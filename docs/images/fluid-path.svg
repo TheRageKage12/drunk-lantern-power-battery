@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 850" width="1000" height="850" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
+<title>Green Lantern power battery - fluid path and internal layout, side view</title>
+<defs>
+<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker>
+<marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+<marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+<marker id="arrGy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#777777"/></marker>
+<marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2a9d2a"/></marker>
+<marker id="arrK" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#222222"/></marker>
+<marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f77f00"/></marker>
+<marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d62828"/></marker>
+</defs>
+<rect x="0" y="0" width="1000" height="850" fill="#ffffff"/>
+<text x="20" y="32" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Fluid path and internal layout — side view (section)</text>
+<text x="20" y="50" font-size="11" text-anchor="start" font-weight="normal" fill="#555">1.8× rebuild, ~430 mm tall; schematic, not to scale</text>
+<path d="M350,406 L350,250 A150,150 0 0 1 650,250 L650,406" fill="none" stroke="#777777" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+<path d="M350,406 L350,250 A150,150 0 0 1 650,250 L650,406" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,4"/>
+<circle cx="350" cy="406" r="5" fill="#bdbdbd" stroke="#777777" stroke-width="1"/>
+<circle cx="650" cy="406" r="5" fill="#bdbdbd" stroke="#777777" stroke-width="1"/>
+<rect x="362" y="770" width="276" height="20" rx="0" fill="#f1f1f1" stroke="#222222" stroke-width="1.4"/>
+<rect x="372" y="650" width="256" height="122" rx="0" fill="#f1f1f1" stroke="#222222" stroke-width="1.4"/>
+<path d="M374,650 L448,540 L552,540 L626,650 Z" fill="#f1f1f1" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M374,160 L448,272 L552,272 L626,160" fill="#f1f1f1" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M374,160 L626,160" fill="none" stroke="#222222" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,3"/>
+<path d="M415,302 A134,134 0 0 1 585,302 L585,510 A134,134 0 0 1 415,510 Z" fill="#ffffff" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M500,274 L500,538" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
+<rect x="455" y="330" width="90" height="150" rx="0" fill="#fafafa" stroke="#222222" stroke-width="1" stroke-dasharray="2,2"/>
+<rect x="460" y="478" width="88" height="8" rx="0" fill="#cfd8dc" stroke="#222222" stroke-width="1"/>
+<path d="M470,478 L476,400 L524,400 L530,478 Z" fill="#eef6ff" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M472,452 L528,452" fill="none" stroke="#1d4ed8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,2"/>
+<rect x="512" y="362" width="18" height="14" rx="0" fill="#cfd8dc" stroke="#222222" stroke-width="1"/>
+<path d="M415,327 L415,484" fill="none" stroke="#2a9d2a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+<path d="M427,338 L427,474" fill="none" stroke="#2a9d2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,3"/>
+<circle cx="427" cy="342.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="358.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="375.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="391.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="408.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="424.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="441.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="457.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<circle cx="427" cy="474.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
+<path d="M585,350 L585,480" fill="none" stroke="#8d6e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="581" y="346" width="8" height="6" rx="0" fill="#5d4037" stroke="none" stroke-width="1.2"/>
+<rect x="581" y="474" width="8" height="6" rx="0" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
+<path d="M660,430 L596,430" fill="none" stroke="#8d6e63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrK)"/>
+<rect x="458" y="258" width="84" height="32" rx="0" fill="#dcdcdc" stroke="#222222" stroke-width="1.2"/>
+<rect x="458" y="250" width="20" height="8" rx="0" fill="#a5d6a7" stroke="#222222" stroke-width="0.8"/>
+<rect x="522" y="250" width="20" height="8" rx="0" fill="#a5d6a7" stroke="#222222" stroke-width="0.8"/>
+<rect x="478" y="246" width="44" height="12" rx="0" fill="#bdbdbd" stroke="#222222" stroke-width="1"/>
+<circle cx="500" cy="228" r="18" fill="none" stroke="#2e7d32" stroke-width="5"/>
+<rect x="492" y="206" width="16" height="8" rx="0" fill="#2e7d32" stroke="none" stroke-width="1.2"/>
+<rect x="380" y="690" width="36" height="92" rx="0" fill="#e0e0e0" stroke="#222222" stroke-width="1.2"/>
+<rect x="378" y="660" width="64" height="14" rx="0" fill="#c8e6c9" stroke="#222222" stroke-width="1.2"/>
+<circle cx="453" cy="737" r="21" fill="#e0e0e0" stroke="#222222" stroke-width="1.3"/>
+<circle cx="453.0" cy="747.0" r="4" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
+<circle cx="444.33974596215563" cy="732.0" r="4" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
+<circle cx="461.66025403784437" cy="732.0" r="4" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
+<rect x="474" y="719" width="40" height="38" rx="0" fill="#e0e0e0" stroke="#222222" stroke-width="1.3"/>
+<rect x="518" y="605" width="72" height="177" rx="10" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<rect x="518" y="655" width="72" height="127" rx="10" fill="#bfdbfe" stroke="none" stroke-width="1.2"/>
+<rect x="518" y="605" width="72" height="177" rx="10" fill="none" stroke="#222222" stroke-width="1.4"/>
+<rect x="538" y="593" width="36" height="14" rx="0" fill="#9e9e9e" stroke="#222222" stroke-width="1"/>
+<path d="M570,593 L570,586" fill="none" stroke="#222222" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M584,570 L572,586" fill="none" stroke="#777777" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrGy)"/>
+<path d="M556,607 L556,772" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M556,760 L556,700" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<rect x="626" y="656" width="10" height="14" rx="0" fill="#424242" stroke="#222222" stroke-width="1"/>
+<path d="M628,682 L628,775" fill="none" stroke="#8d6e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="624" y="678" width="8" height="6" rx="0" fill="#5d4037" stroke="none" stroke-width="1.2"/>
+<rect x="624" y="770" width="8" height="6" rx="0" fill="#5d4037" stroke="none" stroke-width="1.2"/>
+<path d="M556,593 L556,573 L443,573 L443,717" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M520,573 L470,573" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M463,717 L463,585 L530,585 L530,520 L548,520 L548,372 L521,372 L521,392" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M463,700 L463,640" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M548,500 L548,420" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M521,378 L521,395" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<rect x="524" y="536" width="12" height="8" rx="0" fill="#424242" stroke="none" stroke-width="1.2"/>
+<path d="M420,660 L420,622 L450,622 L450,522 L444,522 L444,292 L470,278" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
+<text x="40" y="100" font-size="15" text-anchor="start" font-weight="bold" fill="#222222">FRONT (audience)</text>
+<text x="960" y="100" font-size="15" text-anchor="end" font-weight="bold" fill="#222222">REAR (owner)</text>
+<path d="M40,112 L170,112" fill="none" stroke="#777777" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrGy)"/>
+<path d="M960,112 L830,112" fill="none" stroke="#777777" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrGy)"/>
+<text x="300" y="150" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">handle arch — outline only (it really</text>
+<text x="300" y="163" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">spans left–right across this view)</text>
+<path d="M294,146 L351,300" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="351" cy="300" r="2.2" fill="#777777"/>
+<text x="300" y="205" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">upper dish, mouth up</text>
+<text x="300" y="218" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(charging socket in its floor)</text>
+<path d="M294,201 L405,207" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="405" cy="207" r="2.2" fill="#777777"/>
+<text x="300" y="300" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">sphere: two printed halves</text>
+<text x="300" y="313" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">split on the dashed line</text>
+<path d="M294,296 L432,300" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="432" cy="300" r="2.2" fill="#777777"/>
+<text x="300" y="365" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">front window: green diffuser disc,</text>
+<text x="300" y="378" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">WS2812B strip right behind it</text>
+<path d="M294,361 L414,380" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="414" cy="380" r="2.2" fill="#777777"/>
+<text x="300" y="440" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">hidden glass bay with cradle;</text>
+<text x="300" y="453" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">shot glass sits inside</text>
+<path d="M294,436 L456,430" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="456" cy="430" r="2.2" fill="#777777"/>
+<text x="300" y="520" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">bay-floor grommet (tube seal)</text>
+<path d="M294,516 L523,540" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="523" cy="540" r="2.2" fill="#777777"/>
+<text x="300" y="580" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">lower dish, mouth down — hollow,</text>
+<text x="300" y="593" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">tube and wires pass its neck</text>
+<path d="M294,576 L400,612" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="400" cy="612" r="2.2" fill="#777777"/>
+<text x="300" y="640" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">wire channel to the socket</text>
+<text x="300" y="653" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(dashed purple)</text>
+<path d="M294,636 L420,640" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="420" cy="640" r="2.2" fill="#777777"/>
+<text x="300" y="690" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">electronics tray: XIAO, D4184,</text>
+<text x="300" y="703" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">AHCT125, fuses, 1000 µF</text>
+<path d="M294,686 L376,667" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="376" cy="667" r="2.2" fill="#777777"/>
+<text x="300" y="745" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">USB power bank, standing on edge</text>
+<text x="300" y="758" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(or flat on the floor if it fits)</text>
+<path d="M294,741 L379,735" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="379" cy="735" r="2.2" fill="#777777"/>
+<text x="300" y="805" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">base drum (stepped foot)</text>
+<path d="M294,801 L372,782" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="372" cy="782" r="2.2" fill="#777777"/>
+<text x="700" y="150" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">ring key cap in the rotor pocket</text>
+<text x="700" y="163" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(6×2 mm magnet on the axis)</text>
+<path d="M694,146 L519,228" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="519" cy="228" r="2.2" fill="#777777"/>
+<text x="700" y="205" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">charging socket module: rotor, Hall</text>
+<text x="700" y="218" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">sensor, microswitch, 24-px ring halo</text>
+<path d="M694,201 L543,270" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="543" cy="270" r="2.2" fill="#777777"/>
+<text x="700" y="300" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">tube rises behind the bay</text>
+<text x="700" y="313" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">to the nozzle clip</text>
+<path d="M694,296 L549,440" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="549" cy="440" r="2.2" fill="#777777"/>
+<text x="700" y="365" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">nozzle clip above the glass</text>
+<text x="700" y="378" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(aims into the centre)</text>
+<path d="M694,361 L531,369" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="531" cy="369" r="2.2" fill="#777777"/>
+<text x="700" y="420" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear hatch, magnet-latched:</text>
+<text x="700" y="433" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">reach in, take the glass</text>
+<path d="M694,416 L592,410" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="592" cy="410" r="2.2" fill="#777777"/>
+<text x="700" y="480" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">removable drip tray under the glass</text>
+<path d="M694,476 L549,482" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="549" cy="482" r="2.2" fill="#777777"/>
+<text x="700" y="560" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">silicone tube from the pump</text>
+<text x="700" y="573" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(1/8" ID × 1/4" OD in the head)</text>
+<path d="M694,556 L531,575" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="531" cy="575" r="2.2" fill="#777777"/>
+<text x="700" y="612" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">vented cap: air in as liquid leaves;</text>
+<text x="700" y="625" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">pickup tube reaches the bottom</text>
+<path d="M694,608 L575,600" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="575" cy="600" r="2.2" fill="#777777"/>
+<text x="700" y="660" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">master power switch (rear wall)</text>
+<path d="M694,656 L637,663" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="637" cy="663" r="2.2" fill="#777777"/>
+<text x="700" y="700" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">250 mL reservoir bottle, upright,</text>
+<text x="700" y="713" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">top protrudes into the lower dish</text>
+<path d="M694,696 L591,690" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="591" cy="690" r="2.2" fill="#777777"/>
+<text x="700" y="760" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear service door: refill the</text>
+<text x="700" y="773" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">bottle, swap the bank, USB access</text>
+<path d="M694,756 L632,745" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="632" cy="745" r="2.2" fill="#777777"/>
+<text x="468" y="822" font-size="11" text-anchor="middle" font-weight="normal" fill="#222222">Kamoer KPHM200 peristaltic pump, 12 V</text>
+<path d="M468,810 L468,772" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="468" cy="772" r="2.2" fill="#777777"/>
+<text x="490" y="757" font-size="8" text-anchor="start" font-weight="normal" fill="#555">pump</text>
+<path d="M660,818 L688,818" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<text x="694" y="822" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">liquid path</text>
+<path d="M770,818 L798,818" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
+<text x="804" y="822" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">wires</text>
+<path d="M850,818 L878,818" fill="none" stroke="#8d6e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="884" y="822" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">hinged door / hatch</text>
+<path d="M40,822 L112,822 M40,817 L40,827 M112,817 L112,827" fill="none" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="76" y="838" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">50 mm</text>
+</svg>
