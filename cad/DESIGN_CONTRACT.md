@@ -137,3 +137,38 @@ exception in build.py output.
   DRV5032 breakout (25.6 x 17.8 mm, sensor near the centre, JST PH at one end): make the hall_carrier a
   separate small part with the PCB slot length >= 32 mm and the stop position adjustable (two stop positions
   or a sliding stop), so the sensor element can be put on the rotor axis for either board.
+
+## Revision 3 (after the adversarial design review, docs/research/design-critique.md) - supersedes conflicts above
+1. **Reservoir = squat wide-mouth jar** (8 oz straight-sided PET, 70-400 neck, ~71 x 72 mm incl. cap; envelope
+   BOTTLE_D x BOTTLE_H = 76 x 76). It stands on the base deck and is refilled IN PLACE through the rear door with a
+   funnel (cap top must be below the door's top edge). Cradle: a ring ID 72, 8 mm tall, plus a strap. The cap is
+   drilled for the 6.4 mm tube (snug 6 mm hole) and a 2.5 mm vent. BASE_H is now 115, door 110 x 90 (Z 12..102).
+2. **Hatch and glass tray.** Hatch 110 x 105 mm rounded rectangle at +Y, centre Z = sphere centre - 8. The hatch
+   DOOR is bottom-hinged (two 3 mm printed pins into 3.3 mm holes in the sphere wall, door stops at ~100 deg),
+   magnet-latched at the top (2 pairs, magnets touching). The glass sits on a **glass_tray** (flat, 2 mm, with the
+   glass ring ID GLASS_D_BASE+4 x 8 mm tall and a pull tab) that slides GLASS_TRAY_TRAVEL mm out through the hatch
+   on two rails in the bay_floor (rails 3 mm tall, tray has matching grooves, an end stop so it cannot fall out).
+   Pulling the tab presents the glass through the hatch; no reaching into the sphere.
+3. **Socket module geometry.** SOCKET_HOUSING_OD = 76 so it passes the 80 mm dish hole from above (the faceplate
+   100 mm sits in the counterbore). ROTOR_OD = 36, ROTOR_H = 16, SOCKET_HOUSING_H = 22. Cam lift CAM_LIFT = 5 mm
+   (lever free 10 mm, operate ~6.8 mm above the switch mounting face), switch mount slotted +/- 2 mm. Return spring:
+   compression 0.4 x 5 x 30 mm in a tangential closed pocket (5.6 wide, 31 deep) at the skirt; rotor arm at
+   R = ROTOR_OD/2 + 1.5; preload 2 mm; compute and state the compression at 45 deg (expect ~17 mm). Stop pin = an
+   M3 x 8 screw in a heat-set insert in the rotor skirt riding in the 45 deg arc slot (steel stop, replaceable);
+   the loading gap at 90 deg lets the rotor drop in; slot ends keep >= 2.4 mm wall. Hall carrier accepts the
+   DRV5032 breakout (primary, lies flat, sensor on the axis, 2 mm under the key-cap magnet) or the A3144 module.
+   Key-cap bayonet: the key tab enters only at 0 deg, so the ring is removable only at rest.
+4. **Nozzle.** The tube enters the bay from the rear-left wall at NOZZLE_ANGLE_DEG (45) aimed at the inside wall of
+   the glass, tip NOZZLE_TIP_ABOVE_RIM (10) above the rim; the last 30 mm may be a rigid stainless 1/8" barb.
+   nozzle_clip holds the tube at that angle. Bay free height = socket housing bottom - bay floor: assert the glass
+   envelope + 10 mm + tube OD fits with the 45 deg approach (no U-bend).
+5. **Power architecture (final).** ONE USB-C PD port of a bank that offers a 12 V PDO (INIU B61) -> 12 V PD trigger
+   cable -> master switch -> 2 A fuse -> 12 V bus -> D4184 (pump) AND a 12 V -> 5 V buck (Pololu D24V22F5 or an
+   LM2596 module) -> 3 A fuse -> 5 V bus (XIAO via a 1N5819 into its 5V pin, NeoPixels, 1000 uF). Simple alternative:
+   Adafruit 3910 5 V pump + any 5 V/3 A bank, no 12 V at all. The 5 V -> 12 V step-up cable is a fallback only.
+   Base electronics tray must fit: XIAO perfboard 50 x 70, D4184 34 x 17, buck module 44 x 22 x 14, two inline fuse
+   holders, the PD trigger cable's inline module (~45 x 20 x 12). Door panel: 19 x 13 rocker cutout, 12 mm PRIME
+   momentary button hole, panel-mount USB-C extension (24 mm hole) is NOT needed (the bank is charged through the
+   door); add a 10 x 8 notch instead for the trigger cable if the bank's port faces the door.
+6. **Firmware**: PRIME button on D6 (hold = pump runs, IDLE only, 20 s cap); pour-abort on Hall loss >= 60 ms;
+   separate POURING brightness cap; brighter idle pilot glow (bank keep-alive); pump trigger via AHCT125 ch.3.

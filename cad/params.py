@@ -48,21 +48,23 @@ TUBE_OD = 6.4               # 1/8" ID x 1/4" OD food-grade silicone for the head
 TUBE_ID = 3.2
 TUBE_GROMMET_D = 7.0        # hole for the tube to pass a wall
 
-BOTTLE_D = 60.0             # 8 oz PET Boston round 57.2 mm (ContainerAndPackaging B320) + clearance
-BOTTLE_H = 136.0            # 132.6 mm body + cap
-BOTTLE_NECK_D = 28.0        # 24-410 cap OD ~ 27-28
+# Reservoir (rev 3): a SQUAT wide-mouth jar, refilled in place through the door with a funnel.
+# 8 oz straight-sided PET jar, 70-400 neck, ~71 mm dia x ~72 mm tall with cap. Envelope below.
+BOTTLE_D = 76.0             # jar envelope diameter (71 + cap/clearance)
+BOTTLE_H = 76.0             # jar envelope height incl. cap; standing on the deck its cap stays below the door top
+BOTTLE_NECK_D = 73.0        # 70-400 cap OD (tube + vent holes are drilled in the cap)
 
 GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and Torque 92440 Tritan (48 top, 54 tall)
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 153.0, 71.0, 17.0   # Anker 313 (A1229) 149.5 x 68.5 x 14.5 + clearance; +25 mm cable room at one end
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 155.0, 72.0, 25.0   # pocket covers INIU B61 (104 x 66 x 23, primary) and Anker 313 (153 x 72 x 16); strap-retained; +25 mm cable room at one end
 
 # ---------------------------------------------------------------- stack (bottom to top)
-BASE_H = 100.0              # base drum height
+BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
 BASE_BODY_D = 174.0         # drum body between the bands
-BASE_DOOR_W, BASE_DOOR_H = 110.0, 76.0   # rear service door opening in the base wall
+BASE_DOOR_W, BASE_DOOR_H = 110.0, 90.0   # rear service door opening in the base wall (Z 12..102)
 
 JOINT_SPIGOT_H = 8.0        # spigot height for base->lower dish and sphere->upper dish joints
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)
@@ -81,25 +83,31 @@ SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/b
 WINDOW_W, WINDOW_H = 108.0, 108.0   # front arched window (60 x 1.8 = 108)
 DIFFUSER_D = 118.0          # front diffuser disc (sits behind the window on an internal ledge)
 DIFFUSER_T = 1.0
-HATCH_W, HATCH_H = 78.0, 92.0       # rear hatch opening (hand/glass access); magnet-latched cover
+HATCH_W, HATCH_H = 110.0, 105.0     # rear hatch opening (rev 3: wide enough for a hand holding the glass); bottom-hinged door, magnet-latched at the top
+GLASS_TRAY_TRAVEL = 45.0    # the glass sits on a tray that slides out through the hatch on two rails in the bay floor
+NOZZLE_ANGLE_DEG = 45.0     # nozzle enters from the rear-left wall at 45 deg aimed at the inside wall of the glass
+NOZZLE_TIP_ABOVE_RIM = 10.0
 STRIP_W = 10.0              # WS2812B strip width; strip channel inside the front half, around the window
 
 # socket module (lives in the upper dish floor; see DESIGN_CONTRACT.md for the mechanism)
 SOCKET_PLATE_D = 100.0      # faceplate OD, sits in a 100.6 mm counterbore in the dish floor
 SOCKET_PLATE_T = 3.0
 SOCKET_BOLT_CIRCLE = 88.0   # 4 x M3 into heat-set inserts in the dish floor
-ROTOR_OD = 44.0
-ROTOR_H = 22.0
+ROTOR_OD = 36.0             # rev 3: smaller rotor so a 30 mm compression spring covers the 45 deg arc at the skirt
+ROTOR_H = 16.0
 ROTOR_TRAVEL_DEG = 45.0
 KEY_D = 24.0                # ring key cap disc diameter
 KEY_T = 3.0
 KEY_TAB_W, KEY_TAB_L = 6.0, 4.0
 ROTOR_FLOOR_T = 1.2         # plastic between magnet (in key cap) and Hall sensor
-SOCKET_HOUSING_OD = 92.0
-SOCKET_HOUSING_H = 30.0     # below the faceplate
-SPRING_D = 6.0              # compression spring OD (5-6 mm), ~0.5 mm wire, 20 mm free length
-SPRING_FREE_L = 20.0
-SPRING_POCKET_D = 7.0
+SOCKET_HOUSING_OD = 76.0    # rev 3: MUST pass through the DISH_NECK_HOLE_D (80) hole from above
+SOCKET_HOUSING_H = 22.0     # below the faceplate (rev 3: shorter, frees bay height for the nozzle)
+CAM_LIFT = 5.0              # D2F-L hinge lever: free position 10 mm, operates at 6.8 +/- 1.5 mm above its mounting face -> press ~5 mm
+SPRING_D = 5.0              # compression spring OD; 0.4 mm wire (0.5 mm if a firmer return is wanted)
+SPRING_WIRE = 0.4
+SPRING_PRELOAD = 2.0        # compression at 0 deg
+SPRING_FREE_L = 30.0        # arc travel at the skirt (R = ROTOR_OD/2 + 1.5) for 45 deg is ~15.3 mm; + preload = 17.3 < 30 - solid height (~9)
+SPRING_POCKET_D = 5.6       # spring OD + 0.6; closed ends; depth = free length + 1
 
 # handle
 HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 10.0
