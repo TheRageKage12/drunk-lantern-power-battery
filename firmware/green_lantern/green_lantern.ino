@@ -15,11 +15,18 @@
  *   - switch alone never pumps; Hall alone never pumps
  *   - exactly one pour per ring insertion
  *   - ring removal at any time stops the pump immediately
- *   - absolute pump run-time cap MAX_PUMP_MS, independent of the state machine
- *   - a switch that is already pressed at boot (jammed cam) is ignored until released
+ *   - absolute pump run-time cap MAX_PUMP_MS on CONTINUOUS run time, independent of the state
+ *     machine (a cal run followed by a pour cannot stack past it)
+ *   - a switch that is already pressed at boot, or when the ring arrives (jammed cam), is ignored
+ *     until it has been released
+ *   - the pump only starts from FLASH if the Hall sensor sees the ring at that instant
+ *   - the only way to run the pump without the ring is the serial "cal" bench command
  *
  * Wiring (see docs/BUILD_GUIDE.md):
- *   D1  <- Hall module OUT (active LOW when the magnet is present) via divider if the module runs at 5 V
+ *   D1  <- Hall sensor OUT, active LOW when the magnet is present. Primary: Adafruit DRV5032 breakout
+ *          (open-drain, VCC 3V3, GND; D1 uses the XIAO's internal pull-up, no divider needed).
+ *          Alternative: 5 V A3144 module, OUT -> 4.7k series -> D1, 22k from D1 to GND (divider off the
+ *          module's own pull-up so the 3.3 V pin never sees 5 V).
  *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
  *   D3  -> D4184 MOSFET module PWM/TRIG input (HIGH = pump on); module GND tied to XIAO GND
  *   D4  -> 74AHCT125 in  -> out -> 330 ohm -> NeoPixel RING DIN (24 px, in the charging socket)
@@ -86,23 +93,28 @@ bool     pouredThisInsertion = false;
 
 // pump bookkeeping (the cap is enforced here, not in the state machine)
 bool     pumpOn       = false;
-uint32_t pumpStarted  = 0;
+uint32_t pumpStarted  = 0;     // millis() of the latest pumpStart() (requested-duration timer)
 uint32_t pumpRunFor   = 0;     // requested duration for the current run
+uint32_t pumpOnSince  = 0;     // millis() when the pump last went off -> on (continuous-run cap)
+bool     pumpCal      = false; // current run is a serial "cal" run: allowed without the ring
 
 static inline uint32_t since(uint32_t t) { return millis() - t; } // wrap-safe
 
 // ------------------------------------------------------------------ pump
 void pumpStop() {
   analogWrite(PUMP_PIN, 0);
-  digitalWrite(PUMP_PIN, LOW);
-  pumpOn = false;
+  digitalWrite(PUMP_PIN, LOW);       // rp2040 core: takes the pad back from the PWM slice to SIO
+  pumpOn  = false;
+  pumpCal = false;
 }
 
 void pumpStart(uint32_t runMs) {
   if (runMs > MAX_PUMP_MS) runMs = MAX_PUMP_MS;
+  if (!pumpOn) pumpOnSince = millis();  // restarting an already running pump does not extend the cap
   pumpStarted = millis();
   pumpRunFor  = runMs;
   pumpOn      = true;
+  pumpCal     = false;               // the "cal" command sets this after calling us
   analogWrite(PUMP_PIN, 1);          // ramp handled in pumpService()
 }
 
@@ -110,7 +122,7 @@ void pumpStart(uint32_t runMs) {
 bool pumpService() {
   if (!pumpOn) return false;
   const uint32_t t = since(pumpStarted);
-  if (t >= pumpRunFor || t >= MAX_PUMP_MS) { pumpStop(); return false; }
+  if (t >= pumpRunFor || t >= MAX_PUMP_MS || since(pumpOnSince) >= MAX_PUMP_MS) { pumpStop(); return false; }
   uint32_t duty = 255;
   if (t < PUMP_RAMP_MS) duty = 40 + (215UL * t) / PUMP_RAMP_MS;
   analogWrite(PUMP_PIN, duty);
@@ -217,6 +229,7 @@ void handleCommand(String cmd) {
     if (ms <= 0 || (uint32_t)ms > MAX_PUMP_MS) { Serial.println(F("cal: 1..MAX_PUMP_MS")); return; }
     if (state == State::POURING) { Serial.println(F("busy")); return; }
     pumpStart((uint32_t)ms);
+    pumpCal = true;                   // bench run: exempt from the no-ring interlock, cap still applies
     Serial.print(F("calibration run ")); Serial.print(ms); Serial.println(F(" ms - measure the volume"));
     return;
   }
@@ -270,7 +283,7 @@ void enter(State s) {
 void setup() {
   pinMode(PUMP_PIN, OUTPUT);
   digitalWrite(PUMP_PIN, LOW);          // FIRST: pump off
-  pinMode(HALL_PIN, INPUT);             // external divider / module pull-up defines the level
+  pinMode(HALL_PIN, INPUT_PULLUP);      // DRV5032 is open-drain; the A3144 divider also sits below the pull-up
   pinMode(SWITCH_PIN, INPUT_PULLUP);
 
   Serial.begin(115200);
@@ -296,13 +309,17 @@ void loop() {
   serviceSerial();
   const bool pumping = pumpService();   // enforces duration and the hard cap every pass
 
-  // Global interlock: no ring -> no pump, whatever the state.
-  if (!hallStable && pumpOn) pumpStop();
+  // Global interlock: no ring -> no pump, whatever the state (only a serial "cal" run is exempt).
+  if (!hallStable && pumpOn && !pumpCal) pumpStop();
 
   switch (state) {
     case State::IDLE:
       animateIdle();
-      if (hallStable) { pouredThisInsertion = false; enter(State::ARMED); }
+      if (hallStable) {
+        pouredThisInsertion = false;
+        if (swStable) switchJammed = true;  // pressed before the twist (stuck cam): ignore until released
+        enter(State::ARMED);
+      }
       break;
 
     case State::ARMED:
@@ -317,7 +334,7 @@ void loop() {
     case State::FLASH:
       animateFlash();
       if (!hallStable) { enter(State::IDLE); break; }
-      if (since(stateSince) >= FLASH_MS) {
+      if (since(stateSince) >= FLASH_MS && hallRaw) {   // raw too: never start on a stale debounced reading
         pumpStart(settings.pourMs);
         enter(State::POURING);
       }

@@ -90,3 +90,11 @@ At stock size (~100 mm diameter, ~240 mm tall) NOTHING fits inside. Renders: doc
 
 Full ChatGPT transcript (long, 125 KB): docs/research/chatgpt-transcript.md
 Tooling available: python3 with cadquery 2.8, trimesh, manifold3d, numpy, PIL, reportlab; cad/render_stl.py (software STL renderer -> PNG). No OpenSCAD/FreeCAD/Blender. No arduino-cli (check before assuming).
+
+## Purchasing rules for the build guide (owner's instruction, 2026-10-11)
+- Prefer Amazon product links (specific /dp/ASIN listings that were fetched and confirmed) for everything.
+- For small items that Amazon only sells in huge multipacks (screws, nuts, heat-set inserts, springs, resistors,
+  capacitors, fuses, magnets, wire, heat-shrink, connectors), ALSO name a Seattle-area store (verified open,
+  with address) where a handful can be bought: e.g. Vetco Electronics (Bellevue) for electronics parts, Tacoma
+  Screw / Ace Hardware / McLendon for fasteners and springs, homebrew shops for food-grade tubing. Give both
+  options in the BOM table: "Amazon: <link> (pack of N)" and "Local: <store>".

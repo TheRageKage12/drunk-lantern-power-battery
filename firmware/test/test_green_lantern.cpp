@@ -53,6 +53,8 @@ static void serialLine(const std::string& l) { Serial.inject(l + "\n"); }
 static bool serialSaid(const std::string& s) { return Serial.tx.find(s) != std::string::npos; }
 
 static double LOOP_MS = 0;   // measured loop() period in simulation (delay(8) + show() wire time)
+// Run-length checks allow 1 ms below the request: pumpStarted = millis() truncates sub-ms time, so a run
+// can end up to 1 ms early (same on hardware), and up to one loop pass late.
 
 // run loop() until `ms` of simulated time have passed
 static unsigned runMs(double ms) {
@@ -129,11 +131,11 @@ static PourMeasure doPour(uint64_t startUs) {
   return m;
 }
 static void checkPour(const PourMeasure& m) {
-  CHECK(m.armedAfter >= HALL_DEBOUNCE_MS && m.armedAfter <= HALL_DEBOUNCE_MS + LOOP_MS, "ARMED after %.1f ms", m.armedAfter);
-  CHECK(m.flashAfter >= SWITCH_DEBOUNCE_MS && m.flashAfter <= SWITCH_DEBOUNCE_MS + LOOP_MS, "FLASH after %.1f ms", m.flashAfter);
+  CHECK(m.armedAfter >= HALL_DEBOUNCE_MS && m.armedAfter <= HALL_DEBOUNCE_MS + 2 * LOOP_MS, "ARMED after %.1f ms (edge seen next pass, debounced, acted on the pass after)", m.armedAfter);
+  CHECK(m.flashAfter >= SWITCH_DEBOUNCE_MS && m.flashAfter <= SWITCH_DEBOUNCE_MS + 2 * LOOP_MS, "FLASH after %.1f ms", m.flashAfter);
   CHECK(m.pumpAfterFlash >= FLASH_MS && m.pumpAfterFlash <= FLASH_MS + LOOP_MS, "pump on %.1f ms after FLASH (want %u..%u)", m.pumpAfterFlash, (unsigned)FLASH_MS, (unsigned)(FLASH_MS + LOOP_MS));
   CHECK(m.dutyAt400 == 255, "duty after the 300 ms ramp = %d (want 255)", m.dutyAt400);
-  CHECK(m.pourLen >= settings.pourMs && m.pourLen <= settings.pourMs + LOOP_MS, "pump ran %.1f ms (pourMs=%u)", m.pourLen, (unsigned)settings.pourMs);
+  CHECK(m.pourLen >= settings.pourMs - 1 && m.pourLen <= settings.pourMs + LOOP_MS, "pump ran %.1f ms (pourMs=%u)", m.pourLen, (unsigned)settings.pourMs);
   CHECK(m.endState == "LOCKED" && m.offToLocked == 0, "state after the pour: %s (LOCKED in the same loop pass expected)", m.endState.c_str());
   CHECK(m.pwmReleased, "pump pad still on the PWM function / not LOW after pumpStop()");
   CHECK(pumpRuns() == 1, "pump energised %zu times", pumpRuns());
@@ -254,7 +256,7 @@ int main() {
     runMs(300); setSwitch(false);
     runUntil([] { return state == State::LOCKED; }, (double)MAX_PUMP_MS + 1000);
     CHECK(pumpRuns() == 2, "runs %zu (want 2)", pumpRuns());
-    CHECK(pumpRunMs(1) >= settings.pourMs && pumpRunMs(1) <= settings.pourMs + LOOP_MS, "second pour %.1f ms", pumpRunMs(1));
+    CHECK(pumpRunMs(1) >= settings.pourMs - 1 && pumpRunMs(1) <= settings.pourMs + LOOP_MS, "second pour %.1f ms", pumpRunMs(1));
     for (int i = 0; i < 5; i++) { setSwitch(true); runMs(300); setSwitch(false); runMs(300); }
     CHECK(pumpRuns() == 2 && state == State::LOCKED, "more pours on re-twist: runs %zu state %s", pumpRuns(), stateName(state));
     // and the cycle repeats cleanly
@@ -283,7 +285,7 @@ int main() {
     // 2) even with the clamp bypassed, pumpService() stops at the cap
     pumpRunFor = MAX_PUMP_MS + 5000;
     CHECK(runUntil([] { return !pumpPinOn(); }, (double)MAX_PUMP_MS + 10000) >= 0, "forced run never stopped");
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= MAX_PUMP_MS && pumpRunMs(0) <= MAX_PUMP_MS + LOOP_MS, "forced run lasted %.1f ms (cap %u)", pumpRuns() ? pumpRunMs(0) : -1.0, (unsigned)MAX_PUMP_MS);
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= MAX_PUMP_MS - 1 && pumpRunMs(0) <= MAX_PUMP_MS + LOOP_MS, "forced run lasted %.1f ms (cap %u)", pumpRuns() ? pumpRunMs(0) : -1.0, (unsigned)MAX_PUMP_MS);
     CHECK(state == State::ARMED, "state %s", stateName(state));
     setRing(false); runMs(1000);
 
@@ -308,7 +310,7 @@ int main() {
     CHECK(pumpPinOn(), "cal 3000 did not start the pump (no ring)");
     CHECK(state == State::IDLE, "cal changed the state to %s", stateName(state));
     runUntil([] { return !pumpPinOn(); }, 6000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 3000 && pumpRunMs(0) <= 3000 + LOOP_MS, "cal ran %.1f ms", pumpRuns() ? pumpRunMs(0) : -1.0);
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 2999 && pumpRunMs(0) <= 3000 + LOOP_MS, "cal ran %.1f ms", pumpRuns() ? pumpRunMs(0) : -1.0);
     CHECK(state == State::IDLE && pumpPinQuiet(), "after cal: %s", stateName(state));
 
     serialLine("cal 3000"); runMs(500);
@@ -324,7 +326,7 @@ int main() {
     // cal with the ring in (ARMED) runs but does not touch the state machine
     setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
     serialLine("cal 1000"); runMs(2000);
-    CHECK(pumpRuns() == 3 && pumpRunMs(2) >= 1000 && pumpRunMs(2) <= 1000 + LOOP_MS && state == State::ARMED, "cal while ARMED: runs %zu state %s", pumpRuns(), stateName(state));
+    CHECK(pumpRuns() == 3 && pumpRunMs(2) >= 999 && pumpRunMs(2) <= 1000 + LOOP_MS && state == State::ARMED, "cal while ARMED: runs %zu state %s", pumpRuns(), stateName(state));
     // stop during a real pour -> LOCKED, no re-pour
     setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
     runMs(2000); serialLine("stop"); runMs(LOOP_MS * 2);
@@ -349,7 +351,7 @@ int main() {
     setRing(true); runUntil([] { return state == State::ARMED; }, 1000); setSwitch(true);
     runUntil([] { return pumpPinOn(); }, 1000); setSwitch(false);
     runUntil([] { return !pumpPinOn(); }, 20000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 12500 && pumpRunMs(0) <= 12500 + LOOP_MS, "pour used %.1f ms", pumpRuns() ? pumpRunMs(0) : -1.0);
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 12499 && pumpRunMs(0) <= 12500 + LOOP_MS, "pour used %.1f ms", pumpRuns() ? pumpRunMs(0) : -1.0);
     // corrupt flash (bad magic) -> defaults
     reboot();
     CHECK(settings.pourMs == DEFAULT_POUR_MS, "erased flash did not give defaults");
@@ -418,7 +420,7 @@ int main() {
     runMs(3000); setRing(false); runMs(100); setRing(true);
     CHECK(pumpPinOn() && state == State::POURING, "100 ms dropout aborted the pour");
     runUntil([] { return !pumpPinOn(); }, 20000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= settings.pourMs && pumpRunMs(0) <= settings.pourMs + LOOP_MS && state == State::LOCKED, "pour %.1f ms state %s", pumpRunMs(0), stateName(state));
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= settings.pourMs - 1 && pumpRunMs(0) <= settings.pourMs + LOOP_MS && state == State::LOCKED, "pour %.1f ms state %s", pumpRunMs(0), stateName(state));
   });
 
   scenario("o", "LED math: no channel ever exceeds maxBright in any state (maxBright 160 / 255 / 1 / 0)", [] {
