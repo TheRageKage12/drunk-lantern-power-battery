@@ -8,26 +8,28 @@ Severity: BLOCKER = CAD or purchase cannot proceed correctly; MAJOR = will fail 
 ## Decisions / recommendations (the short list)
 
 - Change the reservoir from the 133 mm tall Boston round to a jar/pouch that fits entirely inside the 100 mm base and can be
-  refilled through the rear door; vent it with a tube, not an open hole (issues 1, 10, 11).
+  refilled through the rear door: standing on base.py's deck (top Z 26) its cap must stay below the door's top edge (Z 88), i.e.
+  a jar no taller than ~60 mm, or a pouch; vent it with a tube, not an open hole (issues 1, 5, 7).
 - Widen the sphere hatch to at least 105 x 100 mm and make the glass cradle a pull-out tray that rides on the hatch door, so the
   glass is presented instead of fished out of a 180 mm sphere with one hand (issues 2, 3).
 - Fix the socket module geometry before modelling: housing OD <= 78 mm so it passes the 80 mm dish hole; rotor becomes a
-  ~10 mm disc (not 22 mm) so the Hall sensor sits 2 mm under the magnet; cam lift ~3.5 mm (not 1.2); spring numbers from
-  mechanical.md (2 mm preload, ~10 mm at 45 deg), not the contract's 40 %/75 % (issues 4-8).
+  ~10 mm disc (not 22 mm) so the Hall sensor sits 2 mm under the magnet; cam lift ~4-5 mm (not 1.2); spring numbers from
+  mechanical.md (2 mm preload, ~10 mm at 45 deg), not the contract's 40 %/75 % (issues 9-12).
 - Hall sensor: make the Adafruit/ScoutMakes DRV5032 (#6051) the primary, A3144 the alternate. DRV5032 runs at 3.3 V (no
   diode/divider), trips at 3-4.8 mT (vs A3144 35-45 mT) and senses perpendicular to its board, which matches a magnet on the
-  rotor axis above a board lying flat (issue 9).
+  rotor axis above a board lying flat (issues 10, 17).
 - Fluid path: nozzle must approach the glass from the side at 45 deg (or through a short rigid stainless tip); there is no
-  room for a 6.4 mm silicone tube to U-turn above the glass (issue 12). Tube cannot be "one continuous piece" if the bottle
+  room for a 6.4 mm silicone tube to U-turn above the glass (issue 4). Tube cannot be "one continuous piece" if the bottle
   cap must come off for refills unless the cap is drilled and the tube pushed through (it is: keep that).
 - Power: the single 5 V port + 10-14 W step-up cable + 10 W pump + LEDs is the weakest link (3.0-3.3 A at 5 V during a pour,
   against a 3 A port). Bench-test with a USB meter before committing; preferred fix is a 12 V-PDO bank + 12 V trigger cable
-  with a 12 V -> 5 V buck for LEDs/XIAO (one port, 18 W), fallback is the Pololu U3V70F12 boost (issue 14).
+  with a 12 V -> 5 V buck for LEDs/XIAO (one port, 18 W), fallback is the Pololu U3V70F12 boost (issue 15).
 - Firmware: add a hidden PRIME button (D6) so a bottle swap at the party does not need a laptop; raise the idle "pilot"
   current so the bank does not auto-off; abort on raw Hall loss (<= 30 ms) instead of the 200 ms "ring gone" filter; add a
-  separate POURING brightness cap (issues 16-19).
-- Resolve the three document conflicts now: pump vertical (base.py) vs horizontal (contract rev. 2); one NeoPixel chain
-  (lighting.md) vs two data pins (firmware/electronics.md); 12 V from a PD port (lighting.md budget) vs boost cable (power.md).
+  separate POURING brightness cap (issues 22, 16, 23, 15).
+- Resolve the two remaining document conflicts now: one NeoPixel chain (lighting.md) vs two data pins (firmware/electronics.md);
+  12 V from a PD port (lighting.md budget) vs boost cable (power.md). (The pump-orientation conflict is already resolved: the
+  current base.py mounts the pump horizontally on a deck, head toward the door, as contract rev. 2 asks.)
 
 ## Facts and numbers
 
@@ -39,33 +41,33 @@ Severity: BLOCKER = CAD or purchase cannot proceed correctly; MAJOR = will fail 
 | Glass envelope + nozzle gap | 62 + 12 = 74 mm; tube OD 6.4 -> tube top edge at 74 + 6.4 = 80.4 mm (calc) | cad/params.py `GLASS_H`, `TUBE_OD`; contract "tip 12 mm above the glass rim" |
 | Hatch opening | 78 x 92 mm, centre Z 227.5 (sphere centre - 8) -> Z 181.5 to 273.5 | cad/params.py `HATCH_W/H`, DESIGN_CONTRACT.md |
 | Dish neck hole vs socket housing | hole 80, housing OD 92, faceplate 100 | cad/NOTES-dishes.md "Known issues", cad/params.py |
-| Base interior / door | base 100 tall, door opening 110 x 76 at Z 12-88; bottle envelope 60 x 136 standing at (-33, -15) | cad/parts/base.py `DOOR_Z0/Z1`, `BOTTLE_XY`; cad/params.py `BOTTLE_H` |
-| Pump orientation conflict | base.py: "standing VERTICAL (motor down, head up)"; contract rev. 2: "lying with its motor axis horizontal ... on a raised shelf above the bank" | cad/parts/base.py line ~66; cad/DESIGN_CONTRACT.md Revision 2 |
+| Base interior / door | base 100 tall, door opening 110 x 76 at Z 12-88; bottle envelope 60 x 136 standing on the deck (deck top Z 26) at (-39.5, 0), so the cap top is at Z ~162 with 2.7 mm to the lower-dish cone | cad/parts/base.py `DOOR_Z0/Z1`, `BOTTLE_X/Y`, `DECK_TOP`; cad/params.py `BOTTLE_H`; cad/NOTES-base.md ("bottle top at Z 162") |
+| Pump orientation | NO conflict in the current code: base.py lies the pump "with the motor axis along Y, head face toward the rear door" on a deck (axis Z 57.5, top Z 89, under the 92 mm spigot zone), matching contract rev. 2; cad/NOTES-base.md exists and documents it | cad/parts/base.py `PUMP_AXIS_Z`, `PUMP_HEAD_FACE_Y`; cad/NOTES-base.md; cad/DESIGN_CONTRACT.md Revision 2 |
 | Spring compression conflict | contract: "~40 % compressed at 0 deg, ~75 % at 45 deg" on a 20 mm spring (= 8 and 15 mm); mechanical.md: 2 mm preload, 9.9 mm at 45 deg, solid height ~8.5 mm | cad/DESIGN_CONTRACT.md; docs/research/mechanical.md |
-| Cam lift conflict | contract: cam lift 1.2 mm; electronics.md (Omron D2F datasheet): lever FP 10 mm max, OP 6.8 +/- 1.5 mm, OT 0.55 min -> "cam must push the lever at least ~3.5 mm" | cad/DESIGN_CONTRACT.md; docs/research/electronics.md |
+| Cam lift conflict | contract: cam lift 1.2 mm; Omron D2F-L hinge lever: FP 10 mm max, OP 6.8 +/- 1.5 mm, OT 0.55 mm min, OF 0.78 N max -> the click can sit anywhere 5.3-8.3 mm above the mounting face, so electronics.md asks the cam to press the lever to ~5 mm above the face, "up to ~5 mm of travel from a 10 mm free position" | cad/DESIGN_CONTRACT.md; docs/research/electronics.md; [Omron D2F datasheet](https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2f.pdf) (fetched, text extracted) |
 | DRV5032 supply / thresholds | VCC 1.65-5.5 V; FA/FB/FC versions BOP +/-1.5 min, +/-3 typ, +/-4.8 mT max; AJ 9.5 mT max; 20 Hz sampling (50 ms period typ, 75 max) for DU/FA/FC/AJ; FA push-pull omnipolar, FC open-drain omnipolar, DU unipolar push-pull | [TI DRV5032 datasheet](https://www.ti.com/lit/ds/symlink/drv5032.pdf) (fetched, text extracted): features list, Table "Device Comparison", section 6.5 |
-| DRV5032 sensing axis | "sensitive to the magnetic field component that is perpendicular to the top of the package" (sec. 7.3.1); positive = south pole near the top | same datasheet, sec. 7.3.1 and 8.3 |
+| DRV5032 sensing axis | "sensitive to the magnetic field component that is perpendicular to the top of the package" (sec. 7.3.1); flux bottom-to-top is positive, "This condition exists when a south magnetic pole is near the top of the package" (same section, Figure 7-1 text) | same datasheet, sec. 7.3.1 |
 | ScoutMakes/Adafruit DRV5032 breakout #6051 | $4.95; "1.65-V to 5.5-V supply"; 25.6 x 17.8 x 7.2 mm; JST PH 3-pin; variant, polarity and output type NOT stated on the page | [Adafruit 6051](https://www.adafruit.com/product/6051) |
 | A3144 thresholds (for comparison) | Bop 350 G max at 25 C, 450 G over temperature; supply 4.5-24 V | docs/research/electronics.md (Allegro datasheet, not re-fetched) |
-| 6 x 2 N35 field on axis | ~1450 G at 2 mm, ~900 G at 3 mm, ~560 G at 4 mm, ~370 G at 5 mm | docs/research/electronics.md (computed from Supermagnete formula, not re-fetched) |
-| KY-003-style A3144 module | A3144 unipolar; "4.5-24 V (5 V typical; 3.3 V is below rated spec)"; pins "-", middle "+", "S"; 680 ohm on board; power LED; 18.5 x 15 mm. Sensor mounting orientation not described | [arduinomodules.info KY-003](https://arduinomodules.info/ky-003-hall-magnetic-sensor-module/) |
+| 6 x 2 N35 field on axis | ~1450 G at 2 mm, ~880 G at 3 mm, ~560 G at 4 mm, ~373 G at 5 mm | docs/research/electronics.md and mechanical.md (computed from the Supermagnete formula / K&J calculator, not re-fetched) |
+| KY-003-style A3144 module | A3144 unipolar; "4.5-24 V (5 V typical; 3.3 V is below rated spec)"; pins "-", middle "+", "S"; 680 ohm on board; power LED; 18.5 x 15 mm. Output goes LOW "when a magnet's south pole faces the marked side of the chip"; sensor mounting orientation (upright vs flat) not described | [arduinomodules.info KY-003](https://arduinomodules.info/ky-003-hall-magnetic-sensor-module/) |
 | HiLetgo module B01NBE2XIR | title only: "HiLetgo 5pcs Hall Effect Magnetic Sensor Module 3144E A3144 ... DC 5V"; layout not retrievable | [Amazon B01NBE2XIR](https://www.amazon.com/dp/B01NBE2XIR) |
 | RP2040 analogWrite | default PWM 1 kHz; analogWriteFreq 100 Hz-1 MHz; PWM "will continue until a digitalWrite or other digital output is performed" | [arduino-pico analog docs](https://arduino-pico.readthedocs.io/en/latest/analog.html) |
 | Pololu U3V70F12 12 V step-up | $25.95; input 2.9-12 V; 12 V +/-4 %; input current up to 6 A prolonged, 7-8 A for seconds, 10 A cycle-by-cycle limit; 80-95 % efficiency; 40.6 x 15.2 x 4.6 mm. Output current at 5 V in: ~2.0-2.4 A (my calc from 6 A x eff x 5/12, not a page figure) | [Pololu 2895](https://www.pololu.com/product/2895) |
 | Pololu D24V22F5 5 V step-down | $18.95; input 5.3-36 V; 5 V, 2.5 A typical max; 85-95 %; 17.8 x 17.8 x 8 mm; reverse-voltage protection and thermal shutdown | [Pololu 2858](https://www.pololu.com/product/2858) |
 | 5 V -> 12 V cable limits (plan's primary) | B0CF5DR1JJ: 12 V 1.2 A max, "do not use for more than 14 watts"; HiLetgo B073R7Z7CL: 10 W max | docs/research/power.md (not re-fetched) |
-| Pump power | 12 V, 0.7 A (Amazon bullet), 10 W (Kamoer params page) -> 10 W / 0.85 / 5 V = 2.35 A at the bank (calc) | docs/research/pump-and-plumbing.md (not re-fetched) |
+| Pump power | 12 V, 0.7 A (Amazon bullet, per pump-and-plumbing.md); Kamoer's own parameter page lists the brushed KPHM200-SW/SV at "10W", 12 V/24 V, >= 200 mL/min -> 10 W / 0.85 / 5 V = 2.35 A at the bank (calc) | docs/research/pump-and-plumbing.md; [Kamoer KPHM200 params](https://www.kamoer.com/us/product/params.html?id=4001) (re-fetched) |
 | 5 V budget during a pour | power.md: ~2.9 A (pump 2.0 A reflected + LEDs 50 %); with Kamoer's 10 W and the firmware's actual POURING levels: ~3.2 A (calc below) | docs/research/power.md; firmware animatePouring() |
 | Firmware POURING LED current (calc) | strip 120-255 x 160/255 -> avg ~119/255 x 20 mA x 60 px = 0.56 A; ring ~0.25 A; XIAO 0.05 A; total LEDs+MCU ~0.85 A | firmware/green_lantern/green_lantern.ino `animatePouring`, `DEFAULT_MAX_BRIGHT` 160 |
 | Firmware IDLE current (calc) | ring/strip values 3-8 after cap -> ~0.04 A lit + ~0.08 A dark-pixel quiescent + XIAO 0.05 = ~0.17 A | firmware `animateIdle`; power.md (1 mA/px dark, 50-200 mA bank auto-off threshold) |
 | Pour math | 200 mL/min = 3.33 mL/s: 30 mL in 9.0 s, 44 mL in 13.2 s; robu's 260 mL/min: 44 mL in 10.2 s | docs/research/pump-and-plumbing.md |
 | Ethanol flammable range | LEL 3.3 %, UEL 19 % by volume in air at 20 C | [Engineering ToolBox](https://www.engineeringtoolbox.com/explosive-concentration-limits-d_423.html) |
 | Vetco Electronics | 12718 Northup Way, STE 100, Bellevue, WA 98005; 425-641-7275; Mon-Fri 9-6, Sat 10-3:30; resistors, electrolytic caps, fuses, wire, toggle/rocker/pushbutton switches; no mention of heat-set inserts or magnets | [vetco.net](https://vetco.net/) |
-| Tacoma Screw Products (Seattle branches) | Ballard: 3930 Leary Way N.W., 98107; Georgetown: 1121 S. Bailey Street, 98108; Kirkland: 11200 120th Avenue N.E., 98033; Kent: 22123 84th Avenue S., 98032; Everett: 11630 Airport Road, 98204 | [Tacoma Screw LocationFinder](https://www.tacomascrew.com/LocationFinder) |
+| Tacoma Screw Products (Seattle branches) | Ballard: 3930 Leary Way N.W., 98107 (Mon-Fri 7-5, Sat 9-1); Georgetown: 1121 S. Bailey Street, 98108; Kirkland: 11200 120th Avenue N.E., 98033; Kent: 22123 84th Avenue S., 98032; Everett: 11630 Airport Road, 98204 (branches Mon-Fri 7-5 unless noted) | [Tacoma Screw LocationFinder](https://www.tacomascrew.com/LocationFinder) |
 | McLendon Hardware | White Center: 10210 16th Ave. SW, Seattle 98146 (Mon-Sat 8-8, Sun 9-7); Renton: 440 Rainier Ave. S, 98057 (Mon-Fri 7-8, Sat 8-8, Sun 9-7); Woodinville: 17705 130th Ave. NE, 98072; Kent: 23662 104th Ave. SE, 98031 | [mclendons.com/locations](https://www.mclendons.com/locations) |
-| Sound Homebrew Supply | the domain now redirects to an auto shop (closed or moved); do NOT list it | fetch of soundhomebrew.com returned 301 to theapexautoworks.com |
-| Hand breadth | NOT confirmed (NASA MSIS and RoyMech pages failed to fetch). Estimate: adult male hand breadth across the knuckles ~85-95 mm; a claw grip on a 50 mm glass needs ~90-100 mm clear width | estimate |
-| Silicone tube bend radius | NOT confirmed. Estimate: 1/4" OD, 1.6 mm wall silicone kinks below ~20-25 mm centreline radius | estimate (pump-and-plumbing.md also says ~25 mm, estimate) |
+| Sound Homebrew Supply | the domain is dead for homebrew purposes: soundhomebrew.com 301s to theapexautoworks.com, which 301s again to kwgearhydraulic.com and then to a spam page; do NOT list it | fetch chain of soundhomebrew.com (re-fetched) |
+| Hand breadth | Male hand breadth: mean 9.04 cm, 5th 8.36, 50th 9.03, 95th 9.76 cm (N = 1774; population not named in the table). So ~84-98 mm across the knuckles; a claw grip on a 50 mm glass needing ~90-100 mm of clear width is still an estimate on top of that | [NC State Ergonomics Center anthropometric tables (PDF)](https://multisite.eos.ncsu.edu/www-ergocenter-ncsu-edu/wp-content/uploads/sites/18/2016/06/Anthropometric-Detailed-Data-Tables.pdf) (fetched, text extracted) |
+| Silicone tube bend radius | NOT confirmed (unverified: Freelin-Wade 503, NewAge 404, Cole-Parmer 403 on the fact-check pass). Estimate: 1/4" OD, 1.6 mm wall silicone kinks below ~20-25 mm centreline radius | estimate (pump-and-plumbing.md also says ~25 mm, estimate) |
 
 ## Products to buy (only what this review adds or changes; everything else is in the sibling notes)
 
@@ -74,11 +76,11 @@ Severity: BLOCKER = CAD or purchase cannot proceed correctly; MAJOR = will fail 
 | Hall sensor (make primary) | ScoutMakes DRV5032 Digital Magnetic Hall Effect Sensor breakout, JST PH 3-pin | $4.95 | [Adafruit 6051](https://www.adafruit.com/product/6051) | 3.3 V native, 10x more sensitive than A3144, senses perpendicular to the board so it lies flat under the rotor; variant (FA push-pull vs FC open-drain) is not on the page: firmware must work with either (INPUT_PULLUP is harmless for push-pull) |
 | 12 V -> 5 V buck (for the PD-trigger architecture) | Pololu 5V, 2.5A Step-Down Voltage Regulator D24V22F5 | $18.95 | [Pololu 2858](https://www.pololu.com/product/2858) | Lets everything run from ONE 12 V PD port: pump direct, LEDs + XIAO via this buck; reverse-voltage protection, thermal shutdown |
 | 12 V boost (fallback if the step-up cable sags) | Pololu 12V Step-Up Voltage Regulator U3V70F12 | $25.95 | [Pololu 2895](https://www.pololu.com/product/2895) | ~2 A at 12 V from a 5 V input (calc), 10 A cycle-by-cycle limit; needs the firmware soft-start and a 2200 uF cap or it will trip the bank's 3 A port on inrush |
-| 12 V PD trigger cable + 12 V-PDO bank | wininks USB-C PD 12 V trigger (B0FD9P7PV4) + INIU B61 (B09176JCKZ) | $9.97 / not confirmed | links in docs/research/power.md | The alternative power architecture (issue 14); not re-fetched here |
-| Reservoir (replace the Boston round) | 8 oz / 250 mL wide-mouth PET jar, 70-400 cap, ~71 mm dia x ~75-80 mm tall (estimate) | not confirmed (Amazon throttled) | [Amazon search](https://www.amazon.com/s?k=8+oz+clear+PET+plastic+jar+wide+mouth+70-400) | Fits inside the 100 mm base, refills through the door with a funnel; alt: the 8 oz food-grade pouch B0B8VQNJVR already in pump-and-plumbing.md (collapses, no vent) |
-| Rigid nozzle tip | 304/316 stainless 1/8" hose-barb 90 deg elbow (or the straight MAACFLOW B0CFQJXTN6 barb set at 45 deg) | not confirmed | [Amazon search](https://www.amazon.com/s?k=1%2F8+barb+elbow+stainless+steel+90+degree) | Turns the tube down into the glass in 15 mm instead of a 25 mm silicone bend (issue 12) |
-| Prime button | any 12 mm panel-mount momentary pushbutton, NO | ~$1 local | Vetco (above) | Hidden inside the service door; hold = pump runs (issue 16) |
-| Hall/switch line conditioning | 2 x 10 k resistors, 2 x 100 nF ceramic, 1 x 100 nF across the pump motor terminals | from the kits already listed | Vetco / resistor kit in electronics.md | Stops 800 kHz LED-data and brush noise from toggling a 50-80 k pulled-up GPIO on a 350 mm wire (issue 15) |
+| 12 V PD trigger cable + 12 V-PDO bank | wininks USB-C PD 12 V trigger to 5.5 x 2.1 mm, 3 ft (B0FD9P7PV4) + INIU B61 10,000 mAh 22.5 W (B09176JCKZ; PD 5 V/3 A, 9 V/2.22 A, 12 V/1.5 A, only one port at full power) | $9.97 / $20.69 (both per power.md; Amazon hides prices from the fetcher) | [B0FD9P7PV4](https://www.amazon.com/dp/B0FD9P7PV4), [B09176JCKZ](https://www.amazon.com/dp/B09176JCKZ), [techtest.org B61 PDO list](https://techtest.org/iniu-powerbank-klein-aber-stark-22-5w-10000mah/) | The alternative power architecture (issue 15); listings and the PDO list re-fetched |
+| Reservoir (replace the Boston round) | squat wide-mouth PET jar no taller than ~60 mm so the cap stays below the door top at Z 88 when standing on the deck: 8 oz 89-400 ~89 x 50 mm or 4 oz 70-400 ~71 x 45 mm (estimates) (unverified: no specific listing was fetched) | not confirmed | [Amazon search](https://www.amazon.com/s?k=8+oz+clear+PET+plastic+jar+wide+mouth+70-400) | Fits inside the 100 mm base, refills through the door with a funnel; alt: the 8 oz food-grade pouch B0B8VQNJVR already in pump-and-plumbing.md (collapses, no vent) |
+| Rigid nozzle tip | 304/316 stainless 1/8" hose-barb 90 deg elbow (unverified: no specific listing was fetched), or the straight MAACFLOW stainless 1/8" barb union, barb OD 0.16", pack of 2 (B0CFQJXTN6, re-fetched) set at 45 deg | not confirmed | [Amazon search](https://www.amazon.com/s?k=1%2F8+barb+elbow+stainless+steel+90+degree) | Turns the tube down into the glass in 15 mm instead of a 25 mm silicone bend (issue 4) |
+| Prime button | any 12 mm panel-mount momentary pushbutton, NO | ~$1 local | Vetco (above) | Hidden inside the service door; hold = pump runs (issue 22) |
+| Hall/switch line conditioning | 2 x 10 k resistors, 2 x 100 nF ceramic, 1 x 100 nF across the pump motor terminals | from the kits already listed | Vetco / resistor kit in electronics.md | Stops 800 kHz LED-data and brush noise from toggling a 50-80 k pulled-up GPIO on a 350 mm wire (issue 17) |
 | 12 V rail cap | 2200 uF 16 V electrolytic (instead of 1000 uF) | ~$1 | Vetco | Pump inrush buffer on the boost output |
 
 ## Open questions / risks
@@ -86,10 +88,10 @@ Severity: BLOCKER = CAD or purchase cannot proceed correctly; MAJOR = will fail 
 - Kevin's printer model/bed size is still unknown (mechanical.md): decides whether 180 mm parts need splitting. Ask before freezing the split.
 - Which DRV5032 variant is on the #6051 board (FA push-pull or FC open-drain) and its sensing face (board top vs bottom): test with the magnet before the hall_carrier is cut.
 - Whether the HiLetgo A3144 module's sensor stands upright (face vertical) or lies flat: unconfirmed; if upright it cannot see an axial magnet and the leads must be re-bent.
-- KPHM200 inrush current and the bank port's over-current behaviour: a 10 s bench pour with a USB meter and the full LED show decides issue 14.
-- Hand breadth / hatch size: anthropometric page not fetched; print the rear sphere half first and try the reach with the real glass.
+- KPHM200 inrush current and the bank port's over-current behaviour: a 10 s bench pour with a USB meter and the full LED show decides issue 15.
+- Hand breadth / hatch size: the anthropometric table gives 84-98 mm (5th-95th male) across the knuckles; the extra width a claw grip needs is still a guess. Print the rear sphere half first and try the reach with the real glass.
 - Bottle vent vs tilt: no page covers it; the vent-tube fix is reasoning, not a tested spec.
-- Amazon was throttling (503) at the end of this session: the jar and elbow are search links, not confirmed ASINs.
+- The jar and the 90 deg elbow are search links, not confirmed ASINs (unverified).
 
 ---
 
@@ -98,12 +100,12 @@ Severity: BLOCKER = CAD or purchase cannot proceed correctly; MAJOR = will fail 
 ### A. Fluid system and reservoir
 
 **1. BLOCKER - The reservoir cannot be installed, removed or refilled.**
-What: a 57 x 133 mm Boston round (136 mm with cap, `BOTTLE_H`) stands in a 100 mm tall base; its cap sits at Z ~138, inside the lower dish cone. The only access is the rear door at Z 12-88 (`DOOR_Z0/Z1`, base.py). A 136 mm bottle cannot be tilted out through a 76 mm tall opening while its top is captured in a cone that narrows upward, and the cap (with the tube through it) is unreachable for refilling.
-Evidence: base.py `BOTTLE_XY`, `DOOR_Z0 = 12`, `DOOR_Z1 = 88`; params `BOTTLE_H = 136`; BRIEF "250 mL reservoir bottle (vertical, protruding up into the hollow lower reflector)".
-Fix: use a reservoir that is shorter than the door: an 8 oz wide-mouth PET jar (~71 x 75-80 mm, 70-400 cap; unconfirmed dims) standing on the floor with its cap at Z ~80, refilled in place through the door with a funnel, or the 8 oz pouch from pump-and-plumbing.md laid flat. Keep the drilled-cap tube pass-through. If the Boston round is kept, the base must grow to ~150 mm or the bottle must come out through the top (remove the lower dish: 3 screws), which is not party-friendly.
+What: a 57 x 133 mm Boston round (136 mm with cap, `BOTTLE_H`) stands on the base's deck (deck top Z 26) in a 100 mm tall base; its cap top sits at Z ~162, inside the lower dish cone with only 2.7 mm of radial margin (NOTES-base.md). The only access is the rear door at Z 12-88 (`DOOR_Z0/Z1`, base.py). A 136 mm bottle cannot be tilted out through a 76 mm tall opening while its top is captured in a cone that narrows upward, and the cap (with the tube through it) is unreachable for refilling.
+Evidence: base.py `BOTTLE_X = -39.5`, `BOTTLE_Y = 0`, `DECK_TOP = 26`, `DOOR_Z0 = 12`, `DOOR_Z1 = 88`; params `BOTTLE_H = 136`; cad/NOTES-base.md "bottle top at Z 162 ... cap top (z 162) margin 2.7 mm"; BRIEF "250 mL reservoir bottle (vertical, protruding up into the hollow lower reflector)".
+Fix: use a reservoir whose cap is below the door's top edge (Z 88). The bottle stands on the deck (Z 26), so that means a jar no taller than ~60 mm: a squat wide-mouth PET jar (e.g. 8 oz 89-400 "salve" jar ~89 dia x 50 tall, or a 4 oz 70-400 jar ~71 x 45; dims unverified, no listing fetched) refilled in place through the door with a funnel, or the 8 oz pouch from pump-and-plumbing.md laid flat. A 75-80 mm tall 8 oz jar on the deck puts its cap at Z ~101-106, above the door, so it only works if the deck is cut away so the jar stands on the floor beside the bank (NOTES-base.md says nothing fits beside the bank at floor level, so check that first). Keep the drilled-cap tube pass-through. If the Boston round is kept, the base must grow to ~150 mm or the bottle must come out through the top (remove the lower dish: 3 screws), which is not party-friendly.
 
 **2. BLOCKER - The hatch is too narrow for a hand holding the glass.**
-What: `HATCH_W` = 78 mm. The glass is 48-52 mm across the top; a claw grip from above adds a finger on each side, roughly 90-100 mm (estimate; anthropometric page not fetched). The reach is 90 mm into a dark sphere while the other hand holds a ~2 kg lantern by a handle on the sphere's equator.
+What: `HATCH_W` = 78 mm. The glass is 48-52 mm across the top; a claw grip from above adds a finger on each side, roughly 90-100 mm (estimate; the bare male hand is 84-98 mm across the knuckles, 5th-95th percentile, NC State table above). The reach is 90 mm into a dark sphere while the other hand holds a ~2 kg lantern by a handle on the sphere's equator.
 Evidence: params `HATCH_W, HATCH_H = 78.0, 92.0`, `GLASS_D_TOP = 52`; BRIEF step 7 "He reaches into the lantern and pulls out the filled glass".
 Fix: hatch >= 105 x 100 mm (the rear half has the room: flat-to-flat 117 mm, equator 180), AND make the glass cradle a tray that slides out through the hatch on two printed rails, pulled by a tab that is part of the hatch door (bottom-hinged door, the tray rides on it). The glass is then lifted straight up from a presented tray with no reach. This also keeps a spilled glass on the tray instead of in the sphere.
 
@@ -115,7 +117,7 @@ Fix: bottom-hinged hatch (two 3 mm pins) that stops at ~100 deg open and carries
 **4. MAJOR - No room for the tube to turn down into the glass.**
 What: free bay height is 263 - 183 = 80 mm; glass 62 + 12 mm nozzle gap puts the tube tip at 74 mm; a 6.4 mm OD tube arriving horizontally already reaches 80.4 mm, and a 180 deg U-bend in 1.6 mm-wall silicone needs ~20-25 mm radius (estimate) -> ~100 mm. It collides with the socket housing bottom.
 Evidence: params `SOCKET_HOUSING_H = 30`, `GLASS_H = 62`, `TUBE_OD = 6.4`; NOTES-dishes `BAY_FLOOR_SEAT_Z = 183`, `Z_SOCKET_PLATE_SEAT = Z_SPHERE_TOP - 1`; contract "holds the tube end ... pointing down into the glass centre, tip 12 mm above the glass rim".
-Fix: (a) nozzle at 45 deg aimed at the inside wall, entering from the rear-left wall at Z ~250, tip 8-10 mm above the rim (pump-and-plumbing already recommends aiming at the wall); (b) a rigid stainless elbow or a straight barb as the last 30 mm so the bend is in metal; (c) shorten the socket housing to ~18 mm by flattening the rotor (issue 6); (d) prefer the 54 mm Torque glass in params (`GLASS_H` 56). Add the tube bend envelope to checks.py.
+Fix: (a) nozzle at 45 deg aimed at the inside wall, entering from the rear-left wall at Z ~250, tip 8-10 mm above the rim (pump-and-plumbing already recommends aiming at the wall); (b) a rigid stainless elbow or a straight barb as the last 30 mm so the bend is in metal; (c) shorten the socket housing to ~18 mm by flattening the rotor (issue 10); (d) prefer the 54 mm Torque glass in params (`GLASS_H` 56). Add the tube bend envelope to checks.py.
 
 **5. MAJOR - Vent hole = leak when the lantern tilts; vacuum lock if there is no vent.**
 What: the plan drills a 2-3 mm open vent in the cap of a 250 mL bottle that will be nearly full and will be carried, swung and tilted. Liquid runs out of the vent onto the base floor, where the power bank and XIAO live.
@@ -146,9 +148,9 @@ Evidence: params `ROTOR_H = 22`, `ROTOR_FLOOR_T = 1.2`, `KEY_T = 3`; contract "h
 Fix: rotor = solid disc ~10 mm tall (pocket 3.5 + floor 1.2 + 5 mm body) with the cam lobe, stop pin and spring arm on its rim; Hall carrier is a flat shelf directly under the disc; housing height then ~18 mm, which also helps issue 4. Magnet-to-element distance becomes 1.2 + 0.4 + 0.5 = 2.1 mm (plus the 0.6 mm key-cap skin if the magnet is pocketed from the top; pocket it from the underside as the contract says).
 
 **11. MAJOR - Cam lift 1.2 mm cannot operate a D2F-L hinge lever.**
-What: the lever's free position is up to 10 mm above the mounting face and it operates at 6.8 +/- 1.5 mm (electronics.md, Omron datasheet): 1.2 mm of lift works only if the switch is pre-positioned within 1.2 mm of its operate point, which the +/-1.5 mm OP tolerance makes a per-switch fiddle, and leaves no overtravel.
-Evidence: contract "cam lobe (ramps from 30 deg, full lift at 40 deg; lift 1.2 mm over the skirt OD)" vs electronics.md "the cam must push the lever at least ~3.5 mm down from free (to ~5 mm)".
-Fix: cam lift 3.5-4 mm, ramp from 20 to 38 deg (at r 22 that is ~7 mm of arc for 3.5 mm lift, ~27 deg ramp), symmetric ramps so the spring return does not snag the lever tip; lever oriented so the cam approaches from the free end toward the hinge; slotted mount (already planned) for +/-2 mm.
+What: the lever's free position is up to 10 mm above the mounting face and it operates at 6.8 +/- 1.5 mm (Omron D2F datasheet, confirmed: FP max 10 mm, OP 6.8 +/- 1.5 mm, OT min 0.55 mm): 1.2 mm of lift works only if the switch is pre-positioned within 1.2 mm of its operate point, which the +/-1.5 mm OP tolerance makes a per-switch fiddle, and leaves no overtravel.
+Evidence: contract "cam lobe (ramps from 30 deg, full lift at 40 deg; lift 1.2 mm over the skirt OD)" vs electronics.md "Design the cam to press the lever down to about 5 mm above the mounting face (up to ~5 mm of travel from a 10 mm free position)".
+Fix: cam lift 4-5 mm, ramp from 20 to 38 deg (at r 22 that is ~7 mm of arc for 4-5 mm lift, ~35 deg ramp), symmetric ramps so the spring return does not snag the lever tip; lever oriented so the cam approaches from the free end toward the hinge; slotted mount (already planned) for +/-2 mm.
 
 **12. MAJOR - Spring numbers in the contract go solid before 45 deg.**
 What: "~40 % compressed at 0 deg, ~75 % at 45 deg" on a 20 mm free-length spring is 8 mm and 15 mm of compression; solid height of a 0.5 x 5 x 20 spring is ~8.5 mm (mechanical.md), so it is solid 4 mm before the stop. It also implies 7 mm of travel at the arm, which at r 10 is 40 deg, not 45.
@@ -182,9 +184,9 @@ The T3A fuse on a 3 A-limited USB port never opens before the bank's own protect
 
 ### D. Printing, assembly, structure
 
-**19. MAJOR - Pump orientation is contradictory between base.py and the contract.**
-What: base.py places the pump VERTICAL at (56, -22) with the head 40 mm long on top of a 52 mm motor (total 118 mm from Z 2 -> head top at Z 120, inside the lower dish cone). Contract rev. 2 says horizontal on a shelf above the bank, head toward the door "so the tube can be loaded without removing the pump". Vertical puts the quick-release head cap 20 mm above the base top, inside the dish, unreachable through the door; and the head's outer edge at r = 60 + 32 = 92 mm at Z 100-120 is outside the lower dish's inner cone (~r 78-87 there; cone from NOTES-dishes), i.e. it collides with the dish wall (estimate from the cone geometry; run checks.py with the dish included).
-Fix: follow the contract (horizontal, head to the door, shelf top ~22 mm) or raise `BASE_H` to 110 and keep it vertical only if the head is fully below Z 100 - it is not (118 > 98). The NOTES-base.md the code refers to does not exist in the repo; write it.
+**19. RESOLVED (was listed as MAJOR) - Pump orientation: base.py already follows the contract.**
+What: the current base.py lies the KPHM200 with its motor axis along Y on a deck (deck top Z 26, pump axis Z 57.5, pump top Z 89, under the 92 mm dish-spigot zone), head face at Y 52 toward the rear door "so the tube can be loaded through the door without removing the pump" - exactly what contract rev. 2 asks. cad/NOTES-base.md exists and documents the deck, the saddles and the clearances. An earlier draft of this review described a vertical pump at (56, -22) reaching Z 120; that is not what the code does.
+Residual: `PUMP_HEAD_L_EST` = 40 mm is an estimate (NOTES-base.md "Known issues"); if the real head is longer than ~46 mm the motor saddle must move toward -Y. Measure the pump before printing the deck.
 
 **20. MINOR - Handle boss vs sphere flange screw collision; hanging tilt.**
 Handle bosses at +/-X on the equator (rear half, 6 mm behind the split) and the sphere flange screws "at the equator sides + top/bottom" occupy the same spot; move the flange screws to +/-45 deg. Bosses 6 mm behind the split plane tilt the hanging lantern ~2 deg (calc) - ignore. A 2.2 kg lantern (PETG ~1.1 kg + pump 0.30 + bank 0.21 + full bottle 0.28 + glass, wires, LEDs; estimate) hangs on two M3 screws in inserts in 14 x 10 bosses: make the bosses 25 x 20 x 15 mm blocks fused to the shell with 100 % infill, and put the lap joint of the arch 30-40 mm from a boss (mechanical.md).
@@ -217,12 +219,12 @@ No max-runtime cap; `setGreen()` calls `show()` inside the state machine every l
 
 ## Design decisions to change in the BRIEF
 
-1. Reservoir: "8 oz wide-mouth PET jar (70-400) or 8 oz pouch, entirely inside the base, refilled through the rear door; vented by tube" replaces "250 mL bottle protruding up into the lower reflector".
+1. Reservoir: "squat wide-mouth PET jar (<= ~60 mm tall on the deck, cap below Z 88) or 8 oz pouch, entirely inside the base, refilled through the rear door; vented by tube" replaces "250 mL bottle protruding up into the lower reflector".
 2. Sphere: "rear hatch >= 105 x 100 mm, bottom-hinged door carrying a pull-out glass tray" replaces "hatch (magnet-latched) to reach in and grab the glass".
-3. Socket: "housing OD <= 78 mm, rotor a ~10 mm disc, Hall sensor on a shelf directly under it, cam lift 3.5 mm, D2F-L at 38 deg, stop at 45" replaces the "rotating keyed rotor (OD ~44)" line; Hall primary = DRV5032 #6051, A3144 alternate.
+3. Socket: "housing OD <= 78 mm, rotor a ~10 mm disc, Hall sensor on a shelf directly under it, cam lift 4-5 mm, D2F-L at 38 deg, stop at 45" replaces the "rotating keyed rotor (OD ~44)" line; Hall primary = DRV5032 #6051, A3144 alternate.
 4. Nozzle: "45 deg approach from the bay wall, rigid stainless tip, 8-10 mm above the rim" replaces "nozzle holder above the glass".
 5. Power: keep the single-port 5 V design as the first thing to bench-test, but write the 12 V-PDO + buck architecture into the BRIEF as the approved fallback with its parts (INIU B61 + wininks trigger + Pololu D24V22F5).
-6. Pump orientation: horizontal on a shelf, head to the door (contract rev. 2); delete the vertical layout from base.py.
+6. Pump orientation: no change needed; base.py already mounts it horizontally on a deck, head to the door (contract rev. 2).
 7. Firmware: add PRIME button, POUR brightness cap, idle pilot >= 0.3 A, 30 ms raw-Hall abort, `MAX_PUMP_MS` 15 s.
 8. Serving: 30 mL (9 s) in a 1.5 oz glass is the default; 44 mL (13 s) is allowed only with a 2 oz glass and a taller bay - the "~10 s" show length is a firmware constant, not a pump constraint.
 
@@ -240,7 +242,7 @@ No max-runtime cap; `setGreen()` calls `show()` inside the state machine every l
 - [ ] 5 x 7 cm perfboard, 2 x 1x7 female headers, DIP-14 socket
 - [ ] AUBER 1/8" x 1/4" platinum silicone tube, 10 ft (pump head + inlet + outlet + vent tube)
 - [ ] Rigid nozzle tip (stainless 1/8" barb, straight or elbow) and a tube pinch clamp
-- [ ] Reservoir: 8 oz wide-mouth PET jar + spare caps (drill 6.5 mm tube hole + 6.5 mm vent-tube hole), or 8 oz pouches
+- [ ] Reservoir: squat wide-mouth PET jar (<= ~60 mm tall) + spare caps (drill 6.5 mm tube hole + 6.5 mm vent-tube hole), or 8 oz pouches
 - [ ] Shot glass: Libbey 92440 Torque 1.5 oz Tritan (or Libbey 5120 glass)
 - [ ] Return springs: Mardatt 240-pc compression kit (0.4 and 0.5 x 5 x 20) or uxcell 0.4 x 5 x 20
 - [ ] M3 heat-set inserts (ruthex 5.7 mm), M3 x 8/10/12 socket screws, 2 x M2 x 8 + nuts for the D2F-L
@@ -248,3 +250,41 @@ No max-runtime cap; `setGreen()` calls `show()` inside the state machine every l
 - [ ] 20 mm hook-and-loop strap (pump/bank), cable ties 3.6 mm, silicone grease
 - [ ] White/natural PETG for the diffuser, LED carrier and bay tray; CA glue + activator; 5-minute epoxy
 - [ ] Local: Vetco (Bellevue) for resistors/caps/fuses/switches/wire; Tacoma Screw Ballard or Georgetown for M3 hardware and springs; McLendon White Center for the Everbilt/Hillman spring assortment, funnel, grease
+
+## Fact-check notes (2026-10-11, independent pass)
+
+Re-fetched and confirmed as written: TI DRV5032 datasheet (VCC 1.65-5.5 V; F-series BOP +/-1.5/+/-3/+/-4.8 mT; AJ 9.5 mT; 20 Hz
+sampling 13.3-20-37 Hz = 27/50/75 ms; FA push-pull omnipolar, FC open-drain omnipolar, DU unipolar push-pull; sec. 7.3.1 sensing axis);
+Adafruit 6051 ($4.95, 1.65-5.5 V, 25.6 x 17.8 x 7.2 mm, JST PH 3-pin, variant/polarity not stated); arduinomodules.info KY-003 (4.5-24 V,
+3.3 V below spec, pins -/+/S, 680 ohm, LED, 18.5 x 15 mm); arduino-pico analog docs (1 kHz default, 100 Hz-1 MHz, PWM continues until a
+digitalWrite); Pololu 2895 ($25.95, 2.9-12 V in, 12 V +/-4 %, 6 A prolonged / 7 A seconds / 10 A cycle-by-cycle, 80-95 %, 40.6 x 15.2 x 4.6 mm);
+Pololu 2858 ($18.95, 5.3-36 V in, 2.5 A typ, 85-95 %, 17.8 x 17.8 x 8 mm, reverse-voltage protection, thermal shutdown); Engineering ToolBox
+(ethanol LEL 3.3 %, UEL 19 %, 20 C); Vetco (address, phone, hours, categories); Tacoma Screw (all five addresses); McLendon (all four
+addresses and the White Center / Renton hours); soundhomebrew.com redirect chain; Amazon B01NBE2XIR, B0FD9P7PV4, B09176JCKZ, B0CFQJXTN6,
+B0B8VQNJVR, B09C1DDHRV, B076LZZQPW, B08BCRZZS3, B0DKB1NKB4, B0CF5DR1JJ, B073R7Z7CL, B0D5CLSMFB (titles match; Amazon shows no prices or
+availability to the fetcher, so every Amazon price in this file is from the sibling notes); Omron D2F datasheet (D2F-L: OF 0.78 N, RF 0.05 N,
+OT 0.55 mm, MD 0.5 mm, FP 10 mm max, OP 6.8 +/-1.5 mm); Kamoer KPHM200 parameter page (brushed SW/SV: 10 W, 12/24 V, >= 200 mL/min);
+techtest.org INIU B61 PDO list (12 V/1.5 A; one port at full power). Repo values re-read from params.py, base.py, NOTES-dishes.md,
+NOTES-base.md, DESIGN_CONTRACT.md, the firmware and the sibling notes: stack heights, 80 mm bay height, hatch 78 x 92 at Z 181.5-273.5,
+socket OD 92 / plate 100 / hole 80, rotor 22 / floor 1.2, cam lift 1.2, 40 %/75 % spring, mechanical.md 2 mm / 9.9 mm / 8.5 mm solid,
+firmware constants (maxBright 160, idle 6-13 -> 3-8 after the cap, pouring 120-255 strip / 140-225 ring, HALL 100 ms, SWITCH 40 ms,
+RING_GONE 200 ms, MAX_PUMP 20 s, POUR 10 s) and test scenarios j and n.
+
+Corrected:
+- Issue 19 and the "pump orientation conflict" row: the current base.py mounts the pump HORIZONTALLY on a deck (axis Z 57.5, head toward
+  the door), matching contract rev. 2, and cad/NOTES-base.md exists. The vertical-pump claim and the "NOTES-base.md does not exist" claim
+  were wrong; issue 19 is now marked resolved and the decisions list no longer asks for that change.
+- Bottle position: base.py puts it on the deck at (-39.5, 0), not at (-33, -15); its cap top is at Z ~162 (deck top 26 + 136), not ~138.
+  This makes issue 1 worse, not better (the cap is deeper inside the lower-dish cone), and it also invalidates the original fix: a
+  75-80 mm jar on the deck would still top out above the door (Z 88), so the jar must be <= ~60 mm tall or stand on the floor.
+- Issue cross-references in the short list and product table were renumbered to match the numbered sections.
+- Cam lift: electronics.md no longer says "~3.5 mm"; it asks for up to ~5 mm of travel (press to ~5 mm above the mounting face). The
+  recommendation is now 4-5 mm everywhere in this file.
+- DRV5032 polarity sentence is in sec. 7.3.1 (not 8.3). 6 x 2 N35 field at 3 mm / 5 mm now quoted as ~880 G / ~373 G to match the
+  sibling notes.
+- Hand breadth now has a source (NC State table: male 5th-95th 8.36-9.76 cm); the 90-100 mm claw-grip width remains an estimate.
+- Pump 10 W is now sourced to the Kamoer parameter page (re-fetched) instead of only pump-and-plumbing.md.
+
+Still unverified: silicone tube minimum bend radius (three vendor pages blocked); the 8 oz wide-mouth jar and the 90 deg stainless elbow
+(search links only); Amazon prices and the "Currently unavailable" status of B0CF5DR1JJ (taken from power.md); the HiLetgo A3144 module's
+sensor orientation; which DRV5032 variant is on the #6051 board; KPHM200 inrush current; the bottle-vent-vs-tilt reasoning.
