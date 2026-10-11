@@ -18,7 +18,16 @@ Repo: /home/user/temprepo (branch claude/green-lantern-battery-prop-7bn4rp).
 Safety interlocks required in firmware: pump OFF at boot; switch alone never pumps; Hall alone never pumps;
 one pour per insertion; ring removal aborts/locks; absolute max pump runtime; master power switch.
 
-## Hardware Kevin has ALREADY BOUGHT (Amazon ASINs, verified by fetching the listings)
+## CORRECTION (2026-10-11): NOTHING HAS BEEN BOUGHT YET. The list below is Kevin's SHORTLIST of candidate
+## parts he looked up on Amazon. Treat each as "the default candidate" - recommend it where it is a good choice,
+## and recommend a BETTER part where one exists (and say why), with the shortlist item as the alternative.
+## Known weak spots in the shortlist: the A3144 5 V Hall module (a 3.3 V-friendly sensor such as the Adafruit
+## DRV5032 breakout #6051 avoids the divider and the pole-orientation issue), the JoyTube 1/8" x 3/16" tubing
+## (wrong wall for the KPHM200 head: use 1/8" ID x 1/4" OD platinum silicone), and the older Gikfun pump /
+## 2x4 mm tubing (superseded by the Kamoer KPHM200). The 12 V KPHM200 is Kevin's deliberate choice for a fast
+## pour; keep it primary but present the 5 V Adafruit 3910 (single 5 V rail, ~2x slower) as the simpler option.
+
+## Hardware shortlist (Amazon ASINs, verified by fetching the listings) - NOT purchased
 | ASIN | What it is | Notes |
 |---|---|---|
 | B09HGVLHFV | **Kamoer KPHM200 peristaltic pump, 12 V DC, 200 mL/min, tube 3.2 mm ID x 6.4 mm OD** | Replaces the 5 V Adafruit 3910 that ChatGPT specced. Needs a 12 V rail. ~0.7 A at 12 V per a retailer listing (verify). |
@@ -33,7 +42,7 @@ one pour per insertion; ring removal aborts/locks; absolute max pump runtime; ma
 | B01IUVHB8E | Gikfun 12 V dosing pump AE1207 (older purchase, likely superseded by the Kamoer) | 2 mm ID tube, ~100 mL/min claimed, slow. |
 | B092V8PR3Y | Kamoer silicone tubing 2 mm ID x 4 mm OD, 3 m (older purchase for the Gikfun) | Does not fit KPHM200 head. |
 
-NOT yet bought (Kevin's open questions): LEDs ("almost obnoxiously bright" - more LEDs or bigger ones? power impact?),
+Also still to choose (Kevin's open questions): LEDs ("almost obnoxiously bright" - more LEDs or bigger ones? power impact?),
 USB power bank (any requirements?), reservoir bottle, shot glass, compression/torsion springs (what size?), M3
 screws/heat-set inserts, wire, switch, fuse, resistors, capacitor, and where in the Seattle area to buy small
 quantities of misc hardware and magnets.

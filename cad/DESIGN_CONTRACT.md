@@ -113,3 +113,27 @@ exception in build.py output.
   (sweep check at 0, 15, 30, 40, 45 deg by boolean intersection of rotor vs housing == 0 except the
   spring pocket volume).
 - Print envelope: bounding box of each part <= 220 x 220 x 220.
+
+## Revision 2 (after hardware research) - supersedes anything above that conflicts
+- The pump is the Kamoer KPHM200 (12 V): envelope ~116 x 64 x 63 mm, 300 g, tube ports on the head face
+  (the face away from the motor). It no longer fits beside the bottle AND a flat power bank on the floor:
+  put the power bank FLAT on the base floor (153 x 71 x 17) and the pump on a raised shelf/saddle above it
+  (shelf top ~22 mm above the floor), lying with its motor axis horizontal, head toward the rear door so the
+  tube can be loaded without removing the pump. Bottle stands at -X. Electronics tray at +X front. Base
+  height may grow to 110 mm if needed (expose BASE_H use; the stack heights derive from it).
+- Power: ONE 5 V port of the bank feeds everything; a 5->12 V step-up cable (max 1.2 A) hangs off the 5 V
+  bus and feeds the MOSFET module. So the base needs room for: the bank, the boost cable's inline module
+  (~45 x 20 x 12 mm), the D4184 module, the XIAO on a 40 x 30 perfboard, two inline fuse holders, the rocker
+  switch in the door panel, and a panel-mount USB-C extension in the door panel (24 mm hole or 10 x 8 notch).
+- Reservoir: 8 oz PET Boston round 57.2 x 132.6 mm, 24-410 cap (drilled: 6 mm tube hole + 2.5 mm vent).
+- Shot glass: Libbey Torque 1.5 oz Tritan 54 mm tall / 48 mm top, or Libbey 5120 60 mm tall / 51 mm top.
+  Serving 30 mL in ~9 s. Nozzle tip 10-15 mm above the rim, aimed at the inside wall of the glass.
+- Lighting: 24-px NeoPixel ring in the socket; inside the sphere a 60/m WS2812B strip cut into 8 rows of
+  7 px on a flat white-PETG 'led_carrier' plate ~110 x 110 mm standing 25 mm behind the front diffuser
+  (it doubles as the front wall of the glass bay); ADD this part to the sphere module if not present:
+  a plate with 8 parallel 10.5 x 1.5 mm shallow strip channels at 13 mm pitch, two tabs that drop into
+  slots in the bay_floor, and a wire notch. The window-frame strip channel may stay as an alternative.
+- The Hall sensor may be either the HiLetgo A3144 module (31 x 15 mm, sensor at the edge) or the Adafruit
+  DRV5032 breakout (25.6 x 17.8 mm, sensor near the centre, JST PH at one end): make the hall_carrier a
+  separate small part with the PCB slot length >= 32 mm and the stop position adjustable (two stop positions
+  or a sliding stop), so the sensor element can be put on the rotor axis for either board.

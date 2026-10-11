@@ -40,22 +40,23 @@ D2F_HOLE_D, D2F_HOLE_PITCH = 2.4, 6.5               # two mounting holes through
 D2F_LEVER_LEN = 13.5                                # free end measured from the hinge pivot
 
 # ---------------------------------------------------------------- pump / fluid (Kamoer KPHM200, 12 V)
-PUMP_L = 92.0               # overall length incl. motor (ESTIMATE until research confirms; bracket is a strap cradle)
-PUMP_HEAD_D = 42.0          # pump head diameter (ESTIMATE)
-PUMP_MOTOR_D = 30.0         # motor can diameter (ESTIMATE)
+PUMP_L = 118.0              # Kamoer KPHM200 overall 115.6 mm (Amazon dims) + margin; head end = tube ports
+PUMP_HEAD_D = 64.0          # KPHM200 is ~64 x 63 mm across the head (box-like); saddle for a 64 mm round/box
+PUMP_MOTOR_D = 40.0         # motor can diameter (estimate; a 300 g 1:8 gear motor)
+PUMP_W, PUMP_H = 64.0, 63.0 # envelope width/height when lying with the motor axis horizontal
 TUBE_OD = 6.4               # 1/8" ID x 1/4" OD food-grade silicone for the head
 TUBE_ID = 3.2
 TUBE_GROMMET_D = 7.0        # hole for the tube to pass a wall
 
-BOTTLE_D = 62.0             # 8 oz PET Boston round incl. tolerance (ESTIMATE, verify)
-BOTTLE_H = 136.0            # with cap
+BOTTLE_D = 60.0             # 8 oz PET Boston round 57.2 mm (ContainerAndPackaging B320) + clearance
+BOTTLE_H = 136.0            # 132.6 mm body + cap
 BOTTLE_NECK_D = 28.0        # 24-410 cap OD ~ 27-28
 
-GLASS_D_TOP = 52.0          # shot glass envelope: 2 oz glass top OD
-GLASS_D_BASE = 42.0
-GLASS_H = 72.0
+GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and Torque 92440 Tritan (48 top, 54 tall)
+GLASS_D_BASE = 40.0
+GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 150.0, 72.0, 26.0   # pocket (strap-retained); most 10k banks are smaller
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 153.0, 71.0, 17.0   # Anker 313 (A1229) 149.5 x 68.5 x 14.5 + clearance; +25 mm cable room at one end
 
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 100.0              # base drum height
