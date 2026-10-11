@@ -1,5 +1,7 @@
 import sys
-sys.path.insert(0, "/tmp/claude-0/-home-user-temprepo/45c7fed5-b38c-5bcd-8935-8412da500de5/scratchpad")
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 
 W, H = 1100, 470
@@ -77,5 +79,5 @@ callout(9, 38, 950, 400, ["Open the rear hatch,", "reach in, take the", "full gl
 # notes
 s.text(20, 455, "Pulling the ring out at any moment stops the pump immediately and returns to IDLE. The hatch faces the owner; the audience only sees the glow through the front window.", size=9.5, color="#444")
 
-open("/home/user/temprepo/docs/images/interaction.svg", "w").write(s.finish())
+open(os.path.join(HERE, "..", "interaction.svg"), "w").write(s.finish())
 print("written")

@@ -1,5 +1,7 @@
 import sys, math
-sys.path.insert(0, "/tmp/claude-0/-home-user-temprepo/45c7fed5-b38c-5bcd-8935-8412da500de5/scratchpad")
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 
 BLUE = "#1d4ed8"
@@ -164,5 +166,5 @@ s.text(lx + 224, ly, "hinged door / hatch", size=11)
 s.path("M40,822 L112,822 M40,817 L40,827 M112,817 L112,827", stroke=INK, sw=1.5)
 s.text(76, 838, "50 mm", size=10, anchor="middle")
 
-open("/home/user/temprepo/docs/images/fluid-path.svg", "w").write(s.finish())
+open(os.path.join(HERE, "..", "fluid-path.svg"), "w").write(s.finish())
 print("written")

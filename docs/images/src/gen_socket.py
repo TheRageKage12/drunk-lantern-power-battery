@@ -1,5 +1,7 @@
 import sys, math
-sys.path.insert(0, "/tmp/claude-0/-home-user-temprepo/45c7fed5-b38c-5bcd-8935-8412da500de5/scratchpad")
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 
 W, H = 1100, 800
@@ -196,5 +198,5 @@ lab(RXS, 657, ["DRV5032 breakout on a post, chip", "~3–4 mm under the magnet p
 lab(RXS, 707, ["D2F-L lever under the cam lobe", "(lobe dashed: it is at 50°, out of", "this plane). Slotted mount block"], cx + 90, Y0 + 70, anchor="start", size=9.5)
 lab(RXS, 757, ["cables through the floor grommet", "down the sphere's wire channel"], cx + 40, Y0 + 115, anchor="start", size=9.5)
 
-open("/home/user/temprepo/docs/images/socket-mechanism.svg", "w").write(s.finish())
+open(os.path.join(HERE, "..", "socket-mechanism.svg"), "w").write(s.finish())
 print("written")

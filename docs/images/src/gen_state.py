@@ -1,5 +1,7 @@
 import sys
-sys.path.insert(0, "/tmp/claude-0/-home-user-temprepo/45c7fed5-b38c-5bcd-8935-8412da500de5/scratchpad")
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 
 W, H = 1100, 600
@@ -99,5 +101,5 @@ s.text(44, 567, "Legend:", size=10, weight="bold")
 s.wire([(100, 563), (130, 563)], INK, sw=2, marker="arrK"); s.text(136, 567, "transition", size=10)
 s.wire([(210, 563), (240, 563)], RED, sw=1.8, dash="6,4", marker="arrR"); s.text(246, 567, "abort path (ring pulled)", size=10)
 
-open("/home/user/temprepo/docs/images/state-machine.svg", "w").write(s.finish())
+open(os.path.join(HERE, "..", "state-machine.svg"), "w").write(s.finish())
 print("written")
