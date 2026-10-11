@@ -9,6 +9,7 @@
  *   Hall present AND switch pressed AND not poured yet -> FLASH, then POURING (pump on, light show)
  *   pour finishes                            -> LOCKED (afterglow) until the ring is removed
  *   remove ring                              -> IDLE
+ *   PRIME button (D6) held while IDLE, no ring -> pump runs to prime the tube, stops on release
  *
  * Safety interlocks (do not remove)
  *   - pump output is driven LOW before anything else at boot
@@ -20,7 +21,13 @@
  *   - a switch that is already pressed at boot, or when the ring arrives (jammed cam), is ignored
  *     until it has been released
  *   - the pump only starts from FLASH if the Hall sensor sees the ring at that instant
- *   - the only way to run the pump without the ring is the serial "cal" bench command
+ *   - the only ways to run the pump without the ring are the serial "cal" bench command and the
+ *     PRIME button, which works only in IDLE with no ring, only while held, never changes state,
+ *     and after a cap stop needs a release before it runs again
+ *   - during POURING the pump stops once the Hall input has been absent for POUR_ABORT_MS (60 ms)
+ *     and the prop goes LOCKED; the slower RING_GONE_MS only governs the LOCKED -> IDLE reset
+ *   - LED brightness is capped at POUR_MAX_BRIGHT on top of maxBright during FLASH/POURING so the
+ *     5 V rail stays under ~1 A for the LEDs while the pump runs
  *
  * Wiring (see docs/BUILD_GUIDE.md):
  *   D1  <- Hall sensor OUT, active LOW when the magnet is present. Primary: Adafruit DRV5032 breakout
@@ -28,9 +35,14 @@
  *          Alternative: 5 V A3144 module, OUT -> 4.7k series -> D1, 22k from D1 to GND (divider off the
  *          module's own pull-up so the 3.3 V pin never sees 5 V).
  *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
- *   D3  -> D4184 MOSFET module PWM/TRIG input (HIGH = pump on); module GND tied to XIAO GND
+ *   D3  -> 74AHCT125 channel 3 (pin 9 in, pin 8 out) -> D4184 TRIG (HIGH = pump on); 10 k pull-down
+ *          on D3 keeps the trigger LOW while the XIAO boots/resets; D4184 GND tied to XIAO GND;
+ *          1N5819 flyback diode across the pump motor (cathode to +12 V)
  *   D4  -> 74AHCT125 in  -> out -> 330 ohm -> NeoPixel RING DIN (24 px, in the charging socket)
  *   D5  -> 74AHCT125 in  -> out -> 330 ohm -> NeoPixel STRIP DIN (60 px, inside the sphere)
+ *   D6  <- PRIME button, momentary to GND (internal pull-up, active LOW)
+ *   5V  <- 5 V bus through a 1N5819 (USB and the power bank never back-feed each other)
+ *   3V3 -> DRV5032 VCC (the A3144 alternative runs from 5 V with the divider above)
  *
  * Serial (115200) commands for bench calibration, type then Enter:
  *   status            print state and settings
@@ -50,6 +62,7 @@ constexpr uint8_t SWITCH_PIN    = D2;
 constexpr uint8_t PUMP_PIN      = D3;
 constexpr uint8_t RING_LED_PIN  = D4;
 constexpr uint8_t STRIP_LED_PIN = D5;
+constexpr uint8_t PRIME_PIN     = D6;  // momentary to GND: primes the tube while held (IDLE, no ring)
 
 // ------------------------------------------------------------------ LEDs
 constexpr uint16_t RING_COUNT  = 24;   // Adafruit 24-px NeoPixel ring in the socket
@@ -58,12 +71,16 @@ constexpr uint16_t STRIP_COUNT = 60;   // WS2812B strip inside the sphere (set t
 // ------------------------------------------------------------------ timing
 constexpr uint32_t HALL_DEBOUNCE_MS   = 100;   // ring must be seen this long before ARMED
 constexpr uint32_t SWITCH_DEBOUNCE_MS = 40;
-constexpr uint32_t RING_GONE_MS       = 200;   // ring must be absent this long to reset
+constexpr uint32_t PRIME_DEBOUNCE_MS  = 40;
+constexpr uint32_t RING_GONE_MS       = 200;   // ring must be absent this long to reset (LOCKED -> IDLE)
+constexpr uint32_t POUR_ABORT_MS      = 60;    // ring absent this long during POURING -> pump off, LOCKED
 constexpr uint32_t FLASH_MS           = 220;   // bright flash before the pump starts
 constexpr uint32_t PUMP_RAMP_MS       = 300;   // PWM soft start to avoid a 5 V brown-out
 constexpr uint32_t DEFAULT_POUR_MS    = 10000; // replace after water calibration (see guide)
 constexpr uint32_t MAX_PUMP_MS        = 20000; // hard cap, independent of everything else
 constexpr uint8_t  DEFAULT_MAX_BRIGHT = 160;   // 0..255 cap for every animation (current budget)
+constexpr uint8_t  POUR_MAX_BRIGHT    = 110;   // extra cap while FLASH/POURING: LEDs < ~1 A on the 5 V rail
+constexpr uint8_t  IDLE_PILOT         = 40;    // steady ring glow in IDLE (>= ~150 mA keeps the power bank awake)
 
 // ------------------------------------------------------------------ persistent settings
 struct Settings {
@@ -90,6 +107,10 @@ bool     hallStable   = false; // debounced "ring present"
 bool     swStable     = false; // debounced "switch pressed"
 bool     switchJammed = false; // pressed at boot -> ignore until released
 bool     pouredThisInsertion = false;
+uint32_t primeChanged = 0;     // last raw edge on the PRIME button
+bool     primeRaw     = false;
+bool     primeStable  = false; // debounced "PRIME held"
+bool     primeReady   = false; // PRIME seen released since the last prime run (no auto-restart after the cap)
 
 // pump bookkeeping (the cap is enforced here, not in the state machine)
 bool     pumpOn       = false;
@@ -97,6 +118,7 @@ uint32_t pumpStarted  = 0;     // millis() of the latest pumpStart() (requested-
 uint32_t pumpRunFor   = 0;     // requested duration for the current run
 uint32_t pumpOnSince  = 0;     // millis() when the pump last went off -> on (continuous-run cap)
 bool     pumpCal      = false; // current run is a serial "cal" run: allowed without the ring
+bool     pumpPrime    = false; // current run is a PRIME-button run: allowed without the ring, ends on release
 
 static inline uint32_t since(uint32_t t) { return millis() - t; } // wrap-safe
 
@@ -104,8 +126,9 @@ static inline uint32_t since(uint32_t t) { return millis() - t; } // wrap-safe
 void pumpStop() {
   analogWrite(PUMP_PIN, 0);
   digitalWrite(PUMP_PIN, LOW);       // rp2040 core: takes the pad back from the PWM slice to SIO
-  pumpOn  = false;
-  pumpCal = false;
+  pumpOn    = false;
+  pumpCal   = false;
+  pumpPrime = false;
 }
 
 void pumpStart(uint32_t runMs) {
@@ -114,7 +137,8 @@ void pumpStart(uint32_t runMs) {
   pumpStarted = millis();
   pumpRunFor  = runMs;
   pumpOn      = true;
-  pumpCal     = false;               // the "cal" command sets this after calling us
+  pumpCal     = false;               // the "cal" command / PRIME logic set their flag after calling us
+  pumpPrime   = false;
   analogWrite(PUMP_PIN, 1);          // ramp handled in pumpService()
 }
 
@@ -130,7 +154,11 @@ bool pumpService() {
 }
 
 // ------------------------------------------------------------------ LED helpers
-uint8_t capB(uint16_t v) { return (uint8_t)((v * settings.maxBright) / 255); }
+uint8_t capB(uint16_t v) {
+  uint8_t cap = settings.maxBright;
+  if ((state == State::FLASH || state == State::POURING) && cap > POUR_MAX_BRIGHT) cap = POUR_MAX_BRIGHT;
+  return (uint8_t)((v * cap) / 255);
+}
 
 uint32_t green(uint8_t b)      { return Adafruit_NeoPixel::Color(0, capB(b), 0); }
 uint32_t greenWhite(uint8_t b) { return Adafruit_NeoPixel::Color(capB(b) / 3, capB(b), capB(b) / 4); }
@@ -147,9 +175,9 @@ uint8_t tri(uint32_t periodMs, uint32_t phaseMs) {
   return (p < half) ? (uint8_t)((255UL * p) / half) : (uint8_t)((255UL * (periodMs - p)) / half);
 }
 
-void animateIdle() {              // faint ember so the prop never looks dead
-  const uint8_t b = 6 + tri(4000, 0) / 32;         // 6..13
-  fillAll(green(b), green(b / 2));
+void animateIdle() {              // pilot glow: steady ring so the power bank sees a load, strip dark
+  const uint8_t b = IDLE_PILOT + tri(4000, 0) / 16;              // 40..55, slow breathe
+  fillAll(Adafruit_NeoPixel::Color(0, b, 0), 0);                 // absolute, not scaled by maxBright
 }
 
 void animateArmed() {             // slow charging pulse that builds over ~20 s
@@ -264,14 +292,18 @@ void serviceSerial() {
 
 // ------------------------------------------------------------------ inputs
 void readInputs() {
-  const bool h = digitalRead(HALL_PIN) == LOW;    // A3144 pulls LOW when the magnet is present
+  const bool h = digitalRead(HALL_PIN) == LOW;    // DRV5032 / A3144 pull LOW when the magnet is present
   const bool s = digitalRead(SWITCH_PIN) == LOW;  // NO contact to GND
+  const bool p = digitalRead(PRIME_PIN) == LOW;   // button to GND
   const uint32_t now = millis();
-  if (h != hallRaw) { hallRaw = h; hallChanged = now; }
-  if (s != swRaw)   { swRaw = s;   swChanged = now; }
+  if (h != hallRaw)  { hallRaw = h;  hallChanged = now; }
+  if (s != swRaw)    { swRaw = s;    swChanged = now; }
+  if (p != primeRaw) { primeRaw = p; primeChanged = now; }
   if (since(hallChanged) >= (hallRaw ? HALL_DEBOUNCE_MS : RING_GONE_MS)) hallStable = hallRaw;
   if (since(swChanged) >= SWITCH_DEBOUNCE_MS) swStable = swRaw;
+  if (since(primeChanged) >= PRIME_DEBOUNCE_MS) primeStable = primeRaw;
   if (switchJammed && !swStable) switchJammed = false;  // released at last
+  if (!primeStable && !primeRaw) primeReady = true;     // a held-at-boot or capped PRIME needs a real release first
 }
 
 void enter(State s) {
@@ -285,6 +317,7 @@ void setup() {
   digitalWrite(PUMP_PIN, LOW);          // FIRST: pump off
   pinMode(HALL_PIN, INPUT_PULLUP);      // DRV5032 is open-drain; the A3144 divider also sits below the pull-up
   pinMode(SWITCH_PIN, INPUT_PULLUP);
+  pinMode(PRIME_PIN, INPUT_PULLUP);
 
   Serial.begin(115200);
   loadSettings();
@@ -309,8 +342,15 @@ void loop() {
   serviceSerial();
   const bool pumping = pumpService();   // enforces duration and the hard cap every pass
 
-  // Global interlock: no ring -> no pump, whatever the state (only a serial "cal" run is exempt).
-  if (!hallStable && pumpOn && !pumpCal) pumpStop();
+  // Global interlock: no ring -> no pump, whatever the state (only "cal" and PRIME runs are exempt).
+  if (!hallStable && pumpOn && !pumpCal && !pumpPrime) pumpStop();
+
+  // PRIME button: tube priming. Only in IDLE with no ring, only while held, never changes state.
+  // Starts on a debounced press (after a release has been seen), stops on the RAW release, on any
+  // state/ring change, or at the cap, and does not restart after the cap until released and pressed.
+  const bool primeAllowed = (state == State::IDLE) && !hallStable && primeStable && primeRaw;
+  if (primeAllowed && primeReady && !pumpOn) { pumpStart(MAX_PUMP_MS); pumpPrime = true; primeReady = false; }
+  if (pumpPrime && !primeAllowed) pumpStop();
 
   switch (state) {
     case State::IDLE:
@@ -342,7 +382,9 @@ void loop() {
 
     case State::POURING:
       animatePouring();
-      if (!hallStable) { pumpStop(); enter(State::IDLE); break; }   // ring pulled: abort
+      // ring pulled: abort as soon as the raw input has been absent POUR_ABORT_MS, lock until it is
+      // really gone (RING_GONE_MS) so a dropout can never buy a second pour
+      if (!hallStable || (!hallRaw && since(hallChanged) >= POUR_ABORT_MS)) { pumpStop(); enter(State::LOCKED); break; }
       if (!pumping)   { enter(State::LOCKED); }
       break;
 
