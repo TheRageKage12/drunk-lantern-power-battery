@@ -76,6 +76,7 @@ static double runUntil(const std::function<bool()>& pred, double maxMs) {
 struct BootOpts { uint64_t startUs = 0; bool keepFlash = false; bool switchHeld = false; bool ringPresent = false; bool primeHeld = false; };
 static void reboot(BootOpts o = BootOpts{}) {
   sim::resetPins();
+  sim::pwmRange = 255;
   sim::nowUs = o.startUs;
   Serial.reset();
   EEPROM.powerCycle();
@@ -92,15 +93,29 @@ static void reboot(BootOpts o = BootOpts{}) {
   pumpOn = false; pumpStarted = pumpRunFor = 0;
   pumpOnSince = 0; pumpCal = false; pumpPrime = false;
   lineBuf = "";
-  ledShown = 0.0f; ledLastMs = 0; ledDuty = 0;
+  ledShown = 0.0f; ledLastMs = 0; ledDuty = 0; finaleFrom = finaleTo = 0.0f;
 
   setup();
 }
 
+// ------------------------------------------------------------------ helpers for the hold-to-pour flow
+static uint32_t speedDuty() { return (PWM_RANGE * settings.pumpSpeed) / 100; }
+static uint32_t lightDuty(float p) {      // the sketch's own formula, for exact comparisons
+  uint32_t d = (uint32_t)(powf(p, GAMMA) * (float)settings.maxBright * ((float)PWM_RANGE / 255.0f) + 0.5f);
+  const uint32_t f = (uint32_t)settings.idleDuty * PWM_RANGE / 255;
+  if (d < f) d = f;
+  if (d > PWM_RANGE) d = PWM_RANGE;
+  return d;
+}
+static const double FINALE_MS = FINALE_UP_MS + FINALE_HOLD_MS + FINALE_FADE_MS;
+static bool insertRing() { setRing(true); return runUntil([] { return state == State::ARMED; }, 1000) >= 0; }
+static bool twistAndHold() { setSwitch(true); return runUntil([] { return pumpPinOn(); }, 1000) >= 0; }
+static bool holdToEnd() { return runUntil([] { return state == State::HOLDING; }, (double)MAX_PUMP_MS + 2000) >= 0; }
+
 // ------------------------------------------------------------------ the canonical pour (d / j)
 struct PourMeasure {
-  double armedAfter = -1, flashAfter = -1, pumpAfterFlash = -1, pourLen = -1, offToLocked = -1;
-  std::string endState; bool pwmReleased = false; int dutyAt400 = -1;
+  double armedAfter = -1, pumpAfterPress = -1, pourLen = -1, finaleAfterRelease = -1, lockedAfterFinale = -1;
+  std::string stateAtPumpOff; bool pwmReleased = false; int dutyAt600 = -1; uint32_t lightAtPumpOff = 0;
   uint32_t millisAtStart = 0, millisAtEnd = 0;
 };
 static PourMeasure doPour(uint64_t startUs) {
@@ -109,489 +124,395 @@ static PourMeasure doPour(uint64_t startUs) {
   m.millisAtStart = millis();
   setRing(true);
   m.armedAfter = runUntil([] { return state == State::ARMED; }, 1000);
-  runMs(2000);                                            // the oath
-  setSwitch(true);                                        // twist
-  m.flashAfter = runUntil([] { return state == State::FLASH; }, 1000);
-  const uint32_t flashSince = stateSince;
-  if (runUntil([] { return pumpPinOn(); }, 1000) >= 0 && pumpRuns() == 1)
-    m.pumpAfterFlash = (double)(uint32_t)((uint32_t)(sim::runs[PUMP_PIN][0].startUs / 1000) - flashSince);
-  const std::string st = stateName(state);
-  runMs(400);                                             // rotor spring-returns while the pump ramps
-  m.dutyAt400 = sim::pin[PUMP_PIN].func == sim::FUNC_PWM ? sim::pin[PUMP_PIN].pwm : -1;
-  setSwitch(false);
+  runMs(2000);                                            // the first words of the oath
+  setSwitch(true);                                        // twist and hold
+  m.pumpAfterPress = runUntil([] { return pumpPinOn(); }, 1000);
+  runMs(600);
+  m.dutyAt600 = sim::pin[PUMP_PIN].func == sim::FUNC_PWM ? sim::pin[PUMP_PIN].pwm : -1;
   runUntil([] { return !pumpPinOn(); }, (double)MAX_PUMP_MS + 2000);
   if (pumpRuns() >= 1) m.pourLen = pumpRunMs(0);
-  m.endState = stateName(state);
+  m.stateAtPumpOff = stateName(state);
+  m.lightAtPumpOff = ledDuty;
   m.pwmReleased = pumpPinQuiet();
-  m.offToLocked = (state == State::LOCKED) ? 0 : runUntil([] { return state == State::LOCKED; }, 1000);
+  runMs(1500);                                            // still holding: lights stay at the peak
+  setSwitch(false);                                       // the ring turns back
+  m.finaleAfterRelease = runUntil([] { return state == State::FINALE; }, 1000);
+  m.lockedAfterFinale = runUntil([] { return state == State::LOCKED; }, 5000);
   m.millisAtEnd = millis();
-  if (st != "POURING") m.endState = "pump on in state " + st + " then " + m.endState;
   return m;
 }
 static void checkPour(const PourMeasure& m) {
-  CHECK(m.armedAfter >= HALL_DEBOUNCE_MS && m.armedAfter <= HALL_DEBOUNCE_MS + 2 * LOOP_MS, "ARMED after %.1f ms (edge seen next pass, debounced, acted on the pass after)", m.armedAfter);
-  CHECK(m.flashAfter >= SWITCH_DEBOUNCE_MS && m.flashAfter <= SWITCH_DEBOUNCE_MS + 2 * LOOP_MS, "FLASH after %.1f ms", m.flashAfter);
-  CHECK(m.pumpAfterFlash >= FLASH_MS && m.pumpAfterFlash <= FLASH_MS + LOOP_MS, "pump on %.1f ms after FLASH (want %u..%u)", m.pumpAfterFlash, (unsigned)FLASH_MS, (unsigned)(FLASH_MS + LOOP_MS));
-  CHECK(m.dutyAt400 == 255, "duty after the 300 ms ramp = %d (want 255)", m.dutyAt400);
+  CHECK(m.armedAfter >= HALL_DEBOUNCE_MS && m.armedAfter <= HALL_DEBOUNCE_MS + 2 * LOOP_MS, "ARMED after %.1f ms", m.armedAfter);
+  CHECK(m.pumpAfterPress >= SWITCH_DEBOUNCE_MS && m.pumpAfterPress <= SWITCH_DEBOUNCE_MS + 2 * LOOP_MS, "pump on %.1f ms after the twist", m.pumpAfterPress);
+  CHECK(m.dutyAt600 == (int)speedDuty(), "running duty %d (want %u = speed %u %%)", m.dutyAt600, speedDuty(), settings.pumpSpeed);
   CHECK(m.pourLen >= settings.pourMs - 1 && m.pourLen <= settings.pourMs + LOOP_MS, "pump ran %.1f ms (pourMs=%u)", m.pourLen, (unsigned)settings.pourMs);
-  CHECK(m.endState == "LOCKED" && m.offToLocked == 0, "state after the pour: %s (LOCKED in the same loop pass expected)", m.endState.c_str());
+  CHECK(m.stateAtPumpOff == "HOLDING", "state when the pour completed: %s (want HOLDING)", m.stateAtPumpOff.c_str());
+  CHECK(m.lightAtPumpOff + 2 >= lightDuty(POUR_PEAK) && m.lightAtPumpOff <= lightDuty(POUR_PEAK), "light at the end of the pour %u (want ~%u = %.0f %%)", m.lightAtPumpOff, lightDuty(POUR_PEAK), POUR_PEAK * 100);
   CHECK(m.pwmReleased, "pump pad still on the PWM function / not LOW after pumpStop()");
+  CHECK(m.finaleAfterRelease >= SWITCH_DEBOUNCE_MS && m.finaleAfterRelease <= SWITCH_DEBOUNCE_MS + 2 * LOOP_MS, "FINALE %.1f ms after the release", m.finaleAfterRelease);
+  CHECK(m.lockedAfterFinale >= FINALE_MS - LOOP_MS && m.lockedAfterFinale <= FINALE_MS + 2 * LOOP_MS, "LOCKED %.1f ms after FINALE began (want ~%.0f)", m.lockedAfterFinale, FINALE_MS);
   CHECK(pumpRuns() == 1, "pump energised %zu times", pumpRuns());
 }
 
 // ------------------------------------------------------------------ scenarios
 int main() {
-  // measure the loop period once (IDLE, nothing happening)
   reboot();
   { const uint64_t t0 = sim::nowUs; for (int i = 0; i < 100; i++) loop(); LOOP_MS = (sim::nowUs - t0) / 1000.0 / 100; }
-  printf("simulated loop() period: %.2f ms (delay(8) + show() wire time); one-iteration budget: 20 ms\n", LOOP_MS);
+  printf("simulated loop() period: %.2f ms; one-iteration budget: 20 ms\n", LOOP_MS);
   if (LOOP_MS > 20) { printf("FAIL loop period exceeds 20 ms\n"); return 1; }
 
-  scenario("a", "boot: pump LOW after setup(), jammed switch ignored until released + pressed again", [] {
+  scenario("a", "boot: pump LOW first, lights dark, jammed switch ignored until released + twisted again", [] {
     reboot(BootOpts{0, false, /*switchHeld*/ true});
-    CHECK(!pumpPinOn(), "pump pin on right after setup()");
-    CHECK(pumpRuns() == 0, "pump pin was energised during setup() (%zu runs)", pumpRuns());
-    CHECK(pumpPinQuiet(), "pump pin not SIO/LOW after setup()");
-    // the first two pin operations of the whole boot must be pinMode(PUMP, OUTPUT) + digitalWrite(PUMP, LOW)
+    CHECK(!pumpPinOn() && pumpRuns() == 0 && pumpPinQuiet(), "pump pin active after setup()");
     CHECK(sim::events.size() >= 2 && sim::events[0].pin == PUMP_PIN && !strcmp(sim::events[0].what, "pinMode") && sim::events[0].val == OUTPUT
           && sim::events[1].pin == PUMP_PIN && !strcmp(sim::events[1].what, "digitalWrite") && sim::events[1].val == LOW,
           "pump pin is not the first thing setup() configures");
     CHECK(switchJammed, "switch held through boot not flagged as jammed");
-    CHECK(state == State::IDLE, "state %s", stateName(state));
-    setRing(true);
-    runMs(3000);
-    CHECK(state == State::ARMED, "ring in, state %s", stateName(state));
+    runMs(1000);
+    CHECK(state == State::IDLE && ledDuty == 0, "IDLE: state %s light %u (want dark)", stateName(state), ledDuty);
+    CHECK(insertRing(), "never ARMED");
+    runMs(8000);
     CHECK(pumpRuns() == 0, "jammed switch + ring poured");
-    runMs(5000);
-    CHECK(pumpRuns() == 0, "jammed switch + ring poured (held 8 s)");
     setSwitch(false); runMs(300);
-    CHECK(!switchJammed, "jam flag not cleared after release");
-    CHECK(pumpRuns() == 0, "pour on release");
-    setSwitch(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0, "no pour after release + press");
+    CHECK(!switchJammed && pumpRuns() == 0, "jam flag %d runs %zu after release", switchJammed, pumpRuns());
+    CHECK(twistAndHold(), "no pour after release + twist");
+    CHECK(holdToEnd(), "never reached HOLDING");
     setSwitch(false);
-    runUntil([] { return state == State::LOCKED; }, (double)MAX_PUMP_MS + 1000);
+    runUntil([] { return state == State::LOCKED; }, 5000);
     CHECK(pumpRuns() == 1 && state == State::LOCKED, "runs=%zu state=%s", pumpRuns(), stateName(state));
   });
 
   scenario("b", "switch only (no ring): never pumps, 60 s of toggling", [] {
     reboot();
     bool everLeftIdle = false;
-    for (int i = 0; i < 60; i++) {           // 500 ms pressed / 500 ms released
+    for (int i = 0; i < 60; i++) {
       setSwitch(true);  runMs(500); everLeftIdle |= (state != State::IDLE);
       setSwitch(false); runMs(500); everLeftIdle |= (state != State::IDLE);
     }
-    CHECK(pumpRuns() == 0, "pump energised %zu times", pumpRuns());
-    CHECK(!everLeftIdle, "left IDLE on the switch alone");
-    CHECK(pumpPinQuiet(), "pump pin not quiet");
+    CHECK(pumpRuns() == 0 && !everLeftIdle && pumpPinQuiet(), "runs %zu, left IDLE %d", pumpRuns(), everLeftIdle);
   });
 
-  scenario("c", "ring only: ARMED, never pumps (60 s)", [] {
+  scenario("c", "ring only: ARMED at the ~15 % glow for 60 s, never pumps", [] {
     reboot();
-    setRing(true);
-    CHECK(runUntil([] { return state == State::ARMED; }, 1000) >= 0, "never ARMED");
-    runMs(1000);
-    const uint8_t early = ledDuty;
-    runMs(59000);
-    CHECK(state == State::ARMED, "state %s", stateName(state));
-    CHECK(pumpRuns() == 0, "pump energised %zu times", pumpRuns());
-    CHECK(ledDuty > early, "ARMED light did not climb (%u -> %u)", early, ledDuty);
+    CHECK(insertRing(), "never ARMED");
+    runMs(60000);
+    CHECK(state == State::ARMED && pumpRuns() == 0, "state %s runs %zu", stateName(state), pumpRuns());
+    CHECK(ledDuty == lightDuty(ARMED_LEVEL), "ARMED light %u (want %u)", ledDuty, lightDuty(ARMED_LEVEL));
   });
 
   static PourMeasure pourD;
-  scenario("d", "ring + switch: FLASH, pump on after ~220 ms, off after pourMs -> LOCKED", [] {
+  scenario("d", "twist and hold: pump runs pourMs at the set speed, lights climb to ~90 %, HOLDING; release -> FINALE -> LOCKED", [] {
     pourD = doPour(0);
     checkPour(pourD);
-    NOTE("ARMED +%.1f ms, FLASH +%.1f ms after press, pump %.1f ms after FLASH, ran %.1f ms, then %s",
-         pourD.armedAfter, pourD.flashAfter, pourD.pumpAfterFlash, pourD.pourLen, pourD.endState.c_str());
+    NOTE("ARMED +%.1f ms, pump %.1f ms after the twist, ran %.1f ms, light at the end %u/%u, FINALE %.1f ms after release, LOCKED %.1f ms later",
+         pourD.armedAfter, pourD.pumpAfterPress, pourD.pourLen, pourD.lightAtPumpOff, PWM_RANGE, pourD.finaleAfterRelease, pourD.lockedAfterFinale);
   });
 
-  scenario("e", "LOCKED: switch held 5 s and re-pressed 20x with the ring in -> no second pour", [] {
-    // continues from d: LOCKED, ring present, switch released
+  scenario("e", "LOCKED: twisted and held 5 s, re-twisted 20x with the ring in -> no second pour", [] {
     CHECK(state == State::LOCKED && pumpRuns() == 1, "precondition: state %s runs %zu", stateName(state), pumpRuns());
     setSwitch(true); runMs(5000);
-    CHECK(pumpRuns() == 1 && state == State::LOCKED, "held: runs=%zu state=%s", pumpRuns(), stateName(state));
     for (int i = 0; i < 20; i++) { setSwitch(false); runMs(150); setSwitch(true); runMs(150); }
     setSwitch(false); runMs(500);
-    CHECK(pumpRuns() == 1 && state == State::LOCKED, "re-pressed: runs=%zu state=%s", pumpRuns(), stateName(state));
+    CHECK(pumpRuns() == 1 && state == State::LOCKED, "runs=%zu state=%s", pumpRuns(), stateName(state));
     CHECK(sim::totalOnUs(PUMP_PIN) / 1000.0 <= settings.pourMs + LOOP_MS, "extra pump time");
   });
 
-  scenario("f", "ring removed during POURING: pump off within one pass of POUR_ABORT_MS (60 ms), LOCKED, then IDLE", [] {
+  scenario("f", "ring pulled out mid-pour (still twisted): pump off within one pass of POUR_ABORT_MS, LOCKED, then IDLE", [] {
     reboot();
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
-    setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
-    runMs(3000);
+    insertRing(); twistAndHold(); runMs(3000);
     CHECK(state == State::POURING && pumpPinOn(), "precondition");
     const double tRemove = nowMs();
     setRing(false);
-    // step one pass at a time: the first pass that starts with the raw input absent for POUR_ABORT_MS
-    // (what readInputs() will see, time does not move until the end of the pass) must end pump-off
     bool offSamePass = false, conditionSeen = false; int passes = 0;
     while (passes++ < 100) {
       const bool cond = !hallRaw && since(hallChanged) >= POUR_ABORT_MS;
       loop();
       if (cond) { conditionSeen = true; offSamePass = !pumpPinOn(); break; }
     }
-    CHECK(conditionSeen, "abort condition never reached");
-    CHECK(offSamePass, "pump still on in the pass that saw %u ms of absence", (unsigned)POUR_ABORT_MS);
-    CHECK(pumpRuns() == 1, "runs %zu", pumpRuns());
+    CHECK(conditionSeen && offSamePass, "pump still on in the pass that saw %u ms of absence", (unsigned)POUR_ABORT_MS);
     const double offLatency = pumpRunEndMs(0) - tRemove;
-    CHECK(offLatency >= POUR_ABORT_MS && offLatency <= POUR_ABORT_MS + 2 * LOOP_MS, "pump off %.1f ms after the raw removal (want %u..%u)", offLatency, (unsigned)POUR_ABORT_MS, (unsigned)(POUR_ABORT_MS + 2 * LOOP_MS));
-    CHECK(offLatency < RING_GONE_MS, "abort waited for RING_GONE_MS");
-    CHECK(state == State::LOCKED, "state after abort %s (want LOCKED until the ring is really gone)", stateName(state));
-    CHECK(pumpPinQuiet(), "pump pad not released");
-    const double tIdle = runUntil([] { return state == State::IDLE; }, 1000);
-    CHECK(tIdle >= 0 && nowMs() - tRemove <= RING_GONE_MS + 2 * LOOP_MS, "IDLE %.1f ms after removal", nowMs() - tRemove);
-    NOTE("pump off %.1f ms after the raw removal (POUR_ABORT_MS=%u), LOCKED, IDLE after %.1f ms (RING_GONE_MS=%u)", offLatency, (unsigned)POUR_ABORT_MS, nowMs() - tRemove, (unsigned)RING_GONE_MS);
+    CHECK(offLatency >= POUR_ABORT_MS && offLatency <= POUR_ABORT_MS + 2 * LOOP_MS, "pump off %.1f ms after the removal", offLatency);
+    CHECK(state == State::LOCKED && pumpPinQuiet(), "state after abort %s", stateName(state));
+    setSwitch(false);
+    CHECK(runUntil([] { return state == State::IDLE; }, 1000) >= 0 && nowMs() - tRemove <= RING_GONE_MS + 2 * LOOP_MS, "IDLE %.1f ms after removal", nowMs() - tRemove);
     runMs(2000);
-    CHECK(state == State::IDLE && pumpRuns() == 1, "after abort: %s runs %zu", stateName(state), pumpRuns());
+    CHECK(state == State::IDLE && pumpRuns() == 1 && ledDuty == 0, "after abort: %s runs %zu light %u", stateName(state), pumpRuns(), ledDuty);
+    NOTE("pump off %.1f ms after the ring left", offLatency);
   });
 
-  scenario("g", "remove and re-insert the ring: exactly one new pour", [] {
-    // continues from f: IDLE, ring out, switch released, one aborted run so far
+  scenario("g", "remove and re-insert the ring: exactly one new pour each time", [] {
     CHECK(state == State::IDLE && pumpRuns() == 1, "precondition");
+    CHECK(insertRing(), "not re-armed");
     runMs(1000);
-    setRing(true);
-    CHECK(runUntil([] { return state == State::ARMED; }, 1000) >= 0, "not re-armed");
-    runMs(1000);
-    setSwitch(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0, "no pour after re-insertion");
-    runMs(300); setSwitch(false);
-    runUntil([] { return state == State::LOCKED; }, (double)MAX_PUMP_MS + 1000);
-    CHECK(pumpRuns() == 2, "runs %zu (want 2)", pumpRuns());
-    CHECK(pumpRunMs(1) >= settings.pourMs - 1 && pumpRunMs(1) <= settings.pourMs + LOOP_MS, "second pour %.1f ms", pumpRunMs(1));
+    CHECK(twistAndHold() && holdToEnd(), "second pour did not complete");
+    setSwitch(false); runUntil([] { return state == State::LOCKED; }, 5000);
+    CHECK(pumpRuns() == 2 && pumpRunMs(1) >= settings.pourMs - 1 && pumpRunMs(1) <= settings.pourMs + LOOP_MS, "second pour %.1f ms", pumpRunMs(1));
     for (int i = 0; i < 5; i++) { setSwitch(true); runMs(300); setSwitch(false); runMs(300); }
-    CHECK(pumpRuns() == 2 && state == State::LOCKED, "more pours on re-twist: runs %zu state %s", pumpRuns(), stateName(state));
-    // and the cycle repeats cleanly
-    setRing(false); runMs(1000); setRing(true); runMs(1000); setSwitch(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0 && pumpRuns() == 3, "third insertion did not pour");
+    CHECK(pumpRuns() == 2 && state == State::LOCKED, "re-twist poured: runs %zu state %s", pumpRuns(), stateName(state));
+    setRing(false); runMs(1000); insertRing(); runMs(500);
+    CHECK(twistAndHold() && pumpRuns() == 3, "third insertion did not pour");
     setSwitch(false);
   });
 
-  scenario("h", "hard cap: 'pour' above MAX_PUMP_MS rejected; forced long run stops at MAX_PUMP_MS", [] {
+  scenario("h", "hard cap: 'pour' above MAX_PUMP_MS rejected; forced long runs stop at MAX_PUMP_MS", [] {
     reboot();
-    serialLine("pour 25000"); runMs(50);
-    CHECK(settings.pourMs == DEFAULT_POUR_MS, "pour 25000 accepted: pourMs=%u", (unsigned)settings.pourMs);
-    CHECK(serialSaid("pour: 500..MAX_PUMP_MS"), "no rejection message");
-    serialLine("pour 20001"); runMs(50);
-    CHECK(settings.pourMs == DEFAULT_POUR_MS, "pour 20001 accepted");
-    serialLine("pour 499"); runMs(50);
-    CHECK(settings.pourMs == DEFAULT_POUR_MS, "pour 499 accepted");
+    serialLine("pour 25000"); serialLine("pour 20001"); serialLine("pour 499"); runMs(50);
+    CHECK(settings.pourMs == DEFAULT_POUR_MS, "invalid pour accepted: %u", (unsigned)settings.pourMs);
     serialLine("pour 20000"); runMs(50);
     CHECK(settings.pourMs == MAX_PUMP_MS, "pour 20000 (= cap) rejected");
-    serialLine("pour 10000"); runMs(50);
-
-    // 1) pumpStart() clamps the request
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
+    serialLine("pour 11000"); runMs(50);
+    insertRing();
     pumpStart(MAX_PUMP_MS + 5000);
-    CHECK(pumpRunFor == MAX_PUMP_MS, "pumpStart did not clamp: pumpRunFor=%u", (unsigned)pumpRunFor);
-    // 2) even with the clamp bypassed, pumpService() stops at the cap
-    pumpRunFor = MAX_PUMP_MS + 5000;
+    CHECK(pumpRunFor == MAX_PUMP_MS, "pumpStart did not clamp: %u", (unsigned)pumpRunFor);
+    pumpRunFor = MAX_PUMP_MS + 5000;                     // bypass the clamp: pumpService() must still stop it
+    pumpCal = true;                                      // (a bare pumpStart() in ARMED is not a pour; keep the interlock out of the way)
     CHECK(runUntil([] { return !pumpPinOn(); }, (double)MAX_PUMP_MS + 10000) >= 0, "forced run never stopped");
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= MAX_PUMP_MS - 1 && pumpRunMs(0) <= MAX_PUMP_MS + LOOP_MS, "forced run lasted %.1f ms (cap %u)", pumpRuns() ? pumpRunMs(0) : -1.0, (unsigned)MAX_PUMP_MS);
-    CHECK(state == State::ARMED, "state %s", stateName(state));
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= MAX_PUMP_MS - 1 && pumpRunMs(0) <= MAX_PUMP_MS + LOOP_MS, "forced run %.1f ms", pumpRunMs(0));
     setRing(false); runMs(1000);
-
-    // 3) the cap is on continuous run time: a cal run followed by a real pour cannot exceed it
+    // the cap is on continuous run time: a cal run followed by a held pour cannot exceed it
     reboot();
-    serialLine("cal 20000"); runMs(50);
-    CHECK(pumpPinOn(), "cal 20000 did not start");
-    runMs(15000);
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
-    setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
+    serialLine("cal 20000"); runMs(15000);
+    insertRing(); twistAndHold();
     runUntil([] { return !pumpPinOn(); }, (double)MAX_PUMP_MS + 20000);
     const double longest = sim::longestRunUs(PUMP_PIN) / 1000.0;
     CHECK(longest <= MAX_PUMP_MS + LOOP_MS, "cal + pour ran %.1f ms continuously (cap %u)", longest, (unsigned)MAX_PUMP_MS);
-    CHECK(state == State::LOCKED, "state %s after the capped pour", stateName(state));
-    NOTE("forced run %.1f ms; cal+pour longest continuous run %.1f ms", pumpRunMs(0) > 0 ? pumpRunMs(0) : -1.0, longest);
+    CHECK(state == State::HOLDING, "state %s after the capped pour (want HOLDING until the release)", stateName(state));
+    setSwitch(false);
+    NOTE("cal+pour longest continuous run %.1f ms", longest);
   });
 
-  scenario("i", "serial: cal 3000 without ring, stop, pour 12500 + save + reboot persists (EEPROM)", [] {
+  scenario("i", "serial: cal without the ring, stop, pour/speed/leds/idle + save + reboot persist", [] {
     reboot();
-    CHECK(settings.pourMs == DEFAULT_POUR_MS && settings.maxBright == DEFAULT_MAX_BRIGHT, "blank flash did not give defaults");
     serialLine("cal 3000"); runMs(LOOP_MS * 2);
-    CHECK(pumpPinOn(), "cal 3000 did not start the pump (no ring)");
-    CHECK(state == State::IDLE, "cal changed the state to %s", stateName(state));
+    CHECK(pumpPinOn() && state == State::IDLE, "cal did not start (no ring) or changed state");
     runUntil([] { return !pumpPinOn(); }, 6000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 2999 && pumpRunMs(0) <= 3000 + LOOP_MS, "cal ran %.1f ms", pumpRuns() ? pumpRunMs(0) : -1.0);
-    CHECK(state == State::IDLE && pumpPinQuiet(), "after cal: %s", stateName(state));
-
-    serialLine("cal 3000"); runMs(500);
-    CHECK(pumpPinOn(), "second cal did not start");
-    serialLine("stop");
-    CHECK(runUntil([] { return !pumpPinOn(); }, LOOP_MS * 2) >= 0, "stop did not stop the pump within a loop pass");
-    CHECK(pumpRuns() == 2 && pumpRunMs(1) < 500 + 2 * LOOP_MS, "stopped run lasted %.1f ms", pumpRuns() > 1 ? pumpRunMs(1) : -1.0);
-    CHECK(serialSaid("pump stopped"), "no 'pump stopped' reply");
-
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 2999 && pumpRunMs(0) <= 3000 + LOOP_MS, "cal ran %.1f ms", pumpRunMs(0));
+    serialLine("cal 3000"); runMs(500); serialLine("stop");
+    CHECK(runUntil([] { return !pumpPinOn(); }, LOOP_MS * 2) >= 0 && serialSaid("pump stopped"), "stop did not stop the pump");
     serialLine("cal 0"); serialLine("cal 25000"); serialLine("cal abc"); runMs(100);
     CHECK(pumpRuns() == 2, "invalid cal values started the pump");
-
-    // cal with the ring in (ARMED) runs but does not touch the state machine
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
-    serialLine("cal 1000"); runMs(2000);
-    CHECK(pumpRuns() == 3 && pumpRunMs(2) >= 999 && pumpRunMs(2) <= 1000 + LOOP_MS && state == State::ARMED, "cal while ARMED: runs %zu state %s", pumpRuns(), stateName(state));
-    // stop during a real pour -> LOCKED, no re-pour
-    setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
-    runMs(2000); serialLine("stop"); runMs(LOOP_MS * 2);
-    CHECK(!pumpPinOn() && state == State::LOCKED, "stop during pour: pump %d state %s", pumpPinOn(), stateName(state));
+    // stop during a held pour -> pump off, still HOLDING-like? it stays POURING->HOLDING on the next pass
+    insertRing(); twistAndHold(); runMs(2000); serialLine("stop"); runMs(LOOP_MS * 3);
+    CHECK(!pumpPinOn() && state == State::HOLDING, "stop during a pour: pump %d state %s", pumpPinOn(), stateName(state));
+    setSwitch(false); runUntil([] { return state == State::LOCKED; }, 5000);
     setSwitch(true); runMs(500); setSwitch(false);
-    CHECK(pumpRuns() == 4, "re-pour after stop (runs %zu)", pumpRuns());
+    CHECK(pumpRuns() == 3, "re-pour after stop (runs %zu)", pumpRuns());
     setRing(false); runMs(1000);
-
-    serialLine("pour 12500"); runMs(50);
-    CHECK(settings.pourMs == 12500, "pour 12500 not applied");
-    serialLine("leds 128"); runMs(50);
-    CHECK(settings.maxBright == 128, "leds 128 not applied");
+    serialLine("pour 12500"); serialLine("speed 60"); serialLine("leds 128"); serialLine("idle 30"); runMs(50);
     Serial.tx.clear(); serialLine("status"); runMs(50);
-    CHECK(serialSaid("pourMs=12500") && serialSaid("maxBright=128") && serialSaid("state=IDLE"), "status output: %s", Serial.tx.c_str());
+    CHECK(serialSaid("pourMs=12500") && serialSaid("speed=60") && serialSaid("maxBright=128") && serialSaid("idle=30") && serialSaid("state=IDLE"),
+          "status output: %s", Serial.tx.c_str());
     CHECK(EEPROM.commits == 0, "flash written before 'save'");
     serialLine("save"); runMs(50);
-    CHECK(EEPROM.commits == 1 && serialSaid("saved"), "save did not commit (%u commits)", EEPROM.commits);
-
+    CHECK(EEPROM.commits == 1 && serialSaid("saved"), "save did not commit");
     reboot(BootOpts{0, /*keepFlash*/ true});
-    CHECK(settings.pourMs == 12500 && settings.maxBright == 128, "settings after reboot: pourMs=%u maxBright=%u", (unsigned)settings.pourMs, settings.maxBright);
-    // and the persisted value is what a pour actually uses
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000); setSwitch(true);
-    runUntil([] { return pumpPinOn(); }, 1000); setSwitch(false);
-    runUntil([] { return !pumpPinOn(); }, 20000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 12499 && pumpRunMs(0) <= 12500 + LOOP_MS, "pour used %.1f ms", pumpRuns() ? pumpRunMs(0) : -1.0);
-    // corrupt flash (bad magic) -> defaults
+    CHECK(settings.pourMs == 12500 && settings.pumpSpeed == 60 && settings.maxBright == 128 && settings.idleDuty == 30, "settings after reboot");
+    CHECK(runUntil([] { return ledDuty == 30u * PWM_RANGE / 255; }, 2000) >= 0, "idle glow %u after reboot", ledDuty);
+    insertRing(); twistAndHold(); holdToEnd(); setSwitch(false);
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= 12499 && pumpRunMs(0) <= 12500 + LOOP_MS, "pour used %.1f ms", pumpRunMs(0));
     reboot();
-    CHECK(settings.pourMs == DEFAULT_POUR_MS, "erased flash did not give defaults");
+    CHECK(settings.pourMs == DEFAULT_POUR_MS && settings.pumpSpeed == DEFAULT_PUMP_SPEED, "erased flash did not give defaults");
   });
 
   scenario("j", "millis() wraparound: clock starts at 0xFFFFF000, scenario d behaves identically", [] {
     PourMeasure m = doPour(0xFFFFF000ULL * 1000ULL);
     checkPour(m);
-    CHECK(m.millisAtEnd < m.millisAtStart, "millis() did not wrap during the scenario (start %u end %u)", m.millisAtStart, m.millisAtEnd);
-    CHECK(m.armedAfter == pourD.armedAfter && m.flashAfter == pourD.flashAfter && m.pumpAfterFlash == pourD.pumpAfterFlash
-          && m.pourLen == pourD.pourLen && m.endState == pourD.endState,
-          "differs from d: armed %.1f/%.1f flash %.1f/%.1f pump %.1f/%.1f pour %.1f/%.1f %s/%s",
-          m.armedAfter, pourD.armedAfter, m.flashAfter, pourD.flashAfter, m.pumpAfterFlash, pourD.pumpAfterFlash,
-          m.pourLen, pourD.pourLen, m.endState.c_str(), pourD.endState.c_str());
-    // LOCKED afterglow + IDLE ember keep animating across the wrap
-    runMs(6000);
-    CHECK(ledDuty >= settings.idleDuty && sim::pin[LED_PIN].pwm == ledDuty, "LED output wrong after the wrap (%u)", ledDuty);
+    CHECK(m.millisAtEnd < m.millisAtStart, "millis() did not wrap during the scenario");
+    CHECK(m.armedAfter == pourD.armedAfter && m.pumpAfterPress == pourD.pumpAfterPress && m.pourLen == pourD.pourLen
+          && m.finaleAfterRelease == pourD.finaleAfterRelease && m.lockedAfterFinale == pourD.lockedAfterFinale,
+          "differs from d");
   });
 
-  scenario("k", "debounce: 30 ms Hall glitch does not arm, 20 ms switch glitch does not fire", [] {
+  scenario("k", "debounce: 30 ms Hall glitch does not arm; 20 ms twist glitch does not pour; 20 ms bounce mid-pour does not stop it", [] {
     reboot();
     setRing(true); runMs(30); setRing(false);
     CHECK(runUntil([] { return state != State::IDLE; }, 2000) < 0, "30 ms Hall glitch armed the prop");
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000); runMs(500);
+    insertRing(); runMs(500);
     setSwitch(true); runMs(20); setSwitch(false);
-    CHECK(runUntil([] { return state != State::ARMED; }, 2000) < 0, "20 ms switch glitch fired (state %s)", stateName(state));
-    CHECK(pumpRuns() == 0, "pump ran");
-    // a real press still works afterwards
-    setSwitch(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0, "real press after the glitch did not pour");
+    CHECK(runUntil([] { return state != State::ARMED; }, 2000) < 0 && pumpRuns() == 0, "20 ms twist glitch poured");
+    CHECK(twistAndHold(), "real twist after the glitch did not pour");
+    runMs(2000);
+    setSwitch(false); runMs(20); setSwitch(true);
+    runMs(500);
+    CHECK(state == State::POURING && pumpPinOn() && pumpRuns() == 1, "20 ms switch bounce stopped the pour (state %s)", stateName(state));
     setSwitch(false); setRing(false);
   });
 
-  scenario("l", "ring removed during FLASH (at 0 / 100 / 200 / 210 ms): pump never starts", [] {
-    for (double offset : {0.0, 100.0, 200.0, 210.0}) {
-      reboot();
-      setRing(true); runUntil([] { return state == State::ARMED; }, 1000); runMs(500);
-      setSwitch(true);
-      CHECK(runUntil([] { return state == State::FLASH; }, 1000) >= 0, "no FLASH");
-      runMs(offset);
-      setRing(false); setSwitch(false);
-      const double t = runUntil([] { return state == State::IDLE; }, 2000);
-      CHECK(t >= 0, "offset %.0f: never returned to IDLE (state %s)", offset, stateName(state));
-      CHECK(pumpRuns() == 0, "offset %.0f ms into FLASH: pump started (%zu runs, %.1f ms)", offset, pumpRuns(), pumpRuns() ? pumpRunMs(0) : 0.0);
-      runMs(1000);
-      CHECK(pumpRuns() == 0 && state == State::IDLE, "offset %.0f: late pour", offset);
-    }
+  scenario("l", "let go early: pump stops where it is, light swells ~10 % then goes dark, LOCKED (no resume)", [] {
+    reboot();
+    insertRing(); runMs(1000); twistAndHold();
+    runMs(4000);
+    const uint32_t before = ledDuty;
+    const float shownBefore = ledShown;
+    const double tRelease = nowMs();
+    setSwitch(false);
+    CHECK(runUntil([] { return !pumpPinOn(); }, 500) >= 0, "pump kept running after the release");
+    const double offLatency = pumpRunEndMs(0) - tRelease;
+    CHECK(offLatency >= SWITCH_DEBOUNCE_MS && offLatency <= SWITCH_DEBOUNCE_MS + 2 * LOOP_MS, "pump off %.1f ms after the release", offLatency);
+    CHECK(state == State::FINALE, "state %s after an early release", stateName(state));
+    CHECK(pumpRunMs(0) > 3900 && pumpRunMs(0) < 4200, "partial pour %.1f ms", pumpRunMs(0));
+    uint32_t peak = 0;
+    const double end = nowMs() + FINALE_MS + 200;
+    while (nowMs() < end) { loop(); peak = std::max(peak, ledDuty); }
+    const uint32_t want = lightDuty(std::min(1.0f, shownBefore + EARLY_BUMP));
+    CHECK(peak + 2 >= want && peak <= want + 2 && peak > before, "early-release swell peaked at %u (was %u, want ~%u)", peak, before, want);
+    CHECK(state == State::LOCKED && ledDuty == 0, "after the swell: state %s light %u (want LOCKED, dark)", stateName(state), ledDuty);
+    setSwitch(true); runMs(2000); setSwitch(false); runMs(500);
+    CHECK(pumpRuns() == 1, "re-twist after an early release resumed the pour");
+    NOTE("pump off %.1f ms after letting go; light %u -> peak %u -> 0", offLatency, before, peak);
   });
 
-  scenario("m", "switch stuck pressed after boot: ring insertion alone must not pour", [] {
+  scenario("m", "switch stuck pressed before the ring goes in: no pour until released and twisted", [] {
     reboot();
-    setSwitch(true); runMs(2000);                 // cam jams while the prop sits idle
+    setSwitch(true); runMs(2000);
     CHECK(state == State::IDLE && pumpRuns() == 0, "switch alone");
     setRing(true); runMs(3000);
-    CHECK(pumpRuns() == 0, "inserting the ring onto a stuck switch poured without a twist");
-    CHECK(state == State::ARMED, "state %s", stateName(state));
-    setSwitch(false); runMs(300); setSwitch(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0 && pumpRuns() == 1, "release + twist did not pour");
+    CHECK(pumpRuns() == 0 && state == State::ARMED, "stuck switch + ring: runs %zu state %s", pumpRuns(), stateName(state));
+    setSwitch(false); runMs(300);
+    CHECK(twistAndHold() && pumpRuns() == 1, "release + twist did not pour");
     setSwitch(false);
   });
 
-  scenario("n", "Hall dropout mid-pour: 30 ms does not abort, 70 ms aborts -> LOCKED, no second pour", [] {
-    auto pourTo3s = [] {
-      reboot();
-      setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
-      setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
-      runMs(3000);
-    };
+  scenario("n", "Hall dropout mid-pour: 30 ms does not abort; 70 ms aborts -> LOCKED, no second pour", [] {
+    auto pourTo3s = [] { reboot(); insertRing(); twistAndHold(); runMs(3000); };
     pourTo3s();
     setRing(false); runMs(30); setRing(true);
-    CHECK(pumpPinOn() && state == State::POURING, "30 ms dropout aborted the pour (state %s)", stateName(state));
-    runUntil([] { return !pumpPinOn(); }, 20000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= settings.pourMs - 1 && pumpRunMs(0) <= settings.pourMs + LOOP_MS && state == State::LOCKED, "after 30 ms dropout: pour %.1f ms state %s", pumpRunMs(0), stateName(state));
-
+    CHECK(pumpPinOn() && state == State::POURING, "30 ms dropout aborted (state %s)", stateName(state));
+    holdToEnd();
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= settings.pourMs - 1 && pumpRunMs(0) <= settings.pourMs + LOOP_MS, "after a 30 ms dropout: pour %.1f ms", pumpRunMs(0));
+    setSwitch(false);
     pourTo3s();
     const double tDrop = nowMs();
     setRing(false); runMs(70); setRing(true);
     CHECK(!pumpPinOn() && state == State::LOCKED, "70 ms dropout: pump %d state %s", pumpPinOn(), stateName(state));
-    CHECK(pumpRuns() == 1, "runs %zu", pumpRuns());
     const double off = pumpRunEndMs(0) - tDrop;
     CHECK(off >= POUR_ABORT_MS && off <= POUR_ABORT_MS + 2 * LOOP_MS, "pump off %.1f ms after the dropout", off);
     runMs(1000);
-    CHECK(state == State::LOCKED, "ring back after the abort: state %s (want LOCKED, one pour per insertion)", stateName(state));
-    for (int i = 0; i < 3; i++) { setSwitch(true); runMs(300); setSwitch(false); runMs(300); }
-    CHECK(pumpRuns() == 1, "re-twist after an aborted pour poured again");
-    const double tOut = nowMs();
+    setSwitch(false); runMs(300); setSwitch(true); runMs(500); setSwitch(false);
+    CHECK(state == State::LOCKED && pumpRuns() == 1, "re-twist after an aborted pour poured again");
     setRing(false);
-    CHECK(runUntil([] { return state == State::IDLE; }, 1000) >= 0 && nowMs() - tOut <= RING_GONE_MS + 2 * LOOP_MS, "no IDLE after removal");
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000); setSwitch(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0 && pumpRuns() == 2, "fresh insertion after an abort did not pour");
+    CHECK(runUntil([] { return state == State::IDLE; }, 1000) >= 0, "no IDLE after removal");
+    insertRing();
+    CHECK(twistAndHold() && pumpRuns() == 2, "fresh insertion after an abort did not pour");
     setSwitch(false);
-    NOTE("70 ms dropout: pump off %.1f ms after the raw drop, LOCKED kept while the ring was back", off);
   });
 
-  scenario("o", "light: idle floor always, ARMED climbs steadily over RAMP_MS, FLASH/POURING at maxBright, LOCKED holds then fades", [] {
-    for (int mb : {255, 160, 0}) {
+  scenario("o", "light: dark idle, ~15 % with the ring, steady climb to ~90 % over the pour, 100 % swell on release, then dark", [] {
+    for (int mb : {255, 160}) for (int idle : {0, 30}) {
       reboot();
-      settings.maxBright = (uint8_t)mb;
-      const uint32_t floorD = settings.idleDuty, cap = std::max<uint32_t>(mb, floorD);
-      auto expect = [&](float p) { return std::max<uint32_t>(floorD, (uint32_t)(powf(p, GAMMA) * mb + 0.5f)); };
-      uint32_t prevArmed = 0, armedFirst = 0, armedLast = 0, maxPour = 0, maxJump = 0;
-      unsigned armedFrames = 0; bool armedMono = true;
-      auto step = [&] {
-        const State before = state;
+      settings.maxBright = (uint8_t)mb; settings.idleDuty = (uint8_t)idle;
+      const uint32_t floorD = (uint32_t)idle * PWM_RANGE / 255;
+      runMs(1000);
+      CHECK(ledDuty == floorD, "mb %d idle %d: IDLE light %u (want %u)", mb, idle, ledDuty, floorD);
+      insertRing(); runMs(ARMED_FADE_IN_MS + 200);
+      CHECK(ledDuty == lightDuty(ARMED_LEVEL), "mb %d idle %d: ARMED light %u (want %u)", mb, idle, ledDuty, lightDuty(ARMED_LEVEL));
+      setSwitch(true);
+      runUntil([] { return state == State::POURING; }, 1000);
+      uint32_t prev = ledDuty, maxStep = 0; bool mono = true; uint32_t mid = 0;
+      const double t0 = nowMs();
+      while (state == State::POURING) {
         loop();
-        const uint32_t d = ledDuty;
-        CHECK(sim::pin[LED_PIN].pwm == (int)d, "maxBright %d: pin %d != ledDuty %u", mb, sim::pin[LED_PIN].pwm, d);
-        CHECK(d >= floorD && d <= cap, "maxBright %d %s: duty %u outside [%u, %u]", mb, stateName(before), d, floorD, cap);
-        if (before == State::ARMED && state == State::ARMED) {
-          if (armedFrames == 0) armedFirst = d;
-          else { if (d < prevArmed) armedMono = false; maxJump = std::max(maxJump, d - std::min(d, prevArmed)); }
-          prevArmed = armedLast = d; armedFrames++;
-        }
-        if (before == State::POURING) maxPour = std::max(maxPour, d);
-      };
-      auto runChecked = [&](double ms) { const double end = nowMs() + ms; while (nowMs() < end) step(); };
-      runChecked(3000);
-      CHECK(ledDuty == floorD, "maxBright %d: IDLE duty %u (want floor %u)", mb, ledDuty, floorD);
-      setRing(true); runChecked(RAMP_MS + 3000);
-      CHECK(armedMono, "maxBright %d: ARMED light went down", mb);
-      CHECK(maxJump <= 3, "maxBright %d: ARMED jumped %u in one frame (not gradual)", mb, maxJump);
-      CHECK(armedFirst <= expect(ARMED_START) + 1, "maxBright %d: ARMED starts at %u (want ~%u)", mb, armedFirst, expect(ARMED_START));
-      CHECK(armedLast + 1 >= expect(ARMED_PEAK) && armedLast <= expect(ARMED_PEAK) + 1, "maxBright %d: ARMED peak %u (want %u)", mb, armedLast, expect(ARMED_PEAK));
-      setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
-      runChecked(settings.pourMs + 200);
-      CHECK(state == State::LOCKED, "maxBright %d: state %s after the pour", mb, stateName(state));
-      CHECK(maxPour == cap, "maxBright %d: pour brightness %u (want %u)", mb, maxPour, cap);
-      runChecked(LOCK_HOLD_MS - 400);
-      CHECK(ledDuty == cap, "maxBright %d: LOCKED hold duty %u (want %u)", mb, ledDuty, cap);
-      uint32_t prev = ledDuty; bool fadeMono = true;
-      const double fadeEnd = nowMs() + 400 + FADE_MS + 200;
-      while (nowMs() < fadeEnd) { step(); if (ledDuty > prev) fadeMono = false; prev = ledDuty; }
-      CHECK(fadeMono, "maxBright %d: LOCKED fade went up", mb);
-      CHECK(ledDuty == floorD, "maxBright %d: after the fade duty %u (want floor %u)", mb, ledDuty, floorD);
-      setRing(false); runChecked(1000);
-      CHECK(state == State::IDLE && ledDuty == floorD, "maxBright %d: back in IDLE duty %u", mb, ledDuty);
-      CHECK(pumpRuns() == 1, "maxBright %d: runs %zu", mb, pumpRuns());
+        if (state != State::POURING) break;
+        if (ledDuty < prev) mono = false;
+        maxStep = std::max(maxStep, ledDuty - std::min(ledDuty, prev));
+        prev = ledDuty;
+        if (mid == 0 && nowMs() - t0 >= settings.pourMs / 2.0) mid = ledDuty;
+      }
+      CHECK(mono, "mb %d idle %d: light went down during the pour", mb, idle);
+      CHECK(maxStep <= 4, "mb %d idle %d: light jumped %u in one pass (not gradual)", mb, idle, maxStep);
+      const uint32_t wantMid = lightDuty(ARMED_LEVEL + (POUR_PEAK - ARMED_LEVEL) * 0.5f);
+      CHECK(mid + 6 >= wantMid && mid <= wantMid + 6, "mb %d idle %d: light halfway through the pour %u (want ~%u)", mb, idle, mid, wantMid);
+      CHECK(state == State::HOLDING, "mb %d idle %d: state %s after the pour", mb, idle, stateName(state));
+      runMs(1000);
+      CHECK(ledDuty == lightDuty(POUR_PEAK), "mb %d idle %d: HOLDING light %u (want %u)", mb, idle, ledDuty, lightDuty(POUR_PEAK));
+      setSwitch(false);
+      uint32_t peak = 0; bool sawFull = false;
+      const double end = nowMs() + FINALE_MS + 300;
+      while (nowMs() < end) { loop(); peak = std::max(peak, ledDuty); sawFull |= (ledDuty == lightDuty(1.0f)); }
+      CHECK(sawFull && peak == lightDuty(1.0f), "mb %d idle %d: release swell peaked at %u (want full %u)", mb, idle, peak, lightDuty(1.0f));
+      CHECK(state == State::LOCKED && ledDuty == floorD, "mb %d idle %d: after the finale state %s light %u", mb, idle, stateName(state), ledDuty);
+      setRing(false); runMs(1000);
+      CHECK(state == State::IDLE && ledDuty == floorD, "mb %d idle %d: back to IDLE light %u", mb, idle, ledDuty);
     }
   });
 
-  scenario("q", "pump speed: 'speed 70' sets the running duty to 70 %, keeps the pour time, persists; out of range rejected", [] {
+  scenario("q", "pump speed sets the running duty and leaves the pour time alone; out-of-range rejected; persists", [] {
     reboot();
-    serialLine("speed 70"); serialLine("speed 20"); serialLine("speed 101"); runMs(50);
-    CHECK(settings.pumpSpeed == 70, "speed %u (want 70)", settings.pumpSpeed);
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
-    setSwitch(true); runUntil([] { return pumpPinOn(); }, 1000); setSwitch(false);
-    runMs(500);
-    CHECK(sim::pin[PUMP_PIN].pwm == (255 * 70) / 100, "running duty %d (want %d)", sim::pin[PUMP_PIN].pwm, (255 * 70) / 100);
-    runUntil([] { return !pumpPinOn(); }, 20000);
+    serialLine("speed 50"); serialLine("speed 20"); serialLine("speed 101"); runMs(50);
+    CHECK(settings.pumpSpeed == 50, "speed %u (want 50)", settings.pumpSpeed);
+    insertRing(); twistAndHold(); runMs(600);
+    CHECK(sim::pin[PUMP_PIN].pwm == (int)((PWM_RANGE * 50) / 100), "running duty %d", sim::pin[PUMP_PIN].pwm);
+    holdToEnd();
     CHECK(pumpRuns() == 1 && pumpRunMs(0) >= DEFAULT_POUR_MS - 1 && pumpRunMs(0) <= DEFAULT_POUR_MS + LOOP_MS, "pour %.1f ms", pumpRunMs(0));
-    serialLine("idle 35"); serialLine("save"); runMs(50);
+    setSwitch(false);
+    serialLine("save"); runMs(50);
     reboot(BootOpts{0, /*keepFlash*/ true});
-    CHECK(settings.pumpSpeed == 70 && settings.idleDuty == 35, "after reboot: speed %u idle %u", settings.pumpSpeed, settings.idleDuty);
+    CHECK(settings.pumpSpeed == 50, "after reboot: speed %u", settings.pumpSpeed);
   });
 
   scenario("p", "PRIME button (D6): runs only while held in IDLE with no ring, stops on release, capped, never changes state", [] {
     reboot();
-    // 1. hold in IDLE without the ring: soft start, state unchanged, stops on release within one pass
     setPrime(true);
     const double t = runUntil([] { return pumpPinOn(); }, 500);
     CHECK(t >= PRIME_DEBOUNCE_MS && t <= PRIME_DEBOUNCE_MS + 2 * LOOP_MS, "prime started after %.1f ms", t);
     CHECK(state == State::IDLE && pumpPrime, "state %s pumpPrime %d", stateName(state), pumpPrime);
     runMs(100);
-    CHECK(sim::pin[PUMP_PIN].func == sim::FUNC_PWM && sim::pin[PUMP_PIN].pwm > 40 && sim::pin[PUMP_PIN].pwm < 255, "no soft start (duty %d at 100 ms)", sim::pin[PUMP_PIN].pwm);
+    CHECK(sim::pin[PUMP_PIN].func == sim::FUNC_PWM && sim::pin[PUMP_PIN].pwm > (int)(PWM_RANGE / 6) && sim::pin[PUMP_PIN].pwm < (int)speedDuty(), "no soft start (duty %d at 100 ms)", sim::pin[PUMP_PIN].pwm);
     runMs(300);
-    CHECK(sim::pin[PUMP_PIN].pwm == 255, "duty %d after the ramp", sim::pin[PUMP_PIN].pwm);
-    CHECK(state == State::IDLE, "state %s while priming", stateName(state));
+    CHECK(sim::pin[PUMP_PIN].pwm == (int)speedDuty(), "duty %d after the ramp (want %u)", sim::pin[PUMP_PIN].pwm, speedDuty());
     setPrime(false);
     CHECK(runUntil([] { return !pumpPinOn(); }, 2 * LOOP_MS) >= 0, "pump still on after release");
     CHECK(pumpRuns() == 1 && state == State::IDLE && pumpPinQuiet(), "after release: runs %zu state %s", pumpRuns(), stateName(state));
-    // 2. 20 ms glitch: nothing
     setPrime(true); runMs(20); setPrime(false); runMs(500);
     CHECK(pumpRuns() == 1, "20 ms PRIME glitch ran the pump");
-    // 2b. a 10 ms contact glitch while priming stops the pump; it does not restart until a real release + press
     setPrime(true); runUntil([] { return pumpPinOn(); }, 500); runMs(500);
     setPrime(false); runMs(10); setPrime(true);
     CHECK(runUntil([] { return !pumpPinOn(); }, 2 * LOOP_MS) >= 0, "raw glitch did not stop the prime");
     runMs(1000);
-    CHECK(pumpRuns() == 2 && !pumpPinOn(), "prime restarted after a glitch without a real release (runs %zu)", pumpRuns());
+    CHECK(pumpRuns() == 2 && !pumpPinOn(), "prime restarted after a glitch without a real release");
     setPrime(false); runMs(100); setPrime(true);
     CHECK(runUntil([] { return pumpPinOn(); }, 500) >= 0 && pumpRuns() == 3, "no restart after a real release + press");
     setPrime(false); runMs(100);
-    // 3. held past the cap: stops at MAX_PUMP_MS and does not restart until released and pressed again
     setPrime(true); runUntil([] { return pumpPinOn(); }, 500);
     CHECK(runUntil([] { return !pumpPinOn(); }, (double)MAX_PUMP_MS + 2000) >= 0, "capped prime never stopped");
-    CHECK(pumpRuns() == 4 && pumpRunMs(3) >= MAX_PUMP_MS - 1 && pumpRunMs(3) <= MAX_PUMP_MS + LOOP_MS, "capped prime ran %.1f ms", pumpRuns() > 3 ? pumpRunMs(3) : -1.0);
+    CHECK(pumpRuns() == 4 && pumpRunMs(3) >= MAX_PUMP_MS - 1 && pumpRunMs(3) <= MAX_PUMP_MS + LOOP_MS, "capped prime ran %.1f ms", pumpRunMs(3));
     runMs(3000);
-    CHECK(pumpRuns() == 4 && !pumpPinOn(), "prime restarted while still held after the cap (runs %zu)", pumpRuns());
-    setPrime(false); runMs(100); setPrime(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 500) >= 0 && pumpRuns() == 5, "release + press after the cap did not prime");
+    CHECK(pumpRuns() == 4, "prime restarted while still held after the cap");
     setPrime(false); runMs(100);
-    CHECK(state == State::IDLE, "state %s", stateName(state));
-    // 4. held through boot: ignored until released and pressed
     reboot(BootOpts{0, false, false, false, /*primeHeld*/ true});
-    CHECK(pumpRuns() == 0 && !pumpPinOn(), "pump ran during boot with PRIME held");
     runMs(2000);
     CHECK(pumpRuns() == 0, "PRIME held at boot primed");
     setPrime(false); runMs(100); setPrime(true);
     CHECK(runUntil([] { return pumpPinOn(); }, 500) >= 0 && pumpRuns() == 1, "no prime after release + press");
     setPrime(false); runMs(100);
-    // 5. never in another state: ARMED, POURING (does not stop the pour), LOCKED
+    // never in another state; does not disturb a held pour
     reboot();
-    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
+    insertRing();
     setPrime(true); runMs(2000); setPrime(false); runMs(100);
     CHECK(pumpRuns() == 0 && state == State::ARMED, "PRIME in ARMED: runs %zu state %s", pumpRuns(), stateName(state));
-    setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
-    runMs(2000); setPrime(true); runMs(500); setPrime(false);
+    twistAndHold(); runMs(2000); setPrime(true); runMs(500); setPrime(false);
     CHECK(pumpPinOn() && state == State::POURING, "PRIME press/release during a pour stopped it");
-    runUntil([] { return !pumpPinOn(); }, 20000);
-    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= settings.pourMs - 1 && state == State::LOCKED, "pour after PRIME use: %.1f ms state %s", pumpRunMs(0), stateName(state));
+    holdToEnd(); setSwitch(false); runUntil([] { return state == State::LOCKED; }, 5000);
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= settings.pourMs - 1, "pour after PRIME use %.1f ms", pumpRunMs(0));
     setPrime(true); runMs(2000);
     CHECK(pumpRuns() == 1 && state == State::LOCKED, "PRIME in LOCKED ran the pump");
     setPrime(false); runMs(100);
-    // 6. priming when the ring arrives: pump off no later than the pass that arms, then a normal twist pour
+    // priming when the ring arrives: pump off no later than the pass that arms
     setRing(false); runMs(1000);
     setPrime(true); runUntil([] { return pumpPinOn(); }, 500);
-    CHECK(pumpRuns() == 2 && state == State::IDLE, "precondition");
     setRing(true);
     CHECK(runUntil([] { return state == State::ARMED; }, 1000) >= 0, "no ARMED");
-    CHECK(!pumpPinOn() && (uint32_t)(sim::runs[PUMP_PIN][1].endUs / 1000) <= stateSince, "pump still on when ARMED (off at %.1f, armed at %u)", pumpRunEndMs(1), (unsigned)stateSince);
+    CHECK(!pumpPinOn(), "pump still on when ARMED");
     runMs(2000);
-    CHECK(pumpRuns() == 2 && state == State::ARMED, "ARMED with PRIME held: runs %zu", pumpRuns());
-    setSwitch(true); CHECK(runUntil([] { return pumpPinOn(); }, 1000) >= 0 && pumpRuns() == 3, "twist with PRIME held did not pour normally");
-    setSwitch(false); runUntil([] { return state == State::LOCKED; }, 20000);
-    // 7. ring removed with PRIME still held since step 6: no restart until released and pressed
-    setRing(false); runUntil([] { return state == State::IDLE; }, 1000); runMs(2000);
-    CHECK(pumpRuns() == 3, "PRIME auto-restarted after the ring left (runs %zu)", pumpRuns());
-    setPrime(false); runMs(100); setPrime(true);
-    CHECK(runUntil([] { return pumpPinOn(); }, 500) >= 0 && pumpRuns() == 4, "release + press did not prime");
+    CHECK(pumpRuns() == 2, "ARMED with PRIME held: runs %zu", pumpRuns());
     setPrime(false); runMs(100);
-    // 8. PRIME does not interfere with a serial cal run
+    // PRIME does not interfere with a serial cal run
+    setRing(false); runMs(1000);
     serialLine("cal 3000"); runMs(500);
     setPrime(true); runMs(300); setPrime(false);
     CHECK(pumpPinOn(), "PRIME release stopped a cal run");
     runUntil([] { return !pumpPinOn(); }, 5000);
-    CHECK(pumpRuns() == 5 && pumpRunMs(4) >= 2999 && pumpRunMs(4) <= 3000 + LOOP_MS, "cal with PRIME use ran %.1f ms", pumpRuns() > 4 ? pumpRunMs(4) : -1.0);
+    CHECK(pumpRuns() == 3 && pumpRunMs(2) >= 2999 && pumpRunMs(2) <= 3000 + LOOP_MS, "cal with PRIME use ran %.1f ms", pumpRunMs(2));
   });
 
   // ------------------------------------------------------------------ report

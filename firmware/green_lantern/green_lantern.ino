@@ -3,12 +3,16 @@
  * Board: Seeed Studio XIAO RP2040 (Arduino core: earlephilhower "Raspberry Pi Pico/RP2040",
  *        board "Seeed XIAO RP2040"). No extra libraries.
  *
- * Interaction
- *   insert ring (magnet -> Hall sensor)      -> ARMED: the green strip brightens steadily over RAMP_MS
- *   recite oath, twist ring ~45 deg          -> cam presses microswitch
- *   Hall present AND switch pressed AND not poured yet -> FLASH (full brightness), then POURING (pump on)
- *   pour finishes                            -> LOCKED: holds bright, then fades to the idle glow
- *   remove ring                              -> IDLE
+ * Interaction (hold-to-pour)
+ *   insert ring (magnet -> Hall sensor)   -> ARMED: the light fades up to ARMED_LEVEL (~15 %)
+ *   twist ~45 deg and HOLD (cam presses the microswitch)
+ *                                         -> POURING: the pump runs and the light climbs from ARMED_LEVEL to
+ *                                            POUR_PEAK (~90 %) over the pour time (pourMs, ~11 s)
+ *   pour time reached while still held    -> HOLDING: pump off, light stays at POUR_PEAK
+ *   let the ring turn back (switch opens) -> FINALE: light swells to 100 %, then fades out -> LOCKED (dark)
+ *   let go early, mid-pour                -> pump stops where it is; light swells by EARLY_BUMP (~10 %) then
+ *                                            fades out -> LOCKED
+ *   remove ring                           -> IDLE (dark); only a removed ring re-arms the prop
  *   PRIME button (D6, optional) held while IDLE, no ring -> pump runs to prime the tube, stops on release
  *
  * Safety interlocks (do not remove)
@@ -20,7 +24,8 @@
  *     machine (a cal run followed by a pour cannot stack past it)
  *   - a switch that is already pressed at boot, or when the ring arrives (jammed cam), is ignored
  *     until it has been released
- *   - the pump only starts from FLASH if the Hall sensor sees the ring at that instant
+ *   - the pump only runs while the ring is in AND the switch is held (dead-man): letting go stops it
+ *   - the pump only starts if the Hall sensor sees the ring at that instant
  *   - the only ways to run the pump without the ring are the serial "cal" bench command and the
  *     PRIME button, which works only in IDLE with no ring, only while held, never changes state,
  *     and after a cap stop needs a release before it runs again
@@ -42,10 +47,10 @@
  * Serial (115200) commands for bench calibration, type then Enter:
  *   status            print state and settings
  *   cal 10000         run the pump for 10000 ms (water calibration; works without the ring)
- *   pour 9000         set the pour time in ms (500..20000)
- *   speed 80          pump speed in percent (30..100); slower pump = longer pour for the same volume
+ *   pour 11000        pour time in ms (500..20000) = length of the light build-up
+ *   speed 70          pump speed in percent (30..100): sets the VOLUME for the fixed pour time
  *   leds 200          maximum LED brightness 0..255
- *   idle 20           idle glow, raw PWM 0..255 (a small load keeps some power banks from switching off)
+ *   idle 0            idle glow, raw PWM 0..255; raise it (e.g. 30) if your power bank switches itself off
  *   save              store pour time, speed, brightness and idle glow in flash
  *   stop              stop the pump now
  */
@@ -59,13 +64,17 @@ constexpr uint8_t PUMP_PIN      = D3;
 constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through the 74AHCT125)
 constexpr uint8_t PRIME_PIN     = D6;  // momentary to GND: primes the tube while held (IDLE, no ring)
 
-// ------------------------------------------------------------------ light
-constexpr uint32_t RAMP_MS       = 15000;  // ARMED: brightness climbs over this long; set it to your oath
-constexpr float    ARMED_START   = 0.15f;  // perceived brightness when the ring goes in (0..1)
-constexpr float    ARMED_PEAK    = 0.75f;  // perceived brightness at the end of the ramp; the twist goes to 1.0
-constexpr uint32_t LOCK_HOLD_MS  = 1500;   // after the pour: stay at full brightness this long
-constexpr uint32_t FADE_MS       = 3000;   // full -> dark fade time (also used when the ring is pulled)
-constexpr float    GAMMA         = 2.2f;   // eye response: makes the ramp look steady instead of front-loaded
+// ------------------------------------------------------------------ light (perceived brightness, 0..1)
+constexpr float    ARMED_LEVEL      = 0.15f;  // ring in: the glow fades up to this
+constexpr uint32_t ARMED_FADE_IN_MS = 600;
+constexpr float    POUR_PEAK        = 0.90f;  // the light climbs to this as the pour completes
+constexpr float    EARLY_BUMP       = 0.10f;  // let go mid-pour: swell this much above the current level
+constexpr uint32_t FINALE_UP_MS     = 400;    // swell time (to 100 %, or by EARLY_BUMP)
+constexpr uint32_t FINALE_HOLD_MS   = 300;    // stay at the top of the swell
+constexpr uint32_t FINALE_FADE_MS   = 1200;   // then fade to dark
+constexpr uint32_t FADE_MS          = 1000;   // any other fall (ring pulled) goes 1.0 -> 0 in this long
+constexpr float    GAMMA            = 2.2f;   // eye response: makes the ramp look steady instead of front-loaded
+constexpr uint32_t PWM_RANGE        = 1023;   // 10-bit PWM so the dim end of the ramp is smooth
 
 // ------------------------------------------------------------------ timing
 constexpr uint32_t HALL_DEBOUNCE_MS   = 100;   // ring must be seen this long before ARMED
@@ -73,17 +82,16 @@ constexpr uint32_t SWITCH_DEBOUNCE_MS = 40;
 constexpr uint32_t PRIME_DEBOUNCE_MS  = 40;
 constexpr uint32_t RING_GONE_MS       = 200;   // ring must be absent this long to reset (LOCKED -> IDLE)
 constexpr uint32_t POUR_ABORT_MS      = 60;    // ring absent this long during POURING -> pump off, LOCKED
-constexpr uint32_t FLASH_MS           = 220;   // bright flash before the pump starts
 constexpr uint32_t PUMP_RAMP_MS       = 300;   // PWM soft start: tames the motor inrush on the 12 V rail
-constexpr uint32_t DEFAULT_POUR_MS    = 9000;  // ~30 mL at the Kamoer's rated 200 mL/min; set by calibration (see guide)
+constexpr uint32_t DEFAULT_POUR_MS    = 11000; // pour time = length of the light build-up; the volume is set with speed
 constexpr uint32_t MAX_PUMP_MS        = 20000; // hard cap, independent of everything else
 constexpr uint8_t  DEFAULT_MAX_BRIGHT = 255;   // 0..255 cap on the strip PWM
-constexpr uint8_t  DEFAULT_IDLE_DUTY  = 20;    // raw PWM floor in every state: a faint glow and a small keep-alive load
-constexpr uint8_t  DEFAULT_PUMP_SPEED = 100;   // percent; lower it to stretch the pour if the Kamoer is too fast
+constexpr uint8_t  DEFAULT_IDLE_DUTY  = 0;     // raw PWM floor in every state (0 = dark); raise it if the bank sleeps
+constexpr uint8_t  DEFAULT_PUMP_SPEED = 70;    // percent: ~30-35 mL in 11 s on the Kamoer; set by calibration
 
 // (declared before the first function so the Arduino prototype generator sees it)
 // ------------------------------------------------------------------ state
-enum class State : uint8_t { IDLE, ARMED, FLASH, POURING, LOCKED };
+enum class State : uint8_t { IDLE, ARMED, POURING, HOLDING, FINALE, LOCKED };
 State state = State::IDLE;
 
 // ------------------------------------------------------------------ persistent settings
@@ -126,7 +134,9 @@ bool     pumpPrime    = false; // current run is a PRIME-button run: allowed wit
 // light bookkeeping
 float    ledShown     = 0.0f;  // perceived brightness currently shown, 0..1
 uint32_t ledLastMs    = 0;     // millis() of the previous light update (for the fade rate)
-uint8_t  ledDuty      = 0;     // last PWM value written to LED_PIN
+uint32_t ledDuty      = 0;     // last PWM value written to LED_PIN (0..PWM_RANGE)
+float    finaleFrom   = 0.0f;  // light level when FINALE began
+float    finaleTo     = 0.0f;  // top of the FINALE swell
 
 static inline uint32_t since(uint32_t t) { return millis() - t; } // wrap-safe
 
@@ -155,47 +165,66 @@ bool pumpService() {
   if (!pumpOn) return false;
   const uint32_t t = since(pumpStarted);
   if (t >= pumpRunFor || t >= MAX_PUMP_MS || since(pumpOnSince) >= MAX_PUMP_MS) { pumpStop(); return false; }
-  const uint32_t full = (255UL * settings.pumpSpeed) / 100;   // speed setting, 30..100 %
+  const uint32_t full = (PWM_RANGE * settings.pumpSpeed) / 100;   // speed setting, 30..100 %
+  const uint32_t start = PWM_RANGE / 6;                           // soft start from ~16 %
   uint32_t duty = full;
-  if (t < PUMP_RAMP_MS) duty = 40 + ((full > 40 ? full - 40 : 0) * t) / PUMP_RAMP_MS;
+  if (t < PUMP_RAMP_MS) duty = start + ((full > start ? full - start : 0) * t) / PUMP_RAMP_MS;
   analogWrite(PUMP_PIN, duty);
   return true;
 }
 
 // ------------------------------------------------------------------ light
+void enter(State s) {
+  state = s;
+  stateSince = millis();
+}
+
 // Target perceived brightness (0..1) for the current state.
 float lightTarget() {
   const uint32_t t = since(stateSince);
   switch (state) {
-    case State::IDLE:    return 0.0f;                     // the idle floor (idleDuty) still applies
-    case State::ARMED: {                                  // steady climb over the oath
-      const float k = t >= RAMP_MS ? 1.0f : (float)t / (float)RAMP_MS;
-      return ARMED_START + (ARMED_PEAK - ARMED_START) * k;
+    case State::IDLE:    return 0.0f;
+    case State::ARMED:   return t >= ARMED_FADE_IN_MS ? ARMED_LEVEL : ARMED_LEVEL * (float)t / (float)ARMED_FADE_IN_MS;
+    case State::POURING: {                                // climbs with the pour, reaching POUR_PEAK as it completes
+      const float k = t >= settings.pourMs ? 1.0f : (float)t / (float)settings.pourMs;
+      return ARMED_LEVEL + (POUR_PEAK - ARMED_LEVEL) * k;
     }
-    case State::FLASH:
-    case State::POURING: return 1.0f;
-    case State::LOCKED:  return t < LOCK_HOLD_MS ? 1.0f : 0.0f;
+    case State::HOLDING: return POUR_PEAK;
+    case State::FINALE: {                                 // swell, hold, fade to dark
+      if (t < FINALE_UP_MS) return finaleFrom + (finaleTo - finaleFrom) * (float)t / (float)FINALE_UP_MS;
+      if (t < FINALE_UP_MS + FINALE_HOLD_MS) return finaleTo;
+      const uint32_t f = t - FINALE_UP_MS - FINALE_HOLD_MS;
+      return f >= FINALE_FADE_MS ? 0.0f : finaleTo * (1.0f - (float)f / (float)FINALE_FADE_MS);
+    }
+    case State::LOCKED:  return 0.0f;
   }
   return 0.0f;
 }
 
-// Rises instantly to the target (the ARMED ramp is already gradual), falls at most 1.0 per FADE_MS.
+void startFinale(float to) {
+  finaleFrom = ledShown;
+  finaleTo = to > 1.0f ? 1.0f : to;
+  enter(State::FINALE);
+}
+
+// Follows the target: rises instantly (every ramp is already gradual), falls at most 1.0 per FADE_MS.
 void lightService() {
   const uint32_t now = millis();
   const uint32_t dt = now - ledLastMs;
   ledLastMs = now;
   const float target = lightTarget();
-  if (target >= ledShown) {
+  if (target >= ledShown || state == State::FINALE) {   // FINALE draws its own fade
     ledShown = target;
   } else {
     const float step = (float)dt / (float)FADE_MS;
     ledShown = (ledShown - step > target) ? ledShown - step : target;
   }
-  uint32_t duty = (uint32_t)(powf(ledShown, GAMMA) * settings.maxBright + 0.5f);
-  if (duty < settings.idleDuty) duty = settings.idleDuty;          // floor: faint glow + keep-alive load
-  if (duty > 255) duty = 255;
-  ledDuty = (uint8_t)duty;
-  analogWrite(LED_PIN, ledDuty);
+  uint32_t duty = (uint32_t)(powf(ledShown, GAMMA) * (float)settings.maxBright * ((float)PWM_RANGE / 255.0f) + 0.5f);
+  const uint32_t floorDuty = (uint32_t)settings.idleDuty * PWM_RANGE / 255;   // idle glow / keep-alive load
+  if (duty < floorDuty) duty = floorDuty;
+  if (duty > PWM_RANGE) duty = PWM_RANGE;
+  ledDuty = duty;
+  analogWrite(LED_PIN, (int)ledDuty);
 }
 
 // ------------------------------------------------------------------ settings
@@ -219,8 +248,9 @@ const char* stateName(State s) {
   switch (s) {
     case State::IDLE: return "IDLE";
     case State::ARMED: return "ARMED";
-    case State::FLASH: return "FLASH";
     case State::POURING: return "POURING";
+    case State::HOLDING: return "HOLDING";
+    case State::FINALE: return "FINALE";
     case State::LOCKED: return "LOCKED";
   }
   return "?";
@@ -311,10 +341,6 @@ void readInputs() {
   if (!primeStable && !primeRaw) primeReady = true;     // a held-at-boot or capped PRIME needs a real release first
 }
 
-void enter(State s) {
-  state = s;
-  stateSince = millis();
-}
 
 // ------------------------------------------------------------------ setup / loop
 void setup() {
@@ -325,6 +351,7 @@ void setup() {
   pinMode(PRIME_PIN, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
+  analogWriteRange(PWM_RANGE);
 
   Serial.begin(115200);
   loadSettings();
@@ -334,7 +361,7 @@ void setup() {
   switchJammed = swStable;
 
   // short boot blink so you know it is alive and the strip works
-  analogWrite(LED_PIN, 120); delay(250);
+  analogWrite(LED_PIN, (int)(PWM_RANGE / 2)); delay(250);
   analogWrite(LED_PIN, 0);   delay(150);
   ledShown = 0.0f;
   ledLastMs = millis();
@@ -367,29 +394,33 @@ void loop() {
 
     case State::ARMED:
       if (!hallStable) { enter(State::IDLE); break; }
-      if (swStable && !switchJammed && !pouredThisInsertion) {
-        pouredThisInsertion = true;       // one pour per insertion, decided here
-        enter(State::FLASH);
-      }
-      break;
-
-    case State::FLASH:
-      if (!hallStable) { enter(State::IDLE); break; }
-      if (since(stateSince) >= FLASH_MS && hallRaw) {   // raw too: never start on a stale debounced reading
+      if (swStable && !switchJammed && !pouredThisInsertion && hallRaw) {   // raw too: never start on a stale reading
+        pouredThisInsertion = true;         // one pour per insertion, decided here
         pumpStart(settings.pourMs);
         enter(State::POURING);
       }
       break;
 
     case State::POURING:
-      // ring pulled: abort as soon as the raw input has been absent POUR_ABORT_MS, lock until it is
-      // really gone (RING_GONE_MS) so a dropout can never buy a second pour
+      // ring pulled: abort as soon as the raw input has been absent POUR_ABORT_MS, lock until it is really gone
       if (!hallStable || (!hallRaw && since(hallChanged) >= POUR_ABORT_MS)) { pumpStop(); enter(State::LOCKED); break; }
-      if (!pumping)   { enter(State::LOCKED); }
+      // let go early (switch released): stop where it is, small swell, fade out
+      if (!swStable) { pumpStop(); startFinale(ledShown + EARLY_BUMP); break; }
+      if (!pumping) enter(State::HOLDING);  // pour time reached (or the hard cap): wait for the release
+      break;
+
+    case State::HOLDING:
+      if (!hallStable) { enter(State::LOCKED); break; }
+      if (!swStable) startFinale(1.0f);     // the ring turns back: full swell, then dark
+      break;
+
+    case State::FINALE:
+      if (!hallStable) { enter(State::LOCKED); break; }
+      if (since(stateSince) >= FINALE_UP_MS + FINALE_HOLD_MS + FINALE_FADE_MS) enter(State::LOCKED);
       break;
 
     case State::LOCKED:
-      if (!hallStable) enter(State::IDLE);   // only a removed ring re-arms the prop
+      if (!hallStable) enter(State::IDLE);  // only a removed ring re-arms the prop
       break;
   }
 
