@@ -2,8 +2,8 @@
 
 A Halloween prop: a 3D-printed Green Lantern power battery (about 470 mm tall, 180 mm diameter)
 with a hidden peristaltic pump, a hidden shot glass, and a twist-to-pour ring socket.
-Insert the ring and the lantern glows brighter while you recite the oath; twist the ring 45 degrees
-on the last line and it pours about 1 oz into the hidden glass. Parts cost about $140 (budget build).
+Insert the ring, then twist and hold it through the oath: the pump pours about 1 oz into the hidden
+glass while the light climbs; turn the ring back and the light swells and goes dark. Parts cost about $140 (budget build).
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
 assembly, wiring, firmware, calibration, testing, cleaning).

@@ -1,9 +1,10 @@
 # Green Lantern power battery that pours a shot: build guide (budget build, ~$140)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
-shot glass and a twist-to-pour ring socket. Insert the ring and the lantern starts to glow. Recite the oath
-while it brightens. Twist the ring 45 degrees on the last line: it goes to full brightness and pours about
-1 oz into the glass in roughly 9 seconds. Open the hatch on your side, pull the tray, hand over the glass.
+shot glass and a twist-to-pour ring socket. Insert the ring and the lantern glows faintly. Twist the ring
+45 degrees and hold it while you recite the oath: the pump pours about 1 oz into the hidden glass while the
+light climbs from 15 % to 90 % over about 11 seconds. Turn the ring back and the light swells to full, then
+goes dark. Open the hatch on your side, pull the tray, take the glass.
 
 ![interaction timeline](images/interaction.svg)
 
@@ -17,11 +18,14 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 ## 1. How it works
 
 ```
- ring with a 6x2 mm magnet in a printed key cap  -> Hall sensor under the socket  -> ARMED: the light starts to climb
- recite the oath (the light brightens steadily for 15 s, then holds)
- twist the ring 45 deg                            -> a cam on the rotor clicks a microswitch
- firmware: ring present AND switch AND no pour yet this insertion -> full brightness, pump runs ~9 s
- let go: the rotor springs back. The prop stays LOCKED until the ring is removed.
+ 1. insert the ring (6x2 mm magnet in a printed key cap) -> Hall sensor sees it -> light fades up to ~15 %
+ 2. twist 45 deg and HOLD -> a cam clicks the microswitch -> pump starts, light starts climbing
+ 3. keep holding through the oath: the pump runs ~11 s while the light climbs to ~90 %
+ 4. let the ring turn back (spring) -> light swells to 100 % and goes dark
+ 5. pull out the full glass
+
+ Let go early: the pump stops where it is, the light swells ~10 % and goes dark.
+ Safety: the pump only runs while the ring is in AND the twist is held, and only once per insertion.
 ```
 
 | Where | What is inside |
@@ -46,7 +50,7 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 
 | # | Item | Buy | Price | Notes |
 |---|---|---|---|---|
-| 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28 | 200 mL/min or more at 12 V, 0.7 A. 1 oz in about 7-9 s. |
+| 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
 | 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $14 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. |
 | 3 | LED strip | [12 V green LED strip, single colour](https://www.amazon.com/s?k=12V+green+LED+strip+single+color+2835+60+LED) | ~$12 | Pick: 12 V, green only (not RGB), 2835 or 5050 LEDs, 60 LEDs/m, 8 or 10 mm wide, cuttable every 3 LEDs (5 cm). You use 90 cm. |
 | 4 | Buck converter | [LM2596 step-down module, multipack](https://www.amazon.com/s?k=LM2596+buck+converter+module) | ~$8 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
@@ -225,18 +229,20 @@ Serial console at 115200 baud. Type a command and press Enter:
 |---|---|
 | `status` | Shows state, ring, switch, pump, pour time, speed, brightness, idle glow. |
 | `cal 10000` | Runs the pump 10 s without the ring, for calibration (only when idle). |
-| `pour 9000` | Pour time in ms (500 to 20000). |
-| `speed 80` | Pump speed in percent (30 to 100). Lower = slower, longer pour for the same volume. |
+| `pour 11000` | Pour time in ms (500 to 20000): the length of the light build-up. |
+| `speed 70` | Pump speed in percent (30 to 100): sets how much is poured in that time. |
 | `leds 255` | Maximum LED brightness, 0 to 255. |
-| `idle 20` | The faint glow when idle, 0 to 255. Raise it if the power bank switches itself off. |
+| `idle 0` | Glow when idle, 0 to 255 (default dark). Raise it to ~30 if the power bank switches itself off. |
 | `save` | Stores pour time, speed, brightness and idle glow so they survive a power cycle. |
 | `stop` | Stops the pump now. |
 
-`RAMP_MS` near the top of the sketch is how long the light takes to climb after the ring goes in (15000 ms by
-default). Set it to the length of your oath and re-upload.
+The light levels live near the top of the sketch: `ARMED_LEVEL` (15 %), `POUR_PEAK` (90 %), `EARLY_BUMP`
+(10 %) and the finale timings (0.4 s swell, 0.3 s hold, 1.2 s fade). They are perceived brightness, so the
+climb looks steady to the eye.
 
 **Safety interlocks, all tested in simulation:** pump off at boot. The switch alone never pumps; the ring
-alone never pumps. One pour per insertion. Pulling the ring mid-pour stops the pump within about 60 ms. A
+alone never pumps. The pump runs only while the twist is held. One pour per insertion; letting go early
+does not resume. Pulling the ring mid-pour stops the pump within about 60 ms. A
 switch already pressed at boot or at insertion is ignored until released. A 20 s hard cap applies to every
 pump run.
 
@@ -336,44 +342,51 @@ and unplug the cable from the power bank.
 
 Water in the jar, a measuring cup under the nozzle, laptop on the serial console:
 
+The pour time is the length of the show, so set it first and then adjust the pump speed until that time
+pours the amount you want.
+
 ```
-cal 10000        measure the volume; repeat 3 times and average
-flow_mL_per_s  = volume_mL / 10
-pour time (ms) = target_mL / flow_mL_per_s * 1000      e.g. 30 mL at 3.3 mL/s -> 9000
-pour 9000
-save
+pour 11000       the build-up lasts 11 s (match it to how long you hold the twist)
+cal 11000        pours for 11 s at the current speed (70 %): measure the volume
+speed 60         too much? lower the speed (too little? raise it) and run cal 11000 again
+save             when it pours 30-37 mL (1 to 1.25 oz)
 ```
 
 Then repeat with the real drink: liqueur is thicker than water and the nozzle is 20 cm above the pump, so
-expect a little less flow. Target 30-37 mL (1 to 1.25 oz) in a 1.5 oz glass so it can be carried.
-
-If the pour finishes before your light show does, slow the pump instead of shortening the show: `speed 70`,
-then re-measure and set `pour` again.
+expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be carried without spilling.
 
 ---
 
 ## 11. Test before the party
 
-- [ ] Power on: faint glow, pump silent.
+- [ ] Power on: dark, pump silent.
 - [ ] Twist the empty socket: nothing.
-- [ ] Insert the ring: the glow climbs steadily, no pump.
-- [ ] Twist: full brightness, the pump runs the calibrated time. Let go: the rotor returns.
-- [ ] Twist again with the ring still in: nothing.
+- [ ] Insert the ring: the light fades up to a faint glow, no pump.
+- [ ] Twist and hold: the pump runs the calibrated time while the light climbs; it stays bright after the pump stops.
+- [ ] Let go: the rotor returns, the light swells to full and goes dark.
+- [ ] Twist and hold again with the ring still in: nothing.
+- [ ] New insertion, twist, let go after 3 s: the pump stops at once, the light swells a little and goes dark.
 - [ ] Remove the ring and reinsert it, twist: one new pour.
 - [ ] Pull the ring out mid-pour: the pump stops at once.
 - [ ] 20 water pours in a row: every pour lands in the glass, no drips anywhere.
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
-- [ ] The power bank stays on after 20 minutes idle (if not: `idle 40`, `save`).
+- [ ] The power bank stays on after 20 minutes idle (if not: `idle 30`, `save`).
 - [ ] The hatch stays shut when the lantern swings.
 
 ---
 
 ## 12. Performing it
 
-Set the lantern on a table or hang it on your forearm: one hand does the ring, the other opens the hatch
-afterwards. Glass on the tray, tray in, hatch shut. Insert the ring, speak, twist on the last line and hold
-the twist for a moment, then let go: the pour carries on by itself. Remove the ring (that re-arms the prop),
-open the hatch, pull the tray, hand over the glass. Refill the jar through the rear door.
+Set the lantern on a table or hang it on your forearm. Glass on the tray, tray in, hatch shut.
+
+1. Insert the ring. The lantern glows faintly.
+2. Twist 45 degrees and hold it as you start the oath. The pump starts and the light begins to climb.
+3. Keep holding through the oath. After about 11 seconds the pour is done; the light sits at 90 % until you
+   let go, so a longer oath is fine.
+4. On the last word, let the ring turn back. The light swells to full and goes dark.
+5. Remove the ring, open the hatch, pull the tray, take the glass.
+
+Refill the jar through the rear door.
 
 ---
 
@@ -397,7 +410,7 @@ flattened.
 | Pump doesn't run at all | Check the PD cable gives 12 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, bank nearly empty, or the bank doesn't really offer 12 V. |
 | LEDs stay dark or stay on | Q2 wiring, or U1's OE pins not grounded. |
-| Power bank switches off when idle | `idle 40` then `save`; or turn on the bank's low-current mode if it has one. |
+| Power bank switches off when idle | `idle 30` then `save`; or turn on the bank's low-current mode if it has one. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |
 | Drips after the pour | Lower the nozzle a little or trim the tube end square. |
 
