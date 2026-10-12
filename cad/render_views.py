@@ -116,7 +116,7 @@ def main():
             cut.append((s, COLORS.get(n, GREEN)))
     for n, m in envelopes.items():
         cut.append((m, ORANGE))
-    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=90, el=12, title='cutaway at x=0 seen from +X; orange = hardware envelopes (jar, pump, bank, glass)')
+    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway at x=0 seen from +X; orange = hardware envelopes (jar, pump, bank, glass)')
 
     # exploded: lift each printed part by its order in Z
     names = sorted(printed, key=lambda n: printed[n].bounds[0][2])
