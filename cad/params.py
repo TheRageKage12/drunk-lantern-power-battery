@@ -137,6 +137,7 @@ Z_HANDLE_TOP = Z_UPPER_DISH_TOP + HANDLE_TOP_CLEAR
 # LED strips on both faces and the top edge of the wall light the hand port (through a strip curtain), the
 # display window (through the diffuser) and the top dish (through a diffuser disc).
 SOCKET_IN_SPHERE = True
+LOCK_TWIST = 'ccw'           # twist direction as you see it: 'ccw' mirrors the whole lock left-right ('cw' = as designed)
 SOCKET_Z_LOCAL = 4.0         # ring centre height, sphere frame (0 = sphere centre)
 SOCKET_MODULE_DEPTH = 13.2   # socket face -> back of its base plate (socket.MODULE_DEPTH)
 LOCK_FACE_Y = -12.0          # socket face (y); the wall's front face is SOCKET_MODULE_DEPTH behind it

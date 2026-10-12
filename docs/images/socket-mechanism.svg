@@ -12,8 +12,9 @@
 </defs>
 <rect x="0" y="0" width="1100" height="800" fill="#ffffff"/>
 <text x="20" y="30" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">The lock — face views at 0° (rest) and 45° (fired), and section A–A</text>
-<text x="20" y="48" font-size="11" text-anchor="start" font-weight="normal" fill="#555">schematic, ~3 px = 1 mm; seen from your side (the hand opening); the twist is clockwise, like a key; exact geometry in cad/parts/socket.py</text>
+<text x="20" y="48" font-size="11" text-anchor="start" font-weight="normal" fill="#555">schematic, ~3 px = 1 mm; seen from your side (the hand opening); the twist is counterclockwise; exact geometry in cad/parts/socket.py</text>
 <text x="330" y="112" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">A  rest, 0°</text>
+<g transform="translate(660,0) scale(-1,1)">
 <rect x="190" y="122" width="280" height="280" rx="0" fill="#f4f4f4" stroke="#bbb" stroke-width="1"/>
 <path d="M412.7,331.4 L451.8,364.2" fill="none" stroke="#cfcfcf" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="451.8010664559175" cy="364.20322994015976" r="15" fill="#cfcfcf" stroke="#999" stroke-width="1"/>
@@ -43,7 +44,9 @@
 <path d="M286.5,228.6 L274.7,221.8 L267.5,234.2 L279.3,241.0 Z" fill="#1565c0" stroke="#222222" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M268.7766804279294,231.49975179484403 L269.3307364460858,222.12519015937892 L261.4895885936543,227.29317748722514 L262.04544919048635,217.91849566680793 L254.2049784938418,223.08785902984758 L254.76214797723463,213.71309056275743 L246.92217688597708,218.88346829074584 L247.48032580461046,209.5086352750592 L239.64073380710363,214.67978219533114" fill="none" stroke="#1565c0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M407.0,276 L399.0,246" fill="none" stroke="#222222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
 <text x="720" y="112" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">B  fired, 45° (held against the spring)</text>
+<g transform="translate(1440,0) scale(-1,1)">
 <rect x="580" y="122" width="280" height="280" rx="0" fill="#f4f4f4" stroke="#bbb" stroke-width="1"/>
 <path d="M802.7,331.4 L841.8,364.2" fill="none" stroke="#cfcfcf" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="841.8010664559175" cy="364.20322994015976" r="15" fill="#cfcfcf" stroke="#999" stroke-width="1"/>
@@ -74,21 +77,22 @@
 <path d="M648.3673547070966,225.4907665330934 L650.2244609645312,216.8670391807742 L643.6847247473119,222.7875177640276 L645.5424235750482,214.16361935804025 L639.0028221731334,220.0846426225071 L640.8610129040673,211.46060228465535 L634.32152409001,217.3820802172348 L636.1801276320055,208.75792081245214 L629.6407338071036,214.67978219533114" fill="none" stroke="#1565c0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M797.0,276 L795.0,246" fill="none" stroke="#222222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M703.7,146.1 A117.0,117.0 0 0 1 795.2,172.4" fill="none" stroke="#e65100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrO)"/>
-<text x="759.8631922743682" y="139.3137093979252" font-size="10" text-anchor="start" font-weight="normal" fill="#e65100">twist 45°</text>
+</g>
+<text x="680.1368077256318" y="139.3137093979252" font-size="10" text-anchor="end" font-weight="normal" fill="#e65100">twist 45°</text>
 <text x="165" y="112" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">cam lobe on the rim</text>
 <text x="165" y="124" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">(50–70° at rest, 3 mm lift)</text>
-<path d="M170,108 L389.75575286112627,227.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="389.75575286112627" cy="227.5" r="2.2" fill="#999"/>
+<path d="M170,108 L270.24424713887373,227.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="270.24424713887373" cy="227.5" r="2.2" fill="#999"/>
 <text x="165" y="150" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">rotor drops in from below; the</text>
 <text x="165" y="162" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">base plate closes the housing</text>
 <text x="165" y="174" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">and carries the Hall board</text>
-<path d="M170,146 L339.53328495391446,207.93405435962978" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="339.53328495391446" cy="207.93405435962978" r="2.2" fill="#999"/>
+<path d="M170,146 L320.46671504608554,207.93405435962978" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="320.46671504608554" cy="207.93405435962978" r="2.2" fill="#999"/>
 <text x="165" y="200" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">housing, 76 mm across: its</text>
 <text x="165" y="212" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">face is flush with the ring pocket</text>
-<path d="M170,196 L231.273103968574,205.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="231.273103968574" cy="205.0" r="2.2" fill="#999"/>
-<text x="165" y="240" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">stop lug (printed, at 9 o'clock)</text>
+<path d="M170,196 L428.726896031426,205.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="428.726896031426" cy="205.0" r="2.2" fill="#999"/>
+<text x="165" y="240" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">stop lug (printed, at 3 o'clock)</text>
 <text x="165" y="252" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">in a 59° channel: its walls are</text>
 <text x="165" y="264" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">the hard stops at 0° and 45°</text>
 <path d="M170,236 L330.0,322.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
@@ -96,55 +100,55 @@
 <text x="165" y="290" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">keyed pocket: 24 mm disc +</text>
 <text x="165" y="302" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">6×4 mm tab (matches the</text>
 <text x="165" y="314" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">ring key cap)</text>
-<path d="M170,286 L294.0,262.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="294.0" cy="262.0" r="2.2" fill="#999"/>
+<path d="M170,286 L366.0,262.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="366.0" cy="262.0" r="2.2" fill="#999"/>
 <text x="165" y="340" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">6×2 mm magnet in the key cap,</text>
 <text x="165" y="352" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">on the axis: it never moves</text>
 <text x="165" y="364" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">when the ring is twisted</text>
-<path d="M170,336 L326,266" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="326" cy="266" r="2.2" fill="#999"/>
+<path d="M170,336 L334,266" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="334" cy="266" r="2.2" fill="#999"/>
 <text x="165" y="390" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">0.5×5×10 mm spring + plunger in a</text>
 <text x="165" y="402" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">radial pocket press on the rim</text>
 <text x="165" y="414" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">ramp: it pushes the rotor back to 0°</text>
-<path d="M170,386 L252.05771365940052,217.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="252.05771365940052" cy="217.0" r="2.2" fill="#999"/>
+<path d="M170,386 L407.9422863405995,217.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="407.9422863405995" cy="217.0" r="2.2" fill="#999"/>
 <text x="165" y="440" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">two ears on the base plate:</text>
 <text x="165" y="452" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">M3x10 + nut through the lock wall</text>
-<path d="M170,436 L208.1989335440825,364.20322994015976" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="208.1989335440825" cy="364.20322994015976" r="2.2" fill="#999"/>
+<path d="M170,436 L451.8010664559175,364.20322994015976" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="451.8010664559175" cy="364.20322994015976" r="2.2" fill="#999"/>
 <text x="165" y="478" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">ramp on the rim, 300–345°</text>
-<path d="M170,474 L293.06031148046054,214.71935478359669" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="293.06031148046054" cy="214.71935478359669" r="2.2" fill="#999"/>
-<text x="875" y="112" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">twist the ring 45° clockwise</text>
-<text x="875" y="124" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">(as you see it), like a key</text>
-<path d="M870,108 L778.5,160.67502775722068" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="778.5" cy="160.67502775722068" r="2.2" fill="#999"/>
+<path d="M170,474 L366.93968851953946,214.71935478359669" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="366.93968851953946" cy="214.71935478359669" r="2.2" fill="#999"/>
+<text x="875" y="112" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">twist the ring 45° counterclockwise</text>
+<text x="875" y="124" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">(as you see it)</text>
+<path d="M870,108 L661.5,160.67502775722068" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="661.5" cy="160.67502775722068" r="2.2" fill="#999"/>
 <text x="875" y="160" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">stop lug against the channel</text>
 <text x="875" y="172" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">wall = 45° hard stop</text>
-<path d="M870,156 L762.4264068711929,304.42640687119285" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="762.4264068711929" cy="304.42640687119285" r="2.2" fill="#999"/>
+<path d="M870,156 L677.5735931288071,304.42640687119285" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="677.5735931288071" cy="304.42640687119285" r="2.2" fill="#999"/>
 <text x="875" y="205" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">D2F-L on a slotted bracket</text>
 <text x="875" y="217" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">(slide it to tune the click angle)</text>
-<path d="M870,201 L815.0,245" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="815.0" cy="245" r="2.2" fill="#999"/>
+<path d="M870,201 L625.0,245" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="625.0" cy="245" r="2.2" fill="#999"/>
 <text x="875" y="250" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">cam lobe has pressed the D2F-L</text>
 <text x="875" y="262" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">lever 3 mm after ~40° of twist:</text>
 <text x="875" y="274" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">click (SW goes LOW)</text>
-<path d="M870,246 L743.5993898894711,197.16120916577233" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="743.5993898894711" cy="197.16120916577233" r="2.2" fill="#999"/>
+<path d="M870,246 L696.4006101105289,197.16120916577233" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="696.4006101105289" cy="197.16120916577233" r="2.2" fill="#999"/>
 <text x="875" y="300" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">magnet still centred on the</text>
 <text x="875" y="312" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">Hall sensor: Hall stays LOW</text>
 <text x="875" y="324" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">through the whole twist</text>
-<path d="M870,296 L724,266" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="724" cy="266" r="2.2" fill="#999"/>
+<path d="M870,296 L716,266" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="716" cy="266" r="2.2" fill="#999"/>
 <text x="875" y="350" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">plunger pushed out 4 mm by the</text>
 <text x="875" y="362" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">ramp; let go and it pushes the</text>
 <text x="875" y="374" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">rotor back to 0° (switch releases)</text>
-<path d="M870,346 L642.0577136594005,217.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="642.0577136594005" cy="217.0" r="2.2" fill="#999"/>
+<path d="M870,346 L797.9422863405995,217.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="797.9422863405995" cy="217.0" r="2.2" fill="#999"/>
 <text x="875" y="400" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">ramp now under the plunger</text>
-<path d="M870,396 L660.7993648904878,240.45273097048286" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="660.7993648904878" cy="240.45273097048286" r="2.2" fill="#999"/>
+<path d="M870,396 L779.2006351095122,240.45273097048286" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="779.2006351095122" cy="240.45273097048286" r="2.2" fill="#999"/>
 <path d="M60,488 L1040,488" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="20" y="512" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">Section A–A (axis, stop lug, switch) — ring inserted, 0°; drawn face up (in the lantern the face points at you)</text>
 <rect x="400" y="591" width="15" height="95" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>

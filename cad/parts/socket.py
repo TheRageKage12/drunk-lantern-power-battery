@@ -18,6 +18,10 @@ Parts (print orientation noted in build()):
   key_cap         24 mm keyed disc with the magnet pocket, glued to the ring's face
   switch_envelope D2F-L body + lever at rest, for the collision test (not printed)
 
+LOCK_TWIST = 'ccw' (params): every part below is mirrored left-right (x -> -x in the socket frame) on output,
+so the same mechanism twists COUNTERCLOCKWISE; the geometry code and tests/test_socket.py stay in the
+clockwise frame. The two ears (40/140 deg) are a mirror pair, so the lock wall does not change.
+
 Mechanism, from the top: ring + key_cap drop into the rotor pocket (one orientation). Twist clockwise:
   - the stop lug rides in a 59 deg channel whose walls are the 0 and 45 deg hard stops;
   - the cam lobe lifts the D2F-L lever 3 mm between 30 and 40 deg of twist (click before the stop);
@@ -360,7 +364,18 @@ def build():
         out['socket_standoff'] = st          # print 2
     if LED_RING:
         out['halo'] = halo_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, HALO_H))   # skin down
+    if MIRROR:
+        out = {k: v.mirror('YZ') for k, v in out.items()}
     return out
+
+
+MIRROR = P.LOCK_TWIST == 'ccw'
+
+
+def _mirror_step(step):
+    """Conjugate a placement step by the x -> -x mirror: M(R p + t) = (M R M)(M p) + M t, and M R(a, th) M = R(M a, -th)."""
+    (ax, ay, az), ang, (dx, dy, dz) = step
+    return ((-ax, ay, az), -ang, (-dx, dy, dz))
 
 
 def mount_step():
@@ -388,5 +403,7 @@ def placements():
         pl['socket_standoff'] = [((0, 0, 1), 0, (ex, ey, BASE_BOT - P.SOCKET_STANDOFF)), m]
     if LED_RING:
         pl['halo'] = [(X, 180, (0, 0, HALO_H)), m]
+    if MIRROR:    # print geometry is mirrored: mirror every step up to the socket frame, not the mount step
+        pl = {n: [_mirror_step(st) for st in steps[:-1]] + [steps[-1]] for n, steps in pl.items()}
     return pl
 

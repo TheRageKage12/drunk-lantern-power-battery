@@ -24,7 +24,7 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 ```
  0. before: push the empty glass in under the lock until it clicks over the ridge at the stop
  1. punch in, ring face first (6x2 mm magnet in a printed key cap) -> Hall sensor sees it -> light fades up to ~15 %
- 2. twist 45 deg clockwise and HOLD -> a cam clicks the microswitch -> pump starts, light starts climbing
+ 2. twist 45 deg counterclockwise and HOLD -> a cam clicks the microswitch -> pump starts, light starts climbing
  3. keep holding through the oath: the pump runs ~11 s while the light climbs to ~90 %
  4. let the ring turn back (spring) -> light swells to 100 % and goes dark
  5. grip the front of the glass, slide it 3 cm toward you, lift it ~5 cm out of its slot and bring it out
@@ -277,9 +277,10 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
    `socket_base`. A dab of super glue holds each.
 2. **Ring key.** Glue the magnet into the pocket under `key_cap` (either pole works with the DRV5032). Scuff
    the ring's flat face and the key cap. Put the ring on your left hand and make the fist you will punch with,
-   ring face forward, in the position you start the twist from. Thumb-up is easiest: the clockwise twist then
-   rolls your thumb over toward palm-down. Glue the key cap on so its tab points to your left. In the lock the
-   tab then sits at the rest position, and the twist is clockwise as you see it, like turning a key.
+   ring face forward, held the way you start the twist (for example palm down). Glue the key cap on so its tab
+   points to your right. In the lock the tab then sits at the rest position, and the twist is counterclockwise
+   as you see it (from palm down, your thumb rolls up). The lock is built mirrored for this;
+   `LOCK_TWIST = 'cw'` in `cad/params.py` gives the clockwise version.
 3. **Hall sensor.** Lay the DRV5032 board in the pocket under `socket_base`, components down. The pocket is
    longer than the board: slide it until its chip sits under the square window on the axis, then hold it
    with two dots of glue. The magnet ends up about 8 mm above the chip, which the DRV5032 detects easily.
@@ -425,7 +426,7 @@ position, under the lock.
 
 1. Make a fist (ring on your left hand) and punch in through the curtain, ring face first, until the ring
    seats in the lock. The lantern glows faintly.
-2. Twist 45 degrees clockwise and hold it as you start the oath. The pump starts and the light begins to climb.
+2. Twist 45 degrees counterclockwise and hold it as you start the oath. The pump starts and the light begins to climb.
 3. Keep holding through the oath. After about 11 seconds the pour is done; the light sits at 90 % until you
    turn back, so a longer oath is fine.
 4. On the last word, turn back. The light swells to full and goes dark.

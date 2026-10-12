@@ -251,3 +251,7 @@ exception in build.py output.
   26 mm quarter bend from the tube exit at (-37, -31.1); the tube end at (-6, -31.1), z = -21.5, 20 mm from the
   glass centre. Cable hole at (35, -32). `DISH_LOWER_HOLE_D` 104.
 - Fist envelope 106 x 76 mm (owner: under 4 x 3 in), centred 3 mm above the ring.
+- `LOCK_TWIST = 'ccw'`: the owner twists counterclockwise (left hand, palm turning toward the glass). Every
+  socket part is mirrored left-right (x -> -x in the socket frame) on output and its placement steps are
+  conjugated by the same mirror; the mechanism code and `tests/test_socket.py` stay in the clockwise frame. The
+  ears (40/140 deg) are a mirror pair, so the lock wall is unchanged. The key cap tab now rests at -X (your right).
