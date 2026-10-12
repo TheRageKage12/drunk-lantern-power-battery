@@ -1,15 +1,15 @@
 /*
  * Green Lantern power battery - twist-to-pour firmware
  * Board: Seeed Studio XIAO RP2040 (Arduino core: earlephilhower "Raspberry Pi Pico/RP2040",
- *        board "Seeed XIAO RP2040"). Library: Adafruit NeoPixel.
+ *        board "Seeed XIAO RP2040"). No extra libraries.
  *
  * Interaction
- *   insert ring (magnet -> Hall sensor)      -> ARMED, slow green pulse
+ *   insert ring (magnet -> Hall sensor)      -> ARMED: the green strip brightens steadily over RAMP_MS
  *   recite oath, twist ring ~45 deg          -> cam presses microswitch
- *   Hall present AND switch pressed AND not poured yet -> FLASH, then POURING (pump on, light show)
- *   pour finishes                            -> LOCKED (afterglow) until the ring is removed
+ *   Hall present AND switch pressed AND not poured yet -> FLASH (full brightness), then POURING (pump on)
+ *   pour finishes                            -> LOCKED: holds bright, then fades to the idle glow
  *   remove ring                              -> IDLE
- *   PRIME button (D6) held while IDLE, no ring -> pump runs to prime the tube, stops on release
+ *   PRIME button (D6, optional) held while IDLE, no ring -> pump runs to prime the tube, stops on release
  *
  * Safety interlocks (do not remove)
  *   - pump output is driven LOW before anything else at boot
@@ -26,47 +26,46 @@
  *     and after a cap stop needs a release before it runs again
  *   - during POURING the pump stops once the Hall input has been absent for POUR_ABORT_MS (60 ms)
  *     and the prop goes LOCKED; the slower RING_GONE_MS only governs the LOCKED -> IDLE reset
- *   - LED brightness is capped at POUR_MAX_BRIGHT on top of maxBright during FLASH/POURING so the
- *     5 V rail stays under ~1 A for the LEDs while the pump runs
  *
- * Wiring (see docs/BUILD_GUIDE.md):
- *   D1  <- Hall sensor OUT, active LOW when the magnet is present. Primary: Adafruit DRV5032 breakout
- *          (open-drain, VCC 3V3, GND; D1 uses the XIAO's internal pull-up, no divider needed).
- *          Alternative: 5 V A3144 module, OUT -> 4.7k series -> D1, 22k from D1 to GND (divider off the
- *          module's own pull-up so the 3.3 V pin never sees 5 V).
+ * Wiring (see docs/BUILD_GUIDE.md and docs/images/wiring.svg):
+ *   D1  <- Hall sensor OUT, active LOW when the magnet is present. Adafruit DRV5032 breakout on 3V3/GND
+ *          (D1 uses the XIAO's internal pull-up). Alternative: 5 V A3144 with a 1N5819 (anode on D1,
+ *          cathode on the sensor OUT) so D1 never sees 5 V.
  *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
- *   D3  -> 74AHCT125 channel 3 (pin 9 in, pin 8 out) -> D4184 TRIG (HIGH = pump on); 10 k pull-down
- *          on D3 keeps the trigger LOW while the XIAO boots/resets; D4184 GND tied to XIAO GND;
- *          1N5819 flyback diode across the pump motor (cathode to +12 V)
- *   D4  -> 74AHCT125 in  -> out -> 330 ohm -> NeoPixel RING DIN (24 px, in the charging socket)
- *   D5  -> 74AHCT125 in  -> out -> 330 ohm -> NeoPixel STRIP DIN (60 px, inside the sphere)
- *   D6  <- PRIME button, momentary to GND (internal pull-up, active LOW)
- *   5V  <- 5 V bus through a 1N5819 (USB and the power bank never back-feed each other)
- *   3V3 -> DRV5032 VCC (the A3144 alternative runs from 5 V with the divider above)
+ *   D3  -> 74AHCT125 ch.1 (pin 2 in, pin 3 out) -> gate of Q1 (pump MOSFET, low side); 10 k from D3 to GND
+ *          keeps it off while the XIAO boots. 1N5819 flyback across the pump (stripe to +12 V).
+ *   D4  -> 74AHCT125 ch.2 (pin 5 in, pin 6 out) -> gate of Q2 (LED strip MOSFET, low side); 10 k D4 to GND.
+ *   D6  <- PRIME button, momentary to GND (optional; leave unconnected if you skip it)
+ *   5V  <- 5 V from the LM2596 buck through a 1N5819 (USB and the buck never back-feed each other)
+ *   3V3 -> DRV5032 VCC
  *
  * Serial (115200) commands for bench calibration, type then Enter:
  *   status            print state and settings
- *   cal 10000         run the pump for 10000 ms (water calibration; works without the ring, USB only)
- *   pour 12500        set the pour time in ms for this session
- *   save              store the pour time in flash (EEPROM emulation) so it survives power cycles
+ *   cal 10000         run the pump for 10000 ms (water calibration; works without the ring)
+ *   pour 9000         set the pour time in ms (500..20000)
+ *   speed 80          pump speed in percent (30..100); slower pump = longer pour for the same volume
+ *   leds 200          maximum LED brightness 0..255
+ *   idle 20           idle glow, raw PWM 0..255 (a small load keeps some power banks from switching off)
+ *   save              store pour time, speed, brightness and idle glow in flash
  *   stop              stop the pump now
- *   leds 128          set the maximum LED brightness 0..255 (saved with "save")
  */
 
-#include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
 
 // ------------------------------------------------------------------ pins
 constexpr uint8_t HALL_PIN      = D1;
 constexpr uint8_t SWITCH_PIN    = D2;
 constexpr uint8_t PUMP_PIN      = D3;
-constexpr uint8_t RING_LED_PIN  = D4;
-constexpr uint8_t STRIP_LED_PIN = D5;
+constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through the 74AHCT125)
 constexpr uint8_t PRIME_PIN     = D6;  // momentary to GND: primes the tube while held (IDLE, no ring)
 
-// ------------------------------------------------------------------ LEDs
-constexpr uint16_t RING_COUNT  = 24;   // Adafruit 24-px NeoPixel ring in the socket
-constexpr uint16_t STRIP_COUNT = 60;   // WS2812B strip inside the sphere (set to your real count)
+// ------------------------------------------------------------------ light
+constexpr uint32_t RAMP_MS       = 15000;  // ARMED: brightness climbs over this long; set it to your oath
+constexpr float    ARMED_START   = 0.15f;  // perceived brightness when the ring goes in (0..1)
+constexpr float    ARMED_PEAK    = 0.75f;  // perceived brightness at the end of the ramp; the twist goes to 1.0
+constexpr uint32_t LOCK_HOLD_MS  = 1500;   // after the pour: stay at full brightness this long
+constexpr uint32_t FADE_MS       = 3000;   // full -> dark fade time (also used when the ring is pulled)
+constexpr float    GAMMA         = 2.2f;   // eye response: makes the ramp look steady instead of front-loaded
 
 // ------------------------------------------------------------------ timing
 constexpr uint32_t HALL_DEBOUNCE_MS   = 100;   // ring must be seen this long before ARMED
@@ -75,28 +74,32 @@ constexpr uint32_t PRIME_DEBOUNCE_MS  = 40;
 constexpr uint32_t RING_GONE_MS       = 200;   // ring must be absent this long to reset (LOCKED -> IDLE)
 constexpr uint32_t POUR_ABORT_MS      = 60;    // ring absent this long during POURING -> pump off, LOCKED
 constexpr uint32_t FLASH_MS           = 220;   // bright flash before the pump starts
-constexpr uint32_t PUMP_RAMP_MS       = 300;   // PWM soft start to avoid a 5 V brown-out
-constexpr uint32_t DEFAULT_POUR_MS    = 10000; // replace after water calibration (see guide)
+constexpr uint32_t PUMP_RAMP_MS       = 300;   // PWM soft start: tames the motor inrush on the 12 V rail
+constexpr uint32_t DEFAULT_POUR_MS    = 9000;  // ~30 mL at the Kamoer's rated 200 mL/min; set by calibration (see guide)
 constexpr uint32_t MAX_PUMP_MS        = 20000; // hard cap, independent of everything else
-constexpr uint8_t  DEFAULT_MAX_BRIGHT = 160;   // 0..255 cap for every animation (current budget)
-constexpr uint8_t  POUR_MAX_BRIGHT    = 110;   // extra cap while FLASH/POURING: LEDs < ~1 A on the 5 V rail
-constexpr uint8_t  IDLE_PILOT         = 40;    // steady ring glow in IDLE (>= ~150 mA keeps the power bank awake)
+constexpr uint8_t  DEFAULT_MAX_BRIGHT = 255;   // 0..255 cap on the strip PWM
+constexpr uint8_t  DEFAULT_IDLE_DUTY  = 20;    // raw PWM floor in every state: a faint glow and a small keep-alive load
+constexpr uint8_t  DEFAULT_PUMP_SPEED = 100;   // percent; lower it to stretch the pour if the Kamoer is too fast
+
+// (declared before the first function so the Arduino prototype generator sees it)
+// ------------------------------------------------------------------ state
+enum class State : uint8_t { IDLE, ARMED, FLASH, POURING, LOCKED };
+State state = State::IDLE;
 
 // ------------------------------------------------------------------ persistent settings
 struct Settings {
   uint32_t magic;
   uint32_t pourMs;
   uint8_t  maxBright;
+  uint8_t  idleDuty;
+  uint8_t  pumpSpeed;
 };
-constexpr uint32_t SETTINGS_MAGIC = 0x474C3031; // "GL01"
-Settings settings{SETTINGS_MAGIC, DEFAULT_POUR_MS, DEFAULT_MAX_BRIGHT};
+constexpr uint32_t SETTINGS_MAGIC = 0x474C3032; // "GL02"
+Settings defaultSettings() {
+  return Settings{SETTINGS_MAGIC, DEFAULT_POUR_MS, DEFAULT_MAX_BRIGHT, DEFAULT_IDLE_DUTY, DEFAULT_PUMP_SPEED};
+}
+Settings settings = defaultSettings();
 
-// ------------------------------------------------------------------ state
-enum class State : uint8_t { IDLE, ARMED, FLASH, POURING, LOCKED };
-State state = State::IDLE;
-
-Adafruit_NeoPixel ring(RING_COUNT, RING_LED_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip(STRIP_COUNT, STRIP_LED_PIN, NEO_GRB + NEO_KHZ800);
 
 uint32_t stateSince   = 0;     // millis() when the current state began
 uint32_t hallChanged  = 0;     // last raw edge on the Hall input
@@ -119,6 +122,11 @@ uint32_t pumpRunFor   = 0;     // requested duration for the current run
 uint32_t pumpOnSince  = 0;     // millis() when the pump last went off -> on (continuous-run cap)
 bool     pumpCal      = false; // current run is a serial "cal" run: allowed without the ring
 bool     pumpPrime    = false; // current run is a PRIME-button run: allowed without the ring, ends on release
+
+// light bookkeeping
+float    ledShown     = 0.0f;  // perceived brightness currently shown, 0..1
+uint32_t ledLastMs    = 0;     // millis() of the previous light update (for the fade rate)
+uint8_t  ledDuty      = 0;     // last PWM value written to LED_PIN
 
 static inline uint32_t since(uint32_t t) { return millis() - t; } // wrap-safe
 
@@ -147,67 +155,47 @@ bool pumpService() {
   if (!pumpOn) return false;
   const uint32_t t = since(pumpStarted);
   if (t >= pumpRunFor || t >= MAX_PUMP_MS || since(pumpOnSince) >= MAX_PUMP_MS) { pumpStop(); return false; }
-  uint32_t duty = 255;
-  if (t < PUMP_RAMP_MS) duty = 40 + (215UL * t) / PUMP_RAMP_MS;
+  const uint32_t full = (255UL * settings.pumpSpeed) / 100;   // speed setting, 30..100 %
+  uint32_t duty = full;
+  if (t < PUMP_RAMP_MS) duty = 40 + ((full > 40 ? full - 40 : 0) * t) / PUMP_RAMP_MS;
   analogWrite(PUMP_PIN, duty);
   return true;
 }
 
-// ------------------------------------------------------------------ LED helpers
-uint8_t capB(uint16_t v) {
-  uint8_t cap = settings.maxBright;
-  if ((state == State::FLASH || state == State::POURING) && cap > POUR_MAX_BRIGHT) cap = POUR_MAX_BRIGHT;
-  return (uint8_t)((v * cap) / 255);
-}
-
-uint32_t green(uint8_t b)      { return Adafruit_NeoPixel::Color(0, capB(b), 0); }
-uint32_t greenWhite(uint8_t b) { return Adafruit_NeoPixel::Color(capB(b) / 3, capB(b), capB(b) / 4); }
-
-void fillAll(uint32_t ringColor, uint32_t stripColor) {
-  ring.fill(ringColor);
-  strip.fill(stripColor);
-}
-
-// triangle wave 0..255 with the given period
-uint8_t tri(uint32_t periodMs, uint32_t phaseMs) {
-  const uint32_t p = (millis() + phaseMs) % periodMs;
-  const uint32_t half = periodMs / 2;
-  return (p < half) ? (uint8_t)((255UL * p) / half) : (uint8_t)((255UL * (periodMs - p)) / half);
-}
-
-void animateIdle() {              // pilot glow: steady ring so the power bank sees a load, strip dark
-  const uint8_t b = IDLE_PILOT + tri(4000, 0) / 16;              // 40..55, slow breathe
-  fillAll(Adafruit_NeoPixel::Color(0, b, 0), 0);                 // absolute, not scaled by maxBright
-}
-
-void animateArmed() {             // slow charging pulse that builds over ~20 s
+// ------------------------------------------------------------------ light
+// Target perceived brightness (0..1) for the current state.
+float lightTarget() {
   const uint32_t t = since(stateSince);
-  const uint8_t ceiling = (uint8_t)min<uint32_t>(90 + t / 250, 170); // 90 -> 170 over 20 s
-  const uint8_t b = 25 + (uint16_t)tri(1600, 0) * (ceiling - 25) / 255;
-  fillAll(green(b), green(b));
-  // a single bright pixel orbiting the socket ring sells "energy flowing in"
-  const uint16_t i = (millis() / 60) % RING_COUNT;
-  ring.setPixelColor(i, greenWhite(255));
-}
-
-void animateFlash() { fillAll(greenWhite(255), greenWhite(255)); }
-
-void animatePouring() {           // bright swirl on the strip, breathing ring, all near max
-  const uint8_t base = 140 + tri(700, 0) / 3;      // 140..225
-  ring.fill(green(base));
-  for (uint16_t i = 0; i < STRIP_COUNT; i++) {
-    const uint16_t wave = (uint16_t)((i * 255UL) / max<uint16_t>(STRIP_COUNT, 1) + (millis() / 4)) & 255;
-    const uint8_t b = 120 + ((wave < 128 ? wave : 255 - wave) * 135) / 128; // 120..255
-    strip.setPixelColor(i, green(b));
+  switch (state) {
+    case State::IDLE:    return 0.0f;                     // the idle floor (idleDuty) still applies
+    case State::ARMED: {                                  // steady climb over the oath
+      const float k = t >= RAMP_MS ? 1.0f : (float)t / (float)RAMP_MS;
+      return ARMED_START + (ARMED_PEAK - ARMED_START) * k;
+    }
+    case State::FLASH:
+    case State::POURING: return 1.0f;
+    case State::LOCKED:  return t < LOCK_HOLD_MS ? 1.0f : 0.0f;
   }
-  const uint16_t head = (millis() / 25) % RING_COUNT;
-  for (uint8_t k = 0; k < 6; k++) ring.setPixelColor((head + RING_COUNT - k) % RING_COUNT, greenWhite(255 - k * 35));
+  return 0.0f;
 }
 
-void animateLocked() {            // satisfied afterglow that slowly fades to a steady glow
-  const uint32_t t = since(stateSince);
-  const uint8_t b = (t < 4000) ? (uint8_t)(200 - (140UL * t) / 4000) : 60;
-  fillAll(green(b), green(b));
+// Rises instantly to the target (the ARMED ramp is already gradual), falls at most 1.0 per FADE_MS.
+void lightService() {
+  const uint32_t now = millis();
+  const uint32_t dt = now - ledLastMs;
+  ledLastMs = now;
+  const float target = lightTarget();
+  if (target >= ledShown) {
+    ledShown = target;
+  } else {
+    const float step = (float)dt / (float)FADE_MS;
+    ledShown = (ledShown - step > target) ? ledShown - step : target;
+  }
+  uint32_t duty = (uint32_t)(powf(ledShown, GAMMA) * settings.maxBright + 0.5f);
+  if (duty < settings.idleDuty) duty = settings.idleDuty;          // floor: faint glow + keep-alive load
+  if (duty > 255) duty = 255;
+  ledDuty = (uint8_t)duty;
+  analogWrite(LED_PIN, ledDuty);
 }
 
 // ------------------------------------------------------------------ settings
@@ -215,7 +203,8 @@ void loadSettings() {
   EEPROM.begin(256);
   Settings s;
   EEPROM.get(0, s);
-  if (s.magic == SETTINGS_MAGIC && s.pourMs >= 500 && s.pourMs <= MAX_PUMP_MS) settings = s;
+  if (s.magic == SETTINGS_MAGIC && s.pourMs >= 500 && s.pourMs <= MAX_PUMP_MS &&
+      s.pumpSpeed >= 30 && s.pumpSpeed <= 100) settings = s;
 }
 
 void saveSettings() {
@@ -243,7 +232,9 @@ void printStatus() {
   Serial.print(F(" switch=")); Serial.print(swStable ? "pressed" : "released");
   Serial.print(F(" pump=")); Serial.print(pumpOn ? "ON" : "off");
   Serial.print(F(" pourMs=")); Serial.print(settings.pourMs);
-  Serial.print(F(" maxBright=")); Serial.println(settings.maxBright);
+  Serial.print(F(" speed=")); Serial.print(settings.pumpSpeed);
+  Serial.print(F(" maxBright=")); Serial.print(settings.maxBright);
+  Serial.print(F(" idle=")); Serial.println(settings.idleDuty);
 }
 
 void handleCommand(String cmd) {
@@ -275,7 +266,21 @@ void handleCommand(String cmd) {
     Serial.print(F("maxBright=")); Serial.println(settings.maxBright);
     return;
   }
-  Serial.println(F("commands: status | cal <ms> | pour <ms> | leds <0-255> | save | stop"));
+  if (cmd.startsWith("speed ")) {
+    const long v = cmd.substring(6).toInt();
+    if (v < 30 || v > 100) { Serial.println(F("speed: 30..100")); return; }
+    settings.pumpSpeed = (uint8_t)v;
+    Serial.print(F("speed=")); Serial.println(settings.pumpSpeed);
+    return;
+  }
+  if (cmd.startsWith("idle ")) {
+    const long v = cmd.substring(5).toInt();
+    if (v < 0 || v > 255) { Serial.println(F("idle: 0..255")); return; }
+    settings.idleDuty = (uint8_t)v;
+    Serial.print(F("idle=")); Serial.println(settings.idleDuty);
+    return;
+  }
+  Serial.println(F("commands: status | cal <ms> | pour <ms> | speed <30-100> | leds <0-255> | idle <0-255> | save | stop"));
 }
 
 void serviceSerial() {
@@ -318,22 +323,21 @@ void setup() {
   pinMode(HALL_PIN, INPUT_PULLUP);      // DRV5032 is open-drain; the A3144 divider also sits below the pull-up
   pinMode(SWITCH_PIN, INPUT_PULLUP);
   pinMode(PRIME_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
 
   Serial.begin(115200);
   loadSettings();
-
-  ring.begin();  ring.setBrightness(255);  ring.clear();  ring.show();
-  strip.begin(); strip.setBrightness(255); strip.clear(); strip.show();
 
   // settle the debouncers; if the switch is already pressed something is jammed
   for (int i = 0; i < 30; i++) { readInputs(); delay(10); }
   switchJammed = swStable;
 
-  // short boot sweep so you know it is alive (and that both LED chains work)
-  for (uint16_t i = 0; i < RING_COUNT; i++) { ring.setPixelColor(i, green(120)); ring.show(); delay(12); }
-  for (uint16_t i = 0; i < STRIP_COUNT; i++) { strip.setPixelColor(i, green(90)); strip.show(); delay(6); }
-  delay(150);
-  ring.clear(); strip.clear(); ring.show(); strip.show();
+  // short boot blink so you know it is alive and the strip works
+  analogWrite(LED_PIN, 120); delay(250);
+  analogWrite(LED_PIN, 0);   delay(150);
+  ledShown = 0.0f;
+  ledLastMs = millis();
   enter(State::IDLE);
 }
 
@@ -354,7 +358,6 @@ void loop() {
 
   switch (state) {
     case State::IDLE:
-      animateIdle();
       if (hallStable) {
         pouredThisInsertion = false;
         if (swStable) switchJammed = true;  // pressed before the twist (stuck cam): ignore until released
@@ -363,7 +366,6 @@ void loop() {
       break;
 
     case State::ARMED:
-      animateArmed();
       if (!hallStable) { enter(State::IDLE); break; }
       if (swStable && !switchJammed && !pouredThisInsertion) {
         pouredThisInsertion = true;       // one pour per insertion, decided here
@@ -372,7 +374,6 @@ void loop() {
       break;
 
     case State::FLASH:
-      animateFlash();
       if (!hallStable) { enter(State::IDLE); break; }
       if (since(stateSince) >= FLASH_MS && hallRaw) {   // raw too: never start on a stale debounced reading
         pumpStart(settings.pourMs);
@@ -381,7 +382,6 @@ void loop() {
       break;
 
     case State::POURING:
-      animatePouring();
       // ring pulled: abort as soon as the raw input has been absent POUR_ABORT_MS, lock until it is
       // really gone (RING_GONE_MS) so a dropout can never buy a second pour
       if (!hallStable || (!hallRaw && since(hallChanged) >= POUR_ABORT_MS)) { pumpStop(); enter(State::LOCKED); break; }
@@ -389,12 +389,10 @@ void loop() {
       break;
 
     case State::LOCKED:
-      animateLocked();
       if (!hallStable) enter(State::IDLE);   // only a removed ring re-arms the prop
       break;
   }
 
-  ring.show();
-  strip.show();
-  delay(8);   // ~100 Hz; NeoPixel show() for 84 px takes ~2.5 ms
+  lightService();
+  delay(10);   // ~100 Hz
 }

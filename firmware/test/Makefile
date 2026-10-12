@@ -3,7 +3,7 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -O1 -g -Wall -Wextra -Wno-unused-parameter -Wno-unused-function
 SKETCH    = ../green_lantern/green_lantern.ino
-MOCKS     = Arduino.h Adafruit_NeoPixel.h EEPROM.h
+MOCKS     = Arduino.h EEPROM.h
 
 all: build/test_green_lantern
 

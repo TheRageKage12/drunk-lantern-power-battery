@@ -21,6 +21,7 @@
 #include <vector>
 #include <deque>
 #include <algorithm>
+#include <math.h>
 #include <type_traits>
 
 #define HIGH 1

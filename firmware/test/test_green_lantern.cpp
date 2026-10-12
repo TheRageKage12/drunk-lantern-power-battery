@@ -1,13 +1,12 @@
 // test_green_lantern.cpp - host-side simulation of firmware/green_lantern/green_lantern.ino
 //
-// The mocks (Arduino.h, Adafruit_NeoPixel.h, EEPROM.h in this directory) are included first,
+// The mocks (Arduino.h, EEPROM.h in this directory) are included first,
 // then the sketch itself is pulled in as part of this translation unit, so the scenarios can
 // call setup()/loop(), drive the pins through the fake clock and inspect the sketch's globals.
 //
 // Build + run:   make -C firmware/test test      (or ./run.sh)
 
 #include "Arduino.h"
-#include "Adafruit_NeoPixel.h"
 #include "EEPROM.h"
 
 #ifndef SKETCH_PATH
@@ -85,7 +84,7 @@ static void reboot(BootOpts o = BootOpts{}) {
   setRing(o.ringPresent);
   setPrime(o.primeHeld);
 
-  settings = Settings{SETTINGS_MAGIC, DEFAULT_POUR_MS, DEFAULT_MAX_BRIGHT};
+  settings = defaultSettings();
   state = State::IDLE;
   stateSince = hallChanged = swChanged = 0;
   hallRaw = swRaw = hallStable = swStable = switchJammed = pouredThisInsertion = false;
@@ -93,7 +92,7 @@ static void reboot(BootOpts o = BootOpts{}) {
   pumpOn = false; pumpStarted = pumpRunFor = 0;
   pumpOnSince = 0; pumpCal = false; pumpPrime = false;
   lineBuf = "";
-  ring.reset(); strip.reset();
+  ledShown = 0.0f; ledLastMs = 0; ledDuty = 0;
 
   setup();
 }
@@ -191,11 +190,12 @@ int main() {
     reboot();
     setRing(true);
     CHECK(runUntil([] { return state == State::ARMED; }, 1000) >= 0, "never ARMED");
-    unsigned showsBefore = ring.shows;
-    runMs(60000);
+    runMs(1000);
+    const uint8_t early = ledDuty;
+    runMs(59000);
     CHECK(state == State::ARMED, "state %s", stateName(state));
     CHECK(pumpRuns() == 0, "pump energised %zu times", pumpRuns());
-    CHECK(ring.shows > showsBefore + 1000 && ring.maxComponentShown() > 0, "ARMED animation not running");
+    CHECK(ledDuty > early, "ARMED light did not climb (%u -> %u)", early, ledDuty);
   });
 
   static PourMeasure pourD;
@@ -372,7 +372,7 @@ int main() {
           m.pourLen, pourD.pourLen, m.endState.c_str(), pourD.endState.c_str());
     // LOCKED afterglow + IDLE ember keep animating across the wrap
     runMs(6000);
-    CHECK(ring.maxComponentShown() > 0, "LEDs dark after the wrap");
+    CHECK(ledDuty >= settings.idleDuty && sim::pin[LED_PIN].pwm == ledDuty, "LED output wrong after the wrap (%u)", ledDuty);
   });
 
   scenario("k", "debounce: 30 ms Hall glitch does not arm, 20 ms switch glitch does not fire", [] {
@@ -450,52 +450,65 @@ int main() {
     NOTE("70 ms dropout: pump off %.1f ms after the raw drop, LOCKED kept while the ring was back", off);
   });
 
-  scenario("o", "LED budget: IDLE pilot 40..55 ring only, FLASH/POURING <= min(maxBright, POUR_MAX_BRIGHT), else <= maxBright", [] {
-    for (int mb : {(int)DEFAULT_MAX_BRIGHT, 255, 1, 0}) {
+  scenario("o", "light: idle floor always, ARMED climbs steadily over RAMP_MS, FLASH/POURING at maxBright, LOCKED holds then fades", [] {
+    for (int mb : {255, 160, 0}) {
       reboot();
       settings.maxBright = (uint8_t)mb;
-      const uint32_t pourCap = std::min<uint32_t>(mb, POUR_MAX_BRIGHT);
-      uint32_t maxPour = 0, maxArmed = 0; unsigned idleFrames = 0;
-      // every frame is drawn by the animate*() of the state at the start of the pass, with capB() using that state
+      const uint32_t floorD = settings.idleDuty, cap = std::max<uint32_t>(mb, floorD);
+      auto expect = [&](float p) { return std::max<uint32_t>(floorD, (uint32_t)(powf(p, GAMMA) * mb + 0.5f)); };
+      uint32_t prevArmed = 0, armedFirst = 0, armedLast = 0, maxPour = 0, maxJump = 0;
+      unsigned armedFrames = 0; bool armedMono = true;
       auto step = [&] {
         const State before = state;
         loop();
-        const uint32_t r = ring.maxComponentShown(), st = strip.maxComponentShown(), m = std::max(r, st);
-        switch (before) {
-          case State::IDLE: {
-            idleFrames++;
-            CHECK(st == 0, "maxBright %d IDLE: strip lit (%u)", mb, st);
-            for (uint16_t i = 0; i < ring.numPixels(); i++) {
-              const uint32_t c = ring.lastShown[i], g = (c >> 8) & 255, rr = (c >> 16) & 255, bb = c & 255;
-              if (!(g >= IDLE_PILOT && g <= IDLE_PILOT + 16 && rr == 0 && bb == 0)) { CHECK(false, "maxBright %d IDLE px %u = %06x (want green %u..%u)", mb, i, c, IDLE_PILOT, IDLE_PILOT + 16); break; }
-            }
-            break;
-          }
-          case State::FLASH: case State::POURING:
-            maxPour = std::max(maxPour, m);
-            CHECK(m <= pourCap, "maxBright %d %s frame: channel %u > pour cap %u", mb, stateName(before), m, pourCap);
-            break;
-          case State::ARMED: case State::LOCKED:
-            if (before == State::ARMED) maxArmed = std::max(maxArmed, m);
-            CHECK(m <= (uint32_t)mb, "maxBright %d %s frame: channel %u", mb, stateName(before), m);
-            break;
+        const uint32_t d = ledDuty;
+        CHECK(sim::pin[LED_PIN].pwm == (int)d, "maxBright %d: pin %d != ledDuty %u", mb, sim::pin[LED_PIN].pwm, d);
+        CHECK(d >= floorD && d <= cap, "maxBright %d %s: duty %u outside [%u, %u]", mb, stateName(before), d, floorD, cap);
+        if (before == State::ARMED && state == State::ARMED) {
+          if (armedFrames == 0) armedFirst = d;
+          else { if (d < prevArmed) armedMono = false; maxJump = std::max(maxJump, d - std::min(d, prevArmed)); }
+          prevArmed = armedLast = d; armedFrames++;
         }
-        if (pumpPinOn()) CHECK(m <= pourCap, "maxBright %d: pump on with channel %u > %u", mb, m, pourCap);
+        if (before == State::POURING) maxPour = std::max(maxPour, d);
       };
       auto runChecked = [&](double ms) { const double end = nowMs() + ms; while (nowMs() < end) step(); };
-      runChecked(5000);                                 // IDLE pilot
-      setRing(true); runChecked(25000);                 // ARMED, ceiling clamps at 20 s
-      setSwitch(true); runChecked(300);                 // FLASH -> POURING
-      setSwitch(false); runChecked(11000);              // POURING -> LOCKED
-      runChecked(6000);                                 // LOCKED afterglow
-      setRing(false); runChecked(1000);                 // IDLE again
+      runChecked(3000);
+      CHECK(ledDuty == floorD, "maxBright %d: IDLE duty %u (want floor %u)", mb, ledDuty, floorD);
+      setRing(true); runChecked(RAMP_MS + 3000);
+      CHECK(armedMono, "maxBright %d: ARMED light went down", mb);
+      CHECK(maxJump <= 3, "maxBright %d: ARMED jumped %u in one frame (not gradual)", mb, maxJump);
+      CHECK(armedFirst <= expect(ARMED_START) + 1, "maxBright %d: ARMED starts at %u (want ~%u)", mb, armedFirst, expect(ARMED_START));
+      CHECK(armedLast + 1 >= expect(ARMED_PEAK) && armedLast <= expect(ARMED_PEAK) + 1, "maxBright %d: ARMED peak %u (want %u)", mb, armedLast, expect(ARMED_PEAK));
+      setSwitch(true); runUntil([] { return state == State::POURING; }, 1000); setSwitch(false);
+      runChecked(settings.pourMs + 200);
+      CHECK(state == State::LOCKED, "maxBright %d: state %s after the pour", mb, stateName(state));
+      CHECK(maxPour == cap, "maxBright %d: pour brightness %u (want %u)", mb, maxPour, cap);
+      runChecked(LOCK_HOLD_MS - 400);
+      CHECK(ledDuty == cap, "maxBright %d: LOCKED hold duty %u (want %u)", mb, ledDuty, cap);
+      uint32_t prev = ledDuty; bool fadeMono = true;
+      const double fadeEnd = nowMs() + 400 + FADE_MS + 200;
+      while (nowMs() < fadeEnd) { step(); if (ledDuty > prev) fadeMono = false; prev = ledDuty; }
+      CHECK(fadeMono, "maxBright %d: LOCKED fade went up", mb);
+      CHECK(ledDuty == floorD, "maxBright %d: after the fade duty %u (want floor %u)", mb, ledDuty, floorD);
+      setRing(false); runChecked(1000);
+      CHECK(state == State::IDLE && ledDuty == floorD, "maxBright %d: back in IDLE duty %u", mb, ledDuty);
       CHECK(pumpRuns() == 1, "maxBright %d: runs %zu", mb, pumpRuns());
-      CHECK(idleFrames > 400, "maxBright %d: only %u IDLE frames checked", mb, idleFrames);
-      if (mb == DEFAULT_MAX_BRIGHT) {
-        CHECK(maxPour >= pourCap - 10 && maxPour <= pourCap, "pour animation peaks at %u (cap %u should be binding)", maxPour, pourCap);
-        CHECK(maxArmed > POUR_MAX_BRIGHT, "ARMED peaks at %u: the pour cap is not lower than the show", maxArmed);
-      }
     }
+  });
+
+  scenario("q", "pump speed: 'speed 70' sets the running duty to 70 %, keeps the pour time, persists; out of range rejected", [] {
+    reboot();
+    serialLine("speed 70"); serialLine("speed 20"); serialLine("speed 101"); runMs(50);
+    CHECK(settings.pumpSpeed == 70, "speed %u (want 70)", settings.pumpSpeed);
+    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
+    setSwitch(true); runUntil([] { return pumpPinOn(); }, 1000); setSwitch(false);
+    runMs(500);
+    CHECK(sim::pin[PUMP_PIN].pwm == (255 * 70) / 100, "running duty %d (want %d)", sim::pin[PUMP_PIN].pwm, (255 * 70) / 100);
+    runUntil([] { return !pumpPinOn(); }, 20000);
+    CHECK(pumpRuns() == 1 && pumpRunMs(0) >= DEFAULT_POUR_MS - 1 && pumpRunMs(0) <= DEFAULT_POUR_MS + LOOP_MS, "pour %.1f ms", pumpRunMs(0));
+    serialLine("idle 35"); serialLine("save"); runMs(50);
+    reboot(BootOpts{0, /*keepFlash*/ true});
+    CHECK(settings.pumpSpeed == 70 && settings.idleDuty == 35, "after reboot: speed %u idle %u", settings.pumpSpeed, settings.idleDuty);
   });
 
   scenario("p", "PRIME button (D6): runs only while held in IDLE with no ring, stops on release, capped, never changes state", [] {
