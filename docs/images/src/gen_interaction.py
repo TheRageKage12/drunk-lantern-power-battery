@@ -23,7 +23,7 @@ bands = [
     ("state", 168, 24, [(T0, 0, "#e0e0e0", "IDLE"), (0, P0, "#e3f2e3", "ARMED"), (P0, P1, "#81c784", "POURING"), (P1, R1, "#b9dfba", "HOLDING"), (R1, F1, "#f1fff1", "FINALE"), (F1, OUT, "#e0e0e0", "LOCKED"), (OUT, T1, "#e0e0e0", "IDLE")]),
     ("light", 198, 22, [(T0, 0, "#ffffff", "dark"), (0, P0, "#e8f5e9", "15 %"), (P0, P1, "#81c784", "climbs 15 % → 90 %"), (P1, R1, "#43a047", "90 %"), (R1, R1 + 0.7, "#2e7d32", ""), (R1 + 0.7, F1, "#c8e6c9", "fade"), (F1, T1, "#ffffff", "dark")]),
     ("pump", 226, 18, [(T0, P0, "#f5f5f5", "off"), (P0, P1, "#ffcc80", "ON ~11 s (about 1 oz)"), (P1, T1, "#f5f5f5", "off")]),
-    ("ring", 250, 18, [(T0, 0, "#f5f5f5", "out"), (0, P0, "#dcedc8", "in, 0°"), (P0, R1, "#aed581", "twisted to 45° and held"), (R1, OUT, "#dcedc8", "back at 0°"), (OUT, T1, "#f5f5f5", "out")]),
+    ("ring", 250, 18, [(T0, 0, "#f5f5f5", "out"), (0, P0, "#dcedc8", "in, 0°"), (P0, R1, "#aed581", "twisted to 45° and held"), (R1, OUT, "#dcedc8", "back at 0°"), (OUT, T1, "#f5f5f5", "hand out")]),
 ]
 for name, y, h, segs in bands:
     s.text(X0 - 8, y + h / 2 + 4, name, size=11, anchor="end", weight="bold")
@@ -61,19 +61,19 @@ def callout(num, t, bx, by, rows, above, width=172):
 
 
 # above the bands
-callout(0, -3, 60, 78, ["Before: empty shot glass", "on the tray, hatch shut.", "Lantern dark."], True)
+callout(0, -3, 60, 78, ["Before: empty shot glass", "pushed forward in its slot.", "Lantern dark."], True)
 callout(2, 7, 300, 78, ["Hold the twist through the oath:", "the pump pours and the light", "climbs from 15 % to 90 %."], True, width=200)
-callout(4, R1, 600, 78, ["Turn the ring back: the light", "swells to 100 %, then goes", "dark. The pour is complete."], True, width=190)
-callout(6, OUT, 860, 78, ["Remove the ring: re-arms", "the prop for the next", "insertion."], True, width=160)
+callout(4, R1, 600, 78, ["Turn back: the light swells", "to 100 %, then goes dark.", "The pour is complete."], True, width=190)
+callout(6, OUT, 860, 78, ["Open your fingers, slide", "the glass back, lift it out:", "re-arms for next time."], True, width=170)
 # oath span bracket
 s.path(f"M{X(P0)},150 L{X(P0)},144 L{X(R1)},144 L{X(R1)},150", stroke="#1b5e20", sw=1.2)
 s.text(X((P0 + R1) / 2), 140, "the oath", size=8.5, anchor="middle", color="#1b5e20")
 
 # below the axis
-callout(1, 0, 60, 348, ["Insert the ring: the light", "fades up to ~15 %."], False)
+callout(1, 0, 60, 348, ["Punch in, ring face first:", "the light fades up to ~15 %."], False)
 callout(3, P0, 260, 348, ["On the first line, twist 45° and", "hold: the cam clicks the switch", "and the pump starts."], False, width=200)
 callout(5, P1, 520, 348, ["The pour finishes (~11 s) while", "you are still holding; the light", "stays at 90 %."], False, width=200)
-callout(7, OUT + 1, 800, 348, ["Open the hatch, pull the tray", "and take the glass.", "Cheers."], False)
+callout(7, OUT + 1, 800, 348, ["Bring the glass out", "through the port.", "Cheers."], False)
 
 # notes
 s.text(20, 455, "Let go early and the pump stops where it is; the light swells ~10 % and goes dark (no resume until the ring is removed and re-inserted). Pulling the ring out stops the pump within 60 ms.", size=9.5, color="#444")

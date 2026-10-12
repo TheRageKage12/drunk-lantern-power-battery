@@ -136,7 +136,7 @@ SOCKET_IN_SPHERE = True
 SOCKET_Z_LOCAL = 11.0        # ring centre height, sphere frame (0 = sphere centre); socket top stays below the top plug
 SOCKET_STANDOFF = 8.0        # LED carrier -> socket base plate gap (Hall connector and cables)
 SOCKET_EAR_R = 53.0          # mounting ears on the socket base plate (left/right), outside the LED channels
-GLASS_TOP_Z_LOCAL = -38.0    # glass rim height: under the curled fingers, low enough for the nozzle to clear it
+GLASS_TOP_Z_LOCAL = -32.0    # glass rim height: ~20 mm under the knuckles, ~11 mm under the tube tip; ~14 mm of glass stands above the slot to grab
 WELL_ID, WELL_WALL = 54.0, 2.0
 NOZZLE_RISE = 5.5            # straight rise above the bay floor before the bend
 NOZZLE_BEND_R = 22.0         # then a 90 deg bend toward the glass; the tube ends ~15 mm above the rim, aimed inside it
@@ -145,11 +145,11 @@ FIST_W, FIST_H, FIST_LEN, FOREARM_R = 100.0, 58.0, 85.0, 30.0   # hand envelopes
 # ---------------------------------------------------------------- slide-out glass (rev 7)
 # A glass sunk in a round well must rise ~52 mm before it can move sideways, and the nozzle tip and the
 # socket both hang over that path. So the well is a slot: the glass pours at the FRONT end (under the tip) and
-# you pull it GLASS_SLIDE mm toward you before lifting it, where nothing is above it. The slot floor slopes
-# down to the front so an empty glass settles back at the pour position on its own.
+# you pull it GLASS_SLIDE mm toward you before lifting it, where nothing is above it. A low ridge across the
+# slot floor, just behind the glass base, holds the glass at the pour position (push it forward over the ridge).
 GLASS_POUR_Y = -2.0          # glass centre while pouring (sphere frame; -Y = front)
 GLASS_SLIDE = 24.0           # pull back this far, then lift
-WELL_SLOPE_DEG = 3.0
+WELL_RIDGE_H = 1.5           # detent ridge height (a 3 deg slope would not move a glass: it needs ~15-20 deg)
 NOZZLE_TIP_XY = (-14.0, -6.0)   # where the tube end hangs: 14 mm off the pour centre, 30+ mm from the lift path
 NOZZLE_TIP_OUT = 5.0         # tube length left sticking out of the guide
 DISH_LOWER_HOLE_D = 102.0    # lower dish floor hole (was 80): the slot hangs through it into the dish cone

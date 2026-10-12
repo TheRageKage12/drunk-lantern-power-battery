@@ -25,7 +25,7 @@ BAY_FLOOR_Z = -CUT + 6.0                    # -52.5: bay_floor rests on the lowe
 FLANGE_W, FLANGE_T = P.SPHERE_FLANGE_W, 3.0 # 8 wide, 3 mm into the front half
 FLANGE_R_OUT = R_IN - P.FIT                 # 87.3
 FLANGE_R_IN = FLANGE_R_OUT - FLANGE_W       # 79.3
-FLANGE_SCREW_ANGLES = (0.0, 180.0, 60.0, 120.0)   # in the XZ plane from +X
+FLANGE_SCREW_ANGLES = (30.0, 150.0, 210.0, 330.0)   # in the XZ plane from +X; |z| = 41.7 stays inside the clipped flange
 FLANGE_SCREW_R = FLANGE_R_IN + FLANGE_W / 2 # 83.3
 BOSS_L = 9.0                                # insert boss length along -Y on the front half
 
@@ -45,16 +45,18 @@ HATCH_ZC = HATCH_Z0 + HATCH_H / 2           # 0
 # bay floor, LED carrier
 BAY_FLOOR_OD = 131.0
 CARRIER_Y = -35.0
-CARRIER_W, CARRIER_H, CARRIER_T = 110.0, 104.0, 2.4
-STRIP_ROWS, STRIP_LEDS, ROW_PITCH = 9, 6, 12.0
+CARRIER_W, CARRIER_H, CARRIER_T = 110.0, 99.0, 2.4    # 99: stays 1 mm under the upper dish plug
+STRIP_ROWS, STRIP_LEDS, ROW_PITCH = 8, 6, 11.5
+STRIP_ROW0 = 4.0                            # rows 4..95 cover the window (8.5..95.5 above the bay floor)
 STRIP_CH_W, STRIP_CH_D, STRIP_CH_L = 10.5, 1.5, 102.0
-# punch-in layout: the glass sits in a sloped slot below the knuckles. It pours at the front end, under the
+# punch-in layout: the glass sits in a slot below the knuckles. It pours at the front end, under the
 # nozzle tip, and is pulled back GLASS_SLIDE mm before lifting, so the lift path is clear of the tip and the
 # socket. The tube and the cables pass through the bay floor inside the lower dish hole, outside the slot.
 GLASS_OUT_Y = P.GLASS_POUR_Y + P.GLASS_SLIDE                # +22: glass centre where it is lifted out
 WELL_YC = (P.GLASS_POUR_Y + GLASS_OUT_Y) / 2               # slot centre
 WELL_L = P.GLASS_SLIDE + P.WELL_ID                         # 78: inner slot length
 WELL_FLANGE_W, WELL_FLANGE_T = 3.0, 2.0
+WELL_SKIRT = P.FLOOR                        # 45 deg skirt height = bay floor thickness
 GLASS_BASE_Z = P.GLASS_TOP_Z_LOCAL - P.GLASS_H            # -100: slot floor under the glass at the pour position
 GROMMET_XY = (P.NOZZLE_TIP_XY[0] - P.NOZZLE_TIP_OUT - P.NOZZLE_BEND_R, P.NOZZLE_TIP_XY[1])   # (-41, -6): tube exit
 WIRE_SLOT_XY = (38.0, -6.0)
@@ -161,6 +163,7 @@ def build_halves():
     front = front.cut(arch_cutter(WIN_W, WIN_H - WIN_R, WIN_R, -100, -60, WIN_Z0))
     ledge = (cq.Workplane('XZ').workplane(offset=-(DIFF_Y - DIFF_T - LEDGE_T)).circle(DIFF_D / 2 + 2).circle(DIFF_D / 2 - LEDGE_W).extrude(LEDGE_T))
     ledge = ledge.intersect(cq.Workplane('XY').sphere(R_IN + 0.5))
+    ledge = ledge.intersect(big_box(-100, 100, -100, 100, -CUT + OPENING_DEPTH + 0.5, CUT - OPENING_DEPTH - 0.5))   # stay off the dish plugs
     front = front.union(ledge)
     adds, bcuts = front_bosses()
     for a in adds:
@@ -181,14 +184,21 @@ def build_halves():
 
 
 def diffuser():
-    return cq.Workplane('XY').circle(DIFF_D / 2).extrude(DIFF_T)
+    # flats top and bottom keep it off the dish plugs (the window spans z -42..+45)
+    h = 2 * (CUT - OPENING_DEPTH - 0.5)
+    return cq.Workplane('XY').circle(DIFF_D / 2).extrude(DIFF_T).intersect(
+        cq.Workplane('XY').rect(DIFF_D + 2, h).extrude(DIFF_T))
 
 
 def bay_floor():
     """Floor of the glass bay (drip tray): slot for the glass well, tube hole, cable hole, carrier slots."""
     f = cyl(BAY_FLOOR_OD / 2, 0, P.FLOOR)
     f = f.union(cyl(BAY_FLOOR_OD / 2, 0, P.FLOOR + 2.0).cut(cyl(BAY_FLOOR_OD / 2 - 1.6, -1, P.FLOOR + 3)))   # drip lip
-    f = f.cut(slot(P.WELL_ID + 2 * P.WELL_WALL + 2 * P.FIT, WELL_L + 2 * P.WELL_WALL + 2 * P.FIT, -1, P.FLOOR + 1))
+    sw, sl = P.WELL_ID + 2 * P.WELL_WALL + 2 * P.FIT, WELL_L + 2 * P.WELL_WALL + 2 * P.FIT
+    f = f.cut(slot(sw, sl, -1, P.FLOOR + 1))
+    chamfer = (cq.Workplane('XY').center(0, WELL_YC).slot2D(sl, sw, angle=90)
+               .workplane(offset=P.FLOOR).slot2D(sl + 2 * WELL_SKIRT, sw + 2 * WELL_SKIRT, angle=90).loft())
+    f = f.cut(chamfer)                                       # seat for the well's skirt
     for sx in (-1, 1):
         f = f.cut(big_box(sx * 30 - 6, sx * 30 + 6, CARRIER_Y - 1.6 - 1.2, CARRIER_Y + 1.6 - 1.2, -1, P.FLOOR + 1))
     f = f.cut(cyl(P.TUBE_GROMMET_D / 2, -1, P.FLOOR + 3, *GROMMET_XY))
@@ -204,33 +214,30 @@ def slot(w, l, z0, z1, yc=None):
 
 
 def glass_well():
-    """Sloped slot the glass slides in. Hangs from its flange on the bay floor into the lower dish.
+    """Slot the glass slides in. Hangs from its flange on the bay floor into the lower dish.
     Built and printed floor down: z = 0 is the outside bottom, the flange is at the top with a 45 deg skirt."""
     top = (BAY_FLOOR_Z + P.FLOOR + WELL_FLANGE_T) - (GLASS_BASE_Z - P.FLOOR)   # outside bottom -> flange top
     ow, ol = P.WELL_ID + 2 * P.WELL_WALL, WELL_L + 2 * P.WELL_WALL
-    fw = WELL_FLANGE_W
+    fw, sk = WELL_FLANGE_W, WELL_SKIRT
     w = slot(ow, ol, 0, top)
     w = w.union(slot(ow + 2 * fw, ol + 2 * fw, top - WELL_FLANGE_T, top))
-    skirt = (cq.Workplane('XY').workplane(offset=top - WELL_FLANGE_T - fw).center(0, WELL_YC).slot2D(ol, ow, angle=90)
-             .workplane(offset=fw).slot2D(ol + 2 * fw, ow + 2 * fw, angle=90).loft())
+    # 45 deg skirt under the flange (prints without support); it sits in the chamfer of the bay floor slot
+    skirt = (cq.Workplane('XY').workplane(offset=top - WELL_FLANGE_T - sk).center(0, WELL_YC).slot2D(ol, ow, angle=90)
+             .workplane(offset=sk).slot2D(ol + 2 * sk, ow + 2 * sk, angle=90).loft())
     w = w.union(skirt)
     w = w.cut(slot(P.WELL_ID, WELL_L, P.FLOOR, top + 1))
-    # sloped floor: flat under the glass at the pour position, then a wedge rising toward the rear (+Y), so a
-    # glass left anywhere in the slot slides forward to the pour position
-    t = math.tan(math.radians(P.WELL_SLOPE_DEG))
-    y0, y1 = WELL_YC - WELL_L / 2, WELL_YC + WELL_L / 2
-    ys = P.GLASS_POUR_Y + P.GLASS_D_BASE / 2 + 1.0          # slope starts just behind the glass base
-    wedge = (cq.Workplane('YZ').polyline([(ys, P.FLOOR), (y1, P.FLOOR), (y1, P.FLOOR + (y1 - ys) * t),
-                                           (ys, P.FLOOR)]).close()
+    # detent: a low triangular ridge across the floor just behind the glass base at the pour position
+    ys, h = P.GLASS_POUR_Y + P.GLASS_D_BASE / 2 + 1.0, P.WELL_RIDGE_H
+    ridge = (cq.Workplane('YZ').polyline([(ys, P.FLOOR - 0.1), (ys + 2 * h, P.FLOOR + h), (ys + 4 * h, P.FLOOR - 0.1)]).close()
              .extrude(P.WELL_ID / 2 + 1, both=True))
-    return w.union(wedge.intersect(slot(P.WELL_ID + 0.2, WELL_L + 0.2, 0, top)))
+    return w.union(ridge.intersect(slot(P.WELL_ID + 0.2, WELL_L + 0.2, 0, top)))
 
 
 def glass_path():
     """Everything the glass passes through on the way out: the slide back at rim height, then the lift."""
     r = P.GLASS_D_TOP / 2 + 1.5
     z0 = BAY_FLOOR_Z + P.FLOOR + WELL_FLANGE_T                # flange top
-    rim = P.GLASS_TOP_Z_LOCAL + P.GLASS_SLIDE * math.tan(math.radians(P.WELL_SLOPE_DEG)) + 1.0   # rim, pulled back (upper bound)
+    rim = P.GLASS_TOP_Z_LOCAL + P.WELL_RIDGE_H + 1.0          # rim while the base rides over the ridge, + 1 mm
     slide = slot(2 * r, P.GLASS_SLIDE + 2 * r, z0, rim)
     lift = cq.Workplane('XY').workplane(offset=z0).center(0, GLASS_OUT_Y).circle(r).extrude(P.GLASS_H + 3.0)
     return slide.union(lift)
@@ -259,20 +266,21 @@ def nozzle_guide():
 def led_carrier():
     c = big_box(-CARRIER_W / 2, CARRIER_W / 2, 0, CARRIER_T, 0, CARRIER_H)
     for i in range(STRIP_ROWS):
-        z0 = 6.0 + i * ROW_PITCH
+        z0 = STRIP_ROW0 + i * ROW_PITCH
         c = c.cut(big_box(-STRIP_CH_L / 2, STRIP_CH_L / 2, -1, STRIP_CH_D, z0, z0 + STRIP_CH_W))   # channels face -Y (toward the diffuser)
-    # tabs into the bay floor slots, wire notch at the bottom-right corner
+    # tabs into the bay floor slots; a notch in both bottom corners clears the bay floor's drip lip (wires pass there)
     for sx in (-1, 1):
         c = c.union(big_box(sx * 30 - 5.5, sx * 30 + 5.5, 0, CARRIER_T, -P.FLOOR - 0.5, 0))
-    c = c.cut(big_box(CARRIER_W / 2 - 14, CARRIER_W / 2 + 1, -1, CARRIER_T + 1, 0, 8))
+        c = c.cut(big_box(sx * (CARRIER_W / 2 - 14), sx * (CARRIER_W / 2 + 1), -1, CARRIER_T + 1, 0, 8))
     if P.SOCKET_IN_SPHERE:   # two holes for the socket mounting screws, outside the LED channels
         zc = P.SOCKET_Z_LOCAL - (BAY_FLOOR_Z + P.FLOOR)
         for sx in (-1, 1):
             c = c.cut(cq.Workplane('XZ').workplane(offset=-(CARRIER_T + 1)).center(sx * P.SOCKET_EAR_R, zc)
                       .circle(P.M3_CLEAR / 2).extrude(CARRIER_T + 2))
-    # four spacer posts reaching the diffuser (25 mm)
+    # four spacer posts from the LED face (y = 0) forward to the back of the diffuser
+    post_y = (DIFF_Y - DIFF_T) - (CARRIER_Y - CARRIER_T)      # -23.6
     for (x, z) in ((-40, 20), (40, 20), (-40, 85), (40, 85)):
-        c = c.union(big_box(x - 3, x + 3, -(DIFF_Y - CARRIER_Y) + DIFF_T, 0, z - 3, z + 3))
+        c = c.union(big_box(x - 3, x + 3, post_y, 0, z - 3, z + 3))
     return c
 
 
@@ -298,8 +306,12 @@ def build():
     }
     for k in ('sphere_front', 'sphere_rear', 'led_carrier'):
         bb = out[k].val().BoundingBox()
+        _SHIFT[k] = -bb.zmin                           # placements() undoes this before rotating back
         out[k] = out[k].translate((0, 0, -bb.zmin))
     return out
+
+
+_SHIFT = {}
 
 
 def placements():
@@ -307,13 +319,18 @@ def placements():
     face_y = CARRIER_Y + P.SOCKET_STANDOFF + 13.2     # = socket.FACE_Y (faceplate surface)
     hand_z = Z + P.SOCKET_Z_LOCAL + 6.0                # fist centre a little above the ring
     gx, gy, gz = _guide_origin()
+    if not _SHIFT:
+        build()
+
+    def unflat(k, angle, d):     # undo the print-bed shift, then rotate back into the sphere frame
+        return [((0, 0, 1), 0, (0, 0, -_SHIFT[k])), ((1, 0, 0), angle, d)]
     return {
-        'sphere_front': ((1, 0, 0), 90, (0, 0, Z)),
-        'sphere_rear': ((1, 0, 0), -90, (0, 0, Z)),
+        'sphere_front': unflat('sphere_front', 90, (0, 0, Z)),
+        'sphere_rear': unflat('sphere_rear', -90, (0, 0, Z)),
         'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
         'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
-        'led_carrier': ((1, 0, 0), 90, (0, CARRIER_Y, Z + BAY_FLOOR_Z + P.FLOOR)),
+        'led_carrier': unflat('led_carrier', 90, (0, CARRIER_Y - CARRIER_T, Z + BAY_FLOOR_Z + P.FLOOR)),   # back face at CARRIER_Y
         'nozzle_guide': ((0, 0, 1), 0, (gx, gy, Z + gz)),
         'glass_envelope': ((0, 0, 1), 0, (0, P.GLASS_POUR_Y, Z + GLASS_BASE_Z)),
         'glass_path_envelope': ((0, 0, 1), 0, (0, 0, Z)),

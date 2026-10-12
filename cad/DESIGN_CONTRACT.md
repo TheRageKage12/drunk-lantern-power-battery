@@ -191,7 +191,7 @@ exception in build.py output.
 - No NeoPixel ring or halo at the socket (`LED_RING = False` in parts/socket.py).
 - No master-switch hole in the base door (`DOOR_SWITCH_D = 0`).
 - Hall pocket widened to fit the Adafruit DRV5032 board (`HALL_PCB_W = 17.8`).
-- Light = one plain 12 V green strip (18 x 5 cm pieces, 2 per carrier channel) switched by a MOSFET.
+- Light = one plain 12 V green strip (16 x 5 cm pieces, 2 per carrier channel; 8 channels since rev 7) switched by a MOSFET.
 - The LM2596 buck sits in the left floor crescent of the base; the right crescent pocket is a spare.
 
 ## Revision 6 (punch-in layout) - supersedes the socket mounting, hatch and tray above
@@ -201,10 +201,35 @@ exception in build.py output.
   the sphere centre. `socket_base` grows two ears at r = 53 (+-X) that screw through two 8 mm `socket_standoff`s
   to the back of the LED carrier (2 x M3x20 + nuts). The housing has no faceplate flange.
 - `top_cap` (a 3 mm disc with 4 countersunk M3 holes) closes the upper dish's old socket counterbore.
-- The glass hangs in `glass_well`, a 54 mm ID cup that drops through the bay floor into the lower dish neck: rim
-  at sphere z = -38, about 25 mm below the fist, so the fingers open straight onto it.
-- The tube rises through the bay floor at (-34.5, -4) into `nozzle_guide`: 5.5 mm straight, then a 22 mm radius
-  quarter bend that points the tip horizontally over the glass. The cable for the socket and LEDs goes down the
-  7 mm hole at (+34.5, -4).
+- The glass hangs in `glass_well` below the fist (rim at sphere z = -32, ~20 mm under the knuckles). Revision 7
+  replaces the round cup with a slot, see below.
+- The tube rises through the bay floor into `nozzle_guide`: 5.5 mm straight, then a 22 mm radius quarter bend
+  that points the tip horizontally over the glass. The socket and LED cables go down a 7 mm hole in the bay floor.
 - Checks: the fist (100 x 58 mm ellipse, 85 mm long) and forearm (60 mm) envelopes must clear every part except
-  the switch envelope.
+  the switch envelope. The hand port is 120 x 96 mm.
+
+## Revision 7 (slide-out glass)
+- A round well 52 mm deep made the glass rise 52 mm before it could move sideways, and the nozzle tip and the
+  socket's lower edge both hang over that path. `glass_well` is now a 54 x 78 mm slot (`GLASS_SLIDE` = 24): the
+  glass pours at the front end (centre y = -2) and is pulled back to y = +22 before it is lifted. A 1.5 mm ridge
+  across the floor just behind the glass base holds it at the pour position (a gentle slope would not: glass on
+  PETG needs ~15-20 deg to slide, and that would tip a full glass).
+- Tube tip at (-14, -6), 14 mm from the pour centre and 28 mm from the lift axis (2 mm clear of the rim). The guide
+  exit (grommet) is at (-41, -6); the cable hole at (+38, -6).
+- `dish_lower` floor hole 80 -> 102 mm (`DISH_LOWER_HOLE_D`) so the slot hangs through it. The bay floor rests on
+  the locating ring, not the hole edge.
+- `glass_path_envelope` (the slide at rim height plus the vertical lift cylinder, rim + 1.5 mm) must clear every
+  part. With `GLASS_SLIDE` near 0 it hits the socket and the nozzle guide, which is the bug this revision fixes.
+- `glass_well` prints floor down, as it hangs, with a 45 deg skirt under the flange.
+- Fixes found by an overlap audit at 0.05 cm3 (the build check fails only above 1 cm3):
+  - `led_carrier`: the spacer posts pointed backward, and the untracked print-bed shift moved the whole carrier to
+    the diffuser. Now the posts reach forward from the LED face to the diffuser and the back face is at y = -35,
+    where the bay floor slots and the socket standoffs expect it. Height 104 -> 99 (it ran 4 mm into the upper
+    dish plug), 8 LED channels at 11.5 mm pitch (the 9th was only 2 mm deep), notches in both bottom corners
+    clear the bay floor drip lip.
+  - `sphere.placements()` undoes each part's print-bed shift (`_SHIFT`) before rotating back. `sphere_rear` had
+    been placed 3 mm too far back.
+  - Front-half flange screws moved from 0/60/120/180 deg to 30/150/210/330 deg: the 60 and 120 deg bosses sat
+    above the top flat, floating, where the upper dish plug goes.
+  - The diffuser ledge and the diffuser are clipped to |z| < 49 so they stay off the dish plugs.
+  - `glass_well` skirt reduced to 2 mm and seated in a 45 deg chamfer on the bay floor slot.

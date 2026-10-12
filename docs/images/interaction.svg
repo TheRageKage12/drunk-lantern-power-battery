@@ -59,7 +59,7 @@
 <rect x="741.7857142857143" y="250" width="141.42857142857133" height="18" rx="0" fill="#dcedc8" stroke="#999" stroke-width="0.8"/>
 <text x="812.5" y="262.5" font-size="9" text-anchor="middle" font-weight="normal" fill="#222222">back at 0°</text>
 <rect x="883.2142857142857" y="250" width="176.78571428571433" height="18" rx="0" fill="#f5f5f5" stroke="#999" stroke-width="0.8"/>
-<text x="971.6071428571429" y="262.5" font-size="9" text-anchor="middle" font-weight="normal" fill="#222222">out</text>
+<text x="971.6071428571429" y="262.5" font-size="9" text-anchor="middle" font-weight="normal" fill="#222222">hand out</text>
 <text x="754.1607142857143" y="194" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#1b5e20">100 %</text>
 <path d="M70,282 L1060,282" fill="none" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrK)"/>
 <path d="M70.0,278 L70.0,286" fill="none" stroke="#222222" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -123,7 +123,7 @@
 <circle cx="69" cy="74" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="69" y="77.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">0</text>
 <text x="84" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Before: empty shot glass</text>
-<text x="84" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">on the tray, hatch shut.</text>
+<text x="84" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">pushed forward in its slot.</text>
 <text x="84" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Lantern dark.</text>
 <path d="M105.35714285714286,166 L105.35714285714286,111.5 L84,111.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="105.35714285714286" cy="166" r="2.5" fill="#1b5e20"/>
@@ -136,24 +136,24 @@
 <circle cx="458.92857142857144" cy="166" r="2.5" fill="#1b5e20"/>
 <circle cx="609" cy="74" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="609" y="77.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">4</text>
-<text x="624" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Turn the ring back: the light</text>
-<text x="624" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">swells to 100 %, then goes</text>
-<text x="624" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">dark. The pour is complete.</text>
+<text x="624" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Turn back: the light swells</text>
+<text x="624" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">to 100 %, then goes dark.</text>
+<text x="624" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">The pour is complete.</text>
 <path d="M741.7857142857143,166 L741.7857142857143,111.5 L701.7857142857143,111.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="741.7857142857143" cy="166" r="2.5" fill="#1b5e20"/>
 <circle cx="869" cy="74" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="869" y="77.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">6</text>
-<text x="884" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Remove the ring: re-arms</text>
-<text x="884" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">the prop for the next</text>
-<text x="884" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">insertion.</text>
+<text x="884" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Open your fingers, slide</text>
+<text x="884" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">the glass back, lift it out:</text>
+<text x="884" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">re-arms for next time.</text>
 <path d="M883.2142857142857,166 L883.2142857142857,111.5 L884,111.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="883.2142857142857" cy="166" r="2.5" fill="#1b5e20"/>
 <path d="M282.1428571428571,150 L282.1428571428571,144 L741.7857142857143,144 L741.7857142857143,150" fill="none" stroke="#1b5e20" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="511.9642857142857" y="140" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#1b5e20">the oath</text>
 <circle cx="69" cy="344" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="69" y="347.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">1</text>
-<text x="84" y="348.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Insert the ring: the light</text>
-<text x="84" y="360.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">fades up to ~15 %.</text>
+<text x="84" y="348.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Punch in, ring face first:</text>
+<text x="84" y="360.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">the light fades up to ~15 %.</text>
 <path d="M211.42857142857142,306 L211.42857142857142,334 L171.42857142857142,334" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="211.42857142857142" cy="306" r="2.5" fill="#1b5e20"/>
 <circle cx="269" cy="344" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
@@ -172,8 +172,8 @@
 <circle cx="671.0714285714286" cy="306" r="2.5" fill="#1b5e20"/>
 <circle cx="809" cy="344" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="809" y="347.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">7</text>
-<text x="824" y="348.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Open the hatch, pull the tray</text>
-<text x="824" y="360.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">and take the glass.</text>
+<text x="824" y="348.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Bring the glass out</text>
+<text x="824" y="360.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">through the port.</text>
 <text x="824" y="373.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Cheers.</text>
 <path d="M918.5714285714286,306 L918.5714285714286,334 L878.5714285714286,334" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="918.5714285714286" cy="306" r="2.5" fill="#1b5e20"/>
