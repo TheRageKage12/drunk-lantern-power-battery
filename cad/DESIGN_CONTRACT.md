@@ -233,3 +233,21 @@ exception in build.py output.
     above the top flat, floating, where the upper dish plug goes.
   - The diffuser ledge and the diffuser are clipped to |z| < 49 so they stay off the dish plugs.
   - `glass_well` skirt reduced to 2 mm and seated in a 45 deg chamfer on the bay floor slot.
+
+## Revision 8 (lock wall layout) - supersedes the socket mounting, LED carrier and glass position above
+- Two openings: the hand opening on the owner's side (+Y, 120 x 96 mm, closed by a curtain of frosted
+  polypropylene strips clamped under the upper dish plug on r = 62 by `curtain_clamp`) and the display window
+  (-Y, diffuser). Light also leaves through the top: `top_diffuser` (1.2 mm frosted centre) replaces `top_cap`,
+  with 5 pieces of 8 mm strip stuck around the 80 mm hole wall under it (the wall is 8 mm tall).
+- `lock_wall` replaces `led_carrier`: 120 x 99 x 2.4 mm, front face at y = -25.2, standing in two bay floor slots
+  with four posts to the diffuser. The lock (socket) screws straight onto its face with two ears at 40 and 140
+  deg (2 x M3x10 + nuts; no standoffs); a 34 x 18 mm window behind the Hall board passes the cables. LED channels:
+  4 rows of 2 x 5 cm on the back (display window), one 5 cm column either side of the lock on the front.
+- Ring centre at z = +4 (socket face y = -12). The wall's lower edge is notched (66 mm wide) to 3 mm above the
+  glass rim (z = -37). The glass is pushed back to the stop (centre y = -12, a 1.5 mm ridge clicks it in): the
+  wall then crosses its back third. To remove it: slide 29 mm toward you, then lift ~49 mm (rim clears the lock
+  face by 1.5 mm plus the envelope's 1.5 mm).
+- The nozzle is behind the wall: `nozzle_guide` is now a C-channel (open toward the wall, which closes it) on a
+  26 mm quarter bend from the tube exit at (-37, -31.1); the tube end at (-6, -31.1), z = -21.5, 20 mm from the
+  glass centre. Cable hole at (35, -32). `DISH_LOWER_HOLE_D` 104.
+- Fist envelope 106 x 76 mm (owner: under 4 x 3 in), centred 3 mm above the ring.

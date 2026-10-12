@@ -1,11 +1,14 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$140)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$150)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
-shot glass and a twist-to-pour ring socket inside the lantern. Punch your fist into the lantern through the
-port on your side and the ring seats in the socket: the lantern glows faintly. Twist 45 degrees and hold it
-while you recite the oath: the pump pours about 1 oz into the glass under your knuckles while the light
-climbs from 15 % to 90 % over about 11 seconds. Turn back and the light swells to full, then goes dark. Open
-your fingers, pull the glass toward you, lift it and bring it out.
+nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
+curtain of frosted plastic strips, and the frosted **display window** on the far side. Push the empty shot
+glass in under the lock until it clicks. Punch in, ring face first, and the ring seats in the lock: the lantern
+glows faintly. Twist 45 degrees and hold it while you recite the oath. Behind the lock wall the pump pours
+about 1 oz into the glass while the light climbs from 15 % to 90 % over about 11 seconds. Turn back and the
+light swells to full, then goes dark. Grip the glass, slide it toward you, lift it and bring it out.
+
+"Your side" means the hand opening; "display side" means the window opposite it.
 
 ![interaction timeline](images/interaction.svg)
 
@@ -19,24 +22,25 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 ## 1. How it works
 
 ```
+ 0. before: push the empty glass in under the lock until it clicks over the ridge at the stop
  1. punch in, ring face first (6x2 mm magnet in a printed key cap) -> Hall sensor sees it -> light fades up to ~15 %
- 2. twist 45 deg and HOLD -> a cam clicks the microswitch -> pump starts, light starts climbing
+ 2. twist 45 deg clockwise and HOLD -> a cam clicks the microswitch -> pump starts, light starts climbing
  3. keep holding through the oath: the pump runs ~11 s while the light climbs to ~90 %
  4. let the ring turn back (spring) -> light swells to 100 % and goes dark
- 5. open your fingers, slide the full glass back ~2.5 cm, lift it and pull your hand out
+ 5. grip the front of the glass, slide it 3 cm toward you, lift it ~5 cm out of its slot and bring it out
 
  Let go early: the pump stops where it is, the light swells ~10 % and goes dark.
  Safety: the pump only runs while the ring is in AND the twist is held, and only once per insertion.
 ```
 
-| Where | What is inside |
+| Where | What is there |
 |---|---|
-| Top dish | Nothing: a printed cap closes it. |
-| Sphere, your side | An open 120 x 96 mm hand port. Your fist goes in horizontally, like a punch. |
-| Sphere, inside | The charging socket, facing the port: a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the DRV5032 Hall sensor. It screws to the back of the LED carrier. Below your knuckles, the shot glass stands in a sloped slot, with the nozzle above its front edge. |
-| Sphere, audience side | Rows of green LED strip on the carrier plate behind the white diffuser window. |
+| Top dish | A frosted disc in its floor. A ring of LED strip in the hole under it makes the top glow. |
+| Sphere, your side | The hand opening (120 x 96 mm), closed by a curtain of frosted plastic strips that your hand and the glass push through. |
+| Sphere, inside | The **lock wall**, 2.5 cm in front of the centre. On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the DRV5032 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
+| Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | The jar reservoir and the Kamoer pump on a deck, the power bank flat on the floor under the deck, the electronics board, the buck converter. Rear door for refilling and charging. |
+| Base | The jar reservoir and the Kamoer pump on a deck, the power bank flat on the floor under the deck, the electronics board, the buck converter. A service door on your side for refilling and charging. |
 
 ![fluid path and layout](images/fluid-path.svg)
 
@@ -55,9 +59,10 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 |---|---|---|---|---|
 | 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
 | 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $14 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. |
-| 3 | LED strip | [12 V green LED strip, single colour](https://www.amazon.com/s?k=12V+green+LED+strip+single+color+2835+60+LED) | ~$12 | Pick: 12 V, green only (not RGB), 2835 or 5050 LEDs, 60 LEDs/m, 8 or 10 mm wide, cuttable every 3 LEDs (5 cm). You use 80 cm. |
+| 3 | LED strip | [12 V green LED strip, single colour](https://www.amazon.com/s?k=12V+green+LED+strip+single+color+2835+60+LED) | ~$12 | Pick: 12 V, green only (not RGB), 2835 LEDs, 60 LEDs/m, **8 mm wide**, cuttable every 3 LEDs (5 cm). You use 75 cm in 15 pieces. |
 | 4 | Buck converter | [LM2596 step-down module, multipack](https://www.amazon.com/s?k=LM2596+buck+converter+module) | ~$8 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key, 8 in the base door. |
+| 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
 | 7 | Hall sensor | [Adafruit DRV5032 breakout #6051](https://www.adafruit.com/product/6051) | $4.95 | Runs on 3.3 V, very sensitive, either magnet pole works. |
 | 8 | 12 V cable | [Adafruit USB-C PD 12 V trigger cable #5450](https://www.adafruit.com/product/5450) | $7.95 | Asks the power bank for 12 V. You cut the barrel plug off. |
@@ -72,21 +77,21 @@ the key cap. Saves the shipping wait; costs about $7 less.
 
 | # | Item | Where | Price | Notes |
 |---|---|---|---|---|
-| 9 | Lever microswitch, D2F-L size | Vetco ([or the 4-pack, B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4), ~$8) | ~$3 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever. The socket bracket is built for this size: take calipers to the store. |
+| 9 | Lever microswitch, D2F-L size | Vetco ([or the 4-pack, B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4), ~$8) | ~$3 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever. The lock's switch bracket is built for this size: take calipers to the store. |
 | 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
 | 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
 | 12 | Small parts | Vetco | ~$12 | 2 x 1N5819 diodes, 2 x 10 k resistors, 1 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 7 x M3x8, 4 x M3x8 flat-head (countersunk), 4 x M3x10, 17 x M3x12, 2 x M3x20, 12 nuts. They thread straight into the printed holes. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 17 x M3x12, 12 nuts. They thread straight into the printed holes. |
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $140.** That assumes you already have:
+**Total: about $150.** That assumes you already have:
 
 - **A power bank with a 12 V USB-C output.** Look for "12V⎓1.5A" printed on the bank or on its listing. If
   yours lacks it, the [INIU B61 (B09176JCKZ)](https://www.amazon.com/dp/B09176JCKZ) has it (~$21).
-- **PETG filament.** About 0.9 kg of green plus a little white or natural for the diffuser (~$40 if you need two spools).
+- **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
-- **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.5 cm of it stands above the slot for your fingers; a heavy base helps.
+- **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
 - Basic tools: soldering iron, multimeter, calipers, a drill with 2.5 mm and 6 mm bits, flush cutters.
 
 ### 2.3 Seattle-area stores (verified open on 2026-10-11; call before driving for specific stock)
@@ -123,10 +128,9 @@ Print these first, before any big part, and check them:
 1. `socket_housing`, `rotor`, `socket_base`, `plunger`: the rotor turns 45 degrees with slight drag and the
    plunger snaps it back. If it binds, raise `FIT` in `cad/params.py` by 0.05 and reprint the rotor.
 2. `key_cap`: drops into the rotor pocket one way only, with a little play.
-3. **Hand mock-up.** The hand clearances in the CAD are estimates (a fist 100 mm wide and 58 mm tall). Cut a
-   120 x 96 mm hole in a cardboard box, tape `socket_housing` inside it with the ring pocket 85 mm in from the
-   hole, and punch in with the ring on. If your fist doesn't fit or the twist is awkward, tell me before you
-   print the sphere.
+3. **Optional hand check.** The CAD clears a fist 106 x 76 mm (yours is under 4 x 3 in). If you want to be
+   sure before the big prints: cut a 120 x 96 mm hole in a box and punch through it with a shot glass held
+   under your fist. Both must pass without scraping.
 
 ### Part list
 
@@ -135,32 +139,33 @@ Print these first, before any big part, and check them:
 | `base` | 180 x 180 x 115 | floor down, open top up | no | green | 175 |
 | `base_deck` | 169 x 167 x 47 | flat | no | green | 72 |
 | `base_door` | 118 x 25 x 94 | standing on its lip edge | no | green | 37 |
-| `dish_lower` | 180 x 180 x 91 | mouth down | no | green | 123 |
+| `dish_lower` | 180 x 180 x 91 | mouth down | no | green | 122 |
 | `dish_upper` | 180 x 180 x 86 | floor down, mouth up | no | green | 152 |
-| `top_cap` | 100 x 100 x 3 | flat | no | green | 18 |
-| `sphere_front` | 180 x 138 x 80 | split face down, dome up | inside only, around the window (tree) | green | 51 |
-| `sphere_rear` | 221 x 117 x 79 | split face down, dome up | inside only, around the hand port (tree) | green | 48 |
-| `diffuser` | 118 x 118 x 1 | flat, 100% infill | no | white | 8 |
-| `led_carrier` | 110 x 106 x 26 | flat, channels up | no | white | 13 |
-| `bay_floor` | 131 x 131 x 4 | flat | no | any | 15 |
-| `glass_well` | 64 x 88 x 48 | floor down, flange up | no | any | 24 |
-| `nozzle_guide` | 30 x 25 x 33 | on its side, so the bend lies flat | no | any | 3 |
+| `top_diffuser` | 100 x 100 x 3 | flat (countersunk) face down | no | white | 11 |
+| `sphere_front` (display side) | 180 x 117 x 80 | split face down, dome up | inside only, around the window (tree) | green | 49 |
+| `sphere_rear` (your side) | 221 x 117 x 79 | split face down, dome up | inside only, around the hand opening (tree) | green | 48 |
+| `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 8 |
+| `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 16 |
+| `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 2 |
+| `bay_floor` | 131 x 131 x 4 | flat | no | any | 14 |
+| `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 26 |
+| `nozzle_guide` | 39 x 18 x 34 | on its side, so the bend lies flat | no | any | 2 |
 | `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 12 |
 | `handle_leg_right` | 14 x 126 x 10 | flat | no | green | 12 |
 | `handle_arc_left` | 120 x 132 x 10 | flat | no | green | 18 |
 | `handle_arc_right` | 120 x 132 x 10 | flat | no | green | 17 |
 | `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 22 |
 | `rotor` | 44 x 37 x 8 | top face down | no | green | 5 |
-| `socket_base` | 116 x 76 x 4 | top face down | no | any | 12 |
-| `socket_standoff` (print 2) | 7 x 7 x 8 | on end | no | any | 0 |
+| `socket_base` | 95 x 79 x 3 | top face down | no | any | 12 |
 | `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
-| **Total** | | | | | **~840 g** |
+| **Total** | | | | | **~835 g** |
 
 Supports: none, except inside the two sphere halves. Print them split-face down; the last 15 mm of dome
-around the window and the hand port overhang more than 45 degrees, so enable tree supports on the inside only.
-The diffuser should be white or natural PETG, 0.8 mm, 100 % infill: a green diffuser works but is dimmer.
+around the window and the hand opening overhang more than 45 degrees, so enable tree supports on the inside
+only. Print both diffusers (`diffuser`, `top_diffuser`) in white or natural PETG at 100 % infill: green works
+but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
 
 ![all printed parts](images/cad-parts-sheet.png)
 
@@ -191,8 +196,8 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    to the LED strip's − wire. The pump's + and the strip's + go to the +12 V rail.
 6. **Flyback diode.** Solder a 1N5819 across the pump's two wires, stripe on the + side. It protects Q1 from
    the motor's voltage spike when it switches off.
-7. **Socket wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. Microswitch: NO to D2, COM to
-   ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the socket down to the board.
+7. **Lock wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. Microswitch: NO to D2, COM to
+   ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the lock down to the board.
 8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
    `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
    `switch=pressed` should follow. Then connect the strip: it should glow faintly.
@@ -255,34 +260,33 @@ pump run.
 
 ---
 
-## 6. The charging socket
+## 6. The lock
 
 ![socket mechanism](images/socket-mechanism.svg)
 
-Parts: `socket_housing`, `rotor`, `socket_base`, 2 x `socket_standoff`, `switch_bracket`, `plunger`,
-`key_cap`. Plus 3 x M3x8 and 3 nuts for the base plate, 1 x M3x6 and a nut for the switch bracket, 2 x M3x20
-and 2 nuts to mount it, the spring, the microswitch, the DRV5032 board and one magnet.
+Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_cap`. Plus 3 x M3x8 and 3
+nuts for the base plate, 1 x M3x6 and a nut for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
+lock wall, the spring, the microswitch, the DRV5032 board and one magnet.
 
-The socket stands inside the sphere with the ring pocket facing the hand port, so you seat the ring by
-punching in. The rotor is a flat 36 mm disc. Under the housing's front lip its edge carries three features: a stop lug in a
-channel whose ends are the 0 and 45 degree stops, a cam that presses the switch lever 3 mm between 33 and
-45 degrees, and a ramp that pushes the spring plunger out so the rotor snaps back when you let go.
+The lock is screwed to the face of the lock wall with its ring pocket facing you, so you seat the ring by
+punching in. The rotor is a flat 36 mm disc. Under the housing's front lip its edge carries three features: a
+stop lug in a channel whose ends are the 0 and 45 degree stops, a cam that presses the switch lever 3 mm
+between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the rotor snaps back when you let go.
 
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing` and the one under
    `socket_base`. A dab of super glue holds each.
 2. **Ring key.** Glue the magnet into the pocket under `key_cap` (either pole works with the DRV5032). Scuff
-   the ring's flat face and the key cap. Make a fist with your right hand, palm down, ring face forward, and
-   glue the key cap on so its tab points left, toward your thumb. In the socket the tab then sits at the rest
-   position, and the twist is clockwise as you see it: thumb rolling up, like turning a key. The socket is
-   built for the right hand; a left-handed one needs a mirrored rotor and cam.
+   the ring's flat face and the key cap. Put the ring on your left hand and make the fist you will punch with,
+   ring face forward, in the position you start the twist from. Thumb-up is easiest: the clockwise twist then
+   rolls your thumb over toward palm-down. Glue the key cap on so its tab points to your left. In the lock the
+   tab then sits at the rest position, and the twist is clockwise as you see it, like turning a key.
 3. **Hall sensor.** Lay the DRV5032 board in the pocket under `socket_base`, components down. The pocket is
    longer than the board: slide it until its chip sits under the square window on the axis, then hold it
-   with two dots of glue. The magnet ends up about 8 mm above the
-   chip, which the DRV5032 detects easily.
+   with two dots of glue. The magnet ends up about 8 mm above the chip, which the DRV5032 detects easily.
 4. **Rotor and plunger.** Turn `socket_housing` upside down. Drop the spring into the straight radial pocket,
-   then the `plunger` nose-first on top. Hold it with a finger and lower the `rotor` into the bore, stop lug down
-   into its channel (it fits one way only). Twist to 45 degrees and let go:
-   it must snap back every time. Too stiff to twist with a finger: use a softer spring (0.4 mm wire).
+   then the `plunger` nose-first on top. Hold it with a finger and lower the `rotor` into the bore, stop lug
+   down into its channel (it fits one way only). Twist to 45 degrees and let go: it must snap back every time.
+   Too stiff to twist with a finger: use a softer spring (0.4 mm wire).
 5. **Switch.** Press the microswitch onto the two pegs of `switch_bracket`, lever toward the rotor. Screw the
    bracket loosely into its recess in `socket_base` (M3x6 through the slot into the nut).
 6. **Close and tune.** Screw `socket_base` onto the housing (3 x M3x8). Twist slowly: the lever should start to
@@ -290,10 +294,9 @@ channel whose ends are the 0 and 45 degree stops, a cam that presses the switch 
    tune, then tighten. The switch must never be what stops the rotor.
 7. **Cycle it 50 times** and watch `status`: `switch=pressed` only near the end of the twist, `ring=present`
    for the whole twist.
-8. **Mount** it on the back of `led_carrier` after the LED strip is on (section 8): an M3x20 through each ear
-   of `socket_base`, through a `socket_standoff`, through the carrier's hole just past the end of the LED
-   channels, nut on the LED side. Ring pocket toward the rear, ears left and right. Leave the socket cable
-   long enough to reach the base (about 40 cm) and run it down through the notch in the carrier's bottom corner.
+8. **Mount** it on the face of `lock_wall` (section 8): the two ears go down, one M3x10 through each ear and
+   the wall, nut on the back. The Hall board's wires pass through the rectangular window in the wall behind
+   it. Leave the cable long enough to reach the base (about 40 cm).
 
 ---
 
@@ -303,57 +306,72 @@ channel whose ends are the 0 and 45 degree stops, a cam that presses the switch 
    tube through the 6 mm hole (it seals itself) until it reaches 5 mm above the jar's bottom.
 2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
    continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
-3. **Route.** The pump sits in its saddles on the deck, head toward the rear door so you can open the cap
+3. **Route.** The pump sits in its saddles on the deck, head toward the service door so you can open the cap
    later, held by a strap or zip tie. The tube goes up through the lower dish neck and the tube hole in
-   `bay_floor` (on your right as you look in through the port), then through `nozzle_guide`.
-4. **Nozzle.** The guide turns the tube from vertical to horizontal. Leave 5 mm of tube sticking out of its
-   end, cut square with a sharp blade. The tube end hangs about 1 cm above the glass rim, 14 mm from the
-   centre of the glass, so the stream and the last drop both land inside it.
+   `bay_floor` (behind the lock wall, on your right as you look in), then through `nozzle_guide`.
+4. **Nozzle.** The guide stands behind the wall and turns the tube from vertical to horizontal. Its open side
+   faces the wall, which holds the tube in. Leave 5 mm of tube sticking out of its end, cut square with a sharp
+   blade. The tube end hangs about 1.5 cm above the rim, over the back third of the glass, so the stream and the
+   last drop both land inside it.
 5. **Prime.** Water in the jar, then `cal 6000` from the laptop (or a pour into a cup) until water reaches
    the nozzle. The tube stays full between pours.
 
 ---
 
-## 8. The sphere
+## 8. The lock wall, the curtain and the top
 
 ![cutaway](images/cad-cutaway.png)
 
-1. **LED carrier.** Cut the strip into 16 pieces of 3 LEDs (5 cm each, cut on the copper pads). Stick two
-   pieces end to end in each of the 8 channels of `led_carrier`, LEDs facing out. Wire every + pad together
-   and every − pad together (thin wire, short jumpers between the pieces, row to row). Direction doesn't
-   matter on a single-colour strip. Leave one + and one − lead about 40 cm long.
-2. **Socket.** Screw the socket to the back of the carrier (section 6, step 8).
-3. **Diffuser.** It sits on the ledge behind the front window of `sphere_front`. A few dots of glue hold it.
+Cut the LED strip into 15 pieces of 3 LEDs (5 cm each, cut on the copper pads). Every piece is wired in
+parallel: all + pads together, all − pads together, with thin wire. Direction doesn't matter on a
+single-colour strip.
 
-Everything else goes in during the final assembly, from the bottom up.
+1. **Back of the wall (display window).** Two pieces end to end in each of the 4 channels on the back of
+   `lock_wall`, LEDs facing out.
+2. **Face of the wall (hand opening).** One piece in each of the two vertical channels beside the lock. Pass
+   their wires to the back through the small hole at the bottom of each channel.
+3. **Lock.** Screw the lock onto the wall (section 6, step 8). Bring one + and one − lead for the whole wall,
+   about 40 cm long, together with the lock cable.
+4. **Top.** Stick 5 pieces around the inside of the hole in the floor of `dish_upper`, LEDs facing the
+   centre: the hole wall is 8 mm tall, the same as the strip. Let their leads hang down from the display side
+   of the hole, so they fall behind the lock wall. Screw `top_diffuser` into the counterbore above them
+   (4 x M3x8 flat-head, from above).
+5. **Curtain.** From one frosted sheet, cut 13 strips 12 mm wide and 97 mm long. Lay them side by side, each
+   overlapping the next by 2 mm, along the curved `curtain_clamp`, and screw the clamp to the underside of
+   `dish_upper`'s plug (4 x M3x8 into the holes on the side with the radial screw hole), the strips sandwiched
+   between. They hang down behind the hand opening once the dish is on.
+6. **Display diffuser.** It sits on the ledge behind the window of `sphere_front`. A few dots of glue hold it.
 
 ---
 
 ## 9. Final assembly
 
-Bottom to top. "Left" and "right" are as you see them standing behind the lantern, looking in through the port.
+Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
 1. `base`. Power bank flat on the floor, held with a strap. `base_deck` drops in on top of it (3 x M3x8 into
    the pillars). Jar in its ring, pump in its saddles. Electronics board on the deck's vertical panel
    (4 x M3x6). LM2596 in the left floor crescent.
 2. `dish_lower`: its spigot goes into the base top, 3 x M3x12 from outside.
-3. **Bay floor.** Lay `bay_floor` on the lower dish's locating ring: the long slot runs front to back, the
-   carrier slots are at the front (audience side), the tube hole is on the right. Feed the tube up through the
-   tube hole. Drop `glass_well` into the slot; it hangs from its flange.
+3. **Bay floor.** Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two
+   short wall slots cross the far half, the tube hole and the 7 mm cable hole are beyond the wall line (tube on
+   the right, cables on the left). Feed the tube up through the tube hole. Drop `glass_well` into the long
+   slot; it hangs from its flange.
 4. **Nozzle.** Thread the tube up through `nozzle_guide` from the foot until 5 mm sticks out of the end. Screw
-   the foot down (1 x M3x8) with the end pointing over the front of the slot.
-5. **Carrier.** Stand the carrier with the socket in the bay floor's two front slots, LEDs facing the
-   audience, ring pocket facing you. Feed the socket cable and the LED leads down through the 7 mm hole on the
-   left and on down to the board.
-6. **Sphere.** Slide `sphere_front`, with the diffuser in it, in from the front until it sits on the lower
-   dish and the carrier's four posts touch the diffuser. Slide `sphere_rear` in from the back. Fit the two
+   the foot down (1 x M3x8), open side toward you, end pointing at the middle.
+5. **Lock wall.** Stand the wall in its two slots, lock facing you. Its back closes the nozzle guide's open
+   side; check the tube sits in the channel. Feed the lock cable and the LED leads down the 7 mm cable hole to
+   the board.
+6. **Sphere.** Slide `sphere_front`, with the diffuser in it, in from the display side until it sits on the
+   lower dish and the wall's four posts touch the diffuser. Slide `sphere_rear` in from your side. Fit the two
    alignment pins, then 4 x M3x10 through the rear half's flange into the front half, and 3 x M3x12 through
    the lower joint.
-7. **Top.** Screw `top_cap` into the counterbore in the floor of `dish_upper` (4 x M3x8 flat-head, from
-   above), then set `dish_upper` on the sphere's top, 3 x M3x12.
+7. **Top.** Lower `dish_upper` (with the top diffuser, the LED ring and the curtain on it) onto the sphere so
+   the curtain goes down behind the hand opening, and screw it on, 3 x M3x12. Connect the ring's leads to the
+   wall's.
 8. Handle: the legs plug into the sphere's bosses (1 x M3x12 each), the two arcs lap-joint to the legs and to
    each other with 6 x M3x12 and nuts.
-9. `base_door` with its 4 magnets snaps onto the back. Glue 4 matching magnets into the door frame first.
+9. `base_door` with its 4 magnets snaps onto the base on your side. Glue 4 matching magnets into the door
+   frame first.
 
 Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern off, open the door
 and unplug the cable from the power bank.
@@ -382,7 +400,7 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 ## 11. Test before the party
 
 - [ ] Power on: dark, pump silent.
-- [ ] Twist the empty socket: nothing.
+- [ ] Twist the empty lock: nothing.
 - [ ] Insert the ring: the light fades up to a faint glow, no pump.
 - [ ] Twist and hold: the pump runs the calibrated time while the light climbs; it stays bright after the pump stops.
 - [ ] Let go: the rotor returns, the light swells to full and goes dark.
@@ -393,26 +411,28 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] 20 water pours in a row: every pour lands in the glass, no drips anywhere.
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
 - [ ] The power bank stays on after 20 minutes idle (if not: `idle 30`, `save`).
-- [ ] With the glass full of water: punch in, open your fingers, pull the glass back and lift it out without touching the nozzle or spilling.
+- [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
+- [ ] Your fist goes through the curtain and into the lock, and back out, without catching.
+- [ ] With the lights on in a dim room, the curtain, the display window and the top all glow; you can't see the nozzle.
 
 ---
 
 ## 12. Performing it
 
-Set the lantern on a table with the port toward you. Push the empty glass forward in its slot until it drops
-over the ridge at the front: that is the pour position.
+Set the lantern on a table with the hand opening toward you. Reach through the curtain, lower the empty glass
+into the near end of its slot and push it all the way back until it clicks over the ridge: that is the pour
+position, under the lock.
 
-1. Make a fist and punch in through the port, ring face first, until the ring seats in the socket. The
-   lantern glows faintly.
-2. Twist 45 degrees (thumb rolling up) and hold it as you start the oath. The pump starts and the light
-   begins to climb.
+1. Make a fist (ring on your left hand) and punch in through the curtain, ring face first, until the ring
+   seats in the lock. The lantern glows faintly.
+2. Twist 45 degrees clockwise and hold it as you start the oath. The pump starts and the light begins to climb.
 3. Keep holding through the oath. After about 11 seconds the pour is done; the light sits at 90 % until you
    turn back, so a longer oath is fine.
 4. On the last word, turn back. The light swells to full and goes dark.
-5. Draw your fist back a little and open your fingers: the glass rim is about 2 cm under your knuckles. Pinch
-   it, slide it toward you about 2.5 cm, lift it straight up out of the slot and bring it out.
+5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it,
+   slide it about 3 cm toward you, lift it straight up out of the slot and bring it out through the curtain.
 
-Refill the jar through the rear door.
+Refill the jar through the service door.
 
 ---
 
@@ -439,8 +459,9 @@ flattened.
 | Power bank switches off when idle | `idle 30` then `save`; or turn on the bank's low-current mode if it has one. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |
 | Drips after the pour | Trim the tube end square; make sure 5 mm sticks out of the guide. |
-| Pour misses the glass | The glass was not pushed forward over the ridge. |
-| The glass catches on the way out | Slide it back the full 2.5 cm before lifting: lifting early hits the nozzle. |
+| Pour misses the glass | The glass was not pushed all the way back: it must click over the ridge. |
+| The glass catches on the way out | Slide it toward you the full 3 cm before lifting: lifting early hits the lock. |
+| Your hand catches on the curtain | Trim the strips 5 mm shorter, or use a thinner sheet (a 0.3 mm report cover). |
 
 ---
 
@@ -448,7 +469,7 @@ flattened.
 
 | Upgrade | Cost | How |
 |---|---|---|
-| Glowing ring around the socket (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
+| Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
 | Heat-set inserts instead of screwing into plastic | ~$10 | Set `M3_INSERT_HOLE = 4.0` in `cad/params.py` and re-run `build.py`. Inserts: [ruthex M3 x 5.7 mm (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3). |
 | Master power switch and fuses | ~$8 | Set `DOOR_SWITCH_D = 12.5` in `cad/parts/base.py` for a switch hole in the door. Put the switch and a 2 A slow-blow fuse in the 12 V lead. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
@@ -457,7 +478,7 @@ flattened.
 **Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in
 10-15 s. Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A plain LED
 strip is enough for a glow that just gets brighter, and it runs from the same 12 V as the pump. The reservoir
-is a squat jar because a tall bottle cannot leave the base through the door. The glass slides back before
-it lifts out because it is sunk deep enough to sit under your fist, and lifting it straight up would hit the
-nozzle and the socket. The research behind every number is
+is a squat jar because a tall bottle cannot leave the base through the door. The glass sits about 5 cm down in
+a slot because the sphere is only 10 cm tall inside and your fist and the lock need the space above it; that is
+also why it slides toward you before it lifts out. The research behind every number is
 in `docs/research/`.
