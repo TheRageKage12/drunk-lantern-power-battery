@@ -93,8 +93,8 @@
 <text x="300" y="313" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">split on the dashed line</text>
 <path d="M294,296 L432,300" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="432" cy="300" r="2.2" fill="#777777"/>
-<text x="300" y="365" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">front window: green diffuser disc,</text>
-<text x="300" y="378" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">WS2812B strip right behind it</text>
+<text x="300" y="365" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">front window: white diffuser,</text>
+<text x="300" y="378" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">green LED strip rows behind it</text>
 <path d="M294,361 L414,380" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="414" cy="380" r="2.2" fill="#777777"/>
 <text x="300" y="440" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">hidden glass bay with cradle;</text>
@@ -112,12 +112,12 @@
 <text x="300" y="653" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(dashed purple)</text>
 <path d="M294,636 L420,640" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="420" cy="640" r="2.2" fill="#777777"/>
-<text x="300" y="690" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">electronics tray: XIAO, D4184,</text>
-<text x="300" y="703" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">AHCT125, fuses, 1000 µF</text>
+<text x="300" y="690" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">electronics board: XIAO, AHCT125,</text>
+<text x="300" y="703" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">2 MOSFETs, LM2596 buck</text>
 <path d="M294,686 L376,667" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="376" cy="667" r="2.2" fill="#777777"/>
-<text x="300" y="745" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">USB power bank, standing on edge</text>
-<text x="300" y="758" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(or flat on the floor if it fits)</text>
+<text x="300" y="745" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">USB-C PD power bank (12 V),</text>
+<text x="300" y="758" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">flat on the floor under the deck</text>
 <path d="M294,741 L379,735" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="379" cy="735" r="2.2" fill="#777777"/>
 <text x="300" y="805" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">base drum (stepped foot)</text>
@@ -128,7 +128,7 @@
 <path d="M694,146 L519,228" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="519" cy="228" r="2.2" fill="#777777"/>
 <text x="700" y="205" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">charging socket module: rotor, Hall</text>
-<text x="700" y="218" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">sensor, microswitch, 24-px ring halo</text>
+<text x="700" y="218" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">sensor, microswitch, return plunger</text>
 <path d="M694,201 L543,270" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="543" cy="270" r="2.2" fill="#777777"/>
 <text x="700" y="300" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">tube rises behind the bay</text>
@@ -154,15 +154,15 @@
 <text x="700" y="625" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">pickup tube reaches the bottom</text>
 <path d="M694,608 L575,600" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="575" cy="600" r="2.2" fill="#777777"/>
-<text x="700" y="660" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">master power switch (rear wall)</text>
+<text x="700" y="660" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(no master switch: unplug the bank)</text>
 <path d="M694,656 L637,663" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="637" cy="663" r="2.2" fill="#777777"/>
-<text x="700" y="700" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">250 mL reservoir bottle, upright,</text>
-<text x="700" y="713" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">top protrudes into the lower dish</text>
+<text x="700" y="700" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">8 oz (250 mL) squat jar on the</text>
+<text x="700" y="713" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">deck, refilled through the door</text>
 <path d="M694,696 L591,690" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="591" cy="690" r="2.2" fill="#777777"/>
 <text x="700" y="760" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear service door: refill the</text>
-<text x="700" y="773" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">bottle, swap the bank, USB access</text>
+<text x="700" y="773" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">jar, charge/unplug the bank</text>
 <path d="M694,756 L632,745" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="632" cy="745" r="2.2" fill="#777777"/>
 <text x="468" y="822" font-size="11" text-anchor="middle" font-weight="normal" fill="#222222">Kamoer KPHM200 peristaltic pump, 12 V</text>

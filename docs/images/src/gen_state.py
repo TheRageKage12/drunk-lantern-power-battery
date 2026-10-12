@@ -7,18 +7,18 @@ from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 W, H = 1100, 600
 s = SVG(W, H, "Green Lantern power battery - firmware state machine")
 s.text(20, 32, "Firmware state machine — green_lantern.ino", size=20, weight="bold")
-s.text(20, 52, "loop() at ~100 Hz: readInputs() → pumpService() → global ring interlock → state switch → show()", size=11, color="#555")
+s.text(20, 52, "loop() at ~100 Hz: readInputs() → pumpService() → global ring interlock → state switch → lightService()", size=11, color="#555")
 
 BW, BH, BY = 136, 182, 150
 xs = [30, 205, 380, 555, 730]
 fills = ["#eeeeee", "#e3f2e3", "#f1fff1", "#c8e6c9", "#dcedc8"]
 names = ["IDLE", "ARMED", "FLASH", "POURING", "LOCKED"]
 leds = [
-    ["LEDs: faint green", "ember, 6–13/255,", "4 s breathe (never", "looks dead)"],
-    ["LEDs: slow charging", "pulse, 1.6 s period;", "ceiling 90→170 over", "20 s; one bright", "pixel orbits the ring"],
-    ["LEDs: ring + strip", "full white-green", "flash for 220 ms"],
-    ["strip: bright green", "swirl (120–255);", "ring: breathing +", "6-px comet head"],
-    ["LEDs: afterglow", "200→60 over 4 s,", "then steady 60"],
+    ["light: faint glow", "(idle floor 20/255,", "also keeps the power", "bank awake)"],
+    ["light: brightens", "steadily from 15 %", "to 75 % over", "RAMP_MS (15 s),", "then holds"],
+    ["light: jumps to", "full brightness"],
+    ["light: full", "brightness for the", "whole pour"],
+    ["light: holds 1.5 s,", "then fades over 3 s", "to the idle glow"],
 ]
 pumps = [
     ["pump: OFF"],
@@ -60,7 +60,7 @@ for i in (1, 2, 3):
     s.wire([(xs[i] + 30, BY + BH), (xs[i] + 30, 404)], RED, sw=1.8, dash="6,4")
 s.wire([(xs[3] + 30, 404), (xs[0] + 40, 404), (xs[0] + 40, BY + BH + 1)], RED, sw=1.8, dash="6,4", marker="arrR")
 s.rect(290, 410, 420, 22, rx=11, fill="#fdecea", stroke=RED, sw=1)
-s.text(500, 425, "ABORT: ring absent ≥ 200 ms in any state → pumpStop() → IDLE", size=11, anchor="middle", weight="bold", color=RED)
+s.text(500, 425, "ABORT: ring pulled → pump off (60 ms while pouring) → LOCKED/IDLE", size=11, anchor="middle", weight="bold", color=RED)
 
 # boot entry
 s.arrow([(xs[0] + 68, 110), (xs[0] + 68, BY - 1)], INK, sw=2)
@@ -79,7 +79,7 @@ items = [
     ["Absolute cap MAX_PUMP_MS", "= 20 s inside pumpService(),", "independent of the states."],
     ["Switch already pressed at", "boot (jammed cam) is ignored", "until it is released."],
     ["Debounce: Hall 100 ms in /", "200 ms out; switch 40 ms."],
-    ["Hardware: master switch,", "fuses on 5 V and 12 V."],
+    ["Hardware: 10 k pull-downs", "hold both MOSFETs off", "while the XIAO boots."],
 ]
 y = PY + 48
 for it in items:
@@ -91,12 +91,12 @@ for it in items:
 s.rect(30, 455, 836, 120, rx=8, fill="#f5f5f5", stroke="#bbb", sw=1)
 s.text(44, 476, "Timing constants", size=12, weight="bold")
 s.lines(44, 494, [
-    "HALL_DEBOUNCE_MS 100   ·   RING_GONE_MS 200   ·   SWITCH_DEBOUNCE_MS 40   ·   FLASH_MS 220   ·   PUMP_RAMP_MS 300",
-    "DEFAULT_POUR_MS 10 000 (replace after water calibration; a 44 mL shot at 200 mL/min ≈ 13 s)   ·   MAX_PUMP_MS 20 000",
-    "DEFAULT_MAX_BRIGHT 160/255 (current budget for 84 pixels)",
+    "HALL_DEBOUNCE_MS 100   ·   RING_GONE_MS 200   ·   POUR_ABORT_MS 60   ·   SWITCH_DEBOUNCE_MS 40   ·   FLASH_MS 220",
+    "DEFAULT_POUR_MS 9 000 (~30 mL at 200 mL/min; set by water calibration)   ·   MAX_PUMP_MS 20 000   ·   PUMP_RAMP_MS 300",
+    "RAMP_MS 15 000 (match your oath)   ·   LOCK_HOLD_MS 1 500   ·   FADE_MS 3 000   ·   idle floor 20/255",
 ], size=10, lh=14)
 s.text(44, 550, "Bench (USB serial, 115200):", size=11, weight="bold")
-s.text(210, 550, "status  ·  cal 10000 (pump for 10 s without the ring)  ·  pour 13000  ·  leds 160  ·  save  ·  stop", size=10, family="Menlo, Consolas, monospace")
+s.text(210, 550, "status  ·  cal 10000  ·  pour 9000  ·  speed 80  ·  leds 255  ·  idle 20  ·  save  ·  stop", size=10, family="Menlo, Consolas, monospace")
 s.text(44, 567, "Legend:", size=10, weight="bold")
 s.wire([(100, 563), (130, 563)], INK, sw=2, marker="arrK"); s.text(136, 567, "transition", size=10)
 s.wire([(210, 563), (240, 563)], RED, sw=1.8, dash="6,4", marker="arrR"); s.text(246, 567, "abort path (ring pulled)", size=10)

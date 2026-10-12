@@ -16,9 +16,9 @@ def X(t):
 
 # ------------------------------------------------------------------ bands
 bands = [
-    ("state", 168, 24, [(-5, 0, "#e0e0e0", "IDLE"), (0, 20, "#c8e6c9", "ARMED"), (20, 20.22, "#ffffff", ""), (20.22, 33.5, "#81c784", "POURING"), (33.5, 36, "#a5d6a7", "LOCKED"), (36, 40, "#e0e0e0", "IDLE")]),
-    ("LEDs", 198, 22, [(-5, 0, "#e8f5e9", "ember"), (0, 20, "#c8e6c9", "pulse builds (ceiling rises over 20 s)"), (20, 20.22, "#ffffff", ""), (20.22, 33.5, "#66bb6a", "swirl + comet"), (33.5, 36, "#a5d6a7", "afterglow"), (36, 40, "#e8f5e9", "ember")]),
-    ("pump", 226, 18, [(-5, 20.22, "#f5f5f5", "off"), (20.22, 33.5, "#ffcc80", "ON: 0.3 s ramp, then full speed"), (33.5, 40, "#f5f5f5", "off")]),
+    ("state", 168, 24, [(-5, 0, "#e0e0e0", "IDLE"), (0, 20, "#c8e6c9", "ARMED"), (20, 20.22, "#ffffff", ""), (20.22, 29.2, "#81c784", "POURING"), (29.2, 36, "#a5d6a7", "LOCKED"), (36, 40, "#e0e0e0", "IDLE")]),
+    ("light", 198, 22, [(-5, 0, "#e8f5e9", "faint glow"), (0, 15, "#c8e6c9", "brightens steadily (15 s ramp)"), (15, 20, "#a5d6a7", "holds"), (20, 20.22, "#ffffff", ""), (20.22, 29.2, "#66bb6a", "full brightness"), (29.2, 36, "#a5d6a7", "hold, fade"), (36, 40, "#e8f5e9", "faint glow")]),
+    ("pump", 226, 18, [(-5, 20.22, "#f5f5f5", "off"), (20.22, 29.2, "#ffcc80", "ON ~9 s (30 mL)"), (29.2, 40, "#f5f5f5", "off")]),
     ("ring", 250, 18, [(-5, 0, "#f5f5f5", "out"), (0, 20, "#dcedc8", "in the socket at 0°"), (20, 21, "#aed581", ""), (21, 36, "#dcedc8", "in at 0° (sprung back)"), (36, 40, "#f5f5f5", "out")]),
 ]
 for name, y, h, segs in bands:
@@ -60,11 +60,11 @@ def callout(num, t, bx, by, rows, above, width=172):
 
 
 # above the bands
-callout(0, -4, 60, 78, ["Before: put the empty shot", "glass in the bay, shut the", "rear hatch. Faint ember."], True)
-callout(2, 10, 250, 78, ["Recite the oath (~15–20 s).", "The glow pulses and builds;", "one pixel orbits the socket."], True)
-callout(4, 20.22, 500, 78, ["FLASH: ring + strip white-", "green for 220 ms, then the", "pump soft-starts (0.3 s)."], True)
-callout(6, 27, 720, 78, ["~13 s pour with the swirl", "light show; the hidden glass", "fills behind the diffuser."], True)
-callout(8, 36, 920, 78, ["Remove the ring → IDLE", "ember. Ready for the", "next insertion."], True, width=160)
+callout(0, -4, 60, 78, ["Before: put the empty shot", "glass on the tray, shut the", "rear hatch. Faint glow."], True)
+callout(2, 10, 250, 78, ["Recite the oath (~15–20 s).", "The glow brightens steadily", "and peaks after 15 s."], True)
+callout(4, 20.22, 500, 78, ["FLASH: full brightness;", "220 ms later the pump", "soft-starts (0.3 s)."], True)
+callout(6, 25, 720, 78, ["~9 s pour (1 oz) at full", "brightness; the hidden glass", "fills behind the diffuser."], True)
+callout(8, 36, 920, 78, ["Remove the ring → IDLE,", "faint glow. Ready for the", "next insertion."], True, width=160)
 # oath span bracket
 s.path(f"M{X(1)},150 L{X(1)},144 L{X(19)},144 L{X(19)},150", stroke="#1b5e20", sw=1.2)
 s.text(X(10), 140, "oath", size=8.5, anchor="middle", color="#1b5e20")
@@ -73,8 +73,8 @@ s.text(X(10), 140, "oath", size=8.5, anchor="middle", color="#1b5e20")
 callout(1, 0, 60, 348, ["Insert the ring: the magnet", "trips the Hall sensor →", "ARMED after 100 ms."], False)
 callout(3, 20, 330, 348, ["Last line: twist the ring 45°", "against the spring → the cam", "clicks the microswitch."], False)
 callout(5, 21, 560, 348, ["Let go: the rotor springs", "back to 0° (switch releases;", "the pour carries on)."], False)
-callout(7, 33.5, 760, 348, ["Pour done → LOCKED after-", "glow (4 s fade to steady).", "No second pour this insertion."], False)
-callout(9, 38, 950, 400, ["Open the rear hatch,", "reach in, take the", "full glass. Cheers."], False, width=140)
+callout(7, 29.2, 760, 348, ["Pour done → LOCKED: holds", "1.5 s, fades over 3 s.", "No second pour this insertion."], False)
+callout(9, 38, 950, 400, ["Open the rear hatch,", "pull the tray, take", "the glass. Cheers."], False, width=140)
 
 # notes
 s.text(20, 455, "Pulling the ring out at any moment stops the pump immediately and returns to IDLE. The hatch faces the owner; the audience only sees the glow through the front window.", size=9.5, color="#444")

@@ -34,12 +34,9 @@ def top_view(cx, cy, theta, title):
         for dy in (-1, 1):
             s.circle(cx + dx * 117, cy + dy * 117, 5, fill="#fff", sw=1.2)
             s.circle(cx + dx * 117, cy + dy * 117, 2, fill="#999", stroke="none")
-    # halo (translucent ring) 68 OD / 50 ID over the NeoPixel ring
-    s.path(arc_path(cx, cy, 34, 0, 359.9) + " Z", stroke=INK, sw=1.2, fill=HALO_FILL)
+    # housing puck outline (76 OD) under the faceplate
+    s.circle(cx, cy, 38 * SC, fill="none", stroke="#999", sw=1, dash="4,3")
     s.circle(cx, cy, 25 * SC, fill="#dedede", sw=1.2)
-    for k in range(24):
-        x, y = pol(cx, cy, 29.5, k * 15)
-        s.circle(x, y, 3.5, fill="#4caf50", stroke="none")
     # housing bore lip with loading gap at 12 o'clock
     s.path(arc_path(cx, cy, 18.3, 0, 360), stroke="#777", sw=2)
     # radial plunger channel at 300 deg (lower-right): r 18.3..34, 5.6 wide
@@ -108,7 +105,7 @@ def lab(x, y, rows, tx, ty, anchor="start", size=9.5):
 cx, cy = 330, 262
 lab(165, 112, ["cam lobe on the rim", "(50\u201370\u00b0 at rest, 3 mm lift)"], *pol(cx, cy, 23, 60), anchor="end")
 lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall board"], *pol(cx, cy, 18.3, 10), anchor="end")
-lab(165, 200, ["translucent halo ring (68 OD)", "over the 24-px NeoPixel ring"], *pol(cx, cy, 31, 300), anchor="end")
+lab(165, 200, ["housing puck (76 OD, dashed)", "under the 100 mm faceplate"], *pol(cx, cy, 38, 235), anchor="end")
 lab(165, 240, ["stop lug (printed, at 9 o'clock)", "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
 lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d74 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
 lab(165, 340, ["6\u00d72 mm magnet in the key cap,", "on the axis: it never moves", "when the ring is twisted"], cx - 4, cy + 4, anchor="end")
@@ -140,14 +137,10 @@ for dx in (-1, 1):
 # faceplate 3 mm with bore 47 mm; halo 68/50 flush; LED PCB underneath
 s.rect(cx - 135, Y0, 33, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx + 102, Y0, 33, 9, fill="#f4f4f4", sw=1.2)
-s.rect(cx - 102, Y0, 27, 9, fill=HALO_FILL, sw=1.2)
-s.rect(cx + 75, Y0, 27, 9, fill=HALO_FILL, sw=1.2)
+s.rect(cx - 102, Y0, 27, 9, fill="#f4f4f4", sw=1.2)
+s.rect(cx + 75, Y0, 27, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx - 75, Y0, 5, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx + 70, Y0, 5, 9, fill="#f4f4f4", sw=1.2)
-s.rect(cx - 98, Y0 + 9, 20, 5, fill="#2e7d32", sw=0.8)      # LED PCB
-s.rect(cx + 78, Y0 + 9, 20, 5, fill="#2e7d32", sw=0.8)
-s.rect(cx - 91, Y0 + 5, 6, 4, fill="#ffeb3b", sw=0.6)        # LED
-s.rect(cx + 85, Y0 + 5, 6, 4, fill="#ffeb3b", sw=0.6)
 # rotor: 44 OD body, flange tab under the lip, pocket on top, recess underneath for the sensor
 s.rect(cx - 66, Y0 + 3, 132, 54, fill="#bdbdbd", sw=1.2)
 s.rect(cx - 72, Y0 + 9, 6, 6, fill="#9e9e9e", sw=1)            # flange tab (left, 9 o'clock)
@@ -176,7 +169,7 @@ s.path(f"M{cx + 60},{Y0 + 48} L{cx + 74},{Y0 + 48} L{cx + 74},{Y0 + 58} L{cx + 6
 s.circle(cx - 87, Y0 + 80, 7, fill="none", stroke="#1565c0", sw=1.4, dash="3,2")
 # cable out through the floor
 s.wire([(cx + 40, Y0 + 97), (cx + 40, Y0 + 125)], "#7c3aed", sw=1.6, dash="4,3")
-s.text(cx + 46, Y0 + 128, "J1 6-wire cable to the base", size=9, color="#7c3aed")
+s.text(cx + 46, Y0 + 128, "socket cable to the base", size=9, color="#7c3aed")
 # axis line
 s.path(f"M{cx},{Y0 - 80} L{cx},{Y0 + 115}", stroke="#999", sw=0.8, dash="8,3,2,3")
 
@@ -184,7 +177,7 @@ s.path(f"M{cx},{Y0 - 80} L{cx},{Y0 + 115}", stroke="#999", sw=0.8, dash="8,3,2,3
 LXS = 300
 lab(LXS, 567, ["Green Lantern ring (20 mm), inserted", "face-down; the printed key cap is", "glued to its emblem face"], cx - 30, Y0 - 50, anchor="end", size=9.5)
 lab(LXS, 617, ["stop lug on the rotor rim rides in", "a channel under the faceplate lip;", "the lip also retains the rotor"], cx - 50, Y0 + 40, anchor="end", size=9.5)
-lab(LXS, 667, ["translucent halo flush with the", "faceplate; 24-px ring PCB right", "under it, LEDs facing up"], cx - 88, Y0 + 4, anchor="end", size=9.5)
+lab(LXS, 667, ["faceplate, 3 mm, sits flush in", "the top dish floor; 4 x M3", "screws into the dish"], cx - 88, Y0 + 4, anchor="end", size=9.5)
 lab(LXS, 717, ["spring + plunger (out of plane,", "lower right) in a radial pocket,", "10 mm spring, 4 mm stroke"], cx - 94, Y0 + 80, anchor="end", size=9.5)
 lab(LXS, 762, ["housing puck 76 OD, 6.7 deep;", "base plate 3.5 mm, 3× M3 + nuts"], cx - 120, Y0 + 100, anchor="end", size=9.5)
 # section labels: right
