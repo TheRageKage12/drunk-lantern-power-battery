@@ -25,7 +25,7 @@ DARK = (40, 110, 60)
 GREY = (150, 150, 150)
 ORANGE = (235, 150, 60)     # hardware envelopes
 WHITE = (235, 235, 235)     # diffuser / halo
-COLORS = {'diffuser': WHITE, 'halo': WHITE, 'base_door': DARK, 'sphere_hatch': DARK}
+COLORS = {'diffuser': WHITE, 'halo': WHITE, 'base_door': DARK}
 
 
 def placements():
@@ -46,10 +46,11 @@ def load_placed(pl):
         name = fn[:-4]
         m = trimesh.load(os.path.join(OUT, fn), force='mesh')
         if name in pl:
-            axis, ang, (dx, dy, dz) = pl[name]
-            if ang:
-                m.apply_transform(trimesh.transformations.rotation_matrix(math.radians(ang), axis))
-            m.apply_translation((dx, dy, dz))
+            steps = pl[name] if isinstance(pl[name], list) else [pl[name]]
+            for axis, ang, (dx, dy, dz) in steps:
+                if ang:
+                    m.apply_transform(trimesh.transformations.rotation_matrix(math.radians(ang), axis))
+                m.apply_translation((dx, dy, dz))
         meshes[name] = m
     return meshes
 
@@ -102,7 +103,7 @@ def main():
 
     render(solid, os.path.join(IMG, 'cad-assembly-iso.png'), az=35, el=22, title='assembly, iso (front-left)')
     render(solid, os.path.join(IMG, 'cad-assembly-front.png'), az=0, el=0, title='assembly, front (audience side)')
-    render(solid, os.path.join(IMG, 'cad-assembly-rear.png'), az=180, el=0, title='assembly, rear (owner side: door + hatch)')
+    render(solid, os.path.join(IMG, 'cad-assembly-rear.png'), az=180, el=0, title='assembly, your side: hand opening with the lock inside (strip curtain not shown)')
     render(solid, os.path.join(IMG, 'cad-assembly-top.png'), az=0, el=89, title='assembly, top')
 
     # cutaway: keep x < 0 half of every printed part, show envelopes whole (they are inside)
@@ -115,8 +116,11 @@ def main():
         if s is not None and len(s.faces):
             cut.append((s, COLORS.get(n, GREEN)))
     for n, m in envelopes.items():
-        cut.append((m, ORANGE))
-    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway at x=0 seen from +X; orange = hardware envelopes (jar, pump, bank, glass)')
+        if n in ('fist_envelope', 'forearm_envelope'):
+            cut.append((m, (230, 190, 160)))        # the hand, skin tone
+        elif n not in ('switch_envelope', 'glass_path_envelope'):
+            cut.append((m, ORANGE))
+    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway at x=0 seen from the side; orange = jar, pump, power bank, glass; tan = the hand (fist + forearm)')
 
     # exploded: lift each printed part by its order in Z
     names = sorted(printed, key=lambda n: printed[n].bounds[0][2])

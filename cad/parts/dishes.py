@@ -139,7 +139,7 @@ def _lower_profile():
     """Closed (r, z) profile of dish_lower in the print frame (mouth down)."""
     r_mouth = P.DISH_MOUTH_D / 2
     r_neck = P.DISH_NECK_D / 2
-    r_hole = P.DISH_NECK_HOLE_D / 2
+    r_hole = P.DISH_LOWER_HOLE_D / 2    # rev 7: wide enough for the glass slot
     r_flange = DISH_FLANGE_D / 2
     r_ring_o, r_ring_i = LOCATING_RING_OD / 2, LOCATING_RING_ID / 2
     r_sp_o, r_sp_i = SPIGOT_OD / 2, SPIGOT_ID / 2
@@ -269,15 +269,40 @@ def build_dish_upper():
             .box(UPPER_WIRE_SLOT_W, UPPER_WIRE_SLOT_L + 1.0, U_Z_FLOOR1 + 2.0, centered=(True, False, False))
             .translate((0, r_hole - 1.0, -1.0)))
     body = body.cut(slot)
+    # pilots in the plug's underside for the strip-curtain clamp (sphere.curtain_clamp), behind the hand port
+    for a in P.CURTAIN_SCREW_ANGLES:
+        x, y = P.CURTAIN_R * math.cos(math.radians(a)), P.CURTAIN_R * math.sin(math.radians(a))
+        body = body.cut(cq.Workplane('XY').workplane(offset=U_Z_PLUG0 - 0.5).center(x, y)
+                        .circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5))
     return body
 
 
 # ================================================================== module API
+def build_top_diffuser():
+    """Frosted disc over the upper dish floor hole: light from the LED ring inside the hole comes out of the top.
+    Sits in the old socket counterbore on 4 countersunk screws. 1.2 mm thick over the hole; print it flat face
+    down in white or natural PETG."""
+    d = SOCKET_COUNTERBORE_D - 2 * P.FIT
+    t = SOCKET_COUNTERBORE_DEPTH
+    disc = cq.Workplane('XY').circle(d / 2).extrude(t)
+    disc = disc.cut(cq.Workplane('XY').workplane(offset=t - 1.8).circle(UPPER_FLOOR_HOLE_D / 2 - 1.0).extrude(2))   # thin centre
+    for a in SOCKET_BOLT_ANGLES:
+        x = P.SOCKET_BOLT_CIRCLE / 2 * math.cos(math.radians(a))
+        y = P.SOCKET_BOLT_CIRCLE / 2 * math.sin(math.radians(a))
+        disc = disc.cut(cq.Workplane('XY').workplane(offset=-1).center(x, y).circle(P.M3_CLEAR / 2).extrude(t + 2))
+        disc = disc.cut(cq.Workplane('XY').add(cq.Solid.makeCone(P.M3_HEAD_D / 2 + 0.3, P.M3_CLEAR / 2, 1.8,
+                                                                  pnt=cq.Vector(x, y, 0))))   # countersink, bed side
+    return disc
+
+
 def build():
-    return {
+    out = {
         'dish_lower': build_dish_lower(),
         'dish_upper': build_dish_upper(),
     }
+    if P.SOCKET_IN_SPHERE:
+        out['top_diffuser'] = build_top_diffuser()
+    return out
 
 
 def placements():
@@ -285,6 +310,8 @@ def placements():
     return {
         'dish_lower': ((0, 0, 1), 0.0, (0.0, 0.0, LOWER_PRINT_TO_ASSEMBLY_DZ)),
         'dish_upper': ((0, 0, 1), 0.0, (0.0, 0.0, UPPER_PRINT_TO_ASSEMBLY_DZ)),
+        # printed flat (countersunk) face down: flip so that face is on top in the dish
+        'top_diffuser': ((1, 0, 0), 180.0, (0.0, 0.0, Z_SOCKET_PLATE_SEAT + SOCKET_COUNTERBORE_DEPTH)),
     }
 
 

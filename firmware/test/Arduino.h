@@ -50,7 +50,7 @@ struct Pin {
   int  mode  = -1;        // last pinMode(), -1 = never configured
   Func func  = FUNC_SIO;  // pad function, as the rp2040 core switches it
   int  out   = LOW;       // SIO output register (digitalWrite)
-  int  pwm   = 0;         // PWM level 0..255 (analogWrite)
+  int  pwm   = 0;         // PWM level 0..analogWriteRange (analogWrite)
   int  in    = HIGH;      // external level seen by digitalRead() (default: pulled up / idle)
   bool on    = false;     // effective output: PWM level > 0, or SIO HIGH
   int  writes = 0;        // number of digitalWrite+analogWrite calls
@@ -125,10 +125,13 @@ inline void digitalWrite(uint8_t p, int val) {
   sim::events.push_back({sim::nowUs, p, "digitalWrite", val});
   sim::updateRuns(p);
 }
+namespace sim { inline int pwmRange = 255; }  // analogWriteRange() of the rp2040 core (default 255)
+inline void analogWriteRange(uint32_t r) { sim::pwmRange = (int)r; }
+inline void analogWriteFreq(uint32_t) {}
 inline void analogWrite(uint8_t p, int val) {
   if (p >= sim::NPINS) return;
   if (val < 0) val = 0;
-  if (val > 255) val = 255;
+  if (val > sim::pwmRange) val = sim::pwmRange;
   sim::pin[p].func = sim::FUNC_PWM;          // core: gpio_set_function(pin, GPIO_FUNC_PWM)
   sim::pin[p].pwm  = val;
   sim::pin[p].writes++;

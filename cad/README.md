@@ -14,13 +14,13 @@ python3 render_stl.py output /tmp/r   # quick per-part previews
 | File | What |
 |---|---|
 | `params.py` | every dimension and the stack heights (`Z_*`) |
-| `DESIGN_CONTRACT.md` | how the parts mate; revisions 2-3 record the changes made after the hardware research and the design review |
+| `DESIGN_CONTRACT.md` | how the parts mate; revisions 2-8 record the changes since the first draft (8 = lock wall layout) |
 | `parts/base.py` | base drum, deck (jar ring, pump saddles, electronics panel), rear door, hardware envelopes; see `NOTES-base.md` |
-| `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings and the socket counterbore; `NOTES-dishes.md` |
-| `parts/sphere.py` | sphere halves, hatch door, diffuser, bay floor + glass tray, LED carrier, nozzle clip, handle bosses |
-| `parts/socket.py` | charging socket: housing, rotor, base plate, switch bracket, plunger, key cap (`LED_RING = True` adds a NeoPixel ring recess and halo) |
+| `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings; `top_diffuser` (frosted disc) in the upper dish floor; pilots for the curtain clamp; `NOTES-dishes.md` |
+| `parts/sphere.py` | sphere halves (hand opening, display window), diffuser, bay floor, glass slot, nozzle guide, lock wall, curtain clamp, handle bosses, glass / glass-path / fist / forearm envelopes |
+| `parts/socket.py` | the lock: housing, rotor, base plate with two mounting ears, switch bracket, plunger, key cap; screwed to the lock wall facing the hand opening (`LED_RING = True` adds a NeoPixel ring recess and halo) |
 | `parts/handle.py` | four-piece handle with lap joints; `NOTES-handle.md` |
-| `checks.py` | validity, hardware-envelope clearance, part overlap (> 1 cm3 fails) |
+| `checks.py` | validity, hardware and hand envelope clearance, the glass's way out, part overlap (> 0.1 cm3 fails) |
 | `output/` | ready-to-slice STL (and STEP) files |
 
 Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
@@ -30,7 +30,8 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
   publishes no drawing. Measure the pump and adjust `PUMP_*` in `params.py` and `PUMP_HEAD_L_EST` in `parts/base.py`.
 - Reservoir jar: 76 mm across the cap, 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
 - Power bank: 150 x 72 x 25 mm pocket, flat on the floor under the deck.
-- Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope on the tray.
+- Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
+- Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, plus a 60 mm forearm through the 120 x 96 mm hand opening.
 - Hall board pocket in `socket_base`: 31.6 x 18.4 mm. The DRV5032 board (25.6 x 17.8) slides along it so its chip sits under the window.
 
 ## Budget-build settings
@@ -39,6 +40,6 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - `DOOR_SWITCH_D = 0` in `parts/base.py`: no master-switch hole in the base door.
 
 ## Known limitations
-- The sphere halves need interior supports around the window and hatch (see the guide).
+- The sphere halves need interior supports around the window and the hand opening (see the guide).
 - The rear sphere half is 221 mm wide because of the integral handle bosses.
 - `key_ring.stl` (the kit ring with the key cap merged in) is not generated; glue `key_cap` to any ring.

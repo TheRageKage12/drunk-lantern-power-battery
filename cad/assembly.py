@@ -4,13 +4,17 @@ import cadquery as cq
 
 
 def place(wp, placement):
+    """placement: (axis, angle_deg, (dx, dy, dz)) = rotate about the origin then translate,
+    or a list of such steps applied in order."""
     if placement is None:
         return wp
-    axis, angle, (dx, dy, dz) = placement
+    steps = placement if isinstance(placement, list) else [placement]
     out = wp
-    if angle:
-        out = out.rotate((0, 0, 0), axis, angle)
-    return out.translate((dx, dy, dz))
+    for axis, angle, (dx, dy, dz) in steps:
+        if angle:
+            out = out.rotate((0, 0, 0), axis, angle)
+        out = out.translate((dx, dy, dz))
+    return out
 
 
 def write_assembly(all_parts, placements, out_dir):
