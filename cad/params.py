@@ -80,10 +80,10 @@ SPHERE_CUT = 58.5           # flats at +/- SPHERE_CUT from the sphere centre (->
 SPHERE_SPLIT = 'front-back' # halves split on the XZ plane (front half y<0 toward audience, rear half y>0 toward owner)
 SPHERE_FLANGE_W = 8.0       # internal joining flange width
 SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/bottom
-WINDOW_W, WINDOW_H = 108.0, 108.0   # front arched window (60 x 1.8 = 108)
+WINDOW_W, WINDOW_H = 90.0, 87.0     # front arched window: must clear the 9 mm collars at both flats
 DIFFUSER_D = 118.0          # front diffuser disc (sits behind the window on an internal ledge)
 DIFFUSER_T = 1.0
-HATCH_W, HATCH_H = 110.0, 105.0     # rear hatch opening (rev 3: wide enough for a hand holding the glass); bottom-hinged door, magnet-latched at the top
+HATCH_W, HATCH_H = 110.0, 96.0      # rear hatch opening (rev 3: wide enough for a hand holding the glass; 96 = all the height between the collars); bottom-hinged door, magnet-latched at the top
 GLASS_TRAY_TRAVEL = 45.0    # the glass sits on a tray that slides out through the hatch on two rails in the bay floor
 NOZZLE_ANGLE_DEG = 45.0     # nozzle enters from the rear-left wall at 45 deg aimed at the inside wall of the glass
 NOZZLE_TIP_ABOVE_RIM = 10.0
@@ -102,16 +102,20 @@ KEY_TAB_W, KEY_TAB_L = 6.0, 4.0
 ROTOR_FLOOR_T = 1.2         # plastic between magnet (in key cap) and Hall sensor
 SOCKET_HOUSING_OD = 76.0    # rev 3: MUST pass through the DISH_NECK_HOLE_D (80) hole from above
 SOCKET_HOUSING_H = 22.0     # below the faceplate (rev 3: shorter, frees bay height for the nozzle)
-CAM_LIFT = 5.0              # D2F-L hinge lever: free position 10 mm, operates at 6.8 +/- 1.5 mm above its mounting face -> press ~5 mm
-SPRING_D = 5.0              # compression spring OD; 0.4 mm wire (0.5 mm if a firmer return is wanted)
-SPRING_WIRE = 0.4
-SPRING_PRELOAD = 2.0        # compression at 0 deg
-SPRING_FREE_L = 30.0        # arc travel at the skirt (R = ROTOR_OD/2 + 1.5) for 45 deg is ~15.3 mm; + preload = 17.3 < 30 - solid height (~9)
+CAM_LIFT = 3.0              # D2F-L hinge lever rests 8 mm above its mounting face (2 mm preloaded from the 10 mm free position); the cam presses it to 5 mm
+# Return spring (rev 4): a RADIAL spring plunger pressing on a ramp on the rotor's edge (rotary-switch detent).
+# The ramp rises CAM_RISE over the 45 deg twist, so the spring force makes a return torque and a click at rest.
+SPRING_D = 5.0              # compression spring OD
+SPRING_WIRE = 0.5
+SPRING_PRELOAD = 1.2        # compression at 0 deg
+CAM_RISE = 4.0              # ramp height on the rotor edge over 45 deg
+PLUNGER_L = 4.5
+SPRING_FREE_L = 10.0        # 0.5 x 5 x 10 mm; compressed 1.2 at rest, 5.2 at 45 deg (solid height ~3)
 SPRING_POCKET_D = 5.6       # spring OD + 0.6; closed ends; depth = free length + 1
 
 # handle
 HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 10.0
-HANDLE_INNER_GAP = 36.0     # clearance between sphere surface and handle leg
+HANDLE_INNER_GAP = 10.0     # clearance between sphere surface and handle leg (original: legs nearly tangent)
 HANDLE_TOP_CLEAR = 80.0     # clearance above the upper dish mouth for a hand + ring
 HANDLE_PIECES = 4           # 2 legs + 2 quarter arcs, lap joints with 2 x M3 each
 
