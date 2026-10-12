@@ -18,7 +18,7 @@ python3 render_stl.py output /tmp/r   # quick per-part previews
 | `parts/base.py` | base drum, deck (jar ring, pump saddles, electronics panel), rear door, hardware envelopes; see `NOTES-base.md` |
 | `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings and the socket counterbore; `NOTES-dishes.md` |
 | `parts/sphere.py` | sphere halves, hatch door, diffuser, bay floor + glass tray, LED carrier, nozzle clip, handle bosses |
-| `parts/socket.py` | charging socket: housing, rotor, base plate, switch bracket, plunger, halo, key cap |
+| `parts/socket.py` | charging socket: housing, rotor, base plate, switch bracket, plunger, key cap (`LED_RING = True` adds a NeoPixel ring recess and halo) |
 | `parts/handle.py` | four-piece handle with lap joints; `NOTES-handle.md` |
 | `checks.py` | validity, hardware-envelope clearance, part overlap (> 1 cm3 fails) |
 | `output/` | ready-to-slice STL (and STEP) files |
@@ -31,7 +31,12 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - Reservoir jar: 76 mm across the cap, 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
 - Power bank: 150 x 72 x 25 mm pocket, flat on the floor under the deck.
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope on the tray.
-- Hall board pocket: 31.6 x 15.6 mm (HiLetgo); the Adafruit DRV5032 board (25.6 x 17.8) needs `HALL_PCB_W` = 17.8.
+- Hall board pocket in `socket_base`: 31.6 x 18.4 mm. The DRV5032 board (25.6 x 17.8) slides along it so its chip sits under the window.
+
+## Budget-build settings
+- `M3_INSERT_HOLE = 2.7` in `params.py`: screws thread straight into the plastic. Set 4.0 for heat-set inserts.
+- `LED_RING = False` in `parts/socket.py`: no LEDs at the socket.
+- `DOOR_SWITCH_D = 0` in `parts/base.py`: no master-switch hole in the base door.
 
 ## Known limitations
 - The sphere halves need interior supports around the window and hatch (see the guide).

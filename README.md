@@ -1,9 +1,9 @@
 # Green Lantern power battery that pours a shot
 
-A Halloween prop: a 3D-printed Green Lantern power battery (about 480 mm tall, 180 mm diameter)
+A Halloween prop: a 3D-printed Green Lantern power battery (about 470 mm tall, 180 mm diameter)
 with a hidden peristaltic pump, a hidden shot glass, and a twist-to-pour ring socket.
-Insert the ring, recite the oath, twist the ring 45 degrees on the last line, and the lantern
-flashes and fills the glass while the light show runs.
+Insert the ring and the lantern glows brighter while you recite the oath; twist the ring 45 degrees
+on the last line and it pours about 1 oz into the hidden glass. Parts cost about $140 (budget build).
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
 assembly, wiring, firmware, calibration, testing, cleaning).
@@ -36,7 +36,6 @@ python3 render_stl.py output /tmp/renders   # PNG previews of every STL
 ```bash
 cd firmware
 arduino-cli core install rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
-arduino-cli lib install "Adafruit NeoPixel"
 arduino-cli compile --fqbn rp2040:rp2040:seeed_xiao_rp2040 green_lantern
 cd test && make test        # simulated interlock scenarios, all must PASS
 ```

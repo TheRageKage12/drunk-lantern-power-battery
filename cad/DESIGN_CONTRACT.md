@@ -185,3 +185,11 @@ exception in build.py output.
 - Sphere: window 90 x 87, hatch 110 x 96 bottom-hinged, glass on a sliding tray on a raised platform, LED
   carrier 9 rows x 6 px at y = -35, diffuser at y = -60. Handle 6 mm from the sphere (rear half 221 mm wide).
 - Bed: the owner's Ender 3 is 230 x 230 x 240.
+
+## Revision 5 (budget build, ~$140)
+- M3 screws thread straight into 2.7 mm pilot holes (`M3_INSERT_HOLE`); 4.0 restores heat-set inserts.
+- No NeoPixel ring or halo at the socket (`LED_RING = False` in parts/socket.py).
+- No master-switch hole in the base door (`DOOR_SWITCH_D = 0`).
+- Hall pocket widened to fit the Adafruit DRV5032 board (`HALL_PCB_W = 17.8`).
+- Light = one plain 12 V green strip (18 x 5 cm pieces, 2 per carrier channel) switched by a MOSFET.
+- The LM2596 buck sits in the left floor crescent of the base; the right crescent pocket is a spare.

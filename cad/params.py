@@ -34,7 +34,7 @@ NEOPIXEL_RING_T = 3.2       # PCB thickness; LEDs add ~1.6 mm on top
 
 XIAO_L, XIAO_W, XIAO_H = 21.0, 17.8, 3.5            # Seeed XIAO RP2040
 D4184_L, D4184_W, D4184_H = 34.0, 17.0, 12.0        # dual MOSFET module
-HALL_PCB_L, HALL_PCB_W, HALL_PCB_T = 31.0, 15.0, 1.6  # HiLetgo A3144 module (verify yours)
+HALL_PCB_L, HALL_PCB_W, HALL_PCB_T = 31.0, 17.8, 1.6  # pocket fits the Adafruit DRV5032 board (25.6 x 17.8, slides along the length to centre its chip) or an A3144 module (31 x 15)
 HALL_SENSOR_OFFSET = 3.0    # sensor element centre from the short PCB edge where it sits
 D2F_L, D2F_W, D2F_H = 12.8, 5.8, 6.5                # D2F-L body (lever adds ~ 13.5 mm along L)
 D2F_HOLE_D, D2F_HOLE_PITCH = 2.4, 6.5               # two mounting holes through the body
