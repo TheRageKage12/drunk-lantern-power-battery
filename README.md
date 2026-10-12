@@ -24,7 +24,7 @@ assembly, wiring, firmware, calibration, testing, cleaning).
 ## Regenerating the CAD
 
 ```bash
-pip install cadquery trimesh manifold3d numpy pillow networkx scipy
+pip install cadquery trimesh manifold3d numpy pillow networkx scipy shapely
 cd cad
 python3 build.py            # all parts -> cad/output/, assembly, checks
 python3 build.py socket     # one module only

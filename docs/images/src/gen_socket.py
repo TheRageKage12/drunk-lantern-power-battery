@@ -127,7 +127,7 @@ lab(875, 400, ["ramp now under the plunger"], *pol(cx, cy, 21, 290), anchor="sta
 
 # ---------------------------------------------------------------- section A-A
 s.path("M60,488 L1040,488", stroke="#ccc", sw=1)
-s.text(20, 512, "Section A–A (axis, stop pin, switch) — ring inserted, 0°", size=13, weight="bold")
+s.text(20, 512, "Section A–A (axis, stop lug, switch) — ring inserted, 0°", size=13, weight="bold")
 cx, Y0 = 520, 582   # Y0 = top of the faceplate
 # housing cup: 80 OD, 70 ID, floor 2.4 mm
 s.rect(cx - 120, Y0 + 9, 15, 95, fill="#d7d7d7", sw=1.2)

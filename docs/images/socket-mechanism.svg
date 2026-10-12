@@ -198,7 +198,7 @@
 <path d="M870,396 L660.7993648904878,240.45273097048286" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="660.7993648904878" cy="240.45273097048286" r="2.2" fill="#999"/>
 <path d="M60,488 L1040,488" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="20" y="512" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">Section A–A (axis, stop pin, switch) — ring inserted, 0°</text>
+<text x="20" y="512" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">Section A–A (axis, stop lug, switch) — ring inserted, 0°</text>
 <rect x="400" y="591" width="15" height="95" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
 <rect x="625" y="591" width="15" height="95" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
 <rect x="400" y="679" width="240" height="7" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>

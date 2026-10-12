@@ -172,3 +172,16 @@ exception in build.py output.
    door); add a 10 x 8 notch instead for the trigger cable if the bank's port faces the door.
 6. **Firmware**: PRIME button on D6 (hold = pump runs, IDLE only, 20 s cap); pour-abort on Hall loss >= 60 ms;
    separate POURING brightness cap; brighter idle pilot glow (bank keep-alive); pump trigger via AHCT125 ch.3.
+
+## Revision 4 (as built, see parts/socket.py and parts/sphere.py) - supersedes the socket section above
+- Rotor: flat 36 x 8 mm disc. Under the faceplate lip its rim carries a printed STOP LUG (channel walls = hard
+  stops at 0 and 45 deg), a CAM LOBE (3 mm lift, presses the D2F-L lever between ~33 and 45 deg) and a RAMP
+  (4 mm rise over 45 deg). No loading gap: the rotor goes in from below and `socket_base` closes the housing
+  with 3 x M3 into captured nuts. Return: a radial spring plunger (0.5 x 5 x 10 mm spring) on the ramp at 300 deg.
+- Hall board sits chip-down in a pocket under `socket_base` with a sensor window on the axis (~8 mm to the
+  magnet; fine for the DRV5032, A3144 users bend the sensor up through the window and stack magnets).
+- Switch on a pegged `switch_bracket` in a slotted recess of the base plate. Module depth 13 mm below the
+  faceplate plus the Hall connector.
+- Sphere: window 90 x 87, hatch 110 x 96 bottom-hinged, glass on a sliding tray on a raised platform, LED
+  carrier 9 rows x 6 px at y = -35, diffuser at y = -60. Handle 6 mm from the sphere (rear half 221 mm wide).
+- Bed: the owner's Ender 3 is 230 x 230 x 240.
