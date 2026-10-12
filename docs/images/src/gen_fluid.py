@@ -95,7 +95,7 @@ for sgn in (-1, 1):
 for n in sorted(M):
     if n.endswith("_envelope") or n.startswith("handle"):
         continue
-    fill = "#ffffff" if n in ("diffuser", "top_diffuser") else ("#e0e0e0" if n in ("bay_floor", "glass_well", "lock_wall", "curtain_clamp") else PRINT)
+    fill = "#ffffff" if n in ("diffuser", "top_diffuser") else ("#e0e0e0" if n in ("bay_floor", "glass_well", "lock_wall", "curtain_clamp", "base_tray", "base_deck") else PRINT)
     draw_polys(section(n), fill, PRINT_EDGE if fill == PRINT else "#616161", sw=0.9)
 
 # ------------------------------------------------------------------ LED strips (green) and the strip curtain
@@ -196,8 +196,8 @@ label(RX, 250, ["your fist, punched in; the ring", "face sits in the lock; LED",
 label(RX, 330, ["to take the glass: grip its front,", "1  slide it toward you %d mm" % P.GLASS_SLIDE, "2  lift it clear of the slot",
                 "3  bring it out through the curtain"], *px(y_out + 26, z_lift + P.GLASS_H - 4))
 label(RX, 440, ["glass rim 3 mm under the lock"], *px(gy + rt - 2, gz0 + P.GLASS_H))
-label(RX, 640, ["Kamoer KPHM200 pump (behind", "the section), head toward the", "service door"], *px(pump[1][1] - 10, 60))
-label(RX, 730, ["service door (your side): refill", "the jar, charge or unplug the bank"], *px(80, 60))
+label(RX, 640, ["Kamoer KPHM200 pump (behind", "the section), head toward", "your side"], *px(pump[1][1] - 10, 60))
+label(RX, 720, ["base cartridge: 3 thumbscrews", "underneath; lift the lantern off", "to refill the jar or charge the bank"], *px(70, 4))
 
 # legend
 lx, ly = 470, 880

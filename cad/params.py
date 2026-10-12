@@ -65,7 +65,7 @@ POWERBANK_L, POWERBANK_W, POWERBANK_T = 150.0, 72.0, 25.0   # pocket: INIU B61 (
 BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
 BASE_BODY_D = 174.0         # drum body between the bands
-BASE_DOOR_W, BASE_DOOR_H = 110.0, 90.0   # rear service door opening in the base wall (Z 12..102)
+SERVICE_SCREW_ANGLES = (0.0, 140.0, 225.0)   # rev 9: 3 thumbscrews from underneath hold the base cartridge in the drum (no door)
 
 JOINT_SPIGOT_H = 8.0        # spigot height for base->lower dish and sphere->upper dish joints
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)

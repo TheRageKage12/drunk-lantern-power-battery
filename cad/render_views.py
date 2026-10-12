@@ -25,7 +25,7 @@ DARK = (40, 110, 60)
 GREY = (150, 150, 150)
 ORANGE = (235, 150, 60)     # hardware envelopes
 WHITE = (235, 235, 235)     # diffuser / halo
-COLORS = {'diffuser': WHITE, 'halo': WHITE, 'base_door': DARK}
+COLORS = {'diffuser': WHITE, 'halo': WHITE, 'top_diffuser': WHITE, 'base_tray': DARK}
 
 
 def placements():

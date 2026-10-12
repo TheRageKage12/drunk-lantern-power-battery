@@ -1,17 +1,22 @@
 """
-base.py - the lantern's base drum, its rear service door, the hardware deck, and the envelopes.
+base.py - the lantern's base: an outer drum (part of the lantern shell) and a removable CARTRIDGE.
+
+The cartridge (tray + deck + power bank + jar + pump + electronics) slides up into the open bottom of the
+drum and is held by three thumbscrews from underneath, hidden while the lantern stands. To refill: undo the
+thumbscrews and lift the lantern off by its handle; the cartridge stays on the table (rev 9; no service door).
 
 Parts (print orientation, bed = XY, min z = 0):
-  base               drum, printed floor-down, open top (identity placement)
-  base_door          curved rear door panel, printed standing on its bottom (lip) edge
+  base               drum, open both ends, printed TOP BAND DOWN (its 3 nut bosses then print without support)
+  base_tray          cartridge floor: bank pocket, deck pillars, buck-converter pocket, drains, 3 knob pads
+  thumb_knob         knurled knob that grips an M3x12 socket screw (print 3)
   base_deck          flat deck plate that drops in over the power bank and carries the bottle
                      cradle, the pump saddles and the electronics panel (printed flat, identity + lift)
   bottle_envelope    stepped cylinder: body BOTTLE_D x BOTTLE_BODY_H_EST, shoulder, neck/cap to BOTTLE_H
   pump_envelope      KPHM200: head box PUMP_W x PUMP_H x PUMP_HEAD_L_EST + motor can PUMP_MOTOR_D, PUMP_L long,
-                     lying with the motor axis along Y, head face toward the rear door
+                     lying with the motor axis along Y, head face toward the owner's side
   powerbank_envelope box POWERBANK_W (X) x POWERBANK_L (Y) x POWERBANK_T (Z) lying flat on the floor
 
-Assembly frame: Z up, origin at the centre of the base bottom, +Y = rear (door), -Y = front.
+Assembly frame: Z up, origin at the centre of the base bottom, +Y = the owner's side, -Y = display side.
 All numbers derive from params.py; the layout and the reasons are in NOTES-base.md.
 """
 import math
@@ -37,32 +42,24 @@ BASE_JOINT_ANGLES = joint_angles()                   # MATING: 90, 210, 330 deg 
 BASE_JOINT_CBORE_DEPTH = 3.0
 BASE_JOINT_R_OUTER = R_MAX                           # the holes start on the band's outer surface
 
-# ------------------------------------------------------------------ rear door
-DOOR_SILL = 10.0                                      # contract: bottom edge 10 mm above the floor
-DOOR_Z0 = P.FLOOR + DOOR_SILL                         # 12
-DOOR_Z1 = DOOR_Z0 + P.BASE_DOOR_H                     # 88 (= bottom of the top band)
-DOOR_X_HALF = P.BASE_DOOR_W / 2
-DOOR_LIP = 4.0                                        # outer plate overlap on left / right / bottom
-DOOR_PLATE_T = 2.0                                    # outer plate thickness, proud of the body
-DOOR_PLATE_R = R_BODY + DOOR_PLATE_T                  # 89; the bands are recessed to R_BODY under the lip
-DOOR_PLUG_CHAMFER = 1.6                               # 45 deg under the plug so it prints standing up
-DOOR_MAG_X = DOOR_X_HALF - 8.0                        # +/-47
-DOOR_MAG_Z = (DOOR_Z0 + 6.0, DOOR_Z1 - 8.0)           # 18, 80
-TAB_T = 4.0                                           # corner stop tabs inside the wall (magnet pockets)
-TAB_IN = 14.0                                         # tab reach sideways into the opening
-TAB_OUT = 6.0                                         # tab reach behind the wall (sideways / down)
-TAB_Z_BOTTOM = (DOOR_Z0 - TAB_OUT, DOOR_Z0 + 10.5)    # 6..22.5  (stays under the deck)
-TAB_Z_TOP = (DOOR_Z1 - TAB_IN, SPIGOT_ZONE_Z0 - 1.0)  # 74..91   (stays under the dish spigot)
-DOOR_SWITCH_D = 0.0                                   # no master switch in the budget build (unplug the bank); 12.5 or 16 adds the hole
-DOOR_SWITCH_XZ = (-30.0, 72.0)                        # upper left: nothing but the electronics panel behind it
-USB_NOTCH_W = 14.0                                    # passes a USB-C plug body (12 x 6.5) + cable
-SILL_NOTCH_H = 6.0                                    # notch in the base sill under the door opening (z 6..12)
-DOOR_NOTCH_H = 7.0                                    # notch in the door's bottom edge (plate bottom + 7)
+# ------------------------------------------------------------------ cartridge joint (rev 9, replaces the door)
 USB_X = 0.0                                           # the bank's ports are at the middle of its +Y end
+SERVICE_ANGLES = P.SERVICE_SCREW_ANGLES               # (0, 140, 225): clear of the bank, pillars, pockets, jar fingers
+SERVICE_R = 79.0                                      # thumbscrew axis radius (knob clears the drum wall)
+BOSS_R0 = 75.5                                        # drum nut bosses: r 75.5 .. wall, BOSS_Z0 .. BOSS_Z1
+BOSS_Z0, BOSS_Z1 = 8.0, 18.0
+BOSS_W = 10.0
+NUT_Z0, NUT_T, NUT_AF = 11.0, 2.8, 5.8                # side-loading nut slot, opening toward the inside
+PAD_R0 = 70.0                                         # tray pads under the bosses: r 70 .. tray edge, z 0 .. BOSS_Z0
+PAD_W = 22.0
+WELL_D, WELL_DEPTH = 20.0, 6.0                        # finger well for the knob, from below
+KNOB_D, KNOB_H = 10.0, 5.5
+TRAY_R = R_IN - P.FIT                                 # 84.3, same as the deck
+SERVICE_SWEEP_Z1 = SPIGOT_ZONE_Z0 - 1.0               # the bosses pass down over the cartridge from here
 
 # ------------------------------------------------------------------ power bank pocket (floor, centred)
 BANK_HALF_W = P.POWERBANK_W / 2                       # 35.5 across X
-BANK_HALF_L = P.POWERBANK_L / 2                       # 76.5 along Y, ports toward +Y (door)
+BANK_HALF_L = P.POWERBANK_L / 2                       # along Y, ports toward +Y (owner's side)
 BANK_END_STOP_T, BANK_END_STOP_H = P.WALL, 12.0
 BANK_END_STOP_GAP = 0.3
 BANK_END_STOP_X = (12.0, 20.0)                        # two blocks at +Y leaving the middle free for the plug
@@ -204,34 +201,7 @@ def _drum():
                                                     pnt=cq.Vector(0, 0, BAND_TOP_Z0 - TOP_CHAMFER_H)))
     top_band = _cyl(R_MAX, P.BASE_BAND_H, z0=BAND_TOP_Z0)
     drum = _union_all([bottom_band, body, step, top_band])
-    return drum.cut(_cyl(R_IN, P.BASE_H, z0=P.FLOOR))
-
-
-def _door_opening_cutters():
-    """Door opening, the USB plug notch in the sill, and the 1 mm band recesses the door plate sits in."""
-    opening = _box(P.BASE_DOOR_W, 60.0, P.BASE_DOOR_H, 0, 70.0, DOOR_Z0)
-    sill_notch = _box(USB_NOTCH_W, 60.0, SILL_NOTCH_H + 0.01, USB_X, 70.0, DOOR_Z0 - SILL_NOTCH_H)
-    half_w = DOOR_X_HALF + DOOR_LIP + P.FIT
-    outside_body = _cyl(R_MAX + 2.0, P.BASE_H).cut(_cyl(R_BODY, P.BASE_H))      # r > body: the lip sits on the body
-    bottom_recess = _box(2 * half_w, 60.0, DOOR_LIP + P.FIT, 0, 70.0, DOOR_Z0 - DOOR_LIP - P.FIT)
-    side_notch = _box(2 * half_w, 60.0, TOP_CHAMFER_H + 0.01, 0, 70.0, BAND_TOP_Z0 - TOP_CHAMFER_H)
-    return [opening, sill_notch, bottom_recess.intersect(outside_body), side_notch.intersect(outside_body)]
-
-
-def _door_tabs():
-    """Four corner stop tabs inside the wall; the door plug rests on them, magnets pull it on."""
-    tabs = []
-    ann = _ring(R_IN, R_IN - TAB_T, P.BASE_H)
-    for sx in (-1, 1):
-        x0, x1 = sx * (DOOR_X_HALF - TAB_IN), sx * (DOOR_X_HALF + TAB_OUT)
-        for (z_lo, z_hi) in (TAB_Z_BOTTOM, TAB_Z_TOP):
-            tabs.append(ann.intersect(_box(abs(x1 - x0), 60.0, z_hi - z_lo, (x0 + x1) / 2, 70.0, z_lo)))
-    return tabs
-
-
-def _door_tab_pockets():
-    return [_radial_cutter(sx * DOOR_MAG_X, z, P.MAGNET_POCKET_D, R_IN - P.MAGNET_POCKET_T, R_IN + 0.5)
-            for sx in (-1, 1) for z in DOOR_MAG_Z]
+    return drum.cut(_cyl(R_IN, P.BASE_H + 2, z0=-1))          # open at the bottom: the cartridge comes out there
 
 
 # ------------------------------------------------------------------ base floor features
@@ -299,42 +269,78 @@ def _joint_screw_cutters():
     return cutters
 
 
+def _sector_box(r0, r1, w, z0, z1, angle):
+    """Block from r0 to r1 (radially), w wide, z0..z1, centred on angle (deg)."""
+    return _rot_z(_box(r1 - r0, w, z1 - z0, (r0 + r1) / 2, 0.0, z0), angle)
+
+
+def _service_xy(a):
+    return SERVICE_R * math.cos(math.radians(a)), SERVICE_R * math.sin(math.radians(a))
+
+
+def _drum_bosses():
+    """Three nut bosses inside the drum's bottom. A 45 deg roof on their upper side lets the drum print
+    top band down without support."""
+    adds, cuts = [], []
+    ch = R_IN - BOSS_R0
+    for a in SERVICE_ANGLES:
+        blk = _sector_box(BOSS_R0, R_IN + 0.5, BOSS_W, BOSS_Z0, BOSS_Z1, a)
+        roof = (cq.Workplane('XZ').polyline([(BOSS_R0, BOSS_Z1), (R_IN + 0.5, BOSS_Z1), (R_IN + 0.5, BOSS_Z1 + ch + 0.5)])
+                .close().extrude(BOSS_W / 2, both=True))
+        adds += [blk, _rot_z(roof, a)]
+        x, y = _service_xy(a)
+        cuts.append(_cyl(P.M3_CLEAR / 2, BOSS_Z1 - BOSS_Z0 + 2, x, y, BOSS_Z0 - 1))
+        # nut slot: the nut slides in flats-first from the inside face
+        cuts.append(_sector_box(BOSS_R0 - 1, SERVICE_R, NUT_AF + 0.2, NUT_Z0, NUT_Z0 + NUT_T, a))
+        cuts.append(cq.Workplane('XY').workplane(offset=NUT_Z0).center(x, y)
+                    .polygon(6, (NUT_AF + 0.2) / math.cos(math.radians(30))).extrude(NUT_T)
+                    .rotate((x, y, 0), (x, y, 1), a))
+    return adds, cuts
+
+
 def build_base():
-    base = _cut_all(_drum(), _door_opening_cutters())
-    adds, cuts = list(_door_tabs()), list(_door_tab_pockets())
-    for fn in (_bank_pocket, _pillars, _floor_electronics):
+    """The drum: part of the lantern shell. No floor, no door; three nut bosses for the thumbscrews."""
+    drum = _drum()
+    adds, cuts = _drum_bosses()
+    drum = drum.union(_union_all(adds))
+    return _cut_all(drum, cuts + _joint_screw_cutters())
+
+
+def _tray_pads():
+    """Pads under the drum bosses, each with a finger well for its thumbscrew knob, from below."""
+    adds, cuts = [], []
+    for a in SERVICE_ANGLES:
+        adds.append(_sector_box(PAD_R0, TRAY_R + 1, PAD_W, 0.0, BOSS_Z0, a).intersect(_cyl(TRAY_R, BOSS_Z0)))
+        x, y = _service_xy(a)
+        cuts.append(_cyl(WELL_D / 2, WELL_DEPTH + 1, x, y, -1))
+        cuts.append(_cyl(P.M3_CLEAR / 2, BOSS_Z0 + 2, x, y, -1))
+    return adds, cuts
+
+
+def build_tray():
+    """Cartridge floor: everything that used to stand on the base floor."""
+    tray = _cyl(TRAY_R, P.FLOOR)
+    adds, cuts = [], []
+    for fn in (_bank_pocket, _pillars, _floor_electronics, _tray_pads):
         a, c = fn()
         adds += a
         cuts += c
-    base = base.union(_union_all(adds))
-    return _cut_all(base, cuts + _floor_cutters() + _joint_screw_cutters())
+    tray = tray.union(_union_all(adds))
+    return _cut_all(tray, cuts + _floor_cutters())
 
 
-# ------------------------------------------------------------------ door panel
-def _door_panel_assembly_frame():
-    """Curved panel: outer plate (opening + lip left/right/bottom, proud of the body) and a plug that
-    fills the opening flush with the inner wall. Built in the assembly frame."""
-    y_half = _box(400.0, 100.0, 400.0, 0, 50.0, -100.0)   # keep only the +Y side
-    plate = _ring(DOOR_PLATE_R, R_BODY, (DOOR_Z1 - P.FIT) - (DOOR_Z0 - DOOR_LIP), 0, 0, DOOR_Z0 - DOOR_LIP)
-    plate = plate.intersect(_box(2 * (DOOR_X_HALF + DOOR_LIP), 100.0, 200.0, 0, 50.0, 0)).intersect(y_half)
-    plug = _ring(R_BODY + 0.01, R_IN, P.BASE_DOOR_H - 2 * P.FIT, 0, 0, DOOR_Z0 + P.FIT)   # 0.01 overlap into the plate
-    plug = plug.intersect(_box(2 * (DOOR_X_HALF - P.FIT), 100.0, 200.0, 0, 50.0, 0)).intersect(y_half)
-    plug = plug.cut(cq.Workplane('XY').add(cq.Solid.makeCone(R_IN, R_IN + DOOR_PLUG_CHAMFER, DOOR_PLUG_CHAMFER,
-                                                             pnt=cq.Vector(0, 0, DOOR_Z0 + P.FIT))))
-    door = plate.union(plug)
-    cuts = [_radial_cutter(sx * DOOR_MAG_X, z, P.MAGNET_POCKET_D, R_IN - 0.5, R_IN + P.MAGNET_POCKET_T)
-            for sx in (-1, 1) for z in DOOR_MAG_Z]                                   # magnets, inside face
-    if DOOR_SWITCH_D > 0:
-        cuts.append(_radial_cutter(DOOR_SWITCH_XZ[0], DOOR_SWITCH_XZ[1], DOOR_SWITCH_D, R_IN - 1.0, DOOR_PLATE_R + 1.0))
-    cuts.append(_box(USB_NOTCH_W, 60.0, DOOR_NOTCH_H + 1.0, USB_X, 70.0, DOOR_Z0 - DOOR_LIP - 1.0))   # USB notch
-    return _cut_all(door, cuts)
+def build_knob():
+    """Knurled thumbscrew knob: an M3x12 socket screw goes in head-first from below and is glued; print 3."""
+    k = _cyl(KNOB_D / 2, KNOB_H)
+    for i in range(12):
+        k = k.cut(_rot_z(_cyl(0.9, KNOB_H + 2, KNOB_D / 2 + 0.3, 0, -1), i * 30.0))
+    return k.cut(_cyl(5.7 / 2, 3.2, z0=-0.01)).cut(_cyl(P.M3_CLEAR / 2, KNOB_H + 2, z0=-1))
 
 
-def build_door():
-    door = _door_panel_assembly_frame()
-    bb = door.val().BoundingBox()
-    shift = (0.0, -(bb.ymin + bb.ymax) / 2, -bb.zmin)
-    return door.translate(shift), tuple(-s for s in shift)
+def _service_sweep():
+    """Everything the drum's bosses pass through when the lantern is lowered over the cartridge."""
+    return _union_all([_sector_box(BOSS_R0 - 0.5, R_IN, BOSS_W + 1.0, BOSS_Z0, SERVICE_SWEEP_Z1, a)
+                       for a in SERVICE_ANGLES])
 
 
 # ------------------------------------------------------------------ deck (built in the assembly frame, then lowered)
@@ -407,6 +413,8 @@ def build_deck():
     for (x, y) in DECK_WIRE_SLOTS_XY:
         cuts.append(_box(DECK_WIRE_SLOT[0], DECK_WIRE_SLOT[1], DECK_T + 2, x, y, DECK_Z0 - 1))
     cuts.append(_box(DECK_PORT_NOTCH[0], 2 * DECK_PORT_NOTCH[1], DECK_T + 2, USB_X, DECK_R, DECK_Z0 - 1))
+    for a in SERVICE_ANGLES:     # notches so the drum's bosses pass the deck when the lantern is lowered on
+        cuts.append(_sector_box(BOSS_R0 - 1.5, DECK_R + 1, BOSS_W + 3.0, DECK_Z0 - 1, DECK_Z0 + DECK_T + 1, a))
     deck = _cut_all(deck, cuts)
     return deck.translate((0, 0, -DECK_Z0))         # print frame: flat on the bed
 
@@ -423,24 +431,23 @@ def _envelopes():
     return {'bottle_envelope': bottle, 'pump_envelope': pump, 'powerbank_envelope': bank}
 
 
-_DOOR_SHIFT = None
-
-
 def build():
-    global _DOOR_SHIFT
-    door, _DOOR_SHIFT = build_door()
-    parts = {'base': build_base(), 'base_door': door, 'base_deck': build_deck()}
+    parts = {'base': build_base().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.BASE_H)),   # top band down
+             'base_tray': build_tray(), 'base_deck': build_deck(), 'thumb_knob': build_knob(),
+             'service_sweep_envelope': _service_sweep()}
     parts.update(_envelopes())
     return parts
 
 
 def placements():
-    door_shift = _DOOR_SHIFT or build_door()[1]
     on_floor = ((0, 0, 1), 0, (0, 0, P.FLOOR))
     on_deck = ((0, 0, 1), 0, (0, 0, DECK_TOP))
+    kx, ky = _service_xy(SERVICE_ANGLES[0])
     return {
-        'base': ((0, 0, 1), 0, (0, 0, 0)),
-        'base_door': ((0, 0, 1), 0, door_shift),
+        'base': ((1, 0, 0), 180, (0, 0, P.BASE_H)),          # printed top band down: flip back
+        'base_tray': ((0, 0, 1), 0, (0, 0, 0)),
+        'thumb_knob': ((0, 0, 1), 0, (kx, ky, WELL_DEPTH - KNOB_H)),   # one of three shown, in its well
+        'service_sweep_envelope': ((0, 0, 1), 0, (0, 0, 0)),
         'base_deck': ((0, 0, 1), 0, (0, 0, DECK_Z0)),
         'bottle_envelope': on_deck,
         'pump_envelope': on_deck,

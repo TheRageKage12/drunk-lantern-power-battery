@@ -15,7 +15,7 @@ python3 render_stl.py output /tmp/r   # quick per-part previews
 |---|---|
 | `params.py` | every dimension and the stack heights (`Z_*`) |
 | `DESIGN_CONTRACT.md` | how the parts mate; revisions 2-8 record the changes since the first draft (8 = lock wall layout) |
-| `parts/base.py` | base drum, deck (jar ring, pump saddles, electronics panel), rear door, hardware envelopes; see `NOTES-base.md` |
+| `parts/base.py` | base drum (part of the lantern shell) and the removable cartridge: tray, deck (jar ring, pump saddles, electronics panel), thumbscrew knobs, hardware envelopes |
 | `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings; `top_diffuser` (frosted disc) in the upper dish floor; pilots for the curtain clamp; `NOTES-dishes.md` |
 | `parts/sphere.py` | sphere halves (hand opening, display window), diffuser, bay floor, glass slot, nozzle guide, lock wall, curtain clamp, handle bosses, glass / glass-path / fist / forearm envelopes |
 | `parts/socket.py` | the lock: housing, rotor, base plate with two mounting ears, switch bracket, plunger, key cap; screwed to the lock wall facing the hand opening (`LED_RING = True` adds a NeoPixel ring recess and halo) |
@@ -37,7 +37,6 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 ## Budget-build settings
 - `M3_INSERT_HOLE = 2.7` in `params.py`: screws thread straight into the plastic. Set 4.0 for heat-set inserts.
 - `LED_RING = False` in `parts/socket.py`: no LEDs at the socket.
-- `DOOR_SWITCH_D = 0` in `parts/base.py`: no master-switch hole in the base door.
 
 ## Known limitations
 - The sphere halves need interior supports around the window and the hand opening (see the guide).

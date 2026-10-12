@@ -1,3 +1,5 @@
+> **Superseded in part.** Written for revision 2 (60 mm bottle, other power bank, rear door). Since revision 9 the base is a drum plus a removable cartridge (see `DESIGN_CONTRACT.md`, revision 9); the numbers below are history.
+
 # NOTES-base: base drum, rear door, hardware deck
 
 Module `cad/parts/base.py`. Parts: `base`, `base_door`, `base_deck` (printed) and the envelopes

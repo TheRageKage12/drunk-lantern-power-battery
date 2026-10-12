@@ -255,3 +255,18 @@ exception in build.py output.
   socket part is mirrored left-right (x -> -x in the socket frame) on output and its placement steps are
   conjugated by the same mirror; the mechanism code and `tests/test_socket.py` stay in the clockwise frame. The
   ears (40/140 deg) are a mirror pair, so the lock wall is unchanged. The key cap tab now rests at -X (your right).
+
+## Revision 9 (base cartridge, no service door)
+- The jar (76 mm tall on the deck at z 34) could not leave through the old door (top at z 102), and refilling
+  in place was awkward. The base is now split: `base` is an open drum that stays with the lantern (joined to
+  `dish_lower` by the same 3 radial screws), and the **cartridge** (`base_tray` + `base_deck` + bank + jar + pump
+  + electronics) slides up into its open bottom. No door, no door magnets.
+- Three thumbscrews from underneath (M3x12 glued into a printed `thumb_knob`, in 20 mm finger wells in the
+  tray) go up into nuts in three bosses inside the bottom of the drum, at 0, 140 and 225 deg, r = 79. The
+  bosses (r 75.5 .. wall, z 8..18, 45 deg roof, drum printed top band down) must pass down over the cartridge
+  when the lantern is lowered on; the deck has notches at those angles.
+- `service_sweep_envelope` (the bosses' path from z 8 up to the dish spigot zone) must clear the tray, the
+  deck, the jar, the pump and the power bank; `checks.py` tests it against the hardware envelopes too.
+  At 180 deg it would hit the jar and its ring, which is why the angles are uneven.
+- Crossing the split: the tube keeps ~30 cm of slack (no joint in the drink path); the lock and LED cables get
+  a 4-pin and a 2-pin plug.

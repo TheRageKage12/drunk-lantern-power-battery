@@ -40,7 +40,7 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 | Sphere, inside | The **lock wall**, 2.5 cm in front of the centre. On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the DRV5032 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | The jar reservoir and the Kamoer pump on a deck, the power bank flat on the floor under the deck, the electronics board, the buck converter. A service door on your side for refilling and charging. |
+| Base | A removable **cartridge**: the power bank flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the bank. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
 
 ![fluid path and layout](images/fluid-path.svg)
 
@@ -61,7 +61,8 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $14 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. |
 | 3 | LED strip | [12 V green LED strip, single colour](https://www.amazon.com/s?k=12V+green+LED+strip+single+color+2835+60+LED) | ~$12 | Pick: 12 V, green only (not RGB), 2835 LEDs, 60 LEDs/m, **8 mm wide**, cuttable every 3 LEDs (5 cm). You use 75 cm in 15 pieces. |
 | 4 | Buck converter | [LM2596 step-down module, multipack](https://www.amazon.com/s?k=LM2596+buck+converter+module) | ~$8 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
-| 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key, 8 in the base door. |
+| 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key (the pack is the smallest sensible buy). |
+| 5b | Cable plugs | [JST-SM 2-pin and 4-pin connector pairs (LED-strip connector kit)](https://www.amazon.com/s?k=JST+SM+2+pin+4+pin+connector+kit) | ~$7 | One 4-pin plug in the lock cable and one 2-pin plug in the LED leads, so the lantern unplugs from the base cartridge. |
 | 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
 | 7 | Hall sensor | [Adafruit DRV5032 breakout #6051](https://www.adafruit.com/product/6051) | $4.95 | Runs on 3.3 V, very sensitive, either magnet pole works. |
@@ -81,7 +82,7 @@ the key cap. Saves the shipping wait; costs about $7 less.
 | 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
 | 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
 | 12 | Small parts | Vetco | ~$12 | 2 x 1N5819 diodes, 2 x 10 k resistors, 1 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 17 x M3x12, 12 nuts. They thread straight into the printed holes. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
@@ -136,9 +137,10 @@ Print these first, before any big part, and check them:
 
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
-| `base` | 180 x 180 x 115 | floor down, open top up | no | green | 175 |
-| `base_deck` | 169 x 167 x 47 | flat | no | green | 72 |
-| `base_door` | 118 x 25 x 94 | standing on its lip edge | no | green | 37 |
+| `base` (drum) | 180 x 180 x 115 | top band down | no | green | 146 |
+| `base_tray` (cartridge floor) | 169 x 169 x 31 | flat | no | any | 48 |
+| `base_deck` | 168 x 167 x 47 | flat | no | any | 71 |
+| `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 0 |
 | `dish_lower` | 180 x 180 x 91 | mouth down | no | green | 122 |
 | `dish_upper` | 180 x 180 x 86 | floor down, mouth up | no | green | 152 |
 | `top_diffuser` | 100 x 100 x 3 | flat (countersunk) face down | no | white | 11 |
@@ -160,7 +162,7 @@ Print these first, before any big part, and check them:
 | `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
-| **Total** | | | | | **~835 g** |
+| **Total** | | | | | **~815 g** |
 
 Supports: none, except inside the two sphere halves. Print them split-face down; the last 15 mm of dome
 around the window and the hand opening overhang more than 45 degrees, so enable tree supports on the inside
@@ -197,7 +199,9 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 6. **Flyback diode.** Solder a 1N5819 across the pump's two wires, stripe on the + side. It protects Q1 from
    the motor's voltage spike when it switches off.
 7. **Lock wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. Microswitch: NO to D2, COM to
-   ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the lock down to the board.
+   ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
+   about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
+   lantern unplugs from the base cartridge.
 8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
    `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
    `switch=pressed` should follow. Then connect the strip: it should glow faintly.
@@ -307,13 +311,16 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
    tube through the 6 mm hole (it seals itself) until it reaches 5 mm above the jar's bottom.
 2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
    continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
-3. **Route.** The pump sits in its saddles on the deck, head toward the service door so you can open the cap
+3. **Route.** The pump sits in its saddles on the deck, head toward your side so you can open the cap
    later, held by a strap or zip tie. The tube goes up through the lower dish neck and the tube hole in
    `bay_floor` (behind the lock wall, on your right as you look in), then through `nozzle_guide`.
 4. **Nozzle.** The guide stands behind the wall and turns the tube from vertical to horizontal. Its open side
    faces the wall, which holds the tube in. Leave 5 mm of tube sticking out of its end, cut square with a sharp
    blade. The tube end hangs about 1.5 cm above the rim, over the back third of the glass, so the stream and the
    last drop both land inside it.
+6. **Service loop.** Leave about 30 cm of extra tube between the pump and the bay floor, coiled loosely (no
+   tighter than a 5 cm circle, or it kinks) in the space above the jar and pump. That slack lets you lift the
+   lantern off the cartridge and set it down beside it without disconnecting the tube.
 5. **Prime.** Water in the jar, then `cal 6000` from the laptop (or a pour into a cup) until water reaches
    the nozzle. The tube stays full between pours.
 
@@ -349,10 +356,12 @@ single-colour strip.
 
 Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
-1. `base`. Power bank flat on the floor, held with a strap. `base_deck` drops in on top of it (3 x M3x8 into
-   the pillars). Jar in its ring, pump in its saddles. Electronics board on the deck's vertical panel
-   (4 x M3x6). LM2596 in the left floor crescent.
-2. `dish_lower`: its spigot goes into the base top, 3 x M3x12 from outside.
+1. **Cartridge.** On `base_tray`: the LM2596 in its pocket on the right, the power bank flat in the middle,
+   held with a strap. `base_deck` drops in on top of it (3 x M3x8 into the pillars). Jar in its ring, pump in
+   its saddles. Electronics board on the deck's vertical panel (4 x M3x6).
+2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
+   holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
+   its spigot goes into the top of the drum, 3 x M3x12 from outside. The drum stays with the lantern from now on.
 3. **Bay floor.** Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two
    short wall slots cross the far half, the tube hole and the 7 mm cable hole are beyond the wall line (tube on
    the right, cables on the left). Feed the tube up through the tube hole. Drop `glass_well` into the long
@@ -371,11 +380,13 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    wall's.
 8. Handle: the legs plug into the sphere's bosses (1 x M3x12 each), the two arcs lap-joint to the legs and to
    each other with 6 x M3x12 and nuts.
-9. `base_door` with its 4 magnets snaps onto the base on your side. Glue 4 matching magnets into the door
-   frame first.
+9. **Join the lantern and the cartridge.** Plug the lock and LED plugs together, coil the tube's slack above
+   the jar, and lower the lantern over the cartridge. The three notches in the deck's edge and the three
+   bosses inside the drum only line up one way. Tip the lantern a little and turn the 3 thumbscrews up into the
+   bosses from underneath, finger-tight.
 
-Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern off, open the door
-and unplug the cable from the power bank.
+Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern off, lift it off the
+cartridge and unplug the cable from the power bank.
 
 ---
 
@@ -433,14 +444,20 @@ position, under the lock.
 5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it,
    slide it about 3 cm toward you, lift it straight up out of the slot and bring it out through the curtain.
 
-Refill the jar through the service door.
+**Refilling or charging** (about 2 minutes):
+1. Tip the lantern slightly and undo the 3 thumbscrews underneath.
+2. Lift the lantern off by its handle and set it down beside the cartridge. The tube and the cables have
+   enough slack; unplug the two cable plugs if you want the lantern completely free.
+3. Unplug the power bank (or charge it now). Unscrew the jar lid; the pickup tube comes out with it.
+4. Fill the jar, put the lid back on, plug the bank back in.
+5. Lower the lantern back over the cartridge and do the thumbscrews up.
 
 ---
 
 ## 13. Cleaning and storage
 
 Same night: put warm water in the jar and run `cal 20000` into a cup twice, then once more with the tube
-out of the water to push the line empty. Open the pump head and lift the tube off the rollers. Let it air-dry
+out of the water to push the line empty. Lift the lantern off the cartridge, open the pump head and lift the tube off the rollers. Let it air-dry
 with both ends open. Never leave liqueur in the tube overnight: the sugar gums up the bore and the rollers.
 Store with the head open so the tube isn't crushed for months. Replace the pump tube when it looks cloudy or
 flattened.
@@ -472,14 +489,14 @@ flattened.
 |---|---|---|
 | Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
 | Heat-set inserts instead of screwing into plastic | ~$10 | Set `M3_INSERT_HOLE = 4.0` in `cad/params.py` and re-run `build.py`. Inserts: [ruthex M3 x 5.7 mm (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3). |
-| Master power switch and fuses | ~$8 | Set `DOOR_SWITCH_D = 12.5` in `cad/parts/base.py` for a switch hole in the door. Put the switch and a 2 A slow-blow fuse in the 12 V lead. |
+| Master power switch and fuses | ~$8 | An inline rocker switch and a 2 A slow-blow fuse in the 12 V lead, mounted on the deck. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
 | Pinch clamp for carrying a full jar | ~$6 | [Tubing pinch clamps (B0FCM98N2Q)](https://www.amazon.com/dp/B0FCM98N2Q). |
 
 **Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in
 10-15 s. Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A plain LED
 strip is enough for a glow that just gets brighter, and it runs from the same 12 V as the pump. The reservoir
-is a squat jar because a tall bottle cannot leave the base through the door. The glass sits about 5 cm down in
+is a squat jar because it shares the deck with the pump under the lower dish. The glass sits about 5 cm down in
 a slot because the sphere is only 10 cm tall inside and your fist and the lock need the space above it; that is
 also why it slides toward you before it lifts out. The research behind every number is
 in `docs/research/`.
