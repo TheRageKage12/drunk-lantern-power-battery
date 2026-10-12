@@ -171,13 +171,13 @@ def stage(cx_load, load, sub, gate_y, mosfet_label, flyback):
         s.lines(fx + 10, 290, ["1N5819", "flyback,", "stripe to +12 V"], size=9.5)
 
 
-stage(900, "Green LED strip", ["plain 12 V, one colour", "~0.4-0.6 A per metre"], 640, "Q2 light", False)
+stage(900, "Green LED strip", ["plain 12 V, 75 cm in 15 pieces,", "all in parallel, ~0.35 A"], 640, "Q2 light", False)
 stage(1070, "Kamoer KPHM200", ["12 V peristaltic pump", "~0.7 A"], 680, "Q1 pump", True)
 
 # ---------------------------------------------------------------- charging socket (dashed group)
 s.rect(30, 560, 440, 200, fill="none", stroke=GREY, sw=1.2, rx=8, dash="6,4")
 s.rect(38, 568, 392, 17, fill="#ffffff", stroke="#ffffff", sw=0)
-s.text(42, 581, "charging socket module (top dish): one cable down to the base", size=11, weight="bold", color="#555")
+s.text(42, 581, "the lock (on the lock wall in the sphere): one cable down behind the wall to the base", size=11, weight="bold", color="#555")
 box(40, 590, 190, 70, "DRV5032 Hall sensor", ["Adafruit 6051. Chip on the", "rotor axis, under the magnet"], fill="#f3e8ff")
 pin(230, 610, "VIN", "in-right", MAG)
 pin(230, 628, "OUT", "in-right", GREEN)

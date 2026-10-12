@@ -6,8 +6,8 @@ from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 
 W, H = 1100, 800
 s = SVG(W, H, "Green Lantern power battery - charging socket mechanism")
-s.text(20, 30, "Charging socket mechanism — top views at 0° (rest) and 45° (fired), and section A–A", size=18, weight="bold")
-s.text(20, 48, "schematic, ~3 px = 1 mm; twist is clockwise seen from above; see cad/parts/socket.py for the exact geometry", size=11, color="#555")
+s.text(20, 30, "The lock — face views at 0° (rest) and 45° (fired), and section A–A", size=18, weight="bold")
+s.text(20, 48, "schematic, ~3 px = 1 mm; seen from your side (the hand opening); the twist is clockwise, like a key; exact geometry in cad/parts/socket.py", size=11, color="#555")
 
 SC = 3.0  # px per mm
 HALO_FILL = "#c8f5c8"
@@ -28,14 +28,16 @@ def arc_path(cx, cy, r_mm, a1, a2):
 
 def top_view(cx, cy, theta, title):
     s.text(cx, cy - 150, title, size=13, anchor="middle", weight="bold")
-    # faceplate 90 x 90 with 4 M3 inserts
-    s.rect(cx - 135, cy - 135, 270, 270, rx=18, fill="#f4f4f4", sw=1.4)
-    for dx in (-1, 1):
-        for dy in (-1, 1):
-            s.circle(cx + dx * 117, cy + dy * 117, 5, fill="#fff", sw=1.2)
-            s.circle(cx + dx * 117, cy + dy * 117, 2, fill="#999", stroke="none")
-    # housing puck outline (76 OD) under the faceplate
-    s.circle(cx, cy, 38 * SC, fill="none", stroke="#999", sw=1, dash="4,3")
+    # lock wall behind, and the base plate's two mounting ears (lower left / lower right, screwed to the wall)
+    s.rect(cx - 140, cy - 140, 280, 280, fill="#f4f4f4", stroke="#bbb", sw=1)
+    for ang in (130.0, 230.0):                       # 40 and 140 deg in the socket frame, drawn clockwise from 12
+        ex, ey = pol(cx, cy, 53, ang)
+        bx, by = pol(cx, cy, 36, ang)
+        s.path(f"M{bx:.1f},{by:.1f} L{ex:.1f},{ey:.1f}", stroke="#cfcfcf", sw=30)
+        s.circle(ex, ey, 15, fill="#cfcfcf", stroke="#999", sw=1)
+        s.circle(ex, ey, 5, fill="#fff", stroke="#777", sw=1)
+    # housing (76 OD) - its face is what you see
+    s.circle(cx, cy, 38 * SC, fill="#ececec", stroke="#999", sw=1.2)
     s.circle(cx, cy, 25 * SC, fill="#dedede", sw=1.2)
     # housing bore lip with loading gap at 12 o'clock
     s.path(arc_path(cx, cy, 18.3, 0, 360), stroke="#777", sw=2)
@@ -105,16 +107,16 @@ def lab(x, y, rows, tx, ty, anchor="start", size=9.5):
 cx, cy = 330, 262
 lab(165, 112, ["cam lobe on the rim", "(50\u201370\u00b0 at rest, 3 mm lift)"], *pol(cx, cy, 23, 60), anchor="end")
 lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall board"], *pol(cx, cy, 18.3, 10), anchor="end")
-lab(165, 200, ["housing puck (76 OD, dashed)", "under the 100 mm faceplate"], *pol(cx, cy, 38, 235), anchor="end")
+lab(165, 200, ["housing, 76 mm across: its", "face is flush with the ring pocket"], *pol(cx, cy, 38, 300), anchor="end")
 lab(165, 240, ["stop lug (printed, at 9 o'clock)", "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
 lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d74 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
 lab(165, 340, ["6\u00d72 mm magnet in the key cap,", "on the axis: it never moves", "when the ring is twisted"], cx - 4, cy + 4, anchor="end")
 lab(165, 390, ["0.5\u00d75\u00d710 mm spring + plunger in a", "radial pocket press on the rim", "ramp: it pushes the rotor back to 0\u00b0"], *pol(cx, cy, 30, 300), anchor="end")
-lab(165, 440, ["faceplate 100 mm round,", "4\u00d7 M3 into dish-floor inserts"], cx - 117, cy + 117, anchor="end")
+lab(165, 440, ["two ears on the base plate:", "M3x10 + nut through the lock wall"], *pol(cx, cy, 53, 230), anchor="end")
 lab(165, 478, ["ramp on the rim, 300\u2013345\u00b0"], *pol(cx, cy, 20, 322), anchor="end")
 # panel B: right column, left-aligned at x=875
 cx, cy = 720, 262
-lab(875, 112, ["twist the ring 45\u00b0 clockwise", "(seen from above)"], *pol(cx, cy, 39, 30), anchor="start")
+lab(875, 112, ["twist the ring 45\u00b0 clockwise", "(as you see it), like a key"], *pol(cx, cy, 39, 30), anchor="start")
 lab(875, 160, ["stop lug against the channel", "wall = 45\u00b0 hard stop"], *pol(cx, cy, 20, 135), anchor="start")
 lab(875, 205, ["D2F-L on a slotted bracket", "(slide it to tune the click angle)"], cx + 26 * SC + 17, cy - 17, anchor="start")
 lab(875, 250, ["cam lobe has pressed the D2F-L", "lever 3 mm after ~40\u00b0 of twist:", "click (SW goes LOW)"], *pol(cx, cy, 23, 20), anchor="start")
@@ -124,19 +126,16 @@ lab(875, 400, ["ramp now under the plunger"], *pol(cx, cy, 21, 290), anchor="sta
 
 # ---------------------------------------------------------------- section A-A
 s.path("M60,488 L1040,488", stroke="#ccc", sw=1)
-s.text(20, 512, "Section A–A (axis, stop lug, switch) — ring inserted, 0°", size=13, weight="bold")
-cx, Y0 = 520, 582   # Y0 = top of the faceplate
+s.text(20, 512, "Section A–A (axis, stop lug, switch) — ring inserted, 0°; drawn face up (in the lantern the face points at you)", size=13, weight="bold")
+cx, Y0 = 520, 582   # Y0 = the socket face
 # housing cup: 80 OD, 70 ID, floor 2.4 mm
 s.rect(cx - 120, Y0 + 9, 15, 95, fill="#d7d7d7", sw=1.2)
 s.rect(cx + 105, Y0 + 9, 15, 95, fill="#d7d7d7", sw=1.2)
 s.rect(cx - 120, Y0 + 97, 240, 7, fill="#d7d7d7", sw=1.2)
-# bosses with inserts
-for dx in (-1, 1):
-    s.rect(cx + dx * 128 - 8, Y0 + 9, 16, 28, fill="#d7d7d7", sw=1.2)
-    s.rect(cx + dx * 128 - 3, Y0 + 9, 6, 20, fill="#9e9e9e", sw=0.8)
-# faceplate 3 mm with bore 47 mm; halo 68/50 flush; LED PCB underneath
-s.rect(cx - 135, Y0, 33, 9, fill="#f4f4f4", sw=1.2)
-s.rect(cx + 102, Y0, 33, 9, fill="#f4f4f4", sw=1.2)
+# the lock wall under the base plate (2.4 mm), with the window for the cables
+s.rect(cx - 170, Y0 + 104, 340, 7, fill="#e0e0e0", sw=1.2)
+s.rect(cx - 51, Y0 + 104, 102, 7, fill="#ffffff", sw=1, dash="2,2")
+# housing lip around the ring pocket
 s.rect(cx - 102, Y0, 27, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx + 75, Y0, 27, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx - 75, Y0, 5, 9, fill="#f4f4f4", sw=1.2)
@@ -156,10 +155,6 @@ s.circle(cx, Y0 - 34, 34, fill="none", stroke="#2e7d32", sw=9)
 s.rect(cx - 4, Y0 + 23, 8, 5, fill="#222", sw=0.6)             # sensor chip
 s.rect(cx - 22, Y0 + 28, 44, 5, fill="#1a237e", sw=0.8)        # breakout PCB
 s.rect(cx + 14, Y0 + 33, 7, 64, fill="#d7d7d7", sw=1)          # post to the floor
-# stop pin: M3 screw through the rotor into the arc slot in the floor
-s.rect(cx - 53, Y0 + 1, 6, 98, fill="#444", sw=0.8)
-s.rect(cx - 57, Y0 - 1, 14, 4, fill="#444", sw=0.8)
-s.rect(cx - 60, Y0 + 97, 20, 7, fill="#ffffff", sw=1)           # arc slot (open through the floor)
 # switch under the cam lobe (right): body on the floor, lever on top
 s.rect(cx + 64, Y0 + 70, 38, 17, fill="#e8e8e8", sw=1.2)
 s.path(f"M{cx + 98},{Y0 + 68} L{cx + 66},{Y0 + 62}", stroke=INK, sw=2.2)
@@ -176,17 +171,17 @@ s.path(f"M{cx},{Y0 - 80} L{cx},{Y0 + 115}", stroke="#999", sw=0.8, dash="8,3,2,3
 # section labels: left
 LXS = 300
 lab(LXS, 567, ["Green Lantern ring (20 mm), inserted", "face-down; the printed key cap is", "glued to its emblem face"], cx - 30, Y0 - 50, anchor="end", size=9.5)
-lab(LXS, 617, ["stop lug on the rotor rim rides in", "a channel under the faceplate lip;", "the lip also retains the rotor"], cx - 50, Y0 + 40, anchor="end", size=9.5)
-lab(LXS, 667, ["faceplate, 3 mm, sits flush in", "the top dish floor; 4 x M3", "screws into the dish"], cx - 88, Y0 + 4, anchor="end", size=9.5)
+lab(LXS, 617, ["stop lug on the rotor rim rides in", "a channel under the housing's lip;", "the lip also retains the rotor"], cx - 50, Y0 + 40, anchor="end", size=9.5)
+lab(LXS, 667, ["lock wall behind the base plate;", "a window in it passes the cables", "to the hidden side"], cx - 140, Y0 + 108, anchor="end", size=9.5)
 lab(LXS, 717, ["spring + plunger (out of plane,", "lower right) in a radial pocket,", "10 mm spring, 4 mm stroke"], cx - 94, Y0 + 80, anchor="end", size=9.5)
 lab(LXS, 762, ["housing puck 76 OD, 6.7 deep;", "base plate 3.5 mm, 3× M3 + nuts"], cx - 120, Y0 + 100, anchor="end", size=9.5)
 # section labels: right
 RXS = 760
 lab(RXS, 567, ["6×2 mm magnet in the key cap,", "on the rotation axis"], cx + 9, Y0 + 7, anchor="start", size=9.5)
-lab(RXS, 612, ["rotor 36 OD × 8 flat disc; its rim", "lugs ride under the faceplate lip"], cx + 66, Y0 + 20, anchor="start", size=9.5)
+lab(RXS, 612, ["rotor 36 OD × 8 flat disc; its rim", "lug rides under the housing's lip"], cx + 66, Y0 + 20, anchor="start", size=9.5)
 lab(RXS, 657, ["DRV5032 breakout in the base plate,", "chip down under the sensor window,", "~8 mm below the magnet"], cx + 4, Y0 + 26, anchor="start", size=9.5)
 lab(RXS, 707, ["D2F-L on its pegged bracket in the", "base plate (lobe dashed: at 50–70°,", "out of this plane)"], cx + 90, Y0 + 70, anchor="start", size=9.5)
-lab(RXS, 757, ["cables through the floor grommet", "down the sphere's wire channel"], cx + 40, Y0 + 115, anchor="start", size=9.5)
+lab(RXS, 757, ["cables through the wall window,", "down behind the wall to the base"], cx + 40, Y0 + 115, anchor="start", size=9.5)
 
 open(os.path.join(HERE, "..", "socket-mechanism.svg"), "w").write(s.finish())
 print("written")

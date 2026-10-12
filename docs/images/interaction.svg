@@ -123,7 +123,7 @@
 <circle cx="69" cy="74" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="69" y="77.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">0</text>
 <text x="84" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Before: empty shot glass</text>
-<text x="84" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">pushed forward in its slot.</text>
+<text x="84" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">pushed back under the lock.</text>
 <text x="84" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Lantern dark.</text>
 <path d="M105.35714285714286,166 L105.35714285714286,111.5 L84,111.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="105.35714285714286" cy="166" r="2.5" fill="#1b5e20"/>
@@ -143,8 +143,8 @@
 <circle cx="741.7857142857143" cy="166" r="2.5" fill="#1b5e20"/>
 <circle cx="869" cy="74" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="869" y="77.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">6</text>
-<text x="884" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Open your fingers, slide</text>
-<text x="884" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">the glass back, lift it out:</text>
+<text x="884" y="78.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Grip the glass, slide it</text>
+<text x="884" y="90.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">toward you, lift it out:</text>
 <text x="884" y="103.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">re-arms for next time.</text>
 <path d="M883.2142857142857,166 L883.2142857142857,111.5 L884,111.5" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="883.2142857142857" cy="166" r="2.5" fill="#1b5e20"/>
@@ -173,7 +173,7 @@
 <circle cx="809" cy="344" r="9" fill="#1b5e20" stroke="none" stroke-width="1.2"/>
 <text x="809" y="347.5" font-size="10" text-anchor="middle" font-weight="bold" fill="#fff">7</text>
 <text x="824" y="348.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Bring the glass out</text>
-<text x="824" y="360.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">through the port.</text>
+<text x="824" y="360.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">through the curtain.</text>
 <text x="824" y="373.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Cheers.</text>
 <path d="M918.5714285714286,306 L918.5714285714286,334 L878.5714285714286,334" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="918.5714285714286" cy="306" r="2.5" fill="#1b5e20"/>

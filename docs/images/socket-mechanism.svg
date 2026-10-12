@@ -11,19 +11,17 @@
 <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d62828"/></marker>
 </defs>
 <rect x="0" y="0" width="1100" height="800" fill="#ffffff"/>
-<text x="20" y="30" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Charging socket mechanism — top views at 0° (rest) and 45° (fired), and section A–A</text>
-<text x="20" y="48" font-size="11" text-anchor="start" font-weight="normal" fill="#555">schematic, ~3 px = 1 mm; twist is clockwise seen from above; see cad/parts/socket.py for the exact geometry</text>
+<text x="20" y="30" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">The lock — face views at 0° (rest) and 45° (fired), and section A–A</text>
+<text x="20" y="48" font-size="11" text-anchor="start" font-weight="normal" fill="#555">schematic, ~3 px = 1 mm; seen from your side (the hand opening); the twist is clockwise, like a key; exact geometry in cad/parts/socket.py</text>
 <text x="330" y="112" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">A  rest, 0°</text>
-<rect x="195" y="127" width="270" height="270" rx="18" fill="#f4f4f4" stroke="#222222" stroke-width="1.4"/>
-<circle cx="213" cy="145" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="213" cy="145" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="213" cy="379" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="213" cy="379" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="447" cy="145" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="447" cy="145" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="447" cy="379" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="447" cy="379" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="330" cy="262" r="114.0" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="190" y="122" width="280" height="280" rx="0" fill="#f4f4f4" stroke="#bbb" stroke-width="1"/>
+<path d="M412.7,331.4 L451.8,364.2" fill="none" stroke="#cfcfcf" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="451.8010664559175" cy="364.20322994015976" r="15" fill="#cfcfcf" stroke="#999" stroke-width="1"/>
+<circle cx="451.8010664559175" cy="364.20322994015976" r="5" fill="#fff" stroke="#777" stroke-width="1"/>
+<path d="M247.3,331.4 L208.2,364.2" fill="none" stroke="#cfcfcf" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="208.1989335440825" cy="364.20322994015976" r="15" fill="#cfcfcf" stroke="#999" stroke-width="1"/>
+<circle cx="208.1989335440825" cy="364.20322994015976" r="5" fill="#fff" stroke="#777" stroke-width="1"/>
+<circle cx="330" cy="262" r="114.0" fill="#ececec" stroke="#999" stroke-width="1.2"/>
 <circle cx="330" cy="262" r="75.0" fill="#dedede" stroke="#222222" stroke-width="1.2"/>
 <path d="M330.0,207.1 A54.9,54.9 0 1 1 330.0,207.1" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M287.2,227.6 L246.2,203.9 L237.8,218.4 L278.8,242.1 Z" fill="#f3f3f3" stroke="#888" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,2"/>
@@ -46,16 +44,14 @@
 <path d="M268.7766804279294,231.49975179484403 L269.3307364460858,222.12519015937892 L261.4895885936543,227.29317748722514 L262.04544919048635,217.91849566680793 L254.2049784938418,223.08785902984758 L254.76214797723463,213.71309056275743 L246.92217688597708,218.88346829074584 L247.48032580461046,209.5086352750592 L239.64073380710363,214.67978219533114" fill="none" stroke="#1565c0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M407.0,276 L399.0,246" fill="none" stroke="#222222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="720" y="112" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">B  fired, 45° (held against the spring)</text>
-<rect x="585" y="127" width="270" height="270" rx="18" fill="#f4f4f4" stroke="#222222" stroke-width="1.4"/>
-<circle cx="603" cy="145" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="603" cy="145" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="603" cy="379" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="603" cy="379" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="837" cy="145" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="837" cy="145" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="837" cy="379" r="5" fill="#fff" stroke="#222222" stroke-width="1.2"/>
-<circle cx="837" cy="379" r="2" fill="#999" stroke="none" stroke-width="1.2"/>
-<circle cx="720" cy="262" r="114.0" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="580" y="122" width="280" height="280" rx="0" fill="#f4f4f4" stroke="#bbb" stroke-width="1"/>
+<path d="M802.7,331.4 L841.8,364.2" fill="none" stroke="#cfcfcf" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="841.8010664559175" cy="364.20322994015976" r="15" fill="#cfcfcf" stroke="#999" stroke-width="1"/>
+<circle cx="841.8010664559175" cy="364.20322994015976" r="5" fill="#fff" stroke="#777" stroke-width="1"/>
+<path d="M637.3,331.4 L598.2,364.2" fill="none" stroke="#cfcfcf" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="598.1989335440825" cy="364.20322994015976" r="15" fill="#cfcfcf" stroke="#999" stroke-width="1"/>
+<circle cx="598.1989335440825" cy="364.20322994015976" r="5" fill="#fff" stroke="#777" stroke-width="1"/>
+<circle cx="720" cy="262" r="114.0" fill="#ececec" stroke="#999" stroke-width="1.2"/>
 <circle cx="720" cy="262" r="75.0" fill="#dedede" stroke="#222222" stroke-width="1.2"/>
 <path d="M720.0,207.1 A54.9,54.9 0 1 1 720.0,207.1" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M677.2,227.6 L636.2,203.9 L627.8,218.4 L668.8,242.1 Z" fill="#f3f3f3" stroke="#888" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,2"/>
@@ -88,10 +84,10 @@
 <text x="165" y="174" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">and carries the Hall board</text>
 <path d="M170,146 L339.53328495391446,207.93405435962978" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="339.53328495391446" cy="207.93405435962978" r="2.2" fill="#999"/>
-<text x="165" y="200" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">housing puck (76 OD, dashed)</text>
-<text x="165" y="212" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">under the 100 mm faceplate</text>
-<path d="M170,196 L236.61666695105498,327.38771374401927" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="236.61666695105498" cy="327.38771374401927" r="2.2" fill="#999"/>
+<text x="165" y="200" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">housing, 76 mm across: its</text>
+<text x="165" y="212" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">face is flush with the ring pocket</text>
+<path d="M170,196 L231.273103968574,205.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="231.273103968574" cy="205.0" r="2.2" fill="#999"/>
 <text x="165" y="240" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">stop lug (printed, at 9 o'clock)</text>
 <text x="165" y="252" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">in a 59° channel: its walls are</text>
 <text x="165" y="264" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">the hard stops at 0° and 45°</text>
@@ -112,15 +108,15 @@
 <text x="165" y="414" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">ramp: it pushes the rotor back to 0°</text>
 <path d="M170,386 L252.05771365940052,217.0" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="252.05771365940052" cy="217.0" r="2.2" fill="#999"/>
-<text x="165" y="440" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">faceplate 100 mm round,</text>
-<text x="165" y="452" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">4× M3 into dish-floor inserts</text>
-<path d="M170,436 L213,379" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="213" cy="379" r="2.2" fill="#999"/>
+<text x="165" y="440" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">two ears on the base plate:</text>
+<text x="165" y="452" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">M3x10 + nut through the lock wall</text>
+<path d="M170,436 L208.1989335440825,364.20322994015976" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="208.1989335440825" cy="364.20322994015976" r="2.2" fill="#999"/>
 <text x="165" y="478" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">ramp on the rim, 300–345°</text>
 <path d="M170,474 L293.06031148046054,214.71935478359669" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="293.06031148046054" cy="214.71935478359669" r="2.2" fill="#999"/>
 <text x="875" y="112" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">twist the ring 45° clockwise</text>
-<text x="875" y="124" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">(seen from above)</text>
+<text x="875" y="124" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">(as you see it), like a key</text>
 <path d="M870,108 L778.5,160.67502775722068" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="778.5" cy="160.67502775722068" r="2.2" fill="#999"/>
 <text x="875" y="160" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">stop lug against the channel</text>
@@ -150,16 +146,12 @@
 <path d="M870,396 L660.7993648904878,240.45273097048286" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="660.7993648904878" cy="240.45273097048286" r="2.2" fill="#999"/>
 <path d="M60,488 L1040,488" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="20" y="512" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">Section A–A (axis, stop lug, switch) — ring inserted, 0°</text>
+<text x="20" y="512" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">Section A–A (axis, stop lug, switch) — ring inserted, 0°; drawn face up (in the lantern the face points at you)</text>
 <rect x="400" y="591" width="15" height="95" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
 <rect x="625" y="591" width="15" height="95" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
 <rect x="400" y="679" width="240" height="7" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
-<rect x="384" y="591" width="16" height="28" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
-<rect x="389" y="591" width="6" height="20" rx="0" fill="#9e9e9e" stroke="#222222" stroke-width="0.8"/>
-<rect x="640" y="591" width="16" height="28" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1.2"/>
-<rect x="645" y="591" width="6" height="20" rx="0" fill="#9e9e9e" stroke="#222222" stroke-width="0.8"/>
-<rect x="385" y="582" width="33" height="9" rx="0" fill="#f4f4f4" stroke="#222222" stroke-width="1.2"/>
-<rect x="622" y="582" width="33" height="9" rx="0" fill="#f4f4f4" stroke="#222222" stroke-width="1.2"/>
+<rect x="350" y="686" width="340" height="7" rx="0" fill="#e0e0e0" stroke="#222222" stroke-width="1.2"/>
+<rect x="469" y="686" width="102" height="7" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1" stroke-dasharray="2,2"/>
 <rect x="418" y="582" width="27" height="9" rx="0" fill="#f4f4f4" stroke="#222222" stroke-width="1.2"/>
 <rect x="595" y="582" width="27" height="9" rx="0" fill="#f4f4f4" stroke="#222222" stroke-width="1.2"/>
 <rect x="445" y="582" width="5" height="9" rx="0" fill="#f4f4f4" stroke="#222222" stroke-width="1.2"/>
@@ -175,9 +167,6 @@
 <rect x="516" y="605" width="8" height="5" rx="0" fill="#222" stroke="#222222" stroke-width="0.6"/>
 <rect x="498" y="610" width="44" height="5" rx="0" fill="#1a237e" stroke="#222222" stroke-width="0.8"/>
 <rect x="534" y="615" width="7" height="64" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1"/>
-<rect x="467" y="583" width="6" height="98" rx="0" fill="#444" stroke="#222222" stroke-width="0.8"/>
-<rect x="463" y="581" width="14" height="4" rx="0" fill="#444" stroke="#222222" stroke-width="0.8"/>
-<rect x="460" y="679" width="20" height="7" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1"/>
 <rect x="584" y="652" width="38" height="17" rx="0" fill="#e8e8e8" stroke="#222222" stroke-width="1.2"/>
 <path d="M618,650 L586,644" fill="none" stroke="#222222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="584" y="669" width="38" height="10" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1"/>
@@ -192,15 +181,15 @@
 <path d="M305,563 L490,532" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="490" cy="532" r="2.2" fill="#999"/>
 <text x="300" y="617" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">stop lug on the rotor rim rides in</text>
-<text x="300" y="629" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">a channel under the faceplate lip;</text>
+<text x="300" y="629" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">a channel under the housing's lip;</text>
 <text x="300" y="641" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">the lip also retains the rotor</text>
 <path d="M305,613 L470,622" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="470" cy="622" r="2.2" fill="#999"/>
-<text x="300" y="667" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">faceplate, 3 mm, sits flush in</text>
-<text x="300" y="679" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">the top dish floor; 4 x M3</text>
-<text x="300" y="691" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">screws into the dish</text>
-<path d="M305,663 L432,586" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="432" cy="586" r="2.2" fill="#999"/>
+<text x="300" y="667" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">lock wall behind the base plate;</text>
+<text x="300" y="679" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">a window in it passes the cables</text>
+<text x="300" y="691" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">to the hidden side</text>
+<path d="M305,663 L380,690" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="380" cy="690" r="2.2" fill="#999"/>
 <text x="300" y="717" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">spring + plunger (out of plane,</text>
 <text x="300" y="729" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">lower right) in a radial pocket,</text>
 <text x="300" y="741" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">10 mm spring, 4 mm stroke</text>
@@ -215,7 +204,7 @@
 <path d="M755,563 L529,589" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="529" cy="589" r="2.2" fill="#999"/>
 <text x="760" y="612" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">rotor 36 OD × 8 flat disc; its rim</text>
-<text x="760" y="624" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">lugs ride under the faceplate lip</text>
+<text x="760" y="624" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">lug rides under the housing's lip</text>
 <path d="M755,608 L586,602" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="586" cy="602" r="2.2" fill="#999"/>
 <text x="760" y="657" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">DRV5032 breakout in the base plate,</text>
@@ -228,8 +217,8 @@
 <text x="760" y="731" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">out of this plane)</text>
 <path d="M755,703 L610,652" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="610" cy="652" r="2.2" fill="#999"/>
-<text x="760" y="757" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">cables through the floor grommet</text>
-<text x="760" y="769" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">down the sphere's wire channel</text>
+<text x="760" y="757" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">cables through the wall window,</text>
+<text x="760" y="769" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">down behind the wall to the base</text>
 <path d="M755,753 L560,697" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="560" cy="697" r="2.2" fill="#999"/>
 </svg>

@@ -15,6 +15,7 @@ sys.path.insert(0, CAD)
 from svgkit import SVG, GREY, INK  # noqa: E402
 import params as P  # noqa: E402
 import render_views as RV  # noqa: E402
+import parts.sphere as SP  # noqa: E402
 
 BLUE, LBLUE, PURPLE = "#1d4ed8", "#bfdbfe", "#7c3aed"
 PRINT, PRINT_EDGE = "#a5d6a7", "#2e7d32"
@@ -31,7 +32,7 @@ def px(y, z):
 
 s = SVG(W, H, "Green Lantern power battery - fluid path and layout, true section at x = 0")
 s.text(20, 30, "Fluid path and layout — section through the centre, seen from the side", size=18, weight="bold")
-s.text(20, 48, "Drawn from the CAD (cad/output); 1.5 px = 1 mm. Front (audience) on the left, your side and the hand port on the right.",
+s.text(20, 48, "Drawn from the CAD (cad/output); 1.5 px = 1 mm. Display side on the left, your side (the hand opening) on the right.",
        size=11, color="#555")
 
 pl = RV.placements()
@@ -94,8 +95,20 @@ for sgn in (-1, 1):
 for n in sorted(M):
     if n.endswith("_envelope") or n.startswith("handle"):
         continue
-    fill = "#ffffff" if n == "diffuser" else ("#e0e0e0" if n in ("bay_floor", "glass_well", "led_carrier") else PRINT)
+    fill = "#ffffff" if n in ("diffuser", "top_diffuser") else ("#e0e0e0" if n in ("bay_floor", "glass_well", "lock_wall", "curtain_clamp") else PRINT)
     draw_polys(section(n), fill, PRINT_EDGE if fill == PRINT else "#616161", sw=0.9)
+
+# ------------------------------------------------------------------ LED strips (green) and the strip curtain
+LED = "#43a047"
+for z0 in SP.BACK_ROWS:                                   # rows on the wall's back face (display window)
+    (x0, y0), (x1, y1) = px(SP.WALL_BACK_Y - 3.0, SP.WALL_Z0 + z0 + Zc0), px(SP.WALL_BACK_Y - 0.2, SP.WALL_Z0 + z0 + 8 + Zc0)
+    s.rect(x0, y1, x1 - x0, y0 - y1, fill=LED, stroke="none", sw=0)
+zc0, zc1 = SP.FRONT_COL_Z                                 # columns on the front face, beside the lock (behind the cut)
+(x0, y0), (x1, y1) = px(SP.WALL_FRONT_Y, SP.WALL_Z0 + zc0 + Zc0), px(SP.WALL_FRONT_Y + 1.5, SP.WALL_Z0 + zc1 + Zc0)
+s.rect(x0, y1, x1 - x0, y0 - y1, fill="none", stroke=LED, sw=1.4, dash="3,2")
+for yr in (-40.0, 37.5):                                  # ring of strip inside the upper dish's floor hole
+    (x0, y0), (x1, y1) = px(yr, P.Z_SPHERE_TOP - 9.0), px(yr + 2.5, P.Z_SPHERE_TOP - 1.0)
+    s.rect(x0, y1, x1 - x0, y0 - y1, fill=LED, stroke="none", sw=0)
 
 # ------------------------------------------------------------------ glass, at the pour position and on its way out
 gz0 = P.Z_SPHERE_CENTER + P.GLASS_TOP_Z_LOCAL - P.GLASS_H
@@ -126,19 +139,25 @@ s.rect(fx0, fz1, fx1 - fx0, fz0 - fz1, rx=22, fill=SKIN, stroke=SKIN_EDGE, sw=1.
 rx_, rz_ = px(-13.8 + 6, P.Z_SPHERE_CENTER + P.SOCKET_Z_LOCAL)
 s.circle(rx_, rz_, 9, fill="none", stroke="#2e7d32", sw=4)
 
+for dy in (-2.5, 0.0, 2.5):                               # strip curtain hanging behind the hand port
+    s.path("M{:.1f},{:.1f} L{:.1f},{:.1f}".format(*px(P.CURTAIN_R + dy, P.Z_SPHERE_TOP - 12.0), *px(P.CURTAIN_R + dy, Zc0 - 46.0)),
+           stroke="#64b5f6", sw=2.2, dash="12,3", opacity=0.9)
+
 # ------------------------------------------------------------------ tube (blue) and cables (purple)
 jar, pump = M["bottle_envelope"].bounds, M["pump_envelope"].bounds
 jy = (jar[0][1] + jar[1][1]) / 2 - 10
+tip_z = Zc0 + SP.WALL_Z0 + P.NOZZLE_RISE + P.NOZZLE_BEND_R
 tube = [(jy, jar[0][2] + 5), (jy, jar[1][2] + 6), (pump[1][1] - 14, jar[1][2] + 6), (pump[1][1] - 14, pump[1][2] - 12),
-        (pump[1][1] - 6, pump[1][2] - 12), (pump[1][1] - 6, jar[1][2] + 14), (P.NOZZLE_TIP_XY[1], 165.0),
-        (P.NOZZLE_TIP_XY[1], P.Z_SPHERE_CENTER - 23.0)]
+        (pump[1][1] - 6, pump[1][2] - 12), (pump[1][1] - 6, jar[1][2] + 14), (P.NOZZLE_TIP_XY[1] - 6, 165.0),
+        (P.NOZZLE_TIP_XY[1], tip_z)]
 s.wire([px(*p) for p in tube], BLUE, sw=2.4)
 for a, b in ((0, 1), (5, 6), (6, 7)):
     (xa, ya), (xb, yb) = px(*tube[a]), px(*tube[b])
     s.arrow([(xa + 0.35 * (xb - xa), ya + 0.35 * (yb - ya)), (xa + 0.6 * (xb - xa), ya + 0.6 * (yb - ya))], BLUE, sw=2.4)
-tx, tz = px(P.NOZZLE_TIP_XY[1], P.Z_SPHERE_CENTER - 23.0)
+tx, tz = px(P.NOZZLE_TIP_XY[1], tip_z)
 s.arrow([(tx, tz + 6), (tx, tz + 18)], BLUE, sw=1.6)          # the stream falls into the glass
-cable = [(-25.0, P.Z_SPHERE_CENTER - 27.0), (-25.0, 205.0), (P.NOZZLE_TIP_XY[1] + 10, 196.0), (-30.0, 140.0), (-60.0, 70.0)]
+cable = [(SP.WALL_BACK_Y - 1.0, Zc0 + P.SOCKET_Z_LOCAL), (SP.WALL_BACK_Y - 2.5, Zc0 - 40.0), (SP.WIRE_SLOT_XY[1], 196.0),
+         (-36.0, 140.0), (-60.0, 70.0)]
 s.wire([px(*p) for p in cable], PURPLE, sw=1.5, dash="5,3")
 
 # ------------------------------------------------------------------ the glass's way out
@@ -161,22 +180,24 @@ def label(x, y, rows, tx, ty, anchor="start", size=11):
 Zc = P.Z_SPHERE_CENTER
 LX, RX = 262, 690
 label(LX, 120, ["handle (dashed: it stands beside", "the section, not in it)"], *px(8, 430), anchor="end")
-label(LX, 190, ["upper dish, closed by top_cap", "(nothing inside)"], *px(-30, P.Z_SPHERE_TOP + 20), anchor="end")
-label(LX, 250, ["sphere (dashed): this cut passes", "through the front window and", "the open hand port"], *px(-89, Zc + 8), anchor="end")
-label(LX, 300, ["white diffuser in the front", "window; 8 rows of green LED", "strip on the carrier behind it"], *px(-61.5, Zc + 25), anchor="end")
-label(LX, 360, ["socket screwed to the back of", "the LED carrier (ears + standoffs)"], *px(-30, Zc - 20), anchor="end")
-label(LX, 430, ["nozzle guide (beside the section):", "the tube ends ~1 cm above the rim"], *px(-6, Zc - 23), anchor="end")
-label(LX, 492, ["glass slot with a ridge that holds", "the glass at the pour position"], *px(-20, gz0 + 4), anchor="end")
-label(LX, 560, ["lower dish, hollow: the slot hangs", "in it; tube and cables pass down"], *px(-50, 150), anchor="end")
+label(LX, 180, ["frosted disc on the top dish; a ring", "of LED strip in the hole under it"], *px(-30, P.Z_SPHERE_TOP + 2), anchor="end")
+label(LX, 250, ["sphere (dashed): this cut passes", "through the display window and", "the hand opening"], *px(-89, Zc + 8), anchor="end")
+label(LX, 310, ["display window: white diffuser;", "4 rows of LED strip on the back", "of the lock wall light it"], *px(-61.5, Zc + 25), anchor="end")
+label(LX, 375, ["lock wall: the lock on its face,", "the nozzle hidden behind it"], *px(SP.WALL_BACK_Y, Zc + 30), anchor="end")
+label(LX, 440, ["nozzle guide behind the wall:", "the tube pours into the back", "third of the glass"], *px(P.NOZZLE_TIP_XY[1], tip_z), anchor="end")
+label(LX, 510, ["glass slot: push the glass back", "to the stop (a ridge clicks it in)"], *px(-30, gz0 + 4), anchor="end")
+label(LX, 570, ["lower dish, hollow: the slot hangs", "in it; tube and cables pass down"], *px(-50, 150), anchor="end")
 label(LX, 650, ["8 oz jar (behind the section),", "vented lid, pickup tube to the bottom"], *px(jar[0][1] + 8, 80), anchor="end")
-label(LX, 720, ["electronics board on the deck panel;", "cables come down from the sphere"], *px(-60, 70), anchor="end")
+label(LX, 720, ["electronics board on the deck panel;", "cables come down behind the wall"], *px(-60, 70), anchor="end")
 label(LX, 790, ["USB-C PD power bank (12 V),", "flat on the floor under the deck"], *px(-40, 14), anchor="end")
 
-label(RX, 230, ["your fist, punched in through", "the open hand port; the ring", "face sits in the socket"], *px(40, Zc + 30))
-label(RX, 330, ["1  slide the full glass back 24 mm", "2  lift it clear of the slot", "3  bring it out through the port"], *px(y_out + 26, z_lift + P.GLASS_H - 4))
-label(RX, 420, ["glass rim ~2 cm under the", "knuckles: open your fingers", "onto it"], *px(gy + rt - 2, gz0 + P.GLASS_H))
-label(RX, 640, ["Kamoer KPHM200 pump (behind", "the section), head toward the", "rear door"], *px(pump[1][1] - 10, 60))
-label(RX, 730, ["rear door: refill the jar,", "charge or unplug the bank"], *px(80, 60))
+label(RX, 170, ["strip curtain (frosted plastic", "strips) hangs behind the hand", "opening; your hand parts it"], *px(P.CURTAIN_R + 2, Zc + 35))
+label(RX, 250, ["your fist, punched in; the ring", "face sits in the lock; LED", "columns beside the lock"], *px(40, Zc + 20))
+label(RX, 330, ["to take the glass: grip its front,", "1  slide it toward you %d mm" % P.GLASS_SLIDE, "2  lift it clear of the slot",
+                "3  bring it out through the curtain"], *px(y_out + 26, z_lift + P.GLASS_H - 4))
+label(RX, 440, ["glass rim 3 mm under the lock"], *px(gy + rt - 2, gz0 + P.GLASS_H))
+label(RX, 640, ["Kamoer KPHM200 pump (behind", "the section), head toward the", "service door"], *px(pump[1][1] - 10, 60))
+label(RX, 730, ["service door (your side): refill", "the jar, charge or unplug the bank"], *px(80, 60))
 
 # legend
 lx, ly = 470, 880
