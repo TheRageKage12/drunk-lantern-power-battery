@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 850" width="1000" height="850" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
-<title>Green Lantern power battery - fluid path and internal layout, side view</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 900" width="1000" height="900" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
+<title>Green Lantern power battery - fluid path and layout, true section at x = 0</title>
 <defs>
 <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker>
 <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
@@ -10,171 +10,136 @@
 <marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f77f00"/></marker>
 <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d62828"/></marker>
 </defs>
-<rect x="0" y="0" width="1000" height="850" fill="#ffffff"/>
-<text x="20" y="32" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Fluid path and internal layout — side view (section)</text>
-<text x="20" y="50" font-size="11" text-anchor="start" font-weight="normal" fill="#555">1.8× rebuild, ~430 mm tall; schematic, not to scale</text>
-<path d="M350,406 L350,250 A150,150 0 0 1 650,250 L650,406" fill="none" stroke="#777777" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
-<path d="M350,406 L350,250 A150,150 0 0 1 650,250 L650,406" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,4"/>
-<circle cx="350" cy="406" r="5" fill="#bdbdbd" stroke="#777777" stroke-width="1"/>
-<circle cx="650" cy="406" r="5" fill="#bdbdbd" stroke="#777777" stroke-width="1"/>
-<rect x="362" y="770" width="276" height="20" rx="0" fill="#f1f1f1" stroke="#222222" stroke-width="1.4"/>
-<rect x="372" y="650" width="256" height="122" rx="0" fill="#f1f1f1" stroke="#222222" stroke-width="1.4"/>
-<path d="M374,650 L448,540 L552,540 L626,650 Z" fill="#f1f1f1" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M374,160 L448,272 L552,272 L626,160" fill="#f1f1f1" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M374,160 L626,160" fill="none" stroke="#222222" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,3"/>
-<path d="M415,302 A134,134 0 0 1 585,302 L585,510 A134,134 0 0 1 415,510 Z" fill="#ffffff" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M500,274 L500,538" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
-<rect x="455" y="330" width="90" height="150" rx="0" fill="#fafafa" stroke="#222222" stroke-width="1" stroke-dasharray="2,2"/>
-<rect x="460" y="478" width="88" height="8" rx="0" fill="#cfd8dc" stroke="#222222" stroke-width="1"/>
-<path d="M470,478 L476,400 L524,400 L530,478 Z" fill="#eef6ff" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M472,452 L528,452" fill="none" stroke="#1d4ed8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,2"/>
-<rect x="512" y="362" width="18" height="14" rx="0" fill="#cfd8dc" stroke="#222222" stroke-width="1"/>
-<path d="M415,327 L415,484" fill="none" stroke="#2a9d2a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-<path d="M427,338 L427,474" fill="none" stroke="#2a9d2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,3"/>
-<circle cx="427" cy="342.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="358.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="375.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="391.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="408.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="424.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="441.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="457.5" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<circle cx="427" cy="474.0" r="2.4" fill="#4caf50" stroke="none" stroke-width="1.2"/>
-<path d="M585,350 L585,480" fill="none" stroke="#8d6e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="581" y="346" width="8" height="6" rx="0" fill="#5d4037" stroke="none" stroke-width="1.2"/>
-<rect x="581" y="474" width="8" height="6" rx="0" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
-<path d="M660,430 L596,430" fill="none" stroke="#8d6e63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrK)"/>
-<rect x="458" y="258" width="84" height="32" rx="0" fill="#dcdcdc" stroke="#222222" stroke-width="1.2"/>
-<rect x="458" y="250" width="20" height="8" rx="0" fill="#a5d6a7" stroke="#222222" stroke-width="0.8"/>
-<rect x="522" y="250" width="20" height="8" rx="0" fill="#a5d6a7" stroke="#222222" stroke-width="0.8"/>
-<rect x="478" y="246" width="44" height="12" rx="0" fill="#bdbdbd" stroke="#222222" stroke-width="1"/>
-<circle cx="500" cy="228" r="18" fill="none" stroke="#2e7d32" stroke-width="5"/>
-<rect x="492" y="206" width="16" height="8" rx="0" fill="#2e7d32" stroke="none" stroke-width="1.2"/>
-<rect x="380" y="690" width="36" height="92" rx="0" fill="#e0e0e0" stroke="#222222" stroke-width="1.2"/>
-<rect x="378" y="660" width="64" height="14" rx="0" fill="#c8e6c9" stroke="#222222" stroke-width="1.2"/>
-<circle cx="453" cy="737" r="21" fill="#e0e0e0" stroke="#222222" stroke-width="1.3"/>
-<circle cx="453.0" cy="747.0" r="4" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
-<circle cx="444.33974596215563" cy="732.0" r="4" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
-<circle cx="461.66025403784437" cy="732.0" r="4" fill="#9e9e9e" stroke="none" stroke-width="1.2"/>
-<rect x="474" y="719" width="40" height="38" rx="0" fill="#e0e0e0" stroke="#222222" stroke-width="1.3"/>
-<rect x="518" y="605" width="72" height="177" rx="10" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<rect x="518" y="655" width="72" height="127" rx="10" fill="#bfdbfe" stroke="none" stroke-width="1.2"/>
-<rect x="518" y="605" width="72" height="177" rx="10" fill="none" stroke="#222222" stroke-width="1.4"/>
-<rect x="538" y="593" width="36" height="14" rx="0" fill="#9e9e9e" stroke="#222222" stroke-width="1"/>
-<path d="M570,593 L570,586" fill="none" stroke="#222222" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M584,570 L572,586" fill="none" stroke="#777777" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrGy)"/>
-<path d="M556,607 L556,772" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M556,760 L556,700" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
-<rect x="626" y="656" width="10" height="14" rx="0" fill="#424242" stroke="#222222" stroke-width="1"/>
-<path d="M628,682 L628,775" fill="none" stroke="#8d6e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="624" y="678" width="8" height="6" rx="0" fill="#5d4037" stroke="none" stroke-width="1.2"/>
-<rect x="624" y="770" width="8" height="6" rx="0" fill="#5d4037" stroke="none" stroke-width="1.2"/>
-<path d="M556,593 L556,573 L443,573 L443,717" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M520,573 L470,573" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
-<path d="M463,717 L463,585 L530,585 L530,520 L548,520 L548,372 L521,372 L521,392" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M463,700 L463,640" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
-<path d="M548,500 L548,420" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
-<path d="M521,378 L521,395" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
-<rect x="524" y="536" width="12" height="8" rx="0" fill="#424242" stroke="none" stroke-width="1.2"/>
-<path d="M420,660 L420,622 L450,622 L450,522 L444,522 L444,292 L470,278" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
-<text x="40" y="100" font-size="15" text-anchor="start" font-weight="bold" fill="#222222">FRONT (audience)</text>
-<text x="960" y="100" font-size="15" text-anchor="end" font-weight="bold" fill="#222222">REAR (owner)</text>
-<path d="M40,112 L170,112" fill="none" stroke="#777777" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrGy)"/>
-<path d="M960,112 L830,112" fill="none" stroke="#777777" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrGy)"/>
-<text x="300" y="150" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">handle arch — outline only (it really</text>
-<text x="300" y="163" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">spans left–right across this view)</text>
-<path d="M294,146 L351,300" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="351" cy="300" r="2.2" fill="#777777"/>
-<text x="300" y="205" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">upper dish, mouth up</text>
-<text x="300" y="218" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(charging socket in its floor)</text>
-<path d="M294,201 L405,207" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="405" cy="207" r="2.2" fill="#777777"/>
-<text x="300" y="300" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">sphere: two printed halves</text>
-<text x="300" y="313" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">split on the dashed line</text>
-<path d="M294,296 L432,300" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="432" cy="300" r="2.2" fill="#777777"/>
-<text x="300" y="365" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">front window: white diffuser,</text>
-<text x="300" y="378" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">green LED strip rows behind it</text>
-<path d="M294,361 L414,380" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="414" cy="380" r="2.2" fill="#777777"/>
-<text x="300" y="440" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">hidden glass bay with cradle;</text>
-<text x="300" y="453" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">shot glass sits inside</text>
-<path d="M294,436 L456,430" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="456" cy="430" r="2.2" fill="#777777"/>
-<text x="300" y="520" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">bay-floor grommet (tube seal)</text>
-<path d="M294,516 L523,540" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="523" cy="540" r="2.2" fill="#777777"/>
-<text x="300" y="580" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">lower dish, mouth down — hollow,</text>
-<text x="300" y="593" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">tube and wires pass its neck</text>
-<path d="M294,576 L400,612" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="400" cy="612" r="2.2" fill="#777777"/>
-<text x="300" y="640" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">wire channel to the socket</text>
-<text x="300" y="653" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(dashed purple)</text>
-<path d="M294,636 L420,640" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="420" cy="640" r="2.2" fill="#777777"/>
-<text x="300" y="690" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">electronics board: XIAO, AHCT125,</text>
-<text x="300" y="703" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">2 MOSFETs, LM2596 buck</text>
-<path d="M294,686 L376,667" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="376" cy="667" r="2.2" fill="#777777"/>
-<text x="300" y="745" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">USB-C PD power bank (12 V),</text>
-<text x="300" y="758" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">flat on the floor under the deck</text>
-<path d="M294,741 L379,735" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="379" cy="735" r="2.2" fill="#777777"/>
-<text x="300" y="805" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">base drum (stepped foot)</text>
-<path d="M294,801 L372,782" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="372" cy="782" r="2.2" fill="#777777"/>
-<text x="700" y="150" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">ring key cap in the rotor pocket</text>
-<text x="700" y="163" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(6×2 mm magnet on the axis)</text>
-<path d="M694,146 L519,228" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="519" cy="228" r="2.2" fill="#777777"/>
-<text x="700" y="205" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">charging socket module: rotor, Hall</text>
-<text x="700" y="218" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">sensor, microswitch, return plunger</text>
-<path d="M694,201 L543,270" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="543" cy="270" r="2.2" fill="#777777"/>
-<text x="700" y="300" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">tube rises behind the bay</text>
-<text x="700" y="313" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">to the nozzle clip</text>
-<path d="M694,296 L549,440" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="549" cy="440" r="2.2" fill="#777777"/>
-<text x="700" y="365" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">nozzle clip above the glass</text>
-<text x="700" y="378" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(aims into the centre)</text>
-<path d="M694,361 L531,369" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="531" cy="369" r="2.2" fill="#777777"/>
-<text x="700" y="420" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear hatch, magnet-latched:</text>
-<text x="700" y="433" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">reach in, take the glass</text>
-<path d="M694,416 L592,410" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="592" cy="410" r="2.2" fill="#777777"/>
-<text x="700" y="480" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">removable drip tray under the glass</text>
-<path d="M694,476 L549,482" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="549" cy="482" r="2.2" fill="#777777"/>
-<text x="700" y="560" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">silicone tube from the pump</text>
-<text x="700" y="573" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(1/8" ID × 1/4" OD in the head)</text>
-<path d="M694,556 L531,575" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="531" cy="575" r="2.2" fill="#777777"/>
-<text x="700" y="612" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">vented cap: air in as liquid leaves;</text>
-<text x="700" y="625" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">pickup tube reaches the bottom</text>
-<path d="M694,608 L575,600" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="575" cy="600" r="2.2" fill="#777777"/>
-<text x="700" y="660" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">(no master switch: unplug the bank)</text>
-<path d="M694,656 L637,663" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="637" cy="663" r="2.2" fill="#777777"/>
-<text x="700" y="700" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">8 oz (250 mL) squat jar on the</text>
-<text x="700" y="713" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">deck, refilled through the door</text>
-<path d="M694,696 L591,690" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="591" cy="690" r="2.2" fill="#777777"/>
-<text x="700" y="760" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear service door: refill the</text>
-<text x="700" y="773" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">jar, charge/unplug the bank</text>
-<path d="M694,756 L632,745" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="632" cy="745" r="2.2" fill="#777777"/>
-<text x="468" y="822" font-size="11" text-anchor="middle" font-weight="normal" fill="#222222">Kamoer KPHM200 peristaltic pump, 12 V</text>
-<path d="M468,810 L468,772" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="468" cy="772" r="2.2" fill="#777777"/>
-<text x="490" y="757" font-size="8" text-anchor="start" font-weight="normal" fill="#555">pump</text>
-<path d="M660,818 L688,818" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
-<text x="694" y="822" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">liquid path</text>
-<path d="M770,818 L798,818" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
-<text x="804" y="822" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">wires</text>
-<path d="M850,818 L878,818" fill="none" stroke="#8d6e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="884" y="822" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">hinged door / hatch</text>
-<path d="M40,822 L112,822 M40,817 L40,827 M112,817 L112,827" fill="none" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="76" y="838" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">50 mm</text>
+<rect x="0" y="0" width="1000" height="900" fill="#ffffff"/>
+<text x="20" y="30" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Fluid path and layout — section through the centre, seen from the side</text>
+<text x="20" y="48" font-size="11" text-anchor="start" font-weight="normal" fill="#555">Drawn from the CAD (cad/output); 1.5 px = 1 mm. Front (audience) on the left, your side and the hand port on the right.</text>
+<path d="M317.5,799.5 L542.5,799.5 L542.5,837.0 L317.5,837.0 L317.5,799.5 Z" fill="#e0e0e0" fill-rule="evenodd" stroke="#757575" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4,3" opacity="0.85"/>
+<path d="M331.0,768.8 L331.0,767.7 L331.0,766.5 L331.0,765.2 L331.0,763.7 L331.0,762.2 L331.0,760.5 L331.0,758.6 L331.0,756.8 L331.0,754.8 L331.0,752.7 L331.0,750.6 L331.0,748.4 L331.0,746.2 L331.0,744.0 L331.0,741.8 L331.0,739.5 L331.0,737.3 L331.0,735.1 L331.0,732.9 L331.0,730.8 L331.0,728.7 L331.0,726.8 L331.0,724.9 L331.0,723.0 L331.0,721.3 L331.0,719.8 L331.0,718.3 L331.0,717.0 L331.0,715.8 L331.0,714.7 L331.0,713.8 L331.0,713.1 L331.0,712.5 L331.0,712.1 L331.0,711.8 L331.0,711.8 L448.0,711.8 L448.0,694.5 L508.0,694.5 L508.0,789.0 L448.0,789.0 L448.0,771.8 L331.0,771.8 L331.0,771.7 L331.0,771.4 L331.0,771.0 L331.0,770.4 L331.0,769.7 L331.0,768.8 Z" fill="#e0e0e0" fill-rule="evenodd" stroke="#757575" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4,3" opacity="0.85"/>
+<path d="M362.4,789.0 L361.6,789.0 L361.2,789.0 L361.0,789.0 L361.0,675.0 L361.2,675.0 L361.6,675.0 L362.4,675.0 L363.5,675.0 L364.9,675.0 L366.6,675.0 L368.6,675.0 L370.9,675.0 L373.4,675.0 L376.2,675.0 L379.2,675.0 L382.5,675.0 L385.9,675.0 L389.5,675.0 L393.3,675.0 L397.2,675.0 L401.2,675.0 L405.3,675.0 L409.5,675.0 L413.7,675.0 L418.0,675.0 L422.3,675.0 L426.5,675.0 L430.7,675.0 L434.8,675.0 L438.8,675.0 L442.7,675.0 L446.5,675.0 L450.1,675.0 L453.5,675.0 L456.8,675.0 L459.8,675.0 L462.6,675.0 L465.1,675.0 L467.4,675.0 L469.4,675.0 L471.1,675.0 L472.5,675.0 L473.6,675.0 L474.4,675.0 L474.8,675.0 L475.0,675.0 L475.0,789.0 L474.8,789.0 L474.4,789.0 L473.6,789.0 L472.5,789.0 L471.1,789.0 L469.4,789.0 L467.4,789.0 L465.1,789.0 L462.6,789.0 L459.8,789.0 L456.8,789.0 L453.5,789.0 L450.1,789.0 L446.5,789.0 L442.7,789.0 L438.8,789.0 L434.8,789.0 L430.7,789.0 L426.5,789.0 L422.3,789.0 L418.0,789.0 L413.7,789.0 L409.5,789.0 L405.3,789.0 L401.2,789.0 L397.2,789.0 L393.3,789.0 L389.5,789.0 L385.9,789.0 L382.5,789.0 L379.2,789.0 L376.2,789.0 L373.4,789.0 L370.9,789.0 L368.6,789.0 L366.6,789.0 L364.9,789.0 L363.5,789.0 L362.4,789.0 Z" fill="#bfdbfe" fill-rule="evenodd" stroke="#757575" stroke-width="1" stroke-linejoin="round" stroke-dasharray="4,3" opacity="0.85"/>
+<path d="M433.8,328.5 L433.9,328.5 L434.0,328.5 L434.1,328.5 L434.3,328.5 L434.4,328.5 L434.6,328.5 L434.7,328.5 L434.9,328.5 L435.1,328.5 L435.3,328.5 L435.5,328.5 L435.7,328.5 L435.9,328.5 L436.2,328.5 L436.4,328.5 L436.6,328.5 L441.1,328.5 L441.1,322.0 L441.1,322.0 L441.1,322.0 L441.1,322.0 L441.1,321.9 L441.1,321.9 L441.1,321.8 L441.1,321.7 L441.1,321.6 L441.1,321.5 L441.1,321.4 L441.1,321.2 L441.1,321.1 L441.1,320.9 L441.1,320.8 L441.1,320.6 L441.1,320.4 L441.1,320.3 L441.1,320.1 L441.1,319.9 L441.1,319.7 L441.1,319.5 L441.1,319.3 L441.1,319.1 L441.1,318.9 L441.1,318.7 L441.1,318.6 L441.1,318.4 L441.1,318.2 L441.1,318.1 L441.1,317.9 L441.1,317.8 L441.1,317.6 L441.1,317.5 L441.1,317.4 L441.1,317.3 L441.1,317.2 L441.1,317.1 L441.1,317.1 L441.1,317.0 L441.1,317.0 L441.1,317.0 L441.1,317.0 L441.1,304.0 L441.1,304.0 L441.1,304.0 L441.1,303.9 L441.1,303.9 L441.1,303.8 L441.1,303.7 L441.1,303.6 L441.1,303.5 L441.1,303.4 L441.1,303.2 L441.1,303.1 L441.1,302.9 L441.1,302.8 L441.1,302.6 L441.1,302.4 L441.1,302.3 L441.1,302.1 L441.1,301.9 L441.1,301.7 L441.1,301.5 L441.1,301.3 L441.1,301.1 L441.1,300.9 L441.1,300.7 L441.1,300.6 L441.1,300.4 L441.1,300.2 L441.1,299.2 L441.1,293.0 L445.6,293.0 L445.8,293.0 L446.0,293.0 L446.3,293.0 L446.5,293.0 L446.7,293.0 L446.9,293.0 L447.1,293.0 L447.3,293.0 L447.5,293.0 L447.6,293.0 L447.8,293.0 L447.9,293.0 L448.1,293.0 L448.2,293.0 L448.3,293.0 L448.4,293.0 L448.5,293.0 L448.5,293.0 L448.6,293.0 L448.6,293.0 L448.6,293.0 L448.6,297.3 L448.6,297.4 L448.6,301.5 L448.6,305.7 L448.6,315.3 L448.6,319.5 L448.6,323.7 L448.6,481.0 L447.4,482.2 L447.4,482.2 L447.4,482.2 L447.4,482.2 L447.3,482.2 L447.3,482.2 L447.2,482.2 L447.2,482.2 L447.1,482.2 L447.0,482.2 L446.9,482.2 L446.8,482.2 L446.7,482.2 L446.6,482.2 L446.5,482.2 L446.4,482.2 L446.3,482.2 L446.1,482.2 L446.0,482.2 L445.9,482.2 L445.7,482.2 L445.6,482.2 L436.6,482.2 L436.5,482.2 L436.3,482.2 L436.2,482.2 L436.1,482.2 L435.9,482.2 L435.8,482.2 L435.7,482.2 L435.6,482.2 L435.5,482.2 L435.4,482.2 L435.3,482.2 L435.2,482.2 L435.1,482.2 L435.0,482.2 L435.0,482.2 L434.9,482.2 L434.9,482.2 L434.8,482.2 L434.8,482.2 L434.8,482.2 L434.8,482.2 L433.6,481.0 L433.6,328.5 L433.6,328.5 L433.6,328.5 L433.7,328.5 L433.7,328.5 L433.8,328.5 Z M443.2,471.8 L443.1,471.7 L443.0,471.5 L442.8,471.4 L442.7,471.3 L442.5,471.1 L442.4,471.0 L442.2,471.0 L442.0,470.9 L441.9,470.8 L441.7,470.8 L441.5,470.7 L441.3,470.7 L441.1,470.7 L440.9,470.7 L440.7,470.7 L440.5,470.8 L440.3,470.8 L440.2,470.9 L440.0,471.0 L439.8,471.0 L439.7,471.1 L439.5,471.3 L439.4,471.4 L439.2,471.5 L439.1,471.7 L439.0,471.8 L438.9,472.0 L438.8,472.1 L438.7,472.3 L438.7,472.5 L438.6,472.7 L438.6,472.9 L438.6,473.1 L438.5,473.2 L438.6,473.4 L438.6,473.6 L438.6,473.8 L438.7,474.0 L438.7,474.2 L438.8,474.4 L438.9,474.5 L439.0,474.7 L439.1,474.8 L439.2,475.0 L439.4,475.1 L439.5,475.2 L439.7,475.4 L439.8,475.5 L440.0,475.5 L440.2,475.6 L440.3,475.7 L440.5,475.7 L440.7,475.8 L440.9,475.8 L441.1,475.8 L441.3,475.8 L441.5,475.8 L441.7,475.7 L441.9,475.7 L442.0,475.6 L442.2,475.5 L442.4,475.5 L442.5,475.4 L442.7,475.2 L442.8,475.1 L443.0,475.0 L443.1,474.8 L443.2,474.7 L443.3,474.5 L443.4,474.4 L443.5,474.2 L443.5,474.0 L443.6,473.8 L443.6,473.6 L443.6,473.4 L443.6,473.2 L443.6,473.1 L443.6,472.9 L443.6,472.7 L443.5,472.5 L443.5,472.3 L443.4,472.1 L443.3,472.0 L443.2,471.8 Z M447.0,482.1 L447.0,482.1 L447.0,482.1 L447.0,482.1 Z" fill="none" fill-rule="evenodd" stroke="#777777" stroke-width="1" stroke-linejoin="round" stroke-dasharray="5,4"/>
+<path d="M433.6,250.7 L433.6,246.7 L433.6,240.7 L433.6,235.7 L433.6,231.0 L433.6,225.0 L433.6,221.5 L433.6,214.6 L433.6,212.5 L433.6,204.7 L433.6,199.1 L433.6,195.8 L433.6,195.3 L433.6,188.2 L433.6,186.3 L433.6,178.0 L433.6,174.8 L433.6,170.2 L433.6,169.0 L433.6,163.9 L433.6,163.1 L433.6,156.7 L433.6,155.8 L433.6,152.8 L433.6,151.0 L433.6,150.6 L433.6,149.6 L433.6,146.1 L433.6,143.8 L433.6,143.8 L433.6,143.8 L433.6,143.8 L433.6,143.7 L433.6,143.6 L433.6,143.6 L433.6,143.5 L433.6,143.4 L433.6,143.3 L433.6,143.1 L433.6,143.0 L433.6,142.9 L433.6,142.7 L433.6,142.5 L433.6,142.4 L433.6,142.2 L433.6,142.0 L433.6,142.0 L433.6,141.8 L433.6,141.6 L433.6,141.5 L433.6,141.3 L433.6,141.1 L433.6,140.9 L433.6,140.7 L433.6,140.5 L433.6,140.3 L433.6,140.2 L433.6,140.0 L433.6,139.8 L433.6,139.7 L433.6,139.5 L433.6,139.4 L433.6,139.3 L433.6,139.2 L433.6,139.1 L433.6,139.0 L433.6,138.9 L433.6,138.8 L433.6,138.8 L433.6,138.7 L433.6,138.7 L433.6,138.7 L433.6,138.6 L433.6,138.5 L433.6,136.1 L433.6,134.5 L433.6,134.4 L433.6,133.6 L433.6,133.6 L433.6,133.4 L433.6,133.2 L433.7,133.0 L433.7,132.8 L433.8,132.6 L433.8,132.5 L433.9,132.3 L434.0,132.1 L434.1,131.9 L434.2,131.8 L434.3,131.6 L434.5,131.5 L434.6,131.3 L434.8,131.2 L434.9,131.1 L435.1,131.0 L435.3,130.9 L435.4,130.8 L435.6,130.8 L435.8,130.7 L436.0,130.7 L436.2,130.6 L436.4,130.6 L436.6,130.6 L441.1,130.6 L441.1,130.6 L441.1,131.5 L441.1,131.5 L445.6,131.5 L445.8,131.5 L446.0,131.5 L446.2,131.6 L446.4,131.6 L446.6,131.7 L446.8,131.7 L446.9,131.8 L447.1,131.9 L447.3,132.0 L447.4,132.1 L447.6,132.3 L447.7,132.4 L447.9,132.5 L448.0,132.7 L448.1,132.8 L448.2,133.0 L448.3,133.2 L448.4,133.4 L448.4,133.6 L448.5,133.7 L448.5,133.9 L448.6,134.1 L448.6,134.3 L448.6,134.5 L448.6,136.3 L448.6,138.8 L448.6,142.2 L448.6,146.4 L448.6,149.6 L448.6,151.3 L448.6,151.3 L448.6,153.7 L448.6,156.8 L448.6,157.0 L448.6,160.7 L448.6,165.2 L448.6,170.4 L448.6,170.5 L448.6,176.2 L448.6,178.3 L448.6,182.7 L448.6,186.6 L448.6,189.7 L448.6,195.5 L448.6,197.3 L448.6,205.0 L448.6,213.8 L448.6,214.9 L448.6,222.7 L448.6,225.2 L448.6,232.0 L448.6,235.8 L448.6,241.6 L448.6,246.8 L448.6,251.4 L448.6,258.0 L448.6,261.5 L448.6,269.4 L448.6,271.8 L448.6,280.9 L448.6,282.1 L448.6,292.5 L448.6,292.5 L448.6,292.5 L448.5,292.5 L448.5,292.5 L448.4,292.5 L448.3,292.5 L448.2,292.5 L448.1,292.5 L447.9,292.5 L447.8,292.5 L447.6,292.5 L447.5,292.5 L447.3,292.5 L447.1,292.5 L446.9,292.5 L446.7,292.5 L446.5,292.5 L446.3,292.5 L446.0,292.5 L445.8,292.5 L445.6,292.5 L441.1,292.5 L441.1,319.3 L441.1,319.5 L441.1,319.7 L441.1,319.9 L441.1,320.1 L441.1,320.3 L441.1,320.4 L441.1,320.6 L441.1,320.8 L441.1,320.9 L441.1,321.1 L441.1,321.2 L441.1,321.4 L441.1,321.5 L441.1,321.6 L441.1,321.7 L441.1,321.8 L441.1,321.9 L441.1,321.9 L441.1,322.0 L441.1,322.0 L441.1,322.0 L441.1,322.0 L441.1,328.0 L436.6,328.0 L436.4,328.0 L436.2,328.0 L435.9,328.0 L435.7,328.0 L435.5,328.0 L435.3,328.0 L435.1,328.0 L434.9,328.0 L434.7,328.0 L434.6,328.0 L434.4,328.0 L434.3,328.0 L434.1,328.0 L434.0,328.0 L433.9,328.0 L433.8,328.0 L433.7,328.0 L433.7,328.0 L433.6,328.0 L433.6,328.0 L433.6,328.0 L433.6,322.0 L433.6,322.0 L433.6,322.0 L433.6,322.0 L433.6,321.9 L433.6,321.9 L433.6,321.8 L433.6,321.7 L433.6,321.6 L433.6,321.5 L433.6,321.4 L433.6,321.2 L433.6,321.1 L433.6,320.9 L433.6,320.8 L433.6,320.6 L433.6,320.4 L433.6,320.3 L433.6,320.1 L433.6,319.9 L433.6,319.7 L433.6,319.5 L433.6,319.5 L433.6,319.3 L433.6,319.1 L433.6,318.9 L433.6,318.7 L433.6,318.6 L433.6,318.4 L433.6,318.2 L433.6,318.1 L433.6,317.9 L433.6,317.8 L433.6,317.6 L433.6,317.5 L433.6,317.4 L433.6,317.3 L433.6,317.2 L433.6,317.1 L433.6,317.1 L433.6,317.0 L433.6,317.0 L433.6,317.0 L433.6,317.0 L433.6,304.0 L433.6,304.0 L433.6,304.0 L433.6,304.0 L433.6,303.9 L433.6,303.9 L433.6,303.8 L433.6,303.7 L433.6,303.6 L433.6,303.5 L433.6,303.4 L433.6,303.2 L433.6,303.1 L433.6,302.9 L433.6,302.8 L433.6,302.6 L433.6,302.4 L433.6,302.3 L433.6,302.1 L433.6,301.9 L433.6,301.7 L433.6,301.5 L433.6,301.3 L433.6,301.1 L433.6,300.9 L433.6,300.7 L433.6,300.6 L433.6,300.4 L433.6,300.2 L433.6,300.1 L433.6,300.0 L433.6,299.9 L433.6,299.8 L433.6,299.6 L433.6,299.5 L433.6,299.4 L433.6,299.3 L433.6,299.2 L433.6,299.1 L433.6,299.1 L433.6,299.0 L433.6,299.0 L433.6,299.0 L433.6,299.0 L433.6,292.5 L433.6,281.9 L433.6,271.4 L433.6,261.0 L433.6,257.9 L433.6,250.7 Z" fill="none" fill-rule="evenodd" stroke="#777777" stroke-width="1" stroke-linejoin="round" stroke-dasharray="5,4"/>
+<path d="M412.8,507.3 L412.8,507.1 L412.8,507.0 L412.8,506.0 L412.8,503.7 L412.8,501.5 L412.8,499.5 L412.8,497.7 L412.8,496.0 L412.8,494.6 L412.8,493.4 L412.8,492.3 L412.8,491.5 L412.8,491.0 L412.8,490.6 L412.8,490.5 L429.2,490.5 L429.2,490.6 L429.2,491.0 L429.2,491.5 L429.2,492.3 L429.2,493.4 L429.2,494.6 L429.2,496.0 L429.2,497.7 L429.2,499.5 L429.2,501.5 L429.2,503.7 L429.2,506.0 L429.2,507.0 L429.2,507.1 L429.2,507.3 L429.2,507.6 L429.2,508.1 L429.2,508.5 L429.2,508.7 L429.2,509.5 L429.2,510.3 L429.2,511.1 L429.2,511.3 L429.2,512.4 L429.2,513.6 L429.2,513.9 L429.2,514.9 L429.2,516.3 L429.2,516.7 L429.2,517.8 L429.2,519.4 L429.2,519.6 L429.2,521.0 L429.2,522.6 L429.2,522.7 L429.2,524.5 L429.2,525.6 L429.2,526.2 L429.2,528.1 L429.2,528.7 L429.2,529.9 L429.2,531.8 L429.2,535.5 L436.5,535.5 L436.5,535.5 L436.5,535.5 L436.5,535.5 L436.6,535.5 L436.6,535.5 L436.7,535.5 L436.8,535.5 L436.9,535.5 L437.0,535.5 L437.1,535.5 L437.3,535.5 L437.4,535.5 L437.6,535.5 L437.7,535.5 L437.9,535.5 L438.1,535.5 L438.2,535.5 L438.4,535.5 L438.6,535.5 L438.8,535.5 L439.0,535.5 L439.2,535.5 L439.4,535.5 L439.6,535.5 L439.8,535.5 L439.9,535.5 L440.1,535.5 L440.3,535.5 L440.4,535.5 L440.6,535.5 L440.7,535.5 L440.9,535.5 L441.0,535.5 L441.1,535.5 L441.2,535.5 L441.3,535.5 L441.4,535.5 L441.4,535.5 L441.5,535.5 L441.5,535.5 L441.5,535.5 L441.5,535.5 L450.2,535.5 L450.2,540.0 L441.5,540.0 L441.5,540.0 L441.5,540.0 L441.5,540.0 L441.4,540.0 L441.4,540.0 L441.3,540.0 L441.2,540.0 L441.1,540.0 L441.0,540.0 L440.9,540.0 L440.7,540.0 L440.6,540.0 L440.4,540.0 L440.3,540.0 L440.1,540.0 L439.9,540.0 L439.8,540.0 L439.6,540.0 L439.4,540.0 L439.2,540.0 L439.0,540.0 L438.8,540.0 L438.6,540.0 L438.4,540.0 L438.2,540.0 L438.1,540.0 L437.9,540.0 L437.7,540.0 L437.6,540.0 L437.4,540.0 L437.3,540.0 L437.1,540.0 L437.0,540.0 L436.9,540.0 L436.8,540.0 L436.7,540.0 L436.6,540.0 L436.6,540.0 L436.5,540.0 L436.5,540.0 L436.5,540.0 L436.5,540.0 L426.2,540.0 L426.2,540.0 L426.2,540.0 L426.1,540.0 L426.0,540.0 L425.9,540.0 L425.7,540.0 L425.5,540.0 L425.3,540.0 L425.1,540.0 L424.8,540.0 L424.6,540.0 L424.3,540.0 L424.0,540.0 L423.6,540.0 L423.3,540.0 L422.9,540.0 L422.5,540.0 L422.2,540.0 L421.8,540.0 L421.4,540.0 L421.0,540.0 L420.6,540.0 L420.2,540.0 L419.8,540.0 L419.5,540.0 L419.1,540.0 L418.7,540.0 L418.4,540.0 L418.0,540.0 L417.7,540.0 L417.4,540.0 L417.2,540.0 L416.9,540.0 L416.7,540.0 L416.5,540.0 L416.3,540.0 L416.1,540.0 L416.0,540.0 L415.9,540.0 L415.8,540.0 L415.8,540.0 L415.8,540.0 L415.8,540.0 L412.8,540.0 L412.8,535.5 L412.8,531.8 L412.8,529.9 L412.8,528.7 L412.8,528.1 L412.8,526.2 L412.8,525.6 L412.8,524.5 L412.8,522.7 L412.8,522.6 L412.8,521.0 L412.8,519.6 L412.8,519.4 L412.8,517.8 L412.8,516.7 L412.8,516.3 L412.8,514.9 L412.8,513.9 L412.8,513.6 L412.8,512.4 L412.8,511.3 L412.8,511.1 L412.8,510.3 L412.8,509.5 L412.8,508.7 L412.8,508.5 L412.8,508.1 L412.8,507.6 L412.8,507.3 Z" fill="#cfd8dc" fill-rule="evenodd" stroke="#222222" stroke-width="1" stroke-linejoin="round"/>
+<path d="M327.4,552.0 L324.3,548.2 L321.3,544.3 L318.5,540.3 L315.8,536.2 L313.3,532.0 L310.9,527.8 L308.7,523.4 L306.6,519.0 L304.7,514.5 L302.9,509.9 L301.4,505.2 L300.0,500.5 L298.7,495.8 L297.7,491.0 L296.8,486.2 L296.1,481.3 L295.6,476.5 L295.2,471.6 L295.0,466.7 L295.0,461.8 L295.2,456.9 L295.6,452.0 L296.1,447.2 L296.8,442.3 L297.7,437.5 L298.7,432.7 L300.0,428.0 L301.4,423.3 L302.9,418.6 L304.7,414.0 L306.6,409.5 L308.7,405.1 L310.9,400.7 L313.3,396.5 L315.8,392.3 L318.5,388.2 L321.3,384.2 L324.3,380.3 L327.4,376.5" fill="none" stroke="#2e7d32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,4"/>
+<path d="M532.6,552.0 L535.7,548.2 L538.7,544.3 L541.5,540.3 L544.2,536.2 L546.7,532.0 L549.1,527.8 L551.3,523.4 L553.4,519.0 L555.3,514.5 L557.1,509.9 L558.6,505.2 L560.0,500.5 L561.3,495.8 L562.3,491.0 L563.2,486.2 L563.9,481.3 L564.4,476.5 L564.8,471.6 L565.0,466.7 L565.0,461.8 L564.8,456.9 L564.4,452.0 L563.9,447.2 L563.2,442.3 L562.3,437.5 L561.3,432.7 L560.0,428.0 L558.6,423.3 L557.1,418.6 L555.3,414.0 L553.4,409.5 L551.3,405.1 L549.1,400.7 L546.7,396.5 L544.2,392.3 L541.5,388.2 L538.7,384.2 L535.7,380.3 L532.6,376.5" fill="none" stroke="#2e7d32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,4"/>
+<path d="M430.0,840.0 L460.0,840.0 L476.5,840.0 L493.0,840.0 L562.8,840.0 L565.0,837.8 L565.0,831.0 L560.9,831.0 L556.9,831.0 L556.9,837.0 L543.0,837.0 L530.8,837.0 L493.0,837.0 L476.5,837.0 L460.0,837.0 L448.3,837.0 L436.8,837.0 L430.0,837.0 L423.2,837.0 L411.7,837.0 L400.0,837.0 L383.5,837.0 L367.0,837.0 L334.4,837.0 L317.0,837.0 L317.0,828.0 L317.0,819.0 L315.2,819.0 L313.5,819.0 L313.5,828.0 L313.5,837.0 L308.0,837.0 L305.9,837.0 L303.1,837.0 L303.1,667.5 L295.0,667.5 L295.1,685.5 L299.5,690.0 L299.5,822.0 L295.1,822.0 L295.0,837.8 L297.2,840.0 L367.0,840.0 L383.5,840.0 L400.0,840.0 L430.0,840.0 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M565.0,670.5 L565.0,667.5 L556.9,667.5 L556.9,672.5 L560.5,672.5 L560.5,670.5 L565.0,670.5 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M565.0,679.5 L560.5,679.5 L560.5,677.5 L556.9,677.5 L556.9,687.0 L560.4,687.0 L560.5,685.5 L565.0,685.5 L565.0,679.5 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M418.0,732.0 L409.0,732.0 L409.0,756.6 L409.0,774.0 L405.7,774.0 L404.7,774.0 L401.5,774.0 L401.5,778.5 L401.5,789.0 L399.9,789.0 L399.8,789.0 L394.6,789.0 L390.7,789.0 L387.9,789.0 L385.9,789.0 L384.6,789.0 L359.5,789.0 L358.2,789.0 L357.2,789.0 L356.6,789.0 L356.1,789.0 L355.8,789.0 L344.7,789.0 L344.4,789.0 L344.1,789.0 L340.3,789.0 L338.9,789.0 L335.4,789.0 L303.5,789.0 L303.5,793.5 L331.1,793.5 L339.7,793.5 L344.0,793.5 L346.6,793.5 L348.5,793.5 L349.8,793.5 L350.9,793.5 L351.9,793.5 L352.7,793.5 L382.5,793.5 L392.7,793.5 L392.7,793.5 L392.7,793.5 L392.7,793.5 L392.8,793.5 L392.8,793.5 L392.8,793.5 L392.8,793.5 L392.9,793.5 L392.9,793.5 L392.9,793.5 L392.9,793.5 L393.0,793.5 L393.0,793.5 L393.0,793.5 L393.1,793.5 L393.1,793.5 L426.5,793.5 L439.3,793.5 L447.5,793.5 L468.6,793.5 L468.6,793.5 L468.7,793.5 L468.7,793.5 L468.7,793.5 L468.7,793.5 L468.7,793.5 L468.7,793.5 L468.8,793.5 L468.8,793.5 L468.8,793.5 L468.8,793.5 L468.8,793.5 L468.8,793.5 L475.0,793.5 L475.1,793.5 L475.1,793.5 L475.1,793.5 L475.1,793.5 L475.1,793.5 L475.1,793.5 L505.5,793.5 L505.5,793.5 L505.5,793.5 L505.5,793.5 L505.5,793.5 L505.6,793.5 L505.6,793.5 L505.6,793.5 L511.9,793.5 L541.5,793.5 L541.5,791.2 L541.5,789.0 L528.9,789.0 L525.4,789.0 L522.3,789.0 L522.3,761.3 L522.3,723.0 L520.2,723.0 L520.2,723.7 L520.2,789.0 L519.4,789.0 L518.5,789.0 L505.5,789.0 L505.5,789.0 L505.5,789.0 L505.5,789.0 L505.5,789.0 L475.1,789.0 L475.1,789.0 L475.1,789.0 L475.1,789.0 L475.1,789.0 L475.1,789.0 L465.8,789.0 L465.7,789.0 L461.2,789.0 L461.2,789.0 L461.2,789.0 L461.2,789.0 L461.2,789.0 L449.9,789.0 L449.9,789.0 L449.9,789.0 L439.3,789.0 L439.2,789.0 L435.4,789.0 L435.4,789.0 L435.4,789.0 L435.4,789.0 L434.5,789.0 L434.5,777.2 L434.5,774.0 L431.6,774.0 L430.9,774.0 L430.1,774.0 L427.0,774.0 L427.0,756.6 L427.0,732.0 L418.0,732.0 Z M418.0,736.5 L420.2,736.5 L420.2,753.0 L420.2,769.5 L418.0,769.5 L415.8,769.5 L415.8,753.0 L415.8,736.5 L418.0,736.5 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M560.2,817.5 L563.5,817.5 L563.5,687.5 L556.8,687.5 L556.8,761.9 L556.9,817.5 L560.2,817.5 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M331.8,537.0 L331.8,543.0 L383.1,543.0 L380.1,540.0 L334.1,540.0 L334.1,537.0 L331.8,537.0 Z" fill="#e0e0e0" fill-rule="evenodd" stroke="#616161" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M506.9,543.0 L528.2,543.0 L528.2,537.0 L525.9,537.0 L525.9,540.0 L509.9,540.0 L506.9,543.0 Z" fill="#e0e0e0" fill-rule="evenodd" stroke="#616161" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M337.0,413.7 L337.0,415.9 L337.0,418.2 L337.0,420.6 L337.0,423.1 L337.0,437.8 L337.0,449.3 L337.0,453.8 L337.0,458.8 L337.0,464.2 L337.0,537.8 L337.8,537.8 L338.5,537.8 L338.5,536.0 L338.5,534.2 L338.5,532.4 L338.5,530.5 L338.5,526.8 L338.5,519.0 L338.5,517.0 L338.5,514.8 L338.5,510.3 L338.5,507.9 L338.5,413.7 L338.5,405.5 L338.5,401.7 L338.5,399.8 L338.5,398.0 L338.5,396.1 L338.5,394.3 L338.5,390.8 L337.8,390.8 L337.0,390.8 L337.0,405.5 L337.0,407.5 L337.0,409.5 L337.0,413.7 Z" fill="#ffffff" fill-rule="evenodd" stroke="#616161" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M561.0,663.0 L561.0,667.5 L565.0,667.5 L565.0,658.5 L553.2,636.0 L547.2,624.1 L541.8,613.4 L535.8,601.5 L530.4,590.9 L519.3,568.3 L525.7,561.7 L532.6,555.0 L532.6,552.0 L528.5,552.0 L528.5,551.0 L518.8,551.0 L518.8,549.7 L518.8,549.4 L518.8,549.0 L518.8,548.3 L518.8,547.0 L528.5,547.0 L528.5,543.0 L516.5,543.0 L516.5,547.5 L516.5,552.0 L506.5,552.0 L506.5,555.0 L509.9,557.9 L522.4,583.0 L528.4,594.8 L535.1,608.2 L541.1,620.0 L547.9,633.3 L561.0,658.5 L552.6,658.5 L548.5,658.5 L544.5,658.5 L544.5,669.0 L544.5,679.5 L556.5,679.5 L556.4,677.0 L546.7,677.0 L546.7,677.0 L546.7,677.0 L546.7,677.0 L546.7,677.0 L546.7,677.0 L546.7,676.8 L546.7,676.7 L546.7,676.3 L546.7,675.9 L546.7,675.8 L546.7,675.7 L546.7,675.7 L546.7,675.4 L546.7,675.4 L546.7,675.2 L546.7,675.1 L546.7,675.0 L546.7,674.9 L546.7,674.8 L546.7,674.7 L546.7,674.5 L546.7,674.2 L546.7,674.0 L546.7,673.8 L546.7,673.0 L546.7,673.0 L546.7,673.0 L546.7,673.0 L556.4,673.0 L556.5,667.5 L561.0,663.0 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M334.3,561.7 L340.7,568.3 L329.6,590.9 L324.2,601.5 L318.2,613.4 L312.8,624.1 L306.8,636.0 L295.0,658.5 L295.0,667.5 L299.0,667.5 L299.0,663.0 L303.5,667.5 L303.5,679.5 L307.2,679.5 L307.2,669.0 L307.2,658.5 L299.0,658.5 L312.1,633.3 L318.9,620.0 L324.9,608.2 L331.6,594.8 L337.6,583.0 L350.1,557.9 L353.5,555.0 L353.5,552.0 L335.1,552.0 L335.1,543.0 L331.5,543.0 L331.5,552.0 L327.4,552.0 L327.4,555.0 L334.3,561.7 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M502.0,390.0 L502.0,378.0 L505.4,378.0 L505.4,373.5 L508.5,373.5 L521.3,347.6 L527.4,335.6 L534.4,321.8 L540.6,309.6 L547.5,295.9 L561.0,270.0 L561.0,263.2 L563.0,261.2 L565.0,263.2 L565.0,270.0 L553.2,292.5 L547.2,304.4 L541.8,315.1 L535.8,327.0 L530.4,337.6 L519.3,360.2 L525.7,366.8 L532.6,373.5 L532.6,376.5 L528.5,376.5 L528.5,377.5 L518.8,377.5 L518.8,381.5 L528.5,381.5 L528.5,390.0 L502.0,390.0 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M297.0,261.2 L299.0,263.2 L299.0,270.0 L312.5,295.9 L319.4,309.6 L325.6,321.8 L332.6,335.6 L338.7,347.6 L351.5,373.5 L354.6,373.5 L354.6,378.0 L370.0,378.0 L370.0,390.0 L331.5,390.0 L331.5,376.5 L327.4,376.5 L327.4,373.5 L334.3,366.8 L340.7,360.2 L329.6,337.6 L324.2,327.0 L318.2,315.1 L312.8,304.4 L306.8,292.5 L295.0,270.0 L295.0,263.2 L297.0,261.2 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M415.1,605.2 L413.6,605.2 L410.7,605.2 L404.1,605.2 L402.9,605.2 L399.4,605.2 L387.7,605.2 L387.3,605.2 L387.0,605.2 L386.6,605.2 L386.5,605.2 L386.5,537.0 L379.0,537.0 L379.0,540.0 L380.5,540.0 L383.5,543.0 L383.5,608.2 L384.2,608.2 L386.0,608.2 L386.4,608.2 L388.0,608.2 L402.4,608.2 L403.8,608.2 L410.9,608.2 L422.1,608.2 L425.4,608.2 L427.0,608.2 L445.0,608.2 L463.0,608.2 L464.6,608.2 L503.4,608.2 L505.8,608.2 L506.3,608.2 L506.4,608.2 L506.5,608.2 L506.5,543.0 L509.5,540.0 L511.0,540.0 L511.0,537.0 L503.5,537.0 L503.5,605.2 L499.7,605.2 L498.3,605.2 L496.8,605.2 L494.6,605.2 L493.4,605.2 L489.1,605.2 L484.5,605.2 L480.1,605.2 L477.3,605.2 L473.2,605.2 L467.2,605.2 L466.7,605.0 L466.2,604.7 L465.6,604.4 L465.1,604.1 L464.6,603.8 L464.1,603.6 L463.5,603.3 L463.0,603.0 L460.9,604.1 L458.8,605.2 L442.9,605.2 L427.0,605.2 L420.9,605.2 L418.0,605.2 L415.1,605.2 Z" fill="#e0e0e0" fill-rule="evenodd" stroke="#616161" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M406.6,443.6 L406.6,448.4 L406.6,449.7 L406.6,451.6 L406.6,451.6 L406.6,451.7 L406.6,452.1 L406.6,452.4 L406.6,452.5 L406.6,452.5 L403.3,452.5 L403.3,465.7 L404.2,465.7 L407.8,465.7 L407.8,465.7 L407.8,465.6 L407.8,465.2 L407.8,465.0 L407.8,464.6 L407.8,463.8 L407.8,462.8 L407.8,458.2 L407.8,449.6 L407.8,444.2 L407.8,439.6 L407.8,436.8 L407.8,433.7 L407.8,430.1 L407.8,430.0 L407.8,429.9 L407.8,429.9 L407.8,429.8 L407.8,429.8 L406.9,429.8 L403.3,429.8 L403.3,443.0 L406.6,443.0 L406.6,443.6 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M377.5,540.0 L377.5,510.5 L377.5,448.5 L377.5,448.4 L377.5,448.3 L377.5,448.2 L377.5,448.1 L377.5,448.0 L377.5,447.9 L377.5,447.8 L377.5,447.8 L377.5,447.7 L377.5,447.6 L377.5,447.5 L377.5,447.4 L377.5,447.3 L377.5,447.2 L377.5,447.1 L377.5,447.0 L377.5,446.9 L377.5,446.8 L377.5,446.7 L377.5,446.6 L377.5,420.0 L377.5,391.5 L375.7,391.5 L373.9,391.5 L373.9,394.6 L373.9,397.5 L375.0,397.5 L376.2,397.5 L376.2,405.4 L376.2,413.2 L374.8,413.2 L373.9,413.2 L373.9,414.0 L373.9,414.8 L374.8,414.8 L376.2,414.8 L376.2,422.6 L376.2,430.5 L375.0,430.5 L373.9,430.5 L373.9,431.2 L373.9,432.0 L375.0,432.0 L376.2,432.0 L376.2,439.9 L376.2,447.8 L375.0,447.8 L373.9,447.8 L373.9,448.5 L373.9,449.2 L375.0,449.2 L376.2,449.2 L376.2,457.1 L376.2,465.0 L375.0,465.0 L373.9,465.0 L373.9,465.8 L373.9,466.5 L375.0,466.5 L376.2,466.5 L376.2,474.4 L376.2,482.2 L375.0,482.2 L373.9,482.2 L373.9,483.0 L373.9,483.8 L375.0,483.8 L376.2,483.8 L376.2,491.6 L376.2,499.5 L375.0,499.5 L373.9,499.5 L373.9,500.2 L373.9,501.0 L375.0,501.0 L376.2,501.0 L376.2,508.9 L376.2,516.8 L375.0,516.8 L373.9,516.8 L373.9,517.5 L373.9,518.2 L375.0,518.2 L376.2,518.2 L376.2,523.7 L376.2,528.0 L376.2,531.0 L376.2,534.0 L375.0,534.0 L373.9,534.0 L373.9,537.8 L373.9,540.0 L375.7,540.0 L377.5,540.0 Z" fill="#e0e0e0" fill-rule="evenodd" stroke="#616161" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M408.6,428.1 L408.6,420.8 L404.2,420.8 L396.6,420.8 L396.6,420.8 L396.6,420.8 L396.6,420.8 L396.6,420.8 L396.6,420.8 L396.6,420.9 L396.6,420.9 L396.6,420.9 L396.6,432.0 L396.6,432.0 L396.6,433.5 L396.6,433.7 L396.6,436.1 L396.6,439.1 L396.6,439.2 L396.6,440.2 L396.6,458.3 L396.6,463.9 L396.6,470.8 L396.6,470.9 L396.6,471.1 L396.6,471.2 L396.6,471.4 L396.6,471.5 L396.6,474.5 L396.6,474.6 L396.6,474.6 L396.6,474.7 L396.6,474.7 L396.6,474.7 L396.6,474.8 L404.2,474.8 L408.6,474.8 L408.6,467.4 L407.9,466.8 L407.3,466.2 L405.6,466.2 L403.3,466.2 L403.3,466.1 L403.3,466.0 L403.3,465.9 L403.3,462.3 L403.3,447.6 L403.3,446.4 L403.3,444.3 L403.3,443.0 L403.3,430.1 L403.3,429.8 L403.3,429.5 L403.3,429.3 L405.6,429.3 L407.3,429.3 L407.9,428.7 L408.6,428.1 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M389.5,488.9 L389.5,489.2 L389.5,489.4 L389.5,489.6 L389.5,489.8 L391.3,489.8 L393.4,489.8 L394.8,489.8 L394.8,488.7 L394.8,488.6 L394.8,488.5 L394.8,488.4 L394.8,488.3 L394.8,488.2 L394.8,488.1 L394.8,488.0 L394.8,487.9 L394.8,487.9 L394.8,487.8 L394.8,487.7 L394.8,487.7 L394.8,487.6 L394.8,487.6 L394.8,487.6 L394.8,470.6 L394.8,470.3 L394.8,470.0 L394.8,469.7 L394.8,469.4 L394.8,469.2 L394.8,453.8 L393.5,453.8 L392.2,453.8 L392.2,455.3 L392.2,461.5 L390.8,461.5 L389.5,461.5 L389.5,478.3 L389.5,478.6 L389.5,478.9 L389.5,479.2 L389.5,479.6 L389.5,479.9 L389.5,480.3 L389.5,480.7 L389.5,481.1 L389.5,481.5 L389.5,486.4 L389.5,486.4 L389.5,486.6 L389.5,486.7 L389.5,486.9 L389.5,487.0 L389.5,487.2 L389.5,487.5 L389.5,487.7 L389.5,487.9 L389.5,488.2 L389.5,488.4 L389.5,488.7 L389.5,488.9 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M389.5,494.2 L389.5,501.4 L389.5,504.7 L392.1,504.7 L394.8,504.7 L394.8,501.4 L394.8,494.2 L392.1,494.2 L389.5,494.2 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M389.5,390.8 L389.5,392.4 L389.5,394.9 L389.5,396.7 L389.5,414.6 L389.5,434.0 L390.8,434.0 L392.2,434.0 L392.2,440.2 L392.2,441.8 L393.5,441.8 L394.8,441.8 L394.8,430.1 L394.8,398.1 L394.8,396.7 L394.8,394.9 L394.8,392.4 L394.8,390.8 L392.1,390.8 L389.5,390.8 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M394.8,494.2 L394.8,504.8 L409.3,504.8 L409.3,475.2 L394.8,475.2 L394.8,476.4 L394.8,478.9 L394.8,482.1 L394.8,485.6 L394.8,487.7 L394.8,489.8 L396.9,489.8 L401.4,489.8 L404.9,489.8 L404.9,492.0 L404.9,494.2 L399.9,494.2 L394.8,494.2 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M394.8,390.8 L394.8,413.9 L403.9,413.9 L404.8,413.9 L404.8,420.2 L404.8,420.3 L409.3,420.3 L409.3,390.8 L394.8,390.8 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M317.6,396.3 L322.8,388.4 L331.0,377.8 L331.0,376.5 L327.4,376.5 L319.2,387.3 L313.4,396.2 L313.1,396.8 L313.4,396.8 L317.3,396.8 L317.6,396.3 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M310.7,527.2 L311.9,529.6 L319.2,541.2 L327.4,552.0 L331.0,552.0 L331.0,550.7 L322.8,540.1 L315.5,528.7 L314.7,527.2 L310.7,527.2 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M538.7,390.7 L539.8,392.2 L544.2,392.2 L540.8,387.3 L532.6,376.5 L529.0,376.5 L529.0,377.8 L537.2,388.4 L538.7,390.7 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M538.7,537.8 L537.2,540.1 L529.0,550.7 L529.0,552.0 L532.6,552.0 L540.8,541.2 L544.2,536.2 L539.8,536.2 L538.7,537.8 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M430.0,373.5 L386.7,373.5 L386.6,373.5 L386.4,373.5 L386.3,373.5 L386.1,373.5 L386.0,373.5 L385.8,373.5 L385.6,373.5 L385.5,373.5 L385.3,373.5 L385.1,373.5 L385.0,373.5 L384.8,373.5 L355.0,373.5 L355.0,378.0 L384.3,378.0 L384.3,378.0 L384.4,378.0 L384.5,378.0 L384.6,378.0 L384.7,378.0 L384.8,378.0 L384.8,378.0 L384.9,378.0 L385.0,378.0 L385.1,378.0 L385.1,378.0 L385.2,378.0 L430.1,378.0 L474.9,378.0 L474.9,378.0 L475.0,378.0 L475.1,378.0 L475.2,378.0 L475.2,378.0 L475.3,378.0 L475.4,378.0 L475.5,378.0 L475.6,378.0 L475.7,378.0 L475.7,378.0 L505.0,378.0 L505.0,373.5 L475.2,373.5 L475.0,373.5 L474.9,373.5 L474.7,373.5 L474.5,373.5 L474.4,373.5 L474.2,373.5 L474.0,373.5 L473.9,373.5 L473.7,373.5 L473.6,373.5 L473.4,373.5 L473.3,373.5 L430.0,373.5 Z" fill="#a5d6a7" fill-rule="evenodd" stroke="#2e7d32" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M397.0,605.2 L457.0,605.2 L466.0,512.2 L388.0,512.2 Z" fill="#eef6ff" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M395.5,554.1 L463.0,554.1" fill="none" stroke="#1d4ed8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3,2"/>
+<path d="M433.0,535.5 L493.0,535.5 L502.0,442.5 L424.0,442.5 Z" fill="none" stroke="#90a4ae" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
+<rect x="536.8" y="396.75" width="112.5" height="84.0" rx="14" fill="#f1d3bd" stroke="#a1887f" stroke-width="1.2"/>
+<rect x="409.3" y="395.2889413833618" width="127.49999999999994" height="86.94860172271729" rx="22" fill="#f1d3bd" stroke="#a1887f" stroke-width="1.2"/>
+<circle cx="418.3" cy="447.75" r="9" fill="none" stroke="#2e7d32" stroke-width="4"/>
+<path d="M403.0,781.5 L403.0,666.0 L487.0,666.0 L487.0,712.5 L499.0,712.5 L499.0,654.0 L421.0,592.5 L421.0,498.75" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M403.0,741.075 L403.0,712.2" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M471.7,632.475 L452.2,617.1" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M421.0,559.6875 L421.0,536.25" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M421.0,504.75 L421.0,516.75" fill="none" stroke="#1d4ed8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrB)"/>
+<path d="M392.5,504.75 L392.5,532.5 L436.0,546.0 L385.0,630.0 L340.0,735.0" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
+<path d="M431.0,506.25 L459.0,506.25" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrK)"/>
+<path d="M466.0,502.25 L466.0,433.5" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrK)"/>
+<path d="M472.0,437.5 L587.5,437.5" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrK)"/>
+<text x="262" y="120" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">handle (dashed: it stands beside</text>
+<text x="262" y="133" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">the section, not in it)</text>
+<path d="M268,116 L442.0,195.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="442.0" cy="195.0" r="2.2" fill="#777777"/>
+<text x="262" y="190" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">upper dish, closed by top_cap</text>
+<text x="262" y="203" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">(nothing inside)</text>
+<path d="M268,186 L385.0,346.5" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="385.0" cy="346.5" r="2.2" fill="#777777"/>
+<text x="262" y="250" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">sphere (dashed): this cut passes</text>
+<text x="262" y="263" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">through the front window and</text>
+<text x="262" y="276" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">the open hand port</text>
+<path d="M268,246 L296.5,452.2" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="296.5" cy="452.25" r="2.2" fill="#777777"/>
+<text x="262" y="300" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">white diffuser in the front</text>
+<text x="262" y="313" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">window; 8 rows of green LED</text>
+<text x="262" y="326" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">strip on the carrier behind it</text>
+<path d="M268,296 L337.8,426.8" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="337.75" cy="426.75" r="2.2" fill="#777777"/>
+<text x="262" y="360" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">socket screwed to the back of</text>
+<text x="262" y="373" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">the LED carrier (ears + standoffs)</text>
+<path d="M268,356 L385.0,494.2" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="385.0" cy="494.25" r="2.2" fill="#777777"/>
+<text x="262" y="430" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">nozzle guide (beside the section):</text>
+<text x="262" y="443" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">the tube ends ~1 cm above the rim</text>
+<path d="M268,426 L421.0,498.8" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="421.0" cy="498.75" r="2.2" fill="#777777"/>
+<text x="262" y="492" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">glass slot with a ridge that holds</text>
+<text x="262" y="505" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">the glass at the pour position</text>
+<path d="M268,488 L400.0,599.2" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="400.0" cy="599.25" r="2.2" fill="#777777"/>
+<text x="262" y="560" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">lower dish, hollow: the slot hangs</text>
+<text x="262" y="573" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">in it; tube and cables pass down</text>
+<path d="M268,556 L355.0,615.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="355.0" cy="615.0" r="2.2" fill="#777777"/>
+<text x="262" y="650" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">8 oz jar (behind the section),</text>
+<text x="262" y="663" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">vented lid, pickup tube to the bottom</text>
+<path d="M268,646 L373.0,720.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="373.0" cy="720.0" r="2.2" fill="#777777"/>
+<text x="262" y="720" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">electronics board on the deck panel;</text>
+<text x="262" y="733" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">cables come down from the sphere</text>
+<path d="M268,716 L340.0,735.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="340.0" cy="735.0" r="2.2" fill="#777777"/>
+<text x="262" y="790" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">USB-C PD power bank (12 V),</text>
+<text x="262" y="803" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">flat on the floor under the deck</text>
+<path d="M268,786 L370.0,819.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="370.0" cy="819.0" r="2.2" fill="#777777"/>
+<text x="690" y="230" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">your fist, punched in through</text>
+<text x="690" y="243" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">the open hand port; the ring</text>
+<text x="690" y="256" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">face sits in the socket</text>
+<path d="M684,226 L490.0,419.2" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="490.0" cy="419.25" r="2.2" fill="#777777"/>
+<text x="690" y="330" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">1  slide the full glass back 24 mm</text>
+<text x="690" y="343" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">2  lift it clear of the slot</text>
+<text x="690" y="356" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">3  bring it out through the port</text>
+<path d="M684,326 L502.0,448.5" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="502.0" cy="448.5" r="2.2" fill="#777777"/>
+<text x="690" y="420" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">glass rim ~2 cm under the</text>
+<text x="690" y="433" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">knuckles: open your fingers</text>
+<text x="690" y="446" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">onto it</text>
+<path d="M684,416 L463.0,512.2" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="463.0" cy="512.25" r="2.2" fill="#777777"/>
+<text x="690" y="640" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">Kamoer KPHM200 pump (behind</text>
+<text x="690" y="653" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">the section), head toward the</text>
+<text x="690" y="666" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear door</text>
+<path d="M684,636 L493.0,750.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="493.0" cy="750.0" r="2.2" fill="#777777"/>
+<text x="690" y="730" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">rear door: refill the jar,</text>
+<text x="690" y="743" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">charge or unplug the bank</text>
+<path d="M684,726 L550.0,750.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="550.0" cy="750.0" r="2.2" fill="#777777"/>
+<path d="M470,876 L498,876" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="504" y="880" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">drink</text>
+<path d="M560,876 L588,876" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
+<text x="594" y="880" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">cables</text>
+<rect x="655" y="869" width="18" height="12" rx="0" fill="#a5d6a7" stroke="#2e7d32" stroke-width="0.9"/>
+<text x="679" y="880" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">printed, cut</text>
+<rect x="760" y="869" width="18" height="12" rx="0" fill="#e0e0e0" stroke="#757575" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="784" y="880" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">behind the cut</text>
+<path d="M40,880 L115,880 M40,875 L40,885 M115,875 L115,885" fill="none" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="77" y="870" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">50 mm</text>
 </svg>

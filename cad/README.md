@@ -20,7 +20,7 @@ python3 render_stl.py output /tmp/r   # quick per-part previews
 | `parts/sphere.py` | sphere halves (open rear hand port), diffuser, bay floor, glass well, nozzle guide, LED carrier, handle bosses, glass / fist / forearm envelopes |
 | `parts/socket.py` | charging socket: housing, rotor, base plate with mounting ears, standoffs, switch bracket, plunger, key cap; mounted inside the sphere facing the hand port (`LED_RING = True` adds a NeoPixel ring recess and halo) |
 | `parts/handle.py` | four-piece handle with lap joints; `NOTES-handle.md` |
-| `checks.py` | validity, hardware-envelope clearance, part overlap (> 1 cm3 fails) |
+| `checks.py` | validity, hardware and hand envelope clearance, the glass's way out, part overlap (> 0.1 cm3 fails) |
 | `output/` | ready-to-slice STL (and STEP) files |
 
 Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.

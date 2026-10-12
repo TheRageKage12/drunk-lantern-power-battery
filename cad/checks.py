@@ -35,7 +35,7 @@ def run(all_parts, placements):
     for i in range(len(names)):
         for j in range(i + 1, len(names)):
             v = inter_volume(placed[names[i]], placed[names[j]])
-            if v > 1000.0:   # > 1 cm3: smaller values are coincident mating faces (lips, rings, plugs)
+            if v > 100.0:    # > 0.1 cm3: smaller values are coincident mating faces (1 cm3 hid real clashes, rev 7)
                 print(f'FAIL overlap: {names[i]} vs {names[j]} by {v / 1000:.1f} cm3'); problems += 1
     print(f'--- checks done: {problems} problem(s) ---')
     return problems
