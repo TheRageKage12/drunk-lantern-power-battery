@@ -128,28 +128,34 @@ Z_SPHERE_TOP = Z_SPHERE_CENTER + SPHERE_CUT
 Z_UPPER_DISH_TOP = Z_SPHERE_TOP + DISH_H
 Z_HANDLE_TOP = Z_UPPER_DISH_TOP + HANDLE_TOP_CLEAR
 
-# ---------------------------------------------------------------- punch-in layout (rev 6)
-# The hand goes in horizontally through the rear port like a punch, ring face forward. The socket stands
-# inside the sphere facing the fist (mounted on the back of the LED carrier); the glass waits in a well
-# just below the knuckles, so the fingers open onto it. The top dish is now decorative (top_cap).
+# ---------------------------------------------------------------- lock wall layout (rev 8)
+# Two openings in the sphere: the hand port on your side (+Y) and the display window on the far side (-Y).
+# Just inside the hand port stands the LOCK WALL with the socket on its face; you punch in, ring face first.
+# The glass sits in a slot under the lock: you lower it into the near end of the slot and push it back to the
+# stop, where the wall crosses its back third. Behind the wall the nozzle pours into that back third, out of
+# sight. To take it, grip the front of the glass, slide it toward you GLASS_SLIDE mm and lift it out.
+# LED strips on both faces and the top edge of the wall light the hand port (through a strip curtain), the
+# display window (through the diffuser) and the top dish (through a diffuser disc).
 SOCKET_IN_SPHERE = True
-SOCKET_Z_LOCAL = 11.0        # ring centre height, sphere frame (0 = sphere centre); socket top stays below the top plug
-SOCKET_STANDOFF = 8.0        # LED carrier -> socket base plate gap (Hall connector and cables)
-SOCKET_EAR_R = 53.0          # mounting ears on the socket base plate (left/right), outside the LED channels
-GLASS_TOP_Z_LOCAL = -32.0    # glass rim height: ~20 mm under the knuckles, ~11 mm under the tube tip; ~14 mm of glass stands above the slot to grab
+SOCKET_Z_LOCAL = 4.0         # ring centre height, sphere frame (0 = sphere centre)
+SOCKET_MODULE_DEPTH = 13.2   # socket face -> back of its base plate (socket.MODULE_DEPTH)
+LOCK_FACE_Y = -12.0          # socket face (y); the wall's front face is SOCKET_MODULE_DEPTH behind it
+LOCK_WALL_T = 2.4
+SOCKET_STANDOFF = 0.0        # the base plate screws straight onto the wall
+SOCKET_EAR_R = 53.0          # two mounting ears on the base plate
+SOCKET_EAR_ANGLES = (40.0, 140.0)   # both below the lock: clear of the back LED rows and the front columns
+GLASS_TOP_Z_LOCAL = -37.0    # glass rim: 3 mm under the lock and the wall's lower edge; ~13 mm stands above the slot
 WELL_ID, WELL_WALL = 54.0, 2.0
-NOZZLE_RISE = 5.5            # straight rise above the bay floor before the bend
-NOZZLE_BEND_R = 22.0         # then a 90 deg bend toward the glass; the tube ends ~15 mm above the rim, aimed inside it
-FIST_W, FIST_H, FIST_LEN, FOREARM_R = 100.0, 58.0, 85.0, 30.0   # hand envelopes (estimates): a 90 mm knuckle-wide fist plus 10 mm for the ring finger being off-centre
-
-# ---------------------------------------------------------------- slide-out glass (rev 7)
-# A glass sunk in a round well must rise ~52 mm before it can move sideways, and the nozzle tip and the
-# socket both hang over that path. So the well is a slot: the glass pours at the FRONT end (under the tip) and
-# you pull it GLASS_SLIDE mm toward you before lifting it, where nothing is above it. A low ridge across the
-# slot floor, just behind the glass base, holds the glass at the pour position (push it forward over the ridge).
-GLASS_POUR_Y = -2.0          # glass centre while pouring (sphere frame; -Y = front)
-GLASS_SLIDE = 24.0           # pull back this far, then lift
-WELL_RIDGE_H = 1.5           # detent ridge height (a 3 deg slope would not move a glass: it needs ~15-20 deg)
-NOZZLE_TIP_XY = (-14.0, -6.0)   # where the tube end hangs: 14 mm off the pour centre, 30+ mm from the lift path
+GLASS_POUR_Y = -12.0         # glass centre at the back stop (= under the socket face)
+GLASS_SLIDE = 29.0           # slide this far toward you, then lift: the rim then clears the socket face
+WELL_RIDGE_H = 1.5           # ridge in front of the glass base at the stop: it clicks into place
+NOZZLE_TIP_XY = (-6.0, -31.1)   # tube end behind the wall, 21 mm from the glass centre (rim inner radius ~24.5)
 NOZZLE_TIP_OUT = 5.0         # tube length left sticking out of the guide
-DISH_LOWER_HOLE_D = 102.0    # lower dish floor hole (was 80): the slot hangs through it into the dish cone
+NOZZLE_RISE = 3.0            # straight rise above the bay floor before the bend
+NOZZLE_BEND_R = 26.0         # 90 deg bend: the riser stands outside the slot, the tip ends ~14 mm above the rim
+DISH_LOWER_HOLE_D = 104.0    # lower dish floor hole: the slot and the tube pass through it into the dish cone
+FIST_W, FIST_H, FIST_LEN, FOREARM_R = 106.0, 76.0, 85.0, 30.0   # owner's fist is under 4 x 3 in
+FIST_Z_OFFSET = 3.0          # fist centre above the ring centre
+CURTAIN_R = 62.0             # strip curtain hangs from the upper dish plug on this radius, behind the hand port
+CURTAIN_HALF_ANGLE = 62.0    # arc spans +-62 deg either side of +Y (covers the 120 mm port seen from inside)
+CURTAIN_SCREW_ANGLES = (40.0, 70.0, 110.0, 140.0)   # clamp screws into the upper dish plug (90 deg has the dish's radial screw)

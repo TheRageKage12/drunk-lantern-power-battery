@@ -103,7 +103,7 @@ def main():
 
     render(solid, os.path.join(IMG, 'cad-assembly-iso.png'), az=35, el=22, title='assembly, iso (front-left)')
     render(solid, os.path.join(IMG, 'cad-assembly-front.png'), az=0, el=0, title='assembly, front (audience side)')
-    render(solid, os.path.join(IMG, 'cad-assembly-rear.png'), az=180, el=0, title='assembly, rear (owner side: base door, open hand port with the socket inside)')
+    render(solid, os.path.join(IMG, 'cad-assembly-rear.png'), az=180, el=0, title='assembly, your side: hand opening with the lock inside (strip curtain not shown)')
     render(solid, os.path.join(IMG, 'cad-assembly-top.png'), az=0, el=89, title='assembly, top')
 
     # cutaway: keep x < 0 half of every printed part, show envelopes whole (they are inside)

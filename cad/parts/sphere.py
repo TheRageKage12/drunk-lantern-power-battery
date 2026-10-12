@@ -42,24 +42,31 @@ HATCH_W, HATCH_H, HATCH_R = P.HATCH_W, P.HATCH_H, 14.0    # 120 x 96
 HATCH_Z0 = -48.0                            # bottom edge (collar top is at -49.5)
 HATCH_ZC = HATCH_Z0 + HATCH_H / 2           # 0
 
-# bay floor, LED carrier
+# bay floor and lock wall (rev 8)
 BAY_FLOOR_OD = 131.0
-CARRIER_Y = -35.0
-CARRIER_W, CARRIER_H, CARRIER_T = 110.0, 99.0, 2.4    # 99: stays 1 mm under the upper dish plug
-STRIP_ROWS, STRIP_LEDS, ROW_PITCH = 8, 6, 11.5
-STRIP_ROW0 = 4.0                            # rows 4..95 cover the window (8.5..95.5 above the bay floor)
-STRIP_CH_W, STRIP_CH_D, STRIP_CH_L = 10.5, 1.5, 102.0
-# punch-in layout: the glass sits in a slot below the knuckles. It pours at the front end, under the
-# nozzle tip, and is pulled back GLASS_SLIDE mm before lifting, so the lift path is clear of the tip and the
-# socket. The tube and the cables pass through the bay floor inside the lower dish hole, outside the slot.
-GLASS_OUT_Y = P.GLASS_POUR_Y + P.GLASS_SLIDE                # +22: glass centre where it is lifted out
+WALL_T = P.LOCK_WALL_T
+WALL_FRONT_Y = P.LOCK_FACE_Y - P.SOCKET_MODULE_DEPTH      # -25.2: the socket base plate sits here
+WALL_BACK_Y = WALL_FRONT_Y - WALL_T                        # -27.6: LED rows for the display window, tube behind
+WALL_W, WALL_H = 120.0, 99.0                               # from the bay floor top to 1 mm under the upper plug
+WALL_Z0 = -CUT + 6.0 + P.FLOOR                             # -50.5: bay floor top (wall-local z = 0)
+NOTCH_HW = 33.0                                            # notch over the glass slot (flange at +-32)
+NOTCH_TOP = P.GLASS_TOP_Z_LOCAL + 3.0 - WALL_Z0            # 16.5: lower edge of the wall over the glass
+TAB_X0, TAB_X1 = 42.0, 50.0                                # tabs into the bay floor slots
+STRIP_CH_W, STRIP_CH_D = 10.2, 1.5                         # channels for 8 mm strip
+BACK_ROWS = (35.0, 65.5, 76.5, 87.5)                       # wall-local z of the 4 rows on the back face (2 x 5 cm each)
+BACK_ROW_L = 100.0
+FRONT_COL_X, FRONT_COL_Z = 54.0, (29.5, 79.5)              # one 5 cm column either side of the lock
+HALL_WIN_W, HALL_WIN_H = 34.0, 18.0                        # window behind the Hall board for the cables
+WALL_POSTS = ((-40.0, 55.0), (40.0, 55.0), (-47.0, 25.0), (47.0, 25.0))   # spacer posts to the diffuser
+GLASS_OUT_Y = P.GLASS_POUR_Y + P.GLASS_SLIDE                # +17: glass centre where it is lifted out
 WELL_YC = (P.GLASS_POUR_Y + GLASS_OUT_Y) / 2               # slot centre
 WELL_L = P.GLASS_SLIDE + P.WELL_ID                         # 78: inner slot length
 WELL_FLANGE_W, WELL_FLANGE_T = 3.0, 2.0
 WELL_SKIRT = P.FLOOR                        # 45 deg skirt height = bay floor thickness
 GLASS_BASE_Z = P.GLASS_TOP_Z_LOCAL - P.GLASS_H            # -100: slot floor under the glass at the pour position
-GROMMET_XY = (P.NOZZLE_TIP_XY[0] - P.NOZZLE_TIP_OUT - P.NOZZLE_BEND_R, P.NOZZLE_TIP_XY[1])   # (-41, -6): tube exit
-WIRE_SLOT_XY = (38.0, -6.0)
+GROMMET_XY = (P.NOZZLE_TIP_XY[0] - P.NOZZLE_TIP_OUT - P.NOZZLE_BEND_R, P.NOZZLE_TIP_XY[1])   # (-37, -31.1): tube exit
+GUIDE_SCREW = (GROMMET_XY[0] - 8.0, GROMMET_XY[1] - 10.0)   # nozzle guide foot screw
+WIRE_SLOT_XY = (35.0, -32.0)                               # cables down, behind the wall
 WIRE_HOLE_D = 7.0
 
 # handle bosses (match parts.handle): pocket 14.6 x 10.6 x 12 deep, open up, mouth at the equator
@@ -199,11 +206,13 @@ def bay_floor():
     chamfer = (cq.Workplane('XY').center(0, WELL_YC).slot2D(sl, sw, angle=90)
                .workplane(offset=P.FLOOR).slot2D(sl + 2 * WELL_SKIRT, sw + 2 * WELL_SKIRT, angle=90).loft())
     f = f.cut(chamfer)                                       # seat for the well's skirt
-    for sx in (-1, 1):
-        f = f.cut(big_box(sx * 30 - 6, sx * 30 + 6, CARRIER_Y - 1.6 - 1.2, CARRIER_Y + 1.6 - 1.2, -1, P.FLOOR + 1))
+    yc = (WALL_FRONT_Y + WALL_BACK_Y) / 2
+    for sx in (-1, 1):                                        # slots for the lock wall's two tabs
+        x0, x1 = sorted((sx * (TAB_X0 - 0.5), sx * (TAB_X1 + 0.5)))
+        f = f.cut(big_box(x0, x1, yc - WALL_T / 2 - 0.4, yc + WALL_T / 2 + 0.4, -1, P.FLOOR + 1))
     f = f.cut(cyl(P.TUBE_GROMMET_D / 2, -1, P.FLOOR + 3, *GROMMET_XY))
     f = f.cut(cyl(WIRE_HOLE_D / 2, -1, P.FLOOR + 3, *WIRE_SLOT_XY))
-    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, -1, P.FLOOR + 1, GROMMET_XY[0] - 2.0, GROMMET_XY[1] + 12.0))   # nozzle guide screw
+    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, -1, P.FLOOR + 1, *GUIDE_SCREW))   # nozzle guide screw
     return f
 
 
@@ -244,44 +253,78 @@ def glass_path():
 
 
 def nozzle_guide():
-    """Quarter-circle bore that turns the tube from vertical (out of the bay floor) to horizontal, pointing at
-    the pour position ~17 mm above the rim. The tube sticks out NOZZLE_TIP_OUT past the end.
-    Built in the sphere frame relative to the tube's floor exit."""
+    """Quarter-circle channel behind the lock wall that turns the tube from vertical (out of the bay floor) to
+    horizontal, pointing over the back third of the glass ~14 mm above the rim. Its +Y side is open (a C-channel):
+    the wall's back face closes it, so the tube can sit 3.5 mm from the wall. The tube sticks out NOZZLE_TIP_OUT.
+    Built relative to the tube's floor exit; +Y points at the wall."""
     r = P.NOZZLE_BEND_R
     bore_d = P.TUBE_OD + 0.6
-    body_w = bore_d + 4.0
+    to_wall = WALL_BACK_Y - GROMMET_XY[1]                     # 3.5: bore centre -> wall back face
+    half_x, back = bore_d / 2 + 1.2, bore_d / 2 + 1.6
     h = P.NOZZLE_RISE
-    # path in the XZ plane: straight up h, then a quarter arc ending horizontal, pointing +X (at the glass)
+    # path in the XZ plane: straight up h, then a quarter arc ending horizontal, pointing +X (over the glass)
     path = cq.Workplane('XZ').moveTo(0, 0).lineTo(0, h).radiusArc((r, h + r), r)
-    prof_o = cq.Workplane('XY').rect(body_w, body_w)
-    outer = prof_o.sweep(path)
+    y0, y1 = -back, to_wall - 0.1
+    outer = cq.Workplane('XY').center(0, (y0 + y1) / 2).rect(2 * half_x, y1 - y0).sweep(path)
     bore = cq.Workplane('XY').workplane(offset=-1).circle(bore_d / 2).extrude(1).union(
         cq.Workplane('XY').circle(bore_d / 2).sweep(path))
     g = outer.cut(bore)
-    foot = big_box(-body_w / 2 - 2, body_w / 2 + 2, -body_w / 2, body_w / 2 + 14, 0, 3.0)
-    foot = foot.cut(cyl(bore_d / 2, -1, 4)).cut(cyl(P.M3_CLEAR / 2, -1, 4, -2.0, 12.0))
+    sx, sy = GUIDE_SCREW[0] - GROMMET_XY[0], GUIDE_SCREW[1] - GROMMET_XY[1]
+    foot = big_box(sx - 5.0, half_x, sy - 5.0, y1, 0, 3.0)
+    foot = foot.cut(cyl(bore_d / 2, -1, 4)).cut(cyl(P.M3_CLEAR / 2, -1, 4, sx, sy))
     return g.union(foot)
 
 
-def led_carrier():
-    c = big_box(-CARRIER_W / 2, CARRIER_W / 2, 0, CARRIER_T, 0, CARRIER_H)
-    for i in range(STRIP_ROWS):
-        z0 = STRIP_ROW0 + i * ROW_PITCH
-        c = c.cut(big_box(-STRIP_CH_L / 2, STRIP_CH_L / 2, -1, STRIP_CH_D, z0, z0 + STRIP_CH_W))   # channels face -Y (toward the diffuser)
-    # tabs into the bay floor slots; a notch in both bottom corners clears the bay floor's drip lip (wires pass there)
+def lock_wall():
+    """The wall just inside the hand port: the lock on its front face, the nozzle hidden behind it, LED strips on
+    both faces. Wall-local frame: x as the sphere, y = 0 the back face (display side), y = WALL_T the front face
+    (your side), z = 0 the bay floor top."""
+    T = WALL_T
+    w = big_box(-WALL_W / 2, WALL_W / 2, 0, T, 0, WALL_H)
+    w = w.cut(big_box(-NOTCH_HW, NOTCH_HW, -1, T + 1, -1, NOTCH_TOP))            # the glass passes under here
     for sx in (-1, 1):
-        c = c.union(big_box(sx * 30 - 5.5, sx * 30 + 5.5, 0, CARRIER_T, -P.FLOOR - 0.5, 0))
-        c = c.cut(big_box(sx * (CARRIER_W / 2 - 14), sx * (CARRIER_W / 2 + 1), -1, CARRIER_T + 1, 0, 8))
-    if P.SOCKET_IN_SPHERE:   # two holes for the socket mounting screws, outside the LED channels
-        zc = P.SOCKET_Z_LOCAL - (BAY_FLOOR_Z + P.FLOOR)
-        for sx in (-1, 1):
-            c = c.cut(cq.Workplane('XZ').workplane(offset=-(CARRIER_T + 1)).center(sx * P.SOCKET_EAR_R, zc)
-                      .circle(P.M3_CLEAR / 2).extrude(CARRIER_T + 2))
-    # four spacer posts from the LED face (y = 0) forward to the back of the diffuser
-    post_y = (DIFF_Y - DIFF_T) - (CARRIER_Y - CARRIER_T)      # -23.6
-    for (x, z) in ((-40, 20), (40, 20), (-40, 85), (40, 85)):
-        c = c.union(big_box(x - 3, x + 3, post_y, 0, z - 3, z + 3))
+        x0, x1 = sorted((sx * TAB_X0, sx * TAB_X1))
+        w = w.union(big_box(x0, x1, 0, T, -P.FLOOR - 0.5, 0))                    # tabs into the bay floor
+        x0, x1 = sorted((sx * (WALL_W / 2 - 8.0), sx * (WALL_W / 2 + 1)))
+        w = w.cut(big_box(x0, x1, -1, T + 1, -1, 6.0))                          # clears the drip lip
+    # LED channels: rows on the back face, a column either side of the lock on the front face
+    for z0 in BACK_ROWS:
+        w = w.cut(big_box(-BACK_ROW_L / 2, BACK_ROW_L / 2, -1, STRIP_CH_D, z0, z0 + STRIP_CH_W))
+    for sx in (-1, 1):
+        xc = sx * FRONT_COL_X
+        w = w.cut(big_box(xc - STRIP_CH_W / 2, xc + STRIP_CH_W / 2, T - STRIP_CH_D, T + 1, *FRONT_COL_Z))
+        w = w.cut(cq.Workplane('XZ').workplane(offset=-(T + 1)).center(xc, FRONT_COL_Z[0] - 3.0)
+                  .circle(1.75).extrude(T + 2))                                 # wire hole to the back
+    # the lock: two ear screws and the window behind the Hall board
+    zr = P.SOCKET_Z_LOCAL - WALL_Z0
+    for a in P.SOCKET_EAR_ANGLES:
+        ex, ez = P.SOCKET_EAR_R * math.cos(math.radians(a)), zr - P.SOCKET_EAR_R * math.sin(math.radians(a))
+        w = w.cut(cq.Workplane('XZ').workplane(offset=-(T + 1)).center(ex, ez).circle(P.M3_CLEAR / 2).extrude(T + 2))
+    w = w.cut(big_box(-HALL_WIN_W / 2, HALL_WIN_W / 2, -1, T + 1, zr - HALL_WIN_H / 2, zr + HALL_WIN_H / 2))
+    # spacer posts from the back face to the display diffuser
+    post_y = (DIFF_Y - DIFF_T) - WALL_BACK_Y                  # -33.4
+    for (x, z) in WALL_POSTS:
+        w = w.union(big_box(x - 3, x + 3, post_y, 0, z - 3, z + 3))
+    return w
+
+
+def curtain_clamp():
+    """Arc bar that clamps the strip curtain to the underside of the upper dish plug, just inside the hand port.
+    Printed flat. Frame: the sphere axis at the origin, the arc centred on +Y."""
+    r0, r1 = P.CURTAIN_R - 4.0, P.CURTAIN_R + 3.0
+    a = P.CURTAIN_HALF_ANGLE
+    ring = cq.Workplane('XY').circle(r1).circle(r0).extrude(CLAMP_T)
+    sector = (cq.Workplane('XY').polyline([(0, 0)] + [(1.5 * r1 * math.cos(math.radians(90 + t)), 1.5 * r1 * math.sin(math.radians(90 + t)))
+                                                  for t in (-a, -a / 2, 0, a / 2, a)]).close().extrude(CLAMP_T))
+    c = ring.intersect(sector)
+    for t in P.CURTAIN_SCREW_ANGLES:
+        x, y = P.CURTAIN_R * math.cos(math.radians(t)), P.CURTAIN_R * math.sin(math.radians(t))
+        c = c.cut(cyl(P.M3_CLEAR / 2, -1, CLAMP_T + 1, x, y))
     return c
+
+
+CLAMP_T = 3.0
+UPPER_PLUG_H = max(6.0, P.SOCKET_PLATE_T + P.M3_INSERT_DEPTH + 1.5 - P.FLOOR)   # = dishes.LOCATING_RING_H_UPPER
 
 
 def _guide_origin():
@@ -296,7 +339,8 @@ def build():
         'diffuser': diffuser(),
         'bay_floor': bay_floor(),
         'glass_well': glass_well(),
-        'led_carrier': led_carrier().rotate((0, 0, 0), (1, 0, 0), -90),   # lie flat: channels up
+        'lock_wall': lock_wall().rotate((0, 0, 0), (1, 0, 0), -90),     # lie flat: back face (rows, posts) up
+        'curtain_clamp': curtain_clamp(),
         'nozzle_guide': nozzle_guide(),
         'glass_envelope': cq.Workplane('XY').add(cq.Solid.makeCone(P.GLASS_D_BASE / 2 + 1.0, P.GLASS_D_TOP / 2, P.GLASS_H)),
         'glass_path_envelope': glass_path(),
@@ -304,7 +348,7 @@ def build():
         'fist_envelope': cq.Workplane('XZ').ellipse(P.FIST_W / 2, P.FIST_H / 2).extrude(-P.FIST_LEN),
         'forearm_envelope': cq.Workplane('XZ').circle(P.FOREARM_R).extrude(-60.0),
     }
-    for k in ('sphere_front', 'sphere_rear', 'led_carrier'):
+    for k in ('sphere_front', 'sphere_rear', 'lock_wall'):
         bb = out[k].val().BoundingBox()
         _SHIFT[k] = -bb.zmin                           # placements() undoes this before rotating back
         out[k] = out[k].translate((0, 0, -bb.zmin))
@@ -316,8 +360,8 @@ _SHIFT = {}
 
 def placements():
     Z = Z_ASM
-    face_y = CARRIER_Y + P.SOCKET_STANDOFF + 13.2     # = socket.FACE_Y (faceplate surface)
-    hand_z = Z + P.SOCKET_Z_LOCAL + 6.0                # fist centre a little above the ring
+    face_y = P.LOCK_FACE_Y                             # = socket.FACE_Y
+    hand_z = Z + P.SOCKET_Z_LOCAL + P.FIST_Z_OFFSET
     gx, gy, gz = _guide_origin()
     if not _SHIFT:
         build()
@@ -330,7 +374,8 @@ def placements():
         'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
         'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
-        'led_carrier': unflat('led_carrier', 90, (0, CARRIER_Y - CARRIER_T, Z + BAY_FLOOR_Z + P.FLOOR)),   # back face at CARRIER_Y
+        'lock_wall': unflat('lock_wall', 90, (0, WALL_BACK_Y, Z + WALL_Z0)),
+        'curtain_clamp': ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_TOP - UPPER_PLUG_H - CLAMP_T)),   # under the upper dish plug
         'nozzle_guide': ((0, 0, 1), 0, (gx, gy, Z + gz)),
         'glass_envelope': ((0, 0, 1), 0, (0, P.GLASS_POUR_Y, Z + GLASS_BASE_Z)),
         'glass_path_envelope': ((0, 0, 1), 0, (0, 0, Z)),

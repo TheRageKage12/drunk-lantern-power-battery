@@ -114,10 +114,10 @@ SENSOR_WINDOW = 8.0                        # square hole on the axis through the
 MAGNET_TO_SENSOR = (POCKET_FLOOR - (HOUSING_BOT - 0.1 - P.HALL_PCB_T - 0.9))   # ~7.7 mm, see NOTES
 
 Z_FACEPLATE_TOP = P.Z_SPHERE_TOP + P.FLOOR     # 311 assembly (top-dish layout only)
-EAR_W, EAR_ANGLES = 10.0, (0.0, 180.0)          # base-plate ears (socket +-X -> sphere +-X)
+EAR_W, EAR_ANGLES = 10.0, P.SOCKET_EAR_ANGLES   # base-plate ears; socket angle a -> sphere (x, z) = (cos a, -sin a)
 STANDOFF_OD = 7.0
-CARRIER_BACK_Y = -35.0                         # sphere frame: back face of the LED carrier (sphere.CARRIER_Y)
-FACE_Y = None                                  # faceplate surface y, assembly frame (set below)
+FACE_Y = P.LOCK_FACE_Y                         # socket face y, assembly frame; the base plate sits on the lock wall
+assert abs(MODULE_DEPTH - P.SOCKET_MODULE_DEPTH) < 1e-6, 'params.SOCKET_MODULE_DEPTH out of date'
 
 
 # ------------------------------------------------------------------ helpers
@@ -355,7 +355,7 @@ def build():
     out['switch_bracket'] = bracket_solid()
     out['plunger'] = plunger_solid()
     out['key_cap'] = key_cap_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.KEY_T))  # flat top down
-    if P.SOCKET_IN_SPHERE:
+    if P.SOCKET_IN_SPHERE and P.SOCKET_STANDOFF > 0:
         st = cyl(STANDOFF_OD / 2, 0, P.SOCKET_STANDOFF).cut(cyl(P.M3_CLEAR / 2, -1, P.SOCKET_STANDOFF + 1))
         out['socket_standoff'] = st          # print 2
     if LED_RING:
@@ -366,7 +366,7 @@ def build():
 def mount_step():
     """socket frame (faceplate top at the origin, +Z out of the face) -> assembly."""
     if P.SOCKET_IN_SPHERE:
-        # rotate so the face points at the hand (+Y), socket +Y points down, then move to the carrier
+        # rotate so the face points at the hand (+Y), socket +Y points down, then move onto the lock wall
         return ((1, 0, 0), -90, (0, FACE_Y, P.Z_SPHERE_CENTER + P.SOCKET_Z_LOCAL))
     return ((0, 0, 1), 0, (0, 0, Z_FACEPLATE_TOP))
 
@@ -383,12 +383,10 @@ def placements():
     pl['switch_bracket'] = [((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, HOUSING_BOT - BRACKET_T)), m]
     pl['plunger'] = [((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)), m]
     pl['key_cap'] = [(X, 180, (0, 0, POCKET_FLOOR + P.KEY_T)), m]
-    if P.SOCKET_IN_SPHERE:
+    if P.SOCKET_IN_SPHERE and P.SOCKET_STANDOFF > 0:
         ex, ey = pol(P.SOCKET_EAR_R, EAR_ANGLES[0])
         pl['socket_standoff'] = [((0, 0, 1), 0, (ex, ey, BASE_BOT - P.SOCKET_STANDOFF)), m]
     if LED_RING:
         pl['halo'] = [(X, 180, (0, 0, HALO_H)), m]
     return pl
 
-
-FACE_Y = CARRIER_BACK_Y + P.SOCKET_STANDOFF + MODULE_DEPTH    # faceplate surface y (sphere = assembly y)
