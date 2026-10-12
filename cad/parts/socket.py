@@ -29,7 +29,9 @@ import cadquery as cq
 import params as P
 
 # ------------------------------------------------------------------ dimensions
-PLATE_D = P.SOCKET_PLATE_D                 # 100
+# In the punch-in layout the socket stands inside the sphere, so the faceplate shrinks to the housing OD
+# (no screws through it); the base plate carries two mounting ears instead.
+PLATE_D = P.SOCKET_HOUSING_OD if P.SOCKET_IN_SPHERE else P.SOCKET_PLATE_D
 PLATE_T = P.SOCKET_PLATE_T                 # 3
 HOUSING_OD = P.SOCKET_HOUSING_OD           # 76
 BOLT_R = P.SOCKET_BOLT_CIRCLE / 2          # 44
@@ -111,7 +113,11 @@ HALL_POCKET_L, HALL_POCKET_W, HALL_POCKET_D = P.HALL_PCB_L + 0.6, P.HALL_PCB_W +
 SENSOR_WINDOW = 8.0                        # square hole on the axis through the plate (A3144 option: bend it up here)
 MAGNET_TO_SENSOR = (POCKET_FLOOR - (HOUSING_BOT - 0.1 - P.HALL_PCB_T - 0.9))   # ~7.7 mm, see NOTES
 
-Z_FACEPLATE_TOP = P.Z_SPHERE_TOP + P.FLOOR     # 311 assembly
+Z_FACEPLATE_TOP = P.Z_SPHERE_TOP + P.FLOOR     # 311 assembly (top-dish layout only)
+EAR_W, EAR_ANGLES = 10.0, (0.0, 180.0)          # base-plate ears (socket +-X -> sphere +-X)
+STANDOFF_OD = 7.0
+CARRIER_BACK_Y = -35.0                         # sphere frame: back face of the LED carrier (sphere.CARRIER_Y)
+FACE_Y = None                                  # faceplate surface y, assembly frame (set below)
 
 
 # ------------------------------------------------------------------ helpers
@@ -194,7 +200,7 @@ def housing_solid():
     h = h.union(cyl(HOUSING_OD / 2, HOUSING_BOT, -PLATE_T))    # puck
     cuts = []
     # faceplate screws (counterbored from the top)
-    for a in BOLT_ANGLES:
+    for a in (BOLT_ANGLES if not P.SOCKET_IN_SPHERE else ()):
         x, y = pol(BOLT_R, a)
         cuts.append(cyl(P.M3_CLEAR / 2, -PLATE_T - 1, 1, x, y))
         cuts.append(cyl(P.M3_HEAD_D / 2 + 0.2, -1.2, 1, x, y))
@@ -228,6 +234,13 @@ def housing_solid():
 
 def base_solid():
     b = cyl(HOUSING_OD / 2, BASE_BOT, HOUSING_BOT)
+    if P.SOCKET_IN_SPHERE:   # two mounting ears, screwed through standoffs to the LED carrier
+        for a in EAR_ANGLES:
+            ex, ey = pol(P.SOCKET_EAR_R, a)
+            arm = frame_box(-EAR_W / 2, EAR_W / 2, 0.0, P.SOCKET_EAR_R - HOUSING_OD / 2 + EAR_W / 2 + 2.0,
+                            BASE_BOT, HOUSING_BOT, a, HOUSING_OD / 2 - 2.0)
+            b = b.union(arm).union(cyl(EAR_W / 2, BASE_BOT, HOUSING_BOT, ex, ey))
+            b = b.cut(cyl(P.M3_CLEAR / 2, BASE_BOT - 1, HOUSING_BOT + 1, ex, ey))
     cuts = []
     for a in BASE_SCREW_ANGLES:
         x, y = pol(BASE_SCREW_R, a)
@@ -324,39 +337,58 @@ def _parts_socket_frame():
     return _cache
 
 
+def _flip_to_bed(wp):
+    """socket frame -> print frame: turn upside down and put min z on the bed; returns (part, z_shift)."""
+    f = wp.rotate((0, 0, 0), (1, 0, 0), 180)
+    dz = -f.val().BoundingBox().zmin
+    return f.translate((0, 0, dz)), dz
+
+
+_SHIFT = {}
+
+
 def build():
     sf = _parts_socket_frame()
-    flip = lambda wp: wp.rotate((0, 0, 0), (1, 0, 0), 180)     # socket frame -> print (upside down)
-    out = {
-        # faceplate DOWN on the bed: flip, then lift so min z = 0 (faceplate top at z=0 after flip is z=0 already)
-        'socket_housing': flip(sf['socket_housing']),
-        # rotor: top face down on the bed (pocket is a recess), lugs up
-        'rotor': flip(sf['rotor']).translate((0, 0, -ROTOR_TOP)),
-        # base plate: top face down
-        'socket_base': flip(sf['socket_base']).translate((0, 0, HOUSING_BOT)),
-        'switch_bracket': bracket_solid(),
-        'plunger': plunger_solid(),
-        'key_cap': key_cap_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.KEY_T)),  # flat top down, magnet pocket up
-        'switch_envelope': flip(sf['switch_envelope']).translate((0, 0, -SWITCH_Z_BOT)),
-    }
+    out = {}
+    for name in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope'):
+        out[name], _SHIFT[name] = _flip_to_bed(sf[name])
+    out['switch_bracket'] = bracket_solid()
+    out['plunger'] = plunger_solid()
+    out['key_cap'] = key_cap_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.KEY_T))  # flat top down
+    if P.SOCKET_IN_SPHERE:
+        st = cyl(STANDOFF_OD / 2, 0, P.SOCKET_STANDOFF).cut(cyl(P.M3_CLEAR / 2, -1, P.SOCKET_STANDOFF + 1))
+        out['socket_standoff'] = st          # print 2
     if LED_RING:
         out['halo'] = halo_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, HALO_H))   # skin down
     return out
 
 
+def mount_step():
+    """socket frame (faceplate top at the origin, +Z out of the face) -> assembly."""
+    if P.SOCKET_IN_SPHERE:
+        # rotate so the face points at the hand (+Y), socket +Y points down, then move to the carrier
+        return ((1, 0, 0), -90, (0, FACE_Y, P.Z_SPHERE_CENTER + P.SOCKET_Z_LOCAL))
+    return ((0, 0, 1), 0, (0, 0, Z_FACEPLATE_TOP))
+
+
 def placements():
-    z = Z_FACEPLATE_TOP
+    if not _SHIFT:
+        build()
     X = (1, 0, 0)
-    sx, sy = switch_screw_xy()
     bx, by = frame_point(SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2, SWITCH_N0 + 3.5, LEVER_TIP_ANGLE, LEVER_REST_R)
     px, py = pol(PLUNGER_CH_R0 + P.PLUNGER_L / 2 + 0.3, PLUNGER_ANGLE)
-    return {
-        'socket_housing': (X, 180, (0, 0, z)),
-        'rotor': (X, 180, (0, 0, z + ROTOR_TOP)),
-        'socket_base': (X, 180, (0, 0, z - HOUSING_BOT)),
-        'switch_bracket': ((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, z + HOUSING_BOT - BRACKET_T)),
-        'plunger': ((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, z + (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)),
-        'halo': (X, 180, (0, 0, z + HALO_H)),
-        'key_cap': (X, 180, (0, 0, z + POCKET_FLOOR + P.KEY_T)),
-        'switch_envelope': (X, 180, (0, 0, z + SWITCH_Z_BOT)),
-    }
+    m = mount_step()
+    # print P = R180(S) + (0,0,dz)  =>  S = R180(P) + (0,0,dz)
+    pl = {n: [(X, 180, (0, 0, _SHIFT[n])), m] for n in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope')}
+    pl['switch_bracket'] = [((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, HOUSING_BOT - BRACKET_T)), m]
+    pl['plunger'] = [((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)), m]
+    pl['key_cap'] = [(X, 180, (0, 0, POCKET_FLOOR + P.KEY_T)), m]
+    if P.SOCKET_IN_SPHERE:
+        ex, ey = pol(P.SOCKET_EAR_R, EAR_ANGLES[0])
+        pl['socket_standoff'] = [((0, 0, 1), 0, (ex, ey, BASE_BOT - P.SOCKET_STANDOFF)), m]
+    if LED_RING:
+        pl['halo'] = [(X, 180, (0, 0, HALO_H)), m]
+    return pl
+
+
+FACE_Y = CARRIER_BACK_Y + P.SOCKET_STANDOFF + MODULE_DEPTH    # faceplate surface y (sphere = assembly y)

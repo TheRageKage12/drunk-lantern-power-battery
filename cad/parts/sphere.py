@@ -61,8 +61,15 @@ CARRIER_Y = -35.0
 CARRIER_W, CARRIER_H, CARRIER_T = 110.0, 104.0, 2.4
 STRIP_ROWS, STRIP_LEDS, ROW_PITCH = 9, 6, 12.0
 STRIP_CH_W, STRIP_CH_D, STRIP_CH_L = 10.5, 1.5, 102.0
-GROMMET_XY = (-48.0, 20.0)
-WIRE_SLOT_XY = (48.0, 20.0)
+# punch-in layout: the glass sits in a well on the axis, below the knuckles; the tube and the cables pass
+# through the bay floor INSIDE the lower dish's 80 mm neck hole (r < 40) and outside the well
+WELL_OD = P.WELL_ID + 2 * P.WELL_WALL                     # 58
+GLASS_BASE_Z = P.GLASS_TOP_Z_LOCAL - P.GLASS_H            # -91: well floor top (sphere frame)
+WELL_FLANGE_OD, WELL_FLANGE_T = WELL_OD + 10.0, 2.0
+TUBE_R_POS = 34.5                                         # radius of the tube / cable holes (well r 29 .. neck r 40)
+GROMMET_XY = (-TUBE_R_POS, -4.0)
+WIRE_SLOT_XY = (TUBE_R_POS, -4.0)
+WIRE_HOLE_D = 7.0
 
 # handle bosses (match parts.handle): pocket 14.6 x 10.6 x 12 deep, open up, mouth at the equator
 LEG_X = P.SPHERE_D / 2 + P.HANDLE_INNER_GAP + P.HANDLE_SECTION_T / 2   # 105
@@ -189,28 +196,15 @@ def build_halves():
     for c in bcuts:
         front = front.cut(c)
 
-    # ---- rear: flange, hatch, hinge holes, magnet pockets, handle bosses, nozzle boss
+    # ---- rear: flange, hand port (open: the fist goes in here), handle bosses
     rear = rear.union(flange_solid())
     rear = rear.cut(rounded_rect_cutter_y(HATCH_W, HATCH_H, HATCH_R, 40, 100, HATCH_ZC))
     for sx in (-1, 1):
-        # hinge pin holes beside the bottom corners (axis along X), in the wall
-        x_hole = sx * (HATCH_W / 2 + 2.6)
-        y_hole = math.sqrt(max(R_OUT ** 2 - x_hole ** 2 - (HATCH_Z0 + 4) ** 2, 1))
-        rear = rear.cut(cq.Workplane('YZ').workplane(offset=x_hole - sx * 4).center(y_hole - 1.2, HATCH_Z0 + 4).circle(HINGE_PIN_D / 2 + 0.15).extrude(sx * 8))
-        # magnet pockets in the inner wall at the top corners (open inward)
-        xm = sx * MAG_X
-        ym = math.sqrt(R_IN ** 2 - xm ** 2 - MAG_Z ** 2)
-        nvec = cq.Vector(xm, ym, MAG_Z).normalized()
-        # pocket cut INTO the wall from its inner surface (opens inward, toward the door lip); 1.6 deep so the
-        # magnet stands 0.4 proud and touches its partner in the lip
-        rear = rear.cut(C.magnet_pocket((xm, ym, MAG_Z), normal=(nvec.x, nvec.y, nvec.z), t=1.6))
         blk, bc = handle_boss(sx)
         rear = rear.union(blk)
         for c in bc:
             rear = rear.cut(c)
-    boss, boss_hole, clip, d = nozzle_clip_and_boss()
-    rear = rear.union(boss).cut(boss_hole)
-    return front, rear, clip, d
+    return front, rear, None, None
 
 
 def hatch_door():
@@ -242,31 +236,45 @@ def diffuser():
 
 
 def bay_floor():
+    """Floor of the glass bay (drip tray): hole for the glass well, tube hole, cable hole, carrier slots."""
     f = cyl(BAY_FLOOR_OD / 2, 0, P.FLOOR)
     f = f.union(cyl(BAY_FLOOR_OD / 2, 0, P.FLOOR + 2.0).cut(cyl(BAY_FLOOR_OD / 2 - 1.6, -1, P.FLOOR + 3)))   # drip lip
-    plat = big_box(-PLATFORM_W / 2, PLATFORM_W / 2, PLATFORM_Y0, PLATFORM_Y0 + PLATFORM_L, P.FLOOR, P.FLOOR + PLATFORM_H)
-    f = f.union(plat)
+    f = f.cut(cyl(WELL_OD / 2 + P.FIT, -1, P.FLOOR + 1))
     for sx in (-1, 1):
-        x = sx * (TRAY_W / 2 + P.FIT + RAIL_T / 2)
-        f = f.union(big_box(x - RAIL_T / 2, x + RAIL_T / 2, PLATFORM_Y0, PLATFORM_Y0 + PLATFORM_L, P.FLOOR + PLATFORM_H, P.FLOOR + PLATFORM_H + RAIL_H))
-    # rear stop so the tray cannot be pushed off the back; front end nub
-    f = f.union(big_box(-TRAY_W / 2, TRAY_W / 2, PLATFORM_Y0, PLATFORM_Y0 + 2, P.FLOOR + PLATFORM_H, P.FLOOR + PLATFORM_H + RAIL_H))
-    # carrier tab slots, grommet hole, wire slot
-    for sx in (-1, 1):
-        f = f.cut(big_box(sx * 30 - 6, sx * 30 + 6, CARRIER_Y - 1.6, CARRIER_Y + 1.6, -1, P.FLOOR + 1))
+        f = f.cut(big_box(sx * 30 - 6, sx * 30 + 6, CARRIER_Y - 1.6 - 1.2, CARRIER_Y + 1.6 - 1.2, -1, P.FLOOR + 1))
     f = f.cut(cyl(P.TUBE_GROMMET_D / 2, -1, P.FLOOR + 3, *GROMMET_XY))
-    f = f.cut(big_box(WIRE_SLOT_XY[0] - 7, WIRE_SLOT_XY[0] + 7, WIRE_SLOT_XY[1] - 4, WIRE_SLOT_XY[1] + 4, -1, P.FLOOR + 3))
+    f = f.cut(cyl(WIRE_HOLE_D / 2, -1, P.FLOOR + 3, *WIRE_SLOT_XY))
+    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, -1, P.FLOOR + 1, GROMMET_XY[0] - 2.0, GROMMET_XY[1] + 12.0))   # nozzle guide screw
     return f
 
 
-def glass_tray():
-    t = big_box(-TRAY_W / 2, TRAY_W / 2, 0, TRAY_L, 0, TRAY_T)
-    ring = cyl(GLASS_RING_ID / 2 + GLASS_RING_WALL, TRAY_T, TRAY_T + GLASS_RING_H, 0, -TRAY_Y0).cut(cyl(GLASS_RING_ID / 2, TRAY_T - 1, TRAY_T + GLASS_RING_H + 1, 0, -TRAY_Y0))
-    t = t.union(ring)
-    tab = big_box(-9, 9, TRAY_L, TRAY_L + 12, 0, TRAY_T + 2)
-    t = t.union(tab).cut(cyl(2.5, -1, TRAY_T + 3, 0, TRAY_L + 7))
-    # stop nub under the tray's rear edge (rides behind the rail stop... simple: nub at the rear, under)
-    return t
+def glass_well():
+    """Cup the glass stands in: hangs through the bay floor into the lower dish neck. Print flange down."""
+    depth = (BAY_FLOOR_Z + P.FLOOR + WELL_FLANGE_T) - GLASS_BASE_Z   # flange top -> glass base
+    w = cyl(WELL_FLANGE_OD / 2, 0, WELL_FLANGE_T)
+    w = w.union(cyl(WELL_OD / 2, 0, depth + P.FLOOR))
+    w = w.cut(cyl(P.WELL_ID / 2, -1, depth))                  # open at z=0 (the top, flange side)
+    ring = cyl(GLASS_RING_ID / 2 + GLASS_RING_WALL, depth - 5.0, depth).cut(cyl(GLASS_RING_ID / 2, depth - 6, depth + 1))
+    return w.union(ring)                                       # print frame: flange on the bed, well upward
+
+
+def nozzle_guide():
+    """Quarter-circle bore that turns the tube from vertical (out of the bay floor) to horizontal, pointing at
+    the glass from just above the rim. Built in the sphere frame relative to the tube's floor exit."""
+    r = P.NOZZLE_BEND_R
+    bore_d = P.TUBE_OD + 0.6
+    body_w = bore_d + 4.0
+    h = P.NOZZLE_RISE
+    # path in the XZ plane: straight up h, then a quarter arc ending horizontal, pointing +X (at the glass)
+    path = cq.Workplane('XZ').moveTo(0, 0).lineTo(0, h).radiusArc((r, h + r), r)
+    prof_o = cq.Workplane('XY').rect(body_w, body_w)
+    outer = prof_o.sweep(path)
+    bore = cq.Workplane('XY').workplane(offset=-1).circle(bore_d / 2).extrude(1).union(
+        cq.Workplane('XY').circle(bore_d / 2).sweep(path))
+    g = outer.cut(bore)
+    foot = big_box(-body_w / 2 - 2, body_w / 2 + 2, -body_w / 2, body_w / 2 + 14, 0, 3.0)
+    foot = foot.cut(cyl(bore_d / 2, -1, 4)).cut(cyl(P.M3_CLEAR / 2, -1, 4, -2.0, 12.0))
+    return g.union(foot)
 
 
 def led_carrier():
@@ -278,27 +286,37 @@ def led_carrier():
     for sx in (-1, 1):
         c = c.union(big_box(sx * 30 - 5.5, sx * 30 + 5.5, 0, CARRIER_T, -P.FLOOR - 0.5, 0))
     c = c.cut(big_box(CARRIER_W / 2 - 14, CARRIER_W / 2 + 1, -1, CARRIER_T + 1, 0, 8))
+    if P.SOCKET_IN_SPHERE:   # two holes for the socket mounting screws, outside the LED channels
+        zc = P.SOCKET_Z_LOCAL - (BAY_FLOOR_Z + P.FLOOR)
+        for sx in (-1, 1):
+            c = c.cut(cq.Workplane('XZ').workplane(offset=-(CARRIER_T + 1)).center(sx * P.SOCKET_EAR_R, zc)
+                      .circle(P.M3_CLEAR / 2).extrude(CARRIER_T + 2))
     # four spacer posts reaching the diffuser (25 mm)
     for (x, z) in ((-40, 20), (40, 20), (-40, 85), (40, 85)):
         c = c.union(big_box(x - 3, x + 3, -(DIFF_Y - CARRIER_Y) + DIFF_T, 0, z - 3, z + 3))
     return c
 
 
+def _guide_origin():
+    return (GROMMET_XY[0], GROMMET_XY[1], BAY_FLOOR_Z + P.FLOOR)   # tube exit on the bay floor top
+
+
 def build():
-    front, rear, clip, d = build_halves()
+    front, rear, _, _ = build_halves()
     out = {
-        'sphere_front': front.rotate((0, 0, 0), (1, 0, 0), -90),   # (x,y,z)->(x,z,-y): dome up, split face on the bed
-        'sphere_rear': rear.rotate((0, 0, 0), (1, 0, 0), 90),      # (x,y,z)->(x,-z,y)
-        'sphere_hatch': hatch_door().rotate((0, 0, 0), (1, 0, 0), 90).translate((0, 0, 0)),
+        'sphere_front': front.rotate((0, 0, 0), (1, 0, 0), -90),   # dome up, split face on the bed
+        'sphere_rear': rear.rotate((0, 0, 0), (1, 0, 0), 90),
         'diffuser': diffuser(),
         'bay_floor': bay_floor(),
-        'glass_tray': glass_tray(),
+        'glass_well': glass_well(),
         'led_carrier': led_carrier().rotate((0, 0, 0), (1, 0, 0), -90),   # lie flat: channels up
-        'nozzle_clip': clip,
-        'glass_envelope': cq.Workplane('XY').add(cq.Solid.makeCone(P.GLASS_D_BASE / 2 + 1.0, P.GLASS_D_TOP / 2, P.GLASS_H)),   # tapered like a shot glass
+        'nozzle_guide': nozzle_guide(),
+        'glass_envelope': cq.Workplane('XY').add(cq.Solid.makeCone(P.GLASS_D_BASE / 2 + 1.0, P.GLASS_D_TOP / 2, P.GLASS_H)),
+        # the hand: a fist (ring face on the socket) and the forearm through the port
+        'fist_envelope': cq.Workplane('XZ').circle(P.FIST_R).extrude(-P.FIST_LEN),
+        'forearm_envelope': cq.Workplane('XZ').circle(P.FOREARM_R).extrude(-60.0),
     }
-    # normalise min z to 0 for the rotated parts
-    for k in ('sphere_front', 'sphere_rear', 'sphere_hatch', 'led_carrier'):
+    for k in ('sphere_front', 'sphere_rear', 'led_carrier'):
         bb = out[k].val().BoundingBox()
         out[k] = out[k].translate((0, 0, -bb.zmin))
     return out
@@ -306,18 +324,20 @@ def build():
 
 def placements():
     Z = Z_ASM
-    hatch_bb = hatch_door().rotate((0, 0, 0), (1, 0, 0), 90).val().BoundingBox()
-    carrier_bb = led_carrier().rotate((0, 0, 0), (1, 0, 0), -90).val().BoundingBox()
-    front_bb = build_halves()[0].rotate((0, 0, 0), (1, 0, 0), -90).val().BoundingBox()
-    rear_bb = build_halves()[1].rotate((0, 0, 0), (1, 0, 0), 90).val().BoundingBox()
+    face_y = CARRIER_Y + P.SOCKET_STANDOFF + 13.2     # = socket.FACE_Y (faceplate surface)
+    hand_z = Z + P.SOCKET_Z_LOCAL + 6.0                # fist centre a little above the ring
+    gx, gy, gz = _guide_origin()
+    well_depth = (BAY_FLOOR_Z + P.FLOOR) - GLASS_BASE_Z
     return {
-        'sphere_front': ((1, 0, 0), 90, (0, 0, Z)),       # inverse of -90 is +90 ... after the zmin shift (zmin = 0 since split face at y=0)
+        'sphere_front': ((1, 0, 0), 90, (0, 0, Z)),
         'sphere_rear': ((1, 0, 0), -90, (0, 0, Z)),
-        'sphere_hatch': ((1, 0, 0), -90, (0, 0, Z)),
-        'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),   # disc in XZ plane at y = DIFF_Y-1..DIFF_Y (after +90: z->-y... see note)
+        'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
         'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
-        'glass_tray': ((0, 0, 1), 0, (0, TRAY_Y0, Z + BAY_FLOOR_Z + P.FLOOR + PLATFORM_H)),
+        # print frame has the flange at z=0 and the cup going up: flip so it hangs down from the bay floor top
+        'glass_well': ((1, 0, 0), 180, (0, 0, Z + BAY_FLOOR_Z + P.FLOOR + WELL_FLANGE_T)),
         'led_carrier': ((1, 0, 0), 90, (0, CARRIER_Y, Z + BAY_FLOOR_Z + P.FLOOR)),
-        'nozzle_clip': ((0, 0, 1), 0, (NOZZLE_MOUNT[0] + 8, NOZZLE_MOUNT[1] - 10, Z + NOZZLE_MOUNT[2] - 5)),
-        'glass_envelope': ((0, 0, 1), 0, (0, 0, Z + TRAY_TOP_Z)),
+        'nozzle_guide': ((0, 0, 1), 0, (gx, gy, Z + gz)),
+        'glass_envelope': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z)),
+        'fist_envelope': ((0, 0, 1), 0, (0, face_y, hand_z)),
+        'forearm_envelope': ((0, 0, 1), 0, (0, face_y + P.FIST_LEN - 10.0, hand_z)),
     }

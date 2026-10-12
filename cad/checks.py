@@ -21,11 +21,12 @@ def run(all_parts, placements):
             print(f'FAIL valid: {n}'); problems += 1
     # 2. hardware envelopes in the assembly frame must not hit any wall
     envelopes = {}
-    for n in ('bottle_envelope', 'pump_envelope', 'powerbank_envelope', 'glass_envelope'):
-        if n in placed:
-            envelopes[n] = placed.pop(n)
+    for n in [k for k in list(placed) if k.endswith('_envelope') and k != 'switch_envelope']:
+        envelopes[n] = placed.pop(n)
     for en, env in envelopes.items():
         for n, wp in placed.items():
+            if en in ('fist_envelope', 'forearm_envelope') and n.startswith('switch'):
+                continue
             v = inter_volume(env, wp)
             if v > 200.0:   # > 0.2 cm3: smaller values are coincident-face artefacts of touching envelopes
                 print(f'FAIL clearance: {en} intersects {n} by {v / 1000:.1f} cm3'); problems += 1

@@ -273,11 +273,28 @@ def build_dish_upper():
 
 
 # ================================================================== module API
+def build_top_cap():
+    """Closes the top dish floor when the socket lives in the sphere (punch-in layout): a disc that sits in
+    the socket counterbore, held by the same 4 screws (countersunk from the top)."""
+    d = SOCKET_COUNTERBORE_D - 2 * P.FIT
+    cap = cq.Workplane('XY').circle(d / 2).extrude(SOCKET_COUNTERBORE_DEPTH)
+    for a in SOCKET_BOLT_ANGLES:
+        x = P.SOCKET_BOLT_CIRCLE / 2 * math.cos(math.radians(a))
+        y = P.SOCKET_BOLT_CIRCLE / 2 * math.sin(math.radians(a))
+        cap = cap.cut(cq.Workplane('XY').workplane(offset=-1).center(x, y).circle(P.M3_CLEAR / 2).extrude(SOCKET_COUNTERBORE_DEPTH + 2))
+        cap = cap.cut(cq.Workplane('XY').add(cq.Solid.makeCone(P.M3_CLEAR / 2, P.M3_HEAD_D / 2 + 0.3, 1.8,
+                                                                pnt=cq.Vector(x, y, SOCKET_COUNTERBORE_DEPTH - 1.8))))
+    return cap
+
+
 def build():
-    return {
+    out = {
         'dish_lower': build_dish_lower(),
         'dish_upper': build_dish_upper(),
     }
+    if P.SOCKET_IN_SPHERE:
+        out['top_cap'] = build_top_cap()
+    return out
 
 
 def placements():
@@ -285,6 +302,7 @@ def placements():
     return {
         'dish_lower': ((0, 0, 1), 0.0, (0.0, 0.0, LOWER_PRINT_TO_ASSEMBLY_DZ)),
         'dish_upper': ((0, 0, 1), 0.0, (0.0, 0.0, UPPER_PRINT_TO_ASSEMBLY_DZ)),
+        'top_cap': ((0, 0, 1), 0.0, (0.0, 0.0, Z_SOCKET_PLATE_SEAT)),
     }
 
 

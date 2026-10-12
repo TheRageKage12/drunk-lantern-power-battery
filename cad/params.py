@@ -127,3 +127,17 @@ Z_SPHERE_CENTER = Z_LOWER_DISH_TOP + SPHERE_CUT
 Z_SPHERE_TOP = Z_SPHERE_CENTER + SPHERE_CUT
 Z_UPPER_DISH_TOP = Z_SPHERE_TOP + DISH_H
 Z_HANDLE_TOP = Z_UPPER_DISH_TOP + HANDLE_TOP_CLEAR
+
+# ---------------------------------------------------------------- punch-in layout (rev 6)
+# The hand goes in horizontally through the rear port like a punch, ring face forward. The socket stands
+# inside the sphere facing the fist (mounted on the back of the LED carrier); the glass waits in a well
+# just below the knuckles, so the fingers open onto it. The top dish is now decorative (top_cap).
+SOCKET_IN_SPHERE = True
+SOCKET_Z_LOCAL = 11.0        # ring centre height, sphere frame (0 = sphere centre); socket top stays below the top plug
+SOCKET_STANDOFF = 8.0        # LED carrier -> socket base plate gap (Hall connector and cables)
+SOCKET_EAR_R = 53.0          # mounting ears on the socket base plate (left/right), outside the LED channels
+GLASS_TOP_Z_LOCAL = -38.0    # glass rim height: under the curled fingers, low enough for the nozzle to clear it
+WELL_ID, WELL_WALL = 54.0, 2.0
+NOZZLE_RISE = 5.5            # straight rise above the bay floor before the bend
+NOZZLE_BEND_R = 22.0         # then a 90 deg bend toward the glass; the tube ends ~15 mm above the rim, aimed inside it
+FIST_R, FIST_LEN, FOREARM_R = 32.0, 85.0, 30.0   # hand envelopes for the clearance checks (estimates)
