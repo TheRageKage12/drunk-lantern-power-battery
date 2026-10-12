@@ -21,7 +21,7 @@ sys.path.insert(0, HERE)
 
 import parts  # noqa: E402
 
-PRINT_BED = (220.0, 220.0, 220.0)
+PRINT_BED = (230.0, 230.0, 240.0)   # the owner's modified Ender 3
 
 
 def discover(selected):

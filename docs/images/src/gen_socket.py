@@ -7,7 +7,7 @@ from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 W, H = 1100, 800
 s = SVG(W, H, "Green Lantern power battery - charging socket mechanism")
 s.text(20, 30, "Charging socket mechanism — top views at 0° (rest) and 45° (fired), and section A–A", size=18, weight="bold")
-s.text(20, 48, "scale 3 px = 1 mm; 0° = 12 o'clock, twist is clockwise (seen from above)", size=11, color="#555")
+s.text(20, 48, "schematic, ~3 px = 1 mm; twist is clockwise seen from above; see cad/parts/socket.py for the exact geometry", size=11, color="#555")
 
 SC = 3.0  # px per mm
 HALO_FILL = "#c8f5c8"
@@ -41,56 +41,53 @@ def top_view(cx, cy, theta, title):
         x, y = pol(cx, cy, 29.5, k * 15)
         s.circle(x, y, 3.5, fill="#4caf50", stroke="none")
     # housing bore lip with loading gap at 12 o'clock
-    s.path(arc_path(cx, cy, 23.5, 8, 352), stroke="#777", sw=3)
-    s.path(arc_path(cx, cy, 23.5, 352, 368), stroke="#fff", sw=3)
-    # spring pocket (fixed, tangential, lower-left) and switch (fixed, right)
-    s.path(arc_path(cx, cy, 27, 175, 240), stroke="#888", sw=1, dash="3,2")
-    s.path(arc_path(cx, cy, 31, 175, 240), stroke="#888", sw=1, dash="3,2")
-    s.path(f"M{pol(cx, cy, 27, 240)[0]:.1f},{pol(cx, cy, 27, 240)[1]:.1f} L{pol(cx, cy, 31, 240)[0]:.1f},{pol(cx, cy, 31, 240)[1]:.1f}", stroke="#888", sw=1.6)
+    s.path(arc_path(cx, cy, 18.3, 0, 360), stroke="#777", sw=2)
+    # radial plunger channel at 300 deg (lower-right): r 18.3..34, 5.6 wide
+    def rad_rect(r0, r1, hw, ang, **kw):
+        pts = [pol(cx, cy, r0, ang + hw / r0 * 57.3), pol(cx, cy, r1, ang + hw / r1 * 57.3),
+               pol(cx, cy, r1, ang - hw / r1 * 57.3), pol(cx, cy, r0, ang - hw / r0 * 57.3)]
+        s.path("M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts) + " Z", **kw)
+    rad_rect(18.3, 34, 2.8, 300, stroke="#888", sw=1.2, fill="#f3f3f3", dash="3,2")
+    # stop channel for the lug: 128..187 deg, r 18.3..23.5 (its end walls are the hard stops)
+    s.path(arc_path(cx, cy, 21, 128, 187), stroke="#ddd", sw=14)
+    s.path(arc_path(cx, cy, 21, 128, 187), stroke="#888", sw=1, dash="3,2")
     # D2F-L body at 3 o'clock, long side tangent (vertical)
     sx = cx + 26 * SC
     s.rect(sx, cy - 20, 17, 38, fill="#e8e8e8", sw=1.2)
     s.circle(sx + 8, cy - 11, 1.8, fill="#555", stroke="none")
     s.circle(sx + 8, cy + 8.5, 1.8, fill="#555", stroke="none")
-    # arc slot for the stop pin, 300..345 deg at r=17
-    s.path(arc_path(cx, cy, 17, 300, 345), stroke="#555", sw=9, cap="round")
-    s.path(arc_path(cx, cy, 17, 300, 345), stroke="#fff", sw=5, cap="round")
     # ---- rotating group
     s.add(f'<g transform="rotate({theta} {cx} {cy})">')
-    s.circle(cx, cy, 22 * SC, fill="#bdbdbd", sw=1.4)                    # rotor 44 OD
-    # flange tab at 9 o'clock (passes the loading gap when the rotor is turned 90 deg)
-    s.path(arc_path(cx, cy, 24.5, 262, 278), stroke="#9e9e9e", sw=6)
+    s.circle(cx, cy, 18 * SC, fill="#bdbdbd", sw=1.4)                    # rotor 36 OD
+    # ramp on the rim, 300..345 deg at rest: r rises 18 -> 22, pushes the plunger out as the rotor turns
+    ramp = [pol(cx, cy, 18, a) for a in range(300, 346, 5)] + [pol(cx, cy, 18 + 4 * (a - 300) / 45, a) for a in range(345, 299, -5)]
+    s.path("M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in ramp) + " Z", stroke=INK, sw=1.2, fill="#a5a5a5")
+    # stop lug at 180 deg (-X), 4 mm wide, out to r 22.5
+    s.path("M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in [pol(cx, cy, 17, 186), pol(cx, cy, 22.5, 186), pol(cx, cy, 22.5, 174), pol(cx, cy, 17, 174)]) + " Z", stroke=INK, sw=1.2, fill="#777")
     # keyed pocket: 24 mm disc + 6 mm tab pointing to 12 o'clock
     s.circle(cx, cy, 12 * SC, fill="#8d8d8d", sw=1)
     s.rect(cx - 3 * SC, cy - 17.5 * SC, 6 * SC, 6 * SC, fill="#8d8d8d", sw=1)
     s.circle(cx, cy, 12 * SC, fill="none", sw=1)
     # magnet pocket (hidden under the pocket floor)
     s.circle(cx, cy, 3 * SC, fill="#616161", sw=1, dash="2,2")
-    # cam lobe on the rim at 50 deg (rest)
-    lx, ly = pol(cx, cy, 22, 50)
-    s.path(f"M{pol(cx, cy, 22, 36)[0]:.1f},{pol(cx, cy, 22, 36)[1]:.1f} Q{pol(cx, cy, 27.5, 50)[0]:.1f},{pol(cx, cy, 27.5, 50)[1]:.1f} {pol(cx, cy, 22, 64)[0]:.1f},{pol(cx, cy, 22, 64)[1]:.1f}", stroke=INK, sw=1.2, fill="#bdbdbd")
-    # spring arm at 6 o'clock out to r=29 mm
-    s.path(f"M{cx - 6},{cy + 21 * SC} L{cx - 6},{cy + 32 * SC} L{cx + 6},{cy + 32 * SC} L{cx + 6},{cy + 21 * SC}", stroke=INK, sw=1.2, fill="#bdbdbd")
-    # stop pin at 300 deg (M3 screw head)
-    px, py = pol(cx, cy, 17, 300)
-    s.circle(px, py, 4.5, fill="#444", sw=1)
+    # cam lobe on the rim, 50..70 deg at rest, 3 mm lift: presses the lever between 33 and 45 deg of twist
+    s.path(f"M{pol(cx, cy, 18, 50)[0]:.1f},{pol(cx, cy, 18, 50)[1]:.1f} Q{pol(cx, cy, 23, 60)[0]:.1f},{pol(cx, cy, 23, 60)[1]:.1f} {pol(cx, cy, 18, 70)[0]:.1f},{pol(cx, cy, 18, 70)[1]:.1f}", stroke=INK, sw=1.2, fill="#bdbdbd")
     s.add("</g>")
+    # plunger + spring in the radial channel: pushed out 4 mm when fired
+    lift = 4 if theta else 0
+    rad_rect(18.3 + lift, 22.8 + lift, 2.4, 300, stroke=INK, sw=1.2, fill="#1565c0")
+    pts = []
+    n = 8
+    for k in range(n + 1):
+        r = 22.8 + lift + (34 - 22.8 - lift) * k / n
+        a = 300 + (1.4 if k % 2 else -1.4) * 57.3 / r
+        pts.append(pol(cx, cy, r, a))
+    s.wire(pts, "#1565c0", sw=1.6)
     # the switch lever: pressed or not
     if theta == 0:
         s.path(f"M{sx - 1},{cy + 14} L{sx - 9},{cy - 16}", stroke=INK, sw=2.2)
     else:
         s.path(f"M{sx - 1},{cy + 14} L{sx - 3},{cy - 16}", stroke=INK, sw=2.2)
-    # spring (compression) between the pocket end at 240 deg and the arm
-    a_arm = 180 + theta
-    seg_a1 = 240
-    seg_a2 = a_arm + 8
-    n = 7
-    pts = []
-    for k in range(n + 1):
-        a = seg_a1 + (seg_a2 - seg_a1) * k / n
-        r = 29 + (1.6 if k % 2 else -1.6)
-        pts.append(pol(cx, cy, r, a))
-    s.wire(pts, "#1565c0", sw=1.6)
     # rotation arrow
     if theta:
         s.path(arc_path(cx, cy, 39, -8, 40), stroke="#e65100", sw=2, marker="arrO")
@@ -109,24 +106,24 @@ def lab(x, y, rows, tx, ty, anchor="start", size=9.5):
 
 # panel A: left column, right-aligned at x=165 (ordered so the leaders never cross)
 cx, cy = 330, 262
-lab(165, 112, ["cam lobe on the rim", "(~50\u00b0 at rest)"], *pol(cx, cy, 27.5, 50), anchor="end")
-lab(165, 150, ["loading gap in the bore lip at", "12 o'clock: turn the rotor 90\u00b0,", "drop it in, turn it back"], *pol(cx, cy, 23.5, 0), anchor="end")
+lab(165, 112, ["cam lobe on the rim", "(50\u201370\u00b0 at rest, 3 mm lift)"], *pol(cx, cy, 23, 60), anchor="end")
+lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall board"], *pol(cx, cy, 18.3, 10), anchor="end")
 lab(165, 200, ["translucent halo ring (68 OD)", "over the 24-px NeoPixel ring"], *pol(cx, cy, 31, 300), anchor="end")
-lab(165, 240, ["stop pin (M3 screw in the rotor)", "in the 45\u00b0 arc slot: hard stops", "at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 17, 300), anchor="end")
-lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d76 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
+lab(165, 240, ["stop lug (printed, at 9 o'clock)", "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
+lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d74 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
 lab(165, 340, ["6\u00d72 mm magnet in the key cap,", "on the axis: it never moves", "when the ring is twisted"], cx - 4, cy + 4, anchor="end")
-lab(165, 390, ["compression spring in a", "tangential pocket pushes the", "rotor arm back to 0\u00b0"], *pol(cx, cy, 29, 215), anchor="end")
-lab(165, 440, ["faceplate 90\u00d790 mm,", "4\u00d7 M3 heat-set inserts"], cx - 117, cy + 117, anchor="end")
-lab(165, 478, ["rotor arm at 6 o'clock"], cx, cy + 30 * SC, anchor="end")
+lab(165, 390, ["0.5\u00d75\u00d710 mm spring + plunger in a", "radial pocket press on the rim", "ramp: it pushes the rotor back to 0\u00b0"], *pol(cx, cy, 30, 300), anchor="end")
+lab(165, 440, ["faceplate 100 mm round,", "4\u00d7 M3 into dish-floor inserts"], cx - 117, cy + 117, anchor="end")
+lab(165, 478, ["ramp on the rim, 300\u2013345\u00b0"], *pol(cx, cy, 20, 322), anchor="end")
 # panel B: right column, left-aligned at x=875
 cx, cy = 720, 262
 lab(875, 112, ["twist the ring 45\u00b0 clockwise", "(seen from above)"], *pol(cx, cy, 39, 30), anchor="start")
-lab(875, 160, ["stop pin at the 45\u00b0 end of the", "slot = hard stop"], *pol(cx, cy, 17, 345), anchor="start")
-lab(875, 205, ["D2F-L on a slotted mount", "(slide it to tune the click angle)"], cx + 26 * SC + 17, cy - 17, anchor="start")
-lab(875, 250, ["cam lobe has pressed the D2F-L", "lever after ~40\u00b0 of twist: click", "(SW goes LOW)"], *pol(cx, cy, 27.5, 95), anchor="start")
+lab(875, 160, ["stop lug against the channel", "wall = 45\u00b0 hard stop"], *pol(cx, cy, 20, 135), anchor="start")
+lab(875, 205, ["D2F-L on a slotted bracket", "(slide it to tune the click angle)"], cx + 26 * SC + 17, cy - 17, anchor="start")
+lab(875, 250, ["cam lobe has pressed the D2F-L", "lever 3 mm after ~40\u00b0 of twist:", "click (SW goes LOW)"], *pol(cx, cy, 23, 20), anchor="start")
 lab(875, 300, ["magnet still centred on the", "Hall sensor: Hall stays LOW", "through the whole twist"], cx + 4, cy + 4, anchor="start")
-lab(875, 350, ["spring compressed; let go and", "the rotor springs back to 0\u00b0", "(the switch releases)"], *pol(cx, cy, 29, 236), anchor="start")
-lab(875, 400, ["rotor arm now at ~7 o'clock"], *pol(cx, cy, 30, 225), anchor="start")
+lab(875, 350, ["plunger pushed out 4 mm by the", "ramp; let go and it pushes the", "rotor back to 0\u00b0 (switch releases)"], *pol(cx, cy, 30, 300), anchor="start")
+lab(875, 400, ["ramp now under the plunger"], *pol(cx, cy, 21, 290), anchor="start")
 
 # ---------------------------------------------------------------- section A-A
 s.path("M60,488 L1040,488", stroke="#ccc", sw=1)
@@ -186,16 +183,16 @@ s.path(f"M{cx},{Y0 - 80} L{cx},{Y0 + 115}", stroke="#999", sw=0.8, dash="8,3,2,3
 # section labels: left
 LXS = 300
 lab(LXS, 567, ["Green Lantern ring (20 mm), inserted", "face-down; the printed key cap is", "glued to its emblem face"], cx - 30, Y0 - 50, anchor="end", size=9.5)
-lab(LXS, 617, ["stop pin: M3×20 screw fitted from", "above after the rotor is seated;", "its tip rides in the 45° arc slot"], cx - 50, Y0 + 40, anchor="end", size=9.5)
+lab(LXS, 617, ["stop lug on the rotor rim rides in", "a channel under the faceplate lip;", "the lip also retains the rotor"], cx - 50, Y0 + 40, anchor="end", size=9.5)
 lab(LXS, 667, ["translucent halo flush with the", "faceplate; 24-px ring PCB right", "under it, LEDs facing up"], cx - 88, Y0 + 4, anchor="end", size=9.5)
-lab(LXS, 717, ["compression spring (end-on,", "out of plane) in its tangential", "pocket, ~20 mm long"], cx - 94, Y0 + 80, anchor="end", size=9.5)
-lab(LXS, 762, ["housing cup ~80 OD, 32 deep,", "2.4 mm walls; floor has the arc slot"], cx - 120, Y0 + 100, anchor="end", size=9.5)
+lab(LXS, 717, ["spring + plunger (out of plane,", "lower right) in a radial pocket,", "10 mm spring, 4 mm stroke"], cx - 94, Y0 + 80, anchor="end", size=9.5)
+lab(LXS, 762, ["housing puck 76 OD, 6.7 deep;", "base plate 3.5 mm, 3× M3 + nuts"], cx - 120, Y0 + 100, anchor="end", size=9.5)
 # section labels: right
 RXS = 760
 lab(RXS, 567, ["6×2 mm magnet in the key cap,", "on the rotation axis"], cx + 9, Y0 + 7, anchor="start", size=9.5)
-lab(RXS, 612, ["rotor 44 OD; flange tabs ride under", "the faceplate lip (bayonet)"], cx + 66, Y0 + 20, anchor="start", size=9.5)
-lab(RXS, 657, ["DRV5032 breakout on a post, chip", "~3–4 mm under the magnet pocket", "floor (thin floor, recess below)"], cx + 4, Y0 + 26, anchor="start", size=9.5)
-lab(RXS, 707, ["D2F-L lever under the cam lobe", "(lobe dashed: it is at 50°, out of", "this plane). Slotted mount block"], cx + 90, Y0 + 70, anchor="start", size=9.5)
+lab(RXS, 612, ["rotor 36 OD × 8 flat disc; its rim", "lugs ride under the faceplate lip"], cx + 66, Y0 + 20, anchor="start", size=9.5)
+lab(RXS, 657, ["DRV5032 breakout in the base plate,", "chip down under the sensor window,", "~8 mm below the magnet"], cx + 4, Y0 + 26, anchor="start", size=9.5)
+lab(RXS, 707, ["D2F-L on its pegged bracket in the", "base plate (lobe dashed: at 50–70°,", "out of this plane)"], cx + 90, Y0 + 70, anchor="start", size=9.5)
 lab(RXS, 757, ["cables through the floor grommet", "down the sphere's wire channel"], cx + 40, Y0 + 115, anchor="start", size=9.5)
 
 open(os.path.join(HERE, "..", "socket-mechanism.svg"), "w").write(s.finish())

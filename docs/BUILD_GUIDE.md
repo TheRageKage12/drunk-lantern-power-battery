@@ -55,7 +55,7 @@ column names a Seattle-area store that sells singles. Store details are in secti
 | 4 | Pump driver | [Dual D4184 MOSFET trigger module, 6-pack (B0FMJH3DML)](https://www.amazon.com/dp/B0FMJH3DML) | ~$10 | | 5-36 V, 15 A; one module used. |
 | 5 | Level shifter | [SN74AHCT125N DIP-14, 10-pack (B08R6BCSYC)](https://www.amazon.com/dp/B08R6BCSYC) | ~$8 | Vetco: 74AHCT125 VUPN524 $2.95 | Three channels used: ring data, strip data, pump trigger. |
 | 6 | Socket LEDs | [Adafruit NeoPixel Ring 24 #1586](https://www.adafruit.com/product/1586) | $16.95 | | 65.5 mm OD, fits around the rotor. |
-| 7 | Sphere LEDs | [BTF-LIGHTING WS2812B 5 V, 60 LED/m, 1 m, IP30 (B01CDTED80)](https://www.amazon.com/dp/B01CDTED80) | $8.99 | Vetco: 1 m WS2812 strip VUPN2314 $19.95 | Cut into 8 rows of 7 on the white carrier plate. |
+| 7 | Sphere LEDs | [BTF-LIGHTING WS2812B 5 V, 60 LED/m, 1 m, IP30 (B01CDTED80)](https://www.amazon.com/dp/B01CDTED80) | $8.99 | Vetco: 1 m WS2812 strip VUPN2314 $19.95 | Cut into 9 rows of 6 (54 px) on the white carrier plate. |
 | 8 | Power bank | [INIU B61 10,000 mAh 22.5 W (B09176JCKZ)](https://www.amazon.com/dp/B09176JCKZ) | ~$21 | | USB-C PD with a 12 V/1.5 A profile: this is what makes the single-cable 12 V design work. 104 x 66 x 23 mm. |
 | 9 | 12 V cable | [wininks USB-C PD trigger cable, fixed 12 V, 5.5 x 2.1 mm (B0FD9P7PV4)](https://www.amazon.com/dp/B0FD9P7PV4) | ~$10 | | Negotiates 12 V from the bank. [Adafruit 5450](https://www.adafruit.com/product/5450) ($7.95, 5.5 x 2.5 mm plug) is equivalent. |
 | 10 | 12 V to 5 V buck | [Pololu D24V22F5 5 V 2.5 A regulator #2858](https://www.pololu.com/product/2858) | $18.95 | | Feeds the XIAO and LEDs. Cheaper alternative: any [LM2596 module](https://www.amazon.com/s?k=LM2596+buck+converter+module+3A) (43 x 21 x 14 mm, set to 5.0 V with a meter before connecting anything). |
@@ -90,7 +90,7 @@ column names a Seattle-area store that sells singles. Store details are in secti
 | 29 | White/translucent PETG | [SUNLU PETG white 1 kg (B085TH48N6)](https://www.amazon.com/dp/B085TH48N6) or [AMOLEN 4 x 250 g bundle (B08Z77GCM4)](https://www.amazon.com/dp/B08Z77GCM4) | $16-25 | | Diffuser, halo, LED carrier, glass tray. |
 | 30 | Heat-set inserts | [ruthex M3 x 5.7 mm, 100-pack (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3) | ~$10 | No Seattle retail source; online only | About 30 used. |
 | 31 | M3 screws and nuts | [M3 304 stainless socket-head kit (B0HKFCTLK8)](https://www.amazon.com/dp/B0HKFCTLK8) | ~$18 | Tacoma Screw Ballard or Georgetown (by the piece); Ace/McLendon Hillman packs | Need 6, 8, 10, 12, 16 mm lengths plus a few nuts. |
-| 32 | Return spring | [Mardatt 240-pc compression spring kit (B09C1DDHRV)](https://www.amazon.com/dp/B09C1DDHRV) | ~$12 | Vetco: Hillman compression spring $1.29 (bring calipers); Ace/McLendon spring drawers; McMaster for exact spec | Design spring: 0.4 mm wire, 5 mm OD, 30 mm free length (0.5 mm wire for a firmer feel). |
+| 32 | Return spring | [Mardatt 240-pc compression spring kit (B09C1DDHRV)](https://www.amazon.com/dp/B09C1DDHRV) | ~$12 | Vetco: Hillman compression spring $1.29 (bring calipers); Ace/McLendon spring drawers; McMaster for exact spec | Design spring: 0.5 mm wire, 5 mm OD, 10 mm free length, in the radial plunger pocket (0.4 mm wire for a softer twist). |
 | 33 | Magnets | [SMARTAKE 6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | [K&J D41](https://www.kjmagnetics.com/proddetail.asp?prod=D41) $0.28 each | 1 in the ring, 4 in the hatch, 8 in the base door. |
 | 34 | Epoxy | [J-B Weld ClearWeld 5-minute, 2 syringes (B09C6R4VSQ)](https://www.amazon.com/dp/B09C6R4VSQ) | ~$9 | Home Depot / McLendon | PETG-to-PETG permanent joints. |
 | 35 | CA glue + activator | [Starbond medium CA + accelerator (B09Z36D448)](https://www.amazon.com/dp/B09Z36D448) | ~$25 | Home Depot: Loctite Plastics Bonding System | Magnets, ring key cap, tacking. Any medium CA works. |
@@ -98,7 +98,8 @@ column names a Seattle-area store that sells singles. Store details are in secti
 
 **Totals (estimates).** Electronics ~$215, fluid path ~$80, printing and hardware ~$150: about **$445** buying
 everything new on Amazon, or about **$350** if you buy the single-use items (resistors, caps, fuses, switch,
-headers, springs, screws) at Vetco and Tacoma Screw instead of in kits. The ChatGPT transcript's "$100"
+headers, springs, screws) at Vetco and Tacoma Screw instead of in kits. The printed set is about 0.9 kg of
+PETG plus supports, so two spools of green and a part spool of white cover it. The ChatGPT transcript's "$100"
 covered only the core electronics and pump; those alone are ~$170 here (items 1-11, 21-23).
 
 ### 2.4 Tools
@@ -125,10 +126,10 @@ Hardwick's in the U-District closed in 2020 (moved to Idaho). Metrix Create:Spac
 
 ## 3. Print the parts
 
-All files are in `cad/output/` (STL for slicing, STEP for editing). Everything fits a 220 x 220 x 220 mm bed;
-the biggest parts are 180 mm across. On a 180 mm bed (Bambu A1 mini) either print the five big parts at the
-KCLS makerspace or scale the whole lantern to 1.6x by setting `D_MAX`, `SPHERE_D` and `BASE_BODY_D` in
-`cad/params.py` (and re-run the build).
+All files are in `cad/output/` (STL for slicing, STEP for editing). Everything fits your 230 x 230 x 240 mm
+Ender 3; the widest part is the rear sphere half at 221 mm (its handle bosses), the tallest is the base at
+115 mm. Centre the big parts and use a skirt, not a brim. (On a 220 mm bed the rear half needs the bosses
+trimmed to separate brackets; on a 180 mm bed scale the lantern to 1.6x in `cad/params.py`.)
 
 **PETG settings (Creality PETG, 0.4 mm nozzle):** 0.2 mm layers, nozzle 235-245 C, bed 75-85 C, 4 perimeters,
 5 top/bottom layers, 25-30 % gyroid infill, outer walls 40-60 mm/s, fan off for the first 3 layers then
@@ -136,15 +137,50 @@ KCLS makerspace or scale the whole lantern to 1.6x by setting `D_MAX`, `SPHERE_D
 
 Print these three test pieces first, before any big part:
 
-1. `rotor` and `socket_housing`: check that the rotor turns in its bore with slight drag and springs back. If
-   it binds, raise `FIT` in `params.py` by 0.05 and reprint the rotor only.
+1. `rotor`, `socket_housing`, `socket_base` and `plunger`: check that the rotor turns 45 degrees in its bore
+   with slight drag and the plunger clicks it back. If it binds, raise `FIT` in `params.py` by 0.05 and
+   reprint the rotor only.
 2. `key_cap`: check that it drops into the rotor pocket in exactly one orientation with a little play.
 3. `sphere_hatch` with 4 magnets: check the latch holds.
 
-<!-- PRINT_TABLE -->
+### Part list
 
-Supports: none, except the two sphere halves (print them split-face down; the window and hatch arches are
-self-supporting). The dish cones are 24 degrees from vertical.
+| Part | File | Size (mm) | Print orientation | Supports | Colour | ~PETG g |
+|---|---|---|---|---|---|---|
+| base | `cad/output/base.stl` | 180 x 180 x 115 | floor down, open top up | no | green | 175 |
+| base_deck | `cad/output/base_deck.stl` | 169 x 167 x 47 | flat | no | green | 72 |
+| base_door | `cad/output/base_door.stl` | 118 x 25 x 94 | standing on its lip edge | no | green | 37 |
+| dish_lower | `cad/output/dish_lower.stl` | 180 x 180 x 91 | mouth down | no | green | 154 |
+| dish_upper | `cad/output/dish_upper.stl` | 180 x 180 x 86 | floor down, mouth up | no | green | 152 |
+| sphere_front | `cad/output/sphere_front.stl` | 180 x 138 x 80 | split face down, dome up | yes: interior around the window (tree supports) | green | 50 |
+| sphere_rear | `cad/output/sphere_rear.stl` | 221 x 117 x 79 | split face down, dome up | yes: interior around the hatch | green | 51 |
+| sphere_hatch | `cad/output/sphere_hatch.stl` | 120 x 101 x 45 | convex side up | no | green | 46 |
+| diffuser | `cad/output/diffuser.stl` | 118 x 118 x 1 | flat, 100% infill | no | white | 8 |
+| led_carrier | `cad/output/led_carrier.stl` | 110 x 106 x 26 | flat, channels up | no | white | 14 |
+| bay_floor | `cad/output/bay_floor.stl` | 131 x 131 x 10 | flat | no | white or green | 45 |
+| glass_tray | `cad/output/glass_tray.stl` | 60 x 82 x 10 | flat | no | white | 9 |
+| nozzle_clip | `cad/output/nozzle_clip.stl` | 30 x 12 x 10 | flat | no | green | 2 |
+| handle_leg_left | `cad/output/handle_leg_left.stl` | 14 x 126 x 10 | flat | no | green | 12 |
+| handle_leg_right | `cad/output/handle_leg_right.stl` | 14 x 126 x 10 | flat | no | green | 12 |
+| handle_arc_left | `cad/output/handle_arc_left.stl` | 120 x 132 x 10 | flat | no | green | 18 |
+| handle_arc_right | `cad/output/handle_arc_right.stl` | 120 x 132 x 10 | flat | no | green | 17 |
+| socket_housing | `cad/output/socket_housing.stl` | 100 x 100 x 10 | faceplate down | no | green | 26 |
+| rotor | `cad/output/rotor.stl` | 44 x 37 x 8 | top face down | no | green | 5 |
+| socket_base | `cad/output/socket_base.stl` | 76 x 76 x 4 | top face down | no | green | 11 |
+| switch_bracket | `cad/output/switch_bracket.stl` | 16 x 10 x 6 | flat | no | any | 0 |
+| plunger | `cad/output/plunger.stl` | 5 x 5 x 4 | nose up | no | any | 0 |
+| halo | `cad/output/halo.stl` | 68 x 68 x 4 | skin down | no | white/translucent | 2 |
+| key_cap | `cad/output/key_cap.stl` | 28 x 24 x 3 | flat face down | no | green | 1 |
+| **Total** | | | | | | **~919 g** (at 30 % infill; plus supports) |
+
+![all printed parts](images/cad-parts-sheet.png)
+
+![assembly](images/cad-assembly-iso.png) ![cutaway](images/cad-cutaway.png)
+
+
+Supports: none, except inside the two sphere halves (print them split-face down; the last 15 mm of dome
+around the window and hatch overhang more than 45 degrees, so enable tree supports on the inside only).
+The dish cones are 27 degrees from vertical and print clean.
 
 ---
 
@@ -250,34 +286,40 @@ the hard cap applies to every pump run including PRIME and `cal`.
 
 ![socket mechanism](images/socket-mechanism.svg)
 
-Parts: `socket_housing` (faceplate + housing), `rotor`, `halo`, `key_cap`, `switch_bracket`, `hall_carrier`,
-plus 4 x M3x8 (faceplate), 2 x M3x8 (switch bracket), 1 x M3x8 (rotor stop pin), the spring, the D2F-L, the
-Hall board, the 24-px ring, and one 6 x 2 mm magnet.
+Parts: `socket_housing` (faceplate + housing puck), `rotor`, `socket_base` (closes the housing from below and
+holds the Hall board), `switch_bracket`, `plunger`, `halo`, `key_cap`, plus 4 x M3x8 (faceplate), 3 x M3x8 and
+3 nuts (base plate), 1 x M3x6 and nut (switch bracket), the 0.5 x 5 x 10 mm spring, the D2F-L, the Hall board,
+the 24-px ring and one 6 x 2 mm magnet. The rotor is a flat 36 mm disc; under the faceplate lip its edge
+carries three features that do all the work: a stop lug running in a channel whose walls are the 0 and 45
+degree hard stops, a cam lobe that presses the D2F-L lever 3 mm between 33 and 45 degrees, and a ramp that
+pushes a spring-loaded plunger out 4 mm so the rotor snaps back to 0 when you let go.
 
-1. **Inserts.** With the iron at about 245 C, set heat-set inserts in: the 4 faceplate bosses (in the upper
-   dish floor), the 2 switch-bracket bosses in the housing, and the one in the rotor skirt for the stop screw.
-   Press slowly, straight, and push the last millimetre flush with a flat tool.
+1. **Inserts and nuts.** With the iron at about 245 C, set heat-set inserts in the 4 faceplate bosses under the
+   upper dish floor. Drop M3 nuts into the three hex pockets on the underside of `socket_housing` and the one
+   under `socket_base` (a dab of CA holds them).
 2. **Ring key.** Glue the 6 x 2 mm magnet into the pocket on the underside of `key_cap` with CA (pole does not
    matter for the DRV5032; for an A3144 test which pole trips the sensor first and glue that pole facing down).
    Glue the key cap to the flat face of your ring with CA (scuff both faces first), tab pointing along the
    finger. The kit's `fingerring_20mm.stl` already has the key merged in (`key_ring.stl`) if you want to print
    the ring too.
-3. **Hall sensor.** Slide the DRV5032 board into `hall_carrier` so the sensor chip sits on the rotor axis, face
-   up, and the carrier into its slot under the rotor floor. The chip should end up about 2 mm below the key-cap
-   magnet. Plug the JST PH lead on. (A3144 module: same slot, sensor at the edge of the board; use the
-   alternative stop position in the carrier.)
+3. **Hall sensor.** Press the DRV5032 board into the pocket on the underside of `socket_base`, components
+   DOWN (the JST connector hangs below the plate), so the chip sits under the square sensor window on the
+   axis; a drop of CA on two corners holds it. The chip ends up about 8 mm below the key-cap magnet, which a
+   DRV5032 sees easily (it trips below 5 mT; the magnet gives about 15 mT there). A3144 module instead: bend
+   its sensor leads so the sensor stands up through the window to within 3 mm of the rotor, and glue a
+   second magnet on top of the first in the key cap.
 4. **NeoPixel ring.** Drop the 24-px ring into the recess on top of the faceplate, LEDs up, wires through the
    notch. Snap the `halo` over it.
-5. **Rotor.** Thread the M3x8 stop screw into the rotor skirt insert so 3 mm protrudes. Turn the rotor to the
-   90 degree loading position, drop it into the bore so the screw passes the loading gap, and turn it back to
-   0. The screw now rides in the 45 degree arc slot: it is the hard stop at both ends and keeps the rotor in.
-6. **Spring.** Put the 0.4 x 5 x 30 mm compression spring into the tangential pocket and swing the rotor arm
-   against it. Twist to 45 degrees and let go: it must snap back to 0 every time. Too weak: use the 0.5 mm wire
-   spring. Too stiff to twist with a finger: shorten the spring by a coil or two.
-7. **Switch.** Screw the D2F-L onto `switch_bracket` and the bracket into the housing with the two slotted
-   holes. Twist the rotor slowly: the cam should start touching the lever at about 30 degrees and you should
-   hear the click at about 40, before the stop at 45. Slide the bracket in its slots to tune, then tighten.
-   Never let the switch be the stop.
+5. **Rotor and plunger.** Turn `socket_housing` upside down. Drop the spring into the radial pocket (the
+   straight channel at the lower right), the `plunger` nose-first on top of it, and hold it in with a finger
+   while you lower the `rotor` into the bore, lugs down into their channels, with the key-pocket tab pointing
+   at the faceplate's +X screw hole. Twist to 45 degrees and let go: it must snap back to 0 every time. Too
+   weak: the 0.5 mm spring is the design; too stiff to twist with a finger: use the 0.4 mm one.
+6. **Switch.** Press the D2F-L onto the two pegs of `switch_bracket` (lever toward the rotor) and screw the
+   bracket into its recess in `socket_base` with the M3 through the slot, loosely.
+7. **Close and tune.** Screw `socket_base` onto the housing with the three M3x8 into the captured nuts. Twist
+   the rotor slowly: the lever should start to move at about 33 degrees and click at about 40, before the stop
+   at 45. Slide the bracket in its slot to tune, then tighten. Never let the switch be the stop.
 8. **Cycle it.** 50 twists. Check with the serial console that `status` shows `switch=pressed` only near the end
    of the twist and `ring=present` through the whole twist with the ring inserted.
 9. **Mount.** Four M3x8 through the faceplate into the upper dish floor. Route the 6-wire J1 cable through the
@@ -307,11 +349,10 @@ Hall board, the 24-px ring, and one 6 x 2 mm magnet.
 
 ## 8. The sphere
 
-1. **LED carrier.** Cut the WS2812B strip into 8 pieces of 7 LEDs (cut on the copper pads). Stick them into
-   the 8 channels of `led_carrier`, all arrows pointing the same way, and solder the ends serpentine-style
+1. **LED carrier.** Cut the WS2812B strip into 9 pieces of 6 LEDs (cut on the copper pads). Stick them into
+   the 9 channels of `led_carrier`, all arrows pointing the same way, and solder the ends serpentine-style
    (end of row 1 to start of row 2, and so on: 5V to 5V, GND to GND, DO to DI). Feed 5 V and ground into the
-   first row AND the last row. The first row's DI gets the J2 pigtail. Set `STRIP_COUNT` to 56 if you keep 4
-   LEDs spare.
+   first row AND the last row. The first row's DI gets the J2 pigtail. Set `STRIP_COUNT` to 54.
 2. **Diffuser.** Print `diffuser` in white PETG at 0.8 mm (0.6 and 1.0 mm coupons are worth a test). It sits
    on the ledge behind the front window; the carrier stands 25 mm behind it, held by the tabs in `bay_floor`.
 3. **Bay floor and tray.** `bay_floor` sits on the lower dish floor inside the sphere. `glass_tray` slides on
@@ -424,9 +465,10 @@ crushed for months; replace the pump tube when it looks cloudy or flat.
   profile and a bigger buck; the limit is current, not LED count.
 - **Power bank requirements:** USB-C PD with a 12 V profile (the INIU B61 has one; the Anker 313 does not),
   and either a low-current mode or the firmware's idle pilot glow so it does not shut off between pours.
-- **Spring size:** compression, 0.4 mm wire, 5 mm OD, 30 mm free, 2 mm preload, about 17 mm compressed at 45
-  degrees (0.5 mm wire for a firmer click). Magnets cannot return the rotor from 45 degrees; they only work as
-  a detent at 0.
+- **Spring size:** compression, 0.5 mm wire, 5 mm OD, 10 mm free, 1.2 mm preload, 5.2 mm compressed at 45
+  degrees, acting radially on a 4 mm ramp in the rotor's edge (0.4 mm wire for a softer twist). A tangential
+  spring long enough for 45 degrees of arc does not fit in a 76 mm housing, and magnets cannot return the
+  rotor from 45 degrees; they only work as a detent at 0.
 - **Why 12 V from the bank rather than a 5 V-to-12 V cable:** the pump's 0.7 A at 12 V would pull 2.4 A from a
   5 V port before the LEDs, right at a USB-A port's limit; a native 12 V profile has margin.
 - **What the simulation does not cover:** the real Hall sensor's response, the real spring feel and the real

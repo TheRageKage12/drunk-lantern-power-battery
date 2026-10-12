@@ -115,7 +115,7 @@ SPRING_POCKET_D = 5.6       # spring OD + 0.6; closed ends; depth = free length 
 
 # handle
 HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 10.0
-HANDLE_INNER_GAP = 10.0     # clearance between sphere surface and handle leg (original: legs nearly tangent)
+HANDLE_INNER_GAP = 6.0      # clearance between sphere surface and handle leg (original: legs nearly tangent)
 HANDLE_TOP_CLEAR = 80.0     # clearance above the upper dish mouth for a hand + ring
 HANDLE_PIECES = 4           # 2 legs + 2 quarter arcs, lap joints with 2 x M3 each
 
