@@ -7,7 +7,7 @@ module-level constant so the base / sphere / socket modules can match it.  See N
 
 Assembly frame: Z up, origin at the centre of the base bottom.
 Print frames:
-  dish_lower : mouth DOWN (spigot ring on the bed), narrow floor + locating ring at the top.
+  dish_lower : mouth DOWN (spigot ring + 3 bosses on the bed), narrow floor + locating ring at the top.
   dish_upper : floor DOWN (locating plug on the bed), mouth at the top.
 Both print orientations coincide with the assembly orientation, so placements() is a pure Z shift.
 
@@ -22,16 +22,24 @@ import params as P
 import common as C
 
 # ------------------------------------------------------------------ joint with the base (dish_lower)
-BASE_TOP_INNER_D = P.D_MAX - 2 * P.WALL             # base top band is at D_MAX with WALL wall -> 175.2
-SPIGOT_OD = BASE_TOP_INNER_D - 2 * P.FIT            # spigot ring OD that slides into the base -> 174.6
-SPIGOT_ID = SPIGOT_OD - 2 * P.WALL                  # 169.8
+# The base drum (parts/base.py) has ONE straight bore from its floor to its top: R_IN = BASE_BODY_D/2 - WALL,
+# i.e. the top band (at D_MAX) is a 5.4 mm thick wall, not a WALL-thick band.  The spigot must match the
+# base's real bore, so take it from the base module when it is importable and fall back to the same formula.
+try:
+    from parts.base import BASE_TOP_INNER_D         # 169.2 = BASE_BODY_D - 2*WALL  (base.py: 2 * R_IN)
+except Exception:                                   # running dishes.py stand-alone
+    BASE_TOP_INNER_D = P.BASE_BODY_D - 2 * P.WALL
+SPIGOT_OD = BASE_TOP_INNER_D - 2 * P.FIT            # spigot ring OD that slides into the base -> 168.6
+SPIGOT_ID = SPIGOT_OD - 2 * P.WALL                  # 163.8
 SPIGOT_H = P.JOINT_SPIGOT_H                         # 8
-Z_BASE_JOINT_SCREWS = P.BASE_H - 5.0                # radial M3 screws through the base top band (assembly Z) -> 95
+Z_BASE_JOINT_SCREWS = P.BASE_H - 5.0                # radial M3 screws through the base top band (assembly Z) -> 110
 JOINT_BOSS_ANGLES = C.joint_angles()                # [90, 210, 330] deg, first at +Y (rear)
 JOINT_BOSS_W = 10.0                                 # tangential width of each radial insert boss
 JOINT_BOSS_T = 8.0                                  # Z thickness of each radial insert boss ("8 mm thick")
 JOINT_BOSS_DEPTH = P.M3_INSERT_DEPTH + 1.5          # radial depth of the boss from its outer face -> 8.0
-RIM_SHOULDER_T = P.WALL                             # plate joining the spigot ring to the mouth rim
+# The mouth rim (r_mouth - CONE_WALL_RADIAL .. r_mouth) overhangs the spigot OD by RIM_GROOVE_W (defined with
+# the cone geometry below); the underside between the two is a 45 deg roof (printable) and only the rim wall
+# footprint (RIM_BEARING_W wide) is a flat bearing ring on the base's top band.
 
 # ------------------------------------------------------------------ joint with the sphere (both dishes)
 SPHERE_FLAT_D = C.sphere_flat_d(P.SPHERE_D, P.SPHERE_CUT)   # 136.8 - flat face dia of the truncated sphere
@@ -53,6 +61,9 @@ CONE_DR = (P.DISH_MOUTH_D - P.DISH_NECK_D) / 2.0    # 35: radial change over CON
 CONE_HALF_ANGLE_DEG = math.degrees(math.atan2(CONE_DR, CONE_H))   # 26.9 deg from vertical
 CONE_K = CONE_DR / CONE_H                           # dr/dz of the cone surface
 CONE_WALL_RADIAL = P.WALL / math.cos(math.radians(CONE_HALF_ANGLE_DEG))   # radial offset for a true WALL thickness
+RIM_BEARING_W = CONE_WALL_RADIAL                    # flat ring under the rim wall that bears on the base band (2.69)
+RIM_GROOVE_W = (P.DISH_MOUTH_D / 2 - RIM_BEARING_W) - SPIGOT_OD / 2   # rim inner wall to spigot OD -> 3.0
+RIM_GROOVE_ANGLE_DEG = 45.0                         # the groove roof rises at this overhang angle (printable)
 COLLAR_ANGLE_DEG = 45.0                             # 45 deg flare under the lower dish flange (printability)
 FLOOR_SUPPORT_ANGLE_DEG = 50.0                      # overhang angle (from vertical) of the support cone under the lower floor
 MOUTH_CHAMFER = 1.5                                 # cosmetic lip on the upper mouth (original has a rounded lip)
@@ -64,14 +75,17 @@ SOCKET_BOLT_ANGLES = [45.0, 135.0, 225.0, 315.0]    # 4 x M3 inserts on SOCKET_B
 Z_UPPER_FLOOR_TOP = P.Z_SPHERE_TOP + P.FLOOR        # assembly Z of the upper floor top face = faceplate top
 Z_SOCKET_PLATE_SEAT = Z_UPPER_FLOOR_TOP - SOCKET_COUNTERBORE_DEPTH   # counterbore floor the faceplate sits on
 UPPER_WIRE_SLOT_W, UPPER_WIRE_SLOT_L = 10.0, 8.0    # wire notch in the +Y edge of the floor hole, 10 wide, 8 radial
-UPPER_FLOOR_HOLE_D = P.DISH_NECK_HOLE_D             # 80 (NOTE: SOCKET_HOUSING_OD 92 cannot pass it, see NOTES)
+UPPER_FLOOR_HOLE_D = P.DISH_NECK_HOLE_D             # 80 (SOCKET_HOUSING_OD 76 passes it from above, rev 3)
+assert P.SOCKET_HOUSING_OD + 2 * P.FIT <= UPPER_FLOOR_HOLE_D, 'socket housing cannot pass the dish floor hole'
 
 # ------------------------------------------------------------------ print frame z levels
 # dish_lower (mouth down): spigot bottom on the bed
 L_Z_SPIGOT0 = 0.0
-L_Z_RIM0 = SPIGOT_H                                 # rim bottom / shoulder bottom (= base top in assembly)
-L_Z_SHOULDER1 = L_Z_RIM0 + RIM_SHOULDER_T
+L_Z_RIM0 = SPIGOT_H                                 # rim bottom / bearing ring (= base top in assembly)
 L_Z_RIM1 = L_Z_RIM0 + P.DISH_RIM_H                  # rim top = cone start
+L_Z_GROOVE1 = L_Z_RIM0 + RIM_GROOVE_W / math.tan(math.radians(RIM_GROOVE_ANGLE_DEG))   # groove roof apex -> 11.0
+L_Z_SHOULDER1 = L_Z_RIM1                            # shoulder plate (spigot ID .. rim) fills the rim height
+assert L_Z_SHOULDER1 - L_Z_GROOVE1 >= P.WALL - 1e-6, 'rim shoulder too thin above the spigot groove'
 L_Z_FLOOR0 = L_Z_RIM1 + CONE_H                      # floor plate underside = cone end
 L_Z_FLOOR1 = L_Z_FLOOR0 + P.FLOOR                   # floor top (= Z_LOWER_DISH_TOP in assembly)
 L_Z_RING1 = L_Z_FLOOR1 + LOCATING_RING_H_LOWER      # locating ring top
@@ -94,9 +108,12 @@ def _revolve_profile(points_rz):
 
 
 def _radial_block(r_inner, r_outer, width, z0, z1, angle_deg):
-    """Box between radii r_inner..r_outer, `width` wide tangentially, z0..z1, rotated to angle_deg."""
+    """Box between radii r_inner..r_outer, `width` wide tangentially, z0..z1, rotated to angle_deg.
+    The flat outer face is pulled in so its CORNERS sit on the cylinder r_outer (a flat face at
+    r_outer would have corners at sqrt(r_outer^2 + (width/2)^2), i.e. proud of a mating OD by ~0.15)."""
+    r_face = math.sqrt(r_outer ** 2 - (width / 2) ** 2)
     blk = (cq.Workplane('XY')
-           .box(r_outer - r_inner, width, z1 - z0, centered=(False, True, False))
+           .box(r_face - r_inner, width, z1 - z0, centered=(False, True, False))
            .translate((r_inner, 0, z0)))
     return blk.rotate((0, 0, 0), (0, 0, 1), angle_deg)
 
@@ -126,7 +143,7 @@ def _lower_profile():
     r_flange = DISH_FLANGE_D / 2
     r_ring_o, r_ring_i = LOCATING_RING_OD / 2, LOCATING_RING_ID / 2
     r_sp_o, r_sp_i = SPIGOT_OD / 2, SPIGOT_ID / 2
-    r_rim_i = r_mouth - CONE_WALL_RADIAL
+    r_rim_i = r_mouth - RIM_BEARING_W   # = r_mouth - CONE_WALL_RADIAL: rim wall = cone wall
 
     # cone surfaces, print frame: wide at L_Z_RIM1 (bottom), narrow at L_Z_FLOOR0 (top)
     def outer(z):
@@ -142,16 +159,19 @@ def _lower_profile():
     tan_s = math.tan(math.radians(FLOOR_SUPPORT_ANGLE_DEG))
     r_s, z_s = _line_hit_cone(r_hole, L_Z_FLOOR0, -tan_s, inner, L_Z_RIM1, L_Z_FLOOR0)
 
+    # rim underside: 45 deg groove roof from the spigot OD out to the rim inner wall, then the flat bearing ring
+    groove = [(r_rim_i, L_Z_GROOVE1), (r_rim_i, L_Z_RIM0)] if RIM_GROOVE_W > 0.3 else []
+
     return [
         (r_hole, L_Z_FLOOR0),            # hole edge, floor underside
         (r_s, z_s),                      # support cone meets the inner cone
-        (inner(L_Z_RIM1), L_Z_RIM1),     # inner cone bottom = rim inner top
-        (r_rim_i, L_Z_SHOULDER1),        # rim inner down to the shoulder top
+        (inner(L_Z_RIM1), L_Z_RIM1),     # inner cone bottom = rim inner top = shoulder top (outer end)
         (r_sp_i, L_Z_SHOULDER1),         # shoulder top, inward to the spigot ID
         (r_sp_i, L_Z_SPIGOT0),           # spigot inner, down to the bed
         (r_sp_o, L_Z_SPIGOT0),           # spigot bottom face
-        (r_sp_o, L_Z_RIM0),              # spigot outer up to the rim bottom
-        (r_mouth, L_Z_RIM0),             # rim bottom (bearing face on the base top band)
+        (r_sp_o, L_Z_RIM0),              # spigot outer up to the rim bottom level
+        *groove,                         # groove roof (45 deg) up to the rim inner wall, back down to the bearing ring
+        (r_mouth, L_Z_RIM0),             # rim bottom: flat bearing ring RIM_BEARING_W wide on the base top band
         (r_mouth, L_Z_RIM1),             # straight rim
         (r_c, z_c),                      # outer cone up to the collar
         (r_flange, L_Z_FLOOR0),          # collar flare out to the flange edge
@@ -173,6 +193,7 @@ def build_dish_lower():
 
     for a in JOINT_BOSS_ANGLES:
         # spigot insert boss: inside the spigot ring, standing on the bed, fused up into the rim shoulder
+        # (the shoulder is solid from the spigot ID to the rim between L_Z_GROOVE1 and L_Z_SHOULDER1)
         body = body.union(_radial_block(r_sp_o - JOINT_BOSS_DEPTH, r_sp_o, JOINT_BOSS_W,
                                         L_Z_SPIGOT0, L_Z_SHOULDER1, a))
         # locating ring insert boss: inside the ring, fused down into the floor plate

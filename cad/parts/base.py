@@ -85,7 +85,7 @@ DECK_PORT_NOTCH = (30.0, 10.0)                        # notch in the deck edge a
 # ------------------------------------------------------------------ pump (on the deck, axis along Y)
 PUMP_HEAD_L_EST = 40.0                                # head box length along the axis (estimate)
 PUMP_MOTOR_L = P.PUMP_L - PUMP_HEAD_L_EST             # 78
-PUMP_X = 28.0                                         # as far right as the wall allows (see NOTES)
+PUMP_X = 30.0                                         # rev 3: shifted right 2 mm to clear the 76 mm jar ring (motor corner r 82.8)
 PUMP_HEAD_FACE_Y = 52.0                               # head face (tube ports) toward the door
 PUMP_AXIS_Z = DECK_TOP + P.PUMP_H / 2                 # 57.5
 PUMP_HEAD_SADDLE_Y = PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST + 2.0 + 4.0   # U-saddle centre (y 20)
@@ -99,13 +99,13 @@ PUMP_STRAP_GAP = 1.5
 BOTTLE_RING_ID = P.BOTTLE_D + 1.0
 BOTTLE_RING_WALL, BOTTLE_RING_H = 3.0, 10.0
 BOTTLE_RING_GAP = 2.0                                 # ring OD to the pump head envelope
-BOTTLE_X = (PUMP_X - P.PUMP_W / 2) - BOTTLE_RING_GAP - BOTTLE_RING_ID / 2 - BOTTLE_RING_WALL   # -39.5
-BOTTLE_Y = 0.0
+# rev 3: squat 8 oz jar (envelope BOTTLE_D x BOTTLE_H = 76 x 76). Front-left of the deck: the ring (OD 83) only
+# reaches x = +1 at y = -8, where the pump is the 40 mm motor can (x 10..50), so it clears the head box (x -2..62).
+BOTTLE_X = -40.0
+BOTTLE_Y = -8.0
 BOTTLE_FINGER_W, BOTTLE_FINGER_H, BOTTLE_FINGER_T = 12.0, 28.0, 3.0
 BOTTLE_FINGER_ANGLES = (0.0, 120.0, 240.0)
-BOTTLE_BODY_H_EST = 100.0                             # straight body of the 8 oz Boston round (envelope)
-BOTTLE_SHOULDER_H = 14.0
-BOTTLE_CAP_D = P.BOTTLE_NECK_D + 6.0                  # 34: cap / shoulder-top envelope
+# (the old stepped Boston-round envelope is gone: the jar is a plain cylinder)
 
 # ------------------------------------------------------------------ electronics
 # XIAO perfboard: vertical panel on the deck, rear-left, face toward the wall / visible through the door
@@ -411,12 +411,7 @@ def build_deck():
 
 # ------------------------------------------------------------------ hardware envelopes (print frame = on z=0)
 def _envelopes():
-    body = _cyl(P.BOTTLE_D / 2, BOTTLE_BODY_H_EST, BOTTLE_X, BOTTLE_Y)
-    shoulder = cq.Workplane('XY').add(cq.Solid.makeCone(P.BOTTLE_D / 2, BOTTLE_CAP_D / 2, BOTTLE_SHOULDER_H,
-                                                        pnt=cq.Vector(BOTTLE_X, BOTTLE_Y, BOTTLE_BODY_H_EST)))
-    neck = _cyl(BOTTLE_CAP_D / 2, P.BOTTLE_H - BOTTLE_BODY_H_EST - BOTTLE_SHOULDER_H, BOTTLE_X, BOTTLE_Y,
-                BOTTLE_BODY_H_EST + BOTTLE_SHOULDER_H)
-    bottle = body.union(shoulder).union(neck)
+    bottle = _cyl(P.BOTTLE_D / 2, P.BOTTLE_H, BOTTLE_X, BOTTLE_Y)   # squat jar incl. cap (rev 3)
     head = _box(P.PUMP_W, PUMP_HEAD_L_EST, P.PUMP_H, PUMP_X, PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST / 2, 0)
     y_motor_end = PUMP_HEAD_FACE_Y - P.PUMP_L
     motor = cq.Workplane('XZ').workplane(offset=-(PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST + 0.01)) \
