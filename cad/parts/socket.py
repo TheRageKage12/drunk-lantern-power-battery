@@ -14,7 +14,7 @@ Parts (print orientation noted in build()):
                   window on the axis), the switch bracket recess with a captured nut, 3 screw holes
   switch_bracket  16 x 10 x 2 slide with two pegs for the D2F-L, M3 slot for +/- 2 mm radial tuning
   plunger         4.5 mm long spring plunger with a rounded nose
-  halo            translucent ring over the 24-px NeoPixel ring (glued with 3 CA dots)
+  halo            (only if LED_RING) translucent ring over a 24-px NeoPixel ring
   key_cap         24 mm keyed disc with the magnet pocket, glued to the ring's face
   switch_envelope D2F-L body + lever at rest, for the collision test (not printed)
 
@@ -54,6 +54,9 @@ KEY_TAB_W = P.KEY_TAB_W + 2 * P.FIT        # 6.6 (tab at rest angle 0 = +X)
 KEY_TAB_L = P.KEY_TAB_L + P.FIT            # 4.3 radial
 POCKET_FLOOR = ROTOR_TOP - KEY_POCKET_DEPTH   # -4.0: magnet bottom face sits here
 
+# Optional NeoPixel ring at the socket. The budget build has no LEDs here (the sphere strip carries the
+# light), so the recess and the halo part are off. Set True to restore them.
+LED_RING = False
 # NeoPixel ring recess (from the top) and halo
 RING_RECESS_RO = P.NEOPIXEL_RING_OD / 2 + 0.3   # 33.05
 RING_RECESS_RI = P.NEOPIXEL_RING_ID / 2 - 0.3   # 25.85
@@ -196,7 +199,8 @@ def housing_solid():
         cuts.append(cyl(P.M3_CLEAR / 2, -PLATE_T - 1, 1, x, y))
         cuts.append(cyl(P.M3_HEAD_D / 2 + 0.2, -1.2, 1, x, y))
     # NeoPixel ring recess and its wire notch
-    cuts.append(cyl(RING_RECESS_RO, -RING_RECESS_DEPTH, 1).cut(cyl(RING_RECESS_RI, -RING_RECESS_DEPTH - 1, 2)))
+    if LED_RING:
+        cuts.append(cyl(RING_RECESS_RO, -RING_RECESS_DEPTH, 1).cut(cyl(RING_RECESS_RI, -RING_RECESS_DEPTH - 1, 2)))
     cuts.append(frame_box(-WIRE_NOTCH_W / 2, WIRE_NOTCH_W / 2, -WIRE_NOTCH_T / 2, WIRE_NOTCH_T / 2,
                           HOUSING_BOT - 1, -RING_RECESS_DEPTH + 0.5, WIRE_NOTCH_ANGLE, WIRE_NOTCH_R))
     # rotor bore through the faceplate, rotor cavity below it
@@ -332,10 +336,11 @@ def build():
         'socket_base': flip(sf['socket_base']).translate((0, 0, HOUSING_BOT)),
         'switch_bracket': bracket_solid(),
         'plunger': plunger_solid(),
-        'halo': halo_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, HALO_H)),   # skin down
         'key_cap': key_cap_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.KEY_T)),  # flat top down, magnet pocket up
         'switch_envelope': flip(sf['switch_envelope']).translate((0, 0, -SWITCH_Z_BOT)),
     }
+    if LED_RING:
+        out['halo'] = halo_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, HALO_H))   # skin down
     return out
 
 

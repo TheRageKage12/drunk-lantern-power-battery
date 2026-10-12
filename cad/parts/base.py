@@ -53,7 +53,7 @@ TAB_IN = 14.0                                         # tab reach sideways into 
 TAB_OUT = 6.0                                         # tab reach behind the wall (sideways / down)
 TAB_Z_BOTTOM = (DOOR_Z0 - TAB_OUT, DOOR_Z0 + 10.5)    # 6..22.5  (stays under the deck)
 TAB_Z_TOP = (DOOR_Z1 - TAB_IN, SPIGOT_ZONE_Z0 - 1.0)  # 74..91   (stays under the dish spigot)
-DOOR_SWITCH_D = 12.5                                  # panel-mount rocker / latching switch
+DOOR_SWITCH_D = 0.0                                   # no master switch in the budget build (unplug the bank); 12.5 or 16 adds the hole
 DOOR_SWITCH_XZ = (-30.0, 72.0)                        # upper left: nothing but the electronics panel behind it
 USB_NOTCH_W = 14.0                                    # passes a USB-C plug body (12 x 6.5) + cable
 SILL_NOTCH_H = 6.0                                    # notch in the base sill under the door opening (z 6..12)
@@ -115,13 +115,14 @@ EPANEL_W, EPANEL_H, EPANEL_T = 52.0, 44.0, 3.0
 EPANEL_GRID = (40.0, 30.0)                            # M3 insert pads (across, up)
 EPANEL_PAD = 9.0
 EPANEL_PAD_PROUD = P.M3_INSERT_DEPTH + 1.0 - EPANEL_T  # pad depth so insert pocket + 1 mm floor fit (4.5)
-# D4184 MOSFET module on the base floor, right crescent (under the deck), long axis along Y
+# Spare pocket on the base floor, right crescent (under the deck): fits a D4184 MOSFET module if you use one
+# (the budget build puts its two MOSFETs on the perfboard instead)
 D4184_XY = (56.0, 0.0)
 D4184_OUTLINE = (P.D4184_W + 2.0, P.D4184_L + 2.0)   # 19 x 36 pocket outline
 D4184_FRAME_T, D4184_FRAME_H = 1.2, 3.0
 D4184_BOSS_D = 9.0
 D4184_BOSS_GAP = 1.0                                  # edge-clamp bosses just outside the short ends
-# 5->12 V boost cable module on the base floor, left crescent (under the deck)
+# LM2596 12 V -> 5 V buck module (43 x 21 mm) on the base floor, left crescent (under the deck)
 BOOST_L, BOOST_W = 45.0, 20.0
 BOOST_XY = (-58.0, 0.0)
 BOOST_OUTLINE = (BOOST_W + 2.0, BOOST_L + 2.0)
@@ -323,7 +324,8 @@ def _door_panel_assembly_frame():
     door = plate.union(plug)
     cuts = [_radial_cutter(sx * DOOR_MAG_X, z, P.MAGNET_POCKET_D, R_IN - 0.5, R_IN + P.MAGNET_POCKET_T)
             for sx in (-1, 1) for z in DOOR_MAG_Z]                                   # magnets, inside face
-    cuts.append(_radial_cutter(DOOR_SWITCH_XZ[0], DOOR_SWITCH_XZ[1], DOOR_SWITCH_D, R_IN - 1.0, DOOR_PLATE_R + 1.0))
+    if DOOR_SWITCH_D > 0:
+        cuts.append(_radial_cutter(DOOR_SWITCH_XZ[0], DOOR_SWITCH_XZ[1], DOOR_SWITCH_D, R_IN - 1.0, DOOR_PLATE_R + 1.0))
     cuts.append(_box(USB_NOTCH_W, 60.0, DOOR_NOTCH_H + 1.0, USB_X, 70.0, DOOR_Z0 - DOOR_LIP - 1.0))   # USB notch
     return _cut_all(door, cuts)
 

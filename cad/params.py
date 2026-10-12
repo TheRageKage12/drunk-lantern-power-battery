@@ -19,8 +19,9 @@ SNUG = 0.15                 # clearance per side for press / locating fits
 
 # ---------------------------------------------------------------- hardware (measured or from datasheets)
 M3_CLEAR = 3.4              # clearance hole for M3 screws
-M3_INSERT_HOLE = 4.0        # pilot hole for M3 x 5.7 mm heat-set insert (4.6 mm OD) in PETG
-M3_INSERT_DEPTH = 6.5       # pocket depth for the insert (insert 5.7 + 0.8 for melt)
+M3_INSERT_HOLE = 2.7        # M3 screws thread straight into the printed plastic (no heat-set inserts).
+                            # Upgrade: set 4.0 for M3 x 5.7 mm heat-set inserts (4.6 mm OD) and re-run.
+M3_INSERT_DEPTH = 6.5       # thread engagement depth (also fits a 5.7 mm insert + 0.8 for melt)
 M3_HEAD_D = 6.0             # socket head diameter (for counterbores)
 MAGNET_D = 6.0              # 6 x 2 mm neodymium disc (owner has 45)
 MAGNET_T = 2.0
