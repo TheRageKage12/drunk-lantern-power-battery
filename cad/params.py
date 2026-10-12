@@ -84,7 +84,7 @@ SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/b
 WINDOW_W, WINDOW_H = 90.0, 87.0     # front arched window: must clear the 9 mm collars at both flats
 DIFFUSER_D = 118.0          # front diffuser disc (sits behind the window on an internal ledge)
 DIFFUSER_T = 1.0
-HATCH_W, HATCH_H = 110.0, 96.0      # rear hatch opening (rev 3: wide enough for a hand holding the glass; 96 = all the height between the collars); bottom-hinged door, magnet-latched at the top
+HATCH_W, HATCH_H = 120.0, 96.0      # rear hand port (rev 6: open, no door; 120 wide so a 90 mm fist clears even 15 mm off-centre; 96 = all the height between the collars)
 GLASS_TRAY_TRAVEL = 45.0    # the glass sits on a tray that slides out through the hatch on two rails in the bay floor
 NOZZLE_ANGLE_DEG = 45.0     # nozzle enters from the rear-left wall at 45 deg aimed at the inside wall of the glass
 NOZZLE_TIP_ABOVE_RIM = 10.0
@@ -140,4 +140,16 @@ GLASS_TOP_Z_LOCAL = -38.0    # glass rim height: under the curled fingers, low e
 WELL_ID, WELL_WALL = 54.0, 2.0
 NOZZLE_RISE = 5.5            # straight rise above the bay floor before the bend
 NOZZLE_BEND_R = 22.0         # then a 90 deg bend toward the glass; the tube ends ~15 mm above the rim, aimed inside it
-FIST_R, FIST_LEN, FOREARM_R = 32.0, 85.0, 30.0   # hand envelopes for the clearance checks (estimates)
+FIST_W, FIST_H, FIST_LEN, FOREARM_R = 100.0, 58.0, 85.0, 30.0   # hand envelopes (estimates): a 90 mm knuckle-wide fist plus 10 mm for the ring finger being off-centre
+
+# ---------------------------------------------------------------- slide-out glass (rev 7)
+# A glass sunk in a round well must rise ~52 mm before it can move sideways, and the nozzle tip and the
+# socket both hang over that path. So the well is a slot: the glass pours at the FRONT end (under the tip) and
+# you pull it GLASS_SLIDE mm toward you before lifting it, where nothing is above it. The slot floor slopes
+# down to the front so an empty glass settles back at the pour position on its own.
+GLASS_POUR_Y = -2.0          # glass centre while pouring (sphere frame; -Y = front)
+GLASS_SLIDE = 24.0           # pull back this far, then lift
+WELL_SLOPE_DEG = 3.0
+NOZZLE_TIP_XY = (-14.0, -6.0)   # where the tube end hangs: 14 mm off the pour centre, 30+ mm from the lift path
+NOZZLE_TIP_OUT = 5.0         # tube length left sticking out of the guide
+DISH_LOWER_HOLE_D = 102.0    # lower dish floor hole (was 80): the slot hangs through it into the dish cone

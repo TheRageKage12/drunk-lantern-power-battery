@@ -139,7 +139,7 @@ def _lower_profile():
     """Closed (r, z) profile of dish_lower in the print frame (mouth down)."""
     r_mouth = P.DISH_MOUTH_D / 2
     r_neck = P.DISH_NECK_D / 2
-    r_hole = P.DISH_NECK_HOLE_D / 2
+    r_hole = P.DISH_LOWER_HOLE_D / 2    # rev 7: wide enough for the glass slot
     r_flange = DISH_FLANGE_D / 2
     r_ring_o, r_ring_i = LOCATING_RING_OD / 2, LOCATING_RING_ID / 2
     r_sp_o, r_sp_i = SPIGOT_OD / 2, SPIGOT_ID / 2

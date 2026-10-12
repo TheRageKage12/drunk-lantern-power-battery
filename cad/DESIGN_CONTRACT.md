@@ -193,3 +193,18 @@ exception in build.py output.
 - Hall pocket widened to fit the Adafruit DRV5032 board (`HALL_PCB_W = 17.8`).
 - Light = one plain 12 V green strip (18 x 5 cm pieces, 2 per carrier channel) switched by a MOSFET.
 - The LM2596 buck sits in the left floor crescent of the base; the right crescent pocket is a spare.
+
+## Revision 6 (punch-in layout) - supersedes the socket mounting, hatch and tray above
+- The hand goes in horizontally like a punch through an open 120 x 96 mm port in the rear sphere half. No hatch
+  door, hinge or hatch magnets.
+- The socket is inside the sphere, its axis along +Y facing the port, ring centre `SOCKET_Z_LOCAL` = 11 mm above
+  the sphere centre. `socket_base` grows two ears at r = 53 (+-X) that screw through two 8 mm `socket_standoff`s
+  to the back of the LED carrier (2 x M3x20 + nuts). The housing has no faceplate flange.
+- `top_cap` (a 3 mm disc with 4 countersunk M3 holes) closes the upper dish's old socket counterbore.
+- The glass hangs in `glass_well`, a 54 mm ID cup that drops through the bay floor into the lower dish neck: rim
+  at sphere z = -38, about 25 mm below the fist, so the fingers open straight onto it.
+- The tube rises through the bay floor at (-34.5, -4) into `nozzle_guide`: 5.5 mm straight, then a 22 mm radius
+  quarter bend that points the tip horizontally over the glass. The cable for the socket and LEDs goes down the
+  7 mm hole at (+34.5, -4).
+- Checks: the fist (100 x 58 mm ellipse, 85 mm long) and forearm (60 mm) envelopes must clear every part except
+  the switch envelope.
