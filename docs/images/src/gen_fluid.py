@@ -189,7 +189,7 @@ label(LX, 510, ["glass slot: push the glass back", "to the stop (a ridge clicks 
 label(LX, 570, ["lower dish, hollow: the slot hangs", "in it; tube and cables pass down"], *px(-50, 150), anchor="end")
 label(LX, 650, ["8 oz jar (behind the section),", "vented lid, pickup tube to the bottom"], *px(jar[0][1] + 8, 80), anchor="end")
 label(LX, 720, ["electronics board on the deck panel;", "cables come down behind the wall"], *px(-60, 70), anchor="end")
-label(LX, 790, ["USB-C PD power bank (12 V),", "flat on the floor under the deck"], *px(-40, 14), anchor="end")
+label(LX, 790, ["12 V Li-ion pack, flat on the", "floor under the deck"], *px(-40, 14), anchor="end")
 
 label(RX, 170, ["strip curtain (frosted plastic", "strips) hangs behind the hand", "opening; your hand parts it"], *px(P.CURTAIN_R + 2, Zc + 35))
 label(RX, 250, ["your fist, punched in; the ring", "face sits in the lock; LED", "columns beside the lock"], *px(40, Zc + 20))
@@ -197,7 +197,7 @@ label(RX, 330, ["to take the glass: grip its front,", "1  slide it toward you %d
                 "3  bring it out through the curtain"], *px(y_out + 26, z_lift + P.GLASS_H - 4))
 label(RX, 440, ["glass rim 3 mm under the lock"], *px(gy + rt - 2, gz0 + P.GLASS_H))
 label(RX, 640, ["Kamoer KPHM200 pump (behind", "the section), head toward", "your side"], *px(pump[1][1] - 10, 60))
-label(RX, 720, ["base cartridge: 3 thumbscrews", "underneath; lift the lantern off", "to refill the jar or charge the bank"], *px(70, 4))
+label(RX, 720, ["base cartridge: 3 thumbscrews", "underneath; lift the lantern off", "to refill the jar"], *px(70, 4))
 
 # legend
 lx, ly = 470, 880

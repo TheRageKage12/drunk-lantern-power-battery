@@ -117,8 +117,8 @@
 <text x="262" y="733" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">cables come down behind the wall</text>
 <path d="M268,716 L340.0,735.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="340.0" cy="735.0" r="2.2" fill="#777777"/>
-<text x="262" y="790" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">USB-C PD power bank (12 V),</text>
-<text x="262" y="803" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">flat on the floor under the deck</text>
+<text x="262" y="790" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">12 V Li-ion pack, flat on the</text>
+<text x="262" y="803" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">floor under the deck</text>
 <path d="M268,786 L370.0,819.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="370.0" cy="819.0" r="2.2" fill="#777777"/>
 <text x="690" y="170" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">strip curtain (frosted plastic</text>
@@ -147,7 +147,7 @@
 <circle cx="493.0" cy="750.0" r="2.2" fill="#777777"/>
 <text x="690" y="720" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">base cartridge: 3 thumbscrews</text>
 <text x="690" y="733" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">underneath; lift the lantern off</text>
-<text x="690" y="746" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">to refill the jar or charge the bank</text>
+<text x="690" y="746" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">to refill the jar</text>
 <path d="M684,716 L535.0,834.0" fill="none" stroke="#777777" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="535.0" cy="834.0" r="2.2" fill="#777777"/>
 <path d="M470,876 L498,876" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>

@@ -326,10 +326,10 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
    faces the wall, which holds the tube in. Leave 5 mm of tube sticking out of its end, cut square with a sharp
    blade. The tube end hangs about 1.5 cm above the rim, over the back third of the glass, so the stream and the
    last drop both land inside it.
-6. **Service loop.** Leave about 30 cm of extra tube between the pump and the bay floor, coiled loosely (no
+5. **Service loop.** Leave about 30 cm of extra tube between the pump and the bay floor, coiled loosely (no
    tighter than a 5 cm circle, or it kinks) in the space above the jar and pump. That slack lets you lift the
    lantern off the cartridge and set it down beside it without disconnecting the tube.
-5. **Prime.** Water in the jar, then `cal 6000` from the laptop (or a pour into a cup) until water reaches
+6. **Prime.** Water in the jar, then `cal 6000` from the laptop (or a pour into a cup) until water reaches
    the nozzle. The tube stays full between pours.
 
 ---
