@@ -4,7 +4,7 @@ The same parts as section 2 of the [build guide](BUILD_GUIDE.md), grouped by whe
 the specific item. Amazon delivery dates were read from each listing on 2026-10-13 (default San Francisco
 address; Seattle should be similar). "Prime" means it ships from Amazon. Tick the boxes as you go.
 
-## Amazon (one order, ~$135)
+## Amazon (one order, ~$125)
 
 | ✓ | Item | Listing | Price | Delivery |
 |---|---|---|---|---|
@@ -16,11 +16,10 @@ address; Seattle should be similar). "Prime" means it ships from Amazon. Tick th
 | [ ] | LED strip, green COB, 12 V, 8 mm, 5 m | [HAMRVL (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | Prime, Oct 14 |
 | [ ] | Buck converter, LM2596, 5-pack | [Seloky (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | Prime, Oct 14 |
 | [ ] | Magnets, 6 x 2 mm, 45 pcs | [SMARTAKE (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | Prime, Oct 14 |
-| [ ] | Cable plugs, JST-SM 4-pin pigtail pairs, 20 pairs (2 used) | [mxuteuk (B083GR7FQF)](https://www.amazon.com/dp/B083GR7FQF) | $9.99 | Prime, Oct 14 |
-| [ ] | Vent valve, aquarium check valve, 10 pcs | [AQUANEAT (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | Prime, Oct 14 |
-| [ ] | Spring assortment, 23 sizes (use the ~0.4-0.5 x 5 x 10 mm one) | [Dianrui (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | Prime, Oct 14 |
+| [ ] | Vent valve, aquarium check valve, 10 pcs (1 used; or 1 from a pet store's aquarium aisle) | [AQUANEAT (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | Prime, Oct 14 |
+| [ ] | Spring assortment, 23 sizes (1 used; try a pen spring first, see below) | [Dianrui (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | Prime, Oct 14 |
 
-## Vetco Electronics, Bellevue (~$38)
+## Vetco Electronics, Bellevue (~$42)
 
 [12718 Northup Way STE 100](https://vetco.net), (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30. Prices from its website.
 
@@ -41,6 +40,8 @@ address; Seattle should be similar). "Prime" means it ships from Amazon. Tick th
 | [ ] | 1 | 14-pin IC socket | [link](https://vetco.net/products/14-pin-ic-socket-2-54mm-spacing-0-1) | $1.95 |
 | [ ] | 1 | 22 AWG stranded wire | [link](https://vetco.net/products/hookup_wire_stranded_22_ga) | $5.37 |
 | [ ] | 1 | 1/8" heat-shrink, 4 ft | [link](https://vetco.net/products/1-8_heat_shrink_tubing_4_long) | $1.69 |
+| [ ] | 1 | Lock cable plug: JST PH 4-pin pair, pre-wired | [link](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) | $2.24 |
+| [ ] | 1 | LED lead plug: JST SM 2-pin locking pair | [VUPN1054](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) | $1.75 |
 
 ## Tacoma Screw Products, Ballard (~$12, by the piece)
 
@@ -68,6 +69,14 @@ are the matching items on their website (sold there in boxes of 100); the store 
 | [ ] | Drill bits, metric 1.5-10 mm (2.5 and 6 mm used) | [15-piece cobalt set (B07B7L6WVY)](https://www.amazon.com/dp/B07B7L6WVY) | $22.99 |
 | [ ] | Flush cutters | [KATA mini (B07VGK8GBL)](https://www.amazon.com/dp/B07VGK8GBL) | $5.39 |
 
+## Spring: try one from a pen first
+
+A retractable ballpoint's spring (about 0.3-0.4 mm wire, 4-4.5 mm across) fits the plunger pocket: cut it to about
+10 mm with flush cutters. It will be softer than the 0.5 mm spring the lock was sized for (roughly a third of the
+force), so test the snap-back when you build the lock (guide section 6, step 4). If the rotor doesn't return
+crisply every time, use a stiffer one: a hardware store spring drawer (Ace, McLendon: Hillman, ~$1-2 each, take
+calipers) or the Amazon assortment above.
+
 ## Already have
 
 - Super glue (any cyanoacrylate, e.g. Gorilla Glue super glue): magnets, key cap, nuts, the Hall sensor, the diffuser.
@@ -85,5 +94,5 @@ are the matching items on their website (sold there in boxes of 100); the store 
 - [ ] **Shot glass**, 1.5 oz: at most **52 mm across the top** and **62 mm tall**; a heavy base helps.
   [Bargreen Ellingson](https://www.bargreen.com/locations/seattle), SoDo showroom, Mon-Fri 10-3.
 
-**Total: about $190** (Amazon ~$135, Vetco ~$38, Tacoma Screw ~$12), plus the jar and shot glass, and filament
+**Total: about $190** (Amazon ~$125, Vetco ~$42, Tacoma Screw ~$12), plus the jar and shot glass, and filament
 or tools if you need them.

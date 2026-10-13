@@ -64,7 +64,7 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
 | 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key (the pack is the smallest sensible buy). |
-| 5b | Cable plugs | [JST-SM 4-pin pigtail pairs, 20 pairs (B083GR7FQF)](https://www.amazon.com/dp/B083GR7FQF) | $9.99 | Two pairs used: one in the lock cable, one in the LED leads (two of its four wires each for + and −), so the lantern unplugs from the base cartridge. |
+| 5b | Cable plugs | Vetco: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) ($2.24) for the lock cable, [JST SM 2-pin pair](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) ($1.75) for the LED leads | $3.99 | So the lantern unplugs from the base cartridge. |
 | 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
 | 5a | Curtain | Office store: one clear-frosted polypropylene binder divider or report cover, letter size | ~$4 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
@@ -211,7 +211,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    pin 3 to the stripe (cathode) of a 1N5819 whose other end goes to D1. The diode lets the sensor pull D1 low
    but never puts 5 V on it; put it on the board. Microswitch: NO to D2, COM to ground. Use one 4-wire cable
    (5V, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
-   about 10 cm from the board. Put the second 4-pin plug in the LED leads the same way (two wires for +, two for −). These two plugs are where the
+   about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
    lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
    cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are 13 mm wide and
    will never pass that hole afterwards. The bay floor then rides on the cables until final assembly.
