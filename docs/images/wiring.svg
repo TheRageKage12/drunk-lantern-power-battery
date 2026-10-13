@@ -29,13 +29,13 @@
 <text x="1270" y="818" font-size="11" text-anchor="end" font-weight="bold" fill="#222222">GND rail</text>
 <rect x="24" y="84" width="170" height="90" rx="6" fill="#f5f5f5" stroke="#222222" stroke-width="1.4"/>
 <text x="109.0" y="104" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">Power bank</text>
-<text x="109.0" y="120" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">USB-C PD with a 12 V profile</text>
-<text x="109.0" y="133" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">(e.g. INIU B61)</text>
+<text x="109.0" y="120" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">VEGER 5000mAh, built-in</text>
+<text x="109.0" y="133" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">USB-C plug, 12V-1.6A PD</text>
 <rect x="188" y="124" width="12" height="14" rx="0" fill="#bbbbbb" stroke="#222222" stroke-width="1"/>
 <rect x="220" y="96" width="150" height="60" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.4"/>
-<text x="295.0" y="116" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">PD 12 V cable</text>
-<text x="295.0" y="132" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">Adafruit 5450,</text>
-<text x="295.0" y="145" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">barrel plug cut off</text>
+<text x="295.0" y="116" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">12 V trigger board</text>
+<text x="295.0" y="132" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">AITRIP PDC004 (12V),</text>
+<text x="295.0" y="145" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">bank plugs into it</text>
 <path d="M200,131 L220,131" fill="none" stroke="#777777" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M370,112 L400,112 L400,120" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="374" y="106" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">+</text>
@@ -208,5 +208,5 @@
 <circle cx="240" cy="800" r="3.4" fill="#222222"/>
 <text x="24" y="836" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.</text>
 <text x="24" y="850" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.</text>
-<text x="24" y="864" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">No master switch or fuse in this build: unplug the cable at the power bank to turn it off; the bank has its own overcurrent cut-out.</text>
+<text x="24" y="864" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">No master switch or fuse in this build: unplug the bank from the trigger board to turn it off; the bank has its own overcurrent cut-out.</text>
 </svg>

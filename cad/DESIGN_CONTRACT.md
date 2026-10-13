@@ -270,3 +270,7 @@ exception in build.py output.
   At 180 deg it would hit the jar and its ring, which is why the angles are uneven.
 - Crossing the split: the tube keeps ~30 cm of slack (no joint in the drink path); the lock and LED cables get
   a 4-pin and a 2-pin plug.
+- Power (rev 9a): VEGER 5000mAh 20W bank (77.2 x 35 x 24.7 mm, USB-C plug with 12V-1.6A PD) plus an AITRIP PDC004
+  fixed-12V PD trigger board on its plug, replacing the Adafruit PD cable. The tray pocket has side rails and
+  one central strap; the plug and board sit in the gap of the +Y end stop (`trigger_envelope`, also checked
+  against the drum boss sweep). The deck drops 0.3 mm with the thinner bank.

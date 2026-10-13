@@ -29,7 +29,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - Kamoer KPHM200: modelled as a 64 x 63 x 40 mm head box plus a 40 mm motor can, 118 mm overall. Kamoer
   publishes no drawing. Measure the pump and adjust `PUMP_*` in `params.py` and `PUMP_HEAD_L_EST` in `parts/base.py`.
 - Reservoir jar: 76 mm across the cap, 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
-- Power bank: 150 x 72 x 25 mm pocket, flat on the floor under the deck.
+- Power bank: VEGER 5000mAh, 77.2 x 35 x 24.7 mm, flat on the cartridge tray under the deck, plug toward +Y; 35 mm beyond its plug end for the plug and the 12 V trigger board (`trigger_envelope`).
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
 - Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, plus a 60 mm forearm through the 120 x 96 mm hand opening.
 - Hall board pocket in `socket_base`: 31.6 x 18.4 mm. The DRV5032 board (25.6 x 17.8) slides along it so its chip sits under the window.

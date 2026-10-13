@@ -62,10 +62,10 @@ s.text(W - 20, RAIL12 - 8, "+12 V rail", size=11, anchor="end", color=ORANGE, we
 s.wire([(16, GND_Y), (W - 20, GND_Y)], BLACK, sw=3)
 s.text(W - 20, GND_Y + 18, "GND rail", size=11, anchor="end", weight="bold")
 
-# ---------------------------------------------------------------- power bank + PD cable
-box(24, 84, 170, 90, "Power bank", ["USB-C PD with a 12 V profile", "(e.g. INIU B61)"])
+# ---------------------------------------------------------------- power bank + 12 V trigger board
+box(24, 84, 170, 90, "Power bank", ["VEGER 5000mAh, built-in", "USB-C plug, 12V-1.6A PD"])
 s.rect(188, 124, 12, 14, fill="#bbbbbb", sw=1)
-box(220, 96, 150, 60, "PD 12 V cable", ["Adafruit 5450,", "barrel plug cut off"], fill="#fff7e6")
+box(220, 96, 150, 60, "12 V trigger board", ["AITRIP PDC004 (12V),", "bank plugs into it"], fill="#fff7e6")
 s.wire([(200, 131), (220, 131)], GREY, sw=3)
 s.wire([(370, 112), (400, 112), (400, RAIL12)], ORANGE, sw=3)
 s.text(374, 106, "+", size=12, weight="bold", color=ORANGE)
@@ -197,7 +197,7 @@ dot(240, GND_Y)
 s.lines(24, GND_Y + 36, [
     "The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.",
     "The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.",
-    "No master switch or fuse in this build: unplug the cable at the power bank to turn it off; the bank has its own overcurrent cut-out.",
+    "No master switch or fuse in this build: unplug the bank from the trigger board to turn it off; the bank has its own overcurrent cut-out.",
 ], size=10.5, color="#333")
 
 open(os.path.join(HERE, "..", "wiring.svg"), "w").write(s.finish())

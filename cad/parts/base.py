@@ -62,8 +62,7 @@ BANK_HALF_W = P.POWERBANK_W / 2                       # 35.5 across X
 BANK_HALF_L = P.POWERBANK_L / 2                       # along Y, ports toward +Y (owner's side)
 BANK_END_STOP_T, BANK_END_STOP_H = P.WALL, 12.0
 BANK_END_STOP_GAP = 0.3
-BANK_END_STOP_X = (12.0, 20.0)                        # two blocks at +Y leaving the middle free for the plug
-BANK_STRAP_Y = 31.0                                   # strap slot centres at y = +/- this
+BANK_END_STOP_X = (7.0, P.POWERBANK_W / 2)            # two blocks at +Y leaving the middle free for the plug
 STRAP_SLOT_L, STRAP_SLOT_W = 22.0, 3.0                # for a 20 mm hook-and-loop strap
 
 # ------------------------------------------------------------------ deck on pillars
@@ -206,15 +205,20 @@ def _drum():
 
 # ------------------------------------------------------------------ base floor features
 def _bank_pocket():
-    """End stops for the flat power bank (sideways it is guided by the pillars) + 2 strap slot pairs."""
+    """End stops and side rails for the flat power bank, and a strap slot pair across its middle. The +Y end
+    stop is two blocks: the bank's USB-C plug and the 12 V trigger board on it sit in the gap and beyond."""
     y_stop = BANK_HALF_L + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
     adds = [_box(2 * BANK_END_STOP_X[1], BANK_END_STOP_T, BANK_END_STOP_H, 0, -y_stop, P.FLOOR)]
-    for sx in (-1, 1):   # +Y end: two blocks, the middle stays free for the charging plug
+    for sx in (-1, 1):   # +Y end: two blocks, the middle stays free for the plug
         xc = sx * (BANK_END_STOP_X[0] + BANK_END_STOP_X[1]) / 2
         adds.append(_box(BANK_END_STOP_X[1] - BANK_END_STOP_X[0], BANK_END_STOP_T, BANK_END_STOP_H, xc, y_stop, P.FLOOR))
-    x_slot = BANK_HALF_W + PUMP_STRAP_GAP + STRAP_SLOT_W / 2
-    cuts = [_box(STRAP_SLOT_W, STRAP_SLOT_L, P.FLOOR + 2, sx * x_slot, sy * BANK_STRAP_Y, -1)
-            for sx in (-1, 1) for sy in (-1, 1)]
+    x_rail = BANK_HALF_W + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
+    rail_l = BANK_HALF_L - STRAP_SLOT_L / 2 - 4.0
+    for sx in (-1, 1):   # side rails either side of the strap, so the narrow bank cannot slide sideways
+        for sy in (-1, 1):
+            adds.append(_box(BANK_END_STOP_T, rail_l, BANK_END_STOP_H, sx * x_rail, sy * (BANK_HALF_L - rail_l / 2), P.FLOOR))
+    x_slot = x_rail + BANK_END_STOP_T / 2 + 1.0 + STRAP_SLOT_W / 2
+    cuts = [_box(STRAP_SLOT_W, STRAP_SLOT_L, P.FLOOR + 2, sx * x_slot, 0.0, -1) for sx in (-1, 1)]
     return adds, cuts
 
 
@@ -428,7 +432,9 @@ def _envelopes():
         .center(PUMP_X, P.PUMP_H / 2).circle(P.PUMP_MOTOR_D / 2).extrude(PUMP_MOTOR_L)
     pump = head.union(motor)
     bank = _box(P.POWERBANK_W, P.POWERBANK_L, P.POWERBANK_T, 0, 0, 0)
-    return {'bottle_envelope': bottle, 'pump_envelope': pump, 'powerbank_envelope': bank}
+    # the bank's USB-C plug and the 12 V trigger board plugged onto it, through the gap in the +Y end stop
+    trig = _box(13.0, P.TRIGGER_ALLOW_L, 14.0, 0, BANK_HALF_L + P.TRIGGER_ALLOW_L / 2, 0)
+    return {'bottle_envelope': bottle, 'pump_envelope': pump, 'powerbank_envelope': bank, 'trigger_envelope': trig}
 
 
 def build():
@@ -452,4 +458,5 @@ def placements():
         'bottle_envelope': on_deck,
         'pump_envelope': on_deck,
         'powerbank_envelope': on_floor,
+        'trigger_envelope': on_floor,
     }

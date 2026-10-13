@@ -66,13 +66,13 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
 | 7 | Hall sensor | [Adafruit DRV5032 breakout #6051](https://www.adafruit.com/product/6051) | $4.95 | Runs on 3.3 V, very sensitive, either magnet pole works. |
-| 8 | 12 V cable | [Adafruit USB-C PD 12 V trigger cable #5450](https://www.adafruit.com/product/5450) | $7.95 | Asks the power bank for 12 V. You cut the barrel plug off. |
-| | Adafruit shipping | | ~$8 | Ships from Brooklyn in 1-2 business days; USPS Ground Advantage is 2-5 more. Order it first. |
+| 8 | Power bank | [VEGER 5000mAh 20W (B09NXCLXVD)](https://www.amazon.com/dp/B09NXCLXVD) | check listing | 77 x 35 x 25 mm. Its built-in USB-C **plug** gives 12V-1.6A (PD). 5,000 mAh is hundreds of pours. |
+| 8a | 12 V trigger board | [AITRIP PDC004 USB-C PD 12V trigger, 5-pack (B09GVQ3FGW)](https://www.amazon.com/dp/B09GVQ3FGW) | check listing | **Pick the 12V version.** The bank plugs into its USB-C socket; it asks the bank for 12 V and puts it on two pads. Fixed 12 V, up to 5 A. |
+| | Adafruit shipping | | ~$8 | Only for the Hall sensor now. Ships from Brooklyn in 1-2 business days; USPS Ground Advantage is 2-5 more. |
 
-**Faster alternative to the Adafruit order.** Use the [wininks USB-C PD 12 V cable (B0FD9P7PV4)](https://www.amazon.com/dp/B0FD9P7PV4)
-(~$10) and an A3144 Hall sensor from Vetco ($1.99). The A3144 needs 5 V and a diode on its output (section 4)
-and is less sensitive: bend its leads so it stands up through the sensor window, and stack two magnets in
-the key cap. Saves the shipping wait; costs about $7 less.
+**Skip the Adafruit order.** Use an A3144 Hall sensor from Vetco ($1.99) instead of the DRV5032. The A3144
+needs 5 V and a diode on its output (section 4) and is less sensitive: bend its leads so it stands up through
+the sensor window, and stack two magnets in the key cap. Saves the shipping and the wait.
 
 ### 2.2 Pick up locally (or order the Amazon kit in brackets)
 
@@ -86,10 +86,8 @@ the key cap. Saves the shipping wait; costs about $7 less.
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $150.** That assumes you already have:
+**Total: about $150 plus the power bank and the trigger boards** (both priced on their listings). That assumes you already have:
 
-- **A power bank with a 12 V USB-C output.** Look for "12V⎓1.5A" printed on the bank or on its listing. If
-  yours lacks it, the [INIU B61 (B09176JCKZ)](https://www.amazon.com/dp/B09176JCKZ) has it (~$21).
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
@@ -183,9 +181,12 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 
 1. **XIAO and U1.** Solder two 1x7 female header strips 15.24 mm apart for the XIAO, or solder it straight to
    the board. Solder the 14-pin DIP socket for the 74AHCT125 (U1).
-2. **12 V in.** Cut the barrel plug off the PD cable. Plug the cable into the power bank and check with the
-   meter that the centre wire reads about +12 V. Centre wire to the +12 V rail, outer wire to ground.
-   Solder C2 (2200 µF 16 V) across the rail, stripe (−) to ground.
+2. **12 V in.** Solder a red and a black 22 AWG wire (about 25 cm) to the trigger board's + and − output pads.
+   Plug the VEGER's USB-C plug into the board's socket and check with the meter that the wires read about
+   **+12 V**. If they read 5 or 9 V, the board is the wrong version or the bank isn't offering 12 V: don't
+   connect anything until it reads 12. Red to the +12 V rail, black to ground. Solder C2 (2200 µF 16 V)
+   across the rail, stripe (−) to ground. In the cartridge the board lies on the tray past the bank's plug end,
+   in the gap between the two end stops.
 3. **5 V.** Wire the LM2596's IN+ and IN− to the 12 V rail and ground. **Turn its little screw until OUT reads
    5.0 V on the meter before connecting anything to it.** Then OUT+ feeds U1 pin 14, and also the XIAO's 5V pin
    through a 1N5819 (stripe toward the XIAO). That diode lets you plug the XIAO into a laptop without feeding
@@ -448,7 +449,7 @@ position, under the lock.
 1. Tip the lantern slightly and undo the 3 thumbscrews underneath.
 2. Lift the lantern off by its handle and set it down beside the cartridge. The tube and the cables have
    enough slack; unplug the two cable plugs if you want the lantern completely free.
-3. Unplug the power bank (or charge it now). Unscrew the jar lid; the pickup tube comes out with it.
+3. Unplug the power bank from the trigger board (charge it now if needed). Unscrew the jar lid; the pickup tube comes out with it.
 4. Fill the jar, put the lid back on, plug the bank back in.
 5. Lower the lantern back over the cartridge and do the thumbscrews up.
 
@@ -471,7 +472,7 @@ flattened.
 | Ring not detected | `status` with the ring in. Is the DRV5032 chip under the window, on the axis? Is the magnet glued in the key cap? |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump hums, no flow | Tube not seated under the rollers, head cap open, or the wrong (thin-walled) tube. |
-| Pump doesn't run at all | Check the PD cable gives 12 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
+| Pump doesn't run at all | Check the trigger board gives 12 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, bank nearly empty, or the bank doesn't really offer 12 V. |
 | LEDs stay dark or stay on | Q2 wiring, or U1's OE pins not grounded. |
 | Power bank switches off when idle | `idle 30` then `save`; or turn on the bank's low-current mode if it has one. |

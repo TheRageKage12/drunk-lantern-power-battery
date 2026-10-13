@@ -26,7 +26,7 @@ def run(all_parts, placements):
     SHELL = ('base', 'dish_lower')   # parts that move with the lantern when it is lifted off the base cartridge
     for en, env in envelopes.items():
         if en.endswith('_sweep_envelope'):   # must also clear the hardware the cartridge carries
-            for hn in ('bottle_envelope', 'pump_envelope', 'powerbank_envelope'):
+            for hn in ('bottle_envelope', 'pump_envelope', 'powerbank_envelope', 'trigger_envelope'):
                 v = inter_volume(env, envelopes[hn]) if hn in envelopes else 0.0
                 if v > 200.0:
                     print(f'FAIL clearance: {en} intersects {hn} by {v / 1000:.1f} cm3'); problems += 1

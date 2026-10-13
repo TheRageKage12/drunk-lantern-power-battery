@@ -59,7 +59,8 @@ GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and 
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 150.0, 72.0, 25.0   # pocket: INIU B61 (104 x 66 x 23, primary) or Anker 313 (149.5 x 68.5 x 14.5); flat on the floor under the deck, strap-retained
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 77.2, 35.0, 24.7   # VEGER 5000mAh 20W (USB-C plug: 12V-1.6A); flat on the tray, plug toward +Y
+TRIGGER_ALLOW_L = 35.0      # beyond the bank's plug end: the plug + the 12 V PD trigger board (AITRIP PDC004)
 
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)
