@@ -129,7 +129,9 @@ Print these first, before any big part, and check them:
 1. `socket_housing`, `rotor`, `socket_base`, `plunger`: the rotor turns 45 degrees with slight drag and the
    plunger snaps it back. If it binds, raise `FIT` in `cad/params.py` by 0.05 and reprint the rotor.
 2. `key_cap`: drops into the rotor pocket one way only, with a little play.
-3. **Optional hand check.** The CAD clears a fist 106 x 76 mm (yours is under 4 x 3 in). If you want to be
+3. `glass_well` with your real shot glass: it slides the length of the slot, clicks over the ridge at the far
+   end, and comes back out. If your glass is wider than 52 mm at the top it won't fit; pick another glass.
+4. **Optional hand check.** The CAD clears a fist 106 x 76 mm (yours is under 4 x 3 in). If you want to be
    sure before the big prints: cut a 120 x 96 mm hole in a box and punch through it with a shot glass held
    under your fist. Both must pass without scraping.
 
