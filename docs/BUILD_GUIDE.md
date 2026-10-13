@@ -444,6 +444,7 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] Pull the ring out mid-pour: the pump stops at once.
 - [ ] 20 water pours in a row: every pour lands in the glass, no drips anywhere.
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
+- [ ] On the day: `status` reads about 11.5 V or more (roughly half charge or better). Below that, charge first.
 - [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring double-blinks before the glow.
 - [ ] Switch off, plug in the charger: the charger's light shows it charging.
 - [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
@@ -483,9 +484,16 @@ well over 100 pours.
 
 ## 13. Cleaning and storage
 
-Same night: put warm water in the jar and run `cal 20000` into a cup twice, then once more with the tube
-out of the water to push the line empty. Lift the lantern off the cartridge, open the pump head and lift the tube off the rollers. Let it air-dry
-with both ends open. Never leave liqueur in the tube overnight: the sugar gums up the bore and the rollers.
+Same night, before the sugar dries:
+1. Empty the jar, half-fill it with warm water, and put the shot glass in its slot.
+2. `cal 8000` pours about 22 mL into the glass. Empty the glass and repeat 4 or 5 times. Only the shot
+   glass fits under the nozzle, so keep each run short: `cal 20000` would pour ~55 mL and overflow it.
+3. Lift the lantern off the cartridge, unscrew the jar lid and hold the pickup tube out of the water. Run
+   `cal 8000` twice more to push the line empty.
+4. Rinse the jar, the lid and its vent valve. Open the pump head and lift the tube off the rollers. Let
+   everything air-dry with the tube ends open.
+
+ Never leave liqueur in the tube overnight: the sugar gums up the bore and the rollers.
 Store with the head open so the tube isn't crushed for months. Replace the pump tube when it looks cloudy or
 flattened.
 
