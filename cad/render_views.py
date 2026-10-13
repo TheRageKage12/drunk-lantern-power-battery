@@ -25,7 +25,9 @@ DARK = (40, 110, 60)
 GREY = (150, 150, 150)
 ORANGE = (235, 150, 60)     # hardware envelopes
 WHITE = (235, 235, 235)     # diffuser / halo
-COLORS = {'diffuser': WHITE, 'halo': WHITE, 'top_diffuser': WHITE, 'base_tray': DARK}
+COLORS = {'diffuser': WHITE, 'halo': WHITE, 'top_diffuser': WHITE, 'base_tray': DARK,
+          'lock_wall': WHITE, 'socket_housing': GREY, 'rotor': GREY, 'socket_base': GREY, 'key_cap': GREY,
+          'switch_bracket': GREY, 'plunger': GREY, 'glass_well': DARK, 'bay_floor': DARK, 'nozzle_guide': DARK}
 
 
 def placements():
@@ -66,6 +68,9 @@ def render(items, out, size=900, az=35, el=25, title=None, zoom=0.92):
     light = np.array([-0.4, -0.7, 0.6]); light /= np.linalg.norm(light)
     tris, depth, cols = [], [], []
     for m, color in items:
+        if m.extents.max() > 60 and len(m.faces) < 200000:   # split big flat faces so the depth sort is right
+            v, f = trimesh.remesh.subdivide_to_size(m.vertices, m.faces, max_edge=12.0)
+            m = trimesh.Trimesh(v, f, process=False)
         v = (m.vertices - center) @ R.T
         f = m.faces
         t = v[f]
