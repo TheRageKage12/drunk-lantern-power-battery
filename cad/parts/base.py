@@ -1,7 +1,7 @@
 """
 base.py - the lantern's base: an outer drum (part of the lantern shell) and a removable CARTRIDGE.
 
-The cartridge (tray + deck + power bank + jar + pump + electronics) slides up into the open bottom of the
+The cartridge (tray + deck + 12 V battery pack + jar + pump + electronics) slides up into the open bottom of the
 drum and is held by three thumbscrews from underneath, hidden while the lantern stands. To refill: undo the
 thumbscrews and lift the lantern off by its handle; the cartridge stays on the table (rev 9; no service door).
 
@@ -9,7 +9,7 @@ Parts (print orientation, bed = XY, min z = 0):
   base               drum, open both ends, printed TOP BAND DOWN (its 3 nut bosses then print without support)
   base_tray          cartridge floor: bank pocket, deck pillars, buck-converter pocket, drains, 3 knob pads
   thumb_knob         knurled knob that grips an M3x12 socket screw (print 3)
-  base_deck          flat deck plate that drops in over the power bank and carries the bottle
+  base_deck          flat deck plate that drops in over the battery pack and carries the bottle
                      cradle, the pump saddles and the electronics panel (printed flat, identity + lift)
   bottle_envelope    stepped cylinder: body BOTTLE_D x BOTTLE_BODY_H_EST, shoulder, neck/cap to BOTTLE_H
   pump_envelope      KPHM200: head box PUMP_W x PUMP_H x PUMP_HEAD_L_EST + motor can PUMP_MOTOR_D, PUMP_L long,
@@ -57,8 +57,8 @@ KNOB_D, KNOB_H = 10.0, 5.5
 TRAY_R = R_IN - P.FIT                                 # 84.3, same as the deck
 SERVICE_SWEEP_Z1 = SPIGOT_ZONE_Z0 - 1.0               # the bosses pass down over the cartridge from here
 
-# ------------------------------------------------------------------ power bank pocket (floor, centred)
-BANK_HALF_W = P.POWERBANK_W / 2                       # 35.5 across X
+# ------------------------------------------------------------------ battery pack pocket (floor, centred)
+BANK_HALF_W = P.POWERBANK_W / 2                       # 27.5 across X
 BANK_HALF_L = P.POWERBANK_L / 2                       # along Y, ports toward +Y (owner's side)
 BANK_END_STOP_T, BANK_END_STOP_H = P.WALL, 12.0
 BANK_END_STOP_GAP = 0.3
@@ -67,14 +67,14 @@ STRAP_SLOT_L, STRAP_SLOT_W = 22.0, 3.0                # for a 20 mm hook-and-loo
 
 # ------------------------------------------------------------------ deck on pillars
 PILLAR_S = 9.0                                        # square pillars
-PILLAR_X = BANK_HALF_W + 1.0 + PILLAR_S / 2           # 41: inner faces also guide the bank sideways
+PILLAR_X = BANK_HALF_W + 1.0 + PILLAR_S / 2           # 33: inner faces also guide the bank sideways
 PILLAR_Y = (-55.0, 0.0, 55.0)
 PILLAR_INSERTS = ((PILLAR_X, 0.0), (-PILLAR_X, 0.0), (PILLAR_X, 55.0))   # 3 = unambiguous orientation
 DECK_GAP = 4.0                                        # over the bank, room for the straps
-DECK_Z0 = P.FLOOR + P.POWERBANK_T + DECK_GAP          # MATING: deck underside (23)
+DECK_Z0 = P.FLOOR + P.POWERBANK_T + DECK_GAP          # MATING: deck underside (26)
 PILLAR_H = DECK_Z0 - P.FLOOR
 DECK_T = 3.0
-DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (26)
+DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (29)
 DECK_R = R_IN - P.FIT                                 # drops in from the open top
 DECK_PORT_NOTCH = (30.0, 10.0)                        # notch in the deck edge at +Y to see the bank's ports
 
@@ -205,8 +205,8 @@ def _drum():
 
 # ------------------------------------------------------------------ base floor features
 def _bank_pocket():
-    """End stops and side rails for the flat power bank, and a strap slot pair across its middle. The +Y end
-    stop is two blocks: the bank's USB-C plug and the 12 V trigger board on it sit in the gap and beyond."""
+    """End stops and side rails for the flat battery pack, and a strap slot pair across its middle. The +Y end
+    stop is two blocks: the pack's DC socket and its plug sit in the gap, toward the port panel."""
     y_stop = BANK_HALF_L + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
     adds = [_box(2 * BANK_END_STOP_X[1], BANK_END_STOP_T, BANK_END_STOP_H, 0, -y_stop, P.FLOOR)]
     for sx in (-1, 1):   # +Y end: two blocks, the middle stays free for the plug
@@ -307,7 +307,7 @@ def build_base():
     drum = _drum()
     adds, cuts = _drum_bosses()
     drum = drum.union(_union_all(adds))
-    return _cut_all(drum, cuts + _joint_screw_cutters())
+    return _cut_all(drum, cuts + _joint_screw_cutters() + [_drum_port_notch()])
 
 
 def _tray_pads():
@@ -321,6 +321,28 @@ def _tray_pads():
     return adds, cuts
 
 
+def _port_panel():
+    """Curved panel in the drum's bottom-band notch, flush with the band: charge jack and power switch.
+    A floor tab carries it out from the tray edge; two ribs brace it."""
+    a = math.radians(P.PORT_ANGLE)
+    half = P.PORT_W / 2 - P.FIT                       # panel half-width (in the notch, with clearance)
+    r_out, r_in = R_MAX - P.FIT, R_MAX - P.FIT - 3.0  # 3 mm curved skin, flush with the band
+    window = _box(2 * half, 40.0, P.PORT_H - P.FIT, 0.0, (R_MAX + 70.0) / 2 + 2.0, 0.0)     # along +Y, then rotated
+    skin = _ring(r_out, r_in, P.PORT_H - P.FIT).intersect(window)
+    tab = _ring(r_out, TRAY_R - 1.0, P.FLOOR).intersect(window)
+    ribs = [_box(2.4, r_in - 74.0 + 0.5, P.PORT_H - P.FIT, sx * (half - 1.2), (74.0 + r_in) / 2, 0.0) for sx in (-1, 1)]
+    panel = _union_all([skin, tab] + ribs)
+    z = P.FLOOR + (P.PORT_H - P.FIT - P.FLOOR) / 2
+    for x, d in ((-half / 2, P.PORT_JACK_D), (half / 2, P.PORT_SWITCH_D)):     # jack on the left, switch on the right (seen from outside: mirrored)
+        panel = panel.cut(cq.Workplane('XZ').workplane(offset=-(R_MAX + 2)).center(x, z).circle(d / 2).extrude(R_MAX + 2 - 74.0))
+    return _rot_z(panel, P.PORT_ANGLE - 90.0)
+
+
+def _drum_port_notch():
+    """Notch in the drum's bottom band for the port panel. Open at the bottom, so the drum still lifts off."""
+    return _rot_z(_box(P.PORT_W, 30.0, P.PORT_H + 1.0, 0.0, R_MAX - 6.0, -1.0), P.PORT_ANGLE - 90.0)
+
+
 def build_tray():
     """Cartridge floor: everything that used to stand on the base floor."""
     tray = _cyl(TRAY_R, P.FLOOR)
@@ -329,7 +351,7 @@ def build_tray():
         a, c = fn()
         adds += a
         cuts += c
-    tray = tray.union(_union_all(adds))
+    tray = tray.union(_union_all(adds + [_port_panel()]))
     return _cut_all(tray, cuts + _floor_cutters())
 
 
@@ -432,9 +454,7 @@ def _envelopes():
         .center(PUMP_X, P.PUMP_H / 2).circle(P.PUMP_MOTOR_D / 2).extrude(PUMP_MOTOR_L)
     pump = head.union(motor)
     bank = _box(P.POWERBANK_W, P.POWERBANK_L, P.POWERBANK_T, 0, 0, 0)
-    # the bank's USB-C plug and the 12 V trigger board plugged onto it, through the gap in the +Y end stop
-    trig = _box(13.0, P.TRIGGER_ALLOW_L, 14.0, 0, BANK_HALF_L + P.TRIGGER_ALLOW_L / 2, 0)
-    return {'bottle_envelope': bottle, 'pump_envelope': pump, 'powerbank_envelope': bank, 'trigger_envelope': trig}
+    return {'bottle_envelope': bottle, 'pump_envelope': pump, 'powerbank_envelope': bank}
 
 
 def build():
@@ -458,5 +478,4 @@ def placements():
         'bottle_envelope': on_deck,
         'pump_envelope': on_deck,
         'powerbank_envelope': on_floor,
-        'trigger_envelope': on_floor,
     }

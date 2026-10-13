@@ -274,3 +274,11 @@ exception in build.py output.
   fixed-12V PD trigger board on its plug, replacing the Adafruit PD cable. The tray pocket has side rails and
   one central strap; the plug and board sit in the gap of the +Y end stop (`trigger_envelope`, also checked
   against the drum boss sweep). The deck drops 0.3 mm with the thinner bank.
+- Power (rev 9b, supersedes 9a): KBT 12 V 1200 mAh 3-cell Li-ion pack, 70 x 55 x 20 mm, protection board and a
+  DC5521 socket; no USB, no trigger board, no idle shut-off. The deck drops another 4.7 mm. The tray carries a
+  port panel (curved 3 mm skin at the drum's inner wall, PORT_W x PORT_H, at PORT_ANGLE = 90, the owner's side)
+  with an 8 mm hole for a panel-mount DC5521 charge jack and a 6.2 mm hole for a mini toggle switch; the drum
+  has a matching notch open at its bottom edge so it lifts off over the panel. The jack is wired across the
+  pack before the switch, so it charges in place with the switch off. Firmware reads the switched rail on D0
+  through 100 k / 22 k, scales pump and LED duty by 12 / Vbat (0.8..1.4) and double-blinks on insertion below
+  10.5 V. `trigger_envelope` is gone.

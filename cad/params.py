@@ -59,8 +59,10 @@ GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and 
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 77.2, 35.0, 24.7   # VEGER 5000mAh 20W (USB-C plug: 12V-1.6A); flat on the tray, plug toward +Y
-TRIGGER_ALLOW_L = 35.0      # beyond the bank's plug end: the plug + the 12 V PD trigger board (AITRIP PDC004)
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 70.0, 55.0, 20.0   # KBT 12 V Li-ion pack (3 cells, overcharge protection), flat on the tray
+PORT_ANGLE = 90.0           # charge jack + power switch panel in the base's bottom band, on the owner's side
+PORT_W, PORT_H = 42.0, 12.0 # notch in the drum's bottom band (open at the bottom); the tray's panel fills it
+PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.2   # panel-mount DC5521 jack (M8 thread) and 1/4" mini toggle switch
 
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)

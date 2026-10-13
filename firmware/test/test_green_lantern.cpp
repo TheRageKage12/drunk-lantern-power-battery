@@ -94,8 +94,15 @@ static void reboot(BootOpts o = BootOpts{}) {
   pumpOnSince = 0; pumpCal = false; pumpPrime = false;
   lineBuf = "";
   ledShown = 0.0f; ledLastMs = 0; ledDuty = 0; finaleFrom = finaleTo = 0.0f;
+  battV = 0.0f; lowBattWarn = false;
+  for (int i = 0; i < sim::NPINS; i++) sim::analogIn[i] = 0;   // no battery divider unless a scenario fits one
 
   setup();
+}
+
+// battery divider: the raw ADC count a given pack voltage produces (inverse of the sketch's battRead)
+static void setBattery(double volts) {
+  sim::analogIn[BATT_PIN] = (int)lround(volts / (ADC_VREF * BATT_DIVIDER) * ADC_MAX);
 }
 
 // ------------------------------------------------------------------ helpers for the hold-to-pour flow
@@ -513,6 +520,59 @@ int main() {
     CHECK(pumpPinOn(), "PRIME release stopped a cal run");
     runUntil([] { return !pumpPinOn(); }, 5000);
     CHECK(pumpRuns() == 3 && pumpRunMs(2) >= 2999 && pumpRunMs(2) <= 3000 + LOOP_MS, "cal with PRIME use ran %.1f ms", pumpRunMs(2));
+  });
+
+  scenario("r", "battery compensation: the pump duty scales with 12 V / battery so pours stay the same; none without a divider", [] {
+    struct Case { double v; double k; };
+    for (Case c : {Case{12.0, 1.0}, Case{12.6, 12.0 / 12.6}, Case{10.0, 1.2}, Case{9.0, 1.3333}, Case{7.0, 1.4}}) {
+      reboot(); setBattery(c.v); runMs(1500);              // let the smoothing settle
+      setRing(true); runUntil([] { return state == State::ARMED; }, 1000); runMs(3000);
+      setSwitch(true); runUntil([] { return pumpPinOn(); }, 1000); runMs(600);
+      const double want = std::min((double)PWM_RANGE, (PWM_RANGE * settings.pumpSpeed) / 100.0 * c.k);
+      const int got = sim::pin[PUMP_PIN].pwm;
+      CHECK(fabs(got - want) <= 2.0, "at %.1f V pump duty %d, want ~%.0f (k %.3f)", c.v, got, want, c.k);
+      setSwitch(false); runUntil([] { return state == State::LOCKED; }, 5000);
+    }
+    reboot(); runMs(1500);                                  // no divider fitted: reads 0 V
+    CHECK(!battSensed() && battK() == 1.0f, "battery sensed with nothing on D0 (%.2f V)", battV);
+    serialLine("status"); runMs(50);
+    CHECK(serialSaid("battery=not sensed"), "status does not say 'not sensed'");
+    NOTE("10.0 V -> duty x1.2, 12.6 V -> x0.95, clamped at x1.4 below 8.6 V");
+  });
+
+  scenario("s", "low battery: inserting the ring below 10.5 V double-blinks, then the normal glow; the pour still works", [] {
+    reboot(); setBattery(10.2); runMs(1500);
+    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
+    CHECK(lowBattWarn, "no low-battery warning at 10.2 V");
+    int flashes = 0; bool lit = false; uint32_t peak = 0;
+    for (int i = 0; i < 70; i++) { runMs(10); const bool on = ledDuty > lightDuty(0.3f); if (on && !lit) flashes++; lit = on; peak = std::max(peak, ledDuty); }
+    CHECK(flashes == 2, "%d flashes in the first 700 ms (want 2)", flashes);
+    runMs(1500);
+    const uint32_t glow = ledDuty;
+    CHECK(glow > 0 && glow < lightDuty(0.3f) * 1.4, "glow after the warning %u", glow);
+    setSwitch(true); runUntil([] { return pumpPinOn(); }, 1000);
+    CHECK(pumpPinOn(), "no pour with a low battery");
+    setSwitch(false); runUntil([] { return state == State::LOCKED; }, 5000);
+    setRing(false); runMs(500);
+    setBattery(11.6); runMs(3000);
+    setRing(true); runUntil([] { return state == State::ARMED; }, 1000);
+    CHECK(!lowBattWarn, "warning at 11.6 V");
+    NOTE("peak during the blink %u of %u", peak, PWM_RANGE);
+  });
+
+  scenario("t", "vcal: the meter reading recalibrates the battery voltage; saved and restored; nonsense rejected", [] {
+    reboot(); setBattery(11.0); runMs(2000);
+    const float before = battV;
+    serialLine("vcal 11.55"); runMs(50);
+    CHECK(fabs(battV - 11.55) < 0.05, "after vcal 11.55 the reading is %.3f (was %.3f)", battV, before);
+    serialLine("vcal 30"); runMs(50);
+    CHECK(fabs(battV - 11.55) < 0.05 && serialSaid("vcal: battery volts"), "vcal 30 accepted");
+    serialLine("save"); runMs(50);
+    reboot(BootOpts{0, true}); setBattery(11.0); runMs(2000);
+    CHECK(fabs(battV - 11.55) < 0.05, "after a reboot the reading is %.3f", battV);
+    reboot(BootOpts{0, true}); runMs(500);
+    serialLine("vcal 12"); runMs(50);
+    CHECK(serialSaid("divider fitted"), "vcal accepted without a divider");
   });
 
   // ------------------------------------------------------------------ report

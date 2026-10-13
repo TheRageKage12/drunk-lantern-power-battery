@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$150)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$175)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -40,7 +40,7 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 | Sphere, inside | The **lock wall**, 2.5 cm in front of the centre. On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the DRV5032 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | A removable **cartridge**: the power bank flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the bank. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
+| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. The charge jack and the power switch sit in a small panel at the bottom edge on your side. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill: undo them and lift the lantern off; the cartridge stays on the table. To charge: plug the charger into the jack, no need to open it. |
 
 ![fluid path and layout](images/fluid-path.svg)
 
@@ -66,8 +66,7 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
 | 7 | Hall sensor | [Adafruit DRV5032 breakout #6051](https://www.adafruit.com/product/6051) | $4.95 | Runs on 3.3 V, very sensitive, either magnet pole works. |
-| 8 | Power bank | [VEGER 5000mAh 20W (B09NXCLXVD)](https://www.amazon.com/dp/B09NXCLXVD) | check listing | 77 x 35 x 25 mm. Its built-in USB-C **plug** gives 12V-1.6A (PD). 5,000 mAh is hundreds of pours. |
-| 8a | 12 V trigger board | [AITRIP PDC004 USB-C PD 12V trigger, 5-pack (B09GVQ3FGW)](https://www.amazon.com/dp/B09GVQ3FGW) | check listing | **Pick the 12V version.** The bank plugs into its USB-C socket; it asks the bank for 12 V and puts it on two pads. Fixed 12 V, up to 5 A. |
+| 8 | 12 V battery pack | [KBT 12 V 1200 mAh Li-ion pack with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $22 | 70 x 55 x 20 mm, 3 cells, overcharge protection, a DC5521 barrel socket for charging and output, and its own charger. 1200 mAh is well over 100 pours. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
 | | Adafruit shipping | | ~$8 | Only for the Hall sensor now. Ships from Brooklyn in 1-2 business days; USPS Ground Advantage is 2-5 more. |
 
 **Skip the Adafruit order.** Use an A3144 Hall sensor from Vetco ($1.99) instead of the DRV5032. The A3144
@@ -81,12 +80,14 @@ the sensor window, and stack two magnets in the key cap. Saves the shipping and 
 | 9 | Lever microswitch, D2F-L size | Vetco ([or the 4-pack, B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4), ~$8) | ~$3 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever. The lock's switch bracket is built for this size: take calipers to the store. |
 | 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
 | 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
-| 12 | Small parts | Vetco | ~$12 | 2 x 1N5819 diodes, 2 x 10 k resistors, 1 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
+| 12 | Small parts | Vetco | ~$12 | 2 x 1N5819 diodes, 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
+| 12a | Power switch | Vetco ([or a 5-pack, search](https://www.amazon.com/s?k=mini+toggle+switch+SPST+6mm+panel+mount)) | ~$3 | Mini toggle, SPST (on-off), 1/4" (6.2 mm) panel hole, rated 3 A or more at 12 V. |
+| 12b | Charge jack and lead | Vetco ([or the Amazon kit, search](https://www.amazon.com/s?k=DC5521+panel+mount+jack+female+nut)) | ~$4 | A panel-mount DC5521 (5.5 x 2.1 mm) female jack with an M8 nut, for the 8 mm hole. Plus a DC5521 **male** plug with bare leads, if the pack didn't come with one, to take power out of the pack's socket. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $150 plus the power bank and the trigger boards** (both priced on their listings). That assumes you already have:
+**Total: about $175, battery included.** That assumes you already have:
 
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
@@ -136,7 +137,7 @@ Print these first, before any big part, and check them:
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
 | `base` (drum) | 180 x 180 x 115 | top band down | no | green | 146 |
-| `base_tray` (cartridge floor) | 169 x 169 x 31 | flat | no | any | 48 |
+| `base_tray` (cartridge floor, with the port panel) | 169 x 174 x 26 | flat | no | green | 50 |
 | `base_deck` | 168 x 167 x 47 | flat | no | any | 71 |
 | `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 0 |
 | `dish_lower` | 180 x 180 x 91 | mouth down | no | green | 122 |
@@ -160,7 +161,7 @@ Print these first, before any big part, and check them:
 | `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
-| **Total** | | | | | **~815 g** |
+| **Total** | | | | | **~817 g** |
 
 Supports: none, except inside the two sphere halves. Print them split-face down; the last 15 mm of dome
 around the window and the hand opening overhang more than 45 degrees, so enable tree supports on the inside
@@ -181,16 +182,19 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 
 1. **XIAO and U1.** Solder two 1x7 female header strips 15.24 mm apart for the XIAO, or solder it straight to
    the board. Solder the 14-pin DIP socket for the 74AHCT125 (U1).
-2. **12 V in.** Solder a red and a black 22 AWG wire (about 25 cm) to the trigger board's + and − output pads.
-   Plug the VEGER's USB-C plug into the board's socket and check with the meter that the wires read about
-   **+12 V**. If they read 5 or 9 V, the board is the wrong version or the bank isn't offering 12 V: don't
-   connect anything until it reads 12. Red to the +12 V rail, black to ground. Solder C2 (2200 µF 16 V)
-   across the rail, stripe (−) to ground. In the cartridge the board lies on the tray past the bank's plug end,
-   in the gap between the two end stops.
+2. **12 V in.** Plug the bare-wire DC5521 lead into the pack's socket and check its polarity with the meter
+   (usually red +, about **12 V**). Its + goes two ways: to the charge jack's centre pin and to one tag of the
+   power switch S1. Its − goes to the jack's outer contact and to ground. S1's other tag is the +12 V rail.
+   Solder C2 (2200 µF 16 V) across the rail, stripe (−) to ground. The jack sits **before** the switch, so the
+   pack charges with S1 off and nothing else connected. Mount the jack (8 mm hole) and S1 (6.2 mm hole) in the
+   panel on the tray's edge, with leads long enough (~15 cm) to reach the board on the deck.
+2a. **Battery sense.** A 100 k from the +12 V rail (after S1) to D0, a 22 k and a 0.1 µF from D0 to ground.
+   It tells the firmware the battery voltage. Leave it out and everything still works, just without the
+   pump compensation and the low-battery warning.
 3. **5 V.** Wire the LM2596's IN+ and IN− to the 12 V rail and ground. **Turn its little screw until OUT reads
    5.0 V on the meter before connecting anything to it.** Then OUT+ feeds U1 pin 14, and also the XIAO's 5V pin
    through a 1N5819 (stripe toward the XIAO). That diode lets you plug the XIAO into a laptop without feeding
-   the lantern. Even so, unplug the power bank while flashing.
+   the lantern. Even so, switch S1 off while flashing.
 4. **U1 (74AHCT125).** Pin 14 to +5 V, pin 7 to ground, 0.1 µF between them. The four OE pins (1, 4, 10, 13)
    and the unused inputs (9, 12) to ground. XIAO D3 to pin 2 (pump), XIAO D4 to pin 5 (light). A 10 k from D3
    to ground and another from D4 to ground, so nothing switches on while the XIAO boots.
@@ -205,7 +209,8 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    lantern unplugs from the base cartridge.
 8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
    `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
-   `switch=pressed` should follow. Then connect the strip: it should glow faintly.
+   `switch=pressed` should follow, and `battery=` should read within 0.2 V of your meter (see `vcal`). Then
+   connect the strip: it should glow faintly.
 
 An optional PRIME button goes between D6 and ground. Holding it runs the pump only when no ring is in.
 It's not in the parts list; the serial `cal` command or a test pour does the same job.
@@ -227,13 +232,14 @@ cd firmware
 arduino-cli core install rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
 arduino-cli compile --fqbn rp2040:rp2040:seeed_xiao_rp2040 green_lantern
 arduino-cli upload  --fqbn rp2040:rp2040:seeed_xiao_rp2040 -p /dev/ttyACM0 green_lantern
-cd test && make test     # 17 simulated scenarios, all must PASS
+cd test && make test     # 20 simulated scenarios, all must PASS
 ```
 
 ![state machine](images/state-machine.svg)
 
 | Pin | Function |
 |---|---|
+| D0 | Battery sense (100 k / 22 k divider from the switched +12 V) |
 | D1 | Hall sensor OUT (LOW = ring present) |
 | D2 | Microswitch NO (COM to GND) |
 | D3 | Pump, through U1 to Q1 |
@@ -244,13 +250,14 @@ Serial console at 115200 baud. Type a command and press Enter:
 
 | Command | What it does |
 |---|---|
-| `status` | Shows state, ring, switch, pump, pour time, speed, brightness, idle glow. |
+| `status` | Shows state, ring, switch, pump, pour time, speed, brightness, idle glow, battery voltage. |
 | `cal 10000` | Runs the pump 10 s without the ring, for calibration (only when idle). |
 | `pour 11000` | Pour time in ms (500 to 20000): the length of the light build-up. |
 | `speed 70` | Pump speed in percent (30 to 100): sets how much is poured in that time. |
 | `leds 255` | Maximum LED brightness, 0 to 255. |
-| `idle 0` | Glow when idle, 0 to 255 (default dark). Raise it to ~30 if the power bank switches itself off. |
-| `save` | Stores pour time, speed, brightness and idle glow so they survive a power cycle. |
+| `idle 0` | Glow when idle, 0 to 255 (default dark). |
+| `vcal 12.31` | Tells it what your meter reads across the pack, to calibrate the battery reading. |
+| `save` | Stores pour time, speed, brightness and idle glow so they survive a power cycle (`vcal` saves itself). |
 | `stop` | Stops the pump now. |
 
 The light levels live near the top of the sketch: `ARMED_LEVEL` (15 %), `POUR_PEAK` (90 %), `EARLY_BUMP`
@@ -357,8 +364,8 @@ single-colour strip.
 
 Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
-1. **Cartridge.** On `base_tray`: the LM2596 in its pocket on the right, the power bank flat in the middle,
-   held with a strap. `base_deck` drops in on top of it (3 x M3x8 into the pillars). Jar in its ring, pump in
+1. **Cartridge.** On `base_tray`: the LM2596 in its pocket on the right, the battery pack flat in the middle,
+   socket end toward the port panel, held with a strap. Jack and switch in the panel, nuts tight. `base_deck` drops in on top of it (3 x M3x8 into the pillars). Jar in its ring, pump in
    its saddles. Electronics board on the deck's vertical panel (4 x M3x6).
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
@@ -386,14 +393,17 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    bosses inside the drum only line up one way. Tip the lantern a little and turn the 3 thumbscrews up into the
    bosses from underneath, finger-tight.
 
-Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern off, lift it off the
-cartridge and unplug the cable from the power bank.
+Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern on or off, use the
+switch next to the charge jack, at the bottom edge on your side.
 
 ---
 
 ## 10. Calibration
 
-Water in the jar, the shot glass (or a measuring cup) under the nozzle, laptop on the serial console:
+Water in the jar, the shot glass (or a measuring cup) under the nozzle, laptop on the serial console.
+
+First the battery reading: measure across the pack (or the rail) with the meter, type `vcal` and that number
+(for example `vcal 12.31`), then `status` should show the same.
 
 The pour time is the length of the show, so set it first and then adjust the pump speed until that time
 pours the amount you want.
@@ -423,7 +433,8 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] Pull the ring out mid-pour: the pump stops at once.
 - [ ] 20 water pours in a row: every pour lands in the glass, no drips anywhere.
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
-- [ ] The power bank stays on after 20 minutes idle (if not: `idle 30`, `save`).
+- [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring double-blinks before the glow.
+- [ ] Switch off, plug in the charger: the charger's light shows it charging.
 - [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
 - [ ] Your fist goes through the curtain and into the lock, and back out, without catching.
 - [ ] With the lights on in a dim room, the curtain, the display window and the top all glow; you can't see the nozzle.
@@ -445,12 +456,16 @@ position, under the lock.
 5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it,
    slide it about 3 cm toward you, lift it straight up out of the slot and bring it out through the curtain.
 
-**Refilling or charging** (about 2 minutes):
-1. Tip the lantern slightly and undo the 3 thumbscrews underneath.
+**Charging:** switch off, plug the pack's charger into the jack at the bottom edge on your side. Charge
+when the ring gets a double blink as you punch in (below 10.5 V), or after every party. A full pack lasts
+well over 100 pours.
+
+**Refilling** (about 2 minutes):
+1. Switch off. Tip the lantern slightly and undo the 3 thumbscrews underneath.
 2. Lift the lantern off by its handle and set it down beside the cartridge. The tube and the cables have
    enough slack; unplug the two cable plugs if you want the lantern completely free.
-3. Unplug the power bank from the trigger board (charge it now if needed). Unscrew the jar lid; the pickup tube comes out with it.
-4. Fill the jar, put the lid back on, plug the bank back in.
+3. Unscrew the jar lid; the pickup tube comes out with it.
+4. Fill the jar and put the lid back on.
 5. Lower the lantern back over the cartridge and do the thumbscrews up.
 
 ---
@@ -472,10 +487,11 @@ flattened.
 | Ring not detected | `status` with the ring in. Is the DRV5032 chip under the window, on the axis? Is the magnet glued in the key cap? |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump hums, no flow | Tube not seated under the rollers, head cap open, or the wrong (thin-walled) tube. |
-| Pump doesn't run at all | Check the trigger board gives 12 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
-| XIAO resets when the pump starts | 12 V sagging: C2 missing, bank nearly empty, or the bank doesn't really offer 12 V. |
+| Pump doesn't run at all | Switch on? Check the rail gives 9.5-12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
+| XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
 | LEDs stay dark or stay on | Q2 wiring, or U1's OE pins not grounded. |
-| Power bank switches off when idle | `idle 30` then `save`; or turn on the bank's low-current mode if it has one. |
+| Double blink when the ring goes in | Low battery (below 10.5 V): charge it. If the pack is full, check the reading against your meter and run `vcal`. |
+| Pours shrink as the night goes on | The battery reading is off or not connected (`status` says `not sensed`): check the divider on D0, then `vcal`. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |
 | Drips after the pour | Trim the tube end square; make sure 5 mm sticks out of the guide. |
 | Pour misses the glass | The glass was not pushed all the way back: it must click over the ridge. |
@@ -490,7 +506,7 @@ flattened.
 |---|---|---|
 | Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
 | Heat-set inserts instead of screwing into plastic | ~$10 | Set `M3_INSERT_HOLE = 4.0` in `cad/params.py` and re-run `build.py`. Inserts: [ruthex M3 x 5.7 mm (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3). |
-| Master power switch and fuses | ~$8 | An inline rocker switch and a 2 A slow-blow fuse in the 12 V lead, mounted on the deck. |
+| Fuse | ~$3 | An inline 2 A slow-blow fuse between the pack and S1. The pack's protection board already cuts out on a short. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
 | Pinch clamp for carrying a full jar | ~$6 | [Tubing pinch clamps (B0FCM98N2Q)](https://www.amazon.com/dp/B0FCM98N2Q). |
 
