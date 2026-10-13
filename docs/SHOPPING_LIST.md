@@ -4,7 +4,7 @@ The same parts as section 2 of the [build guide](BUILD_GUIDE.md), grouped by whe
 the specific item. Amazon delivery dates were read from each listing on 2026-10-13 (default San Francisco
 address; Seattle should be similar). "Prime" means it ships from Amazon. Tick the boxes as you go.
 
-## Amazon (one order, ~$149)
+## Amazon (one order, ~$145)
 
 | ✓ | Item | Listing | Price | Delivery |
 |---|---|---|---|---|
@@ -19,7 +19,6 @@ address; Seattle should be similar). "Prime" means it ships from Amazon. Tick th
 | [ ] | Cable plugs, JST-SM 4-pin pigtail pairs, 20 pairs (2 used) | [mxuteuk (B083GR7FQF)](https://www.amazon.com/dp/B083GR7FQF) | $9.99 | Prime, Oct 14 |
 | [ ] | Vent valve, aquarium check valve, 10 pcs | [AQUANEAT (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | Prime, Oct 14 |
 | [ ] | Spring assortment, 23 sizes (use the ~0.4-0.5 x 5 x 10 mm one) | [Dianrui (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | Prime, Oct 14 |
-| [ ] | Super glue gel | [Loctite Gel Control (B0006HUJCQ)](https://www.amazon.com/dp/B0006HUJCQ) | $3.82 | Sold by Amazon |
 | [ ] | Curtain, 0.5 mm frosted PP sheets | [COYOUCO (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Not re-checked today |
 
 ## Vetco Electronics, Bellevue (~$38)
@@ -70,6 +69,10 @@ are the matching items on their website (sold there in boxes of 100); the store 
 | [ ] | Drill bits, metric 1.5-10 mm (2.5 and 6 mm used) | [15-piece cobalt set (B07B7L6WVY)](https://www.amazon.com/dp/B07B7L6WVY) | $22.99 |
 | [ ] | Flush cutters | [KATA mini (B07VGK8GBL)](https://www.amazon.com/dp/B07VGK8GBL) | $5.39 |
 
+## Already have
+
+- Super glue (any cyanoacrylate, e.g. Gorilla Glue super glue): magnets, key cap, nuts, the Hall sensor, the diffuser.
+
 ## Buy locally (measure in the store with calipers)
 
 - [ ] **Jar**, food-safe, with a lid you can drill: at most **73 mm across with the lid** and **76 mm tall**.
@@ -77,5 +80,5 @@ are the matching items on their website (sold there in boxes of 100); the store 
 - [ ] **Shot glass**, 1.5 oz: at most **52 mm across the top** and **62 mm tall**; a heavy base helps.
   [Bargreen Ellingson](https://www.bargreen.com/locations/seattle), SoDo showroom, Mon-Fri 10-3.
 
-**Total: about $200** (Amazon ~$149, Vetco ~$38, Tacoma Screw ~$12), plus the jar and shot glass, and filament
+**Total: about $195** (Amazon ~$145, Vetco ~$38, Tacoma Screw ~$12), plus the jar and shot glass, and filament
 or tools if you need them.

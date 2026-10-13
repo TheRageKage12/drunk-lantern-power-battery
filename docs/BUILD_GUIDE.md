@@ -88,7 +88,7 @@ works on 3.3 V and either magnet pole.
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | [Dianrui spring assortment, 23 sizes (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | You need one about 0.4-0.5 mm wire, 5 mm outside diameter, 10 mm long; the kit's sizes are printed on the box. |
-| 15 | Super glue | [Loctite Super Glue Gel Control (B0006HUJCQ)](https://www.amazon.com/dp/B0006HUJCQ) | $3.82 | For the magnets and the key cap. |
+| 15 | Super glue | any cyanoacrylate super glue you have (Gorilla Glue, Loctite) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
 **Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
 
