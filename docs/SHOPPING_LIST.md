@@ -85,6 +85,7 @@ test the lock (guide section 6, step 4).
 ## Already have
 
 - Super glue (any cyanoacrylate, e.g. Gorilla Glue super glue): magnets, key cap, nuts, the Hall sensor, the diffuser.
+- A dab of silicone grease or petroleum jelly: the lock's ramp, plunger and bore.
 
 ## Buy locally (measure in the store with calipers)
 

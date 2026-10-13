@@ -99,6 +99,7 @@ The total assumes you already have:
 
 - **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the rest, the supports and one failed big part) plus ~30 g of white or natural for the diffusers (~$43 for two green spools and one white).
 - Basic tools: soldering iron, multimeter, calipers, a drill with 5 and 6 mm bits, flush cutters.
+- A dab of silicone grease or petroleum jelly for the lock's ramp and plunger.
 
 ### 2.3 Seattle-area stores (verified open on 2026-10-11; call before driving for specific stock)
 
@@ -315,10 +316,15 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
    through the bottom of the plate, and lay the sensor in the pocket **printed face up** (flush with the top).
    A dot of glue holds it. Solder the cable to the leads under the plate and sleeve each joint. The rotor turns
    around the post; the magnet ends up about 3 mm above the sensor.
-4. **Rotor and plunger.** Turn `socket_housing` upside down. Drop the spring into the straight radial pocket,
-   then the `plunger` nose-first on top. Hold it with a finger and lower the `rotor` into the bore, stop lug
-   down into its channel (it fits one way only). Twist to 45 degrees and let go: it must snap back every time.
-   Too stiff to twist with a finger: use a softer spring (0.4 mm wire).
+4. **Rotor and plunger.** Turn `socket_housing` upside down. Smear a little silicone grease or petroleum jelly
+   on the rotor's rim (the ramp and the cam), the plunger's nose and the bore: dry PETG on PETG has about the
+   same friction (0.3-0.4) as the ramp's slope (0.26), so an unlubricated rotor can sit at 45 degrees instead
+   of returning; greased (about 0.1) it returns. Drop the spring into the straight radial pocket, then the
+   `plunger` nose-first on top. Hold it with a finger and lower the `rotor` into the bore, stop lug down into
+   its channel (it fits one way only). Twist to 45 degrees and let go: it should snap back every time. If it
+   only creeps back, add grease. It doesn't matter for the show either way: you turn the ring back yourself on
+   the last word, and the firmware only watches the switch. Too stiff to twist with a finger: use a softer
+   spring (0.4 mm wire).
 5. **Switch.** Press the microswitch onto the two pegs of `switch_bracket`, lever toward the rotor, and lay the
    bracket in its recess in `socket_base`, its round hole over the slot at the lever end.
 6. **Close and tune.** Screw `socket_base` onto the housing: 3 x M3x8 flat-head up from below into the nuts, and
@@ -534,6 +540,7 @@ flattened.
 | Double blink when the ring goes in | Low battery (below 10.5 V): charge it. If the pack is full, check the reading against your meter and run `vcal`. |
 | Pours shrink as the night goes on | The battery reading is off or not connected (`status` says `not sensed`): check the divider on D0, then `vcal`. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |
+| Rotor doesn't return on its own | Grease the ramp, the plunger nose and the bore (section 6, step 4). A stiffer spring doesn't help: it is the ramp's slope against dry friction. Turning the ring back by hand works the same for the firmware. |
 | Drips after the pour | Trim the tube end square; make sure 5 mm sticks out of the guide. |
 | Pour misses the glass | The glass was not pushed all the way back: it must click over the ridge. |
 | The glass catches on the way out | Slide it toward you the full 3 cm before lifting: lifting early hits the lock. |
