@@ -16,13 +16,11 @@
 <text x="56" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">+12 V</text>
 <path d="M119,56 L145,56" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="151" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">+5 V</text>
-<path d="M214,56 L240,56" fill="none" stroke="#a21caf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="246" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">3.3 V</text>
-<path d="M309,56 L335,56" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="341" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">GND</text>
-<path d="M404,56 L430,56" fill="none" stroke="#2a9d2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="436" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">signal</text>
-<text x="509" y="60" font-size="10.5" text-anchor="start" font-weight="normal" fill="#444">All ground symbols are one net. A dot is a joint; lines that cross without a dot do not connect.</text>
+<path d="M214,56 L240,56" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="246" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">GND</text>
+<path d="M309,56 L335,56" fill="none" stroke="#2a9d2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="341" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">signal</text>
+<text x="414" y="60" font-size="10.5" text-anchor="start" font-weight="normal" fill="#444">All ground symbols are one net. A dot is a joint; lines that cross without a dot do not connect.</text>
 <path d="M400,120 L1270,120" fill="none" stroke="#f77f00" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="1270" y="112" font-size="11" text-anchor="end" font-weight="bold" fill="#f77f00">+12 V rail</text>
 <path d="M16,800 L1270,800" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -227,8 +225,8 @@
 <path d="M230,628 L356,628" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M372,620 L372,636 L358,628 Z M358,620 L358,636" fill="#dddddd" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M372,628 L515,628 L515,420 L500,420" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="345" y="646" font-size="9.5" text-anchor="start" font-weight="normal" fill="#555">1N5819, stripe</text>
-<text x="345" y="658" font-size="9.5" text-anchor="start" font-weight="normal" fill="#555">to the sensor</text>
+<text x="345" y="646" font-size="9.5" text-anchor="start" font-weight="normal" fill="#555">1N5819 on the board,</text>
+<text x="345" y="658" font-size="9.5" text-anchor="start" font-weight="normal" fill="#555">stripe to the sensor</text>
 <path d="M230,646 L250,646 L250,800" fill="none" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="250" cy="800" r="3.4" fill="#222222"/>
 <rect x="40" y="680" width="190" height="64" rx="6" fill="#f3e8ff" stroke="#222222" stroke-width="1.4"/>
@@ -245,4 +243,5 @@
 <text x="24" y="836" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.</text>
 <text x="24" y="850" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.</text>
 <text x="24" y="864" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">S1 switches everything but the charge jack: turn it off to store the lantern and while charging. The pack's protection board cuts out on a short or a flat pack.</text>
+<text x="24" y="878" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">Plugs where the lantern unplugs from the cartridge: lock cable JST PH 4-pin = 5V, HALL OUT, SW (NO), GND, ~10 cm from the board; LED leads JST SM 2-pin = +, -.</text>
 </svg>

@@ -16,8 +16,8 @@ CUT = P.SPHERE_CUT                          # 58.5: flats at +/- CUT
 FLAT_D = C.sphere_flat_d(P.SPHERE_D, CUT)   # 136.8
 OPENING_ID = FLAT_D - 2 * P.WALL            # 132.0: MATING with the dish locating rings (OD 131.4)
 OPENING_DEPTH = 9.0                         # collar depth from each flat (dishes.LOCATING_RING_H_UPPER)
-Z_LOWER_SCREWS = -CUT + 2.0                 # -56.5 (assembly 194)
-Z_UPPER_SCREWS = CUT - 2.0                  # +56.5 (assembly 307)
+Z_LOWER_SCREWS = -CUT + P.JOINT_SCREW_ABOVE_FLAT   # -55.5 (assembly 195), matches dishes.Z_SPHERE_LOWER_SCREWS
+Z_UPPER_SCREWS = CUT - P.JOINT_SCREW_ABOVE_FLAT    # +55.5 (assembly 306)
 JOINT_ANGLES = C.joint_angles()             # 90, 210, 330 (first at +Y)
 BAY_FLOOR_Z = -CUT + 6.0                    # -52.5: bay_floor rests on the lower dish ring top (assembly 198)
 
@@ -118,10 +118,14 @@ def rounded_rect_cutter_y(w, h, r, y0, y1, zc):
 
 
 def radial_screw_cutters(z, angles):
+    """Horizontal M3 holes through the collar wall at height z (the shell is at r = sqrt(R_OUT^2 - z^2) there,
+    not R_OUT), with a 2 mm counterbore measured from the surface on the hole axis."""
+    r_surf = math.sqrt(R_OUT ** 2 - z ** 2)        # 70.9 at z = +/-55.5
+    r_start = r_surf + 1.0
     cuts = []
     for a in angles:
-        cuts.append(C.radial_hole(z, a, R_OUT + 2, P.WALL + 6, P.M3_CLEAR))
-        cuts.append(C.radial_hole(z, a, R_OUT + 2, 2.0 + 2.0, P.M3_HEAD_D + 0.2))   # 2 mm counterbore
+        cuts.append(C.radial_hole(z, a, r_start, r_start - (OPENING_ID / 2 - 1.0), P.M3_CLEAR))   # through the collar
+        cuts.append(C.radial_hole(z, a, r_start, 1.0 + 2.0, P.M3_HEAD_D + 0.2))                  # 2 mm counterbore
     return cuts
 
 
@@ -159,7 +163,11 @@ def handle_boss(sign):
     ins_x = sign * (LEG_X - BOSS_POCKET_W / 2)
     insert = (cq.Workplane('YZ').workplane(offset=ins_x).center(HANDLE_PLANE_Y, BOSS_SCREW_Z)
               .circle(P.M3_INSERT_HOLE / 2).extrude(-sign * P.M3_INSERT_DEPTH))
-    return blk, [pocket, insert]
+    # access hole through the pocket's outer wall, so the leg screw's head can be reached with a hex key
+    out_x = sign * (LEG_X + BOSS_POCKET_W / 2 - 0.5)
+    access = (cq.Workplane('YZ').workplane(offset=out_x).center(HANDLE_PLANE_Y, BOSS_SCREW_Z)
+              .circle((P.M3_HEAD_D + 0.6) / 2).extrude(sign * 6.0))
+    return blk, [pocket, insert, access]
 
 
 

@@ -12,7 +12,7 @@ never hard-code mating dimensions inside a part file. See DESIGN_CONTRACT.md.
 # ---------------------------------------------------------------- global look
 SCALE = 1.8                 # original Hedo3D model was ~100 mm dia; we are ~180 mm
 D_MAX = 190.0               # base bands and lower dish mouth (rev 9f: 180 -> 190 for room around the jar and pump)
-WALL = 2.4                  # shell wall thickness (6 perimeters at 0.4 mm)
+WALL = 2.4                  # shell wall thickness (printed as 4 perimeters + infill between them)
 FLOOR = 2.0                 # floors / plates
 FIT = 0.30                  # radial clearance per side for sliding / rotating printed fits
 SNUG = 0.15                 # clearance per side for press / locating fits
@@ -49,10 +49,10 @@ TUBE_OD = 6.4               # 1/8" ID x 1/4" OD food-grade silicone for the head
 TUBE_ID = 3.2
 TUBE_GROMMET_D = 7.0        # hole for the tube to pass a wall
 
-# Reservoir (rev 3): a SQUAT wide-mouth jar, refilled in place through the door with a funnel.
+# Reservoir (rev 3): a SQUAT wide-mouth jar on the cartridge deck (rev 9: lift the lantern off to refill it).
 # 8 oz straight-sided PET jar, 70-400 neck, ~71 mm dia x ~72 mm tall with cap. Envelope below.
 BOTTLE_D = 76.0             # jar envelope diameter (71 + cap/clearance)
-BOTTLE_H = 76.0             # jar envelope height incl. cap; standing on the deck its cap stays below the door top
+BOTTLE_H = 76.0             # jar envelope height incl. cap, standing on the deck
 BOTTLE_NECK_D = 73.0        # 70-400 cap OD (tube + vent holes are drilled in the cap)
 
 GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and Torque 92440 Tritan (48 top, 54 tall)
@@ -65,13 +65,14 @@ PORT_W, PORT_H = 42.0, 12.0 # notch in the drum's bottom band (open at the botto
 PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) and mini toggle switch (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)
-BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)
+BASE_H = 115.0              # base drum height (rev 3: taller for the jar + cap; rev 9: open drum over the cartridge)
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
 BASE_BODY_D = D_MAX - 6.0   # drum body between the bands (184)
 SERVICE_SCREW_ANGLES = (0.0, 140.0, 225.0)   # rev 9: 3 thumbscrews from underneath hold the base cartridge in the drum (no door)
 
 JOINT_SPIGOT_H = 8.0        # spigot height for base->lower dish and sphere->upper dish joints
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)
+JOINT_SCREW_ABOVE_FLAT = 3.0  # sphere<->dish screws this far from the sphere flats: a 5.5 mm socket head then clears the dish flange
 
 DISH_H = 77.0               # reflector dish height (43 x 1.8)
 DISH_MOUTH_D = D_MAX        # lower dish wide end outer diameter (matches the base)
@@ -88,11 +89,12 @@ SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/b
 WINDOW_W, WINDOW_H = 90.0, 87.0     # front arched window: must clear the 9 mm collars at both flats
 DIFFUSER_D = 118.0          # front diffuser disc (sits behind the window on an internal ledge)
 DIFFUSER_T = 1.0
-HATCH_W, HATCH_H = 120.0, 96.0      # rear hand port (rev 6: open, no door; 120 wide so a 90 mm fist clears even 15 mm off-centre; 96 = all the height between the collars)
-GLASS_TRAY_TRAVEL = 45.0    # the glass sits on a tray that slides out through the hatch on two rails in the bay floor
-NOZZLE_ANGLE_DEG = 45.0     # nozzle enters from the rear-left wall at 45 deg aimed at the inside wall of the glass
+HATCH_W, HATCH_H = 120.0, 96.0      # hand opening on the owner's side (rev 6: open, no door; 120 wide so a 90 mm fist clears even 15 mm off-centre; 96 = all the height between the collars)
+# Unused since rev 8 (kept so old notes still read): the glass tray, the 90 deg wall nozzle and the WS2812B strip channel.
+GLASS_TRAY_TRAVEL = 45.0
+NOZZLE_ANGLE_DEG = 45.0
 NOZZLE_TIP_ABOVE_RIM = 10.0
-STRIP_W = 10.0              # WS2812B strip width; strip channel inside the front half, around the window
+STRIP_W = 10.0
 
 # socket module (lives in the upper dish floor; see DESIGN_CONTRACT.md for the mechanism)
 SOCKET_PLATE_D = 100.0      # faceplate OD, sits in a 100.6 mm counterbore in the dish floor

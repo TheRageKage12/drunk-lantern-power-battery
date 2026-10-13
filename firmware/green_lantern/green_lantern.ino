@@ -36,6 +36,7 @@
  *   D1  <- Hall sensor OUT, active LOW when the magnet is present (D1 uses the XIAO's internal pull-up).
  *          A3144 on 5 V/GND, its open-collector OUT through a 1N5819 (anode on D1, cathode on OUT) so D1
  *          never sees 5 V. Alternative: Adafruit DRV5032 breakout on 3V3/GND, OUT straight to D1.
+ *   Lock cable (JST PH 4-pin): 5V, HALL OUT, SW, GND. LED leads: JST SM 2-pin (+, -).
  *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
  *   D3  -> 74AHCT125 ch.1 (pin 2 in, pin 3 out) -> gate of Q1 (pump MOSFET, low side); 10 k from D3 to GND
  *          keeps it off while the XIAO boots. 1N5819 flyback across the pump (stripe to +12 V).
@@ -44,7 +45,7 @@
  *   D0  <- battery sense (A0): 100 k from +12 V (after the power switch) to D0, 22 k and 0.1 uF from D0 to GND.
  *          12.6 V full -> 2.27 V at the pin. Reads 0 V when not fitted: compensation and warning switch off.
  *   5V  <- 5 V from the LM2596 buck through a 1N5819 (USB and the buck never back-feed each other)
- *   3V3 -> DRV5032 VCC
+ *   3V3 -> nothing in the A3144 build (only the DRV5032 alternative takes its VCC here)
  *
  * Serial (115200) commands for bench calibration, type then Enter:
  *   status            print state and settings
@@ -54,7 +55,7 @@
  *   leds 200          maximum LED brightness 0..255
  *   idle 0            idle glow, raw PWM 0..255; raise it (e.g. 30) for a pilot glow
  *   vcal 12.31        battery voltage measured with a meter right now: calibrates the battery reading
- *   save              store pour time, speed, brightness and idle glow in flash
+ *   save              store pour time, speed, brightness, idle glow and the vcal correction in flash
  *   stop              stop the pump now
  */
 
@@ -91,9 +92,9 @@ constexpr uint32_t DEFAULT_POUR_MS    = 11000; // pour time = length of the ligh
 constexpr uint32_t MAX_PUMP_MS        = 20000; // hard cap, independent of everything else
 constexpr uint8_t  DEFAULT_MAX_BRIGHT = 255;   // 0..255 cap on the strip PWM
 constexpr uint8_t  DEFAULT_IDLE_DUTY  = 0;     // raw PWM floor in every state (0 = dark); raise it for a pilot glow
-constexpr uint8_t  DEFAULT_PUMP_SPEED = 70;    // percent: ~30-35 mL in 11 s on the Kamoer; set by calibration
+constexpr uint8_t  DEFAULT_PUMP_SPEED = 70;    // percent: ~30-37 mL (1-1.25 oz) in 11 s on the Kamoer; set by calibration
 
-// battery (a 3-cell 12 V lithium pack: 12.6 V full, ~9.5 V empty)
+// battery (a 3S2P 12 V Li-ion pack, 3 cells in series: 12.6 V full, ~9.5 V empty)
 constexpr float    BATT_DIVIDER    = (100.0f + 22.0f) / 22.0f;   // divider ratio
 constexpr float    ADC_VREF        = 3.3f;
 constexpr float    ADC_MAX         = 4095.0f;  // 12-bit
@@ -414,7 +415,7 @@ void readInputs() {
 void setup() {
   pinMode(PUMP_PIN, OUTPUT);
   digitalWrite(PUMP_PIN, LOW);          // FIRST: pump off
-  pinMode(HALL_PIN, INPUT_PULLUP);      // DRV5032 is open-drain; the A3144 divider also sits below the pull-up
+  pinMode(HALL_PIN, INPUT_PULLUP);      // the A3144's open-collector OUT (through the 1N5819) or a DRV5032's open-drain OUT pulls this low
   pinMode(SWITCH_PIN, INPUT_PULLUP);
   pinMode(PRIME_PIN, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);

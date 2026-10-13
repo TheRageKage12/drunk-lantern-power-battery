@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$190)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$186)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 19 cm across at the base, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -86,16 +86,19 @@ works on 3.3 V and either magnet pole.
 | 12 | Small parts | Vetco (links in [SHOPPING_LIST.md](SHOPPING_LIST.md)) | ~$20 | 3 x 1N5819-type diodes (NTE585), 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm protoboard, a 14-pin IC socket, 22 AWG stranded wire, 1/8" heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They thread straight into the printed holes, except the 3 thumbscrews, 5 at the lock and the handle's 6 lap screws, which go into the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
-| 15 | Super glue | any cyanoacrylate super glue you have (Gorilla Glue, Loctite) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
+| 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $190 before tax, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) or the printable [SHOPPING_LIST.pdf](SHOPPING_LIST.pdf) for the store-by-store list). That assumes you already have:
+**Total: about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (see [SHOPPING_LIST.md](SHOPPING_LIST.md) or the printable [SHOPPING_LIST.pdf](SHOPPING_LIST.pdf) for the store-by-store list). Two of the local items have size limits; measure in the store:
 
-- **PETG filament.** About 0.85 kg of green (buy two 1 kg spools so a failed print doesn't stop you) plus a little white or natural for the diffusers (~$43 for two green spools and one white).
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
-- Basic tools: soldering iron, multimeter, calipers, a drill with 2.5 mm and 6 mm bits, flush cutters.
+
+The total assumes you already have:
+
+- **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the rest, the supports and one failed big part) plus ~30 g of white or natural for the diffusers (~$43 for two green spools and one white).
+- Basic tools: soldering iron, multimeter, calipers, a drill with 5 and 6 mm bits, flush cutters.
 
 ### 2.3 Seattle-area stores (verified open on 2026-10-11; call before driving for specific stock)
 
@@ -143,36 +146,38 @@ Print these first, before any big part, and check them:
 
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
-| `base` (drum) | 190 x 190 x 115 | top band down | no | green | 156 |
-| `base_tray` (cartridge floor, with the port panel) | 179 x 184 x 44 | flat | no | green | 61 |
-| `base_deck` | 178 x 177 x 47 | flat | no | any | 77 |
-| `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 0 |
-| `dish_lower` | 190 x 190 x 91 | mouth down | no | green | 127 |
-| `dish_upper` | 180 x 180 x 86 | floor down, mouth up | no | green | 152 |
-| `top_diffuser` | 100 x 100 x 3 | flat (countersunk) face down | no | white | 11 |
-| `sphere_front` (display side) | 180 x 117 x 80 | split face down, dome up | inside only, around the window (tree) | green | 49 |
-| `sphere_rear` (your side) | 221 x 117 x 79 | split face down, dome up | inside only, around the hand opening (tree) | green | 48 |
-| `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 8 |
-| `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 16 |
-| `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 2 |
-| `bay_floor` | 131 x 131 x 4 | flat | no | any | 14 |
-| `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 26 |
-| `nozzle_guide` | 47 x 18 x 34 | on its side, so the bend lies flat | no | any | 3 |
-| `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 12 |
-| `handle_leg_right` | 14 x 126 x 10 | flat | no | green | 12 |
-| `handle_arc_left` | 120 x 132 x 10 | flat | no | green | 18 |
-| `handle_arc_right` | 120 x 132 x 10 | flat | no | green | 17 |
-| `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 22 |
-| `rotor` | 44 x 37 x 8 | top face down | no | green | 5 |
-| `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 12 |
-| `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
-| `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
-| `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
-| **Total** | | | | | **~850 g** |
+| `base` (drum) | 190 x 190 x 115 | top band down | no | green | 226 |
+| `base_tray` (cartridge floor, with the port panel) | 179 x 184 x 44 | flat | no | green | 89 |
+| `base_deck` | 178 x 177 x 47 | flat | no | any | 111 |
+| `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 1 |
+| `dish_lower` | 190 x 190 x 91 | mouth down | no | green | 184 |
+| `dish_upper` | 180 x 180 x 86 | floor down, mouth up | no | green | 220 |
+| `top_diffuser` | 100 x 100 x 3 | flat (countersunk) face down | no | white | 19 |
+| `sphere_front` (display side) | 180 x 117 x 80 | split face down, dome up | inside only, around the window (tree) | green | 72 |
+| `sphere_rear` (your side) | 221 x 117 x 79 | split face down, dome up | inside only, around the hand opening (tree) | green | 69 |
+| `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 13 |
+| `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 24 |
+| `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 3 |
+| `bay_floor` | 131 x 131 x 4 | flat | no | any | 21 |
+| `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 38 |
+| `nozzle_guide` | 47 x 18 x 34 | foot down, as exported | a small tree support under the end of the bend | any | 4 |
+| `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 17 |
+| `handle_leg_right` | 14 x 126 x 10 | flat | no | green | 17 |
+| `handle_arc_left` | 120 x 132 x 10 | flat | no | green | 25 |
+| `handle_arc_right` | 120 x 132 x 10 | flat | no | green | 25 |
+| `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 32 |
+| `rotor` | 44 x 37 x 8 | top face down | no | green | 7 |
+| `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
+| `switch_bracket` | 21 x 10 x 7 | flat, pegs up | no | any | 1 |
+| `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
+| `key_cap` | 28 x 24 x 3 | flat face down | no | green | 2 |
+| **Total** | | | | | **~1230 g** |
 
-Supports: none, except inside the two sphere halves. Print them split-face down; the last 15 mm of dome
-around the window and the hand opening overhang more than 45 degrees, so enable tree supports on the inside
-only. Print both diffusers (`diffuser`, `top_diffuser`) in white or natural PETG at 100 % infill: green works
+Supports: none, except inside the two sphere halves and under the nozzle guide's bend. Print the halves split-face
+down; the last 15 mm of dome around the window and the hand opening overhang more than 45 degrees, so enable
+tree supports on the inside only. The `nozzle_guide` prints foot down; the last 45 degrees of its bend hang past
+horizontal, so give it a small tree support there. The grams column assumes the settings above (the parts are
+mostly wall, so count about 1.1 g per cm3; the diffusers are solid). Print both diffusers (`diffuser`, `top_diffuser`) in white or natural PETG at 100 % infill: green works
 but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
 
 ![all printed parts](images/cad-parts-sheet.png)
@@ -220,7 +225,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
    `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
    `switch=pressed` should follow, and `battery=` should read within 0.2 V of your meter (see `vcal`). Then
-   connect the strip: it should glow faintly.
+   connect the strip: it blinks once at power-up, then stays dark (`idle 30` gives a pilot glow).
 
 An optional PRIME button goes between D6 and ground. Holding it runs the pump only when no ring is in.
 It's not in the parts list; the serial `cal` command or a test pour does the same job.
@@ -261,13 +266,13 @@ Serial console at 115200 baud. Type a command and press Enter:
 | Command | What it does |
 |---|---|
 | `status` | Shows state, ring, switch, pump, pour time, speed, brightness, idle glow, battery voltage. |
-| `cal 10000` | Runs the pump 10 s without the ring, for calibration (only when idle). |
+| `cal 10000` | Runs the pump 10 s without the ring, for calibration (refused while a pour is running). |
 | `pour 11000` | Pour time in ms (500 to 20000): the length of the light build-up. |
 | `speed 70` | Pump speed in percent (30 to 100): sets how much is poured in that time. |
 | `leds 255` | Maximum LED brightness, 0 to 255. |
 | `idle 0` | Glow when idle, 0 to 255 (default dark). |
 | `vcal 12.31` | Tells it what your meter reads across the pack, to calibrate the battery reading. |
-| `save` | Stores pour time, speed, brightness and idle glow so they survive a power cycle (`vcal` saves itself). |
+| `save` | Stores pour time, speed, brightness, idle glow and the `vcal` correction so they survive a power cycle. |
 | `stop` | Stops the pump now. |
 
 The light levels live near the top of the sketch: `ARMED_LEVEL` (15 %), `POUR_PEAK` (90 %), `EARLY_BUMP`
@@ -286,17 +291,17 @@ pump run.
 
 ![socket mechanism](images/socket-mechanism.png)
 
-Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_cap`. Plus 3 x M3x8 and 3
-nuts for the base plate, 1 x M3x6 and a nut for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
+Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_cap`. Plus 3 x M3x8 flat-head and 3
+nuts for the base plate, 1 x M3x8 flat-head for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
 lock wall, the spring, the microswitch, the A3144 and one magnet.
 
 The lock is screwed to the face of the lock wall with its ring pocket facing you, so you seat the ring by
 punching in. The rotor is a flat 36 mm disc. Under the housing's front lip its edge carries three features: a
 stop lug in a channel whose ends are the 0 and 45 degree stops, a cam that presses the switch lever 3 mm
-between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the rotor snaps back when you let go.
+from about 30 degrees to the stop, and a ramp that pushes the spring plunger out so the rotor snaps back when you let go.
 
-1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing` and the one under
-   `socket_base`. A dab of super glue holds each.
+1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing`. A dab of super glue
+   holds each.
 2. **Ring key.** The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and
    `status` running, hold each face of the magnet to the sensor's printed face: the face that gives
    `ring=present` must face **out** of the pocket under `key_cap`. Mark it, then glue the magnet in. Scuff
@@ -314,11 +319,13 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
    then the `plunger` nose-first on top. Hold it with a finger and lower the `rotor` into the bore, stop lug
    down into its channel (it fits one way only). Twist to 45 degrees and let go: it must snap back every time.
    Too stiff to twist with a finger: use a softer spring (0.4 mm wire).
-5. **Switch.** Press the microswitch onto the two pegs of `switch_bracket`, lever toward the rotor. Screw the
-   bracket loosely into its recess in `socket_base` (M3x6 through the slot into the nut).
-6. **Close and tune.** Screw `socket_base` onto the housing (3 x M3x8). Twist slowly: the lever should start to
-   move at about 33 degrees and click at about 40, before the stop at 45. Slide the bracket in its slot to
-   tune, then tighten. The switch must never be what stops the rotor.
+5. **Switch.** Press the microswitch onto the two pegs of `switch_bracket`, lever toward the rotor, and lay the
+   bracket in its recess in `socket_base`, its round hole over the slot at the lever end.
+6. **Close and tune.** Screw `socket_base` onto the housing: 3 x M3x8 flat-head up from below into the nuts, and
+   a 4th flat-head up through the slot and the bracket into the housing, left loose. All four heads sit flush,
+   so the plate lies flat on the lock wall later. Twist slowly: the lever should start to move at about 30
+   degrees and click at about 40, before the stop at 45. To tune, loosen the 4th screw and push it along its
+   slot (it carries the bracket, 1 mm either way), then tighten. The switch must never be what stops the rotor.
 7. **Cycle it 50 times** and watch `status`: `switch=pressed` only near the end of the twist, `ring=present`
    for the whole twist.
 8. **Mount** it on the face of `lock_wall` (section 8): the two ears go down, one M3x10 through each ear and
@@ -329,11 +336,14 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
 
 ## 7. The fluid path
 
-1. **Jar lid.** Drill two 6 mm holes near the edge, on opposite sides. Push the tube through one (it seals
-   itself) until it reaches 5 mm above the jar's bottom. **Vent:** push a 2 cm piece of the same tube through
-   the other hole, then push a check valve's barb into its top, with the valve's arrow pointing **down into the
-   jar**. Air gets in as the pump draws the drink out (without it the jar goes under vacuum and the pours
-   shrink), but if the jar tips, nothing comes out. Blow through it to check: air goes in, not out.
+1. **Jar lid.** Drill a 6 mm hole near the edge and push the tube through it (it seals itself) until it reaches
+   5 mm above the jar's bottom. **Vent:** the check valve's barbs are made for 3/16" airline, wider than the pump
+   tube, so the valve gets its own hole on the opposite side. Measure the barb (about 5 mm), drill the hole to
+   that size, push the valve's lower barb through the lid from above until its ridge seats, with the arrow
+   pointing **down into the jar**, and seal round it with a dab of super glue or hot glue. Air gets in as the
+   pump draws the drink out (without it the jar goes under vacuum and the pours shrink), but if the jar tips,
+   nothing comes out. Blow through it to check: air goes in, not out. The valve stands about 25 mm above the
+   lid; the lower dish leaves about 40 mm.
 2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
    continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
 3. **Route.** The pump sits in its saddles on the deck, head toward your side so you can open the cap
@@ -387,7 +397,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    its saddles. Electronics board on the deck's vertical panel (4 x M3x6).
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
-   its spigot goes into the top of the drum, 3 x M3x12 from outside. The drum stays with the lantern from now on.
+   its spigot goes into the top of the drum, 3 x M3x8 from outside. The drum stays with the lantern from now on.
 3. **Bay floor.** Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two
    short wall slots cross the far half, the tube hole and the 7 mm cable hole are beyond the wall line (tube on
    the right, cables on the left; the lock cable and LED leads already pass through it, section 4 step 7, and
@@ -400,14 +410,15 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    side; check the tube sits in the channel and its end still points down into the glass slot. Take up the
    slack in the lock cable and LED leads down through the cable hole.
 6. **Sphere.** Slide `sphere_front`, with the diffuser in it, in from the display side until it sits on the
-   lower dish and the wall's four posts touch the diffuser. Slide `sphere_rear` in from your side. Fit the two
-   alignment pins, then 4 x M3x10 through the rear half's flange into the front half, and 3 x M3x12 through
-   the lower joint.
+   lower dish and the wall's four posts touch the diffuser. Slide `sphere_rear` in from your side. Then 4 x M3x10
+   through the rear half's flange into the front half, and 3 x M3x8 through the lower joint into the dish's
+   ring (the holes sit 3 mm above the sphere's flat; the heads stand a little proud on the curve, that is normal).
 7. **Top.** Lower `dish_upper` (with the top diffuser, the LED ring and the curtain on it) onto the sphere so
-   the curtain goes down behind the hand opening, and screw it on, 3 x M3x12. Connect the ring's leads to the
+   the curtain goes down behind the hand opening, and screw it on, 3 x M3x8. Connect the ring's leads to the
    wall's.
-8. Handle: the legs plug into the sphere's bosses (1 x M3x12 each), the two arcs lap-joint to the legs and to
-   each other with 6 x M3x12 and nuts.
+8. Handle: the legs plug into the sphere's bosses. One M3x12 each goes in through the round hole in the boss's
+   outer wall and 6 mm down into the leg (a long 2.5 mm hex key), into the pilot on the sphere side. The two
+   arcs lap-joint to the legs and to each other with 6 x M3x12 and nuts.
 9. **Join the lantern and the cartridge.** Plug the lock and LED plugs together, coil the tube's slack above
    the jar, and lower the lantern over the cartridge. The three notches in the deck's edge and the three
    bosses inside the drum only line up one way. Tip the lantern a little and turn the 3 thumbscrews up into the
@@ -424,7 +435,7 @@ Water in the jar, the shot glass in its slot (only the shot glass fits under the
 cup or syringe to measure), laptop on the serial console.
 
 First the battery reading: measure across the pack (or the rail) with the meter, type `vcal` and that number
-(for example `vcal 12.31`), then `status` should show the same.
+(for example `vcal 12.31`), then `status` should show the same. Type `save` to keep it.
 
 The pour time is the length of the show, so set it first and then adjust the pump speed until that time
 pours the amount you want.
@@ -436,7 +447,7 @@ speed 60         too much? lower the speed (too little? raise it) and run cal 11
 save             when it pours 30-37 mL (1 to 1.25 oz)
 ```
 
-Then repeat with the real drink: liqueur is thicker than water and the nozzle is 20 cm above the pump, so
+Then repeat with the real drink: liqueur is thicker than water and the nozzle is about 12 cm above the pump, so
 expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be carried without spilling.
 
 ---
@@ -537,7 +548,7 @@ flattened.
 | Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
 | Heat-set inserts instead of screwing into plastic | ~$10 | Set `M3_INSERT_HOLE = 4.0` in `cad/params.py` and re-run `build.py`. Inserts: [ruthex M3 x 5.7 mm (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3). |
 | Fuse | ~$3 | An inline 2 A slow-blow fuse between the pack and S1. The pack's protection board already cuts out on a short. |
-| Steady LED brightness on a draining battery | ~$6 | A small buck-boost converter set to 12.0 V between the +12 V rail and the LED strip's + (the pump keeps its firmware compensation). Without it the strip dims as the pack drains: ~70 % of its current at half charge (~11.2 V), a third to a half at 10 V. Charging at half keeps it bright enough. |
+| Steady LED brightness on a draining battery | ~$6 | A small buck-boost converter set to 12.0 V between the +12 V rail and the LED strip's + (the pump keeps its firmware compensation). Without it the strip dims as the pack drains: ~70 % of its current at half charge (~11.3 V), a third to a half at 10 V. Charging at half keeps it bright enough. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
 | Pinch clamp for carrying a full jar | ~$6 | [Tubing pinch clamps (B0FCM98N2Q)](https://www.amazon.com/dp/B0FCM98N2Q). |
 
@@ -546,5 +557,5 @@ flattened.
 strip is enough for a glow that just gets brighter, glows without visible dots, and it runs from the same 12 V as the pump. The reservoir
 is a squat jar because it shares the deck with the pump under the lower dish. The glass sits about 5 cm down in
 a slot because the sphere is only 10 cm tall inside and your fist and the lock need the space above it; that is
-also why it slides toward you before it lifts out. The research behind every number is
-in `docs/research/`.
+also why it slides toward you before it lifts out. The early research notes are in `docs/research/`; they are partly superseded, and the
+current numbers are the ones in this guide and in `cad/params.py`.

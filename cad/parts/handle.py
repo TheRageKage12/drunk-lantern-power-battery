@@ -41,7 +41,7 @@ Z_BOSS_POCKET_TOP = P.Z_SPHERE_CENTER                    # 250.5: pocket mouth i
 Z_LEG_BOTTOM = Z_BOSS_POCKET_TOP - BOSS_POCKET_DEPTH     # 238.5
 LEG_SCREW_Z = Z_BOSS_POCKET_TOP - BOSS_POCKET_DEPTH / 2  # 244.5: one M3 across the plug, axis along X
 LEG_SCREW_CB_D = P.M3_HEAD_D + 0.6                       # head counterbore on the leg's outer (+/-X) face
-LEG_SCREW_CB_DEPTH = 2.0
+LEG_SCREW_CB_DEPTH = 6.0                                 # deep enough that an M3x12 gets ~3.7 mm of thread in the boss
 LEG_TIP_CHAMFER = 0.8                                    # lead-in on the plug end
 
 # ------------------------------------------------------------------ lap joints

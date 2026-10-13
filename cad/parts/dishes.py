@@ -26,11 +26,11 @@ import common as C
 # i.e. the top band (at D_MAX) is a 5.4 mm thick wall, not a WALL-thick band.  The spigot must match the
 # base's real bore, so take it from the base module when it is importable and fall back to the same formula.
 try:
-    from parts.base import BASE_TOP_INNER_D         # 169.2 = BASE_BODY_D - 2*WALL  (base.py: 2 * R_IN)
+    from parts.base import BASE_TOP_INNER_D         # 179.2 = BASE_BODY_D - 2*WALL  (base.py: 2 * R_IN)
 except Exception:                                   # running dishes.py stand-alone
     BASE_TOP_INNER_D = P.BASE_BODY_D - 2 * P.WALL
-SPIGOT_OD = BASE_TOP_INNER_D - 2 * P.FIT            # spigot ring OD that slides into the base -> 168.6
-SPIGOT_ID = SPIGOT_OD - 2 * P.WALL                  # 163.8
+SPIGOT_OD = BASE_TOP_INNER_D - 2 * P.FIT            # spigot ring OD that slides into the base -> 178.6
+SPIGOT_ID = SPIGOT_OD - 2 * P.WALL                  # 173.8
 SPIGOT_H = P.JOINT_SPIGOT_H                         # 8
 Z_BASE_JOINT_SCREWS = P.BASE_H - 5.0                # radial M3 screws through the base top band (assembly Z) -> 110
 JOINT_BOSS_ANGLES = C.joint_angles()                # [90, 210, 330] deg, first at +Y (rear)
@@ -51,8 +51,8 @@ LOCATING_RING_H_LOWER = 6.0                                  # lower dish: thin 
 # upper dish: a solid plug so the part prints flat on its floor; thick enough for the socket inserts
 LOCATING_RING_H_UPPER = max(6.0, P.SOCKET_PLATE_T + P.M3_INSERT_DEPTH + 1.5 - P.FLOOR)   # 9.0
 DISH_FLANGE_D = SPHERE_FLAT_D                                # neck floor plate OD = sphere flat (bearing face)
-Z_SPHERE_LOWER_SCREWS = P.Z_LOWER_DISH_TOP + 2.0             # sphere radial M3 holes, bottom joint (assembly Z) -> 179
-Z_SPHERE_UPPER_SCREWS = P.Z_SPHERE_TOP - 2.0                 # sphere radial M3 holes, top joint (assembly Z)
+Z_SPHERE_LOWER_SCREWS = P.Z_LOWER_DISH_TOP + P.JOINT_SCREW_ABOVE_FLAT   # sphere radial M3 holes, bottom joint (assembly Z) -> 195
+Z_SPHERE_UPPER_SCREWS = P.Z_SPHERE_TOP - P.JOINT_SCREW_ABOVE_FLAT       # sphere radial M3 holes, top joint (assembly Z) -> 306
 BAY_FLOOR_SEAT_Z = P.Z_LOWER_DISH_TOP + LOCATING_RING_H_LOWER  # the bay_floor disc (OD 131) rests on the ring top
 
 # ------------------------------------------------------------------ cone geometry (both dishes)

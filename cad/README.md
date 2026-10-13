@@ -28,7 +28,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 ## Hardware envelopes to verify against the real parts
 - Kamoer KPHM200: modelled as a 64 x 63 x 40 mm head box plus a 40 mm motor can, 118 mm overall. Kamoer
   publishes no drawing. Measure the pump and adjust `PUMP_*` in `params.py` and `PUMP_HEAD_L_EST` in `parts/base.py`.
-- Reservoir jar: 76 mm across the cap, 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
+- Reservoir jar: a 76 x 76 mm envelope (`BOTTLE_D`, `BOTTLE_H`); buy one at most 73 mm across the cap (`BOTTLE_NECK_D`) and 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
 - Battery: KBT 12 V 2400 mAh Li-ion pack, 70 x 55 x 40 mm (`POWERBANK_*`), flat on the cartridge tray under the deck, leads toward +Y. With the deck raised for it, the base and lower dish are 190 mm across (`D_MAX`) so the pump and jar clear the lower dish by 5-6 mm; the upper dish stays 180 mm (`UPPER_DISH_MOUTH_D`). The charge jack (8 mm hole) and power switch (6.5 mm hole) sit in the tray's port panel at `PORT_ANGLE`; the drum has a matching notch open at its bottom edge, so it still lifts off. Check the panel holes against your jack and switch.
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
 - Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, plus a 60 mm forearm through the 120 x 96 mm hand opening.

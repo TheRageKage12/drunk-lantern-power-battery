@@ -49,7 +49,7 @@ def resistor_v(x, y_top, label, ground=True):
 # ---------------------------------------------------------------- title, legend, rails
 s.text(24, 34, "Green Lantern power battery - wiring (budget build)", size=20, weight="bold")
 lx = 24
-for col, lab in ((ORANGE, "+12 V"), (RED, "+5 V"), (MAG, "3.3 V"), (BLACK, "GND"), (GREEN, "signal")):
+for col, lab in ((ORANGE, "+12 V"), (RED, "+5 V"), (BLACK, "GND"), (GREEN, "signal")):
     s.wire([(lx, 56), (lx + 26, 56)], col, sw=3)
     s.text(lx + 32, 60, lab, size=11)
     lx += 95
@@ -220,7 +220,7 @@ dot(285, 260, RED)
 s.wire([(230, 628), (356, 628)], GREEN, sw=2)
 s.path("M372,620 L372,636 L358,628 Z M358,620 L358,636", stroke=INK, sw=1.6, fill="#dddddd")
 s.wire([(372, 628), (515, 628), (515, 420), (xr, 420)], GREEN, sw=2)
-s.lines(345, 646, ["1N5819, stripe", "to the sensor"], size=9.5, color="#555")
+s.lines(345, 646, ["1N5819 on the board,", "stripe to the sensor"], size=9.5, color="#555")
 s.wire([(230, 646), (250, 646), (250, GND_Y)], BLACK, sw=1.8)
 dot(250, GND_Y)
 box(40, 680, 190, 64, "D2F-L microswitch", ["pressed by the rotor cam", "at ~40 deg of twist"], fill="#f3e8ff")
@@ -235,6 +235,7 @@ s.lines(24, GND_Y + 36, [
     "The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.",
     "The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.",
     "S1 switches everything but the charge jack: turn it off to store the lantern and while charging. The pack's protection board cuts out on a short or a flat pack.",
+    "Plugs where the lantern unplugs from the cartridge: lock cable JST PH 4-pin = 5V, HALL OUT, SW (NO), GND, ~10 cm from the board; LED leads JST SM 2-pin = +, -.",
 ], size=10.5, color="#333")
 
 open(os.path.join(HERE, "..", "wiring.svg"), "w").write(s.finish())
