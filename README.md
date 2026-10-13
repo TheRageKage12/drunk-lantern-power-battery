@@ -1,13 +1,14 @@
 # Green Lantern power battery that pours a shot
 
-A Halloween prop: a 3D-printed Green Lantern power battery (about 470 mm tall, 180 mm diameter)
+A Halloween prop: a 3D-printed Green Lantern power battery (about 470 mm tall, 190 mm across at the base)
 with a hidden peristaltic pump, a hidden nozzle, and a twist-to-pour lock inside the sphere.
 Punch in through a strip curtain so the ring seats in the lock, then twist and hold it through the oath: the
 pump pours about 1 oz into the shot glass under the lock while the light climbs; turn back and the light
-swells and goes dark. Slide the glass out and drink. Parts cost about $150 (budget build).
+swells and goes dark. Slide the glass out and drink. Parts cost about $190 (budget build).
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
-assembly, wiring, firmware, calibration, testing, cleaning).
+assembly, wiring, firmware, calibration, testing, cleaning). Shopping list by store:
+[docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) (printable: [docs/SHOPPING_LIST.pdf](docs/SHOPPING_LIST.pdf)).
 
 ## Repository map
 

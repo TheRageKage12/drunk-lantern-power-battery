@@ -1,6 +1,6 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$200)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$190)
 
-A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
+A 3D-printed Green Lantern power battery, about 47 cm tall and 19 cm across at the base, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
 curtain of frosted plastic strips, and the frosted **display window** on the far side. Push the empty shot
 glass in under the lock until it clicks. Punch in, ring face first, and the ring seats in the lock: the lantern
@@ -10,9 +10,9 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 
 "Your side" means the hand opening; "display side" means the window opposite it.
 
-![interaction timeline](images/interaction.svg)
+![interaction timeline](images/interaction.png)
 
-**Status.** Designed, modelled and simulated; not yet built. The firmware compiles and passes 17 simulated
+**Status.** Designed, modelled and simulated; not yet built. The firmware compiles and passes 20 simulated
 safety scenarios (`firmware/test`). The CAD passes its fit checks. Two things must be measured on the real
 parts before you print the big pieces: the Kamoer pump's outline and your jar. Every bay is parametric
 (`cad/params.py`), so a measured number is a one-line change and a re-run of `python3 build.py`.
@@ -37,12 +37,12 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 |---|---|
 | Top dish | A frosted disc in its floor. A ring of LED strip in the hole under it makes the top glow. |
 | Sphere, your side | The hand opening (120 x 96 mm), closed by a curtain of frosted plastic strips that your hand and the glass push through. |
-| Sphere, inside | The **lock wall**, 2.5 cm in front of the centre. On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
+| Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window). On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
 | Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. The charge jack and the power switch sit in a small panel at the bottom edge on your side. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill: undo them and lift the lantern off; the cartridge stays on the table. To charge: plug the charger into the jack, no need to open it. |
 
-![fluid path and layout](images/fluid-path.svg)
+![fluid path and layout](images/fluid-path.png)
 
 The drink touches only the jar, the platinum-silicone tube and the glass. No printed part is in the liquid path.
 
@@ -52,48 +52,48 @@ The drink touches only the jar, the platinum-silicone tube and the glass. No pri
 
 The same list grouped by store, with tick boxes: [SHOPPING_LIST.md](SHOPPING_LIST.md).
 
-Prices with "~" are estimates: Amazon hid some prices from my lookups, and the LED strip, buck module and
-Vetco parts were not checked listing by listing. Confirm at checkout.
+Amazon and Vetco prices were read from their listings on 2026-10-13; prices with "~" are estimates.
+Confirm at checkout.
 
 ### 2.1 Order online
 
 | # | Item | Buy | Price | Notes |
 |---|---|---|---|---|
-| 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
-| 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $14 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. |
+| 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28.00 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
+| 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $13.99 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. One run is ~90 cm; the rest covers replacements (the tube is the part that wears). |
 | 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
 | 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
-| 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key (the pack is the smallest sensible buy). |
-| 5b | Cable plugs | Vetco: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) ($2.24) for the lock cable, [JST SM 2-pin pair](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) ($1.75) for the LED leads | $3.99 | So the lantern unplugs from the base cartridge. |
+| 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
 | 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
-| 5a | Curtain | Office store: one clear-frosted polypropylene binder divider or report cover, letter size | ~$4 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
-| 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
+| 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
 | 8 | 12 V battery pack | [KBT 12 V 2400 mAh Li-ion pack, bare leads, with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $21.99 | 70 x 55 x **40** mm, 6 cells, protection board (over-charge, over-discharge, short circuit), bare leads and its own 12.6 V charger. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
+| 9 | Lever microswitch, D2F-L, 4-pack | [Amazon B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4) | $8.99 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever: the lock's switch bracket is built for this size. Vetco doesn't list sizes for its lever switches. |
 
 **Hall sensor alternative.** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
 inside the rotor to about 3 mm from the magnet. If you ever have an Adafruit DRV5032 board (#6051) instead, set
 `HALL_SENSOR = 'DRV5032'` in `cad/params.py` and reprint `rotor` and `socket_base`: it then sits under the plate,
 works on 3.3 V and either magnet pole.
 
-### 2.2 Pick up locally (or order the Amazon kit in brackets)
+### 2.2 Pick up locally
 
 | # | Item | Where | Price | Notes |
 |---|---|---|---|---|
 | 7 | Hall sensor, A3144 | [Vetco, VUPN6596](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63) | $1.99 | Runs on 5 V, reacts to one magnet pole. It sits on a post inside the lock, ~3 mm from the magnet: about 90 mT there, 2.5 x its worst-case switch point. |
-| 9 | Lever microswitch, D2F-L size | [Amazon 4-pack, B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4) (Vetco doesn't list sizes for its lever switches) | ~$8 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever. The lock's switch bracket is built for this size: take calipers to the store. |
-| 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
-| 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
-| 12 | Small parts | Vetco | ~$12 | 3 x 1N5819 diodes, 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
+| 5b | Cable plugs | Vetco: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) ($2.24) for the lock cable, [JST SM 2-pin pair](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) ($1.75) for the LED leads | $3.99 | So the lantern unplugs from the base cartridge. |
+| 5a | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
+| 10 | 74AHCT125 quad buffer, DIP-14 | [Vetco, VUPN524](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96) | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. Must be AHCT, not HC. |
+| 11 | 2 x logic-level N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | IRLZ44N (the page's web address says IRLB8721; either works, same pin order). TO-220. |
+| 12 | Small parts | Vetco (links in [SHOPPING_LIST.md](SHOPPING_LIST.md)) | ~$20 | 3 x 1N5819-type diodes (NTE585), 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm protoboard, a 14-pin IC socket, 22 AWG stranded wire, 1/8" heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | any cyanoacrylate super glue you have (Gorilla Glue, Loctite) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
+**Total: about $190 before tax, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) or the printable [SHOPPING_LIST.pdf](SHOPPING_LIST.pdf) for the store-by-store list). That assumes you already have:
 
-- **PETG filament.** About 0.85 kg of green (buy two 1 kg spools so a failed print doesn't stop you) plus a little white or natural for the two diffusers (~$40 if you need two spools).
-- **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
+- **PETG filament.** About 0.85 kg of green (buy two 1 kg spools so a failed print doesn't stop you) plus a little white or natural for the diffusers (~$43 for two green spools and one white).
+- **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
 - Basic tools: soldering iron, multimeter, calipers, a drill with 2.5 mm and 6 mm bits, flush cutters.
 
@@ -101,10 +101,12 @@ works on 3.3 V and either magnet pole.
 
 | Store | Address, hours | Buy here |
 |---|---|---|
-| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | Diodes, resistors, capacitors, MOSFETs, the 74AHCT125, microswitches, perfboard, DIP sockets, wire, heat-shrink, A3144, Hillman springs. Not stocked: XIAO, magnets. |
+| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, 74AHCT125, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch, charge jack and the two JST plugs. Not stocked: XIAO, magnets, check valves. |
 | [Tacoma Screw Products, Ballard](https://www.tacomascrew.com/LocationFinder) | 3930 Leary Way NW, Seattle 98107, (206) 632-7565. Mon-Fri 7-5, Sat 9-1 | M3 screws and nuts by the piece, springs. Georgetown branch: 1121 S Bailey St, Mon-Fri 7-5. |
 | [McLendon Hardware](https://www.mclendons.com/locations) | White Center: 10210 16th Ave SW, Seattle 98146. Renton: 440 Rainier Ave S | Spring drawers, metric screws, glue. |
-| Stoneway Hardware, Ace stores (Magnolia, Maple Leaf, Junction) | Seattle neighbourhoods | Fasteners by the piece, spring drawers, glue. |
+| Ace Hardware (Magnolia, Maple Leaf, West Seattle Junction), Stoneway Hardware | Seattle neighbourhoods | The lock spring (Hillman spring drawer), fasteners by the piece. |
+| Target, Fred Meyer, Office Depot/OfficeMax | Several in Seattle | The curtain sheet: a clear-frosted polypropylene folder or divider (school aisle). Home Depot has no good match. |
+| Petco, PetSmart, aquarium shops | Several in Seattle | A single aquarium check valve, if you skip the Amazon 10-pack. |
 | [Bargreen Ellingson](https://www.bargreen.com/locations/seattle) | SoDo showroom, Mon-Fri 10-3 | 1.5 oz shot glasses. |
 | [Micro Homebrew](https://www.microhomebrew.com/) | Kenmore, (425) 892-8425 | Small food-safe bottles and jars. They do not stock the 1/8" pump tubing. |
 
@@ -181,7 +183,7 @@ but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
 
 ## 4. Electronics (build it on the bench first)
 
-![wiring diagram](images/wiring.svg)
+![wiring diagram](images/wiring.png)
 
 Build the circuit on the 5 x 7 cm perfboard and test it before anything goes into the lantern.
 
@@ -213,8 +215,8 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    (5V, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
    about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
    lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
-   cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are 13 mm wide and
-   will never pass that hole afterwards. The bay floor then rides on the cables until final assembly.
+   cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are wider than
+   the hole and will never pass it afterwards. The bay floor then rides on the cables until final assembly.
 8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
    `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
    `switch=pressed` should follow, and `battery=` should read within 0.2 V of your meter (see `vcal`). Then
@@ -243,7 +245,7 @@ arduino-cli upload  --fqbn rp2040:rp2040:seeed_xiao_rp2040 -p /dev/ttyACM0 green
 cd test && make test     # 20 simulated scenarios, all must PASS
 ```
 
-![state machine](images/state-machine.svg)
+![state machine](images/state-machine.png)
 
 | Pin | Function |
 |---|---|
@@ -282,7 +284,7 @@ pump run.
 
 ## 6. The lock
 
-![socket mechanism](images/socket-mechanism.svg)
+![socket mechanism](images/socket-mechanism.png)
 
 Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_cap`. Plus 3 x M3x8 and 3
 nuts for the base plate, 1 x M3x6 and a nut for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
@@ -320,7 +322,7 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
 7. **Cycle it 50 times** and watch `status`: `switch=pressed` only near the end of the twist, `ring=present`
    for the whole twist.
 8. **Mount** it on the face of `lock_wall` (section 8): the two ears go down, one M3x10 through each ear and
-   the wall, nut on the back. The Hall board's wires pass through the rectangular window in the wall behind
+   the wall, nut on the back. The sensor's wires pass through the rectangular window in the wall behind
    it. Leave the cable long enough to reach the base (about 40 cm).
 
 ---
@@ -418,7 +420,8 @@ switch next to the charge jack, at the bottom edge on your side.
 
 ## 10. Calibration
 
-Water in the jar, the shot glass (or a measuring cup) under the nozzle, laptop on the serial console.
+Water in the jar, the shot glass in its slot (only the shot glass fits under the nozzle; tip it into a measuring
+cup or syringe to measure), laptop on the serial console.
 
 First the battery reading: measure across the pack (or the rail) with the meter, type `vcal` and that number
 (for example `vcal 12.31`), then `status` should show the same.
@@ -475,9 +478,9 @@ position, under the lock.
 5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it,
    slide it about 3 cm toward you, lift it straight up out of the slot and bring it out through the curtain.
 
-**Charging:** switch off, plug the pack's charger into the jack at the bottom edge on your side. Charge
-when the ring gets a double blink as you punch in (below 10.5 V), or after every party. A full pack lasts
-well over 100 pours.
+**Charging:** switch off, plug the pack's charger into the jack at the bottom edge on your side. Charge after
+every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
+The double blink as you punch in (below 10.5 V) is a late warning. A full pack lasts well over 100 pours.
 
 **Refilling** (about 2 minutes):
 1. Switch off. Tip the lantern slightly and undo the 3 thumbscrews underneath.
@@ -539,8 +542,8 @@ flattened.
 | Pinch clamp for carrying a full jar | ~$6 | [Tubing pinch clamps (B0FCM98N2Q)](https://www.amazon.com/dp/B0FCM98N2Q). |
 
 **Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in
-10-15 s. Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A plain LED
-strip is enough for a glow that just gets brighter, and it runs from the same 12 V as the pump. The reservoir
+10-15 s. Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A green COB LED
+strip is enough for a glow that just gets brighter, glows without visible dots, and it runs from the same 12 V as the pump. The reservoir
 is a squat jar because it shares the deck with the pump under the lower dish. The glass sits about 5 cm down in
 a slot because the sphere is only 10 cm tall inside and your fist and the lock need the space above it; that is
 also why it slides toward you before it lifts out. The research behind every number is

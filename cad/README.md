@@ -14,7 +14,7 @@ python3 render_stl.py output /tmp/r   # quick per-part previews
 | File | What |
 |---|---|
 | `params.py` | every dimension and the stack heights (`Z_*`) |
-| `DESIGN_CONTRACT.md` | how the parts mate; revisions 2-8 record the changes since the first draft (8 = lock wall layout) |
+| `DESIGN_CONTRACT.md` | how the parts mate; revisions 2-9 record the changes since the first draft (8 = lock wall layout, 9 = base cartridge, battery, Hall post, nozzle, 190 mm base) |
 | `parts/base.py` | base drum (part of the lantern shell) and the removable cartridge: tray, deck (jar ring, pump saddles, electronics panel), thumbscrew knobs, hardware envelopes |
 | `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings; `top_diffuser` (frosted disc) in the upper dish floor; pilots for the curtain clamp; `NOTES-dishes.md` |
 | `parts/sphere.py` | sphere halves (hand opening, display window), diffuser, bay floor, glass slot, nozzle guide, lock wall, curtain clamp, handle bosses, glass / glass-path / fist / forearm envelopes |
