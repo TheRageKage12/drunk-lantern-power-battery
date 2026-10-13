@@ -495,6 +495,11 @@ position, under the lock.
 5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it,
    slide it about 3 cm toward you, lift it straight up out of the slot and bring it out through the curtain.
 
+**On the day:** charge (section 11's 11.5 V line), fill the jar with the real drink, put the lantern back on, then
+`cal 8000` into a cup until the drink reaches the nozzle (the line is empty after cleaning) and do one full
+test pour into the glass: the first pour of the night should not be the one in front of a guest. Then the
+empty glass goes in and you are ready.
+
 **Charging:** switch off, plug the pack's charger into the jack at the bottom edge on your side. Charge after
 every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
 The double blink as you punch in (below 10.5 V) is a late warning. A full pack lasts well over 100 pours.
@@ -530,9 +535,12 @@ flattened.
 
 | Symptom | Check |
 |---|---|
-| Ring not detected | `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face facing out of the key cap (section 6, step 2)? Is pin 1 on 5 V? |
+| Ring not detected | Are both cable plugs connected (easy to forget after a refill)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face facing out of the key cap (section 6, step 2)? Is pin 1 on 5 V? |
+| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The key cap's tab must point at the rest notch. |
+| Nothing lights, no response | Switch S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. Plugs connected? |
+| Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, section 6 step 6) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
-| Pump hums, no flow | Tube not seated under the rollers, head cap open, or the wrong (thin-walled) tube. |
+| Pump hums, no flow | Tube not seated under the rollers, head cap open, the service loop kinked when the lantern went back on, or the wrong (thin-walled) tube. |
 | Pours shrink after a few in a row, jar dents in | The vent valve is in backwards (arrow must point into the jar) or blocked. |
 | Pump doesn't run at all | Switch on? Check the rail gives 9.5-12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
