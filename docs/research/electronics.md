@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes a HiLetgo A3144 module and a D4184 MOSFET module, NeoPixels on D4 and a strip on D5 (built: pump D3, LEDs D4, discrete MOSFETs, A3144 on a post). The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Electronics: sensors, switching, microcontroller wiring
 
 Scope: XIAO RP2040, HiLetgo A3144 Hall module, D2F-L microswitch, dual D4184 MOSFET module, SN74AHCT125N, 6x2 mm magnets, the full net list, and the connector/protoboard plan. Pins match `firmware/green_lantern/green_lantern.ino` (D1 Hall, D2 switch, D3 pump, D4 ring, D5 strip).

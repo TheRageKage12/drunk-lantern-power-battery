@@ -302,6 +302,29 @@ exception in build.py output.
   pump envelope is an estimate: measure the head before printing base and dish_lower.
 - LED strip: green COB, 8 mm, cut every 25 mm (HAMRVL B0CKYFLZFQ): back rows one 10 cm piece each, front
   columns 5 cm each, the top ring one 25 cm piece; ~0.6 A estimated for 75 cm.
+- Review fixes (rev 9g): the sphere's six dish-joint holes started at r = 92 and never reached the collar wall
+  (r 66..70 at that height); `radial_screw_cutters` now starts at the shell surface on the hole axis, and the
+  joint screws sit `JOINT_SCREW_ABOVE_FLAT` = 3 mm from the flats (was 2) so a 5.5 mm socket head clears the
+  dish flange; the dish pilots follow the same parameter. Sphere<->dish and drum<->dish screws are M3x8 (the
+  pilots are 6.5 deep behind 2.4-3 mm of wall; an M3x12 bottomed out). The handle boss's outer wall gets a 6.6 mm
+  access hole and the leg counterbore is 6 mm deep, so an M3x12 reaches the pilot (before: 0 mm of thread, and no
+  way to reach the head). Lock base plate: the three screws are countersunk (M3x8 flat head from below) so the
+  plate lies flat on the wall; the switch bracket screw moved beside the lever end of the switch body, from
+  below through a countersunk radial slot in the plate and a round hole in the bracket into a 6 mm pilot in the
+  housing (the captured nut under the bracket did not fit in the 1.5 mm floor, and an M3x6 from above would have
+  stood 2.5 mm out of the plate into the wall); the switch can now be tuned with the lock closed.
+  Second batch (printability and the builder's walk): the rear half's flange ring (OD R_IN - FIT) never fused
+  with the shell, so `sphere_rear` exported as three bodies standing on two loose arcs with the shell 3 mm in
+  the air; the ring now sits inside the rear half, flush with the split (y 0..6, OD R_IN + 0.5) and the front
+  half's bosses start at FIT from the split, same 3.7 mm of thread; the dish rings align the halves. checks.py
+  fails any printed part that is not one solid. The drum has the same 45 deg cone above its bottom band as
+  below its top band (printed top band down it was a 3 mm square ledge 103 mm up). The rotor exports bottom
+  down (its skirt is a full disc; top down bridged the 24.6 mm key pocket ceiling). The lock wall has a 9 x 7
+  window under the Hall window where the base plate's wire notch lands (socket +Y, r 29.5 -> 29.5 mm below the
+  ring centre: the switch wires were pinched against solid wall). The nozzle guide's open side is a 5.7 mm slit
+  (body face 1.5 from the bore centre instead of 0.1: the tube can be pressed in, the lips print). Sensor post
+  radius 4.0 (walls beside the lead slot were 0.6 mm); tray finger wells 19 mm (20 broke through the rim);
+  back LED row 1 at 34 (a 0.3 mm sliver to the Hall window).
 - Wider base (rev 9f): D_MAX 180 -> 190 (base bands and the lower dish mouth; BASE_BODY_D = D_MAX - 6), so the
   raised jar and pump clear the lower dish's inner wall: pump envelope 6.0 mm, jar envelope 5.4 mm. The upper
   dish keeps a 180 mm mouth (UPPER_DISH_MOUTH_D, own cone slope): the handle legs pass its rim (2 mm), and moving

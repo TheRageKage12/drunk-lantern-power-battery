@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes NeoPixel and DRV5032 parts from Adafruit, heat-set inserts, the door and tray, Loctite, a 180 mm base. The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Seattle-area sourcing for small-quantity parts
 
 Researched 2026-10-11; independently fact-checked 2026-10-11 (see Fact-check notes at the end). Every address/hour/price below comes from a page that was fetched (named in the Source column) unless marked **estimate** or **unconfirmed**. Big-box product pages (Home Depot, Lowe's, Ace online) blocked fetching (HTTP 403), so those stock claims are labeled accordingly.

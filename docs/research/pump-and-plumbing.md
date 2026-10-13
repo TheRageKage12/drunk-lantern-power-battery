@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes 1/8" x 3/16" JoyTube tubing, Adafruit pumps, a door (built: the Kamoer with 1/8" x 1/4" Auber tube, a check-valve vent, a lift-off cartridge). The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Pump, tubing, reservoir, glass and fluid path
 
 Research notes for the Green Lantern shot-pouring prop. Every number below is tagged with the page it came from; "estimate" means no page confirmed it, "(unverified)" means the fact-checker could not reach the page or find the number on it. NOTHING HAS BEEN BOUGHT YET (brief correction 2026-10-11): the Kamoer KPHM200 (B09HGVLHFV) and the JoyTube 1/8" x 3/16" tubing (B08RYFGNMK) are items on Kevin's Amazon shortlist, not parts in hand.

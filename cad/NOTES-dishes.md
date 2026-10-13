@@ -1,3 +1,5 @@
+> **Superseded in part.** Written for revision 3 (180 mm lower dish mouth, the old base spigot). Since revision 9f the base bands and the lower dish mouth are `D_MAX` = 190 mm and the upper dish keeps 180 (`UPPER_DISH_MOUTH_D`); the current numbers are in `params.py` and `DESIGN_CONTRACT.md`.
+
 # NOTES - dishes module (`cad/parts/dishes.py`)
 
 Parts: `dish_lower`, `dish_upper`. Both are one revolved (r, z) profile + insert bosses + holes. All numbers

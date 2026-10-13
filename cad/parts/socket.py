@@ -10,9 +10,12 @@ Parts (print orientation noted in build()):
   socket_housing  faceplate (OD 100 x 3) + housing puck (OD 76, 6.7 deep) with every cavity; printed faceplate down
   rotor           disc OD 36 x 8 with the keyed pocket on top, and below the faceplate lip: the stop lug, the
                   switch cam lobe and the plunger ramp, all one polygon extrusion
-  socket_base     plate OD 76 x 3.5 that closes the housing from below: holds the Hall board (chip down, sensor
-                  window on the axis), the switch bracket recess with a captured nut, 3 screw holes
-  switch_bracket  16 x 10 x 2 slide with two pegs for the D2F-L, M3 slot for +/- 2 mm radial tuning
+  socket_base     plate OD 76 x 3.5 that closes the housing from below: the Hall sensor post (A3144) or board
+                  pocket, the switch bracket recess, 3 countersunk screw holes (M3x8 flat head, from below, into nuts
+                  in the housing) and a countersunk radial slot for the bracket screw (M3x8 flat head, from below,
+                  into a pilot in the housing): the plate's underside stays flat, it sits flat on the lock wall
+  switch_bracket  21 x 10 x 2 slide with two pegs for the D2F-L and a round hole for its screw, which moves
+                  with it in the plate's slot: loosen from below, push the screw +/- 1 mm, tighten
   plunger         4.5 mm long spring plunger with a rounded nose
   halo            (only if LED_RING) translucent ring over a 24-px NeoPixel ring
   key_cap         24 mm keyed disc with the magnet pocket, glued to the ring's face
@@ -95,7 +98,10 @@ SWITCH_N1 = SWITCH_N0 + P.D2F_H            # 14.5
 SWITCH_Z_TOP = -3.9                        # body top (just under the ring recess floor at -3.4)
 SWITCH_Z_BOT = SWITCH_Z_TOP - P.D2F_W      # -9.7 = housing bottom: the body stands on the bracket
 PEG_D, PEG_H = 2.3, 4.5
-BRACKET_W, BRACKET_L, BRACKET_T = 16.0, 10.0, 2.0
+BRACKET_W, BRACKET_L, BRACKET_T = 21.4, 10.0, 2.0   # along t: from SWITCH_SCREW_T - 3 to the body's far end + 1.6
+SWITCH_SCREW_T, SWITCH_SCREW_N = -4.0, SWITCH_N0 + 3.5   # bracket screw beside the lever tip end of the body
+BRACKET_T_CENTRE = (SWITCH_SCREW_T - 3.0 + SWITCH_T1 + 1.6) / 2   # 3.7
+SWITCH_PILOT_DEPTH = 6.0                                   # pilot in the housing: HOUSING_BOT up to -3.7 (faceplate at -3)
 
 # plunger + ramp
 PLUNGER_ANGLE = 300.0
@@ -121,7 +127,7 @@ A3144 = P.HALL_SENSOR == 'A3144'
 ROTOR_SKIN = 1.0                           # rotor floor left under the magnet
 ROTOR_HOLE_TOP = POCKET_FLOOR - ROTOR_SKIN # -5.0: top of the blind hole
 AXIAL_PLAY_DOWN = ROTOR_BOT - HOUSING_BOT  # 1.2: a punch can push the rotor this far toward the base plate
-POST_R = 3.6                               # post on the base plate
+POST_R = 4.0                               # post on the base plate (4.0: >= 1 mm walls beside the lead slot)
 ROTOR_HOLE_R = POST_R + 0.5                # blind hole in the rotor (0.5 radial clearance)
 POST_TOP = ROTOR_HOLE_TOP - AXIAL_PLAY_DOWN - 0.3   # -6.5: the skin clears the sensor even when pushed fully down
 SENSOR_POCKET = (P.A3144_L + 0.3, P.A3144_W + 0.3, P.A3144_T + 0.05)   # face up, flush with the post top
@@ -247,6 +253,9 @@ def housing_solid():
         cuts.append(cq.Workplane('XY').workplane(offset=HOUSING_BOT - 1).center(x, y)
                     .polygon(6, NUT_AF / math.cos(math.radians(30))).extrude(NUT_T + 1))
         cuts.append(cyl(P.M3_CLEAR / 2, HOUSING_BOT - 1, -3.8, x, y))
+    # pilot for the switch bracket screw (M3x8 flat head from under the base plate), beside the switch body
+    sx, sy = switch_screw_xy()
+    cuts.append(cyl(P.M3_INSERT_HOLE / 2, HOUSING_BOT - 1, HOUSING_BOT + SWITCH_PILOT_DEPTH, sx, sy))
     for c in cuts:
         h = h.cut(c)
     return h
@@ -265,7 +274,7 @@ def base_solid():
     for a in BASE_SCREW_ANGLES:
         x, y = pol(BASE_SCREW_R, a)
         cuts.append(cyl(P.M3_CLEAR / 2, BASE_BOT - 1, HOUSING_BOT + 1, x, y))
-        cuts.append(cyl(P.M3_HEAD_D / 2 + 0.2, BASE_BOT - 1, BASE_BOT + 2.0, x, y))
+        cuts.append(csk_cone(x, y))                                   # 90 deg countersink in the underside
     if A3144:
         # post up into the rotor, sensor pocket on its tip, lead slot down through the post and the plate
         pl, pw, pd = SENSOR_POCKET
@@ -279,14 +288,19 @@ def base_solid():
                     .extrude(HALL_POCKET_D + 1))
         cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(SENSOR_WINDOW, SENSOR_WINDOW)
                     .extrude(BASE_T + 2))
-    # switch bracket recess (top), its screw hole and captured nut (bottom)
-    bt0, bt1 = SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 - 9.0, SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 + 9.0
+    # switch bracket recess (top) and the bracket screw's radial slot, countersunk from below (the screw goes up
+    # through the bracket into a pilot in the housing; the old captured nut did not fit in the 1.5 mm floor)
+    bt0, bt1 = SWITCH_SCREW_T - 3.6, SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 + 9.0
     bn0, bn1 = SWITCH_N0 - 2.5, SWITCH_N0 + 9.5   # recess spans the body footprint + slide room
     cuts.append(frame_box(bt0, bt1, bn0, bn1, HOUSING_BOT - BRACKET_T, HOUSING_BOT + 1, LEVER_TIP_ANGLE, LEVER_REST_R))
-    sx, sy = switch_screw_xy()
-    cuts.append(cyl(P.M3_CLEAR / 2, BASE_BOT - 1, HOUSING_BOT + 1, sx, sy))
-    cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).center(sx, sy)
-                .polygon(6, NUT_AF / math.cos(math.radians(30))).extrude(NUT_T + 1))
+    st, sn = SWITCH_SCREW_T, SWITCH_SCREW_N
+    cuts.append(frame_box(st - P.M3_CLEAR / 2, st + P.M3_CLEAR / 2, sn - 3.0, sn + 3.0,
+                          BASE_BOT - 1, HOUSING_BOT + 1, LEVER_TIP_ANGLE, LEVER_REST_R))   # 3.4 x 6 slot
+    csk = (cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(P.M3_CLEAR + 2.8 + 2.0, 6.0 + 2.8 + 2.0)
+           .extrude(2.4, taper=45).rotate((0, 0, 0), (0, 0, 1), LEVER_TIP_ANGLE - 90.0))
+    ox, oy = pol(LEVER_REST_R, LEVER_TIP_ANGLE)
+    a = math.radians(LEVER_TIP_ANGLE)
+    cuts.append(csk.translate((ox + st * math.sin(a) + sn * math.cos(a), oy - st * math.cos(a) + sn * math.sin(a), 0)))
     # wire notch continues through the plate; two cable-tie slots
     cuts.append(frame_box(-WIRE_NOTCH_W / 2, WIRE_NOTCH_W / 2, -WIRE_NOTCH_T / 2, WIRE_NOTCH_T / 2,
                           BASE_BOT - 1, HOUSING_BOT + 1, WIRE_NOTCH_ANGLE, WIRE_NOTCH_R))
@@ -298,9 +312,14 @@ def base_solid():
 
 
 def switch_screw_xy():
-    t = SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2
-    n = SWITCH_N0 + 3.5
-    return frame_point(t, n, LEVER_TIP_ANGLE, LEVER_REST_R)
+    return frame_point(SWITCH_SCREW_T, SWITCH_SCREW_N, LEVER_TIP_ANGLE, LEVER_REST_R)
+
+
+def csk_cone(x, y):
+    """90 deg countersink for an M3 flat head, cut into the base plate's underside at (x, y)."""
+    r_top = (P.M3_HEAD_D + 0.2) / 2 + 1.0          # 1 mm below the face the cone is 1 mm wider
+    h = r_top - P.M3_CLEAR / 2                      # 45 deg: radius shrinks 1 per 1 of height
+    return cq.Workplane('XY').add(cq.Solid.makeCone(r_top, P.M3_CLEAR / 2, h, cq.Vector(x, y, BASE_BOT - 1), cq.Vector(0, 0, 1)))
 
 
 def frame_point(t, n, angle_deg, origin_r):
@@ -314,9 +333,11 @@ def frame_point(t, n, angle_deg, origin_r):
 def bracket_solid():
     """Printed flat: plate 16 x 10 x 2 with two pegs on top, slot along the radial direction."""
     b = cq.Workplane('XY').rect(BRACKET_W, BRACKET_L).extrude(BRACKET_T)
+    body_c = SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 - BRACKET_T_CENTRE   # the body's centre in the bracket's frame
     for dx in (-P.D2F_HOLE_PITCH / 2, P.D2F_HOLE_PITCH / 2):
-        b = b.union(cq.Workplane('XY').workplane(offset=BRACKET_T).center(dx, 0).circle(PEG_D / 2).extrude(PEG_H))
-    b = b.cut(cq.Workplane('XY').workplane(offset=-1).slot2D(7.0, P.M3_CLEAR, angle=90).extrude(BRACKET_T + 2))
+        b = b.union(cq.Workplane('XY').workplane(offset=BRACKET_T).center(body_c + dx, 0).circle(PEG_D / 2).extrude(PEG_H))
+    b = b.cut(cq.Workplane('XY').workplane(offset=-1).center(SWITCH_SCREW_T - BRACKET_T_CENTRE, 0)
+              .circle(P.M3_CLEAR / 2).extrude(BRACKET_T + 2))
     return b
 
 
@@ -381,6 +402,8 @@ def build():
     for name in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope'):
         if name == 'socket_base' and A3144:      # the sensor post stands on the top face: print it bottom down
             out[name], _SHIFT[name] = sf[name].translate((0, 0, -BASE_BOT)), None
+        elif name == 'rotor':                    # bottom down: the skirt is a full disc on the bed and the key pocket
+            out[name], _SHIFT[name] = sf[name].translate((0, 0, -ROTOR_BOT)), None   # prints from above (no 25 mm bridge)
         else:
             out[name], _SHIFT[name] = _flip_to_bed(sf[name])
     out['switch_bracket'] = bracket_solid()
@@ -417,13 +440,15 @@ def placements():
     if not _SHIFT:
         build()
     X = (1, 0, 0)
-    bx, by = frame_point(SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2, SWITCH_N0 + 3.5, LEVER_TIP_ANGLE, LEVER_REST_R)
+    bx, by = frame_point(BRACKET_T_CENTRE, SWITCH_N0 + 3.5, LEVER_TIP_ANGLE, LEVER_REST_R)
     px, py = pol(PLUNGER_CH_R0 + P.PLUNGER_L / 2 + 0.3, PLUNGER_ANGLE)
     m = mount_step()
     # print P = R180(S) + (0,0,dz)  =>  S = R180(P) + (0,0,dz)
     pl = {n: [(X, 180, (0, 0, _SHIFT[n])), m] for n in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope')}
     if _SHIFT['socket_base'] is None:          # printed bottom down: just lift it back into the socket frame
         pl['socket_base'] = [((0, 0, 1), 0, (0, 0, BASE_BOT)), m]
+    if _SHIFT['rotor'] is None:
+        pl['rotor'] = [((0, 0, 1), 0, (0, 0, ROTOR_BOT)), m]
     pl['switch_bracket'] = [((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, HOUSING_BOT - BRACKET_T)), m]
     pl['plunger'] = [((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)), m]
     pl['key_cap'] = [(X, 180, (0, 0, POCKET_FLOOR + P.KEY_T)), m]

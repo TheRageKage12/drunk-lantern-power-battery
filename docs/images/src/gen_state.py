@@ -104,10 +104,10 @@ s.text(44, 491, "Timing constants", size=12, weight="bold")
 s.lines(44, 509, [
     "HALL_DEBOUNCE_MS 100   ·   RING_GONE_MS 200   ·   POUR_ABORT_MS 60   ·   SWITCH_DEBOUNCE_MS 40   ·   PUMP_RAMP_MS 300   ·   MAX_PUMP_MS 20 000",
     "DEFAULT_POUR_MS 11 000 (the length of the build-up)   ·   DEFAULT_PUMP_SPEED 70 % (sets the volume: calibrate)",
-    "Light: ARMED_LEVEL 15 %   ·   POUR_PEAK 90 %   ·   EARLY_BUMP +10 %   ·   finale 0.4 s up, 0.3 s hold, 1.2 s fade   ·   idle glow 0",
+    "Light: ARMED_LEVEL 15 %   ·   POUR_PEAK 90 %   ·   EARLY_BUMP +10 %   ·   finale 0.4 s up, 0.3 s hold, 1.2 s fade   ·   idle glow 0   ·   pack < 10.5 V: double blink on insertion",
 ], size=10, lh=14)
 s.text(44, 565, "Bench (USB serial, 115200):", size=11, weight="bold")
-s.text(210, 565, "status  ·  cal 10000  ·  pour 11000  ·  speed 70  ·  leds 255  ·  idle 0  ·  save  ·  stop", size=10, family="Menlo, Consolas, monospace")
+s.text(210, 565, "status  ·  cal 10000  ·  pour 11000  ·  speed 70  ·  leds 255  ·  idle 0  ·  vcal 12.31  ·  save  ·  stop", size=10, family="Menlo, Consolas, monospace")
 s.text(44, 582, "Legend:", size=10, weight="bold")
 s.wire([(100, 578), (130, 578)], INK, sw=2, marker="arrK"); s.text(136, 582, "transition", size=10)
 s.wire([(210, 578), (240, 578)], "#1d4ed8", sw=2, marker="arrB"); s.text(246, 582, "early release", size=10)

@@ -132,7 +132,7 @@ cx, cy = 720, 262
 PANEL_CX = cx
 lab(875, 112, ["twist the ring 45\u00b0 %s" % ("counterclockwise" if MIRROR else "clockwise"), "(as you see it)"], *pol(cx, cy, 39, 30), anchor="start")
 lab(875, 160, ["stop lug against the channel", "wall = 45\u00b0 hard stop"], *pol(cx, cy, 20, 135), anchor="start")
-lab(875, 205, ["D2F-L on a slotted bracket", "(slide it to tune the click angle)"], cx + 26 * SC + 17, cy - 17, anchor="start")
+lab(875, 205, ["D2F-L on a sliding bracket", "(its screw rides in a slot: loosen,", "push, tighten to tune the click)"], cx + 26 * SC + 17, cy - 17, anchor="start")
 lab(875, 250, ["cam lobe has pressed the D2F-L", "lever 3 mm after ~40\u00b0 of twist:", "click (SW goes LOW)"], *pol(cx, cy, 23, 20), anchor="start")
 lab(875, 300, ["magnet still centred on the", "Hall sensor: Hall stays LOW", "through the whole twist"], cx + 4, cy + 4, anchor="start")
 lab(875, 350, ["plunger pushed out 4 mm by the", "ramp; let go and it pushes the", "rotor back to 0\u00b0 (switch releases)"], *pol(cx, cy, 30, 300), anchor="start")

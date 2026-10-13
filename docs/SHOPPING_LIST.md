@@ -16,7 +16,7 @@ address; Seattle should be similar). "Prime" means it ships from Amazon. Tick th
 | [ ] | LED strip, green COB, 12 V, 8 mm, 5 m | [HAMRVL (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | Prime, Oct 14 |
 | [ ] | Buck converter, LM2596, 5-pack | [Seloky (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | Prime, Oct 14 |
 | [ ] | Magnets, 6 x 2 mm, 45 pcs | [SMARTAKE (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | Prime, Oct 14 |
-| [ ] | Vent valve, aquarium check valve, 10 pcs (1 used; or 1 from a pet store's aquarium aisle) | [AQUANEAT (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | Prime, Oct 14 |
+| [ ] | Vent valve, aquarium check valve, 10 pcs (1 used; or 1 from a pet store's aquarium aisle). Its barb goes through its own ~5 mm hole in the jar lid | [AQUANEAT (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | Prime, Oct 14 |
 
 ## Vetco Electronics, Bellevue (~$42)
 
@@ -46,26 +46,29 @@ address; Seattle should be similar). "Prime" means it ships from Amazon. Tick th
 
 [3930 Leary Way NW](https://www.tacomascrew.com/LocationFinder), (206) 632-7565. Mon-Fri 7-5, Sat 9-1. The links
 are the matching items on their website (sold there in boxes of 100); the store sells them by the piece.
+Fallback if you can't get there: the [Amazon M3 kit (B0HKFCTLK8)](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, Prime, covers
+everything except the 8 flat-head screws (4 of them sit under the lock's base plate, where a socket head would hold it off
+the wall), so those 8 still come from a hardware store.
 
 | ✓ | Qty | Item | Link |
 |---|---|---|---|
-| [ ] | 5 | M3 x 6 socket head | [223-306-3](https://www.tacomascrew.com/Product/223-306-3) |
-| [ ] | 11 | M3 x 8 socket head | [223-308-3](https://www.tacomascrew.com/Product/223-308-3) |
-| [ ] | 4 | M3 x 8 flat head (countersunk) | [224-308-4](https://www.tacomascrew.com/Product/224-308-4) |
+| [ ] | 4 | M3 x 6 socket head | [223-306-3](https://www.tacomascrew.com/Product/223-306-3) |
+| [ ] | 17 | M3 x 8 socket head | [223-308-3](https://www.tacomascrew.com/Product/223-308-3) |
+| [ ] | 8 | M3 x 8 flat head (countersunk) | [224-308-4](https://www.tacomascrew.com/Product/224-308-4) |
 | [ ] | 6 | M3 x 10 socket head | [223-310-3](https://www.tacomascrew.com/Product/223-310-3) |
-| [ ] | 20 | M3 x 12 socket head | [223-312-3](https://www.tacomascrew.com/Product/223-312-3) |
-| [ ] | 15 | M3 hex nut | [231-003-1](https://www.tacomascrew.com/Product/231-003-1) |
+| [ ] | 11 | M3 x 12 socket head | [223-312-3](https://www.tacomascrew.com/Product/223-312-3) |
+| [ ] | 14 | M3 hex nut | [231-003-1](https://www.tacomascrew.com/Product/231-003-1) |
 
 ## Only if you don't have them (Amazon, Prime, Oct 14 unless noted)
 
 | ✓ | Item | Listing | Price |
 |---|---|---|---|
-| [ ] | Green PETG, 2 x 1 kg (the parts need ~0.85 kg; the second spool covers supports and failed prints) | [Creality (B0D4MBDL8B)](https://www.amazon.com/dp/B0D4MBDL8B), ships from Amazon, free delivery Oct 18 | $13.99 each |
+| [ ] | Green PETG, 2 x 1 kg (the parts need ~1.2 kg; the second spool covers the rest, supports and a failed print) | [Creality (B0D4MBDL8B)](https://www.amazon.com/dp/B0D4MBDL8B), ships from Amazon, free delivery Oct 18 | $13.99 each |
 | [ ] | White PETG, 1 kg (diffusers, ~30 g) | [Overture (B07PDV9RC8)](https://www.amazon.com/dp/B07PDV9RC8) | $14.99 |
 | [ ] | Soldering iron kit | [80 W LCD (B08R3515SF)](https://www.amazon.com/dp/B08R3515SF) | $9.96 |
 | [ ] | Multimeter | [AstroAI 2000-count (B01ISAMUA6)](https://www.amazon.com/dp/B01ISAMUA6) | $14.39 |
 | [ ] | Digital calipers | [Adoric 0-6" (B07DFFYCXS)](https://www.amazon.com/dp/B07DFFYCXS) | $8.99 |
-| [ ] | Drill bits, metric 1.5-10 mm (2.5 and 6 mm used) | [15-piece cobalt set (B07B7L6WVY)](https://www.amazon.com/dp/B07B7L6WVY) | $22.99 |
+| [ ] | Drill bits, metric 1.5-10 mm (5 and 6 mm used) | [15-piece cobalt set (B07B7L6WVY)](https://www.amazon.com/dp/B07B7L6WVY) | $22.99 |
 | [ ] | Flush cutters | [KATA mini (B07VGK8GBL)](https://www.amazon.com/dp/B07VGK8GBL) | $5.39 |
 
 ## Ace Hardware (~$2)
@@ -82,6 +85,9 @@ test the lock (guide section 6, step 4).
 ## Already have
 
 - Super glue (any cyanoacrylate, e.g. Gorilla Glue super glue): magnets, key cap, nuts, the Hall sensor, the diffuser.
+- A dab of silicone grease or petroleum jelly: the lock's ramp, plunger and bore.
+- 2-3 hook-and-loop straps, 20 mm wide (pump, jar) and ~10 small zip ties (LM2596, cables): any hardware store, ~$5 if you have none.
+- Hex keys 2 and 2.5 mm (a long or ball-end 2.5), a USB-C data cable, a kitchen scale or measuring cup for calibration.
 
 ## Buy locally (measure in the store with calipers)
 

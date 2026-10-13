@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes WS2812B/NeoPixel strips from Adafruit on a 5 V bank (built: a 12 V green COB strip). The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Lighting research: "almost obnoxiously bright" green
 
 Scope: charging-socket ring, sphere glow, diffusion, AHCT125 level-shifter wiring, light choreography.
