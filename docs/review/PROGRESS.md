@@ -284,3 +284,21 @@ than the AQUANEAT 10-pack at $4.79; a single from a pet store (~$1-2) remains th
    (the firmware already allows it), which saves the spring, plunger and ramp. Kevin said to keep the lock.
 9. **Things I would not cut:** the battery sense (cents, gives constant pours and a warning), the power switch
    (storage drain), the check valve (a tipped jar over the electronics), the second green spool.
+
+## Phase 5: polish (done)
+
+- Every file in `docs/research/` carries a "Historical" banner naming what it still describes that was later
+  superseded, and where the current design lives. `cad/NOTES-dishes.md` got its banner in phase 1.
+- State diagram: the low-battery double blink is on it. Fluid-path diagram regenerated from the current CAD.
+- README links the review folder; `cad/README.md`'s limitations mention the dish support rings; CONTEXT.md's
+  loose-end list marks what the review fixed.
+- Renders, diagrams and the PDF were regenerated in the phase that changed their source, so all are current.
+
+Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, all fit the bed),
+`test_socket.py` OK, firmware 20/20, compile 63136 bytes.
+
+## What was not done
+
+- No listing was re-priced except the two checked in phase 4; the prices are the ones read on 2026-10-13.
+- The pump's outline is still the contract's estimate; nothing in the review can replace measuring it.
+- Nothing was merged; the PR waits for Kevin.

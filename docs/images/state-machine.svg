@@ -139,7 +139,7 @@
 <text x="44" y="491" font-size="12" text-anchor="start" font-weight="bold" fill="#222222">Timing constants</text>
 <text x="44" y="509" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">HALL_DEBOUNCE_MS 100   ·   RING_GONE_MS 200   ·   POUR_ABORT_MS 60   ·   SWITCH_DEBOUNCE_MS 40   ·   PUMP_RAMP_MS 300   ·   MAX_PUMP_MS 20 000</text>
 <text x="44" y="523" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">DEFAULT_POUR_MS 11 000 (the length of the build-up)   ·   DEFAULT_PUMP_SPEED 70 % (sets the volume: calibrate)</text>
-<text x="44" y="537" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Light: ARMED_LEVEL 15 %   ·   POUR_PEAK 90 %   ·   EARLY_BUMP +10 %   ·   finale 0.4 s up, 0.3 s hold, 1.2 s fade   ·   idle glow 0</text>
+<text x="44" y="537" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">Light: ARMED_LEVEL 15 %   ·   POUR_PEAK 90 %   ·   EARLY_BUMP +10 %   ·   finale 0.4 s up, 0.3 s hold, 1.2 s fade   ·   idle glow 0   ·   pack &lt; 10.5 V: double blink on insertion</text>
 <text x="44" y="565" font-size="11" text-anchor="start" font-weight="bold" fill="#222222">Bench (USB serial, 115200):</text>
 <text x="210" y="565" font-size="10" text-anchor="start" font-weight="normal" fill="#222222" font-family="Menlo, Consolas, monospace">status  ·  cal 10000  ·  pour 11000  ·  speed 70  ·  leds 255  ·  idle 0  ·  vcal 12.31  ·  save  ·  stop</text>
 <text x="44" y="582" font-size="10" text-anchor="start" font-weight="bold" fill="#222222">Legend:</text>

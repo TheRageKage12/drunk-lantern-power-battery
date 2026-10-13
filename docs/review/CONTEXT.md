@@ -242,9 +242,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
   superseded choices. These are background, not the current spec. Either mark them as historical or leave them, but
   the guide must never point to them for a current number.
 - `cad/NOTES-base.md` is marked superseded. Same caution applies.
-- The firmware comment at `pinMode(HALL_PIN, INPUT_PULLUP)` mentions an "A3144 divider". The A3144 is now
-  wired through a diode, and there is no divider, so the comment is stale. The header comment, lines 36-38, is
-  correct.
+- (Fixed in the review, see PROGRESS.md phase 1.) The firmware comment at `pinMode(HALL_PIN, INPUT_PULLUP)`
+  mentioned an "A3144 divider"; the A3144 is wired through a diode.
 - `key_ring.stl` isn't generated; the guide says to glue `key_cap` onto any ring.
 - The Tacoma Screw and local-item prices are estimates.
 - The rendering tools are home-made:

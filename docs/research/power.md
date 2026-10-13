@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes a USB power bank with a trigger board (built: a KBT 12 V 2400 mAh pack with a charge jack and switch). The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Power system research (USB power bank -> 5 V + 12 V)
 
 Scope: pump (Kamoer KPHM200, 12 V), XIAO RP2040 + WS2812B LEDs (5 V), everything from one USB power bank in the lantern base. All numbers below come from the linked pages; anything not confirmed is labeled "estimate" or "(unverified)". Fact-checked 2026-10-11 (see notes at the end).

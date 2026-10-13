@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes the original ChatGPT plan: power bank and trigger, NeoPixels, Adafruit pumps, a tray. The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Design Alcohol Dispensing Prop
 
 

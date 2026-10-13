@@ -16,6 +16,7 @@ assembly, wiring, firmware, calibration, testing, cleaning). Shopping list by st
 |---|---|
 | `docs/BUILD_GUIDE.md` | The build guide. |
 | `docs/images/` | Wiring, fluid path, state machine, socket mechanism diagrams and CAD renders. |
+| `docs/review/` | The design-review handoff: `CONTEXT.md` (every decision and why), `PROGRESS.md` (what the review checked and changed, and the open questions), the prompt and the conversation transcript. |
 | `docs/research/` | Early research notes (historical: several choices were later superseded, see `docs/review/CONTEXT.md`), the project brief, and the original ChatGPT transcript. |
 | `cad/` | Parametric CadQuery model. `params.py` holds every dimension; `parts/*.py` build the parts; `python3 build.py` exports `cad/output/*.stl` and `*.step`, an assembly, and runs fit checks. See `cad/README.md` and `cad/DESIGN_CONTRACT.md`. |
 | `cad/output/` | Ready-to-slice STL files (and STEP files) for every printed part. |

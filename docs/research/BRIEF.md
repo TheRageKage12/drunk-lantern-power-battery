@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes power bank with a USB-C trigger, Adafruit DRV5032 and NeoPixels, a rear door, a glass tray, 1/8" x 3/16" tube, a 180 mm base. The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Project brief: Green Lantern power battery that pours a shot
 
 Owner: Kevin (software engineer, has a 3D printer, Seattle area). Halloween costume prop.

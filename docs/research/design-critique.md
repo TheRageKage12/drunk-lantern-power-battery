@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes the INIU bank and trigger, the DRV5032/HiLetgo sensors, the rear door and tray, a 180 mm base. The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Adversarial design review (before CAD is frozen)
 
 Scope: BRIEF.md, cad/DESIGN_CONTRACT.md + params.py + NOTES-dishes.md + parts/base.py, firmware/green_lantern/green_lantern.ino,

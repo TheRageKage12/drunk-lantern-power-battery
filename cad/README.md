@@ -39,6 +39,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - `LED_RING = False` in `parts/socket.py`: no LEDs at the socket.
 
 ## Known limitations
-- The sphere halves need interior supports around the window and the hand opening (see the guide).
+- The sphere halves need interior supports around the window and the hand opening, and the two dishes need a short
+  ring of build-plate support under their bearing faces (see the guide's part table).
 - The rear sphere half is 221 mm wide because of the integral handle bosses.
 - `key_ring.stl` (the kit ring with the key cap merged in) is not generated; glue `key_cap` to any ring.

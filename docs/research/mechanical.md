@@ -1,3 +1,5 @@
+> **Historical.** Written early in the design (revisions 2-5). It still describes heat-set inserts, a magnet hatch, a 180 mm base, a 44 mm rotor (built: screws into plastic, a cartridge base, 190 mm, a 36 mm rotor). The current design is in `docs/BUILD_GUIDE.md`, `cad/params.py` and `cad/DESIGN_CONTRACT.md`; the decisions are summarised in `docs/review/CONTEXT.md`.
+
 # Mechanical research: charging socket (twist-to-pour rotor), shells, handle, printing
 
 Scope: return spring for the ~44 mm rotor (0 -> 45 deg -> spring back), heat-set inserts and screws, PETG fits and print settings, joining the big shells, magnet hatch, handle strength, bed-size check, food safety. Every number below comes from the linked page unless it is marked "estimate" or "calc". Amazon prices could not be read from the listing pages (the pages load but the price block is past the readable part), so Amazon prices are marked "not confirmed". Home Depot, Ace and Lowe's pages returned 403 on the fact-check pass, so their prices/SKUs are marked "(unverified)". See "Fact-check notes" at the end.
