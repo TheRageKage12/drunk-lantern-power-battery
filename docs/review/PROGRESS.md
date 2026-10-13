@@ -239,3 +239,48 @@ the rotor hasn't returned, a dark lantern, and plugs left unconnected after a re
 
 Checks after phase 3: `build.py` 0 problems (now including the one-body check), `test_socket.py` OK with the
 4.0 mm post, firmware unchanged (20/20). Renders and the PDF regenerated.
+
+## Phase 4: simplification and cost (done)
+
+Rules applied: no design change without Kevin; only pure wins applied (same part, cheaper or fewer). Prices
+on the list were read from the listings on 2026-10-13, so I did not re-scrape every line; I checked the two
+lines where a smaller pack could plausibly save money (results below).
+
+**Applied (pure wins):** none. Checked on Amazon today: a 3 ft length of 1/8" x 1/4" food-grade silicone
+(B0G1G5L8LS, $7.99, Prime Oct 14) would save $6, but one run with the 30 cm service loop is about 1.3 m, more
+than 3 ft, and its food-contact claim ("meets sanitary standards") is vaguer than the Auber's FDA 21 CFR
+177.2600 / NSF 51; the 10 ft Auber stays. Check valves: every 2-10 pack found costs $4.38-4.99, no cheaper
+than the AQUANEAT 10-pack at $4.79; a single from a pet store (~$1-2) remains the saving, already in the list.
+
+**Proposals (not applied; each needs Kevin's yes):**
+
+1. **Drop the 74AHCT125 (U1), its socket and one 0.1 µF: saves ~$5.20 and 6 wiring steps.** Drive the two
+   MOSFET gates straight from D3/D4 at 3.3 V. The IRLZ44N is specified at Vgs 5 V but its threshold is 1-2 V;
+   at 3.3 V it has roughly 50-80 mΩ, which at 0.7 A is ~30-40 mW, still cold. Vetco's part is actually the
+   IRLZ44NPBF today; if the bag turns out to be IRLB8721 (16 mΩ at 4.5 V, 1.35-2.35 V threshold) the margin
+   is even better. Risk: low at these currents; the gate edges get slower (the XIAO's pins drive ~4-8 mA), so
+   switching loss at 1 kHz stays under 100 mW. What changes: wiring diagram, guide section 4 steps 1 and 4,
+   firmware nothing. I would keep U1: it costs $3 and removes a "why is my pump weak" question.
+2. **USB reachable without lifting the lantern: +$6-9.** A panel-mount USB-C extension (~20 cm, female to male)
+   from the XIAO to a third hole in the port panel would make calibration, `vcal` and the cleaning runs a
+   plug-in job. Needs a 24 x 10 mm cutout in `base_tray`'s port panel (PORT_W is 42, the jack and switch use
+   ~30 of it, so the panel would have to grow to ~60 mm) and a matching wider drum notch. Worth it if you expect
+   to recalibrate after the first party; not needed for one night.
+3. **Six fewer nuts and screws on the handle: saves ~$1.50 and a store line.** The four lap joints (6 x M3x12
+   + nuts) could be glued (PETG on PETG with CA glue holds a handle that only carries ~2 kg) or pinned with
+   printed pegs. Keeps the lantern liftable by the handle either way. Low value; the screws also let you take
+   the handle off to reach the top screws.
+4. **One store fewer: Amazon M3 kit instead of Tacoma Screw.** The kit (B0HKFCTLK8, $8.99) covers 38 of the 46
+   screws and the nuts; the 8 countersunk M3x8 still need a hardware-store stop (Ace sells them by the piece),
+   so this only trades Tacoma for Ace, which you visit for the spring anyway. Net saving ~$3. Your call; the
+   list now says this.
+5. **Check valve: one from a pet store instead of the 10-pack: saves ~$3.** Already offered in the list.
+6. **Tube: a shorter length.** 3 ft is too short (above); a 5 ft listing of the same spec would save ~$3 if one
+   exists with Prime delivery. Not worth the risk of a lesser tube in the drink path.
+7. **2200 µF to 1000 µF.** Saves cents; the XIAO-reset protection is about ESR and the pump's inrush, 1000 µF
+   is enough at 1 kHz PWM. Not worth a change.
+8. **Simpler lock return: none.** Reviewed in phase 2; the geometry is as simple as it gets for a spring return
+   with a hard stop and a cam; the only simplification would be to drop the self-return and rely on the hand
+   (the firmware already allows it), which saves the spring, plunger and ramp. Kevin said to keep the lock.
+9. **Things I would not cut:** the battery sense (cents, gives constant pours and a warning), the power switch
+   (storage drain), the check valve (a tipped jar over the electronics), the second green spool.
