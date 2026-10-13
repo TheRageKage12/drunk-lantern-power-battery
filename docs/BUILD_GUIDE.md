@@ -69,7 +69,8 @@ Confirm at checkout.
 | 8 | 12 V battery pack | [KBT 12 V 2400 mAh Li-ion pack, bare leads, with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $21.99 | 70 x 55 x **40** mm, 6 cells, protection board (over-charge, over-discharge, short circuit), bare leads and its own 12.6 V charger. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
 | 9 | Lever microswitch, D2F-L, 4-pack | [Amazon B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4) | $8.99 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever: the lock's switch bracket is built for this size. Vetco doesn't list sizes for its lever switches. |
 
-**Hall sensor alternative.** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
+**Hall sensor alternative (not recommended: Adafruit ships slowly, and the board sits 7.7 mm from the magnet
+instead of 3).** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
 inside the rotor to about 3 mm from the magnet. If you ever have an Adafruit DRV5032 board (#6051) instead, set
 `HALL_SENSOR = 'DRV5032'` in `cad/params.py` and reprint `rotor` and `socket_base`: it then sits under the plate,
 works on 3.3 V and either magnet pole.

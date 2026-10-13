@@ -7,6 +7,10 @@ Each phase below was committed and pushed when it finished, so the repo is consi
 
 (Decisions I would change or that need your call. Nothing here was changed in the repo.)
 
+**Both answered 2026-10-13:** 1. keep the DRV5032 fallback, marked "not recommended" in the guide. 2. accept the
+lock as it is: grease it, test it on the bench first (it is the first print anyway); if it still sticks, the
+steeper-ramp change below is the fix.
+
 2. **Lock self-return is marginal by calculation** (phase 2). The return ramp rises 4 mm over the 45-degree
    arc (slope 0.26); dry PETG on PETG has a friction coefficient of about 0.3-0.4, so an unlubricated rotor is
    self-locking: it stays at 45 degrees when you let go. Greased (0.1-0.15) the ramp drives it back, but the

@@ -119,6 +119,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
     checks it doesn't hit the post.
   - Rejected: "stack two magnets". It doesn't fit.
   - The A3144 has one pole: if the ring isn't detected, flip the magnet.
+  - The DRV5032 stays documented as a "not recommended" fallback (Kevin, 2026-10-13).
+  - The spring return is marginal by calculation (self-locking when dry, slow when greased): accepted; grease it,
+    and the hand turns the ring back anyway (Kevin, 2026-10-13). A steeper ramp needs a longer spring and a
+    housing reprint; see PROGRESS.md.
   - Wiring: VCC on 5 V. Its OUT goes through a 1N5819 (stripe toward the sensor) to D1, using the internal
     pull-up, so D1 never sees 5 V.
 - `socket_base` prints **bottom-down**, so the post isn't printed upside down.
