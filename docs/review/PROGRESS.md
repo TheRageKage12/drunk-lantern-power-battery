@@ -185,3 +185,57 @@ added (section 6 step 4, troubleshooting, tools list). CAD unchanged.
 200 ms, 20 s cap: the guide's statements match; the 20 simulated scenarios cover each.
 
 Checks after phase 2: docs only (guide, shopping list, PDF); build/test state unchanged from phase 1.
+
+## Phase 3: buildability (done)
+
+Three passes: the guide walked as a first-time builder with only the shopping list; every STL checked for
+printability as exported (trimesh: bodies, overhangs steeper than 45 degrees off the bed, bridges, thickness,
+bed footprint); party failure modes against the troubleshooting table.
+
+**CAD defects found and fixed (`DESIGN_CONTRACT.md` rev 9g, second batch):**
+- **`sphere_rear` was three bodies.** Its joining flange (OD 87.3) sat 0.3 mm inside the shell's bore (87.6)
+  and never fused; the export stood on two loose flange arcs with the whole shell 3 mm above the bed. The ring
+  now lives inside the rear half, flush with the split, and the front half's bosses meet it there (same 3.7 mm
+  of thread, probed). The dish rings align the halves. `checks.py` now fails any printed part that is not one
+  solid.
+- **Switch wires had nowhere to go.** They leave the base plate through its rim notch at socket +Y, which lands
+  29.5 mm below the ring centre on solid lock wall; with the plate flat on the wall they were pinched. A 9 x 7
+  window in the wall under the Hall window, on the notch's axis (probed, with a control 12 mm away hitting wall).
+- `base`: printed top band down, the bottom band's step was a square 3 mm ledge all round, 103 mm up. It now
+  has the same 45-degree cone as the top band.
+- `rotor`: "top face down" bridged the 24.6 mm key-pocket ceiling (sag would eat the key cap's 0.5 mm play).
+  Exported bottom down now (full disc on the bed, pocket printed from above).
+- `nozzle_guide`: the C-channel's "open" side was a 1.7 mm slit with knife-edge lips, so the tube could not be
+  pressed in as the guide said. The body face is now 1.5 mm from the bore centre: a 5.7 mm slit, lips that print.
+- Sensor post radius 4.0 (walls beside the lead slot were 0.6 mm); tray finger wells 19 mm (20 broke out of the
+  tray rim as a 0.3 mm wisp); back LED row 1 moved 1 mm (0.3 mm sliver to the Hall window).
+- Not changed, documented instead: the two dishes' bearing rings (2.8 / 2.7 mm wide, 8-9 mm above the bed)
+  start in mid-air; the table now asks for "touching build plate only" supports there. A CAD chamfer would
+  change how the dish seats on the drum / the sphere, which is not worth it for a short ring of support.
+
+**Guide: steps that would have stalled a first-time builder (all reworded):**
+- The A3144 was soldered to its cable in section 4, but its bare leads must pass a 1.2 mm slot in section 6.
+- The LED lead and its plug were "made" before any LED strip existed (section 8).
+- The 5 x 7 cm protoboard has no mounting holes; the deck panel has four pads on 40 x 30 mm: drill them.
+- Straps and zip ties (the CAD has slots for 20 mm straps and 2.5 mm ties) were on no list.
+- The jack/switch/pack/buck leads are soldered on the bench, then the deck goes on over them: they must go
+  through the deck's open edge notch (its two wire slots are closed holes).
+- Every serial command (calibration, tests, cleaning, "on the day") needs the laptop on the XIAO, which is on
+  the cartridge under the lantern: section 10 now says how (lift the lantern off, lead the tube and cables out
+  through the port notch so the drum rim doesn't crush them) and section 13 is reordered.
+- "Fit the two alignment pins" (none exist), "20 cm above the pump" (12), "cal into a cup" (only the glass
+  fits), "press the tube into the channel" (now true), spring/plunger order, which key-cap face goes where,
+  lead bend direction and staggered joints, where the flange screws are driven from (inside, before the top
+  dish), soldering the top ring's leads before lowering the dish, handle part names being from the display
+  side, the ridge end of the glass well, the three pillars with holes, the notch for the thumb knobs falling
+  free, the brim for the three ring-footprint parts, elephant-foot compensation for the mating rings, "print
+  thin walls" for the sensor post, and the tools list (hex keys, USB-C data cable, 3.2 mm bit, scale).
+- Print-first list extended to the other sliding fits (tray in drum, dish spigot, housing in the top dish,
+  well in the bay floor, a leg in its boss).
+
+**Party failure modes:** troubleshooting rows added for a pump that won't stop, a ring that won't seat because
+the rotor hasn't returned, a dark lantern, and plugs left unconnected after a refill; an "on the day" sequence
+(charge, fill, prime, one test pour) in section 12.
+
+Checks after phase 3: `build.py` 0 problems (now including the one-body check), `test_socket.py` OK with the
+4.0 mm post, firmware unchanged (20/20). Renders and the PDF regenerated.

@@ -19,6 +19,9 @@ def run(all_parts, placements):
     for n, wp in placed.items():
         if not wp.val().isValid():
             print(f'FAIL valid: {n}'); problems += 1
+        ns = len(wp.val().Solids())
+        if ns != 1 and not n.endswith('_envelope'):   # a printed part must be one body (rev 9g: the rear half's flange floated as two loose arcs)
+            print(f'FAIL bodies: {n} is {ns} solids'); problems += 1
     # 2. hardware envelopes in the assembly frame must not hit any wall
     envelopes = {}
     for n in [k for k in list(placed) if k.endswith('_envelope') and k != 'switch_envelope']:

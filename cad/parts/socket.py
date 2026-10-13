@@ -127,7 +127,7 @@ A3144 = P.HALL_SENSOR == 'A3144'
 ROTOR_SKIN = 1.0                           # rotor floor left under the magnet
 ROTOR_HOLE_TOP = POCKET_FLOOR - ROTOR_SKIN # -5.0: top of the blind hole
 AXIAL_PLAY_DOWN = ROTOR_BOT - HOUSING_BOT  # 1.2: a punch can push the rotor this far toward the base plate
-POST_R = 3.6                               # post on the base plate
+POST_R = 4.0                               # post on the base plate (4.0: >= 1 mm walls beside the lead slot)
 ROTOR_HOLE_R = POST_R + 0.5                # blind hole in the rotor (0.5 radial clearance)
 POST_TOP = ROTOR_HOLE_TOP - AXIAL_PLAY_DOWN - 0.3   # -6.5: the skin clears the sensor even when pushed fully down
 SENSOR_POCKET = (P.A3144_L + 0.3, P.A3144_W + 0.3, P.A3144_T + 0.05)   # face up, flush with the post top
@@ -402,6 +402,8 @@ def build():
     for name in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope'):
         if name == 'socket_base' and A3144:      # the sensor post stands on the top face: print it bottom down
             out[name], _SHIFT[name] = sf[name].translate((0, 0, -BASE_BOT)), None
+        elif name == 'rotor':                    # bottom down: the skirt is a full disc on the bed and the key pocket
+            out[name], _SHIFT[name] = sf[name].translate((0, 0, -ROTOR_BOT)), None   # prints from above (no 25 mm bridge)
         else:
             out[name], _SHIFT[name] = _flip_to_bed(sf[name])
     out['switch_bracket'] = bracket_solid()
@@ -445,6 +447,8 @@ def placements():
     pl = {n: [(X, 180, (0, 0, _SHIFT[n])), m] for n in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope')}
     if _SHIFT['socket_base'] is None:          # printed bottom down: just lift it back into the socket frame
         pl['socket_base'] = [((0, 0, 1), 0, (0, 0, BASE_BOT)), m]
+    if _SHIFT['rotor'] is None:
+        pl['rotor'] = [((0, 0, 1), 0, (0, 0, ROTOR_BOT)), m]
     pl['switch_bracket'] = [((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, HOUSING_BOT - BRACKET_T)), m]
     pl['plunger'] = [((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)), m]
     pl['key_cap'] = [(X, 180, (0, 0, POCKET_FLOOR + P.KEY_T)), m]

@@ -52,7 +52,7 @@ BOSS_W = 10.0
 NUT_Z0, NUT_T, NUT_AF = 11.0, 2.8, 5.8                # side-loading nut slot, opening toward the inside
 PAD_R0 = 70.0                                         # tray pads under the bosses: r 70 .. tray edge, z 0 .. BOSS_Z0
 PAD_W = 22.0
-WELL_D, WELL_DEPTH = 20.0, 6.0                        # finger well for the knob, from below
+WELL_D, WELL_DEPTH = 19.0, 6.0                        # finger well for the knob, from below (19: stays inside the tray rim)
 KNOB_D, KNOB_H = 10.0, 5.5
 TRAY_R = R_IN - P.FIT                                 # 84.3, same as the deck
 SERVICE_SWEEP_Z1 = SPIGOT_ZONE_Z0 - 1.0               # the bosses pass down over the cartridge from here
@@ -199,7 +199,10 @@ def _drum():
     step = cq.Workplane('XY').add(cq.Solid.makeCone(R_BODY, R_MAX, TOP_CHAMFER_H,
                                                     pnt=cq.Vector(0, 0, BAND_TOP_Z0 - TOP_CHAMFER_H)))
     top_band = _cyl(R_MAX, P.BASE_BAND_H, z0=BAND_TOP_Z0)
-    drum = _union_all([bottom_band, body, step, top_band])
+    # the same 45 deg step above the bottom band: printed top band down it is the overhang that would otherwise
+    # be a 3 mm square ledge 103 mm up (rev 9g)
+    step_b = cq.Workplane('XY').add(cq.Solid.makeCone(R_MAX, R_BODY, BAND_STEP, pnt=cq.Vector(0, 0, P.BASE_BAND_H)))
+    drum = _union_all([bottom_band, step_b, body, step, top_band])
     return drum.cut(_cyl(R_IN, P.BASE_H + 2, z0=-1))          # open at the bottom: the cartridge comes out there
 
 

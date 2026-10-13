@@ -21,10 +21,13 @@ Z_UPPER_SCREWS = CUT - P.JOINT_SCREW_ABOVE_FLAT    # +55.5 (assembly 306)
 JOINT_ANGLES = C.joint_angles()             # 90, 210, 330 (first at +Y)
 BAY_FLOOR_Z = -CUT + 6.0                    # -52.5: bay_floor rests on the lower dish ring top (assembly 198)
 
-# flange (register ring on the rear half, enters the front half)
-FLANGE_W, FLANGE_T = P.SPHERE_FLANGE_W, 3.0 # 8 wide, 3 mm into the front half
-FLANGE_R_OUT = R_IN - P.FIT                 # 87.3
-FLANGE_R_IN = FLANGE_R_OUT - FLANGE_W       # 79.3
+# flange (joining ring inside the rear half, flush with the split face; the front half's bosses meet it there)
+# rev 9g: it used to span the split with its OD 0.3 inside the rear half's bore, so it never fused with the shell
+# (sphere_rear exported as 3 bodies, standing on two loose arcs). Now it is fused and flush: the dish rings
+# align the halves, the four screws hold them together.
+FLANGE_W, FLANGE_T = P.SPHERE_FLANGE_W, 3.0 # 8 wide, 2 x FLANGE_T thick, all in the rear half
+FLANGE_R_OUT = R_IN + 0.5                   # 88.1: overlaps the wall so the union fuses
+FLANGE_R_IN = R_IN - P.FIT - FLANGE_W       # 79.3
 FLANGE_SCREW_ANGLES = (30.0, 150.0, 210.0, 330.0)   # in the XZ plane from +X; |z| = 41.7 stays inside the clipped flange
 FLANGE_SCREW_R = FLANGE_R_IN + FLANGE_W / 2 # 83.3
 BOSS_L = 9.0                                # insert boss length along -Y on the front half
@@ -53,10 +56,12 @@ NOTCH_HW = 33.0                                            # notch over the glas
 NOTCH_TOP = P.GLASS_TOP_Z_LOCAL + 3.0 - WALL_Z0            # 16.5: lower edge of the wall over the glass
 TAB_X0, TAB_X1 = 42.0, 50.0                                # tabs into the bay floor slots
 STRIP_CH_W, STRIP_CH_D = 10.2, 1.5                         # channels for 8 mm strip
-BACK_ROWS = (35.0, 65.5, 76.5, 87.5)                       # wall-local z of the 4 rows on the back face (2 x 5 cm each)
+BACK_ROWS = (34.0, 65.5, 76.5, 87.5)                       # wall-local z of the 4 rows on the back face (2 x 5 cm each)
 BACK_ROW_L = 100.0
 FRONT_COL_X, FRONT_COL_Z = 54.0, (29.5, 79.5)              # one 5 cm column either side of the lock
 HALL_WIN_W, HALL_WIN_H = 34.0, 18.0                        # window behind the Hall board for the cables
+SWITCH_WIRE_NOTCH_R = 29.5                                 # = socket.WIRE_NOTCH_R: the plate's wire notch, at socket +Y
+SWITCH_WIRE_WIN = (9.0, 7.0)                               # window in the wall under that notch (notch is 6 x 3)
 WALL_POSTS = ((-40.0, 55.0), (40.0, 55.0), (-47.0, 25.0), (47.0, 25.0))   # spacer posts to the diffuser
 GLASS_OUT_Y = P.GLASS_POUR_Y + P.GLASS_SLIDE                # +17: glass centre where it is lifted out
 WELL_YC = (P.GLASS_POUR_Y + GLASS_OUT_Y) / 2               # slot centre
@@ -130,13 +135,13 @@ def radial_screw_cutters(z, angles):
 
 
 def flange_solid():
-    f = (cq.Workplane('XZ').workplane(offset=-FLANGE_T)   # spans y in [-FLANGE_T, +FLANGE_T]
+    f = (cq.Workplane('XZ').workplane(offset=-2 * FLANGE_T)   # spans y in [0, 2 * FLANGE_T]: inside the rear half
          .circle(FLANGE_R_OUT).circle(FLANGE_R_IN).extrude(2 * FLANGE_T))
     f = f.intersect(big_box(-100, 100, -10, 10, -CUT + OPENING_DEPTH + 0.5, CUT - OPENING_DEPTH - 0.5))
     # keep the flange clear of the hatch opening on the rear half (hatch is at +Y so the flange ring at y~0 is fine)
     for a in FLANGE_SCREW_ANGLES:
         x, z = FLANGE_SCREW_R * math.cos(math.radians(a)), FLANGE_SCREW_R * math.sin(math.radians(a))
-        f = f.cut(cq.Workplane('XZ').workplane(offset=-FLANGE_T - 1).center(x, z).circle(P.M3_CLEAR / 2).extrude(2 * FLANGE_T + 2))
+        f = f.cut(cq.Workplane('XZ').workplane(offset=-2 * FLANGE_T - 1).center(x, z).circle(P.M3_CLEAR / 2).extrude(2 * FLANGE_T + 2))
     return f
 
 
@@ -145,9 +150,9 @@ def front_bosses():
     adds, cuts = [], []
     for a in FLANGE_SCREW_ANGLES:
         x, z = FLANGE_SCREW_R * math.cos(math.radians(a)), FLANGE_SCREW_R * math.sin(math.radians(a))
-        boss = cq.Workplane('XZ').workplane(offset=FLANGE_T + P.FIT).center(x, z).circle(4.5).extrude(BOSS_L)   # y from -3.3 to -12.3
+        boss = cq.Workplane('XZ').workplane(offset=P.FIT).center(x, z).circle(4.5).extrude(BOSS_L)   # y from -0.3 to -9.3
         adds.append(boss)
-        cuts.append(cq.Workplane('XZ').workplane(offset=FLANGE_T + P.FIT - 0.5).center(x, z).circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5))
+        cuts.append(cq.Workplane('XZ').workplane(offset=P.FIT - 0.5).center(x, z).circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5))
     return adds, cuts
 
 
@@ -278,7 +283,7 @@ def nozzle_guide():
     # path in the XZ plane: straight up h, then an arc turning toward +X (over the glass) past horizontal
     mid = (r * (1 - math.cos(_BEND / 2)), h + r * math.sin(_BEND / 2))
     path = cq.Workplane('XZ').moveTo(0, 0).lineTo(0, h).threePointArc(mid, ARC_END)
-    y0, y1 = -back, to_wall - 0.1
+    y0, y1 = -back, to_wall - 1.5      # the bore breaks through the +Y face as a 5.7 mm slit: the tube presses in
     outer = cq.Workplane('XY').center(0, (y0 + y1) / 2).rect(2 * half_x, y1 - y0).sweep(path)
     bore = cq.Workplane('XY').workplane(offset=-1).circle(bore_d / 2).extrude(1).union(
         cq.Workplane('XY').circle(bore_d / 2).sweep(path))
@@ -315,6 +320,10 @@ def lock_wall():
         ex, ez = P.SOCKET_EAR_R * math.cos(math.radians(a)), zr - P.SOCKET_EAR_R * math.sin(math.radians(a))
         w = w.cut(cq.Workplane('XZ').workplane(offset=-(T + 1)).center(ex, ez).circle(P.M3_CLEAR / 2).extrude(T + 2))
     w = w.cut(big_box(-HALL_WIN_W / 2, HALL_WIN_W / 2, -1, T + 1, zr - HALL_WIN_H / 2, zr + HALL_WIN_H / 2))
+    # window for the switch wires: they leave the base plate through its wire notch at socket +Y (r 28..31),
+    # which lands that far BELOW the ring centre on the wall (socket +Y -> sphere -Z); rev 9g, it was solid wall
+    w = w.cut(big_box(-SWITCH_WIRE_WIN[0] / 2, SWITCH_WIRE_WIN[0] / 2, -1, T + 1,
+                      zr - SWITCH_WIRE_NOTCH_R - SWITCH_WIRE_WIN[1] / 2, zr - SWITCH_WIRE_NOTCH_R + SWITCH_WIRE_WIN[1] / 2))
     # spacer posts from the back face to the display diffuser
     post_y = (DIFF_Y - DIFF_T) - WALL_BACK_Y                  # -33.4
     for (x, z) in WALL_POSTS:

@@ -86,6 +86,8 @@ test the lock (guide section 6, step 4).
 
 - Super glue (any cyanoacrylate, e.g. Gorilla Glue super glue): magnets, key cap, nuts, the Hall sensor, the diffuser.
 - A dab of silicone grease or petroleum jelly: the lock's ramp, plunger and bore.
+- 2-3 hook-and-loop straps, 20 mm wide (pump, jar) and ~10 small zip ties (LM2596, cables): any hardware store, ~$5 if you have none.
+- Hex keys 2 and 2.5 mm (a long or ball-end 2.5), a USB-C data cable, a kitchen scale or measuring cup for calibration.
 
 ## Buy locally (measure in the store with calipers)
 
