@@ -7,9 +7,10 @@ from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
 W, H = 1100, 800
 s = SVG(W, H, "Green Lantern power battery - charging socket mechanism")
 s.text(20, 30, "The lock — face views at 0° (rest) and 45° (fired), and section A–A", size=18, weight="bold")
-s.text(20, 48, "schematic, ~3 px = 1 mm; seen from your side (the hand opening); the twist is clockwise, like a key; exact geometry in cad/parts/socket.py", size=11, color="#555")
+s.text(20, 48, "schematic, ~3 px = 1 mm; seen from your side (the hand opening); the twist is counterclockwise; exact geometry in cad/parts/socket.py", size=11, color="#555")
 
 SC = 3.0  # px per mm
+MIRROR = True   # the lock is built mirrored (params.LOCK_TWIST = 'ccw'): draw the face views mirrored too
 HALO_FILL = "#c8f5c8"
 
 
@@ -28,6 +29,8 @@ def arc_path(cx, cy, r_mm, a1, a2):
 
 def top_view(cx, cy, theta, title):
     s.text(cx, cy - 150, title, size=13, anchor="middle", weight="bold")
+    if MIRROR:
+        s.add(f'<g transform="translate({2 * cx},0) scale(-1,1)">')
     # lock wall behind, and the base plate's two mounting ears (lower left / lower right, screwed to the wall)
     s.rect(cx - 140, cy - 140, 280, 280, fill="#f4f4f4", stroke="#bbb", sw=1)
     for ang in (130.0, 230.0):                       # 40 and 140 deg in the socket frame, drawn clockwise from 12
@@ -90,25 +93,35 @@ def top_view(cx, cy, theta, title):
     # rotation arrow
     if theta:
         s.path(arc_path(cx, cy, 39, -8, 40), stroke="#e65100", sw=2, marker="arrO")
-        s.text(*pol(cx, cy, 43, 18), "twist 45°", size=10, color="#e65100", anchor="start")
+    if MIRROR:
+        s.add("</g>")
+    if theta:
+        tx, ty = pol(cx, cy, 43, 18)
+        s.text(2 * cx - tx if MIRROR else tx, ty, "twist 45°", size=10, color="#e65100", anchor="end" if MIRROR else "start")
 
 
 top_view(330, 262, 0, "A  rest, 0°")
 top_view(720, 262, 45, "B  fired, 45° (held against the spring)")
 
 # ---------------------------------------------------------------- labels for the top views
+PANEL_CX = None
+
+
 def lab(x, y, rows, tx, ty, anchor="start", size=9.5):
+    if MIRROR and PANEL_CX is not None:
+        tx = 2 * PANEL_CX - tx
     s.lines(x, y, rows, size=size, lh=12, anchor=anchor)
     ax = x - 5 if anchor == "start" else x + 5
     s.path(f"M{ax},{y - 4} L{tx},{ty}", stroke="#999", sw=1)
     s.dot(tx, ty, "#999", r=2.2)
 
-# panel A: left column, right-aligned at x=165 (ordered so the leaders never cross)
+# panel A: left column, right-aligned at x=165
 cx, cy = 330, 262
+PANEL_CX = cx
 lab(165, 112, ["cam lobe on the rim", "(50\u201370\u00b0 at rest, 3 mm lift)"], *pol(cx, cy, 23, 60), anchor="end")
-lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall board"], *pol(cx, cy, 18.3, 10), anchor="end")
+lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall sensor post"], *pol(cx, cy, 18.3, 10), anchor="end")
 lab(165, 200, ["housing, 76 mm across: its", "face is flush with the ring pocket"], *pol(cx, cy, 38, 300), anchor="end")
-lab(165, 240, ["stop lug (printed, at 9 o'clock)", "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
+lab(165, 240, ["stop lug (printed, at %s o'clock)" % ("3" if MIRROR else "9"), "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
 lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d74 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
 lab(165, 340, ["6\u00d72 mm magnet in the key cap,", "on the axis: it never moves", "when the ring is twisted"], cx - 4, cy + 4, anchor="end")
 lab(165, 390, ["0.5\u00d75\u00d710 mm spring + plunger in a", "radial pocket press on the rim", "ramp: it pushes the rotor back to 0\u00b0"], *pol(cx, cy, 30, 300), anchor="end")
@@ -116,13 +129,16 @@ lab(165, 440, ["two ears on the base plate:", "M3x10 + nut through the lock wall
 lab(165, 478, ["ramp on the rim, 300\u2013345\u00b0"], *pol(cx, cy, 20, 322), anchor="end")
 # panel B: right column, left-aligned at x=875
 cx, cy = 720, 262
-lab(875, 112, ["twist the ring 45\u00b0 clockwise", "(as you see it), like a key"], *pol(cx, cy, 39, 30), anchor="start")
+PANEL_CX = cx
+lab(875, 112, ["twist the ring 45\u00b0 %s" % ("counterclockwise" if MIRROR else "clockwise"), "(as you see it)"], *pol(cx, cy, 39, 30), anchor="start")
 lab(875, 160, ["stop lug against the channel", "wall = 45\u00b0 hard stop"], *pol(cx, cy, 20, 135), anchor="start")
 lab(875, 205, ["D2F-L on a slotted bracket", "(slide it to tune the click angle)"], cx + 26 * SC + 17, cy - 17, anchor="start")
 lab(875, 250, ["cam lobe has pressed the D2F-L", "lever 3 mm after ~40\u00b0 of twist:", "click (SW goes LOW)"], *pol(cx, cy, 23, 20), anchor="start")
 lab(875, 300, ["magnet still centred on the", "Hall sensor: Hall stays LOW", "through the whole twist"], cx + 4, cy + 4, anchor="start")
 lab(875, 350, ["plunger pushed out 4 mm by the", "ramp; let go and it pushes the", "rotor back to 0\u00b0 (switch releases)"], *pol(cx, cy, 30, 300), anchor="start")
 lab(875, 400, ["ramp now under the plunger"], *pol(cx, cy, 21, 290), anchor="start")
+
+PANEL_CX = None
 
 # ---------------------------------------------------------------- section A-A
 s.path("M60,488 L1040,488", stroke="#ccc", sw=1)
@@ -144,17 +160,17 @@ s.rect(cx + 70, Y0, 5, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx - 66, Y0 + 3, 132, 54, fill="#bdbdbd", sw=1.2)
 s.rect(cx - 72, Y0 + 9, 6, 6, fill="#9e9e9e", sw=1)            # flange tab (left, 9 o'clock)
 s.rect(cx - 36, Y0 + 3, 72, 8, fill="#8d8d8d", sw=1)           # key pocket
-s.rect(cx - 30, Y0 + 20, 60, 37, fill="#ffffff", sw=1)         # recess from below
+s.rect(cx - 16, Y0 + 18, 32, 39, fill="#ffffff", sw=1)         # blind hole from below (1 mm skin under the magnet)
 # ring key cap in the pocket, magnet centred
 s.rect(cx - 36, Y0 + 3, 72, 8, fill="#2e7d32", sw=1)
 s.rect(cx - 9, Y0 + 4, 18, 6, fill="#616161", sw=0.8)
 s.text(cx, Y0 + 9, "N  S", size=6, anchor="middle", color="#fff", weight="bold")
 # the ring standing on its key cap
 s.circle(cx, Y0 - 34, 34, fill="none", stroke="#2e7d32", sw=9)
-# Hall sensor on a post under the rotor floor, on the axis
-s.rect(cx - 4, Y0 + 23, 8, 5, fill="#222", sw=0.6)             # sensor chip
-s.rect(cx - 22, Y0 + 28, 44, 5, fill="#1a237e", sw=0.8)        # breakout PCB
-s.rect(cx + 14, Y0 + 33, 7, 64, fill="#d7d7d7", sw=1)          # post to the floor
+# A3144 on a post that rises from the base plate into the rotor's blind hole, on the axis
+s.rect(cx - 12, Y0 + 30, 24, 67, fill="#d7d7d7", sw=1)         # post (stationary; the rotor turns around it)
+s.rect(cx - 8, Y0 + 30, 16, 6, fill="#222", sw=0.6)            # A3144, printed face up
+s.wire([(cx - 6, Y0 + 36), (cx - 6, Y0 + 125)], "#7c3aed", sw=1.2, dash="4,3")   # leads down the post
 # switch under the cam lobe (right): body on the floor, lever on top
 s.rect(cx + 64, Y0 + 70, 38, 17, fill="#e8e8e8", sw=1.2)
 s.path(f"M{cx + 98},{Y0 + 68} L{cx + 66},{Y0 + 62}", stroke=INK, sw=2.2)
@@ -179,7 +195,7 @@ lab(LXS, 762, ["housing puck 76 OD, 6.7 deep;", "base plate 3.5 mm, 3× M3 + nut
 RXS = 760
 lab(RXS, 567, ["6×2 mm magnet in the key cap,", "on the rotation axis"], cx + 9, Y0 + 7, anchor="start", size=9.5)
 lab(RXS, 612, ["rotor 36 OD × 8 flat disc; its rim", "lug rides under the housing's lip"], cx + 66, Y0 + 20, anchor="start", size=9.5)
-lab(RXS, 657, ["DRV5032 breakout in the base plate,", "chip down under the sensor window,", "~8 mm below the magnet"], cx + 4, Y0 + 26, anchor="start", size=9.5)
+lab(RXS, 657, ["A3144 on a post up inside the rotor,", "~3 mm below the magnet; the rotor", "turns around the post"], cx + 8, Y0 + 33, anchor="start", size=9.5)
 lab(RXS, 707, ["D2F-L on its pegged bracket in the", "base plate (lobe dashed: at 50–70°,", "out of this plane)"], cx + 90, Y0 + 70, anchor="start", size=9.5)
 lab(RXS, 757, ["cables through the wall window,", "down behind the wall to the base"], cx + 40, Y0 + 115, anchor="start", size=9.5)
 

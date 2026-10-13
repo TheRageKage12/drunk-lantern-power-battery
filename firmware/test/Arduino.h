@@ -34,6 +34,7 @@
 // Seeed XIAO RP2040 pin map (rp2040 core, variants/seeed_xiao_rp2040/pins_arduino.h)
 static const uint8_t D0 = 26, D1 = 27, D2 = 28, D3 = 29, D4 = 6, D5 = 7,
                      D6 = 0, D7 = 1, D8 = 2, D9 = 4, D10 = 3;
+static const uint8_t A0 = 26, A1 = 27, A2 = 28, A3 = 29;
 
 using std::min;
 using std::max;
@@ -138,6 +139,9 @@ inline void analogWrite(uint8_t p, int val) {
   sim::events.push_back({sim::nowUs, p, "analogWrite", val});
   sim::updateRuns(p);
 }
+namespace sim { inline int analogIn[NPINS] = {}; }   // raw ADC counts analogRead() returns (default 0)
+inline void analogReadResolution(int) {}
+inline int analogRead(uint8_t p) { return p < sim::NPINS ? sim::analogIn[p] : 0; }
 inline int digitalRead(uint8_t p) {
   if (p >= sim::NPINS) return LOW;
   const sim::Pin& x = sim::pin[p];
@@ -213,6 +217,7 @@ public:
                   : std::is_signed<T>::value ? std::to_string((long long)v) : std::to_string((unsigned long long)v);
     tx += t; return t.size();
   }
+  size_t print(double v, int digits) { char b[48]; snprintf(b, sizeof b, "%.*f", digits, v); tx += b; return strlen(b); }
   size_t println() { tx += '\n'; return 1; }
   template <class T> size_t println(T v) { size_t n = print(v); return n + println(); }
   size_t write(uint8_t c) { tx += (char)c; return 1; }

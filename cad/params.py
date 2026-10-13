@@ -11,7 +11,7 @@ never hard-code mating dimensions inside a part file. See DESIGN_CONTRACT.md.
 
 # ---------------------------------------------------------------- global look
 SCALE = 1.8                 # original Hedo3D model was ~100 mm dia; we are ~180 mm
-D_MAX = 180.0               # nominal max outer diameter: base top band, dish mouths, sphere
+D_MAX = 190.0               # base bands and lower dish mouth (rev 9f: 180 -> 190 for room around the jar and pump)
 WALL = 2.4                  # shell wall thickness (6 perimeters at 0.4 mm)
 FLOOR = 2.0                 # floors / plates
 FIT = 0.30                  # radial clearance per side for sliding / rotating printed fits
@@ -59,19 +59,23 @@ GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and 
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 150.0, 72.0, 25.0   # pocket: INIU B61 (104 x 66 x 23, primary) or Anker 313 (149.5 x 68.5 x 14.5); flat on the floor under the deck, strap-retained
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 70.0, 55.0, 40.0   # KBT 12 V 2400 mAh Li-ion pack (6 cells, 2 layers, protection board), flat on the tray
+PORT_ANGLE = 90.0           # charge jack + power switch panel in the base's bottom band, on the owner's side
+PORT_W, PORT_H = 42.0, 12.0 # notch in the drum's bottom band (open at the bottom); the tray's panel fills it
+PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) and mini toggle switch (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
-BASE_BODY_D = 174.0         # drum body between the bands
-BASE_DOOR_W, BASE_DOOR_H = 110.0, 90.0   # rear service door opening in the base wall (Z 12..102)
+BASE_BODY_D = D_MAX - 6.0   # drum body between the bands (184)
+SERVICE_SCREW_ANGLES = (0.0, 140.0, 225.0)   # rev 9: 3 thumbscrews from underneath hold the base cartridge in the drum (no door)
 
 JOINT_SPIGOT_H = 8.0        # spigot height for base->lower dish and sphere->upper dish joints
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)
 
 DISH_H = 77.0               # reflector dish height (43 x 1.8)
-DISH_MOUTH_D = D_MAX        # wide end outer diameter
+DISH_MOUTH_D = D_MAX        # lower dish wide end outer diameter (matches the base)
+UPPER_DISH_MOUTH_D = 180.0  # upper dish mouth: kept at 180 so the handle legs (which pass its rim) and the sphere bosses stay on the bed
 DISH_NECK_D = 110.0         # narrow end outer diameter (sits on the sphere flat)
 DISH_NECK_HOLE_D = 80.0     # through hole in the narrow floor (tube, wires, socket module)
 DISH_RIM_H = 6.0            # straight cylindrical rim at the mouth
@@ -97,6 +101,9 @@ SOCKET_BOLT_CIRCLE = 88.0   # 4 x M3 into heat-set inserts in the dish floor
 ROTOR_OD = 36.0             # rev 3: smaller rotor so a 30 mm compression spring covers the 45 deg arc at the skirt
 ROTOR_H = 16.0
 ROTOR_TRAVEL_DEG = 45.0
+HALL_SENSOR = 'A3144'       # 'A3144' (Vetco, TO-92 "UA" package on a post up inside the rotor) or 'DRV5032' (Adafruit board under the plate)
+A3144_L, A3144_W, A3144_T = 4.06, 3.05, 1.57   # UA package body: along the lead row, lead edge to top edge, thickness
+A3144_ELEMENT_DEPTH = 0.5   # Hall element below the printed face
 KEY_D = 24.0                # ring key cap disc diameter
 KEY_T = 3.0
 KEY_TAB_W, KEY_TAB_L = 6.0, 4.0
@@ -137,6 +144,7 @@ Z_HANDLE_TOP = Z_UPPER_DISH_TOP + HANDLE_TOP_CLEAR
 # LED strips on both faces and the top edge of the wall light the hand port (through a strip curtain), the
 # display window (through the diffuser) and the top dish (through a diffuser disc).
 SOCKET_IN_SPHERE = True
+LOCK_TWIST = 'ccw'           # twist direction as you see it: 'ccw' mirrors the whole lock left-right ('cw' = as designed)
 SOCKET_Z_LOCAL = 4.0         # ring centre height, sphere frame (0 = sphere centre)
 SOCKET_MODULE_DEPTH = 13.2   # socket face -> back of its base plate (socket.MODULE_DEPTH)
 LOCK_FACE_Y = -12.0          # socket face (y); the wall's front face is SOCKET_MODULE_DEPTH behind it
@@ -149,10 +157,12 @@ WELL_ID, WELL_WALL = 54.0, 2.0
 GLASS_POUR_Y = -12.0         # glass centre at the back stop (= under the socket face)
 GLASS_SLIDE = 29.0           # slide this far toward you, then lift: the rim then clears the socket face
 WELL_RIDGE_H = 1.5           # ridge in front of the glass base at the stop: it clicks into place
-NOZZLE_TIP_XY = (-6.0, -31.1)   # tube end behind the wall, 21 mm from the glass centre (rim inner radius ~24.5)
+NOZZLE_TIP_XY = (-2.7, -31.1)   # tube end behind the wall, 19 mm from the glass centre (rim inner radius ~23.5)
 NOZZLE_TIP_OUT = 5.0         # tube length left sticking out of the guide
-NOZZLE_RISE = 3.0            # straight rise above the bay floor before the bend
-NOZZLE_BEND_R = 26.0         # 90 deg bend: the riser stands outside the slot, the tip ends ~14 mm above the rim
+NOZZLE_RISE = 11.0           # straight rise above the bay floor before the bend
+NOZZLE_BEND_R = 18.0         # bend radius (~3 x the tube OD): the riser stands outside the slot
+NOZZLE_BEND_DEG = 135.0      # past horizontal: the tip points 45 deg down, so the stream dives into the glass
+                             # instead of being thrown across it (a level tip threw it onto the rim at 70 % speed)
 DISH_LOWER_HOLE_D = 104.0    # lower dish floor hole: the slot and the tube pass through it into the dish cone
 FIST_W, FIST_H, FIST_LEN, FOREARM_R = 106.0, 76.0, 85.0, 30.0   # owner's fist is under 4 x 3 in
 FIST_Z_OFFSET = 3.0          # fist centre above the ring centre

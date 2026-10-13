@@ -251,3 +251,58 @@ exception in build.py output.
   26 mm quarter bend from the tube exit at (-37, -31.1); the tube end at (-6, -31.1), z = -21.5, 20 mm from the
   glass centre. Cable hole at (35, -32). `DISH_LOWER_HOLE_D` 104.
 - Fist envelope 106 x 76 mm (owner: under 4 x 3 in), centred 3 mm above the ring.
+- `LOCK_TWIST = 'ccw'`: the owner twists counterclockwise (left hand, palm turning toward the glass). Every
+  socket part is mirrored left-right (x -> -x in the socket frame) on output and its placement steps are
+  conjugated by the same mirror; the mechanism code and `tests/test_socket.py` stay in the clockwise frame. The
+  ears (40/140 deg) are a mirror pair, so the lock wall is unchanged. The key cap tab now rests at -X (your right).
+
+## Revision 9 (base cartridge, no service door)
+- The jar (76 mm tall on the deck at z 34) could not leave through the old door (top at z 102), and refilling
+  in place was awkward. The base is now split: `base` is an open drum that stays with the lantern (joined to
+  `dish_lower` by the same 3 radial screws), and the **cartridge** (`base_tray` + `base_deck` + bank + jar + pump
+  + electronics) slides up into its open bottom. No door, no door magnets.
+- Three thumbscrews from underneath (M3x12 glued into a printed `thumb_knob`, in 20 mm finger wells in the
+  tray) go up into nuts in three bosses inside the bottom of the drum, at 0, 140 and 225 deg, r = 79. The
+  bosses (r 75.5 .. wall, z 8..18, 45 deg roof, drum printed top band down) must pass down over the cartridge
+  when the lantern is lowered on; the deck has notches at those angles.
+- `service_sweep_envelope` (the bosses' path from z 8 up to the dish spigot zone) must clear the tray, the
+  deck, the jar, the pump and the power bank; `checks.py` tests it against the hardware envelopes too.
+  At 180 deg it would hit the jar and its ring, which is why the angles are uneven.
+- Crossing the split: the tube keeps ~30 cm of slack (no joint in the drink path); the lock and LED cables get
+  a 4-pin and a 2-pin plug.
+- Power (rev 9a): VEGER 5000mAh 20W bank (77.2 x 35 x 24.7 mm, USB-C plug with 12V-1.6A PD) plus an AITRIP PDC004
+  fixed-12V PD trigger board on its plug, replacing the Adafruit PD cable. The tray pocket has side rails and
+  one central strap; the plug and board sit in the gap of the +Y end stop (`trigger_envelope`, also checked
+  against the drum boss sweep). The deck drops 0.3 mm with the thinner bank.
+- Power (rev 9b, supersedes 9a): KBT 12 V 1200 mAh 3-cell Li-ion pack, 70 x 55 x 20 mm, protection board and a
+  DC5521 socket; no USB, no trigger board, no idle shut-off. The deck drops another 4.7 mm. The tray carries a
+  port panel (curved 3 mm skin at the drum's inner wall, PORT_W x PORT_H, at PORT_ANGLE = 90, the owner's side)
+  with an 8 mm hole for a panel-mount DC5521 charge jack and a 6.5 mm hole for a mini toggle switch (1/4" or M6 bushing); the drum
+  has a matching notch open at its bottom edge so it lifts off over the panel. The jack is wired across the
+  pack before the switch, so it charges in place with the switch off. Firmware reads the switched rail on D0
+  through 100 k / 22 k, scales pump and LED duty by 12 / Vbat (0.8..1.4) and double-blinks on insertion below
+  10.5 V. `trigger_envelope` is gone.
+- Nozzle (rev 9c): with the tip level (90 deg bend, 15 mm above the rim, 20 mm from the glass centre) the
+  stream left the tube at ~0.34 m/s at 70 % speed and travelled ~19 mm sideways before the rim plane, landing
+  ~23 mm from the glass centre: on the rim of a 1.5 oz glass, and outside it at 100 %. `nozzle_guide` now
+  bends NOZZLE_BEND_DEG = 135 (R 18, rise 11), so the tip points 45 deg down, 6.7 mm above the rim at
+  (-2.7, -31.1). Projectile estimate: lands 19.2-19.4 mm from the glass centre from the last drop up to a
+  1.5x pulse peak at 100 %. Guide top 1.3 mm under the lowest back LED row; tube exit unchanged at (-37, -31.1).
+- Jar vent: a one-way (aquarium) check valve in the lid instead of an open hole, so a tipped jar can't leak.
+- Hall sensor (rev 9d): `HALL_SENSOR = 'A3144'` (Vetco). Through the 4.5 mm rotor floor the A3144 sat ~5.5 mm from
+  the 6x2 magnet: ~30 mT against a datasheet operate point of up to 35 mT. Now `rotor` has a 8.2 mm blind hole
+  from below (1 mm skin under the magnet) and `socket_base` a 7.2 mm post with the sensor pocket on its tip,
+  POST_TOP = skin - axial play (1.2) - 0.3, so a punch can't reach the sensor. Magnet to Hall element 3.0 mm
+  (3.4 with the rotor at the lip): ~88 / 73 mT for N35. `tests/test_socket.py` checks the pushed-in rotor
+  against the post. `'DRV5032'` restores the board pocket and window.
+- Battery (rev 9e): KBT 12 V 2400 mAh, 70 x 55 x 40 mm (6 cells; the 1200 mAh pack's 1.2 A rating is at our
+  ~1.3 A peak with a COB strip). The deck rises 18 mm (DECK_GAP 4 -> 2, the deck now holds the pack down).
+  Fit checks pass, but the closest gaps are now radial, to the lower dish's inner wall above z 107: pump
+  envelope top corner 0.98 mm, jar envelope 0.51 mm (the real jar, <= 73 mm with its lid, has ~2 mm). The
+  pump envelope is an estimate: measure the head before printing base and dish_lower.
+- LED strip: green COB, 8 mm, cut every 25 mm (HAMRVL B0CKYFLZFQ): back rows one 10 cm piece each, front
+  columns 5 cm each, the top ring one 25 cm piece; ~0.6 A estimated for 75 cm.
+- Wider base (rev 9f): D_MAX 180 -> 190 (base bands and the lower dish mouth; BASE_BODY_D = D_MAX - 6), so the
+  raised jar and pump clear the lower dish's inner wall: pump envelope 6.0 mm, jar envelope 5.4 mm. The upper
+  dish keeps a 180 mm mouth (UPPER_DISH_MOUTH_D, own cone slope): the handle legs pass its rim (2 mm), and moving
+  them out would make sphere_rear ~231 mm wide, past the Ender 3 bed. The sphere is unchanged.

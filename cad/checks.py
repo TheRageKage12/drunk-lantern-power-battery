@@ -23,9 +23,17 @@ def run(all_parts, placements):
     envelopes = {}
     for n in [k for k in list(placed) if k.endswith('_envelope') and k != 'switch_envelope']:
         envelopes[n] = placed.pop(n)
+    SHELL = ('base', 'dish_lower')   # parts that move with the lantern when it is lifted off the base cartridge
     for en, env in envelopes.items():
+        if en.endswith('_sweep_envelope'):   # must also clear the hardware the cartridge carries
+            for hn in ('bottle_envelope', 'pump_envelope', 'powerbank_envelope'):
+                v = inter_volume(env, envelopes[hn]) if hn in envelopes else 0.0
+                if v > 200.0:
+                    print(f'FAIL clearance: {en} intersects {hn} by {v / 1000:.1f} cm3'); problems += 1
         for n, wp in placed.items():
             if en in ('fist_envelope', 'forearm_envelope') and n.startswith('switch'):
+                continue
+            if en.endswith('_sweep_envelope') and n in SHELL:
                 continue
             v = inter_volume(env, wp)
             if v > 200.0:   # > 0.2 cm3: smaller values are coincident-face artefacts of touching envelopes

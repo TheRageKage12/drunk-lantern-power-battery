@@ -25,7 +25,7 @@ DARK = (40, 110, 60)
 GREY = (150, 150, 150)
 ORANGE = (235, 150, 60)     # hardware envelopes
 WHITE = (235, 235, 235)     # diffuser / halo
-COLORS = {'diffuser': WHITE, 'halo': WHITE, 'base_door': DARK}
+COLORS = {'diffuser': WHITE, 'halo': WHITE, 'top_diffuser': WHITE, 'base_tray': DARK}
 
 
 def placements():
@@ -120,7 +120,7 @@ def main():
             cut.append((m, (230, 190, 160)))        # the hand, skin tone
         elif n not in ('switch_envelope', 'glass_path_envelope'):
             cut.append((m, ORANGE))
-    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway at x=0 seen from the side; orange = jar, pump, power bank, glass; tan = the hand (fist + forearm)')
+    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway at x=0 seen from the side; orange = jar, pump, battery, glass; tan = the hand (fist + forearm)')
 
     # exploded: lift each printed part by its order in Z
     names = sorted(printed, key=lambda n: printed[n].bounds[0][2])

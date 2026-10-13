@@ -33,14 +33,16 @@
  *     and the prop goes LOCKED; the slower RING_GONE_MS only governs the LOCKED -> IDLE reset
  *
  * Wiring (see docs/BUILD_GUIDE.md and docs/images/wiring.svg):
- *   D1  <- Hall sensor OUT, active LOW when the magnet is present. Adafruit DRV5032 breakout on 3V3/GND
- *          (D1 uses the XIAO's internal pull-up). Alternative: 5 V A3144 with a 1N5819 (anode on D1,
- *          cathode on the sensor OUT) so D1 never sees 5 V.
+ *   D1  <- Hall sensor OUT, active LOW when the magnet is present (D1 uses the XIAO's internal pull-up).
+ *          A3144 on 5 V/GND, its open-collector OUT through a 1N5819 (anode on D1, cathode on OUT) so D1
+ *          never sees 5 V. Alternative: Adafruit DRV5032 breakout on 3V3/GND, OUT straight to D1.
  *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
  *   D3  -> 74AHCT125 ch.1 (pin 2 in, pin 3 out) -> gate of Q1 (pump MOSFET, low side); 10 k from D3 to GND
  *          keeps it off while the XIAO boots. 1N5819 flyback across the pump (stripe to +12 V).
  *   D4  -> 74AHCT125 ch.2 (pin 5 in, pin 6 out) -> gate of Q2 (LED strip MOSFET, low side); 10 k D4 to GND.
  *   D6  <- PRIME button, momentary to GND (optional; leave unconnected if you skip it)
+ *   D0  <- battery sense (A0): 100 k from +12 V (after the power switch) to D0, 22 k and 0.1 uF from D0 to GND.
+ *          12.6 V full -> 2.27 V at the pin. Reads 0 V when not fitted: compensation and warning switch off.
  *   5V  <- 5 V from the LM2596 buck through a 1N5819 (USB and the buck never back-feed each other)
  *   3V3 -> DRV5032 VCC
  *
@@ -50,7 +52,8 @@
  *   pour 11000        pour time in ms (500..20000) = length of the light build-up
  *   speed 70          pump speed in percent (30..100): sets the VOLUME for the fixed pour time
  *   leds 200          maximum LED brightness 0..255
- *   idle 0            idle glow, raw PWM 0..255; raise it (e.g. 30) if your power bank switches itself off
+ *   idle 0            idle glow, raw PWM 0..255; raise it (e.g. 30) for a pilot glow
+ *   vcal 12.31        battery voltage measured with a meter right now: calibrates the battery reading
  *   save              store pour time, speed, brightness and idle glow in flash
  *   stop              stop the pump now
  */
@@ -63,6 +66,7 @@ constexpr uint8_t SWITCH_PIN    = D2;
 constexpr uint8_t PUMP_PIN      = D3;
 constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through the 74AHCT125)
 constexpr uint8_t PRIME_PIN     = D6;  // momentary to GND: primes the tube while held (IDLE, no ring)
+constexpr uint8_t BATT_PIN      = A0;  // = D0: battery voltage through a 100 k / 22 k divider
 
 // ------------------------------------------------------------------ light (perceived brightness, 0..1)
 constexpr float    ARMED_LEVEL      = 0.15f;  // ring in: the glow fades up to this
@@ -86,8 +90,21 @@ constexpr uint32_t PUMP_RAMP_MS       = 300;   // PWM soft start: tames the moto
 constexpr uint32_t DEFAULT_POUR_MS    = 11000; // pour time = length of the light build-up; the volume is set with speed
 constexpr uint32_t MAX_PUMP_MS        = 20000; // hard cap, independent of everything else
 constexpr uint8_t  DEFAULT_MAX_BRIGHT = 255;   // 0..255 cap on the strip PWM
-constexpr uint8_t  DEFAULT_IDLE_DUTY  = 0;     // raw PWM floor in every state (0 = dark); raise it if the bank sleeps
+constexpr uint8_t  DEFAULT_IDLE_DUTY  = 0;     // raw PWM floor in every state (0 = dark); raise it for a pilot glow
 constexpr uint8_t  DEFAULT_PUMP_SPEED = 70;    // percent: ~30-35 mL in 11 s on the Kamoer; set by calibration
+
+// battery (a 3-cell 12 V lithium pack: 12.6 V full, ~9.5 V empty)
+constexpr float    BATT_DIVIDER    = (100.0f + 22.0f) / 22.0f;   // divider ratio
+constexpr float    ADC_VREF        = 3.3f;
+constexpr float    ADC_MAX         = 4095.0f;  // 12-bit
+constexpr float    BATT_NOMINAL_V  = 12.0f;    // the pump speed and LED levels mean "at 12.0 V"
+constexpr float    BATT_PRESENT_V  = 6.0f;     // below this nothing is connected to D0: no compensation
+constexpr float    BATT_LOW_V      = 10.5f;    // ring inserted below this -> double blink: recharge soon
+constexpr float    BATT_K_MIN      = 0.8f;     // compensation limits (duty x k)
+constexpr float    BATT_K_MAX      = 1.4f;
+constexpr float    BATT_EMA        = 0.05f;    // smoothing per ~10 ms pass
+constexpr uint32_t LOWBATT_BLINK_MS = 150;     // two 150 ms flashes before the normal fade-in
+constexpr float    LOWBATT_LEVEL   = 0.6f;
 
 // (declared before the first function so the Arduino prototype generator sees it)
 // ------------------------------------------------------------------ state
@@ -101,10 +118,11 @@ struct Settings {
   uint8_t  maxBright;
   uint8_t  idleDuty;
   uint8_t  pumpSpeed;
+  float    battScale;   // "vcal" correction of the divider / ADC reference
 };
-constexpr uint32_t SETTINGS_MAGIC = 0x474C3032; // "GL02"
+constexpr uint32_t SETTINGS_MAGIC = 0x474C3033; // "GL03"
 Settings defaultSettings() {
-  return Settings{SETTINGS_MAGIC, DEFAULT_POUR_MS, DEFAULT_MAX_BRIGHT, DEFAULT_IDLE_DUTY, DEFAULT_PUMP_SPEED};
+  return Settings{SETTINGS_MAGIC, DEFAULT_POUR_MS, DEFAULT_MAX_BRIGHT, DEFAULT_IDLE_DUTY, DEFAULT_PUMP_SPEED, 1.0f};
 }
 Settings settings = defaultSettings();
 
@@ -138,7 +156,33 @@ uint32_t ledDuty      = 0;     // last PWM value written to LED_PIN (0..PWM_RANG
 float    finaleFrom   = 0.0f;  // light level when FINALE began
 float    finaleTo     = 0.0f;  // top of the FINALE swell
 
+// battery
+float    battV        = 0.0f;  // smoothed battery voltage (0 = not sensed yet)
+bool     lowBattWarn  = false; // this insertion started with a low battery: blink first
+
 static inline uint32_t since(uint32_t t) { return millis() - t; } // wrap-safe
+
+// ------------------------------------------------------------------ battery
+float battRead() {
+  return (float)analogRead(BATT_PIN) / ADC_MAX * ADC_VREF * BATT_DIVIDER * settings.battScale;
+}
+
+void battService() {
+  const float v = battRead();
+  if (v < BATT_PRESENT_V) { battV = 0.0f; return; }   // nothing on D0 (bench, USB-only): no battery logic
+  battV = battV <= 0.0f ? v : battV + (v - battV) * BATT_EMA;
+}
+
+bool battSensed() { return battV >= BATT_PRESENT_V; }
+
+// duty multiplier that keeps pours and brightness as they were set at BATT_NOMINAL_V
+float battK() {
+  if (!battSensed()) return 1.0f;
+  float k = BATT_NOMINAL_V / battV;
+  if (k < BATT_K_MIN) k = BATT_K_MIN;
+  if (k > BATT_K_MAX) k = BATT_K_MAX;
+  return k;
+}
 
 // ------------------------------------------------------------------ pump
 void pumpStop() {
@@ -165,7 +209,9 @@ bool pumpService() {
   if (!pumpOn) return false;
   const uint32_t t = since(pumpStarted);
   if (t >= pumpRunFor || t >= MAX_PUMP_MS || since(pumpOnSince) >= MAX_PUMP_MS) { pumpStop(); return false; }
-  const uint32_t full = (PWM_RANGE * settings.pumpSpeed) / 100;   // speed setting, 30..100 %
+  uint32_t full = (uint32_t)((float)(PWM_RANGE * settings.pumpSpeed) / 100.0f * battK() + 0.5f);   // speed at 12 V
+  if (battK() == 1.0f) full = (PWM_RANGE * settings.pumpSpeed) / 100;   // exact when no battery is sensed
+  if (full > PWM_RANGE) full = PWM_RANGE;
   const uint32_t start = PWM_RANGE / 6;                           // soft start from ~16 %
   uint32_t duty = full;
   if (t < PUMP_RAMP_MS) duty = start + ((full > start ? full - start : 0) * t) / PUMP_RAMP_MS;
@@ -184,7 +230,14 @@ float lightTarget() {
   const uint32_t t = since(stateSince);
   switch (state) {
     case State::IDLE:    return 0.0f;
-    case State::ARMED:   return t >= ARMED_FADE_IN_MS ? ARMED_LEVEL : ARMED_LEVEL * (float)t / (float)ARMED_FADE_IN_MS;
+    case State::ARMED: {
+      uint32_t u = t;
+      if (lowBattWarn) {                                 // low battery: two quick flashes, then the normal glow
+        if (u < 4 * LOWBATT_BLINK_MS) return ((u / LOWBATT_BLINK_MS) % 2 == 0) ? LOWBATT_LEVEL : 0.0f;
+        u -= 4 * LOWBATT_BLINK_MS;
+      }
+      return u >= ARMED_FADE_IN_MS ? ARMED_LEVEL : ARMED_LEVEL * (float)u / (float)ARMED_FADE_IN_MS;
+    }
     case State::POURING: {                                // climbs with the pour, reaching POUR_PEAK as it completes
       const float k = t >= settings.pourMs ? 1.0f : (float)t / (float)settings.pourMs;
       return ARMED_LEVEL + (POUR_PEAK - ARMED_LEVEL) * k;
@@ -213,13 +266,14 @@ void lightService() {
   const uint32_t dt = now - ledLastMs;
   ledLastMs = now;
   const float target = lightTarget();
-  if (target >= ledShown || state == State::FINALE) {   // FINALE draws its own fade
+  const bool blinking = state == State::ARMED && lowBattWarn && since(stateSince) < 4 * LOWBATT_BLINK_MS;
+  if (target >= ledShown || state == State::FINALE || blinking) {   // FINALE and the warning draw their own steps
     ledShown = target;
   } else {
     const float step = (float)dt / (float)FADE_MS;
     ledShown = (ledShown - step > target) ? ledShown - step : target;
   }
-  uint32_t duty = (uint32_t)(powf(ledShown, GAMMA) * (float)settings.maxBright * ((float)PWM_RANGE / 255.0f) + 0.5f);
+  uint32_t duty = (uint32_t)(powf(ledShown, GAMMA) * (float)settings.maxBright * ((float)PWM_RANGE / 255.0f) * battK() + 0.5f);
   const uint32_t floorDuty = (uint32_t)settings.idleDuty * PWM_RANGE / 255;   // idle glow / keep-alive load
   if (duty < floorDuty) duty = floorDuty;
   if (duty > PWM_RANGE) duty = PWM_RANGE;
@@ -233,7 +287,7 @@ void loadSettings() {
   Settings s;
   EEPROM.get(0, s);
   if (s.magic == SETTINGS_MAGIC && s.pourMs >= 500 && s.pourMs <= MAX_PUMP_MS &&
-      s.pumpSpeed >= 30 && s.pumpSpeed <= 100) settings = s;
+      s.pumpSpeed >= 30 && s.pumpSpeed <= 100 && s.battScale >= 0.5f && s.battScale <= 2.0f) settings = s;
 }
 
 void saveSettings() {
@@ -264,7 +318,10 @@ void printStatus() {
   Serial.print(F(" pourMs=")); Serial.print(settings.pourMs);
   Serial.print(F(" speed=")); Serial.print(settings.pumpSpeed);
   Serial.print(F(" maxBright=")); Serial.print(settings.maxBright);
-  Serial.print(F(" idle=")); Serial.println(settings.idleDuty);
+  Serial.print(F(" idle=")); Serial.print(settings.idleDuty);
+  Serial.print(F(" battery="));
+  if (battSensed()) { Serial.print(battV, 2); Serial.println(battV < BATT_LOW_V ? F("V LOW - recharge") : F("V")); }
+  else Serial.println(F("not sensed"));
 }
 
 void handleCommand(String cmd) {
@@ -310,7 +367,18 @@ void handleCommand(String cmd) {
     Serial.print(F("idle=")); Serial.println(settings.idleDuty);
     return;
   }
-  Serial.println(F("commands: status | cal <ms> | pour <ms> | speed <30-100> | leds <0-255> | idle <0-255> | save | stop"));
+  if (cmd.startsWith("vcal ")) {
+    const float meter = cmd.substring(5).toFloat();
+    const float raw = battRead() / settings.battScale;
+    if (meter < 6.0f || meter > 15.0f || raw < BATT_PRESENT_V * 0.5f) { Serial.println(F("vcal: battery volts 6..15, divider fitted")); return; }
+    const float k = meter / raw;
+    if (k < 0.5f || k > 2.0f) { Serial.println(F("vcal: reading too far off - check the divider")); return; }
+    settings.battScale = k;
+    battV = 0.0f; battService();
+    Serial.print(F("battery=")); Serial.print(battV, 2); Serial.println(F("V (save to keep)"));
+    return;
+  }
+  Serial.println(F("commands: status | cal <ms> | pour <ms> | speed <30-100> | leds <0-255> | idle <0-255> | vcal <volts> | save | stop"));
 }
 
 void serviceSerial() {
@@ -352,6 +420,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
   analogWriteRange(PWM_RANGE);
+  analogReadResolution(12);
 
   Serial.begin(115200);
   loadSettings();
@@ -370,6 +439,7 @@ void setup() {
 
 void loop() {
   readInputs();
+  battService();
   serviceSerial();
   const bool pumping = pumpService();   // enforces duration and the hard cap every pass
 
@@ -387,6 +457,7 @@ void loop() {
     case State::IDLE:
       if (hallStable) {
         pouredThisInsertion = false;
+        lowBattWarn = battSensed() && battV < BATT_LOW_V;   // judged before the pump loads the pack
         if (swStable) switchJammed = true;  // pressed before the twist (stuck cam): ignore until released
         enter(State::ARMED);
       }

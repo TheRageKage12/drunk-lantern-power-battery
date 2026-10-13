@@ -1,5 +1,5 @@
-"""Wiring diagram for the budget build: 12 V USB-C PD power, LM2596 buck, XIAO RP2040, 74AHCT125 gate
-driver, two low-side MOSFETs (pump, plain green LED strip), DRV5032 Hall sensor, D2F-L switch.
+"""Wiring diagram for the budget build: 12 V Li-ion pack with charge jack, power switch and battery sense, LM2596 buck, XIAO RP2040, 74AHCT125 gate
+driver, two low-side MOSFETs (pump, plain green LED strip), A3144 Hall sensor (5 V, output through a diode), D2F-L switch.
 Writes ../wiring.svg."""
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -62,16 +62,27 @@ s.text(W - 20, RAIL12 - 8, "+12 V rail", size=11, anchor="end", color=ORANGE, we
 s.wire([(16, GND_Y), (W - 20, GND_Y)], BLACK, sw=3)
 s.text(W - 20, GND_Y + 18, "GND rail", size=11, anchor="end", weight="bold")
 
-# ---------------------------------------------------------------- power bank + PD cable
-box(24, 84, 170, 90, "Power bank", ["USB-C PD with a 12 V profile", "(e.g. INIU B61)"])
-s.rect(188, 124, 12, 14, fill="#bbbbbb", sw=1)
-box(220, 96, 150, 60, "PD 12 V cable", ["Adafruit 5450,", "barrel plug cut off"], fill="#fff7e6")
-s.wire([(200, 131), (220, 131)], GREY, sw=3)
-s.wire([(370, 112), (400, 112), (400, RAIL12)], ORANGE, sw=3)
-s.text(374, 106, "+", size=12, weight="bold", color=ORANGE)
-s.wire([(370, 146), (386, 146), (386, 176)], BLACK, sw=2.4)
-s.gnd(386, 176)
-s.text(374, 162, "-", size=13, weight="bold")
+# ---------------------------------------------------------------- KBT pack, charge jack, power switch S1
+box(24, 84, 170, 90, "12 V Li-ion pack", ["KBT 2400 mAh, 6 cells,", "protection board inside,", "bare leads"])
+s.text(198, 106, "+", size=12, weight="bold", color=ORANGE)
+s.text(198, 162, "-", size=13, weight="bold")
+# + lead: to the charge jack (before the switch) and through S1 to the rail
+s.wire([(194, 112), (300, 112)], ORANGE, sw=3)
+dot(290, 112, ORANGE)
+s.circle(300, 112, 3.2, fill="#ffffff", stroke=INK, sw=1.6)
+s.circle(336, 112, 3.2, fill="#ffffff", stroke=INK, sw=1.6)
+s.wire([(302, 110), (333, 96)], INK, sw=2)
+s.text(318, 86, "S1 power", size=10, anchor="middle", weight="bold")
+s.wire([(339, 112), (400, 112), (400, RAIL12)], ORANGE, sw=3)
+# - lead: to the charge jack and GND
+s.wire([(194, 146), (226, 146)], BLACK, sw=2.4)
+dot(210, 146)
+s.wire([(210, 146), (210, 176)], BLACK, sw=2.4)
+s.gnd(210, 176)
+box(226, 128, 124, 58, "Charge jack", ["DC5521, panel mount,", "next to S1"], fill="#fff7e6")
+s.circle(226, 146, 3.2, fill="#ffffff", stroke=BLACK, sw=1.4)
+s.circle(290, 128, 3.2, fill="#ffffff", stroke=ORANGE, sw=1.4)
+s.wire([(290, 112), (290, 125)], ORANGE, sw=2.4)
 
 # C2 across the 12 V rail
 cx = 450
@@ -79,8 +90,29 @@ s.wire([(cx, RAIL12), (cx, 150)], ORANGE, sw=2)
 s.path(f"M{cx-12},150 L{cx+12},150 M{cx-12},158 Q{cx},152 {cx+12},158", stroke=INK, sw=2)
 s.wire([(cx, 156), (cx, 172)], BLACK, sw=2)
 s.gnd(cx, 172)
-s.text(cx + 16, 156, "C2 2200 µF 16 V (+ to the rail)", size=10)
+s.lines(cx + 16, 146, ["C2 2200 µF,", "16 V, + to rail"], size=10)
 dot(cx, RAIL12, ORANGE)
+
+# battery sense: 100 k / 22 k divider + 0.1 µF from the rail (after S1) to D0
+bx = 620
+dot(bx, RAIL12, ORANGE)
+s.wire([(bx, RAIL12), (bx, 126)], ORANGE, sw=1.8)
+s.rect(bx - 6, 126, 12, 24, fill="#ffffff", sw=1.3)
+s.text(bx + 10, 142, "100 k", size=9.5)
+s.wire([(bx, 150), (bx, 162)], GREEN, sw=1.8)
+dot(bx, 156, GREEN)
+s.rect(bx - 6, 162, 12, 22, fill="#ffffff", sw=1.3)
+s.text(bx + 10, 177, "22 k", size=9.5)
+s.wire([(bx, 184), (bx, 190)], BLACK, sw=1.4)
+s.gnd(bx, 190)
+s.wire([(bx, 156), (bx + 44, 156), (bx + 44, 168)], GREEN, sw=1.6)
+s.path(f"M{bx+34},168 L{bx+54},168 M{bx+34},174 L{bx+54},174", stroke=INK, sw=2)
+s.wire([(bx + 44, 174), (bx + 44, 190)], BLACK, sw=1.4)
+s.gnd(bx + 44, 190)
+s.text(bx + 58, 186, "0.1 µF", size=9.5)
+s.lines(bx + 90, 140, ["battery sense:", "12.6 V -> 2.27 V at D0"], size=10, color="#444")
+s.wire([(bx, 156), (570, 156), (570, 222), (470, 222), (470, 230)], GREEN, sw=1.8)
+s.text(564, 186, "to D0", size=9.5, anchor="end", color=GREEN)
 
 # ---------------------------------------------------------------- LM2596 buck -> 1N5819 -> XIAO 5V
 box(40, 230, 160, 92, "LM2596 buck", ["12 V in, 5.0 V out:", "set it to 5.0 V with a meter", "BEFORE connecting the XIAO"], fill="#fff7e6")
@@ -94,21 +126,21 @@ s.text(206, 254, "OUT+ 5 V", size=10, color=RED)
 s.wire([(200, 260), (262, 260)], RED, sw=2.4)
 s.path("M262,252 L262,268 L276,260 Z M276,252 L276,268", stroke=INK, sw=1.6, fill="#dddddd")
 s.text(269, 244, "1N5819", size=10, anchor="middle")
-s.text(212, 284, "stripe toward the XIAO", size=9.5, color="#555")
+s.lines(278, 280, ["stripe toward", "the XIAO"], size=9.5, color="#555", anchor="end")
 s.wire([(276, 260), (330, 260)], RED, sw=2.4)
 
 # ---------------------------------------------------------------- XIAO
 XX, XY, XW, XH = 330, 230, 170, 270
 xl, xr = XX, XX + XW
 box(XX, XY, XW, XH, "XIAO RP2040")
-s.lines(XX + XW / 2, XY + XH + 16, ["3.3 V logic. Program it over USB-C", "with the power bank unplugged."], size=10, anchor="middle", color="#444")
+s.lines(XX + XW / 2, XY + XH + 16, ["3.3 V logic. Program it over USB-C", "with S1 off."], size=10, anchor="middle", color="#444")
 pin(xl, 260, "5V", "in-left", RED)
 pin(xl, 290, "GND", "in-left", BLACK)
-pin(xl, 320, "3V3", "in-left", MAG)
 pin(xr, 350, "D4", "in-right", GREEN)
 pin(xr, 380, "D3", "in-right", GREEN)
 pin(xr, 420, "D1", "in-right", GREEN)
 pin(xr, 450, "D2", "in-right", GREEN)
+pin(470, XY, "D0", "below", GREEN)
 s.circle(xr, 480, 3.2, fill="#ffffff", stroke=GREY, sw=1.4)
 s.text(xr - 7, 484, "D6 (optional PRIME", size=10, anchor="end", color="#555")
 s.text(xr - 7, 496, "button to GND)", size=10, anchor="end", color="#555")
@@ -171,19 +203,24 @@ def stage(cx_load, load, sub, gate_y, mosfet_label, flyback):
         s.lines(fx + 10, 290, ["1N5819", "flyback,", "stripe to +12 V"], size=9.5)
 
 
-stage(900, "Green LED strip", ["plain 12 V, 75 cm in 15 pieces,", "all in parallel, ~0.35 A"], 640, "Q2 light", False)
+stage(900, "Green LED strip", ["green COB, 75 cm in 7 pieces,", "all in parallel, ~0.6 A"], 640, "Q2 light", False)
 stage(1070, "Kamoer KPHM200", ["12 V peristaltic pump", "~0.7 A"], 680, "Q1 pump", True)
 
 # ---------------------------------------------------------------- charging socket (dashed group)
 s.rect(30, 560, 440, 200, fill="none", stroke=GREY, sw=1.2, rx=8, dash="6,4")
 s.rect(38, 568, 392, 17, fill="#ffffff", stroke="#ffffff", sw=0)
 s.text(42, 581, "the lock (on the lock wall in the sphere): one cable down behind the wall to the base", size=11, weight="bold", color="#555")
-box(40, 590, 190, 70, "DRV5032 Hall sensor", ["Adafruit 6051. Chip on the", "rotor axis, under the magnet"], fill="#f3e8ff")
-pin(230, 610, "VIN", "in-right", MAG)
+box(40, 590, 190, 70, "A3144 Hall sensor", ["on a post inside the rotor,", "~3 mm under the magnet"], fill="#f3e8ff")
+pin(230, 610, "VCC", "in-right", RED)
 pin(230, 628, "OUT", "in-right", GREEN)
 pin(230, 646, "GND", "in-right", BLACK)
-s.wire([(230, 610), (280, 610), (280, 320), (xl, 320)], MAG, sw=2)
-s.wire([(230, 628), (515, 628), (515, 420), (xr, 420)], GREEN, sw=2)
+s.wire([(230, 610), (285, 610), (285, 260)], RED, sw=2)
+dot(285, 260, RED)
+# 1N5819 in the output: the sensor can pull D1 low but never puts 5 V on it (stripe toward the sensor)
+s.wire([(230, 628), (356, 628)], GREEN, sw=2)
+s.path("M372,620 L372,636 L358,628 Z M358,620 L358,636", stroke=INK, sw=1.6, fill="#dddddd")
+s.wire([(372, 628), (515, 628), (515, 420), (xr, 420)], GREEN, sw=2)
+s.lines(345, 646, ["1N5819, stripe", "to the sensor"], size=9.5, color="#555")
 s.wire([(230, 646), (250, 646), (250, GND_Y)], BLACK, sw=1.8)
 dot(250, GND_Y)
 box(40, 680, 190, 64, "D2F-L microswitch", ["pressed by the rotor cam", "at ~40 deg of twist"], fill="#f3e8ff")
@@ -197,7 +234,7 @@ dot(240, GND_Y)
 s.lines(24, GND_Y + 36, [
     "The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.",
     "The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.",
-    "No master switch or fuse in this build: unplug the cable at the power bank to turn it off; the bank has its own overcurrent cut-out.",
+    "S1 switches everything but the charge jack: turn it off to store the lantern and while charging. The pack's protection board cuts out on a short or a flat pack.",
 ], size=10.5, color="#333")
 
 open(os.path.join(HERE, "..", "wiring.svg"), "w").write(s.finish())

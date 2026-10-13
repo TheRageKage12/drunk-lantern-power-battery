@@ -15,7 +15,7 @@ python3 render_stl.py output /tmp/r   # quick per-part previews
 |---|---|
 | `params.py` | every dimension and the stack heights (`Z_*`) |
 | `DESIGN_CONTRACT.md` | how the parts mate; revisions 2-8 record the changes since the first draft (8 = lock wall layout) |
-| `parts/base.py` | base drum, deck (jar ring, pump saddles, electronics panel), rear door, hardware envelopes; see `NOTES-base.md` |
+| `parts/base.py` | base drum (part of the lantern shell) and the removable cartridge: tray, deck (jar ring, pump saddles, electronics panel), thumbscrew knobs, hardware envelopes |
 | `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings; `top_diffuser` (frosted disc) in the upper dish floor; pilots for the curtain clamp; `NOTES-dishes.md` |
 | `parts/sphere.py` | sphere halves (hand opening, display window), diffuser, bay floor, glass slot, nozzle guide, lock wall, curtain clamp, handle bosses, glass / glass-path / fist / forearm envelopes |
 | `parts/socket.py` | the lock: housing, rotor, base plate with two mounting ears, switch bracket, plunger, key cap; screwed to the lock wall facing the hand opening (`LED_RING = True` adds a NeoPixel ring recess and halo) |
@@ -29,15 +29,14 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - Kamoer KPHM200: modelled as a 64 x 63 x 40 mm head box plus a 40 mm motor can, 118 mm overall. Kamoer
   publishes no drawing. Measure the pump and adjust `PUMP_*` in `params.py` and `PUMP_HEAD_L_EST` in `parts/base.py`.
 - Reservoir jar: 76 mm across the cap, 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
-- Power bank: 150 x 72 x 25 mm pocket, flat on the floor under the deck.
+- Battery: KBT 12 V 2400 mAh Li-ion pack, 70 x 55 x 40 mm (`POWERBANK_*`), flat on the cartridge tray under the deck, leads toward +Y. With the deck raised for it, the base and lower dish are 190 mm across (`D_MAX`) so the pump and jar clear the lower dish by 5-6 mm; the upper dish stays 180 mm (`UPPER_DISH_MOUTH_D`). The charge jack (8 mm hole) and power switch (6.5 mm hole) sit in the tray's port panel at `PORT_ANGLE`; the drum has a matching notch open at its bottom edge, so it still lifts off. Check the panel holes against your jack and switch.
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
 - Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, plus a 60 mm forearm through the 120 x 96 mm hand opening.
-- Hall board pocket in `socket_base`: 31.6 x 18.4 mm. The DRV5032 board (25.6 x 17.8) slides along it so its chip sits under the window.
+- Hall sensor (`HALL_SENSOR`): the A3144 lies face up in a 4.4 x 3.4 mm pocket on a post on `socket_base`, inside a blind hole in the rotor, ~3 mm from the magnet. With `'DRV5032'` the board goes in a 31.6 x 18.4 mm pocket under the plate instead (~8 mm from the magnet).
 
 ## Budget-build settings
 - `M3_INSERT_HOLE = 2.7` in `params.py`: screws thread straight into the plastic. Set 4.0 for heat-set inserts.
 - `LED_RING = False` in `parts/socket.py`: no LEDs at the socket.
-- `DOOR_SWITCH_D = 0` in `parts/base.py`: no master-switch hole in the base door.
 
 ## Known limitations
 - The sphere halves need interior supports around the window and the hand opening (see the guide).

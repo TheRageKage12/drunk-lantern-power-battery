@@ -63,6 +63,9 @@ CONE_K = CONE_DR / CONE_H                           # dr/dz of the cone surface
 CONE_WALL_RADIAL = P.WALL / math.cos(math.radians(CONE_HALF_ANGLE_DEG))   # radial offset for a true WALL thickness
 RIM_BEARING_W = CONE_WALL_RADIAL                    # flat ring under the rim wall that bears on the base band (2.69)
 RIM_GROOVE_W = (P.DISH_MOUTH_D / 2 - RIM_BEARING_W) - SPIGOT_OD / 2   # rim inner wall to spigot OD -> 3.0
+# the upper dish keeps a 180 mm mouth (UPPER_DISH_MOUTH_D): its own cone slope and wall offset
+U_CONE_K = (P.UPPER_DISH_MOUTH_D - P.DISH_NECK_D) / 2.0 / CONE_H
+U_CONE_WALL_RADIAL = P.WALL / math.cos(math.atan(U_CONE_K))
 RIM_GROOVE_ANGLE_DEG = 45.0                         # the groove roof rises at this overhang angle (printable)
 COLLAR_ANGLE_DEG = 45.0                             # 45 deg flare under the lower dish flange (printability)
 FLOOR_SUPPORT_ANGLE_DEG = 50.0                      # overhang angle (from vertical) of the support cone under the lower floor
@@ -208,19 +211,19 @@ def build_dish_lower():
 # ================================================================== dish_upper
 def _upper_profile():
     """Closed (r, z) profile of dish_upper in the print frame (floor down, mouth up)."""
-    r_mouth = P.DISH_MOUTH_D / 2
+    r_mouth = P.UPPER_DISH_MOUTH_D / 2
     r_neck = P.DISH_NECK_D / 2
     r_hole = UPPER_FLOOR_HOLE_D / 2
     r_flange = DISH_FLANGE_D / 2
     r_plug = LOCATING_RING_OD / 2
-    r_rim_i = r_mouth - CONE_WALL_RADIAL
+    r_rim_i = r_mouth - U_CONE_WALL_RADIAL
     ch = MOUTH_CHAMFER
 
     def outer(z):
-        return r_neck + CONE_K * (z - U_Z_FLOOR1)
+        return r_neck + U_CONE_K * (z - U_Z_FLOOR1)
 
     def inner(z):
-        return outer(z) - CONE_WALL_RADIAL
+        return outer(z) - U_CONE_WALL_RADIAL
 
     tan_c = math.tan(math.radians(COLLAR_ANGLE_DEG))
     r_c, z_c = _line_hit_cone(r_flange, U_Z_FLOOR1, -1.0 / tan_c, outer, U_Z_FLOOR1, U_Z_RIM0)
