@@ -146,7 +146,7 @@ for dy in (-2.5, 0.0, 2.5):                               # strip curtain hangin
 # ------------------------------------------------------------------ tube (blue) and cables (purple)
 jar, pump = M["bottle_envelope"].bounds, M["pump_envelope"].bounds
 jy = (jar[0][1] + jar[1][1]) / 2 - 10
-tip_z = Zc0 + SP.WALL_Z0 + P.NOZZLE_RISE + P.NOZZLE_BEND_R
+tip_z = Zc0 + SP.NOZZLE_TIP_Z
 tube = [(jy, jar[0][2] + 5), (jy, jar[1][2] + 6), (pump[1][1] - 14, jar[1][2] + 6), (pump[1][1] - 14, pump[1][2] - 12),
         (pump[1][1] - 6, pump[1][2] - 12), (pump[1][1] - 6, jar[1][2] + 14), (P.NOZZLE_TIP_XY[1] - 6, 165.0),
         (P.NOZZLE_TIP_XY[1], tip_z)]
@@ -187,7 +187,7 @@ label(LX, 375, ["lock wall: the lock on its face,", "the nozzle hidden behind it
 label(LX, 440, ["nozzle guide behind the wall:", "the tube pours into the back", "third of the glass"], *px(P.NOZZLE_TIP_XY[1], tip_z), anchor="end")
 label(LX, 510, ["glass slot: push the glass back", "to the stop (a ridge clicks it in)"], *px(-30, gz0 + 4), anchor="end")
 label(LX, 570, ["lower dish, hollow: the slot hangs", "in it; tube and cables pass down"], *px(-50, 150), anchor="end")
-label(LX, 650, ["8 oz jar (behind the section),", "vented lid, pickup tube to the bottom"], *px(jar[0][1] + 8, 80), anchor="end")
+label(LX, 650, ["8 oz jar (behind the section),", "one-way vent in the lid, pickup", "tube to the bottom"], *px(jar[0][1] + 8, 80), anchor="end")
 label(LX, 720, ["electronics board on the deck panel;", "cables come down behind the wall"], *px(-60, 70), anchor="end")
 label(LX, 790, ["12 V Li-ion pack, flat on the", "floor under the deck"], *px(-40, 14), anchor="end")
 

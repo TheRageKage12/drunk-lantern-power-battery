@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$175)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$180)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -63,6 +63,7 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 4 | Buck converter | [LM2596 step-down module, multipack](https://www.amazon.com/s?k=LM2596+buck+converter+module) | ~$8 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key (the pack is the smallest sensible buy). |
 | 5b | Cable plugs | [JST-SM 2-pin and 4-pin connector pairs (LED-strip connector kit)](https://www.amazon.com/s?k=JST+SM+2+pin+4+pin+connector+kit) | ~$7 | One 4-pin plug in the lock cable and one 2-pin plug in the LED leads, so the lantern unplugs from the base cartridge. |
+| 5c | Vent valve | [Aquaneat aquarium check valves, 10-pack](https://www.amazon.com/s?k=Aquaneat+aquarium+check+valve+one+way) (or any pet store) | ~$6 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. 4 mm barbs. |
 | 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
 | 7 | Hall sensor | [Adafruit DRV5032 breakout #6051](https://www.adafruit.com/product/6051) | $4.95 | Runs on 3.3 V, very sensitive, either magnet pole works. |
@@ -87,7 +88,7 @@ the sensor window, and stack two magnets in the key cap. Saves the shipping and 
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $175, battery included.** That assumes you already have:
+**Total: about $180, battery included.** That assumes you already have:
 
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
@@ -150,7 +151,7 @@ Print these first, before any big part, and check them:
 | `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 2 |
 | `bay_floor` | 131 x 131 x 4 | flat | no | any | 14 |
 | `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 26 |
-| `nozzle_guide` | 39 x 18 x 34 | on its side, so the bend lies flat | no | any | 2 |
+| `nozzle_guide` | 47 x 18 x 34 | on its side, so the bend lies flat | no | any | 3 |
 | `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 12 |
 | `handle_leg_right` | 14 x 126 x 10 | flat | no | green | 12 |
 | `handle_arc_left` | 120 x 132 x 10 | flat | no | green | 18 |
@@ -161,7 +162,7 @@ Print these first, before any big part, and check them:
 | `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
-| **Total** | | | | | **~817 g** |
+| **Total** | | | | | **~818 g** |
 
 Supports: none, except inside the two sphere halves. Print them split-face down; the last 15 mm of dome
 around the window and the hand opening overhang more than 45 degrees, so enable tree supports on the inside
@@ -315,17 +316,21 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
 
 ## 7. The fluid path
 
-1. **Jar lid.** Drill a 6 mm hole near the edge for the tube and a 2.5 mm vent hole on the other side. Push the
-   tube through the 6 mm hole (it seals itself) until it reaches 5 mm above the jar's bottom.
+1. **Jar lid.** Drill two 6 mm holes near the edge, on opposite sides. Push the tube through one (it seals
+   itself) until it reaches 5 mm above the jar's bottom. **Vent:** push a 2 cm piece of the same tube through
+   the other hole, then push a check valve's barb into its top, with the valve's arrow pointing **down into the
+   jar**. Air gets in as the pump draws the drink out (without it the jar goes under vacuum and the pours
+   shrink), but if the jar tips, nothing comes out. Blow through it to check: air goes in, not out.
 2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
    continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
 3. **Route.** The pump sits in its saddles on the deck, head toward your side so you can open the cap
    later, held by a strap or zip tie. The tube goes up through the lower dish neck and the tube hole in
    `bay_floor` (behind the lock wall, on your right as you look in), then through `nozzle_guide`.
-4. **Nozzle.** The guide stands behind the wall and turns the tube from vertical to horizontal. Its open side
-   faces the wall, which holds the tube in. Leave 5 mm of tube sticking out of its end, cut square with a sharp
-   blade. The tube end hangs about 1.5 cm above the rim, over the back third of the glass, so the stream and the
-   last drop both land inside it.
+4. **Nozzle.** The guide stands behind the wall and bends the tube up, over and **45 degrees down**. Its open
+   side faces the wall, which holds the tube in. Leave 5 mm of tube sticking out of its end, cut square with a
+   sharp blade. The tube end sits about 7 mm above the rim, over the back third of the glass, pointing down
+   into it: the stream lands about 19 mm from the glass centre at any pump speed, and the last drop falls
+   straight in. (A level tip would throw the stream sideways, onto the rim at the default speed.)
 5. **Service loop.** Leave about 30 cm of extra tube between the pump and the bay floor, coiled loosely (no
    tighter than a 5 cm circle, or it kinks) in the space above the jar and pump. That slack lets you lift the
    lantern off the cartridge and set it down beside it without disconnecting the tube.
@@ -487,6 +492,7 @@ flattened.
 | Ring not detected | `status` with the ring in. Is the DRV5032 chip under the window, on the axis? Is the magnet glued in the key cap? |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump hums, no flow | Tube not seated under the rollers, head cap open, or the wrong (thin-walled) tube. |
+| Pours shrink after a few in a row, jar dents in | The vent valve is in backwards (arrow must point into the jar) or blocked. |
 | Pump doesn't run at all | Switch on? Check the rail gives 9.5-12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
 | LEDs stay dark or stay on | Q2 wiring, or U1's OE pins not grounded. |

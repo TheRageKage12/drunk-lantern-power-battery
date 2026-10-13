@@ -153,10 +153,12 @@ WELL_ID, WELL_WALL = 54.0, 2.0
 GLASS_POUR_Y = -12.0         # glass centre at the back stop (= under the socket face)
 GLASS_SLIDE = 29.0           # slide this far toward you, then lift: the rim then clears the socket face
 WELL_RIDGE_H = 1.5           # ridge in front of the glass base at the stop: it clicks into place
-NOZZLE_TIP_XY = (-6.0, -31.1)   # tube end behind the wall, 21 mm from the glass centre (rim inner radius ~24.5)
+NOZZLE_TIP_XY = (-2.7, -31.1)   # tube end behind the wall, 19 mm from the glass centre (rim inner radius ~23.5)
 NOZZLE_TIP_OUT = 5.0         # tube length left sticking out of the guide
-NOZZLE_RISE = 3.0            # straight rise above the bay floor before the bend
-NOZZLE_BEND_R = 26.0         # 90 deg bend: the riser stands outside the slot, the tip ends ~14 mm above the rim
+NOZZLE_RISE = 11.0           # straight rise above the bay floor before the bend
+NOZZLE_BEND_R = 18.0         # bend radius (~3 x the tube OD): the riser stands outside the slot
+NOZZLE_BEND_DEG = 135.0      # past horizontal: the tip points 45 deg down, so the stream dives into the glass
+                             # instead of being thrown across it (a level tip threw it onto the rim at 70 % speed)
 DISH_LOWER_HOLE_D = 104.0    # lower dish floor hole: the slot and the tube pass through it into the dish cone
 FIST_W, FIST_H, FIST_LEN, FOREARM_R = 106.0, 76.0, 85.0, 30.0   # owner's fist is under 4 x 3 in
 FIST_Z_OFFSET = 3.0          # fist centre above the ring centre

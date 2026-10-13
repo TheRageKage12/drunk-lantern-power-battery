@@ -64,7 +64,12 @@ WELL_L = P.GLASS_SLIDE + P.WELL_ID                         # 78: inner slot leng
 WELL_FLANGE_W, WELL_FLANGE_T = 3.0, 2.0
 WELL_SKIRT = P.FLOOR                        # 45 deg skirt height = bay floor thickness
 GLASS_BASE_Z = P.GLASS_TOP_Z_LOCAL - P.GLASS_H            # -100: slot floor under the glass at the pour position
-GROMMET_XY = (P.NOZZLE_TIP_XY[0] - P.NOZZLE_TIP_OUT - P.NOZZLE_BEND_R, P.NOZZLE_TIP_XY[1])   # (-37, -31.1): tube exit
+_BEND = math.radians(P.NOZZLE_BEND_DEG)
+NOZZLE_DIR = (math.sin(_BEND), math.cos(_BEND))            # tube direction at the tip in (x, z): 45 deg down
+ARC_END = (P.NOZZLE_BEND_R * (1 - math.cos(_BEND)), P.NOZZLE_RISE + P.NOZZLE_BEND_R * math.sin(_BEND))   # from the floor exit
+NOZZLE_TIP_DXZ = (ARC_END[0] + P.NOZZLE_TIP_OUT * NOZZLE_DIR[0], ARC_END[1] + P.NOZZLE_TIP_OUT * NOZZLE_DIR[1])
+GROMMET_XY = (P.NOZZLE_TIP_XY[0] - NOZZLE_TIP_DXZ[0], P.NOZZLE_TIP_XY[1])   # (-37, -31.1): tube exit
+NOZZLE_TIP_Z = WALL_Z0 + NOZZLE_TIP_DXZ[1]                 # -30.3: tube end, 6.7 mm above the rim
 GUIDE_SCREW = (GROMMET_XY[0] - 8.0, GROMMET_XY[1] - 10.0)   # nozzle guide foot screw
 WIRE_SLOT_XY = (35.0, -32.0)                               # cables down, behind the wall
 WIRE_HOLE_D = 7.0
@@ -253,8 +258,8 @@ def glass_path():
 
 
 def nozzle_guide():
-    """Quarter-circle channel behind the lock wall that turns the tube from vertical (out of the bay floor) to
-    horizontal, pointing over the back third of the glass ~14 mm above the rim. Its +Y side is open (a C-channel):
+    """Curved channel behind the lock wall that turns the tube from vertical (out of the bay floor) through
+    NOZZLE_BEND_DEG, so the tip points 45 deg down into the back third of the glass. Its +Y side is open (a C-channel):
     the wall's back face closes it, so the tube can sit 3.5 mm from the wall. The tube sticks out NOZZLE_TIP_OUT.
     Built relative to the tube's floor exit; +Y points at the wall."""
     r = P.NOZZLE_BEND_R
@@ -262,8 +267,9 @@ def nozzle_guide():
     to_wall = WALL_BACK_Y - GROMMET_XY[1]                     # 3.5: bore centre -> wall back face
     half_x, back = bore_d / 2 + 1.2, bore_d / 2 + 1.6
     h = P.NOZZLE_RISE
-    # path in the XZ plane: straight up h, then a quarter arc ending horizontal, pointing +X (over the glass)
-    path = cq.Workplane('XZ').moveTo(0, 0).lineTo(0, h).radiusArc((r, h + r), r)
+    # path in the XZ plane: straight up h, then an arc turning toward +X (over the glass) past horizontal
+    mid = (r * (1 - math.cos(_BEND / 2)), h + r * math.sin(_BEND / 2))
+    path = cq.Workplane('XZ').moveTo(0, 0).lineTo(0, h).threePointArc(mid, ARC_END)
     y0, y1 = -back, to_wall - 0.1
     outer = cq.Workplane('XY').center(0, (y0 + y1) / 2).rect(2 * half_x, y1 - y0).sweep(path)
     bore = cq.Workplane('XY').workplane(offset=-1).circle(bore_d / 2).extrude(1).union(

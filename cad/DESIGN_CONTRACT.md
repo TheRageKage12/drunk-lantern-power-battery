@@ -282,3 +282,10 @@ exception in build.py output.
   pack before the switch, so it charges in place with the switch off. Firmware reads the switched rail on D0
   through 100 k / 22 k, scales pump and LED duty by 12 / Vbat (0.8..1.4) and double-blinks on insertion below
   10.5 V. `trigger_envelope` is gone.
+- Nozzle (rev 9c): with the tip level (90 deg bend, 15 mm above the rim, 20 mm from the glass centre) the
+  stream left the tube at ~0.34 m/s at 70 % speed and travelled ~19 mm sideways before the rim plane, landing
+  ~23 mm from the glass centre: on the rim of a 1.5 oz glass, and outside it at 100 %. `nozzle_guide` now
+  bends NOZZLE_BEND_DEG = 135 (R 18, rise 11), so the tip points 45 deg down, 6.7 mm above the rim at
+  (-2.7, -31.1). Projectile estimate: lands 19.2-19.4 mm from the glass centre from the last drop up to a
+  1.5x pulse peak at 100 %. Guide top 1.3 mm under the lowest back LED row; tube exit unchanged at (-37, -31.1).
+- Jar vent: a one-way (aquarium) check valve in the lid instead of an open hole, so a tipped jar can't leak.
