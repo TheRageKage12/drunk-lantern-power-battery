@@ -87,7 +87,7 @@ works on 3.3 V and either magnet pole.
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
-| 14 | Compression spring | [Dianrui spring assortment, 23 sizes (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | You need one about 0.4-0.5 mm wire, 5 mm outside diameter, 10 mm long; the kit's sizes are printed on the box. |
+| 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | any cyanoacrylate super glue you have (Gorilla Glue, Loctite) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
 **Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
