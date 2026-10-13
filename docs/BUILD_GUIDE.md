@@ -50,6 +50,8 @@ The drink touches only the jar, the platinum-silicone tube and the glass. No pri
 
 ## 2. Shopping list
 
+The same list grouped by store, with tick boxes: [SHOPPING_LIST.md](SHOPPING_LIST.md).
+
 Prices with "~" are estimates: Amazon hid some prices from my lookups, and the LED strip, buck module and
 Vetco parts were not checked listing by listing. Confirm at checkout.
 
