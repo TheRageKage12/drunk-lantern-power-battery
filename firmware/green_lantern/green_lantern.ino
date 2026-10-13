@@ -90,7 +90,7 @@ constexpr uint32_t PUMP_RAMP_MS       = 300;   // PWM soft start: tames the moto
 constexpr uint32_t DEFAULT_POUR_MS    = 11000; // pour time = length of the light build-up; the volume is set with speed
 constexpr uint32_t MAX_PUMP_MS        = 20000; // hard cap, independent of everything else
 constexpr uint8_t  DEFAULT_MAX_BRIGHT = 255;   // 0..255 cap on the strip PWM
-constexpr uint8_t  DEFAULT_IDLE_DUTY  = 0;     // raw PWM floor in every state (0 = dark); raise it if the bank sleeps
+constexpr uint8_t  DEFAULT_IDLE_DUTY  = 0;     // raw PWM floor in every state (0 = dark); raise it for a pilot glow
 constexpr uint8_t  DEFAULT_PUMP_SPEED = 70;    // percent: ~30-35 mL in 11 s on the Kamoer; set by calibration
 
 // battery (a 3-cell 12 V lithium pack: 12.6 V full, ~9.5 V empty)
