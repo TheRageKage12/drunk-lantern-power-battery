@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$180)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$200)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -84,13 +84,13 @@ the sensor window, and stack two magnets in the key cap. Saves the shipping and 
 | 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
 | 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
 | 12 | Small parts | Vetco | ~$12 | 2 x 1N5819 diodes, 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
-| 12a | Power switch | Vetco ([or a 5-pack, search](https://www.amazon.com/s?k=mini+toggle+switch+SPST+6mm+panel+mount)) | ~$3 | Mini toggle, SPST (on-off), 1/4" (6.2 mm) panel hole, rated 3 A or more at 12 V. |
+| 12a | Power switch | Vetco ([or a 5-pack, search](https://www.amazon.com/s?k=mini+toggle+switch+SPST+6mm+panel+mount)) | ~$3 | Mini toggle, SPST (on-off), 1/4" or M6 bushing (6.5 mm panel hole), rated 3 A or more at 12 V. |
 | 12b | Charge jack and lead | Vetco ([or the Amazon kit, search](https://www.amazon.com/s?k=DC5521+panel+mount+jack+female+nut)) | ~$4 | A panel-mount DC5521 (5.5 x 2.1 mm) female jack with an M8 nut, for the 8 mm hole. Plus a DC5521 **male** plug with bare leads, if the pack didn't come with one, to take power out of the pack's socket. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $180, battery included.** That assumes you already have:
+**Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
 
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
@@ -191,7 +191,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    (usually red +, about **12 V**). Its + goes two ways: to the charge jack's centre pin and to one tag of the
    power switch S1. Its − goes to the jack's outer contact and to ground. S1's other tag is the +12 V rail.
    Solder C2 (2200 µF 16 V) across the rail, stripe (−) to ground. The jack sits **before** the switch, so the
-   pack charges with S1 off and nothing else connected. Mount the jack (8 mm hole) and S1 (6.2 mm hole) in the
+   pack charges with S1 off and nothing else connected. Mount the jack (8 mm hole) and S1 (6.5 mm hole) in the
    panel on the tray's edge, with leads long enough (~15 cm) to reach the board on the deck.
 2a. **Battery sense.** A 100 k from the +12 V rail (after S1) to D0, a 22 k and a 0.1 µF from D0 to ground.
    It tells the firmware the battery voltage. Leave it out and everything still works, just without the
