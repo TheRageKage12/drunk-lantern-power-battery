@@ -18,17 +18,11 @@ are from its website (October 2026); prices with "~" are estimates, so confirm a
 - [ ] **Vent valve**: [Aquaneat aquarium check valves, 10-pack (*search*)](https://www.amazon.com/s?k=Aquaneat+aquarium+check+valve+one+way), ~$6. Or the aquarium aisle of a pet store.
 - [ ] **Curtain**: [COYOUCO 0.5 mm frosted PP sheets (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4), ~$10. Or one frosted poly report cover from an office store.
 
-## Adafruit (optional, ~$13 with shipping)
-
-- [ ] **Hall sensor**: [DRV5032 breakout #6051](https://www.adafruit.com/product/6051), $4.95 + ~$8 shipping
-
-Or skip this order: buy the [A3144 at Vetco](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63)
-($1.99) instead (see guide section 2.1; it needs a diode and two stacked magnets).
-
-## Vetco Electronics, Bellevue (~$37)
+## Vetco Electronics, Bellevue (~$40)
 
 [12718 Northup Way STE 100](https://vetco.net), (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30.
 
+- [ ] **Hall sensor**: [A3144 (VUPN6596)](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63), $1.99. Wired to 5 V through a diode, and reacts to one magnet pole only: see guide section 2.1 for the bench check.
 - [ ] **Gate driver**: [74AHCT125 quad level-shifter (VUPN524)](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96), $2.95. It must be **AHCT**, not HC.
 - [ ] **2 x MOSFET**: [IRLZ44N logic-level (VUPN1682)](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151), $2.67 each. The page title says IRLZ44N and its web address says IRLB8721; both are logic-level and have the same pin order, so either works.
 - [ ] **Power switch**: [SPST mini toggle, on-off, with wire leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a), $4.95. 1/4" bushing, 6 A at 12 V.
@@ -36,7 +30,7 @@ Or skip this order: buy the [A3144 at Vetco](https://vetco.net/products/vupn6596
 - [ ] *(Only if the battery didn't come with a bare-wire lead)* [2.1 mm DC plug with screw terminals](https://vetco.net/products/cd022_2-1mm_dc_power_inline_plug_-_solderless_w-screw_terminals), $2.85. Plugs into the battery's socket, no soldering.
 - [ ] **Spring**: [Hillman compression spring (*search*)](https://vetco.net/search?q=hillman+compression+spring), ~$1.29. Pick by calipers: 0.5 mm wire, 5 mm outside diameter, about 10 mm long.
 - [ ] **Small parts**:
-  - [ ] 2 x [1N5819-type Schottky diode, 40 V 1 A (NTE585)](https://vetco.net/products/nte585_40_volt_1a_schottky_rectifier_do41_-_nte585), $0.94 each
+  - [ ] 3 x [1N5819-type Schottky diode, 40 V 1 A (NTE585)](https://vetco.net/products/nte585_40_volt_1a_schottky_rectifier_do41_-_nte585), $0.94 each
   - [ ] 2 x [10 k resistor](https://vetco.net/products/nte-qw310_10k_ohm_1-4_watt_resistor), $0.29 each
   - [ ] 1 x [100 k resistor](https://vetco.net/products/nte-qw410_100k_ohm_1-4_watt_resistor), $0.29
   - [ ] 1 x [22 k resistor](https://vetco.net/products/nte-qw322_22k_ohm_1-4_watt_resistor), $0.29
@@ -82,6 +76,4 @@ Or get everything in one [Amazon M3 kit (B0HKFCTLK8)](https://www.amazon.com/dp/
   - [2.5 mm and 6 mm drill bits (*search*)](https://www.amazon.com/s?k=metric+drill+bit+set+1-10mm)
   - [Flush cutters (*search*)](https://www.amazon.com/s?k=flush+cutters)
 
-**Total: about $200** (Amazon ~$132, Adafruit ~$13, Vetco ~$37, Tacoma Screw ~$12, glue ~$5). That's up from the
-earlier ~$180 estimate, because Vetco's real prices are a little higher and the microswitch now comes as an
-Amazon 4-pack.
+**Total: about $190** (Amazon ~$132, Vetco ~$40, Tacoma Screw ~$12, glue ~$5).

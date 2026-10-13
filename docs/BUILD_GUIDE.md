@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$200)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$190)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -72,9 +72,12 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 8 | 12 V battery pack | [KBT 12 V 1200 mAh Li-ion pack with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $22 | 70 x 55 x 20 mm, 3 cells, overcharge protection, a DC5521 barrel socket for charging and output, and its own charger. 1200 mAh is well over 100 pours. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
 | | Adafruit shipping | | ~$8 | Only for the Hall sensor now. Ships from Brooklyn in 1-2 business days; USPS Ground Advantage is 2-5 more. |
 
-**Skip the Adafruit order.** Use an A3144 Hall sensor from Vetco ($1.99) instead of the DRV5032. The A3144
-needs 5 V and a diode on its output (section 4) and is less sensitive: bend its leads so it stands up through
-the sensor window, and stack two magnets in the key cap. Saves the shipping and the wait.
+**Skip the Adafruit order.** Use an A3144 Hall sensor from Vetco ($1.99) instead of the DRV5032, plus a third
+1N5819. The A3144 needs 5 V and a diode on its output (section 4, step 7), reacts to one magnet pole only
+(section 6, step 2), and is less sensitive: it has to sit right under the rotor (section 6, step 3). Only one
+magnet fits the key cap. By my estimate the magnet gives about 30 mT there; most A3144s switch well below that,
+but the datasheet allows up to 35 mT, so check it on the bench (section 6, step 7) before building on. If yours
+doesn't switch, the DRV5032 is also sold by [Jameco](https://www.jameco.com/z/6051-Adafruit-Industries-ScoutMakes-DRV5032-Digital-Magnetic-Hall-Effect-Sensor_2883071.html).
 
 ### 2.2 Pick up locally (or order the Amazon kit in brackets)
 
@@ -90,7 +93,7 @@ the sensor window, and stack two magnets in the key cap. Saves the shipping and 
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
+**Total: about $190 with the Vetco A3144, or ~$200 with the Adafruit DRV5032; battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
 
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
@@ -208,7 +211,9 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    to the LED strip's − wire. The pump's + and the strip's + go to the +12 V rail.
 6. **Flyback diode.** Solder a 1N5819 across the pump's two wires, stripe on the + side. It protects Q1 from
    the motor's voltage spike when it switches off.
-7. **Lock wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. Microswitch: NO to D2, COM to
+7. **Lock wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. (A3144 instead: facing its
+   printed side, leads down, pin 1 to **+5 V**, pin 2 to ground, pin 3 to the stripe (cathode) of a 1N5819
+   whose other end goes to D1. The diode lets it pull D1 low but never puts 5 V on it.) Microswitch: NO to D2, COM to
    ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
    about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
    lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
@@ -294,13 +299,16 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
 
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing` and the one under
    `socket_base`. A dab of super glue holds each.
-2. **Ring key.** Glue the magnet into the pocket under `key_cap` (either pole works with the DRV5032). Scuff
+2. **Ring key.** Glue the magnet into the pocket under `key_cap` (either pole works with the DRV5032; with an
+   A3144, first check which face switches it on, using the wired sensor and `status`, and glue that face down). Scuff
    the ring's flat face and the key cap. Put the ring on your left hand and make the fist you will punch with,
    ring face forward, held the way you start the twist (for example palm down). Glue the key cap on so its tab
    points to your right. In the lock the tab then sits at the rest position, and the twist is counterclockwise
    as you see it (from palm down, your thumb rolls up). The lock is built mirrored for this;
    `LOCK_TWIST = 'cw'` in `cad/params.py` gives the clockwise version.
-3. **Hall sensor.** Lay the DRV5032 board in the pocket under `socket_base`, components down. The pocket is
+3. **Hall sensor.** (A3144 instead: bend its leads 90 degrees so it lies printed face up, and push it up
+   into the square window from below until it sits just under the rotor without touching it; glue it there.)
+   Lay the DRV5032 board in the pocket under `socket_base`, components down. The pocket is
    longer than the board: slide it until its chip sits under the square window on the axis, then hold it
    with two dots of glue. The magnet ends up about 8 mm above the chip, which the DRV5032 detects easily.
 4. **Rotor and plunger.** Turn `socket_housing` upside down. Drop the spring into the straight radial pocket,
