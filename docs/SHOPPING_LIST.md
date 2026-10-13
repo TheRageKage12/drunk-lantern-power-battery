@@ -4,7 +4,7 @@ The same parts as section 2 of the [build guide](BUILD_GUIDE.md), grouped by whe
 the specific item. Amazon delivery dates were read from each listing on 2026-10-13 (default San Francisco
 address; Seattle should be similar). "Prime" means it ships from Amazon. Tick the boxes as you go.
 
-## Amazon (one order, ~$145)
+## Amazon (one order, ~$135)
 
 | ✓ | Item | Listing | Price | Delivery |
 |---|---|---|---|---|
@@ -19,7 +19,6 @@ address; Seattle should be similar). "Prime" means it ships from Amazon. Tick th
 | [ ] | Cable plugs, JST-SM 4-pin pigtail pairs, 20 pairs (2 used) | [mxuteuk (B083GR7FQF)](https://www.amazon.com/dp/B083GR7FQF) | $9.99 | Prime, Oct 14 |
 | [ ] | Vent valve, aquarium check valve, 10 pcs | [AQUANEAT (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | Prime, Oct 14 |
 | [ ] | Spring assortment, 23 sizes (use the ~0.4-0.5 x 5 x 10 mm one) | [Dianrui (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | Prime, Oct 14 |
-| [ ] | Curtain, 0.5 mm frosted PP sheets | [COYOUCO (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Not re-checked today |
 
 ## Vetco Electronics, Bellevue (~$38)
 
@@ -77,8 +76,12 @@ are the matching items on their website (sold there in boxes of 100); the store 
 
 - [ ] **Jar**, food-safe, with a lid you can drill: at most **73 mm across with the lid** and **76 mm tall**.
   [Micro Homebrew](https://www.microhomebrew.com/), Kenmore, (425) 892-8425.
+- [ ] **Curtain sheet**: one clear-frosted **polypropylene** binder divider or report cover, letter size, ~0.3-0.5 mm
+  thick (~$3-5 for a pack). Any office store (Staples, Office Depot, Target). Must say "poly" or "polypropylene";
+  skip PVC/vinyl. Bend a corner hard in the store: PP turns white at the crease but doesn't crack. Clear-frosted
+  lets the green light through; a translucent green one works too and tints it greener.
 - [ ] **Shot glass**, 1.5 oz: at most **52 mm across the top** and **62 mm tall**; a heavy base helps.
   [Bargreen Ellingson](https://www.bargreen.com/locations/seattle), SoDo showroom, Mon-Fri 10-3.
 
-**Total: about $195** (Amazon ~$145, Vetco ~$38, Tacoma Screw ~$12), plus the jar and shot glass, and filament
+**Total: about $190** (Amazon ~$135, Vetco ~$38, Tacoma Screw ~$12), plus the jar and shot glass, and filament
 or tools if you need them.
