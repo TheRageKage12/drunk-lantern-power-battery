@@ -207,7 +207,9 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 7. **Lock wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. Microswitch: NO to D2, COM to
    ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
    about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
-   lantern unplugs from the base cartridge.
+   lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
+   cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are 13 mm wide and
+   will never pass that hole afterwards. The bay floor then rides on the cables until final assembly.
 8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
    `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
    `switch=pressed` should follow, and `battery=` should read within 0.2 V of your meter (see `vcal`). Then
@@ -377,13 +379,15 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    its spigot goes into the top of the drum, 3 x M3x12 from outside. The drum stays with the lantern from now on.
 3. **Bay floor.** Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two
    short wall slots cross the far half, the tube hole and the 7 mm cable hole are beyond the wall line (tube on
-   the right, cables on the left). Feed the tube up through the tube hole. Drop `glass_well` into the long
+   the right, cables on the left; the lock cable and LED leads already pass through it, section 4 step 7, and
+   their plugs go down through the lower dish to the board). Feed the tube up through the tube hole. Drop `glass_well` into the long
    slot; it hangs from its flange.
-4. **Nozzle.** Thread the tube up through `nozzle_guide` from the foot until 5 mm sticks out of the end. Screw
-   the foot down (1 x M3x8), open side toward you, end pointing at the middle.
+4. **Nozzle.** Push the tube up through the hole in `nozzle_guide`'s foot, then press it into the channel
+   along the whole curve (the channel is open on one side) so 5 mm sticks out past the end, pointing down.
+   Screw the foot down (1 x M3x8), open side toward you, the curve reaching toward the middle.
 5. **Lock wall.** Stand the wall in its two slots, lock facing you. Its back closes the nozzle guide's open
-   side; check the tube sits in the channel. Feed the lock cable and the LED leads down the 7 mm cable hole to
-   the board.
+   side; check the tube sits in the channel and its end still points down into the glass slot. Take up the
+   slack in the lock cable and LED leads down through the cable hole.
 6. **Sphere.** Slide `sphere_front`, with the diffuser in it, in from the display side until it sits on the
    lower dish and the wall's four posts touch the diffuser. Slide `sphere_rear` in from your side. Fit the two
    alignment pins, then 4 x M3x10 through the rear half's flange into the front half, and 3 x M3x12 through
