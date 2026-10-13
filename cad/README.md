@@ -32,7 +32,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - Battery: KBT 12 V 1200 mAh Li-ion pack, 70 x 55 x 20 mm (`POWERBANK_*`), flat on the cartridge tray under the deck, socket end toward +Y. The charge jack (8 mm hole) and power switch (6.5 mm hole) sit in the tray's port panel at `PORT_ANGLE`; the drum has a matching notch open at its bottom edge, so it still lifts off. Check the panel holes against your jack and switch.
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
 - Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, plus a 60 mm forearm through the 120 x 96 mm hand opening.
-- Hall board pocket in `socket_base`: 31.6 x 18.4 mm. The DRV5032 board (25.6 x 17.8) slides along it so its chip sits under the window.
+- Hall sensor (`HALL_SENSOR`): the A3144 lies face up in a 4.4 x 3.4 mm pocket on a post on `socket_base`, inside a blind hole in the rotor, ~3 mm from the magnet. With `'DRV5032'` the board goes in a 31.6 x 18.4 mm pocket under the plate instead (~8 mm from the magnet).
 
 ## Budget-build settings
 - `M3_INSERT_HOLE = 2.7` in `params.py`: screws thread straight into the plastic. Set 4.0 for heat-set inserts.

@@ -114,8 +114,22 @@ NUT_AF, NUT_T = 5.8, 2.6
 
 # Hall board (chip DOWN so the JST connector hangs below the plate; the DRV5032 is sensitive enough)
 HALL_POCKET_L, HALL_POCKET_W, HALL_POCKET_D = P.HALL_PCB_L + 0.6, P.HALL_PCB_W + 0.6, P.HALL_PCB_T + 0.2
-SENSOR_WINDOW = 8.0                        # square hole on the axis through the plate (A3144 option: bend it up here)
-MAGNET_TO_SENSOR = (POCKET_FLOOR - (HOUSING_BOT - 0.1 - P.HALL_PCB_T - 0.9))   # ~7.7 mm, see NOTES
+SENSOR_WINDOW = 8.0                        # square hole on the axis through the plate (DRV5032 chip under it)
+# A3144: a post on the base plate rises into a blind hole in the rotor's underside, so the sensor sits ~3 mm from
+# the magnet (the rotor turns around it; both are on the axis). The skin under the key pocket stays closed.
+A3144 = P.HALL_SENSOR == 'A3144'
+ROTOR_SKIN = 1.0                           # rotor floor left under the magnet
+ROTOR_HOLE_TOP = POCKET_FLOOR - ROTOR_SKIN # -5.0: top of the blind hole
+AXIAL_PLAY_DOWN = ROTOR_BOT - HOUSING_BOT  # 1.2: a punch can push the rotor this far toward the base plate
+POST_R = 3.6                               # post on the base plate
+ROTOR_HOLE_R = POST_R + 0.5                # blind hole in the rotor (0.5 radial clearance)
+POST_TOP = ROTOR_HOLE_TOP - AXIAL_PLAY_DOWN - 0.3   # -6.5: the skin clears the sensor even when pushed fully down
+SENSOR_POCKET = (P.A3144_L + 0.3, P.A3144_W + 0.3, P.A3144_T + 0.05)   # face up, flush with the post top
+LEAD_SLOT_W = 1.2                          # the three leads bend down at the body's lead edge (-Y) into this slot
+if A3144:
+    MAGNET_TO_SENSOR = POCKET_FLOOR - (POST_TOP - P.A3144_ELEMENT_DEPTH)          # ~3.0 mm (3.4 with the rotor up)
+else:
+    MAGNET_TO_SENSOR = (POCKET_FLOOR - (HOUSING_BOT - 0.1 - P.HALL_PCB_T - 0.9))   # ~7.7 mm, see NOTES
 
 Z_FACEPLATE_TOP = P.Z_SPHERE_TOP + P.FLOOR     # 311 assembly (top-dish layout only)
 EAR_W, EAR_ANGLES = 10.0, P.SOCKET_EAR_ANGLES   # base-plate ears; socket angle a -> sphere (x, z) = (cos a, -sin a)
@@ -196,6 +210,8 @@ def rotor_solid():
         r = r.faces('>Z').edges(cq.selectors.RadiusNthSelector(0)).chamfer(0.8)
     except Exception:
         pass
+    if A3144:   # blind hole from below for the sensor post
+        r = r.cut(cyl(ROTOR_HOLE_R, ROTOR_BOT - 1, ROTOR_HOLE_TOP))
     return r
 
 
@@ -250,11 +266,19 @@ def base_solid():
         x, y = pol(BASE_SCREW_R, a)
         cuts.append(cyl(P.M3_CLEAR / 2, BASE_BOT - 1, HOUSING_BOT + 1, x, y))
         cuts.append(cyl(P.M3_HEAD_D / 2 + 0.2, BASE_BOT - 1, BASE_BOT + 2.0, x, y))
-    # Hall board pocket from below (long side along X), sensor window on the axis
-    cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(HALL_POCKET_L, HALL_POCKET_W)
-                .extrude(HALL_POCKET_D + 1))
-    cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(SENSOR_WINDOW, SENSOR_WINDOW)
-                .extrude(BASE_T + 2))
+    if A3144:
+        # post up into the rotor, sensor pocket on its tip, lead slot down through the post and the plate
+        pl, pw, pd = SENSOR_POCKET
+        b = b.union(cyl(POST_R, HOUSING_BOT - 0.5, POST_TOP))
+        cuts.append(cq.Workplane('XY').workplane(offset=POST_TOP - pd).rect(pl, pw).extrude(pd + 1))
+        cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).center(0, -pw / 2)
+                    .rect(pl, LEAD_SLOT_W).extrude(POST_TOP - BASE_BOT + 2))
+    else:
+        # Hall board pocket from below (long side along X), sensor window on the axis
+        cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(HALL_POCKET_L, HALL_POCKET_W)
+                    .extrude(HALL_POCKET_D + 1))
+        cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(SENSOR_WINDOW, SENSOR_WINDOW)
+                    .extrude(BASE_T + 2))
     # switch bracket recess (top), its screw hole and captured nut (bottom)
     bt0, bt1 = SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 - 9.0, SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 + 9.0
     bn0, bn1 = SWITCH_N0 - 2.5, SWITCH_N0 + 9.5   # recess spans the body footprint + slide room
@@ -355,7 +379,10 @@ def build():
     sf = _parts_socket_frame()
     out = {}
     for name in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope'):
-        out[name], _SHIFT[name] = _flip_to_bed(sf[name])
+        if name == 'socket_base' and A3144:      # the sensor post stands on the top face: print it bottom down
+            out[name], _SHIFT[name] = sf[name].translate((0, 0, -BASE_BOT)), None
+        else:
+            out[name], _SHIFT[name] = _flip_to_bed(sf[name])
     out['switch_bracket'] = bracket_solid()
     out['plunger'] = plunger_solid()
     out['key_cap'] = key_cap_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.KEY_T))  # flat top down
@@ -395,6 +422,8 @@ def placements():
     m = mount_step()
     # print P = R180(S) + (0,0,dz)  =>  S = R180(P) + (0,0,dz)
     pl = {n: [(X, 180, (0, 0, _SHIFT[n])), m] for n in ('socket_housing', 'rotor', 'socket_base', 'switch_envelope')}
+    if _SHIFT['socket_base'] is None:          # printed bottom down: just lift it back into the socket frame
+        pl['socket_base'] = [((0, 0, 1), 0, (0, 0, BASE_BOT)), m]
     pl['switch_bracket'] = [((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, HOUSING_BOT - BRACKET_T)), m]
     pl['plunger'] = [((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)), m]
     pl['key_cap'] = [(X, 180, (0, 0, POCKET_FLOOR + P.KEY_T)), m]

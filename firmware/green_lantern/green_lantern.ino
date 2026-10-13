@@ -33,9 +33,9 @@
  *     and the prop goes LOCKED; the slower RING_GONE_MS only governs the LOCKED -> IDLE reset
  *
  * Wiring (see docs/BUILD_GUIDE.md and docs/images/wiring.svg):
- *   D1  <- Hall sensor OUT, active LOW when the magnet is present. Adafruit DRV5032 breakout on 3V3/GND
- *          (D1 uses the XIAO's internal pull-up). Alternative: 5 V A3144 with a 1N5819 (anode on D1,
- *          cathode on the sensor OUT) so D1 never sees 5 V.
+ *   D1  <- Hall sensor OUT, active LOW when the magnet is present (D1 uses the XIAO's internal pull-up).
+ *          A3144 on 5 V/GND, its open-collector OUT through a 1N5819 (anode on D1, cathode on OUT) so D1
+ *          never sees 5 V. Alternative: Adafruit DRV5032 breakout on 3V3/GND, OUT straight to D1.
  *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
  *   D3  -> 74AHCT125 ch.1 (pin 2 in, pin 3 out) -> gate of Q1 (pump MOSFET, low side); 10 k from D3 to GND
  *          keeps it off while the XIAO boots. 1N5819 flyback across the pump (stripe to +12 V).

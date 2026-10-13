@@ -37,7 +37,7 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 |---|---|
 | Top dish | A frosted disc in its floor. A ring of LED strip in the hole under it makes the top glow. |
 | Sphere, your side | The hand opening (120 x 96 mm), closed by a curtain of frosted plastic strips that your hand and the glass push through. |
-| Sphere, inside | The **lock wall**, 2.5 cm in front of the centre. On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the DRV5032 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
+| Sphere, inside | The **lock wall**, 2.5 cm in front of the centre. On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
 | Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. The charge jack and the power switch sit in a small panel at the bottom edge on your side. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill: undo them and lift the lantern off; the cartridge stays on the table. To charge: plug the charger into the jack, no need to open it. |
@@ -68,32 +68,29 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 | 5c | Vent valve | [Aquaneat aquarium check valves, 10-pack](https://www.amazon.com/s?k=Aquaneat+aquarium+check+valve+one+way) (or any pet store) | ~$6 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. 4 mm barbs. |
 | 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
-| 7 | Hall sensor | [Adafruit DRV5032 breakout #6051](https://www.adafruit.com/product/6051) | $4.95 | Runs on 3.3 V, very sensitive, either magnet pole works. |
 | 8 | 12 V battery pack | [KBT 12 V 1200 mAh Li-ion pack with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $22 | 70 x 55 x 20 mm, 3 cells, overcharge protection, a DC5521 barrel socket for charging and output, and its own charger. 1200 mAh is well over 100 pours. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
-| | Adafruit shipping | | ~$8 | Only for the Hall sensor now. Ships from Brooklyn in 1-2 business days; USPS Ground Advantage is 2-5 more. |
 
-**Skip the Adafruit order.** Use an A3144 Hall sensor from Vetco ($1.99) instead of the DRV5032, plus a third
-1N5819. The A3144 needs 5 V and a diode on its output (section 4, step 7), reacts to one magnet pole only
-(section 6, step 2), and is less sensitive: it has to sit right under the rotor (section 6, step 3). Only one
-magnet fits the key cap. By my estimate the magnet gives about 30 mT there; most A3144s switch well below that,
-but the datasheet allows up to 35 mT, so check it on the bench (section 6, step 7) before building on. If yours
-doesn't switch, the DRV5032 is also sold by [Jameco](https://www.jameco.com/z/6051-Adafruit-Industries-ScoutMakes-DRV5032-Digital-Magnetic-Hall-Effect-Sensor_2883071.html).
+**Hall sensor alternative.** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
+inside the rotor to about 3 mm from the magnet. If you ever have an Adafruit DRV5032 board (#6051) instead, set
+`HALL_SENSOR = 'DRV5032'` in `cad/params.py` and reprint `rotor` and `socket_base`: it then sits under the plate,
+works on 3.3 V and either magnet pole.
 
 ### 2.2 Pick up locally (or order the Amazon kit in brackets)
 
 | # | Item | Where | Price | Notes |
 |---|---|---|---|---|
+| 7 | Hall sensor, A3144 | [Vetco, VUPN6596](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63) | $1.99 | Runs on 5 V, reacts to one magnet pole. It sits on a post inside the lock, ~3 mm from the magnet: about 90 mT there, 2.5 x its worst-case switch point. |
 | 9 | Lever microswitch, D2F-L size | [Amazon 4-pack, B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4) (Vetco doesn't list sizes for its lever switches) | ~$8 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever. The lock's switch bracket is built for this size: take calipers to the store. |
 | 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
 | 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
-| 12 | Small parts | Vetco | ~$12 | 2 x 1N5819 diodes, 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
+| 12 | Small parts | Vetco | ~$12 | 3 x 1N5819 diodes, 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
 | 12a | Power switch | Vetco ([or a 5-pack, search](https://www.amazon.com/s?k=mini+toggle+switch+SPST+6mm+panel+mount)) | ~$3 | Mini toggle, SPST (on-off), 1/4" or M6 bushing (6.5 mm panel hole), rated 3 A or more at 12 V. |
 | 12b | Charge jack and lead | Vetco ([or the Amazon kit, search](https://www.amazon.com/s?k=DC5521+panel+mount+jack+female+nut)) | ~$4 | A panel-mount DC5521 (5.5 x 2.1 mm) female jack with an M8 nut, for the 8 mm hole. Plus a DC5521 **male** plug with bare leads, if the pack didn't come with one, to take power out of the pack's socket. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
 | 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
 
-**Total: about $190 with the Vetco A3144, or ~$200 with the Adafruit DRV5032; battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
+**Total: about $190, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
 
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
@@ -165,7 +162,7 @@ Print these first, before any big part, and check them:
 | `handle_arc_right` | 120 x 132 x 10 | flat | no | green | 17 |
 | `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 22 |
 | `rotor` | 44 x 37 x 8 | top face down | no | green | 5 |
-| `socket_base` | 95 x 79 x 3 | top face down | no | any | 12 |
+| `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 12 |
 | `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
@@ -211,10 +208,10 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    to the LED strip's − wire. The pump's + and the strip's + go to the +12 V rail.
 6. **Flyback diode.** Solder a 1N5819 across the pump's two wires, stripe on the + side. It protects Q1 from
    the motor's voltage spike when it switches off.
-7. **Lock wires.** DRV5032: VIN to the XIAO's 3V3, GND to ground, OUT to D1. (A3144 instead: facing its
-   printed side, leads down, pin 1 to **+5 V**, pin 2 to ground, pin 3 to the stripe (cathode) of a 1N5819
-   whose other end goes to D1. The diode lets it pull D1 low but never puts 5 V on it.) Microswitch: NO to D2, COM to
-   ground. Use one 4-wire cable (3V3, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
+7. **Lock wires.** A3144, facing its printed side with the leads down: pin 1 to **+5 V**, pin 2 to ground,
+   pin 3 to the stripe (cathode) of a 1N5819 whose other end goes to D1. The diode lets the sensor pull D1 low
+   but never puts 5 V on it; put it on the board. Microswitch: NO to D2, COM to ground. Use one 4-wire cable
+   (5V, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
    about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
    lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
    cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are 13 mm wide and
@@ -290,7 +287,7 @@ pump run.
 
 Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_cap`. Plus 3 x M3x8 and 3
 nuts for the base plate, 1 x M3x6 and a nut for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
-lock wall, the spring, the microswitch, the DRV5032 board and one magnet.
+lock wall, the spring, the microswitch, the A3144 and one magnet.
 
 The lock is screwed to the face of the lock wall with its ring pocket facing you, so you seat the ring by
 punching in. The rotor is a flat 36 mm disc. Under the housing's front lip its edge carries three features: a
@@ -299,18 +296,19 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
 
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing` and the one under
    `socket_base`. A dab of super glue holds each.
-2. **Ring key.** Glue the magnet into the pocket under `key_cap` (either pole works with the DRV5032; with an
-   A3144, first check which face switches it on, using the wired sensor and `status`, and glue that face down). Scuff
+2. **Ring key.** The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and
+   `status` running, hold each face of the magnet to the sensor's printed face: the face that gives
+   `ring=present` must face **out** of the pocket under `key_cap`. Mark it, then glue the magnet in. Scuff
    the ring's flat face and the key cap. Put the ring on your left hand and make the fist you will punch with,
    ring face forward, held the way you start the twist (for example palm down). Glue the key cap on so its tab
    points to your right. In the lock the tab then sits at the rest position, and the twist is counterclockwise
    as you see it (from palm down, your thumb rolls up). The lock is built mirrored for this;
    `LOCK_TWIST = 'cw'` in `cad/params.py` gives the clockwise version.
-3. **Hall sensor.** (A3144 instead: bend its leads 90 degrees so it lies printed face up, and push it up
-   into the square window from below until it sits just under the rotor without touching it; glue it there.)
-   Lay the DRV5032 board in the pocket under `socket_base`, components down. The pocket is
-   longer than the board: slide it until its chip sits under the square window on the axis, then hold it
-   with two dots of glue. The magnet ends up about 8 mm above the chip, which the DRV5032 detects easily.
+3. **Hall sensor.** `socket_base` has a short round post in the middle with a small pocket on its tip. Bend
+   the A3144's three leads 90 degrees right at the body, feed them down the slot at the pocket's edge and out
+   through the bottom of the plate, and lay the sensor in the pocket **printed face up** (flush with the top).
+   A dot of glue holds it. Solder the cable to the leads under the plate and sleeve each joint. The rotor turns
+   around the post; the magnet ends up about 3 mm above the sensor.
 4. **Rotor and plunger.** Turn `socket_housing` upside down. Drop the spring into the straight radial pocket,
    then the `plunger` nose-first on top. Hold it with a finger and lower the `rotor` into the bore, stop lug
    down into its channel (it fits one way only). Twist to 45 degrees and let go: it must snap back every time.
@@ -513,7 +511,7 @@ flattened.
 
 | Symptom | Check |
 |---|---|
-| Ring not detected | `status` with the ring in. Is the DRV5032 chip under the window, on the axis? Is the magnet glued in the key cap? |
+| Ring not detected | `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face facing out of the key cap (section 6, step 2)? Is pin 1 on 5 V? |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump hums, no flow | Tube not seated under the rollers, head cap open, or the wrong (thin-walled) tube. |
 | Pours shrink after a few in a row, jar dents in | The vent valve is in backwards (arrow must point into the jar) or blocked. |

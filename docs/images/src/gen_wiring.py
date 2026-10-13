@@ -1,5 +1,5 @@
 """Wiring diagram for the budget build: 12 V Li-ion pack with charge jack, power switch and battery sense, LM2596 buck, XIAO RP2040, 74AHCT125 gate
-driver, two low-side MOSFETs (pump, plain green LED strip), DRV5032 Hall sensor, D2F-L switch.
+driver, two low-side MOSFETs (pump, plain green LED strip), A3144 Hall sensor (5 V, output through a diode), D2F-L switch.
 Writes ../wiring.svg."""
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -126,7 +126,7 @@ s.text(206, 254, "OUT+ 5 V", size=10, color=RED)
 s.wire([(200, 260), (262, 260)], RED, sw=2.4)
 s.path("M262,252 L262,268 L276,260 Z M276,252 L276,268", stroke=INK, sw=1.6, fill="#dddddd")
 s.text(269, 244, "1N5819", size=10, anchor="middle")
-s.text(212, 284, "stripe toward the XIAO", size=9.5, color="#555")
+s.lines(278, 280, ["stripe toward", "the XIAO"], size=9.5, color="#555", anchor="end")
 s.wire([(276, 260), (330, 260)], RED, sw=2.4)
 
 # ---------------------------------------------------------------- XIAO
@@ -136,7 +136,6 @@ box(XX, XY, XW, XH, "XIAO RP2040")
 s.lines(XX + XW / 2, XY + XH + 16, ["3.3 V logic. Program it over USB-C", "with S1 off."], size=10, anchor="middle", color="#444")
 pin(xl, 260, "5V", "in-left", RED)
 pin(xl, 290, "GND", "in-left", BLACK)
-pin(xl, 320, "3V3", "in-left", MAG)
 pin(xr, 350, "D4", "in-right", GREEN)
 pin(xr, 380, "D3", "in-right", GREEN)
 pin(xr, 420, "D1", "in-right", GREEN)
@@ -211,12 +210,17 @@ stage(1070, "Kamoer KPHM200", ["12 V peristaltic pump", "~0.7 A"], 680, "Q1 pump
 s.rect(30, 560, 440, 200, fill="none", stroke=GREY, sw=1.2, rx=8, dash="6,4")
 s.rect(38, 568, 392, 17, fill="#ffffff", stroke="#ffffff", sw=0)
 s.text(42, 581, "the lock (on the lock wall in the sphere): one cable down behind the wall to the base", size=11, weight="bold", color="#555")
-box(40, 590, 190, 70, "DRV5032 Hall sensor", ["Adafruit 6051. Chip on the", "rotor axis, under the magnet"], fill="#f3e8ff")
-pin(230, 610, "VIN", "in-right", MAG)
+box(40, 590, 190, 70, "A3144 Hall sensor", ["on a post inside the rotor,", "~3 mm under the magnet"], fill="#f3e8ff")
+pin(230, 610, "VCC", "in-right", RED)
 pin(230, 628, "OUT", "in-right", GREEN)
 pin(230, 646, "GND", "in-right", BLACK)
-s.wire([(230, 610), (280, 610), (280, 320), (xl, 320)], MAG, sw=2)
-s.wire([(230, 628), (515, 628), (515, 420), (xr, 420)], GREEN, sw=2)
+s.wire([(230, 610), (285, 610), (285, 260)], RED, sw=2)
+dot(285, 260, RED)
+# 1N5819 in the output: the sensor can pull D1 low but never puts 5 V on it (stripe toward the sensor)
+s.wire([(230, 628), (356, 628)], GREEN, sw=2)
+s.path("M372,620 L372,636 L358,628 Z M358,620 L358,636", stroke=INK, sw=1.6, fill="#dddddd")
+s.wire([(372, 628), (515, 628), (515, 420), (xr, 420)], GREEN, sw=2)
+s.lines(345, 646, ["1N5819, stripe", "to the sensor"], size=9.5, color="#555")
 s.wire([(230, 646), (250, 646), (250, GND_Y)], BLACK, sw=1.8)
 dot(250, GND_Y)
 box(40, 680, 190, 64, "D2F-L microswitch", ["pressed by the rotor cam", "at ~40 deg of twist"], fill="#f3e8ff")

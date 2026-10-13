@@ -119,7 +119,7 @@ def lab(x, y, rows, tx, ty, anchor="start", size=9.5):
 cx, cy = 330, 262
 PANEL_CX = cx
 lab(165, 112, ["cam lobe on the rim", "(50\u201370\u00b0 at rest, 3 mm lift)"], *pol(cx, cy, 23, 60), anchor="end")
-lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall board"], *pol(cx, cy, 18.3, 10), anchor="end")
+lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall sensor post"], *pol(cx, cy, 18.3, 10), anchor="end")
 lab(165, 200, ["housing, 76 mm across: its", "face is flush with the ring pocket"], *pol(cx, cy, 38, 300), anchor="end")
 lab(165, 240, ["stop lug (printed, at %s o'clock)" % ("3" if MIRROR else "9"), "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
 lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d74 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
@@ -160,17 +160,17 @@ s.rect(cx + 70, Y0, 5, 9, fill="#f4f4f4", sw=1.2)
 s.rect(cx - 66, Y0 + 3, 132, 54, fill="#bdbdbd", sw=1.2)
 s.rect(cx - 72, Y0 + 9, 6, 6, fill="#9e9e9e", sw=1)            # flange tab (left, 9 o'clock)
 s.rect(cx - 36, Y0 + 3, 72, 8, fill="#8d8d8d", sw=1)           # key pocket
-s.rect(cx - 30, Y0 + 20, 60, 37, fill="#ffffff", sw=1)         # recess from below
+s.rect(cx - 16, Y0 + 18, 32, 39, fill="#ffffff", sw=1)         # blind hole from below (1 mm skin under the magnet)
 # ring key cap in the pocket, magnet centred
 s.rect(cx - 36, Y0 + 3, 72, 8, fill="#2e7d32", sw=1)
 s.rect(cx - 9, Y0 + 4, 18, 6, fill="#616161", sw=0.8)
 s.text(cx, Y0 + 9, "N  S", size=6, anchor="middle", color="#fff", weight="bold")
 # the ring standing on its key cap
 s.circle(cx, Y0 - 34, 34, fill="none", stroke="#2e7d32", sw=9)
-# Hall sensor on a post under the rotor floor, on the axis
-s.rect(cx - 4, Y0 + 23, 8, 5, fill="#222", sw=0.6)             # sensor chip
-s.rect(cx - 22, Y0 + 28, 44, 5, fill="#1a237e", sw=0.8)        # breakout PCB
-s.rect(cx + 14, Y0 + 33, 7, 64, fill="#d7d7d7", sw=1)          # post to the floor
+# A3144 on a post that rises from the base plate into the rotor's blind hole, on the axis
+s.rect(cx - 12, Y0 + 30, 24, 67, fill="#d7d7d7", sw=1)         # post (stationary; the rotor turns around it)
+s.rect(cx - 8, Y0 + 30, 16, 6, fill="#222", sw=0.6)            # A3144, printed face up
+s.wire([(cx - 6, Y0 + 36), (cx - 6, Y0 + 125)], "#7c3aed", sw=1.2, dash="4,3")   # leads down the post
 # switch under the cam lobe (right): body on the floor, lever on top
 s.rect(cx + 64, Y0 + 70, 38, 17, fill="#e8e8e8", sw=1.2)
 s.path(f"M{cx + 98},{Y0 + 68} L{cx + 66},{Y0 + 62}", stroke=INK, sw=2.2)
@@ -195,7 +195,7 @@ lab(LXS, 762, ["housing puck 76 OD, 6.7 deep;", "base plate 3.5 mm, 3× M3 + nut
 RXS = 760
 lab(RXS, 567, ["6×2 mm magnet in the key cap,", "on the rotation axis"], cx + 9, Y0 + 7, anchor="start", size=9.5)
 lab(RXS, 612, ["rotor 36 OD × 8 flat disc; its rim", "lug rides under the housing's lip"], cx + 66, Y0 + 20, anchor="start", size=9.5)
-lab(RXS, 657, ["DRV5032 breakout in the base plate,", "chip down under the sensor window,", "~8 mm below the magnet"], cx + 4, Y0 + 26, anchor="start", size=9.5)
+lab(RXS, 657, ["A3144 on a post up inside the rotor,", "~3 mm below the magnet; the rotor", "turns around the post"], cx + 8, Y0 + 33, anchor="start", size=9.5)
 lab(RXS, 707, ["D2F-L on its pegged bracket in the", "base plate (lobe dashed: at 50–70°,", "out of this plane)"], cx + 90, Y0 + 70, anchor="start", size=9.5)
 lab(RXS, 757, ["cables through the wall window,", "down behind the wall to the base"], cx + 40, Y0 + 115, anchor="start", size=9.5)
 

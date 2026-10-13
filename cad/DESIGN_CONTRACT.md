@@ -289,3 +289,9 @@ exception in build.py output.
   (-2.7, -31.1). Projectile estimate: lands 19.2-19.4 mm from the glass centre from the last drop up to a
   1.5x pulse peak at 100 %. Guide top 1.3 mm under the lowest back LED row; tube exit unchanged at (-37, -31.1).
 - Jar vent: a one-way (aquarium) check valve in the lid instead of an open hole, so a tipped jar can't leak.
+- Hall sensor (rev 9d): `HALL_SENSOR = 'A3144'` (Vetco). Through the 4.5 mm rotor floor the A3144 sat ~5.5 mm from
+  the 6x2 magnet: ~30 mT against a datasheet operate point of up to 35 mT. Now `rotor` has a 8.2 mm blind hole
+  from below (1 mm skin under the magnet) and `socket_base` a 7.2 mm post with the sensor pocket on its tip,
+  POST_TOP = skin - axial play (1.2) - 0.3, so a punch can't reach the sensor. Magnet to Hall element 3.0 mm
+  (3.4 with the rotor at the lip): ~88 / 73 mT for N35. `tests/test_socket.py` checks the pushed-in rotor
+  against the post. `'DRV5032'` restores the board pocket and window.

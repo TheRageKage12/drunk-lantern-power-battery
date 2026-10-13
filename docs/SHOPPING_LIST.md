@@ -22,7 +22,7 @@ are from its website (October 2026); prices with "~" are estimates, so confirm a
 
 [12718 Northup Way STE 100](https://vetco.net), (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30.
 
-- [ ] **Hall sensor**: [A3144 (VUPN6596)](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63), $1.99. Wired to 5 V through a diode, and reacts to one magnet pole only: see guide section 2.1 for the bench check.
+- [ ] **Hall sensor**: [A3144 (VUPN6596)](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63), $1.99. Sits on a post inside the lock, ~3 mm from the magnet. Runs on 5 V with a diode on its output, and reacts to one magnet pole only (guide section 6, step 2).
 - [ ] **Gate driver**: [74AHCT125 quad level-shifter (VUPN524)](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96), $2.95. It must be **AHCT**, not HC.
 - [ ] **2 x MOSFET**: [IRLZ44N logic-level (VUPN1682)](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151), $2.67 each. The page title says IRLZ44N and its web address says IRLB8721; both are logic-level and have the same pin order, so either works.
 - [ ] **Power switch**: [SPST mini toggle, on-off, with wire leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a), $4.95. 1/4" bushing, 6 A at 12 V.

@@ -85,7 +85,7 @@
 <circle cx="270.24424713887373" cy="227.5" r="2.2" fill="#999"/>
 <text x="165" y="150" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">rotor drops in from below; the</text>
 <text x="165" y="162" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">base plate closes the housing</text>
-<text x="165" y="174" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">and carries the Hall board</text>
+<text x="165" y="174" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">and carries the Hall sensor post</text>
 <path d="M170,146 L320.46671504608554,207.93405435962978" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="320.46671504608554" cy="207.93405435962978" r="2.2" fill="#999"/>
 <text x="165" y="200" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222222">housing, 76 mm across: its</text>
@@ -163,14 +163,14 @@
 <rect x="454" y="585" width="132" height="54" rx="0" fill="#bdbdbd" stroke="#222222" stroke-width="1.2"/>
 <rect x="448" y="591" width="6" height="6" rx="0" fill="#9e9e9e" stroke="#222222" stroke-width="1"/>
 <rect x="484" y="585" width="72" height="8" rx="0" fill="#8d8d8d" stroke="#222222" stroke-width="1"/>
-<rect x="490" y="602" width="60" height="37" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1"/>
+<rect x="504" y="600" width="32" height="39" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1"/>
 <rect x="484" y="585" width="72" height="8" rx="0" fill="#2e7d32" stroke="#222222" stroke-width="1"/>
 <rect x="511" y="586" width="18" height="6" rx="0" fill="#616161" stroke="#222222" stroke-width="0.8"/>
 <text x="520" y="591" font-size="6" text-anchor="middle" font-weight="bold" fill="#fff">N  S</text>
 <circle cx="520" cy="548" r="34" fill="none" stroke="#2e7d32" stroke-width="9"/>
-<rect x="516" y="605" width="8" height="5" rx="0" fill="#222" stroke="#222222" stroke-width="0.6"/>
-<rect x="498" y="610" width="44" height="5" rx="0" fill="#1a237e" stroke="#222222" stroke-width="0.8"/>
-<rect x="534" y="615" width="7" height="64" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1"/>
+<rect x="508" y="612" width="24" height="67" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1"/>
+<rect x="512" y="612" width="16" height="6" rx="0" fill="#222" stroke="#222222" stroke-width="0.6"/>
+<path d="M514,618 L514,707" fill="none" stroke="#7c3aed" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
 <rect x="584" y="652" width="38" height="17" rx="0" fill="#e8e8e8" stroke="#222222" stroke-width="1.2"/>
 <path d="M618,650 L586,644" fill="none" stroke="#222222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="584" y="669" width="38" height="10" rx="0" fill="#d7d7d7" stroke="#222222" stroke-width="1"/>
@@ -211,11 +211,11 @@
 <text x="760" y="624" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">lug rides under the housing's lip</text>
 <path d="M755,608 L586,602" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="586" cy="602" r="2.2" fill="#999"/>
-<text x="760" y="657" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">DRV5032 breakout in the base plate,</text>
-<text x="760" y="669" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">chip down under the sensor window,</text>
-<text x="760" y="681" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">~8 mm below the magnet</text>
-<path d="M755,653 L524,608" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="524" cy="608" r="2.2" fill="#999"/>
+<text x="760" y="657" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">A3144 on a post up inside the rotor,</text>
+<text x="760" y="669" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">~3 mm below the magnet; the rotor</text>
+<text x="760" y="681" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">turns around the post</text>
+<path d="M755,653 L528,615" fill="none" stroke="#999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="528" cy="615" r="2.2" fill="#999"/>
 <text x="760" y="707" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">D2F-L on its pegged bracket in the</text>
 <text x="760" y="719" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">base plate (lobe dashed: at 50–70°,</text>
 <text x="760" y="731" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">out of this plane)</text>
