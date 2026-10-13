@@ -77,7 +77,9 @@ are the matching items on their website (sold there in boxes of 100); the store 
 - [ ] **Jar**, food-safe, with a lid you can drill: at most **73 mm across with the lid** and **76 mm tall**.
   [Micro Homebrew](https://www.microhomebrew.com/), Kenmore, (425) 892-8425.
 - [ ] **Curtain sheet**: one clear-frosted **polypropylene** binder divider or report cover, letter size, ~0.3-0.5 mm
-  thick (~$3-5 for a pack). Any office store (Staples, Office Depot, Target). Must say "poly" or "polypropylene";
+  thick (~$1-5). School/office aisle at Target, Fred Meyer, Office Depot/OfficeMax: a translucent plastic
+  2-pocket folder (e.g. Five Star) or plastic dividers. Home Depot doesn't carry a good match (its thin plastic is
+  floppy polyethylene drop cloth; its sheets are rigid acrylic/polycarbonate or thick Coroplast). Must say "poly" or "polypropylene";
   skip PVC/vinyl. Bend a corner hard in the store: PP turns white at the crease but doesn't crack. Clear-frosted
   lets the green light through; a translucent green one works too and tints it greener.
 - [ ] **Shot glass**, 1.5 oz: at most **52 mm across the top** and **62 mm tall**; a heavy base helps.
