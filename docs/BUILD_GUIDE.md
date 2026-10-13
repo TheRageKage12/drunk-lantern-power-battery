@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$190)
+# Green Lantern power battery that pours a shot: build guide (budget build, ~$200)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 18 cm across, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -61,14 +61,14 @@ Vetco parts were not checked listing by listing. Confirm at checkout.
 |---|---|---|---|---|
 | 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
 | 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $14 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. |
-| 3 | LED strip | [12 V green LED strip, single colour](https://www.amazon.com/s?k=12V+green+LED+strip+single+color+2835+60+LED) | ~$12 | Pick: 12 V, green only (not RGB), 2835 LEDs, 60 LEDs/m, **8 mm wide**, cuttable every 3 LEDs (5 cm). You use 75 cm in 15 pieces. |
-| 4 | Buck converter | [LM2596 step-down module, multipack](https://www.amazon.com/s?k=LM2596+buck+converter+module) | ~$8 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
+| 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
+| 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | ~$7 | 1 in the ring key (the pack is the smallest sensible buy). |
-| 5b | Cable plugs | [JST-SM 2-pin and 4-pin connector pairs (LED-strip connector kit)](https://www.amazon.com/s?k=JST+SM+2+pin+4+pin+connector+kit) | ~$7 | One 4-pin plug in the lock cable and one 2-pin plug in the LED leads, so the lantern unplugs from the base cartridge. |
-| 5c | Vent valve | [Aquaneat aquarium check valves, 10-pack](https://www.amazon.com/s?k=Aquaneat+aquarium+check+valve+one+way) (or any pet store) | ~$6 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. 4 mm barbs. |
+| 5b | Cable plugs | [JST-SM 4-pin pigtail pairs, 20 pairs (B083GR7FQF)](https://www.amazon.com/dp/B083GR7FQF) | $9.99 | Two pairs used: one in the lock cable, one in the LED leads (two of its four wires each for + and −), so the lantern unplugs from the base cartridge. |
+| 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
 | 5a | Curtain | [COYOUCO 0.5 mm frosted PP sheets, 10-pack (B0FM3YRGG4)](https://www.amazon.com/dp/B0FM3YRGG4) | ~$10 | Semi-transparent polypropylene: flexes, lets the light through, hides the inside. One sheet makes the curtain. Locally: any frosted poly report cover or binder divider (office store) does the same job. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | ~$10 | |
-| 8 | 12 V battery pack | [KBT 12 V 1200 mAh Li-ion pack with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $22 | 70 x 55 x 20 mm, 3 cells, overcharge protection, a DC5521 barrel socket for charging and output, and its own charger. 1200 mAh is well over 100 pours. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
+| 8 | 12 V battery pack | [KBT 12 V 2400 mAh Li-ion pack, bare leads, with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $21.99 | 70 x 55 x **40** mm, 6 cells, protection board (over-charge, over-discharge, short circuit), bare leads and its own 12.6 V charger. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
 
 **Hall sensor alternative.** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
 inside the rotor to about 3 mm from the magnet. If you ever have an Adafruit DRV5032 board (#6051) instead, set
@@ -87,13 +87,13 @@ works on 3.3 V and either magnet pole.
 | 12a | Power switch | Vetco ([or a 5-pack, search](https://www.amazon.com/s?k=mini+toggle+switch+SPST+6mm+panel+mount)) | ~$3 | Mini toggle, SPST (on-off), 1/4" or M6 bushing (6.5 mm panel hole), rated 3 A or more at 12 V. |
 | 12b | Charge jack and lead | Vetco ([or the Amazon kit, search](https://www.amazon.com/s?k=DC5521+panel+mount+jack+female+nut)) | ~$4 | A panel-mount DC5521 (5.5 x 2.1 mm) female jack with an M8 nut, for the 8 mm hole. Plus a DC5521 **male** plug with bare leads, if the pack didn't come with one, to take power out of the pack's socket. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
-| 14 | Compression spring | Vetco (Hillman, $1.29) or any spring drawer | ~$1 | 0.5 mm wire, 5 mm outside diameter, about 10 mm long. Bring calipers. |
-| 15 | Super glue | anywhere | ~$5 | For the magnets and the key cap. |
+| 14 | Compression spring | [Dianrui spring assortment, 23 sizes (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | You need one about 0.4-0.5 mm wire, 5 mm outside diameter, 10 mm long; the kit's sizes are printed on the box. |
+| 15 | Super glue | [Loctite Super Glue Gel Control (B0006HUJCQ)](https://www.amazon.com/dp/B0006HUJCQ) | $3.82 | For the magnets and the key cap. |
 
-**Total: about $190, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
+**Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
 
 - **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
-- **A food-safe jar no bigger than 76 mm across and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
+- **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
 - Basic tools: soldering iron, multimeter, calipers, a drill with 2.5 mm and 6 mm bits, flush cutters.
 
@@ -187,8 +187,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 
 1. **XIAO and U1.** Solder two 1x7 female header strips 15.24 mm apart for the XIAO, or solder it straight to
    the board. Solder the 14-pin DIP socket for the 74AHCT125 (U1).
-2. **12 V in.** Plug the bare-wire DC5521 lead into the pack's socket and check its polarity with the meter
-   (usually red +, about **12 V**). Its + goes two ways: to the charge jack's centre pin and to one tag of the
+2. **12 V in.** Check the pack's two bare leads with the meter (red +, about **12 V**). Its + goes two ways: to the charge jack's centre pin and to one tag of the
    power switch S1. Its − goes to the jack's outer contact and to ground. S1's other tag is the +12 V rail.
    Solder C2 (2200 µF 16 V) across the rail, stripe (−) to ground. The jack sits **before** the switch, so the
    pack charges with S1 off and nothing else connected. Mount the jack (8 mm hole) and S1 (6.5 mm hole) in the
@@ -212,7 +211,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    pin 3 to the stripe (cathode) of a 1N5819 whose other end goes to D1. The diode lets the sensor pull D1 low
    but never puts 5 V on it; put it on the board. Microswitch: NO to D2, COM to ground. Use one 4-wire cable
    (5V, HALL, SW, GND) from the lock down to the board, with the 4-pin plug
-   about 10 cm from the board. Put the 2-pin plug in the LED leads the same way. These two plugs are where the
+   about 10 cm from the board. Put the second 4-pin plug in the LED leads the same way (two wires for +, two for −). These two plugs are where the
    lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
    cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are 13 mm wide and
    will never pass that hole afterwards. The bay floor then rides on the cables until final assembly.
@@ -355,18 +354,18 @@ between 33 and 45 degrees, and a ramp that pushes the spring plunger out so the 
 
 ![cutaway](images/cad-cutaway.png)
 
-Cut the LED strip into 15 pieces of 3 LEDs (5 cm each, cut on the copper pads). Every piece is wired in
-parallel: all + pads together, all − pads together, with thin wire. Direction doesn't matter on a
-single-colour strip.
+Cut the COB strip on its marked cut lines (every 25 mm) into 7 pieces: four of 10 cm, two of 5 cm and one of
+25 cm. Every piece is wired in parallel: all + pads together, all − pads together, with thin wire. Direction
+doesn't matter on a single-colour strip.
 
-1. **Back of the wall (display window).** Two pieces end to end in each of the 4 channels on the back of
+1. **Back of the wall (display window).** One 10 cm piece in each of the 4 channels on the back of
    `lock_wall`, LEDs facing out.
-2. **Face of the wall (hand opening).** One piece in each of the two vertical channels beside the lock. Pass
+2. **Face of the wall (hand opening).** One 5 cm piece in each of the two vertical channels beside the lock. Pass
    their wires to the back through the small hole at the bottom of each channel.
 3. **Lock.** Screw the lock onto the wall (section 6, step 8). Bring one + and one − lead for the whole wall,
    about 40 cm long, together with the lock cable.
-4. **Top.** Stick 5 pieces around the inside of the hole in the floor of `dish_upper`, LEDs facing the
-   centre: the hole wall is 8 mm tall, the same as the strip. Let their leads hang down from the display side
+4. **Top.** Stick the 25 cm piece around the inside of the hole in the floor of `dish_upper`, LEDs facing
+   the centre: it goes once round (the hole is 25.1 cm around) and the hole wall is 8 mm tall, the same as the strip. Let their leads hang down from the display side
    of the hole, so they fall behind the lock wall. Screw `top_diffuser` into the counterbore above them
    (4 x M3x8 flat-head, from above).
 5. **Curtain.** From one frosted sheet, cut 13 strips 12 mm wide and 97 mm long. Lay them side by side, each
@@ -382,7 +381,7 @@ single-colour strip.
 Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
 1. **Cartridge.** On `base_tray`: the LM2596 in its pocket on the right, the battery pack flat in the middle,
-   socket end toward the port panel, held with a strap. Jack and switch in the panel, nuts tight. `base_deck` drops in on top of it (3 x M3x8 into the pillars). Jar in its ring, pump in
+   leads toward the port panel. The deck sits 2 mm above it and holds it down (a thin strap is optional). Jack and switch in the panel, nuts tight. `base_deck` drops in on top of it (3 x M3x8 into the pillars). Jar in its ring, pump in
    its saddles. Electronics board on the deck's vertical panel (4 x M3x6).
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:

@@ -295,3 +295,10 @@ exception in build.py output.
   POST_TOP = skin - axial play (1.2) - 0.3, so a punch can't reach the sensor. Magnet to Hall element 3.0 mm
   (3.4 with the rotor at the lip): ~88 / 73 mT for N35. `tests/test_socket.py` checks the pushed-in rotor
   against the post. `'DRV5032'` restores the board pocket and window.
+- Battery (rev 9e): KBT 12 V 2400 mAh, 70 x 55 x 40 mm (6 cells; the 1200 mAh pack's 1.2 A rating is at our
+  ~1.3 A peak with a COB strip). The deck rises 18 mm (DECK_GAP 4 -> 2, the deck now holds the pack down).
+  Fit checks pass, but the closest gaps are now radial, to the lower dish's inner wall above z 107: pump
+  envelope top corner 0.98 mm, jar envelope 0.51 mm (the real jar, <= 73 mm with its lid, has ~2 mm). The
+  pump envelope is an estimate: measure the head before printing base and dish_lower.
+- LED strip: green COB, 8 mm, cut every 25 mm (HAMRVL B0CKYFLZFQ): back rows one 10 cm piece each, front
+  columns 5 cm each, the top ring one 25 cm piece; ~0.6 A estimated for 75 cm.

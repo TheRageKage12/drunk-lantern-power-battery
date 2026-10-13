@@ -59,7 +59,7 @@ GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and 
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 70.0, 55.0, 20.0   # KBT 12 V Li-ion pack (3 cells, overcharge protection), flat on the tray
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 70.0, 55.0, 40.0   # KBT 12 V 2400 mAh Li-ion pack (6 cells, 2 layers, protection board), flat on the tray
 PORT_ANGLE = 90.0           # charge jack + power switch panel in the base's bottom band, on the owner's side
 PORT_W, PORT_H = 42.0, 12.0 # notch in the drum's bottom band (open at the bottom); the tray's panel fills it
 PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) and mini toggle switch (1/4" or M6 bushing)

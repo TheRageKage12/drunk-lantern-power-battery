@@ -70,11 +70,11 @@ PILLAR_S = 9.0                                        # square pillars
 PILLAR_X = BANK_HALF_W + 1.0 + PILLAR_S / 2           # 33: inner faces also guide the bank sideways
 PILLAR_Y = (-55.0, 0.0, 55.0)
 PILLAR_INSERTS = ((PILLAR_X, 0.0), (-PILLAR_X, 0.0), (PILLAR_X, 55.0))   # 3 = unambiguous orientation
-DECK_GAP = 4.0                                        # over the bank, room for the straps
-DECK_Z0 = P.FLOOR + P.POWERBANK_T + DECK_GAP          # MATING: deck underside (26)
+DECK_GAP = 2.0                                        # over the pack: holds it down (a thin strap still fits)
+DECK_Z0 = P.FLOOR + P.POWERBANK_T + DECK_GAP          # MATING: deck underside (44)
 PILLAR_H = DECK_Z0 - P.FLOOR
 DECK_T = 3.0
-DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (29)
+DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (47)
 DECK_R = R_IN - P.FIT                                 # drops in from the open top
 DECK_PORT_NOTCH = (30.0, 10.0)                        # notch in the deck edge at +Y to see the bank's ports
 

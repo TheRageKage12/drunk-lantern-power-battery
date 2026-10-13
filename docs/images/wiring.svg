@@ -29,10 +29,9 @@
 <text x="1270" y="818" font-size="11" text-anchor="end" font-weight="bold" fill="#222222">GND rail</text>
 <rect x="24" y="84" width="170" height="90" rx="6" fill="#f5f5f5" stroke="#222222" stroke-width="1.4"/>
 <text x="109.0" y="104" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">12 V Li-ion pack</text>
-<text x="109.0" y="120" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">KBT 1200 mAh, 3 cells,</text>
-<text x="109.0" y="133" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">protection board inside;</text>
-<text x="109.0" y="146" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">its DC5521 socket + the</text>
-<text x="109.0" y="159" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">included bare-wire lead</text>
+<text x="109.0" y="120" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">KBT 2400 mAh, 6 cells,</text>
+<text x="109.0" y="133" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">protection board inside,</text>
+<text x="109.0" y="146" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">bare leads</text>
 <text x="198" y="106" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">+</text>
 <text x="198" y="162" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">-</text>
 <path d="M194,112 L300,112" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -162,8 +161,8 @@
 <path d="M537.0,522 L553.0,522 M539.72,527.0 L550.28,527.0 M543.08,532.0 L546.92,532.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="830" y="250" width="140" height="70" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.4"/>
 <text x="900.0" y="270" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">Green LED strip</text>
-<text x="900.0" y="286" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">plain 12 V, 75 cm in 15 pieces,</text>
-<text x="900.0" y="299" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">all in parallel, ~0.35 A</text>
+<text x="900.0" y="286" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">green COB, 75 cm in 7 pieces,</text>
+<text x="900.0" y="299" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">all in parallel, ~0.6 A</text>
 <path d="M860,120 L860,250" fill="none" stroke="#f77f00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="860" cy="120" r="3.4" fill="#f77f00"/>
 <text x="865" y="246" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">+</text>

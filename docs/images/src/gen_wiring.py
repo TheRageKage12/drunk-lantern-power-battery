@@ -63,7 +63,7 @@ s.wire([(16, GND_Y), (W - 20, GND_Y)], BLACK, sw=3)
 s.text(W - 20, GND_Y + 18, "GND rail", size=11, anchor="end", weight="bold")
 
 # ---------------------------------------------------------------- KBT pack, charge jack, power switch S1
-box(24, 84, 170, 90, "12 V Li-ion pack", ["KBT 1200 mAh, 3 cells,", "protection board inside;", "its DC5521 socket + the", "included bare-wire lead"])
+box(24, 84, 170, 90, "12 V Li-ion pack", ["KBT 2400 mAh, 6 cells,", "protection board inside,", "bare leads"])
 s.text(198, 106, "+", size=12, weight="bold", color=ORANGE)
 s.text(198, 162, "-", size=13, weight="bold")
 # + lead: to the charge jack (before the switch) and through S1 to the rail
@@ -203,7 +203,7 @@ def stage(cx_load, load, sub, gate_y, mosfet_label, flyback):
         s.lines(fx + 10, 290, ["1N5819", "flyback,", "stripe to +12 V"], size=9.5)
 
 
-stage(900, "Green LED strip", ["plain 12 V, 75 cm in 15 pieces,", "all in parallel, ~0.35 A"], 640, "Q2 light", False)
+stage(900, "Green LED strip", ["green COB, 75 cm in 7 pieces,", "all in parallel, ~0.6 A"], 640, "Q2 light", False)
 stage(1070, "Kamoer KPHM200", ["12 V peristaltic pump", "~0.7 A"], 680, "Q1 pump", True)
 
 # ---------------------------------------------------------------- charging socket (dashed group)
