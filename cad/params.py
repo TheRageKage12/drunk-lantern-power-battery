@@ -11,7 +11,7 @@ never hard-code mating dimensions inside a part file. See DESIGN_CONTRACT.md.
 
 # ---------------------------------------------------------------- global look
 SCALE = 1.8                 # original Hedo3D model was ~100 mm dia; we are ~180 mm
-D_MAX = 180.0               # nominal max outer diameter: base top band, dish mouths, sphere
+D_MAX = 190.0               # base bands and lower dish mouth (rev 9f: 180 -> 190 for room around the jar and pump)
 WALL = 2.4                  # shell wall thickness (6 perimeters at 0.4 mm)
 FLOOR = 2.0                 # floors / plates
 FIT = 0.30                  # radial clearance per side for sliding / rotating printed fits
@@ -67,14 +67,15 @@ PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) an
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 115.0              # base drum height (rev 3: taller so the reservoir jar + cap clear the door top)
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
-BASE_BODY_D = 174.0         # drum body between the bands
+BASE_BODY_D = D_MAX - 6.0   # drum body between the bands (184)
 SERVICE_SCREW_ANGLES = (0.0, 140.0, 225.0)   # rev 9: 3 thumbscrews from underneath hold the base cartridge in the drum (no door)
 
 JOINT_SPIGOT_H = 8.0        # spigot height for base->lower dish and sphere->upper dish joints
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)
 
 DISH_H = 77.0               # reflector dish height (43 x 1.8)
-DISH_MOUTH_D = D_MAX        # wide end outer diameter
+DISH_MOUTH_D = D_MAX        # lower dish wide end outer diameter (matches the base)
+UPPER_DISH_MOUTH_D = 180.0  # upper dish mouth: kept at 180 so the handle legs (which pass its rim) and the sphere bosses stay on the bed
 DISH_NECK_D = 110.0         # narrow end outer diameter (sits on the sphere flat)
 DISH_NECK_HOLE_D = 80.0     # through hole in the narrow floor (tube, wires, socket module)
 DISH_RIM_H = 6.0            # straight cylindrical rim at the mouth

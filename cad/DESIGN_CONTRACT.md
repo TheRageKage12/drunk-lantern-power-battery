@@ -302,3 +302,7 @@ exception in build.py output.
   pump envelope is an estimate: measure the head before printing base and dish_lower.
 - LED strip: green COB, 8 mm, cut every 25 mm (HAMRVL B0CKYFLZFQ): back rows one 10 cm piece each, front
   columns 5 cm each, the top ring one 25 cm piece; ~0.6 A estimated for 75 cm.
+- Wider base (rev 9f): D_MAX 180 -> 190 (base bands and the lower dish mouth; BASE_BODY_D = D_MAX - 6), so the
+  raised jar and pump clear the lower dish's inner wall: pump envelope 6.0 mm, jar envelope 5.4 mm. The upper
+  dish keeps a 180 mm mouth (UPPER_DISH_MOUTH_D, own cone slope): the handle legs pass its rim (2 mm), and moving
+  them out would make sphere_rear ~231 mm wide, past the Ender 3 bed. The sphere is unchanged.

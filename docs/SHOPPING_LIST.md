@@ -62,7 +62,7 @@ are the matching items on their website (sold there in boxes of 100); the store 
 
 | ✓ | Item | Listing | Price |
 |---|---|---|---|
-| [ ] | Green PETG, 1 kg (the parts need ~0.82 kg; a second spool covers failed prints) | [Creality (B0D4MBDL8B)](https://www.amazon.com/dp/B0D4MBDL8B), ships from Amazon, free delivery Oct 18 | $13.99 |
+| [ ] | Green PETG, 2 x 1 kg (the parts need ~0.85 kg; the second spool covers supports and failed prints) | [Creality (B0D4MBDL8B)](https://www.amazon.com/dp/B0D4MBDL8B), ships from Amazon, free delivery Oct 18 | $13.99 each |
 | [ ] | White PETG, 1 kg (diffusers, ~30 g) | [Overture (B07PDV9RC8)](https://www.amazon.com/dp/B07PDV9RC8) | $14.99 |
 | [ ] | Soldering iron kit | [80 W LCD (B08R3515SF)](https://www.amazon.com/dp/B08R3515SF) | $9.96 |
 | [ ] | Multimeter | [AstroAI 2000-count (B01ISAMUA6)](https://www.amazon.com/dp/B01ISAMUA6) | $14.39 |
@@ -70,10 +70,12 @@ are the matching items on their website (sold there in boxes of 100); the store 
 | [ ] | Drill bits, metric 1.5-10 mm (2.5 and 6 mm used) | [15-piece cobalt set (B07B7L6WVY)](https://www.amazon.com/dp/B07B7L6WVY) | $22.99 |
 | [ ] | Flush cutters | [KATA mini (B07VGK8GBL)](https://www.amazon.com/dp/B07VGK8GBL) | $5.39 |
 
-## Still to choose
+## Buy locally (measure in the store with calipers)
 
-- **Jar:** food-safe, at most 73 mm across with its lid and 76 mm tall. No Prime listing confirmed yet.
-- **Shot glass:** 1.5 oz, at most 52 mm across the top and 62 mm tall. The Prime listings found don't state their size.
+- [ ] **Jar**, food-safe, with a lid you can drill: at most **73 mm across with the lid** and **76 mm tall**.
+  [Micro Homebrew](https://www.microhomebrew.com/), Kenmore, (425) 892-8425.
+- [ ] **Shot glass**, 1.5 oz: at most **52 mm across the top** and **62 mm tall**; a heavy base helps.
+  [Bargreen Ellingson](https://www.bargreen.com/locations/seattle), SoDo showroom, Mon-Fri 10-3.
 
 **Total: about $200** (Amazon ~$149, Vetco ~$38, Tacoma Screw ~$12), plus the jar and shot glass, and filament
 or tools if you need them.

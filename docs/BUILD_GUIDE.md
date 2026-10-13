@@ -84,15 +84,15 @@ works on 3.3 V and either magnet pole.
 | 10 | 74AHCT125 quad buffer, DIP-14 | Vetco, VUPN524 | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. |
 | 11 | 2 x logic-level N-MOSFET | Vetco | ~$3 | IRLZ44N or similar, TO-220, at least 3 A at 12 V. |
 | 12 | Small parts | Vetco | ~$12 | 3 x 1N5819 diodes, 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm perfboard (protoboard VUPN2924, $3.49), a 14-pin DIP socket, 22 AWG wire, heat-shrink. |
-| 12a | Power switch | Vetco ([or a 5-pack, search](https://www.amazon.com/s?k=mini+toggle+switch+SPST+6mm+panel+mount)) | ~$3 | Mini toggle, SPST (on-off), 1/4" or M6 bushing (6.5 mm panel hole), rated 3 A or more at 12 V. |
-| 12b | Charge jack and lead | Vetco ([or the Amazon kit, search](https://www.amazon.com/s?k=DC5521+panel+mount+jack+female+nut)) | ~$4 | A panel-mount DC5521 (5.5 x 2.1 mm) female jack with an M8 nut, for the 8 mm hole. Plus a DC5521 **male** plug with bare leads, if the pack didn't come with one, to take power out of the pack's socket. |
+| 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
+| 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), ~$18) | ~$12 | 5 x M3x6, 11 x M3x8, 4 x M3x8 flat-head (countersunk), 6 x M3x10, 20 x M3x12, 15 nuts. They thread straight into the printed holes, except the 3 thumbscrews, which go into nuts. |
 | 14 | Compression spring | [Dianrui spring assortment, 23 sizes (B0BVTDP29W)](https://www.amazon.com/dp/B0BVTDP29W) | $6.99 | You need one about 0.4-0.5 mm wire, 5 mm outside diameter, 10 mm long; the kit's sizes are printed on the box. |
 | 15 | Super glue | [Loctite Super Glue Gel Control (B0006HUJCQ)](https://www.amazon.com/dp/B0006HUJCQ) | $3.82 | For the magnets and the key cap. |
 
 **Total: about $200, battery included** (see [SHOPPING_LIST.md](SHOPPING_LIST.md) for the store-by-store breakdown). That assumes you already have:
 
-- **PETG filament.** About 0.85 kg of green plus a little white or natural for the two diffusers (~$40 if you need two spools).
+- **PETG filament.** About 0.85 kg of green (buy two 1 kg spools so a failed print doesn't stop you) plus a little white or natural for the two diffusers (~$40 if you need two spools).
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (an 8 oz straight-sided PET jar, ~$8 if you need one).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
 - Basic tools: soldering iron, multimeter, calipers, a drill with 2.5 mm and 6 mm bits, flush cutters.
@@ -141,11 +141,11 @@ Print these first, before any big part, and check them:
 
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
-| `base` (drum) | 180 x 180 x 115 | top band down | no | green | 146 |
-| `base_tray` (cartridge floor, with the port panel) | 169 x 174 x 26 | flat | no | green | 50 |
-| `base_deck` | 168 x 167 x 47 | flat | no | any | 71 |
+| `base` (drum) | 190 x 190 x 115 | top band down | no | green | 156 |
+| `base_tray` (cartridge floor, with the port panel) | 179 x 184 x 44 | flat | no | green | 61 |
+| `base_deck` | 178 x 177 x 47 | flat | no | any | 77 |
 | `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 0 |
-| `dish_lower` | 180 x 180 x 91 | mouth down | no | green | 122 |
+| `dish_lower` | 190 x 190 x 91 | mouth down | no | green | 127 |
 | `dish_upper` | 180 x 180 x 86 | floor down, mouth up | no | green | 152 |
 | `top_diffuser` | 100 x 100 x 3 | flat (countersunk) face down | no | white | 11 |
 | `sphere_front` (display side) | 180 x 117 x 80 | split face down, dome up | inside only, around the window (tree) | green | 49 |
@@ -166,7 +166,7 @@ Print these first, before any big part, and check them:
 | `switch_bracket` | 16 x 10 x 6 | flat | no | any | 0 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 0 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 1 |
-| **Total** | | | | | **~818 g** |
+| **Total** | | | | | **~850 g** |
 
 Supports: none, except inside the two sphere halves. Print them split-face down; the last 15 mm of dome
 around the window and the hand opening overhang more than 45 degrees, so enable tree supports on the inside
