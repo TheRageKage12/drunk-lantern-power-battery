@@ -352,3 +352,15 @@ fit limits and remaining measurements. No outer-shell, circuit, GPIO or firmware
 - CAD fit follow-up: the charging plug at the old jack position overlapped the populated board. Move
   the deck jack to (74, -25), retaining upward access with the shell off; model both jack and plugged-in
   lead. Compound-solid collision checks now examine solid pairs to avoid operand-order false negatives.
+
+
+### Heat-set insert mounting update (2026-10-14)
+
+Supersedes the earlier self-tapping screw plan: all 32 printed receiving bores are Ø4.0 × 6.5 mm
+for M3-thread brass inserts. Clearance holes, countersinks and the 14 captured-nut connections are unchanged.
+The bay floor now has an 8 mm diameter boss beneath the nozzle screw, with a 1.5 mm closed end;
+the lower dish has a matching relief with 0.3 mm clearance. The floor exports inverted (boss up),
+requiring support under the floor inside its drip lip. The handle sockets have inward boss extensions
+so their bores retain a closed end. The switch-bracket screw moves 1.5 mm away from the switch cavity;
+the bracket and matching base-plate slot follow it, leaving 1.5 mm plastic between the bore and cavity.
+These changes preserve nozzle, handle-leg and microswitch-body positions.

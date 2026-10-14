@@ -50,8 +50,9 @@ off-board wiring, power sequencing and commissioning. This page covers the board
 The revised panel provides **10 mm behind the board**, outside four 9 × 9 mm screw areas.
 The outer wire layer reserves 9.2 mm including insulation, leaving 0.8 mm to the panel.
 Use M3 screw heads (and any washers) no larger than Ø6 mm; the component placement includes access for a straight
-hex key with the shell removed. Recheck screw length for the 7 mm deep pilot holes (board plus
-any washer adds to the required length); a long screw must not bottom out or split the pad.
+hex key with the shell removed. Install the four M3-thread brass inserts in the panel’s Ø4 × 6.5 mm
+bores before mounting the board. Use M3×6 screws; check engagement with any washers added and do not
+let a screw bottom out in the insert.
 
 The component-side drawing and CAD use the **same individual body allowances**, with at least
 1 mm between them. The smallest gap is **1.10 mm (U1 to R3)**; C3 is now **3.47 mm from U1**.

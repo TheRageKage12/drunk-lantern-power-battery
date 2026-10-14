@@ -37,7 +37,8 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - Hall sensor (`HALL_SENSOR`): the A3144 lies face up in a 4.4 x 3.4 mm pocket on a post on `socket_base`, inside a blind hole in the rotor, ~3 mm from the magnet. With `'DRV5032'` the board goes in a 31.6 x 18.4 mm pocket under the plate instead (~8 mm from the magnet).
 
 ## Budget-build settings
-- `M3_INSERT_HOLE = 2.7` in `params.py`: screws thread straight into the plastic. Set 4.0 for heat-set inserts.
+- `M3_INSERT_HOLE = 4.0`, `M3_INSERT_DEPTH = 6.5` in `params.py`: 32 receiving holes for M3-thread brass heat-set inserts. Screw clearance holes and captured-nut joints keep their existing dimensions. Install inserts before assembly; see the part-by-part count in the build guide.
+- `tests/test_inserts.py` checks every receiving bore in the actual solids, including its depth, surrounding plastic and closed end. The nozzle-guide boss has a matching relief in the lower dish; the bay floor prints upside down with support under its recessed floor.
 - `LED_RING = False` in `parts/socket.py`: no LEDs at the socket.
 
 ## Known limitations

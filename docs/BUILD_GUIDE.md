@@ -90,7 +90,7 @@ works on 3.3 V and either magnet pole.
 | 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They thread straight into the printed holes, except the 3 thumbscrews, 5 at the lock and the handle's 6 lap screws, which go into the 14 nuts. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. Use 32 M3-thread brass heat-set inserts in the receiving holes (4 mm bore, 6.5 mm deep). The 3 thumbscrews, 5 lock screws and 6 handle lap screws still use the 14 nuts. Insert price is not included. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
@@ -142,9 +142,22 @@ initial layer horizontal expansion -0.2): the spigots, the locating rings and th
 first layers, with 0.3 mm of clearance a side, and a flared first layer on both parts eats that. If a ring still
 binds, sand the smaller part's edge. Turn "print thin walls" on for `socket_base` (the sensor post's walls).
 
-**Screws go straight into the plastic.** Every screw hole is a 2.7 mm pilot. Drive each M3 in slowly the
-first time so it cuts its own thread, and don't over-tighten. If a hole strips, a heat-set insert rescues it
-(see section 15).
+**Install the brass heat-set inserts before assembly.** All 32 receiving holes are **4 mm diameter ×
+6.5 mm deep**. Use inserts with M3 internal threads compatible with those bores. Fit them flush with the
+entry face, let them cool, and check that each screw turns freely before mounting components. Follow the
+insert supplier's installation temperature and test one in a scrap print first. The 3.4 mm screw
+through-holes, countersinks and captured-nut pockets retain their separate dimensions.
+
+| Printed part | Inserts | Entry side |
+|---|---:|---|
+| `base_tray` | 3 | Tops of the deck-support pillars |
+| `base_deck` | 4 | Faces of the circuit-board mounting pads |
+| `dish_lower` | 6 | Outside faces of the two rings, three per ring |
+| `dish_upper` | 11 | Four top-diffuser holes, three outer radial holes, four underside curtain-clamp holes |
+| `sphere_front` | 4 | Split-face bosses |
+| `sphere_rear` | 2 | Inner walls of the two handle sockets; insert before fitting the legs |
+| `bay_floor` | 1 | Top face, under the nozzle-guide foot |
+| `socket_housing` | 1 | Open back, beside the switch cavity |
 
 Print these first, before any big part, and check them:
 
@@ -177,7 +190,7 @@ Print these first, before any big part, and check them:
 | `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 13 |
 | `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 23 |
 | `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 3 |
-| `bay_floor` | 131 x 131 x 4 | flat | no | any | 21 |
+| `bay_floor` | 131 x 131 x 10 | insert boss up, as exported | under the recessed floor inside the drip lip | any | 21 |
 | `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 38 |
 | `nozzle_guide` | 47 x 17 x 34 | foot down, as exported | a small tree support under the end of the bend | any | 3 |
 | `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 17 |
@@ -187,12 +200,12 @@ Print these first, before any big part, and check them:
 | `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 32 |
 | `rotor` | 44 x 37 x 8 | bottom face down (skirt on the bed, key pocket up) | no | green | 7 |
 | `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
-| `switch_bracket` | 21 x 10 x 7 | flat, pegs up | no | any | 1 |
+| `switch_bracket` | 23 x 10 x 7 | flat, pegs up | no | any | 1 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 2 |
 | **Total** | | | | | **~1240 g** |
 
-Supports: none, except inside the two sphere halves, under the nozzle guide's bend, and the thin rings under the
+Supports: none, except inside the two sphere halves, beneath the inverted bay floor, under the nozzle guide's bend, and the thin rings under the
 two dishes' bearing faces (they start in mid-air 8-9 mm up; "touching build plate only" support is a short ring
 that pulls off clean). Print the halves split-face
 down; the last 15 mm of dome around the window and the hand opening overhang more than 45 degrees, so enable
@@ -474,7 +487,7 @@ on a single-colour strip.
    (4 x M3x8 flat-head, from above).
 5. **Curtain.** From one frosted sheet, cut 13 strips 12 mm wide and 97 mm long. Lay them side by side, each
    overlapping the next by 2 mm, along the curved `curtain_clamp`, and screw the clamp to the underside of
-   `dish_upper`'s plug (4 x M3x8 into the four pilots that bracket one of the plug's three radial screw holes;
+   `dish_upper`'s plug (4 x M3x8 into the four inserts that bracket one of the plug's three radial screw holes;
    that side faces the hand opening), the strips sandwiched between. A strip of double-sided tape or a few
    dots of glue on the clamp hold the 13 strips while you screw it. They hang down behind the hand opening once the dish is on.
 6. **Display diffuser.** It sits on the ledge behind the window of `sphere_front`. A few dots of glue hold it.
@@ -515,8 +528,8 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    hole. Drop `glass_well` into the long slot, its ridge end toward the display side; it hangs from its flange.
 4. **Nozzle.** Push the tube up through the hole in `nozzle_guide`'s foot and along the channel, pressing it
    in through the open side where it resists (the slit is a little narrower than the tube), so 5 mm sticks out
-   past the end, pointing down. Screw the foot down (1 x M3x8; its tip comes out 3 mm under the bay floor, into
-   the dish neck, which is fine), open side toward you, the curve reaching toward the middle.
+   past the end, pointing down. Screw the foot into the bay-floor insert (1 x M3x8), open side toward you,
+   the curve reaching toward the middle. The insert boss below the floor fits the matching relief in the lower dish.
 5. **Lock wall.** Stand the wall in its two slots, lock facing you. Its back closes the nozzle guide's open
    side; check the tube sits in the channel and its end still points down into the glass slot. Take up the
    slack in the lock cable and LED leads down through the cable hole.
@@ -531,7 +544,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    curtain goes down behind the hand opening, feeding the slack down behind the wall, and screw it on, 3 x M3x8.
 8. **Handle.** The part names are from the display side, so `handle_leg_left` goes on your right. Each leg
    plugs into a boss on the rear half, counterbore facing outward; one M3x12 each goes in horizontally through
-   the round hole in the boss's outer wall, 6 mm into the leg's counterbore and on into the pilot on the sphere
+   the round hole in the boss's outer wall, 6 mm into the leg's counterbore and on into the insert on the sphere
    side, pointing at the lantern's axis (a long 2.5 mm hex key). The two arcs lap-joint to the legs and to
    each other with 6 x M3x12 and nuts, left leg with left arc.
 9. **Join the lantern and the cartridge.** Plug the lock and LED plugs together, coil the tube's slack above
@@ -686,7 +699,6 @@ flattened.
 | Upgrade | Cost | How |
 |---|---|---|
 | Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
-| Heat-set inserts instead of screwing into plastic | ~$10 | Set `M3_INSERT_HOLE = 4.0` in `cad/params.py` and re-run `build.py`. Inserts: [ruthex M3 x 5.7 mm (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3). |
 | Fuse | ~$3 | An inline 2 A slow-blow fuse between the pack and S1. The pack's protection board already cuts out on a short. |
 | Steady LED brightness on a draining battery | ~$6 | A small buck-boost converter set to 12.0 V between the +12 V rail and the LED strip's + (the pump keeps its firmware compensation). Without it the strip dims as the pack drains: ~70 % of its current at half charge (~11.3 V), a third to a half at 10 V. Charging at half keeps it bright enough. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
