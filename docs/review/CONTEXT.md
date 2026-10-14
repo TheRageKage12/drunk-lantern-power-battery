@@ -166,6 +166,18 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
     from the side, and raising the handle didn't help.
   - `DECK_GAP = 2` keeps the pack held down.
 
+### Threaded mounts — 2026-10-14
+
+- The owner selected brass heat-set inserts and requested 4 mm holes at least 6 mm deep. All 32
+  receiving bores are now Ø4 × 6.5 mm, for M3 internal threads; this supersedes the self-tapping plan.
+- Added backing at the handle mounts and a nozzle insert boss beneath the bay floor, with a matching
+  lower-dish relief. The bay floor now prints inverted with support inside its drip lip.
+- Moved the twist-switch mounting screw 1.5 mm away from the cavity, with its bracket and base slot,
+  to leave plastic around the wider insert. Switch-body and nozzle positions remain unchanged.
+- Install inserts before mechanical assembly. The existing screw clearance holes, countersinks and
+  14 nut joints remain unchanged. Sheet changes wait for acceptance: record 32 inserts and verify
+  their selected listing/price; no insert price or purchase is assumed.
+
 ### Power (the latest decision wins; this changed several times)
 - History:
   1. INIU power bank plus Adafruit PD trigger cable
@@ -371,3 +383,8 @@ the 2026-10-13 starting point; the sheet is the source of truth.
 - CAD fit follow-up: the charging plug at the old jack position overlapped the populated board. Move
   the deck jack to (74, -25), retaining upward access with the shell off; model both jack and plugged-in
   lead. Compound-solid collision checks now examine solid pairs to avoid operand-order false negatives.
+
+- **2026-10-14, brass inserts:** owner requested Ø4 mm bores at least 6 mm deep. Updated all 32 to
+  6.5 mm depth, reinforced handle/nozzle mounts, relieved the lower dish and moved the switch screw
+  with its bracket/slot. Added solid-geometry bore, wall, end-depth and mating-clearance checks;
+  regenerated ten changed printed parts and the assembly previews. See the threaded-mount decision above.

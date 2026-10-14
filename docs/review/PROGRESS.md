@@ -338,3 +338,12 @@ renders accompany the source. Supplier dimensions listed as allowances still nee
 the complete harness and tool/finger access still require a physical fit check. After acceptance,
 update the Sheet supplies bundle to four 20 mm straps plus its existing small zip ties; no Sheet write
 in this CAD revision. See `cad/README.md` for limits and `docs/BUILD_GUIDE.md` for assembly.
+
+
+## Brass insert mounts — 2026-10-14
+
+PR #14 now uses 32 M3-thread heat-set inserts in Ø4 × 6.5 mm bores. All 32 pass the actual-solid
+bore/depth/side-wall/closed-end checks. The nozzle boss clears its new lower-dish relief; the relocated
+switch screw aligns with the bracket and slot. Full CAD build has zero problems, socket and electronics
+tests pass, firmware simulations pass 20/20, and RP2040 compilation succeeds (63,136 bytes). See BUILD_GUIDE section 3 for the insert count by part
+and the changed bay-floor print orientation. Existing screw and nut quantities stay the same.
