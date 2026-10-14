@@ -18,6 +18,9 @@ The live shopping Sheet is unchanged; the edits below wait for acceptance and se
 
 ## Updated circuit
 
+One connected schematic shows the power and signal wiring end to end; dots mark junctions and
+bridges distinguish crossings. All ground symbols share the common return.
+
 ![Updated circuit diagram](../images/wiring.png)
 
 [Full-size SVG](../images/wiring.svg) · [Generator](../images/src/gen_wiring.py) · [Build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first)

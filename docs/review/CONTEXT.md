@@ -353,3 +353,7 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   pump diode. Add JP1 and USB service instructions. The shared Sheet is unchanged: proposed edits are
   listed in `CIRCUIT_PR.md`, to apply only after PR acceptance and separate spreadsheet review.
   Driver/capacitor sourcing and total cost remain open; near-term delivery is required, Oct 27 is too late.
+
+- **2026-10-13, circuit diagram presentation.** The owner rejected separate net-labelled panels. Keep the
+  circuit as one connected diagram with visible power and signal interconnects, junction dots and clear
+  non-connecting crossings. The corrected SVG/PNG preserves the reviewed electrical design.

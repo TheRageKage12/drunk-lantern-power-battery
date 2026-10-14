@@ -5583,3 +5583,12 @@ Owner instructions, condensed from the circuit review:
 Prepared on local branch `circuit-review`: revised diagram/generator, build guide and wiring comments,
 with `CIRCUIT_PR.md` as the review draft. JP1 and its USB service procedure are additional details proposed
 for review. Driver/1 µF capacitor sourcing remains open. No live Sheet edits, CAD edits, push or GitHub PR.
+
+### Circuit diagram correction
+
+Owner: “The "updated circuit diagram" appears to be a bunch of disconnected separate diagrams rather
+than a single diagram like the original one was. This is not an acceptable regression”
+
+Replaced the panels with one connected wiring diagram, retaining the circuit changes. Power and signal
+connections are drawn explicitly; all ground symbols share the common return. Updated the local PR
+draft and regenerated SVG/PNG. No Sheet, firmware or CAD changes in this correction.

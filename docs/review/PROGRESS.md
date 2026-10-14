@@ -322,3 +322,12 @@ Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, 
 Validation: wiring SVG/PNG regenerated and visually checked; firmware simulations 20/20 pass;
 `git diff --check` clean. Target compilation unavailable (`arduino-cli` not installed). No CAD files
 changed or regenerated, and no hardware measurements claimed.
+
+### Diagram presentation correction
+
+- Replaced the separate net-labelled panels with one connected schematic. Power rails, sensor signals,
+  controller outputs and driver/load wiring are now visible end to end, with explicit crossing bridges.
+- Retained the reviewed components, values, pin assignments and electrical connections; drew the optional
+  PRIME switch explicitly. Regenerated SVG/PNG and checked the rendered labels and wire paths.
+- Checked SVG parsing, deterministic regeneration and `git diff --check`. This presentation-only follow-up
+  does not change firmware or CAD; prior firmware validation still applies.
