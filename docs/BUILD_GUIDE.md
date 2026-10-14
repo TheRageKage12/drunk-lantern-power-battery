@@ -519,8 +519,10 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
    three pillars that have holes; it fits one way). The jack goes socket-up in the relocated 8 mm hole
    on the side opposite the buck converter (+X, y=-25), clear of the populated board. Check its charging
-   plug fits with the shell off. Jar in its ring with a strap through the finger slots, pump in
-   its saddles with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
+   plug fits with the shell off. Jar in its ring with a strap through the finger slots. **Fit the tube
+   to the pump now, while the cartridge is exposed:** open the head, lay the continuous tube around
+   the rollers and close the cap. Leave the outlet end free for later threading to the nozzle. Then
+   seat the pump in its saddles and secure it with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
    drilled). Keep the inline lock/LED plugs above the unused module pocket, clear of the battery supports.
    Remove all print support from the four board pads; clipped leads and rear wiring must stay within
    the 10 mm gap (use the revised pad positions and wire layers in the board guide). Verify access to JP1 and the pack switch with the shell off; undo the three deck screws

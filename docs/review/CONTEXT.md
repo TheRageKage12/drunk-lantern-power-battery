@@ -398,3 +398,7 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   pump outlet/service loop through lower dish and bay floor, then the nozzle riser/bend and 5 mm tip.
   Video is now 4:30 with 36 chapters. Lower routing and pump port are illustrative; the floor hole and
   nozzle path follow the CAD. The written guide explicitly identifies the free end and service slack.
+
+- **2026-10-14, make pump-tube timing explicit:** Step 17 is now titled “Fit the tube, then mount the
+  pump” and instructs opening the head/loading the tube while the cartridge is exposed, leaving the
+  outlet end free before joining the shell. The build guide repeats this order. Video timing stays unchanged.
