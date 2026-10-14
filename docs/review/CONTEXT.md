@@ -181,9 +181,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   - Use a male DC5521 pigtail cut from the supplied splitter, verified centre-positive. Keep charge jack
     before S1; use the supplied charger. TalentCell's own switch must be ON for operation and charging;
     S1 remains OFF during charging. Both switches OFF for storage.
-  - **CAD remains at the old KBT 70 x 55 x 40 mm envelope.** Battery supports, connector/switch access,
-    deck height and clearances are deferred to a separate CAD PR at the owner's request. Do not treat
-    existing base exports as ready for this battery. No mechanical geometry changes in this revision.
+  - CAD now uses the 105 × 65 × 25 mm case, connector/switch end toward -Y. Revised tray rails,
+    end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
+    z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
+    lower run is recessed under the tray. Verify the supplied plug and bend fit the 25 mm end allowance.
 - The charge jack (2.1 mm panel jack, 8 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
   down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
@@ -359,3 +360,14 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   Physical board offsets, capacitor dimensions and assembled clearances remain unverified.
   CAD changes are separate. Live Sheet edits wait for acceptance and separate owner review;
   estimated parts delta is $4.69 before tax/shipping, with an October 20 delivery cutoff.
+
+- **2026-10-14, CAD circuit fit:** resize TalentCell tray supports and matching deck holes while keeping
+  the deck at z=44 mm. Ports face -Y to avoid the hidden switch pocket. Strap slots move clear of pillars;
+  add an underside recess for the required strap. Remove mounting-pad gussets that intruded into board
+  wiring space (four small print supports now required). Add non-printing electronic/component/cable
+  envelopes and strict assembly/removal checks; dimensions not published by suppliers remain explicit
+  limits to measure. Outer shell and circuit unchanged. PR #13 merged; its live Sheet updates are complete.
+
+- CAD fit follow-up: the charging plug at the old jack position overlapped the populated board. Move
+  the deck jack to (74, -25), retaining upward access with the shell off; model both jack and plugged-in
+  lead. Compound-solid collision checks now examine solid pairs to avoid operand-order false negatives.

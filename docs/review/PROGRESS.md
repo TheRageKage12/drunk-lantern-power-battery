@@ -321,3 +321,20 @@ Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, 
 - Next: confirm actual board offsets and C2 dimensions; update battery supports and check hardware,
   cables and shell removal in the separate CAD PR. Live Sheet changes require separate owner review.
   Nothing published or purchased; CAD and the shared Sheet are unchanged.
+
+
+## CAD circuit fit — 2026-10-14
+
+PR #13 is merged and its Sheet updates are complete. New branch `cad-circuit-fit` updates the
+TalentCell tray and matching deck holes, fixes the deck height at 44 mm, provides a required strap
+route and printed buck supports, and moves the upward-facing charge jack clear of the board.
+Board mounting pads now fit inside the drawing's screw keep-outs (print supports required).
+
+Non-printing envelopes include the populated board, local rear wiring, plug/connector allowances,
+S1, charge jack/plug, buck, pump diode and Hall capacitor. Full build: 553 strict electronics / shell
+removal pairs checked, zero problems; all printed parts fit the bed. Socket mechanism and electronics
+regression tests pass; firmware 20/20 and RP2040 compilation pass (63136 bytes). Updated exports and
+renders accompany the source. Supplier dimensions listed as allowances still need measurement;
+the complete harness and tool/finger access still require a physical fit check. After acceptance,
+update the Sheet supplies bundle to four 20 mm straps plus its existing small zip ties; no Sheet write
+in this CAD revision. See `cad/README.md` for limits and `docs/BUILD_GUIDE.md` for assembly.

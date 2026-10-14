@@ -59,13 +59,25 @@ GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and 
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 70.0, 55.0, 40.0   # KBT 12 V 2400 mAh Li-ion pack (6 cells, 2 layers, protection board), flat on the tray
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 105.0, 65.0, 25.0  # TalentCell YB1203000; connector/switch end toward -Y
+CARTRIDGE_DECK_Z = 44.0     # deck underside; independent of pack thickness to preserve pump/jar/board heights
+BATTERY_PORT_CLEARANCE = 25.0  # reserved beyond -Y end for plug + wire bend; verify supplied lead fits
+BATTERY_STRAP_Y = 25.0      # strap crosses here, clear of the deck pillars at y=0 and +/-55
+BATTERY_STRAP_T = 1.0       # recessed underfloor strap allowance; use <=1 mm strap beneath the tray
+# Electronics fit limits, not claims that unmeasured supplier parts have these dimensions.
+PERFBOARD_W, PERFBOARD_H, PERFBOARD_T = 70.0, 50.0, 1.2
+PERFBOARD_BOTTOM_GAP = 2.0
+PERFBOARD_MOSFET_PROJECTION = 22.0
+PERFBOARD_CAP_L, PERFBOARD_CAP_D = 25.0, 18.0
+BUCK_L, BUCK_W, BUCK_H = 43.0, 21.0, 14.0  # reserve above printed corner supports; measure actual module
+BUCK_STANDOFF = 2.0
+BATTERY_PLUG_Z0, BATTERY_PLUG_H = 7.0, 24.0  # plug/switch access reserve above the low front stop
 # rev 9h: nothing shows on the shell. The power switch sits in a pocket under the cartridge floor, lever down (tip
 # the lantern to flip it); the charge jack is on the deck, pointing up, reached with the lantern lifted off.
 SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray floor, +Y side, between a pillar and the rim
 SWITCH_POCKET_W, SWITCH_POCKET_L = 26.0, 23.0       # outer box; the cavity is 2 x WALL smaller
 SWITCH_POCKET_DEPTH = 20.0                          # cavity height: bushing (~7) + lever (~10) stay above the table
-JACK_XY = (-8.0, 80.0)                              # charge jack hole in the deck, +Y edge, beside the lead notch
+JACK_XY = (74.0, -25.0)                             # charge jack on free +X deck edge; clears board and shell bosses
 PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) and mini toggle switch (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)

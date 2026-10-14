@@ -50,8 +50,9 @@ edge empty and nearby R5/R6/R7/D3 no more than 3 mm high to clear the shell's pa
 Route cables clear of that path and check clearance while removing the shell.
 
 Actual capacitor size, board hole offsets, wire crossings and assembled clearances still need
-physical confirmation. The separate CAD PR must resize the battery supports and check the populated
-board, connectors and cable bends. This layout is electrically checked, not a verified physical build.
+physical confirmation. The CAD now checks the board and reserved component/cable volumes against
+the enclosure and its retaining-boss sweep; see [fit limits](../../../cad/README.md#electronics-fit-limits).
+Remove print supports beneath the four mounting pads before assembly. This is not a verified physical build.
 
 With all power disconnected and U1 removed, use the schedule to check continuity for each wire,
 inspect for solder bridges and confirm component orientation. Then follow the build guide's

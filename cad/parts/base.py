@@ -43,7 +43,6 @@ BASE_JOINT_CBORE_DEPTH = 3.0
 BASE_JOINT_R_OUTER = R_MAX                           # the holes start on the band's outer surface
 
 # ------------------------------------------------------------------ cartridge joint (rev 9, replaces the door)
-USB_X = 0.0                                           # the bank's ports are at the middle of its +Y end
 SERVICE_ANGLES = P.SERVICE_SCREW_ANGLES               # (0, 140, 225): clear of the bank, pillars, pockets, jar fingers
 SERVICE_R = 79.0                                      # thumbscrew axis radius (knob clears the drum wall)
 BOSS_R0 = 75.5                                        # drum nut bosses: r 75.5 .. wall, BOSS_Z0 .. BOSS_Z1
@@ -58,20 +57,20 @@ TRAY_R = R_IN - P.FIT                                 # 84.3, same as the deck
 SERVICE_SWEEP_Z1 = SPIGOT_ZONE_Z0 - 1.0               # the bosses pass down over the cartridge from here
 
 # ------------------------------------------------------------------ battery pack pocket (floor, centred)
-BANK_HALF_W = P.POWERBANK_W / 2                       # 27.5 across X
-BANK_HALF_L = P.POWERBANK_L / 2                       # along Y, ports toward +Y (owner's side)
+BANK_HALF_W = P.POWERBANK_W / 2
+BANK_HALF_L = P.POWERBANK_L / 2                       # connector/switch end toward -Y, away from S1
 BANK_END_STOP_T, BANK_END_STOP_H = P.WALL, 12.0
 BANK_END_STOP_GAP = 0.3
-BANK_END_STOP_X = (7.0, P.POWERBANK_W / 2)            # two blocks at +Y leaving the middle free for the plug
+BANK_PORT_STOP_H = 3.0                              # low -Y lip leaves the battery's connector face open
 STRAP_SLOT_L, STRAP_SLOT_W = 22.0, 3.0                # for a 20 mm hook-and-loop strap
 
 # ------------------------------------------------------------------ deck on pillars
 PILLAR_S = 9.0                                        # square pillars
-PILLAR_X = BANK_HALF_W + 1.0 + PILLAR_S / 2           # 33: inner faces also guide the bank sideways
+PILLAR_X = BANK_HALF_W + 1.0 + PILLAR_S / 2           # inner faces guide the bank sideways
 PILLAR_Y = (-55.0, 0.0, 55.0)
 PILLAR_INSERTS = ((PILLAR_X, 0.0), (-PILLAR_X, 0.0), (PILLAR_X, 55.0))   # 3 = unambiguous orientation
-DECK_GAP = 2.0                                        # over the pack: holds it down (a thin strap still fits)
-DECK_Z0 = P.FLOOR + P.POWERBANK_T + DECK_GAP          # MATING: deck underside (44)
+DECK_Z0 = P.CARTRIDGE_DECK_Z                         # MATING: fixed at 44; strap retains the thinner pack
+DECK_GAP = DECK_Z0 - P.FLOOR - P.POWERBANK_T         # 17 mm above the TalentCell case
 PILLAR_H = DECK_Z0 - P.FLOOR
 DECK_T = 3.0
 DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (47)
@@ -209,20 +208,20 @@ def _drum():
 
 # ------------------------------------------------------------------ base floor features
 def _bank_pocket():
-    """End stops and side rails for the flat battery pack, and a strap slot pair across its middle. The +Y end
-    stop is two blocks: the pack's leads leave through the gap, toward +Y."""
+    """TalentCell rails and strap slots. Low -Y stop clears the connector/switch face;
+    full-height +Y stop faces S1. The strap, not the deck, holds the pack down."""
     y_stop = BANK_HALF_L + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
-    adds = [_box(2 * BANK_END_STOP_X[1], BANK_END_STOP_T, BANK_END_STOP_H, 0, -y_stop, P.FLOOR)]
-    for sx in (-1, 1):   # +Y end: two blocks, the middle stays free for the plug
-        xc = sx * (BANK_END_STOP_X[0] + BANK_END_STOP_X[1]) / 2
-        adds.append(_box(BANK_END_STOP_X[1] - BANK_END_STOP_X[0], BANK_END_STOP_T, BANK_END_STOP_H, xc, y_stop, P.FLOOR))
+    adds = [_box(P.POWERBANK_W, BANK_END_STOP_T, BANK_END_STOP_H, 0, y_stop, P.FLOOR),
+            _box(P.POWERBANK_W, BANK_END_STOP_T, BANK_PORT_STOP_H, 0, -y_stop, P.FLOOR)]
     x_rail = BANK_HALF_W + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
-    rail_l = BANK_HALF_L - STRAP_SLOT_L / 2 - 4.0
+    gap0 = P.BATTERY_STRAP_Y - STRAP_SLOT_L / 2 - 4.0
+    gap1 = P.BATTERY_STRAP_Y + STRAP_SLOT_L / 2 + 4.0
     for sx in (-1, 1):   # side rails either side of the strap, so the narrow bank cannot slide sideways
-        for sy in (-1, 1):
-            adds.append(_box(BANK_END_STOP_T, rail_l, BANK_END_STOP_H, sx * x_rail, sy * (BANK_HALF_L - rail_l / 2), P.FLOOR))
+        for y0, y1 in ((-BANK_HALF_L, gap0), (gap1, BANK_HALF_L)):
+            adds.append(_box(BANK_END_STOP_T, y1-y0, BANK_END_STOP_H, sx*x_rail, (y0+y1)/2, P.FLOOR))
     x_slot = x_rail + BANK_END_STOP_T / 2 + 1.0 + STRAP_SLOT_W / 2
-    cuts = [_box(STRAP_SLOT_W, STRAP_SLOT_L, P.FLOOR + 2, sx * x_slot, 0.0, -1) for sx in (-1, 1)]
+    cuts = [_box(STRAP_SLOT_W, STRAP_SLOT_L, P.FLOOR + 2, sx * x_slot, P.BATTERY_STRAP_Y, -1) for sx in (-1, 1)]
+    cuts.append(_box(2*x_slot, STRAP_SLOT_L, P.BATTERY_STRAP_T+1, 0, P.BATTERY_STRAP_Y, -1))
     return adds, cuts
 
 
@@ -251,6 +250,10 @@ def _floor_electronics():
     bx, by = BOOST_XY
     bw, bl = BOOST_OUTLINE
     adds.append(_frame(bw, bl, D4184_FRAME_T, D4184_FRAME_H, bx, by, P.FLOOR))
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            adds.append(_box(3, 3, P.BUCK_STANDOFF, bx+sx*(P.BUCK_W/2-1.5),
+                             by+sy*(P.BUCK_L/2-1.5), P.FLOOR))
     for sy in (-1, 1):       # a cable-tie slot either side of the outline (across X), two ties along Y
         for sx in (-1, 1):
             cuts.append(_box(ZIPTIE_SLOT[1], ZIPTIE_SLOT[0], P.FLOOR + 2,
@@ -410,10 +413,10 @@ def _electronics_panel():
         for sz in (-1, 1):
             yc, zp = sy * EPANEL_GRID[0] / 2, zc + sz * EPANEL_GRID[1] / 2
             x0, x1 = EPANEL_T / 2, EPANEL_T / 2 + EPANEL_PAD_PROUD
-            # pad with a 45 deg underside so it prints without support (deck printed flat)
-            prof = [(x0, zp - EPANEL_PAD / 2 - EPANEL_PAD_PROUD), (x1, zp - EPANEL_PAD / 2),
-                    (x1, zp + EPANEL_PAD / 2), (x0, zp + EPANEL_PAD / 2)]
-            pad = cq.Workplane('XZ').workplane(offset=-(yc + EPANEL_PAD / 2)).polyline(prof).close().extrude(EPANEL_PAD)
+            # Stay inside the board drawing's 9 x 9 mm screw keep-outs. The old
+            # descending gusset occupied rear-wire space below each pad. Use
+            # build-plate supports beneath these four short overhangs when printing.
+            pad = _box(x1-x0, EPANEL_PAD, EPANEL_PAD, (x0+x1)/2, yc, zp-EPANEL_PAD/2)
             adds.append(pad)
             hole = cq.Workplane(cq.Plane(origin=cq.Vector(x1 + 0.5, yc, zp), normal=cq.Vector(-1, 0, 0))) \
                 .circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5)

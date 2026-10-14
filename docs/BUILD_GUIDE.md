@@ -13,9 +13,9 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 ![interaction timeline](images/interaction.png)
 
 **Status.** Designed, modelled and simulated; not yet built. The firmware previously compiled and still passes 20 simulated
-safety scenarios (`firmware/test`). The existing CAD passed its previous fit checks, but **still models the old KBT battery**.
-The selected TalentCell pack needs revised supports and clearance checks in a separate CAD PR;
-do not print the battery tray/deck for this revision yet. Also measure the Kamoer pump and your jar. Every bay is parametric
+safety scenarios (`firmware/test`). The CAD now includes the TalentCell mount and electronics clearance envelopes.
+The fit checks cover the reserved dimensions in [CAD fit limits](../cad/README.md#electronics-fit-limits);
+measure the actual capacitor, connectors, buck, switch, pump and jar before printing. Every bay is parametric
 (`cad/params.py`), so a measured number is a one-line change and a re-run of `python3 build.py`.
 
 ---
@@ -94,7 +94,7 @@ works on 3.3 V and either magnet pole.
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The proposed electrical changes add $4.69 in parts before tax and shipping; refresh the Sheet totals after acceptance. Two of the local items have size limits; measure in the store:
+**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The accepted electrical changes added $4.69 in parts before tax and shipping; the live Sheet has been updated. Two of the local items have size limits; measure in the store:
 
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
@@ -107,7 +107,7 @@ The total assumes you already have:
   countersunk screws, a small flat screwdriver for the LM2596's trimmer, a hobby knife and ruler, a USB-C data
   cable for the XIAO, and a kitchen scale or measuring cup for calibration (1 g of water = 1 mL).
 - A dab of silicone grease or petroleum jelly for the lock's ramp and plunger.
-- 2-3 hook-and-loop straps 20 mm wide (pump and jar; the battery's is optional) and about 10 small zip ties
+- 4 hook-and-loop straps 20 mm wide (two pump, one jar, one battery; battery strap <=1 mm thick beneath tray) and about 10 small zip ties
   (2.5 mm wide, for the LM2596 and cable tidying). Any hardware store, ~$5 if you have none.
 
 ### 2.3 Seattle-area stores (verified open on 2026-10-11; call before driving for specific stock)
@@ -166,8 +166,8 @@ Print these first, before any big part, and check them:
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
 | `base` (drum) | 190 x 190 x 115 | top band down | no | green | 232 |
-| `base_tray` (cartridge floor, with the switch pocket) | 179 x 179 x 44 | flat | no | green | 92 |
-| `base_deck` | 178 x 177 x 47 | flat | no | any | 112 |
+| `base_tray` (cartridge floor, with the switch pocket) | 179 x 179 x 44 | flat | no | green | 91 |
+| `base_deck` | 179 x 179 x 47 | flat | under the four electronics mounting pads; remove fully before fitting board | any | 111 |
 | `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 1 |
 | `dish_lower` | 190 x 190 x 91 | mouth down | the 2.8 mm ring under the rim, 8 mm up: supports touching the build plate only | green | 184 |
 | `dish_upper` | 180 x 180 x 86 | floor down, mouth up | the 2.7 mm ring under the floor, 9 mm up: supports touching the build plate only | green | 220 |
@@ -486,14 +486,23 @@ on a single-colour strip.
 Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
 1. **Cartridge.** Stand `base_tray` with the switch pocket (the raised box near the rim) toward you. The
-   LM2596 goes in its pocket on the right, zip-tied through the two slots beside it; the battery pack flat in
-   the middle, leads toward you (the deck sits 2 mm above it and holds it down; a strap through the tray's
-   slots is optional). S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
-   through the open notch in the deck's edge beside the jack hole (the deck's other slot is a closed hole, so
+   LM2596 goes in its pocket on the right, on its four 2 mm printed corner supports, zip-tied through the slots beside it.
+   Check that no underside solder joint rests on a support.
+   The TalentCell lies flat in the middle, **connector/switch end away from you (-Y)**, at the low end stop.
+   Thread a 20 mm strap through both slots before fitting the pack; its lower run sits in the underside
+   recess and must be no thicker than 1 mm. Tighten the strap: the deck is 17 mm above the case and does
+   not retain it. Check the plugged-in lead and bend fit the 25 mm space beyond the battery end.
+   S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
+   through the open notch at the deck's edge (the deck's other slot is a closed hole, so
    a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
-   three pillars that have holes; it fits one way). Jack in the deck's 8 mm hole, socket up, nut tight. Jar in its ring with a strap through the finger slots, pump in
+   three pillars that have holes; it fits one way). The jack goes socket-up in the relocated 8 mm hole
+   on the side opposite the buck converter (+X, y=-25), clear of the populated board. Check its charging
+   plug fits with the shell off. Jar in its ring with a strap through the finger slots, pump in
    its saddles with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
-   drilled).
+   drilled). Keep the inline lock/LED plugs above the unused module pocket, clear of the battery supports.
+   Remove all print support from the four board pads; clipped leads and rear wiring must stay within
+   the 4.5 mm gap. Verify access to JP1 and the pack switch with the shell off; undo the three deck screws
+   if needed for pack service. Route and tie the battery lead along the tray edge, clear of retaining bosses.
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
    its spigot goes into the top of the drum, 3 x M3x8 from outside. The drum stays with the lantern from now on.
