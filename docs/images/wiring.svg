@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 880" width="1290" height="880" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
-<title>Green Lantern power battery - wiring (budget build)</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1430" width="1600" height="1430" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
+<title>Green Lantern — reviewed circuit</title>
 <defs>
 <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker>
 <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
@@ -10,238 +10,316 @@
 <marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f77f00"/></marker>
 <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d62828"/></marker>
 </defs>
-<rect x="0" y="0" width="1290" height="880" fill="#ffffff"/>
-<text x="24" y="34" font-size="20" text-anchor="start" font-weight="bold" fill="#222222">Green Lantern power battery - wiring (budget build)</text>
-<path d="M24,56 L50,56" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="56" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">+12 V</text>
-<path d="M119,56 L145,56" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="151" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">+5 V</text>
-<path d="M214,56 L240,56" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="246" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">GND</text>
-<path d="M309,56 L335,56" fill="none" stroke="#2a9d2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="341" y="60" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">signal</text>
-<text x="414" y="60" font-size="10.5" text-anchor="start" font-weight="normal" fill="#444">All ground symbols are one net. A dot is a joint; lines that cross without a dot do not connect.</text>
-<path d="M400,120 L1270,120" fill="none" stroke="#f77f00" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1270" y="112" font-size="11" text-anchor="end" font-weight="bold" fill="#f77f00">+12 V rail</text>
-<path d="M16,800 L1270,800" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1270" y="818" font-size="11" text-anchor="end" font-weight="bold" fill="#222222">GND rail</text>
-<rect x="24" y="84" width="170" height="90" rx="6" fill="#f5f5f5" stroke="#222222" stroke-width="1.4"/>
-<text x="109.0" y="104" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">12 V Li-ion pack</text>
-<text x="109.0" y="120" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">KBT 2400 mAh, 6 cells,</text>
-<text x="109.0" y="133" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">protection board inside,</text>
-<text x="109.0" y="146" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">bare leads</text>
-<text x="198" y="106" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">+</text>
-<text x="198" y="162" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">-</text>
-<path d="M194,112 L300,112" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="290" cy="112" r="3.4" fill="#f77f00"/>
-<circle cx="300" cy="112" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.6"/>
-<circle cx="336" cy="112" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.6"/>
-<path d="M302,110 L333,96" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="318" y="86" font-size="10" text-anchor="middle" font-weight="bold" fill="#222222">S1 power (pocket under the cartridge floor)</text>
-<path d="M339,112 L400,112 L400,120" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M194,146 L226,146" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="210" cy="146" r="3.4" fill="#222222"/>
-<path d="M210,146 L210,176" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M202.0,176 L218.0,176 M204.72,181.0 L215.28,181.0 M208.08,186.0 L211.92,186.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="226" y="128" width="124" height="58" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.4"/>
-<text x="288.0" y="148" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">Charge jack</text>
-<text x="288.0" y="164" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">DC5521 on the deck, socket up:</text>
-<text x="288.0" y="177" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">lift the lantern off to charge</text>
-<circle cx="226" cy="146" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<circle cx="290" cy="128" r="3.2" fill="#ffffff" stroke="#f77f00" stroke-width="1.4"/>
-<path d="M290,112 L290,125" fill="none" stroke="#f77f00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M450,120 L450,150" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M438,150 L462,150 M438,158 Q450,152 462,158" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M450,156 L450,172" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M442.0,172 L458.0,172 M444.72,177.0 L455.28,177.0 M448.08,182.0 L451.92,182.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="466" y="146" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">C2 2200 µF,</text>
-<text x="466" y="159" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">16 V, + to rail</text>
-<circle cx="450" cy="120" r="3.4" fill="#f77f00"/>
-<circle cx="620" cy="120" r="3.4" fill="#f77f00"/>
-<path d="M620,120 L620,126" fill="none" stroke="#f77f00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="614" y="126" width="12" height="24" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.3"/>
-<text x="630" y="142" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">100 k</text>
-<path d="M620,150 L620,162" fill="none" stroke="#2a9d2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="620" cy="156" r="3.4" fill="#2a9d2a"/>
-<rect x="614" y="162" width="12" height="22" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.3"/>
-<text x="630" y="177" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">22 k</text>
-<path d="M620,184 L620,190" fill="none" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M612.0,190 L628.0,190 M614.72,195.0 L625.28,195.0 M618.08,200.0 L621.92,200.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M620,156 L664,156 L664,168" fill="none" stroke="#2a9d2a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M654,168 L674,168 M654,174 L674,174" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M664,174 L664,190" fill="none" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M656.0,190 L672.0,190 M658.72,195.0 L669.28,195.0 M662.08,200.0 L665.92,200.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="678" y="186" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">0.1 µF</text>
-<text x="710" y="140" font-size="10" text-anchor="start" font-weight="normal" fill="#444">battery sense:</text>
-<text x="710" y="153" font-size="10" text-anchor="start" font-weight="normal" fill="#444">12.6 V -&gt; 2.27 V at D0</text>
-<path d="M620,156 L570,156 L570,222 L470,222 L470,230" fill="none" stroke="#2a9d2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="564" y="186" font-size="9.5" text-anchor="end" font-weight="normal" fill="#2a9d2a">to D0</text>
-<rect x="40" y="230" width="160" height="92" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.4"/>
-<text x="120.0" y="250" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">LM2596 buck</text>
-<text x="120.0" y="266" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">12 V in, 5.0 V out:</text>
-<text x="120.0" y="279" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">set it to 5.0 V with a meter</text>
-<text x="120.0" y="292" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">BEFORE connecting the XIAO</text>
-<circle cx="80" cy="230" r="3.2" fill="#ffffff" stroke="#f77f00" stroke-width="1.4"/>
-<text x="86" y="224" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">IN+</text>
-<path d="M80,230 L80,196 L415,196 L415,120" fill="none" stroke="#f77f00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="415" cy="120" r="3.4" fill="#f77f00"/>
-<circle cx="120" cy="322" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="126" y="337" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">GND</text>
-<path d="M120,322 L120,344 L16,344 L16,800" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="200" cy="260" r="3.2" fill="#ffffff" stroke="#d62828" stroke-width="1.4"/>
-<text x="207" y="264" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222"></text>
-<text x="206" y="254" font-size="10" text-anchor="start" font-weight="normal" fill="#d62828">OUT+ 5 V</text>
-<path d="M200,260 L262,260" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M262,252 L262,268 L276,260 Z M276,252 L276,268" fill="#dddddd" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="269" y="244" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">1N5819</text>
-<text x="278" y="280" font-size="9.5" text-anchor="end" font-weight="normal" fill="#555">stripe toward</text>
-<text x="278" y="292" font-size="9.5" text-anchor="end" font-weight="normal" fill="#555">the XIAO</text>
-<path d="M276,260 L330,260" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="330" y="230" width="170" height="270" rx="6" fill="#f5f5f5" stroke="#222222" stroke-width="1.4"/>
-<text x="415.0" y="250" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">XIAO RP2040</text>
-<text x="415.0" y="516" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">3.3 V logic. Program it over USB-C</text>
-<text x="415.0" y="529" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">with S1 off.</text>
-<circle cx="330" cy="260" r="3.2" fill="#ffffff" stroke="#d62828" stroke-width="1.4"/>
-<text x="337" y="264" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222">5V</text>
-<circle cx="330" cy="290" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="337" y="294" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222">GND</text>
-<circle cx="500" cy="350" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="493" y="354" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">D4</text>
-<circle cx="500" cy="380" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="493" y="384" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">D3</text>
-<circle cx="500" cy="420" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="493" y="424" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">D1</text>
-<circle cx="500" cy="450" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="493" y="454" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">D2</text>
-<circle cx="470" cy="230" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="476" y="245" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">D0</text>
-<circle cx="500" cy="480" r="3.2" fill="#ffffff" stroke="#777777" stroke-width="1.4"/>
-<text x="493" y="484" font-size="10" text-anchor="end" font-weight="normal" fill="#555">D6 (optional PRIME</text>
-<text x="493" y="496" font-size="10" text-anchor="end" font-weight="normal" fill="#555">button to GND)</text>
-<path d="M330,290 L300,290 L300,304" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M292.0,304 L308.0,304 M294.72,309.0 L305.28,309.0 M298.08,314.0 L301.92,314.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="310" cy="260" r="3.4" fill="#d62828"/>
-<path d="M310,260 L310,210 L700,210 L700,560" fill="none" stroke="#d62828" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="505" y="204" font-size="10" text-anchor="middle" font-weight="normal" fill="#d62828">+5 V to U1 pin 14</text>
-<rect x="600" y="560" width="200" height="150" rx="6" fill="#eef6ff" stroke="#222222" stroke-width="1.4"/>
-<text x="700.0" y="580" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">74AHCT125 (U1)</text>
-<text x="700.0" y="596" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">3.3 V -&gt; 5 V gate driver</text>
-<text x="700.0" y="609" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">14 = +5 V, 7 = GND, 0.1 µF across</text>
-<text x="700.0" y="622" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">OE pins 1, 4, 10, 13 -&gt; GND</text>
-<text x="700.0" y="635" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">unused inputs 9, 12 -&gt; GND</text>
-<text x="706" y="554" font-size="9.5" text-anchor="start" font-weight="normal" fill="#d62828">pin 14</text>
-<circle cx="600" cy="640" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="607" y="644" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222">5  2A</text>
-<circle cx="800" cy="640" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="793" y="644" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">2Y  6</text>
-<circle cx="600" cy="680" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="607" y="684" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222">2  1A</text>
-<circle cx="800" cy="680" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="793" y="684" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">1Y  3</text>
-<path d="M700.0,710 L700.0,800" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="706.0" y="724" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">7</text>
-<circle cx="700.0" cy="800" r="3.4" fill="#222222"/>
-<path d="M500,350 L585,350 L585,640 L600,640" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M500,380 L565,380 L565,680 L600,680" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="590" y="344" font-size="9.5" text-anchor="start" font-weight="normal" fill="#2a9d2a">LIGHT</text>
-<text x="570" y="374" font-size="9.5" text-anchor="start" font-weight="normal" fill="#2a9d2a">PUMP</text>
-<circle cx="585" cy="470" r="3.4" fill="#2a9d2a"/>
-<path d="M585,470 L618,470 L618,484" fill="none" stroke="#2a9d2a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="612" y="484" width="12" height="30" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.3"/>
-<text x="628" y="503" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">10 k</text>
-<path d="M618,514 L618,522" fill="none" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M610.0,522 L626.0,522 M612.72,527.0 L623.28,527.0 M616.08,532.0 L619.92,532.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="565" cy="470" r="3.4" fill="#2a9d2a"/>
-<path d="M565,470 L545,470 L545,484" fill="none" stroke="#2a9d2a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="539" y="484" width="12" height="30" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.3"/>
-<text x="555" y="503" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">10 k</text>
-<path d="M545,514 L545,522" fill="none" stroke="#222222" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M537.0,522 L553.0,522 M539.72,527.0 L550.28,527.0 M543.08,532.0 L546.92,532.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="830" y="250" width="140" height="70" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.4"/>
-<text x="900.0" y="270" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">Green LED strip</text>
-<text x="900.0" y="286" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">green COB, 75 cm in 7 pieces,</text>
-<text x="900.0" y="299" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">all in parallel, ~0.6 A</text>
-<path d="M860,120 L860,250" fill="none" stroke="#f77f00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="860" cy="120" r="3.4" fill="#f77f00"/>
-<text x="865" y="246" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">+</text>
-<path d="M940,320 L940,584" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="946" y="336" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">-</text>
-<rect x="870" y="584" width="100" height="76" rx="4" fill="#f0f0f0" stroke="#222222" stroke-width="1.4"/>
-<text x="920" y="614" font-size="12" text-anchor="middle" font-weight="bold" fill="#222222">Q2 light</text>
-<text x="920" y="629" font-size="9.5" text-anchor="middle" font-weight="normal" fill="#444">IRLZ44N</text>
-<circle cx="940" cy="584" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="946" y="599" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">D</text>
-<circle cx="870" cy="640" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="877" y="644" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222">G</text>
-<circle cx="940" cy="660" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="946" y="654" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">S</text>
-<path d="M940,660 L940,800" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="940" cy="800" r="3.4" fill="#222222"/>
-<path d="M800,640 L870,640" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1000" y="250" width="140" height="70" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.4"/>
-<text x="1070.0" y="270" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">Kamoer KPHM200</text>
-<text x="1070.0" y="286" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">12 V peristaltic pump</text>
-<text x="1070.0" y="299" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">~0.7 A</text>
-<path d="M1030,120 L1030,250" fill="none" stroke="#f77f00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1030" cy="120" r="3.4" fill="#f77f00"/>
-<text x="1035" y="246" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">+</text>
-<path d="M1110,320 L1110,624" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1116" y="336" font-size="13" text-anchor="start" font-weight="bold" fill="#222222">-</text>
-<rect x="1040" y="624" width="100" height="76" rx="4" fill="#f0f0f0" stroke="#222222" stroke-width="1.4"/>
-<text x="1090" y="654" font-size="12" text-anchor="middle" font-weight="bold" fill="#222222">Q1 pump</text>
-<text x="1090" y="669" font-size="9.5" text-anchor="middle" font-weight="normal" fill="#444">IRLZ44N</text>
-<circle cx="1110" cy="624" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="1116" y="639" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">D</text>
-<circle cx="1040" cy="680" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="1047" y="684" font-size="10.5" text-anchor="start" font-weight="normal" fill="#222222">G</text>
-<circle cx="1110" cy="700" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="1116" y="694" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">S</text>
-<path d="M1110,700 L1110,800" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1110" cy="800" r="3.4" fill="#222222"/>
-<path d="M800,680 L1040,680" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1030,236 L1170,236 L1170,262" fill="none" stroke="#f77f00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1030" cy="236" r="3.4" fill="#f77f00"/>
-<path d="M1162,276 L1178,276 L1170,262 Z M1162,262 L1178,262" fill="#dddddd" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1170,276 L1170,380 L1110,380" fill="none" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1110" cy="380" r="3.4" fill="#222222"/>
-<text x="1180" y="290" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">1N5819</text>
-<text x="1180" y="302" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">flyback,</text>
-<text x="1180" y="314" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222222">stripe to +12 V</text>
-<rect x="30" y="560" width="440" height="200" rx="8" fill="none" stroke="#777777" stroke-width="1.2" stroke-dasharray="6,4"/>
-<rect x="38" y="568" width="392" height="17" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="0"/>
-<text x="42" y="581" font-size="11" text-anchor="start" font-weight="bold" fill="#555">the lock (on the lock wall in the sphere): one cable down behind the wall to the base</text>
-<rect x="40" y="590" width="190" height="70" rx="6" fill="#f3e8ff" stroke="#222222" stroke-width="1.4"/>
-<text x="135.0" y="610" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">A3144 Hall sensor</text>
-<text x="135.0" y="626" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">on a post inside the rotor,</text>
-<text x="135.0" y="639" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">~3 mm under the magnet</text>
-<circle cx="230" cy="610" r="3.2" fill="#ffffff" stroke="#d62828" stroke-width="1.4"/>
-<text x="223" y="614" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">VCC</text>
-<circle cx="230" cy="628" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="223" y="632" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">OUT</text>
-<circle cx="230" cy="646" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="223" y="650" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">GND</text>
-<path d="M230,610 L285,610 L285,260" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="285" cy="260" r="3.4" fill="#d62828"/>
-<path d="M230,628 L356,628" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M372,620 L372,636 L358,628 Z M358,620 L358,636" fill="#dddddd" stroke="#222222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M372,628 L515,628 L515,420 L500,420" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="345" y="646" font-size="9.5" text-anchor="start" font-weight="normal" fill="#555">1N5819 on the board,</text>
-<text x="345" y="658" font-size="9.5" text-anchor="start" font-weight="normal" fill="#555">stripe to the sensor</text>
-<path d="M230,646 L250,646 L250,800" fill="none" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="250" cy="800" r="3.4" fill="#222222"/>
-<rect x="40" y="680" width="190" height="64" rx="6" fill="#f3e8ff" stroke="#222222" stroke-width="1.4"/>
-<text x="135.0" y="700" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">D2F-L microswitch</text>
-<text x="135.0" y="716" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">pressed by the rotor cam</text>
-<text x="135.0" y="729" font-size="10" text-anchor="middle" font-weight="normal" fill="#444">at ~40 deg of twist</text>
-<circle cx="230" cy="702" r="3.2" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.4"/>
-<text x="223" y="706" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">NO</text>
-<circle cx="230" cy="724" r="3.2" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="223" y="728" font-size="10.5" text-anchor="end" font-weight="normal" fill="#222222">COM</text>
-<path d="M230,702 L525,702 L525,450 L500,450" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M230,724 L240,724 L240,800" fill="none" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="240" cy="800" r="3.4" fill="#222222"/>
-<text x="24" y="836" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.</text>
-<text x="24" y="850" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.</text>
-<text x="24" y="864" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">S1 switches everything but the charge jack: tip the lantern to reach it; off to store and while charging. The pack's protection board cuts out on a short or a flat pack.</text>
-<text x="24" y="878" font-size="10.5" text-anchor="start" font-weight="normal" fill="#333">Plugs where the lantern unplugs from the cartridge: lock cable JST PH 4-pin = 5V, HALL OUT, SW (NO), GND, ~10 cm from the board; LED leads JST SM 2-pin = +, -.</text>
+<rect x="0" y="0" width="1600" height="1430" fill="#ffffff"/>
+<text x="24" y="38" font-size="25" text-anchor="start" font-weight="bold" fill="#222222">Green Lantern power battery — circuit revision</text>
+<text x="24" y="66" font-size="14" text-anchor="start" font-weight="normal" fill="#222222">Matching net names are connected. All grounds are common. Dots join wires; unmarked crossings do not.</text>
+<rect x="20" y="90" width="1560" height="310" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="38" y="118" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Power and charging</text>
+<rect x="45" y="145" width="210" height="92" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="150.0" y="169" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">TalentCell YB1203000</text>
+<text x="150.0" y="191" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">3000 mAh • 3 A max</text>
+<text x="150.0" y="207" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">9–12.6 V • DC5521 centre +</text>
+<path d="M255,185 L390,185" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="330" cy="185" r="3.2" fill="#f77f00"/>
+<circle cx="390" cy="185" r="3" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<circle cx="430" cy="185" r="3" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<path d="M390,183 L425,165" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="410" y="150" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">S1 master switch</text>
+<path d="M430,185 L650,185" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="545" cy="185" r="3" fill="#f77f00"/>
+<text x="545" y="176" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">VLOAD</text>
+<path d="M255,220 L280,220 L280,246" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M272.0,246 L288.0,246 M274.72,251.0 L285.28,251.0 M278.08,256.0 L281.92,256.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="45" y="285" width="210" height="70" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="150.0" y="309" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">J1 charge jack</text>
+<text x="150.0" y="331" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">DC5521 • centre +</text>
+<path d="M330,185 L330,305 L255,305" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M255,338 L280,338 L280,360" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M272.0,360 L288.0,360 M274.72,365.0 L285.28,365.0 M278.08,370.0 L281.92,370.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="340" y="337" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">Pack switch ON for use/charge; S1 OFF to charge.</text>
+<text x="340" y="362" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">Use supplied 12.6 V charger; J1 switched contact unused.</text>
+<path d="M550,185 L550,222" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="550" cy="185" r="3.2" fill="#f77f00"/>
+<path d="M550,222 L550,256.0" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M539,256.0 H561 M539,264.0 H561" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M550,264.0 L550,298" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="567" y="264.0" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">C2 2200 µF / 25 V</text>
+<text x="527" y="252.0" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">+</text>
+<path d="M542.0,298 L558.0,298 M544.72,303.0 L555.28,303.0 M548.08,308.0 L551.92,308.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="650" y="145" width="210" height="92" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="755.0" y="169" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">LM2596 buck</text>
+<text x="755.0" y="191" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">IN+ = VLOAD; IN− = GND</text>
+<text x="755.0" y="207" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">Set OUT to 5.0 V unloaded</text>
+<path d="M755,237 L755,263" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M747.0,263 L763.0,263 M749.72,268.0 L760.28,268.0 M753.08,273.0 L756.92,273.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M860,185 L995,185" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="890" cy="185" r="3" fill="#d62828"/>
+<text x="890" y="176" font-size="12" text-anchor="start" font-weight="bold" fill="#d62828">+5V_REG</text>
+<text x="885" y="240" font-size="13" text-anchor="start" font-weight="normal" fill="#d62828">To U1 and Hall sensor</text>
+<text x="885" y="259" font-size="13" text-anchor="start" font-weight="bold" fill="#d62828">BEFORE D1</text>
+<path d="M995,185 L1051.0,185" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1051.0,176 L1051.0,194 L1067.0,185 Z M1068.0,175 V195" fill="#e2e8f0" stroke="#222222" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1068.0,185 L1125,185" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1060.0" y="167" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">D1 NTE585</text>
+<path d="M1125,185 L1195,185" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1195" cy="185" r="3" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<circle cx="1225" cy="185" r="3" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<rect x="1189" y="179" width="42" height="12" rx="0" fill="none" stroke="#d62828" stroke-width="2"/>
+<text x="1210" y="150" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">JP1 removable shunt</text>
+<path d="M1225,185 L1485,185" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1485" cy="185" r="3" fill="#d62828"/>
+<text x="1485" y="176" font-size="12" text-anchor="end" font-weight="bold" fill="#d62828">XIAO_5V</text>
+<text x="1060" y="218" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">D1 stripe toward XIAO</text>
+<text x="1040" y="283" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">JP1 fitted: battery operation, USB unplugged.</text>
+<text x="1040" y="307" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">JP1 removed: USB powers XIAO; S1 powers U1/loads.</text>
+<text x="1040" y="331" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">Never connect USB with JP1 fitted.</text>
+<text x="1040" y="355" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">USB-only flashing: remove U1 from its socket first.</text>
+<rect x="20" y="420" width="400" height="450" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="38" y="448" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Controller — 3.3 V GPIO</text>
+<rect x="45" y="475" width="230" height="315" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="160.0" y="499" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">Seeed XIAO RP2040</text>
+<text x="265" y="539" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">5V</text>
+<path d="M275,535 L310,535" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="535" r="3" fill="#d62828"/>
+<text x="310" y="526" font-size="12" text-anchor="start" font-weight="bold" fill="#d62828">XIAO_5V</text>
+<text x="265" y="574" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">3V3</text>
+<path d="M275,570 L310,570" fill="none" stroke="#8b36ad" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="570" r="3" fill="#8b36ad"/>
+<text x="310" y="561" font-size="12" text-anchor="start" font-weight="bold" fill="#8b36ad">+3V3</text>
+<text x="265" y="614" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">D0</text>
+<path d="M275,610 L310,610" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="610" r="3" fill="#2a9d2a"/>
+<text x="310" y="601" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">BAT_SENSE</text>
+<text x="265" y="649" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">D1</text>
+<path d="M275,645 L310,645" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="645" r="3" fill="#2a9d2a"/>
+<text x="310" y="636" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">HALL</text>
+<text x="265" y="684" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">D2</text>
+<path d="M275,680 L310,680" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="680" r="3" fill="#2a9d2a"/>
+<text x="310" y="671" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">TWIST</text>
+<text x="265" y="719" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">D3</text>
+<path d="M275,715 L310,715" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="715" r="3" fill="#2a9d2a"/>
+<text x="310" y="706" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">PUMP_PWM</text>
+<text x="265" y="754" font-size="13" text-anchor="end" font-weight="normal" fill="#222222">D4</text>
+<path d="M275,750 L310,750" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="310" cy="750" r="3" fill="#2a9d2a"/>
+<text x="310" y="741" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">LED_PWM</text>
+<path d="M150,790 L150,815" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M142.0,815 L158.0,815 M144.72,820.0 L155.28,820.0 M148.08,825.0 L151.92,825.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="175" y="810" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">GND</text>
+<text x="40" y="850" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">Optional PRIME: D6 → momentary button → GND</text>
+<rect x="440" y="420" width="660" height="450" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="458" y="448" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">U1 — TC4427CPA dual non-inverting gate driver</text>
+<rect x="685" y="555" width="195" height="205" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="782.5" y="579" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">TC4427CPA</text>
+<text x="782.5" y="601" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">DIP-8</text>
+<text x="782.5" y="617" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">1, 8: no connection</text>
+<circle cx="780" cy="480" r="3" fill="#d62828"/>
+<text x="780" y="471" font-size="12" text-anchor="start" font-weight="bold" fill="#d62828">+5V_REG</text>
+<path d="M780,480 L780,555" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="790" y="546" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">6 VDD</text>
+<path d="M780,760 L780,800" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M772.0,800 L788.0,800 M774.72,805.0 L785.28,805.0 M778.08,810.0 L781.92,810.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="790" y="782" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">3 GND</text>
+<path d="M780,500 L930,500" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="930" cy="500" r="3.2" fill="#d62828"/>
+<path d="M930,500 L930,531.0" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M919,531.0 H941 M919,539.0 H941" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M930,539.0 L930,570" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="947" y="539.0" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">C3 0.1 µF</text>
+<path d="M922.0,570 L938.0,570 M924.72,575.0 L935.28,575.0 M928.08,580.0 L931.92,580.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M780,500 L1025,500" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1025" cy="500" r="3.2" fill="#d62828"/>
+<path d="M1025,500 L1025,531.0" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1014,531.0 H1036 M1014,539.0 H1036" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1025,539.0 L1025,570" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1042" y="539.0" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">C4 1 µF</text>
+<path d="M1017.0,570 L1033.0,570 M1019.72,575.0 L1030.28,575.0 M1023.08,580.0 L1026.92,580.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="780" cy="500" r="3.2" fill="#d62828"/>
+<circle cx="465" cy="660" r="3" fill="#2a9d2a"/>
+<text x="465" y="651" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">PUMP_PWM</text>
+<path d="M465,660 L685,660" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="695" y="664" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">2 IN A</text>
+<text x="870" y="664" font-size="12" text-anchor="end" font-weight="normal" fill="#222222">7 OUT A</text>
+<path d="M880,660 L985,660" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="985" cy="660" r="3" fill="#2a9d2a"/>
+<text x="985" y="651" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">PUMP_DRV</text>
+<circle cx="565" cy="660" r="3.2" fill="#2a9d2a"/>
+<path d="M565,660 L565,662.5" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M565,702.5 L565,705" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="559" y="662.5" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="480" y="686.5" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">R3 10 kΩ</text>
+<path d="M557.0,705 L573.0,705 M559.72,710.0 L570.28,710.0 M563.08,715.0 L566.92,715.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="465" cy="725" r="3" fill="#2a9d2a"/>
+<text x="465" y="716" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">LED_PWM</text>
+<path d="M465,725 L685,725" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="695" y="729" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">4 IN B</text>
+<text x="870" y="729" font-size="12" text-anchor="end" font-weight="normal" fill="#222222">5 OUT B</text>
+<path d="M880,725 L985,725" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="985" cy="725" r="3" fill="#2a9d2a"/>
+<text x="985" y="716" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">LED_DRV</text>
+<circle cx="650" cy="725" r="3.2" fill="#2a9d2a"/>
+<path d="M650,725 L650,750.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M650,790.0 L650,815" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="644" y="750.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="565" y="774.0" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">R4 10 kΩ</text>
+<path d="M642.0,815 L658.0,815 M644.72,820.0 L655.28,820.0 M648.08,825.0 L651.92,825.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="465" y="850" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">C3 + C4: short leads directly across pins 6 and 3.</text>
+<rect x="1120" y="420" width="460" height="705" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1138" y="448" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Pump and lighting</text>
+<circle cx="1330" cy="480" r="3" fill="#f77f00"/>
+<text x="1330" y="471" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">VLOAD</text>
+<path d="M1330,480 L1330,510" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1260" y="510" width="220" height="65" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="1370.0" y="534" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">Kamoer KPHM200 12 V</text>
+<text x="1370.0" y="556" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">+ above • − below</text>
+<path d="M1330,575 L1330,610" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1260" y="610" width="220" height="72" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="1370.0" y="634" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">Q1 IRLZ44NPBF</text>
+<text x="1370.0" y="656" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">1 G     2 D/tab     3 S</text>
+<text x="1340" y="604" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">D</text>
+<circle cx="1145" cy="660" r="3" fill="#2a9d2a"/>
+<text x="1145" y="651" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">PUMP_DRV</text>
+<path d="M1145,660 L1182.5,660" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1222.5,660 L1260,660" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1182.5" y="654" width="40" height="12" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1202.5" y="684" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">R5 47 Ω</text>
+<circle cx="1245" cy="660" r="3.2" fill="#2a9d2a"/>
+<path d="M1245,660 L1245,682.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1245,722.0 L1245,744" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1239" y="682.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1147" y="706.0" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">R7 10 kΩ</text>
+<path d="M1245,744 L1330,744 L1330,682" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1322.0,744 L1338.0,744 M1324.72,749.0 L1335.28,749.0 M1328.08,754.0 L1331.92,754.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1340" y="705" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">S → GND</text>
+<path d="M1330,492 L1530,492 L1530,525" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1330" cy="492" r="3.2" fill="#f77f00"/>
+<path d="M1521,542 H1539 L1530,526 Z M1520,525 H1540" fill="#e2e8f0" stroke="#222222" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1530,542 L1530,592 L1330,592" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1330" cy="592" r="3.2" fill="#222222"/>
+<text x="1510" y="623" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">D2</text>
+<text x="1510" y="636" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">NTE586</text>
+<text x="1510" y="649" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">3 A / 40 V</text>
+<text x="1510" y="662" font-size="10" text-anchor="middle" font-weight="normal" fill="#222222">stripe ↑</text>
+<circle cx="1330" cy="810" r="3" fill="#f77f00"/>
+<text x="1330" y="801" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">VLOAD</text>
+<path d="M1330,810 L1330,840" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1260" y="840" width="220" height="65" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="1370.0" y="864" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">12 V green COB • ~75 cm</text>
+<text x="1370.0" y="886" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">+ above • − below</text>
+<path d="M1330,905 L1330,940" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1260" y="940" width="220" height="72" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="1370.0" y="964" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">Q2 IRLZ44NPBF</text>
+<text x="1370.0" y="986" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">1 G     2 D/tab     3 S</text>
+<text x="1340" y="934" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">D</text>
+<circle cx="1145" cy="990" r="3" fill="#2a9d2a"/>
+<text x="1145" y="981" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">LED_DRV</text>
+<path d="M1145,990 L1182.5,990" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1222.5,990 L1260,990" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1182.5" y="984" width="40" height="12" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1202.5" y="1014" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">R6 47 Ω</text>
+<circle cx="1245" cy="990" r="3.2" fill="#2a9d2a"/>
+<path d="M1245,990 L1245,1012.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1245,1052.0 L1245,1074" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1239" y="1012.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1147" y="1036.0" font-size="11" text-anchor="start" font-weight="normal" fill="#222222">R8 10 kΩ</text>
+<path d="M1245,1074 L1330,1074 L1330,1012" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1322.0,1074 L1338.0,1074 M1324.72,1079.0 L1335.28,1079.0 M1328.08,1084.0 L1331.92,1084.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1340" y="1035" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">S → GND</text>
+<rect x="20" y="890" width="620" height="365" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="38" y="918" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Hall sensor — bare A3144</text>
+<rect x="45" y="995" width="220" height="125" rx="5" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="155.0" y="1019" font-size="16" text-anchor="middle" font-weight="bold" fill="#222222">A3144</text>
+<text x="155.0" y="1041" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">Printed face toward viewer</text>
+<text x="155.0" y="1057" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">leads downward: 1, 2, 3</text>
+<text x="155.0" y="1073" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">1 VCC • 2 GND • 3 OUT</text>
+<circle cx="330" cy="955" r="3" fill="#d62828"/>
+<text x="330" y="946" font-size="12" text-anchor="start" font-weight="bold" fill="#d62828">+5V_REG</text>
+<path d="M330,955 L330,1020 L265,1020" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="1012" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">1</text>
+<path d="M330,970 L490,970" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="330" cy="970" r="3.2" fill="#d62828"/>
+<path d="M490,970 L490,1001.0" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M479,1001.0 H501 M479,1009.0 H501" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M490,1009.0 L490,1040" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="507" y="1009.0" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">C5 0.1 µF</text>
+<path d="M482.0,1040 L498.0,1040 M484.72,1045.0 L495.28,1045.0 M488.08,1050.0 L491.92,1050.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M265,1095 L300,1095 L300,1130" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M292.0,1130 L308.0,1130 M294.72,1135.0 L305.28,1135.0 M298.08,1140.0 L301.92,1140.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="273" y="1088" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">2</text>
+<path d="M265,1060 L390,1060 L390,1150 L565,1150" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="273" y="1052" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">3</text>
+<circle cx="565" cy="1150" r="3" fill="#2a9d2a"/>
+<text x="565" y="1141" font-size="12" text-anchor="end" font-weight="bold" fill="#2a9d2a">HALL → D1</text>
+<circle cx="450" cy="1060" r="3" fill="#8b36ad"/>
+<text x="450" y="1051" font-size="12" text-anchor="start" font-weight="bold" fill="#8b36ad">+3V3</text>
+<path d="M450,1060 L450,1085.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M450,1125.0 L450,1150" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="444" y="1085.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="462" y="1109.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">R9 4.7 kΩ</text>
+<circle cx="450" cy="1150" r="3.2" fill="#2a9d2a"/>
+<text x="40" y="1200" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">C5 goes at the sensor, after the cable; OUT connects directly to D1.</text>
+<text x="40" y="1222" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">No 5 V pull-up and no series diode on HALL.</text>
+<rect x="660" y="890" width="440" height="365" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="678" y="918" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Twist — D2F-01L lever switch</text>
+<circle cx="925" cy="955" r="3" fill="#d62828"/>
+<text x="925" y="946" font-size="12" text-anchor="start" font-weight="bold" fill="#d62828">+5V_REG</text>
+<path d="M925,955 L925,997.5" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M925,1037.5 L925,1080" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="919" y="997.5" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="937" y="1021.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">R11 3.3 kΩ</text>
+<circle cx="925" cy="1080" r="3.2" fill="#2a9d2a"/>
+<circle cx="700" cy="1080" r="3" fill="#2a9d2a"/>
+<text x="700" y="1071" font-size="12" text-anchor="start" font-weight="bold" fill="#2a9d2a">TWIST → D2</text>
+<circle cx="740" cy="955" r="3" fill="#8b36ad"/>
+<text x="740" y="946" font-size="12" text-anchor="start" font-weight="bold" fill="#8b36ad">+3V3</text>
+<path d="M740,955 L740,997.5" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M740,1037.5 L740,1080" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="734" y="997.5" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="752" y="1021.5" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">R10 4.7 kΩ</text>
+<circle cx="740" cy="1080" r="3.2" fill="#2a9d2a"/>
+<path d="M700,1080 L803.5,1080" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M803.5,1071 L803.5,1089 L819.5,1080 Z M820.5,1070 V1090" fill="#e2e8f0" stroke="#222222" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M820.5,1080 L925,1080" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="812.5" y="1062" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">D3 NTE585</text>
+<path d="M925,1080 L925,1100" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="925" cy="1100" r="3" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<circle cx="925" cy="1150" r="3" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<path d="M925,1150 L902,1110" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M925,1150 L925,1175" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M917.0,1175 L933.0,1175 M919.72,1180.0 L930.28,1180.0 M923.08,1185.0 L926.92,1185.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="945" y="1105" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">NO</text>
+<text x="945" y="1154" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">COM</text>
+<text x="680" y="1200" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">D3 stripe toward NO; NC unused.</text>
+<text x="680" y="1222" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">R11 supplies ~1.5 mA when closed; GPIO stays at 3.3 V.</text>
+<rect x="1120" y="1145" width="460" height="265" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1138" y="1173" font-size="18" text-anchor="start" font-weight="bold" fill="#222222">Battery sense</text>
+<circle cx="1170" cy="1198" r="3" fill="#f77f00"/>
+<text x="1170" y="1189" font-size="12" text-anchor="start" font-weight="bold" fill="#f77f00">VLOAD</text>
+<path d="M1170,1198 L1170,1219.0" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1170,1259.0 L1170,1280" fill="none" stroke="#f77f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1164" y="1219.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1180" y="1243.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">R1 100 kΩ</text>
+<circle cx="1170" cy="1280" r="3.2" fill="#2a9d2a"/>
+<path d="M1170,1280 L1170,1305.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1170,1345.0 L1170,1370" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1164" y="1305.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1180" y="1329.0" font-size="10" text-anchor="start" font-weight="normal" fill="#222222">R2 22 kΩ</text>
+<path d="M1162.0,1370 L1178.0,1370 M1164.72,1375.0 L1175.28,1375.0 M1168.08,1380.0 L1171.92,1380.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1170,1280 L1380,1280" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1380" cy="1280" r="3" fill="#2a9d2a"/>
+<text x="1380" y="1271" font-size="12" text-anchor="end" font-weight="bold" fill="#2a9d2a">BAT_SENSE → D0</text>
+<circle cx="1360" cy="1280" r="3.2" fill="#2a9d2a"/>
+<path d="M1360,1280 L1360,1321.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1349,1321.0 H1371 M1349,1329.0 H1371" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1360,1329.0 L1360,1370" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1377" y="1329.0" font-size="12" text-anchor="start" font-weight="normal" fill="#222222">C1 0.1 µF</text>
+<path d="M1352.0,1370 L1368.0,1370 M1354.72,1375.0 L1365.28,1375.0 M1358.08,1380.0 L1361.92,1380.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1150" y="1395" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">12.6 V × 22 / 122 = 2.27 V at D0</text>
+<text x="30" y="1295" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">LOCK CABLE (JST PH 4-pin): +5V_REG, HALL, SW_NO (D3 cathode), GND. R9–R11 and D3 stay on the board.</text>
+<text x="30" y="1323" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">LED CABLE (JST SM 2-pin): VLOAD and Q2 drain. Keep pump/LED return currents out of sensor/MCU wiring.</text>
+<text x="30" y="1351" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">USB service: see build guide power sequence. JP1 only isolates the XIAO supply, not its GPIO connections.</text>
+<text x="30" y="1379" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">CAD FOLLOW-UP: existing battery supports fit the old KBT pack; TalentCell fit is a separate PR.</text>
 </svg>

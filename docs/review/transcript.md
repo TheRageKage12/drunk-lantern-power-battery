@@ -5568,3 +5568,18 @@ Noted. The blocks approach stays, and the guide already says so wherever the lan
 ### Kevin
 
 refresh the handoff
+
+
+## 2026-10-13 — electrical review addendum (local draft)
+
+Owner instructions, condensed from the circuit review:
+- Use TalentCell YB1203000; handle matching CAD changes in a separate PR during CAD review.
+- Accept the proposed gate driver/network, capacitor and pump-diode upgrades, direct Hall interface and
+  explicitly drawn bypass capacitors. Replacement parts must stay within Amazon/Vetco; Oct 27 switch
+  delivery is too late. The fast D2F-01L marketplace listing remains a review candidate.
+- “Let's compose the PR locally.” Explain changes and reasons concisely, include proposed spreadsheet
+  edits after acceptance, and include the updated circuit diagram. Spreadsheet changes are vetted separately.
+
+Prepared on local branch `circuit-review`: revised diagram/generator, build guide and wiring comments,
+with `CIRCUIT_PR.md` as the review draft. JP1 and its USB service procedure are additional details proposed
+for review. Driver/1 µF capacitor sourcing remains open. No live Sheet edits, CAD edits, push or GitHub PR.

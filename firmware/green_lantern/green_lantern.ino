@@ -33,19 +33,23 @@
  *     and the prop goes LOCKED; the slower RING_GONE_MS only governs the LOCKED -> IDLE reset
  *
  * Wiring (see docs/BUILD_GUIDE.md and docs/images/wiring.svg):
- *   D1  <- Hall sensor OUT, active LOW when the magnet is present (D1 uses the XIAO's internal pull-up).
- *          A3144 on 5 V/GND, its open-collector OUT through a 1N5819 (anode on D1, cathode on OUT) so D1
- *          never sees 5 V. Alternative: Adafruit DRV5032 breakout on 3V3/GND, OUT straight to D1.
- *   Lock cable (JST PH 4-pin): 5V, HALL OUT, SW, GND. LED leads: JST SM 2-pin (+, -).
- *   D2  <- microswitch NO   (COM -> GND, internal pull-up, active LOW)
- *   D3  -> 74AHCT125 ch.1 (pin 2 in, pin 3 out) -> gate of Q1 (pump MOSFET, low side); 10 k from D3 to GND
- *          keeps it off while the XIAO boots. 1N5819 flyback across the pump (stripe to +12 V).
- *   D4  -> 74AHCT125 ch.2 (pin 5 in, pin 6 out) -> gate of Q2 (LED strip MOSFET, low side); 10 k D4 to GND.
- *   D6  <- PRIME button, momentary to GND (optional; leave unconnected if you skip it)
- *   D0  <- battery sense (A0): 100 k from +12 V (after the power switch) to D0, 22 k and 0.1 uF from D0 to GND.
- *          12.6 V full -> 2.27 V at the pin. Reads 0 V when not fitted: compensation and warning switch off.
- *   5V  <- 5 V from the LM2596 buck through a 1N5819 (USB and the buck never back-feed each other)
- *   3V3 -> nothing in the A3144 build (only the DRV5032 alternative takes its VCC here)
+ *   D1  <- A3144 open-collector OUT directly; external 4.7 k to 3V3. Hall VCC is regulated 5 V,
+ *          with local 0.1 uF to GND. Internal pull-up can remain enabled.
+ *   Lock cable (JST PH 4-pin): regulated 5V, HALL OUT, SW/NO, GND. LED: JST SM 2-pin (+, -).
+ *   D2  <- NTE585 anode; cathode to switch NO. COM to GND; 3.3 k from NO to regulated 5 V.
+ *          External 4.7 k from D2 to 3V3; active LOW. Do not connect the 5 V switch node directly to D2.
+ *   D3  -> TC4427CPA IN A pin 2; OUT A pin 7 -> 47 ohm -> Q1 gate (pump).
+ *   D4  -> TC4427CPA IN B pin 4; OUT B pin 5 -> 47 ohm -> Q2 gate (LED).
+ *          Each input has 10 k to GND; each gate has 10 k to source/GND. U1 pin 6 = regulated 5 V,
+ *          pin 3 = GND, 0.1 uF + 1 uF locally across supply; pins 1/8 unconnected.
+ *          NTE586 3 A/40 V flyback across pump, cathode to switched battery positive.
+ *   D6  <- optional PRIME button to GND.
+ *   D0  <- battery sense: 100 k from switched battery rail, 22 k and 0.1 uF to GND.
+ *          12.6 V full -> 2.27 V at the pin. Reads 0 V if absent: compensation/warning off.
+ *   5V  <- buck through NTE585 (stripe to XIAO), then removable JP1. Remove JP1 before USB.
+ *          Follow build-guide sequencing; remove U1 for USB-only flashing so its unpowered inputs
+ *          are not driven by the boot blink. Normal operation is battery-only.
+ *   3V3 -> the external Hall and twist GPIO pull-ups only.
  *
  * Serial (115200) commands for bench calibration, type then Enter:
  *   status            print state and settings
@@ -65,7 +69,7 @@
 constexpr uint8_t HALL_PIN      = D1;
 constexpr uint8_t SWITCH_PIN    = D2;
 constexpr uint8_t PUMP_PIN      = D3;
-constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through the 74AHCT125)
+constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through the TC4427CPA)
 constexpr uint8_t PRIME_PIN     = D6;  // momentary to GND: primes the tube while held (IDLE, no ring)
 constexpr uint8_t BATT_PIN      = A0;  // = D0: battery voltage through a 100 k / 22 k divider
 
@@ -415,7 +419,7 @@ void readInputs() {
 void setup() {
   pinMode(PUMP_PIN, OUTPUT);
   digitalWrite(PUMP_PIN, LOW);          // FIRST: pump off
-  pinMode(HALL_PIN, INPUT_PULLUP);      // the A3144's open-collector OUT (through the 1N5819) or a DRV5032's open-drain OUT pulls this low
+  pinMode(HALL_PIN, INPUT_PULLUP);      // A3144 open collector directly to D1; external 4.7 k to 3V3 also fitted
   pinMode(SWITCH_PIN, INPUT_PULLUP);
   pinMode(PRIME_PIN, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);

@@ -307,3 +307,18 @@ Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, 
 - No listing was re-priced except the two checked in phase 4; the prices are the ones read on 2026-10-13.
 - The pump's outline is still the contract's estimate; nothing in the review can replace measuring it.
 - Nothing was merged; the PR waits for Kevin.
+
+## Electrical correctness revision — local draft
+
+- Updated circuit generator and SVG/PNG, build instructions, firmware wiring comments and context for
+  TalentCell, TC4427CPA, gate network, Hall/twist interfaces, diode/capacitor ratings and local bypass.
+- Added JP1 to isolate the XIAO battery feed during USB calibration. USB-only flashing removes socketed U1
+  to avoid GPIO drive into its unpowered inputs. No firmware behavior or pin mapping changes.
+- Kept all CAD/export files unchanged; existing battery supports still fit KBT and require a separate PR.
+- `CIRCUIT_PR.md` is the local PR description and proposed post-acceptance Sheet delta, not a second BOM.
+  Live Sheet unchanged. Fast switch listing remains a marketplace candidate; driver and 1 µF capacitor
+  sourcing within Amazon/Vetco is still open. Do not call this ready to order before resolving those items.
+
+Validation: wiring SVG/PNG regenerated and visually checked; firmware simulations 20/20 pass;
+`git diff --check` clean. Target compilation unavailable (`arduino-cli` not installed). No CAD files
+changed or regenerated, and no hardware measurements claimed.
