@@ -212,7 +212,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
 - **20/20 simulated scenarios pass** (`firmware/test`, `make test`); they run the real `.ino` against mocks.
 - Calibration is done with the shot glass only.
 
-### Shopping (`docs/SHOPPING_LIST.md`, `.pdf`; guide section 2)
+### Shopping (the shared Google Sheet, https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit; guide section 2)
+Since 2026-10-14 the list lives only in the Google Sheet, edited by Kevin, Sky and Duncan (columns: Have, Still to get,
+Who has it). The markdown, PDF and .xlsx copies were removed from the repo so they can't drift. Totals below are
+the 2026-10-13 starting point; the sheet is the source of truth.
 | Store | Total | Notes |
 |---|---|---|
 | Amazon | $118.02 | 9 items |
@@ -272,8 +275,6 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
     downloads.arduino.cc worked.
   - Install the core: `arduino-cli core install rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json`.
   - Then `cd firmware/test && make test`.
-- Shopping PDF: render an HTML version of the list with Playwright `page.pdf` (letter size, 2 pages, tick boxes,
-  clickable links). The generator script wasn't committed, so rebuild it from `SHOPPING_LIST.md`.
 - Scraping Amazon from this environment:
   - curl gets a captcha. Playwright works on `/dp/<ASIN>` pages, sometimes after a "Continue shopping" page.
   - Search URLs are blocked; typing into the home-page search box works.

@@ -50,7 +50,8 @@ The drink touches only the jar, the platinum-silicone tube and the glass. No pri
 
 ## 2. Shopping list
 
-The same list grouped by store, with tick boxes: [SHOPPING_LIST.md](SHOPPING_LIST.md).
+The live list, with who has each item and what is left to buy, is the [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit). The tables
+below explain what each part is for; for current prices, quantities and status, use the sheet.
 
 Amazon and Vetco prices were read from their listings on 2026-10-13; prices with "~" are estimates.
 Confirm at checkout.
@@ -84,14 +85,14 @@ works on 3.3 V and either magnet pole.
 | 5a | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
 | 10 | 74AHCT125 quad buffer, DIP-14 | [Vetco, VUPN524](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96) | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. Must be AHCT, not HC. |
 | 11 | 2 x logic-level N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | IRLZ44N (the page's web address says IRLB8721; either works, same pin order). TO-220. |
-| 12 | Small parts | Vetco (links in [SHOPPING_LIST.md](SHOPPING_LIST.md)) | ~$20 | 3 x 1N5819-type diodes (NTE585), 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm protoboard, a 14-pin IC socket, 22 AWG stranded wire, 1/8" heat-shrink. |
+| 12 | Small parts | Vetco (links in the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit)) | ~$20 | 3 x 1N5819-type diodes (NTE585), 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm protoboard, a 14-pin IC socket, 22 AWG stranded wire, 1/8" heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They thread straight into the printed holes, except the 3 thumbscrews, 5 at the lock and the handle's 6 lap screws, which go into the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (see [SHOPPING_LIST.md](SHOPPING_LIST.md) or the printable [SHOPPING_LIST.pdf](SHOPPING_LIST.pdf) for the store-by-store list). Two of the local items have size limits; measure in the store:
+**Total: about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). Two of the local items have size limits; measure in the store:
 
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.

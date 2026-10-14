@@ -27,7 +27,7 @@ it.
 1. `docs/review/CONTEXT.md`. It holds every decision made so far, the reason for it, and what was rejected.
 2. `docs/review/transcript.md`, if it exists. It's the full design conversation. Use it to check *why* something
    was decided; don't reread all of it.
-3. `docs/BUILD_GUIDE.md`, `docs/SHOPPING_LIST.md`, `cad/params.py`, `cad/DESIGN_CONTRACT.md`,
+3. `docs/BUILD_GUIDE.md`, the shopping Google Sheet (linked from the README), `cad/params.py`, `cad/DESIGN_CONTRACT.md`,
    `firmware/green_lantern/green_lantern.ino`, and `docs/images/src/gen_wiring.py`.
 
 **Rules**
