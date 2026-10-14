@@ -1,56 +1,52 @@
 # Revise the battery, gate drive and sensor circuits
 
-Update the electronics plan with a higher-current battery, a dedicated MOSFET driver, revised Hall and
-twist-switch inputs, stronger pump protection and a removable USB power-isolation link. The PR includes
-the connected circuit diagram (SVG, PNG and generator), matching build and test instructions, updated
-firmware wiring comments, and the proposed shopping-list edits below.
+Revise the power and control circuit to give the pump and lighting more current headroom, improve
+MOSFET switching, and make ring/twist detection more reliable. Update the connected circuit diagram
+and [build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first) to match.
 
 ## Circuit changes and why
 
-- **Battery:** replace the 2400 mAh KBT pack labelled 2 A with the 3000 mAh, 3 A TalentCell YB1203000
-  for more current headroom and capacity. Document the new barrel lead, charger and pack-switch operation.
-- **Gate drive:** replace the 74AHCT125 logic buffer and DIP-14 socket with a TC4427CPA dual gate driver
-  and DIP-8 socket. Add a 47 Ω series resistor and 10 kΩ gate-to-source pull-down to each MOSFET to
-  limit switching transients and hold an undriven gate off. Retain the two driver-input pull-downs and
-  specify IRLZ44NPBF as the required MOSFET.
-- **5 V supply and bypass:** correct the diagram so U1 and the Hall sensor receive the buck's full 5 V
-  before the XIAO supply diode. Explicitly draw U1's 0.1 µF bypass, add 1 µF alongside it, and add 0.1 µF
-  at the Hall sensor to reduce local supply disturbances.
-- **Hall input:** remove the series diode and connect the A3144's open-collector output directly to
-  GPIO D1, with a 4.7 kΩ pull-up to 3.3 V. This gives a defined input voltage without the diode's voltage drop.
-- **Twist input:** replace D2F-L with D2F-01L for low-current switching. Add a 3.3 kΩ resistor from 5 V
-  to the switch contact, a diode with its stripe toward switch NO, and a 4.7 kΩ GPIO pull-up to 3.3 V.
-  This supplies contact current while keeping GPIO D2 isolated from 5 V.
-- **Protection:** increase C2's voltage rating from 16 V to 25 V, keeping 2200 µF, and replace the pump's
-  1 A NTE585 flyback diode with a 3 A/40 V NTE586 for more voltage and current margin, respectively.
-- **USB servicing:** add removable JP1 after the XIAO supply diode. Removing it isolates the battery
-  feed during USB use. Document USB-only flashing with socketed U1 removed and the power sequence for
-  calibration with U1 installed.
+- **Battery:** replace the 2400 mAh, 2 A KBT pack with the 3000 mAh, 3 A TalentCell YB1203000 for
+  more current headroom and capacity.
+- **Gate drive:** replace the 74AHCT125 logic buffer with a TC4427CPA gate driver. The driver can
+  charge and discharge the MOSFET gates faster, reducing the time spent partially on and the associated
+  heating. Add 47 Ω gate resistors to damp switching oscillations and 10 kΩ gate-to-source pull-downs
+  to hold the pump and lights off when the driver is not driving them.
+- **5 V wiring:** move the driver and Hall sensor supply connections ahead of the XIAO supply diode
+  in the diagram. They need the buck's full 5 V; the diode's voltage drop should affect only the XIAO branch.
+- **Local capacitors:** draw the driver's 0.1 µF bypass capacitor that was already required by the build
+  guide but missing from the diagram. Also add two new capacitors: 1 µF beside the driver to support its
+  brief gate-charging current pulses, and 0.1 µF at the Hall sensor to reduce supply noise at the end of its cable.
+- **Hall input:** remove the series diode and connect the A3144 output directly to GPIO D1 with a
+  4.7 kΩ pull-up to 3.3 V. The sensor's open-collector output already pulls the signal to ground without
+  feeding 5 V into the GPIO; the diode adds an unnecessary voltage drop.
+- **Twist input:** replace D2F-L with D2F-01L, which is intended for low-current signals. The weak GPIO
+  pull-up alone supplies too little contact current for its specified operating conditions. Add a 3.3 kΩ
+  resistor from 5 V to supply about 1.5 mA through closed contacts, improving reliable switch detection.
+  A diode blocks that 5 V from the GPIO, whose own 4.7 kΩ pull-up keeps its signal at 3.3 V.
+- **Protection:** change the 2200 µF capacitor from 16 V to 25 V for more voltage margin, and replace
+  the pump's 1 A flyback diode with a 3 A/40 V NTE586 for more current margin when the motor switches off.
+- **USB power:** add removable JP1 in the XIAO's battery supply branch. Remove it for programming or
+  calibration over USB to prevent the battery supply from feeding the USB connection. The build guide
+  covers the accompanying driver power sequence.
 
-The diagram shows these changes in **one connected schematic**, including every used GPIO, driver pin,
-added resistor and capacitor. Visible wires, junction dots and crossing bridges make the connections
-traceable; the existing optional PRIME button is now drawn explicitly.
+Battery CAD changes belong in a separate PR. Firmware behavior and GPIO assignments are unchanged.
 
 ![Updated circuit diagram](../images/wiring.png)
 
 [Full-size SVG](../images/wiring.svg) · [Generator](../images/src/gen_wiring.py)
 
-The [build guide](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first) explains setting the buck to
-5.0 V before connecting electronics, battery/charging wiring, USB servicing, and bench checks for GPIO
-levels, startup behavior, load current and heating. README and review notes reflect the revised parts
-and pending cost/fit checks. Firmware changes are comments only; behavior and GPIO assignments are unchanged.
-Battery CAD changes are deferred to a separate PR; the existing supports still fit the old KBT pack.
-
 ## Spreadsheet edits after acceptance
 
 The [shared Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit)
-remains unchanged. Apply these edits after PR acceptance and separate owner review. Match rows by item,
-preserve purchase/ownership status and update quantity-dependent totals. Prices below were checked October 13.
+will be updated after PR acceptance and separate owner review. Each replacement or added item will get
+its purchase link, quantity and current price, and the affected totals will be recalculated. Existing
+purchase/ownership status will be preserved. Prices below are the October 13 estimates.
 
 | Row / item | Planned edit | Notes |
 |---|---|---|
 | 33 — Battery | Replace with one [TalentCell YB1203000 kit](https://www.amazon.com/dp/B00MHNQIR2), $22.99. | 3000 mAh, 3 A; 105 × 65 × 25 mm. |
-| 30 — Microswitch | Replace with [D2F-01L four-pack](https://www.amazon.com/dp/B0DBV9JX6L), $7.99; one used. | Marketplace candidate; see sourcing below. |
+| 30 — Microswitch | Replace with [D2F-01L four-pack](https://www.amazon.com/dp/B0DBV9JX6L), $7.99; one used. | Seller’s claimed Omron origin unverified. |
 | 3 — Driver | Replace 74AHCT125 with **TC4427CPA, DIP-8**, quantity 1. | Source/price pending. |
 | 12 — IC socket | Replace DIP-14 with [DIP-8 socket](https://vetco.net/products/8-pin-ic-socket-2-54mm-spacing-0-1), $1.24. | Fits new driver. |
 | 4 — MOSFETs | Specify **IRLZ44NPBF**, quantity 2; keep Vetco link. | Remove “IRLB8721 also fine” note. |
@@ -61,22 +57,6 @@ preserve purchase/ownership status and update quantity-dependent totals. Prices 
 | 10 — Bulk capacitor | Replace 2200 µF/16 V with [2200 µF/25 V](https://vetco.net/products/2200uf25vdc_2200uf_25_volt_electrolytic_capacitor), $3.05. | Same capacitance, higher voltage rating. |
 | New — JP1 | Add [header strip](https://vetco.net/products/40-pin-breakable-male-single-row-header-connector-pc-mount-0-1-spacing), $1.99, and [shunt](https://vetco.net/products/vupn8912_0-1_-_2-54mm_shunt_-_jumper), $0.25. | Two header pins used; REMOVE FOR USB. |
 
-Known price changes total **+$2.19, plus the new driver and 1 µF capacitor**, before tax/shipping.
-Recheck prices before updating totals.
-
-**Sourcing still open:** find TC4427CPA and 1 µF capacitor listings from Amazon or Vetco with timely
-delivery. The switch candidate showed October 14 Prime / October 18 standard delivery to Seattle on
-October 13; its claimed Omron origin is unverified. JP1 and its service procedure are additional details
-proposed for review in this PR.
-
-## Validation
-
-- SVG/PNG regenerated and visually checked; pin mapping, diode polarity, pull-up rails and component
-  counts checked against the build guide and references below.
-- All 20 firmware simulation scenarios passed. Target compilation was not rerun (`arduino-cli` unavailable).
-- No CAD changes or new-battery fit verification. Electrical measurements await assembly.
-
-References: [Microchip TC4427](https://ww1.microchip.com/downloads/en/DeviceDoc/20001422G.pdf),
-[Omron D2F](https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2f.pdf),
-[Seeed power/GPIO guidance](https://wiki.seeedstudio.com/XIAO-RP2040/),
-[TalentCell specifications](https://talentcell.com/lithium-ion-battery/12v/yb1203000.html).
+The new driver and 1 µF capacitor are specified in this circuit, but we have not yet selected Amazon or
+Vetco listings with suitable delivery dates. Their purchase links and prices must be filled in to complete
+the shopping-list changes and calculate the revised total.
