@@ -1,12 +1,14 @@
-# Review context: decisions, reasons and open items
+# Project context: decisions, reasons and open items
 
-Written on 2026-10-13 at the end of the design sessions, for whoever reviews this project next. It condenses about
+Written on 2026-10-13 at the end of the design sessions and kept current since (see the Change log at the end),
+for anyone, person or Claude session, picking up this project. It condenses about
 100 messages between Kevin (the owner) and Claude, plus 9 CAD revisions. **Read this before changing anything.**
 Each decision here was made on purpose, usually by Kevin. Don't reverse one unless you've found a concrete defect,
 and even then, ask Kevin first (see the review prompt).
 
 The original brief and ChatGPT plan are in `docs/research/BRIEF.md` and `docs/research/chatgpt-transcript.md`.
-Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
+Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository is
+`TheRageKage12/drunk-lantern-power-battery` (renamed from `temprepo` on 2026-10-14).
 
 ---
 
@@ -17,7 +19,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
 - **Size:** about 47 cm tall, 19 cm across at the base.
 - **Based on:** Hedo3D's "Green Lantern luminous" (CC BY-NC 4.0, in `original-model/`), scaled up and hollowed
   for the hardware.
-- **Deadline:** Halloween 2026. Today is 2026-10-13. Every part has to arrive in time to print, build and test.
+- **Team:** Kevin (owner, wears the ring), Sky and Duncan.
+- **Deadline:** Halloween 2026. Written on 2026-10-13. Every part has to arrive in time to print, build and test.
   Amazon items show Prime delivery Oct 14-15. The filament is the slowest at Oct 18.
 - **Status:** designed, modelled and simulated, not built. Nothing has been measured yet. As of the last message,
   Kevin had not confirmed any order. Ask before assuming anything has been bought.
@@ -53,7 +56,9 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9f).
 - Use **a new branch for each feature or piece of work**, then open a PR to merge it.
 - Check a PR's state before pushing to it or saying it's ready. Earlier sessions twice pushed to, or described as
   open, PRs that were already merged.
-- PRs #1-#4 are all merged into `main`.
+- Every PR so far (#1-#9) is merged into `main`.
+- Any PR that changes a decision, part, quantity, price or dimension also updates this file and its Change
+  log. Refresh `transcript.md` at the end of a working session, not on every push.
 
 **Repo content**
 - No model identifiers in commits, docs or code.
@@ -281,3 +286,27 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   - Amazon throttles parallel runs, so go one at a time.
   - Vetco: `vetco.net/search/suggest.json?q=` and `vetco.net/products/<handle>.json`.
   - Target and Home Depot block automated browsers, so their stock can't be checked.
+
+## 8. Change log (newest last)
+
+- **2026-10-13, full review (PR #6).** Four CAD defects fixed: no screw holes for the sphere/dish joints, three
+  screws that could not seat, the rear sphere half exporting as three loose bodies, and nowhere for the switch
+  wires to leave the lock. Plus print-orientation and guide fixes. Screw list now 4 x M3x6, 17 x M3x8, 8 x M3x8
+  flat head, 6 x M3x10, 11 x M3x12, 14 nuts. Filament is about 1.2 kg (990 g of visible green parts). Details:
+  `PROGRESS.md`.
+- **2026-10-13, Kevin's answers.** Keep the DRV5032 fallback text, marked "not recommended". Accept the lock's
+  spring return as it is: it is self-locking dry, so grease the ramp, plunger and bore and test it on the bench
+  (the hand turns the ring back on the last word anyway).
+- **2026-10-14, shopping list moved to the shared Google Sheet (PRs #7, #8).** The markdown, PDF and .xlsx
+  copies were removed. The sheet has Status (Need / Partial / Have all, from Have vs Qty), Have, Still to get,
+  Who has it (Kevin / Sky / Duncan), Category (Electronics, Fasteners, Fluid path, Lighting, Lock, Power, Shell,
+  Supplies, Tools) and costs of what is left by store. Tools and supplies are in it too, without links or prices.
+- **2026-10-14, README shows the printed parts (PR #9).** `docs/images/stl/` has front, top and iso renders of
+  each printed part and a contact sheet; `cad/render_stl.py output ../docs/images/stl` regenerates them.
+- **2026-10-14, painting instead of green filament: no.** The plastic needed is the same whatever the colour,
+  and green PETG costs the same as any other. Paint (plastic primer, 2-3 cans) costs about what the green
+  spools do, and the sliding fits (0.3 mm a side) would need masking. Instead: print the "any" parts (~215 g,
+  including the lock wall) from leftover filament, and skip the white spool if someone has ~35 g of white or
+  natural PETG for the two diffusers. Keep both green spools.
+- **2026-10-14, handoff.** `CLAUDE.md` at the repo root tells every session to read this file first and to keep
+  it current.
