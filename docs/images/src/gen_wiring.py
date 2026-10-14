@@ -72,14 +72,14 @@ dot(290, 112, ORANGE)
 s.circle(300, 112, 3.2, fill="#ffffff", stroke=INK, sw=1.6)
 s.circle(336, 112, 3.2, fill="#ffffff", stroke=INK, sw=1.6)
 s.wire([(302, 110), (333, 96)], INK, sw=2)
-s.text(318, 86, "S1 power", size=10, anchor="middle", weight="bold")
+s.text(318, 86, "S1 power (pocket under the cartridge floor)", size=10, anchor="middle", weight="bold")
 s.wire([(339, 112), (400, 112), (400, RAIL12)], ORANGE, sw=3)
 # - lead: to the charge jack and GND
 s.wire([(194, 146), (226, 146)], BLACK, sw=2.4)
 dot(210, 146)
 s.wire([(210, 146), (210, 176)], BLACK, sw=2.4)
 s.gnd(210, 176)
-box(226, 128, 124, 58, "Charge jack", ["DC5521, panel mount,", "next to S1"], fill="#fff7e6")
+box(226, 128, 124, 58, "Charge jack", ["DC5521 on the deck, socket up:", "lift the lantern off to charge"], fill="#fff7e6")
 s.circle(226, 146, 3.2, fill="#ffffff", stroke=BLACK, sw=1.4)
 s.circle(290, 128, 3.2, fill="#ffffff", stroke=ORANGE, sw=1.4)
 s.wire([(290, 112), (290, 125)], ORANGE, sw=2.4)
@@ -234,7 +234,7 @@ dot(240, GND_Y)
 s.lines(24, GND_Y + 36, [
     "The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.",
     "The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.",
-    "S1 switches everything but the charge jack: turn it off to store the lantern and while charging. The pack's protection board cuts out on a short or a flat pack.",
+    "S1 switches everything but the charge jack: tip the lantern to reach it; off to store and while charging. The pack's protection board cuts out on a short or a flat pack.",
     "Plugs where the lantern unplugs from the cartridge: lock cable JST PH 4-pin = 5V, HALL OUT, SW (NO), GND, ~10 cm from the board; LED leads JST SM 2-pin = +, -.",
 ], size=10.5, color="#333")
 

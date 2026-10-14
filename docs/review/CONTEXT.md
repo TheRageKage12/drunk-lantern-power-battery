@@ -177,9 +177,11 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   70 x 55 x 40 mm, built-in protection board, charger included.**
   - Kevin corrected an earlier misreading: B0C241NS29 is the right listing and variant. Make sure the 2400 mAh
     bare-leads variant is the one selected.
-- The charge jack (2.1 mm panel jack, 8 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole) sit in a port
-  panel on the tray. The switch stops the ~15 mA idle drain while stored. The drum has a notch open at the
-  bottom, so it still lifts off.
+- The charge jack (2.1 mm panel jack, 8 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
+  2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
+  down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
+  Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
+  underneath (which needs a cable groove at the rim). The switch stops the ~15 mA idle drain while stored.
 - An LM2596 buck converter makes 5 V. The XIAO is fed through a 1N5819.
 - **Low battery (Kevin's decision):** "We shouldn't ever go below 50% battery." No buck-boost for now; it's
   listed as an upgrade only.
@@ -308,5 +310,9 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   spools do, and the sliding fits (0.3 mm a side) would need masking. Instead: print the "any" parts (~215 g,
   including the lock wall) from leftover filament, and skip the white spool if someone has ~35 g of white or
   natural PETG for the two diffusers. Keep both green spools.
+- **2026-10-14, hidden power port (rev 9h).** Kevin wanted no port visible from any angle. The drum's notch and
+  the tray's port panel are gone; the switch sits in a 26 x 23 x 20 mm pocket under the tray floor on his side,
+  the jack in the deck pointing up beside the lead notch. Cost: the lantern must be lifted off to charge, and
+  it stands on two blocks when set beside the cartridge (the tube and cables pass under the rim).
 - **2026-10-14, handoff.** `CLAUDE.md` at the repo root tells every session to read this file first and to keep
   it current.
