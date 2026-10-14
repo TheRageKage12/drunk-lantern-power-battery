@@ -10,6 +10,13 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 
 "Your side" means the hand opening; "display side" means the window opposite it.
 
+**Assembly videos:** [Step-by-step assembly guide (4:08)](videos/assembly-guide.mp4) ·
+[Exploded assembly (0:12)](videos/separate-and-assemble.mp4) ·
+[Opening for service (0:12)](videos/service-access.mp4).
+The assembly guide follows the build order and includes chapter markers. The exploded view illustrates
+how the parts fit together; use the guide for the actual sequence. Wiring, tubing, curtain and metal
+fasteners are described where needed but are not individually animated.
+
 ![interaction timeline](images/interaction.png)
 
 **Status.** Designed, modelled and simulated; not yet built. The firmware previously compiled and still passes 20 simulated

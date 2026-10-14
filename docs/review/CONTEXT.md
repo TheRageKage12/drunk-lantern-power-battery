@@ -388,3 +388,7 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   6.5 mm depth, reinforced handle/nozzle mounts, relieved the lower dish and moved the switch screw
   with its bracket/slot. Added solid-geometry bore, wall, end-depth and mating-clearance checks;
   regenerated ten changed printed parts and the assembly previews. See the threaded-mount decision above.
+
+- **2026-10-14, assembly videos in the repository:** owner requested the three MP4s in PR #14,
+  without the local web page. Store them in `docs/videos/`, linked from README and BUILD_GUIDE:
+  assembly order (4:08, 34 chapters), exploded view (0:12) and service access (0:12).
