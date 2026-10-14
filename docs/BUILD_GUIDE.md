@@ -1,4 +1,4 @@
-# Green Lantern power battery that pours a shot: build guide (budget build, ~$186)
+# Green Lantern power battery that pours a shot: build guide (electrical revision)
 
 A 3D-printed Green Lantern power battery, about 47 cm tall and 19 cm across at the base, with a hidden pump, a hidden
 nozzle and a twist-to-pour lock. The sphere has two openings: the **hand opening** on your side, closed by a
@@ -12,9 +12,10 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 
 ![interaction timeline](images/interaction.png)
 
-**Status.** Designed, modelled and simulated; not yet built. The firmware compiles and passes 20 simulated
-safety scenarios (`firmware/test`). The CAD passes its fit checks. Two things must be measured on the real
-parts before you print the big pieces: the Kamoer pump's outline and your jar. Every bay is parametric
+**Status.** Designed, modelled and simulated; not yet built. The firmware previously compiled and still passes 20 simulated
+safety scenarios (`firmware/test`). The existing CAD passed its previous fit checks, but **still models the old KBT battery**.
+The selected TalentCell pack needs revised supports and clearance checks in a separate CAD PR;
+do not print the battery tray/deck for this revision yet. Also measure the Kamoer pump and your jar. Every bay is parametric
 (`cad/params.py`), so a measured number is a one-line change and a re-run of `python3 build.py`.
 
 ---
@@ -37,7 +38,7 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 |---|---|
 | Top dish | A frosted disc in its floor. A ring of LED strip in the hole under it makes the top glow. |
 | Sphere, your side | The hand opening (120 x 96 mm), closed by a curtain of frosted plastic strips that your hand and the glass push through. |
-| Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window). On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
+| Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window). On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-01L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
 | Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. Nothing shows on the shell: the power switch sits in a pocket under the cartridge floor (tip the lantern to flip it) and the charge jack is on the deck, pointing up. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
@@ -51,7 +52,8 @@ The drink touches only the jar, the platinum-silicone tube and the glass. No pri
 ## 2. Shopping list
 
 The live list, with who has each item and what is left to buy, is the [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit). The tables
-below explain what each part is for; for current prices, quantities and status, use the sheet.
+below describe this proposed circuit. **The Sheet has not been changed**; apply the
+[PR change list](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) only after acceptance and separate spreadsheet review.
 
 Amazon and Vetco prices were read from their listings on 2026-10-13; prices with "~" are estimates.
 Confirm at checkout.
@@ -63,12 +65,12 @@ Confirm at checkout.
 | 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28.00 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
 | 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $13.99 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. One run is ~90 cm; the rest covers replacements (the tube is the part that wears). |
 | 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
-| 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 12 V in, set to 5.0 V out for the XIAO and the level shifter. 43 x 21 mm. |
+| 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 9–12.6 V in, set to 5.0 V out for the XIAO, gate driver and Hall sensor. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
 | 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
-| 8 | 12 V battery pack | [KBT 12 V 2400 mAh Li-ion pack, bare leads, with charger (B0C241NS29)](https://www.amazon.com/dp/B0C241NS29) | $21.99 | 70 x 55 x **40** mm, 6 cells, protection board (over-charge, over-discharge, short circuit), bare leads and its own 12.6 V charger. Full it reads 12.6 V, flat about 9.5 V: the firmware turns the pump up as it drops, so pours stay the same size. |
-| 9 | Lever microswitch, D2F-L, 4-pack | [Amazon B0DBV8XGG4](https://www.amazon.com/dp/B0DBV8XGG4) | $8.99 | Body 12.8 x 5.8 x 6.5 mm, two mounting holes 6.5 mm apart, hinge lever: the lock's switch bracket is built for this size. Vetco doesn't list sizes for its lever switches. |
+| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger and a male DC5521 lead from its supplied splitter. Pack switch must be ON while charging. CAD fit is pending a separate PR. |
+| 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.99 | Selected fast-delivery candidate: Pecafeitas listing, fulfilled by Amazon; Oct 14 Prime / Oct 18 standard shown for Seattle on Oct 13. Omron provenance/contact material is not independently verified. Check marking, mounting and repeated operation. Use the interface in section 4. |
 
 **Hall sensor alternative (not recommended: Adafruit ships slowly, and the board sits 7.7 mm from the magnet
 instead of 3).** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
@@ -84,15 +86,15 @@ works on 3.3 V and either magnet pole.
 | 5b | Cable plugs | Vetco: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) ($2.24) for the lock cable, [JST SM 2-pin pair](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) ($1.75) for the LED leads | $3.99 | So the lantern unplugs from the base cartridge. |
 | 5a | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
 | 10 | 74AHCT125 quad buffer, DIP-14 | [Vetco, VUPN524](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96) | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. Must be AHCT, not HC. |
-| 11 | 2 x logic-level N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | IRLZ44N (the page's web address says IRLB8721; either works, same pin order). TO-220. |
-| 12 | Small parts | Vetco (links in the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit)) | ~$20 | 3 x 1N5819-type diodes (NTE585), 2 x 10 k, 1 x 100 k and 1 x 22 k resistors, 2 x 0.1 µF ceramic, 1 x 2200 µF 16 V electrolytic, a 5 x 7 cm protoboard, a 14-pin IC socket, 22 AWG stranded wire, 1/8" heat-shrink. |
+| 11 | 2 x IRLZ44NPBF N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | Exact required part: IRLZ44NPBF, TO-220. Vendor URL/title is stale; its detail table names IRLZ44NPBF. Verify IRLZ44N marking; review substitutions before use. |
+| 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They thread straight into the printed holes, except the 3 thumbscrews, 5 at the lock and the handle's 6 lap screws, which go into the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). Two of the local items have size limits; measure in the store:
+**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The proposed electrical changes add $4.69 in parts before tax and shipping; refresh the Sheet totals after acceptance. Two of the local items have size limits; measure in the store:
 
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
@@ -112,7 +114,7 @@ The total assumes you already have:
 
 | Store | Address, hours | Buy here |
 |---|---|---|
-| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, 74AHCT125, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch, charge jack and the two JST plugs. Not stocked: XIAO, magnets, check valves. |
+| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch, charge jack and the two JST plugs. Not stocked: XIAO, magnets, check valves. |
 | [Tacoma Screw Products, Ballard](https://www.tacomascrew.com/LocationFinder) | 3930 Leary Way NW, Seattle 98107, (206) 632-7565. Mon-Fri 7-5, Sat 9-1 | M3 screws and nuts by the piece, springs. Georgetown branch: 1121 S Bailey St, Mon-Fri 7-5. |
 | [McLendon Hardware](https://www.mclendons.com/locations) | White Center: 10210 16th Ave SW, Seattle 98146. Renton: 440 Rainier Ave S | Spring drawers, metric screws, glue. |
 | Ace Hardware (Magnolia, Maple Leaf, West Seattle Junction), Stoneway Hardware | Seattle neighbourhoods | The lock spring (Hillman spring drawer), fasteners by the piece. |
@@ -211,48 +213,92 @@ but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
 
 Build the circuit on the 5 x 7 cm perfboard and test it before anything goes into the lantern.
 
-1. **Board, XIAO and U1.** Drill four 3.2 mm holes in the protoboard on a 40 x 30 mm rectangle (the deck
-   panel's four pads) and keep those corners clear. The XIAO comes with its pins soldered: solder it straight
-   to the board (female header strips, 15.24 mm apart, are optional and not on the list). Solder the 14-pin DIP
-   socket for the 74AHCT125 (U1).
-2. **12 V in.** Check the pack's two bare leads with the meter (red +, about **12 V**). Its + goes two ways: to the charge jack's centre pin and to one tag of the
-   power switch S1. Its − goes to the jack's outer contact and to ground. S1's other tag is the +12 V rail.
-   Solder C2 (2200 µF 16 V) across the rail, stripe (−) to ground. The jack sits **before** the switch, so the
-   pack charges with S1 off and nothing else connected. The jack mounts in the 8 mm hole at the deck's edge on
-   your side, socket facing up (nut on top). S1 mounts in the 6.5 mm hole in the ceiling of the pocket under the
-   tray floor, bushing and lever pointing down into the pocket, its nut done up from inside the pocket with
-   pliers. Give both leads long enough (~15 cm) to reach the board on the deck.
-2a. **Battery sense.** A 100 k from the +12 V rail (after S1) to D0, a 22 k and a 0.1 µF from D0 to ground.
-   It tells the firmware the battery voltage. Leave it out and everything still works, just without the
-   pump compensation and the low-battery warning.
-3. **5 V.** Wire the LM2596's IN+ and IN− to the 12 V rail and ground. **Turn its little screw until OUT reads
-   5.0 V on the meter before connecting anything to it.** Then OUT+ feeds U1 pin 14, and also the XIAO's 5V pin
-   through a 1N5819 (stripe toward the XIAO). That diode lets you plug the XIAO into a laptop without feeding
-   the lantern. Even so, switch S1 off while flashing.
-4. **U1 (74AHCT125).** Pin 14 to +5 V, pin 7 to ground, 0.1 µF between them. The four OE pins (1, 4, 10, 13)
-   and the unused inputs (9, 12) to ground. XIAO D3 to pin 2 (pump), XIAO D4 to pin 5 (light). A 10 k from D3
-   to ground and another from D4 to ground, so nothing switches on while the XIAO boots.
-5. **MOSFETs.** IRLZ44N pins, facing the label, left to right: gate, drain, source. Q1 (pump): gate from U1
-   pin 3, source to ground, drain to the pump's − wire. Q2 (light): gate from U1 pin 6, source to ground, drain
-   to the LED strip's − wire. The pump's + and the strip's + go to the +12 V rail.
-6. **Flyback diode.** Solder a 1N5819 across the pump's two wires, stripe on the + side. It protects Q1 from
-   the motor's voltage spike when it switches off.
-7. **Lock wires.** A3144, facing its printed side with the leads down: pin 1 to **+5 V**, pin 2 to ground,
-   pin 3 to the stripe (cathode) of a 1N5819 whose other end goes to D1. The diode lets the sensor pull D1 low
-   but never puts 5 V on it; put it on the board. Microswitch: NO to D2, COM to ground. **Don't solder the A3144 to
-   the cable yet:** in section 6 step 3 its bare leads must pass a 1.2 mm slot in the sensor post; for step 8
-   and section 6 step 2, hold or clip its three leads to the cable ends. Make the lock cable now: one 4-wire
-   cable (5V, HALL, SW, GND), about 40 cm, with the 4-pin plug about 10 cm from the board, and solder its two
-   switch wires to the microswitch's NO and COM terminals **before** the switch goes on its bracket (the
-   terminals end up facing the housing wall). Make the LED lead the same way: two 40 cm wires of 22 AWG with the
-   2-pin plug 10 cm from the board, the far end bare until section 8 step 3. These two plugs are where the
-   lantern unplugs from the base cartridge. **Before you fit the lantern-side half of each plug, thread the
-   cable down through the 7 mm cable hole in `bay_floor`, from the top.** The plug housings are wider than
-   the hole and will never pass it afterwards. The bay floor then rides on the cables until final assembly.
-8. **Check before connecting the pump.** Flash the firmware (section 5), open the serial console, type
-   `status`. Hold a magnet over the Hall sensor and press the switch lever: `ring=present` and
-   `switch=pressed` should follow, and `battery=` should read within 0.2 V of your meter (see `vcal`). Then
-   connect the strip: it blinks once at power-up, then stays dark (`idle 30` gives a pilot glow).
+Use the [two-sided perfboard layout](review/protoboard/README.md) and its
+[wire-by-wire solder schedule](review/protoboard/WIRE_SCHEDULE.md). The rear view is mirrored;
+pad names stay the same. Check the actual hole-array position and C2 case size before assembly.
+
+1. **Board, XIAO and U1.** Orient the perfboard 70 mm across and 50 mm tall. Drill four 3.2 mm
+   holes at x = 15/55 mm and y = 15/45 mm from the component-side top-left corner, checking against
+   the printed panel first. Keep each 9 x 9 mm mounting area clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
+   during initial USB flashing. Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
+2. **Battery, charge jack and S1.** With battery and charger unplugged, cut one male DC5521 lead
+   from the supplied TalentCell splitter to make the battery pigtail. Do not cut or open the pack.
+   Identify centre-positive and sleeve-negative with a continuity meter; do not rely on wire colour.
+   Plug the finished, insulated pigtail into the pack. With its own switch ON, confirm 9–12.6 V and polarity.
+   Power off and unplug again before soldering. Positive goes to J1 centre and S1; S1's other terminal is
+   **VLOAD**, the switched battery rail. Negative goes to J1 sleeve and the common ground.
+   Identify J1's contacts with a plug and continuity meter; its third, switched contact is unused and insulated.
+   Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It buffers short disturbances;
+   it cannot sustain an overloaded or stalled motor. Charge with **S1 OFF, pack switch ON**, using only
+   the supplied 12.6 V charger through J1. Mechanical placement is deferred to the battery CAD PR.
+2a. **Battery sense.** R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground.
+   At a full 12.6 V pack, D0 sees 2.27 V. Keep this signal away from motor wiring.
+3. **Set the buck output first.** Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
+   Turn the pack and S1 on. With the meter on DC volts across OUT+/OUT−, adjust the trimmer to **5.0 V**.
+   Switch off before attaching anything else. OUT+ is **+5V_REG**: connect U1 and the Hall sensor directly
+   here. Feed the XIAO 5V pin through **D1 NTE585**, stripe toward the XIAO, then **JP1** in series.
+   Grounds stay connected even with JP1 removed. D1 blocks reverse flow into the buck, but does not
+   isolate the USB host from battery power: **remove JP1 before connecting USB**.
+4. **U1 (74AHCT125).** Keep the original buffer. Pin 14 to +5V_REG, pin 7 to ground; solder the
+   existing **C3 0.1 µF ceramic** directly across those pins with short leads. Ground all four output-enable
+   pins (1, 4, 10, 13) and the unused inputs (9, 12); leave unused outputs (8, 11) unconnected.
+   XIAO D3 goes to pin 2 (pump); D4 goes to pin 5 (light). R3/R4 remain **10 kΩ** from those respective
+   inputs to ground. Check the socket notch and [DIP-14 pinout](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf)
+   before inserting U1 with all power disconnected. Use **74AHCT125**, not 74HC125.
+5. **MOSFETs.** IRLZ44NPBF, label facing you and leads down: pin 1 gate, pin 2 drain (also tab), pin 3 source.
+   U1 pin 3 connects directly to Q1's gate (pump); U1 pin 6 directly to Q2's gate (light), as in the original
+   circuit. Both sources go to ground. Pump negative goes to Q1 drain, strip negative to Q2 drain;
+   both loads' positives go to VLOAD. Run pump/strip returns separately to the common power ground;
+   do not route their current through the Hall/MCU ground wiring. Verify startup behavior on the bench.
+6. **Pump flyback.** D2 **NTE586, 3 A/40 V**, directly across the pump terminals: stripe/cathode to VLOAD,
+   anode to Q1 drain. The orientation is unchanged. Do not use the 1 A NTE585 here.
+7. **Lock wires.** A3144, printed face toward you, leads down: pin 1 to +5V_REG, pin 2 to ground,
+   pin 3 directly to D1 (the XIAO GPIO). R5 **4.7 kΩ from D1 to XIAO 3V3**, never to 5 V.
+   Fit **C4 0.1 µF across sensor pins 1 and 2 at the sensor**, below its mounting pocket with insulated leads.
+   Its open-collector output needs no series diode.
+
+   Microswitch **D2F-01L**: COM to ground, NO to the SW wire, NC unused. On the board, R7 **3.3 kΩ**
+   connects +5V_REG to SW. R6 **4.7 kΩ** connects XIAO 3V3 to D2 (the GPIO).
+   **D3 NTE585 anode to GPIO D2, stripe/cathode to SW/NO**: closed contacts pull the GPIO low;
+   open contacts leave it at 3.3 V while the switch side rises to 5 V. R7 provides about 1.5 mA through
+   closed contacts; the GPIO pull-up adds about 0.6 mA. The original weak internal pull-up alone is not
+   the specified interface. The firmware's internal pull-ups may remain enabled alongside R5/R6.
+
+   Make the 4-wire lock cable: **+5V_REG, HALL, SW, GND**, about 40 cm, JST PH plug about 10 cm from the
+   board. Keep R5–R7 and D3 on the board. **Do not solder the Hall sensor to the cable yet:** its leads
+   must first pass the sensor post slot (section 6). Clip it temporarily for bench checks. Solder the switch
+   wires before mounting it. Make the LED lead with a JST SM pair, VLOAD and Q2 drain, leaving the far end
+   bare until section 8. Thread lantern-side wires through the bay-floor hole before fitting plug housings.
+8. **Commission before enclosure assembly.** Flash using the power procedure below. First leave pump and
+   strip disconnected. In USB calibration mode, check +5V_REG at U1 and Hall is 5.0 V; check GPIO D1/D2
+   are approximately 3.3 V open and below 0.8 V when asserted. `status` must follow the magnet and twist
+   repeatedly, including with the cable moved; battery reading should match the meter within 0.2 V after
+   `vcal`. Verify both MOSFET gates are low at idle. Then connect loads with power off.
+
+   With a fully charged pack and the intended strip length, check full brightness, current and heating
+   before enclosing it (use `idle 255` for 100% PWM, then restore `idle 0` and `save`). Measure current **in series** with
+   a suitably rated, fused meter, never with the meter in current mode across the battery. Run short water
+   pours with the LEDs on, watch for resets/protection trips and hot wiring/MOSFETs, and measure combined
+   running current; the estimate is ~1.3 A, not a measured specification. A normal meter may miss startup
+   peaks. Stop and investigate overheating, a stall or a protection trip; do not deliberately stall the pump.
+   Confirm every power-up leaves the pump off; the brief LED boot blink is intentional.
+
+### USB programming and calibration power
+
+Normal operation is battery-only. **Never attach USB with JP1 fitted.** JP1 isolates only the XIAO supply.
+Removing U1 for USB-only flashing also disconnects the GPIO signals from the unpowered buffer.
+
+- **USB-only flashing:** S1 OFF, pack unplugged, JP1 removed, **U1 removed from its socket**. Connect USB,
+  upload, then unplug USB before reinserting U1. No load tests in this mode.
+- **USB calibration/testing with U1 installed:** with all power off, remove JP1. Leave the pump and
+  LED leads disconnected during the initial bench check. Turn the pack and S1 ON first, verify +5V_REG, then connect USB; USB powers
+  only the XIAO while the buck powers U1/Hall. After the controller settles at idle, power down (USB out
+  first, then S1 OFF), attach loads, and repeat this sequence for testing. End with `stop`, unplug USB,
+  then switch S1 OFF. Refit JP1 only after USB is unplugged and power is off.
+- **Battery operation:** USB unplugged, U1 installed, JP1 fitted; pack switch ON, then S1 ON. Turn both
+  switches OFF for storage. Never move JP1 or insert/remove U1 with power connected.
+
+If the pack trips or +5V_REG fails during USB testing, unplug USB promptly and investigate before retrying.
 
 An optional PRIME button goes between D6 and ground. Holding it runs the pump only when no ring is in.
 It's not in the parts list; the serial `cal` command or a test pour does the same job.
@@ -263,6 +309,8 @@ It's not in the parts list; the serial `cal` command or a test pour does the sam
 
 Source: `firmware/green_lantern/green_lantern.ino`. Board: Seeed XIAO RP2040 on the "Raspberry Pi
 Pico/RP2040" Arduino core by Earle Philhower. No extra libraries.
+
+**First follow section 4’s USB power procedure.**
 
 **Arduino IDE.** Boards Manager: install "Raspberry Pi Pico/RP2040" (Earle Philhower). Select "Seeed XIAO
 RP2040", open the sketch, upload. If no port appears, hold the XIAO's BOOT button while plugging it in.
@@ -345,7 +393,8 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
    of the plate, and lay the sensor in the pocket **printed face up** (flush with the top). A dot of glue holds
    it. Cut the three leads to different lengths under the plate, solder the cable to them and sleeve each joint:
    staggered, the sleeves fit side by side in the wall's window. The rotor turns
-   around the post; the magnet ends up about 3 mm above the sensor.
+   around the post; the magnet ends up about 3 mm above the sensor. Fit C4 across pins 1 and 2 below the pocket,
+   insulate it and secure it so it cannot obstruct the rotor or the cable slot.
 4. **Rotor and plunger.** Turn `socket_housing` upside down. Smear a little silicone grease or petroleum jelly
    on the rotor's rim (the ramp and the cam), the plunger's nose and the bore: dry PETG on PETG has about the
    same friction (0.3-0.4) as the ramp's slope (0.26), so an unlubricated rotor can sit at 45 degrees instead
@@ -398,8 +447,9 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
 5. **Service loop.** Leave about 30 cm of extra tube between the pump and the bay floor, coiled loosely (no
    tighter than a 5 cm circle, or it kinks) in the space above the jar and pump. That slack lets you lift the
    lantern off the cartridge and set it down beside it without disconnecting the tube.
-6. **Prime.** Water in the jar, the shot glass in its slot, then `cal 6000` from the laptop (section 10 says how
-   to reach the XIAO) until water reaches the nozzle. The tube stays full between pours.
+6. **Prime.** Follow section 4’s USB calibration power sequence (JP1 removed); section 10 explains
+   access to the XIAO. With water in the jar and the glass in its slot, run `cal 6000` until water reaches
+   the nozzle. The tube stays full between pours. Unplug USB before switching S1 off.
 
 ---
 
@@ -493,8 +543,11 @@ stand it beside the cartridge on two blocks (a couple of books), so the tube and
 the drum's rim without being crushed. The glass stays in the lantern under the nozzle; the 30 cm service loop
 reaches.
 
+**Follow section 4’s USB calibration power sequence: JP1 removed, U1 installed,
+regulated 5 V present before USB is connected.** Unplug USB before switching S1 off.
+
 Water in the jar, the shot glass in its slot (only the shot glass fits under the nozzle; weigh what it pours on
-a kitchen scale, 1 g = 1 mL, or tip it into a measuring cup), laptop on the XIAO.
+a kitchen scale, 1 g = 1 mL, or tip it into a measuring cup). Connect USB serial using section 4’s power procedure.
 
 First the battery reading: measure across the pack (or the rail) with the meter, type `vcal` and that number
 (for example `vcal 12.31`), then `status` should show the same. Type `save` to keep it.
@@ -529,7 +582,7 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
 - [ ] On the day: `status` reads about 11.5 V or more (roughly half charge or better). Below that, charge first.
 - [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring double-blinks before the glow.
-- [ ] Switch off, plug in the charger: the charger's light shows it charging.
+- [ ] S1 OFF, pack switch ON, USB unplugged: the supplied charger indicates charging through J1.
 - [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
 - [ ] Your fist goes through the curtain and into the lock, and back out, without catching.
 - [ ] With the lights on in a dim room, the curtain, the display window and the top all glow; you can't see the nozzle.
@@ -557,11 +610,12 @@ nozzle (the line is empty after cleaning; empty the glass as needed). Put the la
 pour into the glass: the first pour of the night should not be the one in front of a guest. Then the empty
 glass goes in and you are ready.
 
-**Charging:** switch off, lift the lantern off (3 thumbscrews) and plug the pack's charger into the jack on
-the deck, the socket pointing up at the edge on your side; the lantern can go back on while it charges if you
+**Charging:** S1 OFF, TalentCell pack switch ON, USB unplugged. Lift the lantern off (3 thumbscrews)
+and plug the supplied TalentCell 12.6 V charger into the jack on the deck, the socket pointing up at the edge on your side; the lantern can go back on while it charges if you
 route the charger lead out under the rim on blocks, or just leave it beside the cartridge. Charge after
 every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
-The double blink as you punch in (below 10.5 V) is a late warning. A full pack lasts well over 100 pours.
+The double blink as you punch in (below 10.5 V) is a late warning. Runtime and state of charge versus voltage
+need checking on the assembled prop; do not treat the voltage threshold as a precise 50% fuel gauge.
 
 **Refilling** (about 2 minutes):
 1. Switch off. Tip the lantern slightly and undo the 3 thumbscrews underneath.
@@ -577,7 +631,8 @@ The double blink as you punch in (below 10.5 V) is a late warning. A full pack l
 ## 13. Cleaning and storage
 
 Same night, before the sugar dries:
-1. Switch off, lift the lantern off the cartridge and stand it beside it (section 10), laptop on the XIAO.
+1. Switch off, lift the lantern off the cartridge and stand it beside it (section 10).
+   Connect USB serial using section 4’s power procedure.
    Empty the jar, half-fill it with warm water, and put the shot glass in its slot.
 2. `cal 8000` pours about 22 mL into the glass. Empty the glass and repeat 4 or 5 times. Only the shot
    glass fits under the nozzle, so keep each run short: `cal 20000` would pour ~55 mL and overflow it.
@@ -587,7 +642,7 @@ Same night, before the sugar dries:
    everything air-dry with the tube ends open.
 
  Never leave liqueur in the tube overnight: the sugar gums up the bore and the rollers.
-Store with the head open so the tube isn't crushed for months. Replace the pump tube when it looks cloudy or
+Store with S1 and the TalentCell switch OFF, USB unplugged, and the head open so the tube is not crushed for months. Replace the pump tube when it looks cloudy or
 flattened.
 
 ---
@@ -598,14 +653,14 @@ flattened.
 |---|---|
 | Ring not detected | Are both cable plugs connected (easy to forget after a refill)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face facing out of the key cap (section 6, step 2)? Is pin 1 on 5 V? |
 | Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The key cap's tab must point at the rest notch. |
-| Nothing lights, no response | Switch S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. Plugs connected? |
+| Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. Plugs connected? |
 | Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, section 6 step 6) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump hums, no flow | Tube not seated under the rollers, head cap open, the service loop kinked when the lantern went back on, or the wrong (thin-walled) tube. |
 | Pours shrink after a few in a row, jar dents in | The vent valve is in backwards (arrow must point into the jar) or blocked. |
-| Pump doesn't run at all | Switch on? Check the rail gives 9.5-12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
+| Pump doesn't run at all | Switch on? Check the rail gives 9–12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
-| LEDs stay dark or stay on | Q2 wiring, or U1's OE pins not grounded. |
+| LEDs stay dark or stay on | Q2 wiring, U1 supply/input/output wiring, or U1's output-enable pins not grounded. |
 | Double blink when the ring goes in | Low battery (below 10.5 V): charge it. If the pack is full, check the reading against your meter and run `vcal`. |
 | Pours shrink as the night goes on | The battery reading is off or not connected (`status` says `not sensed`): check the divider on D0, then `vcal`. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |

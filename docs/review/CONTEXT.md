@@ -109,7 +109,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 ### Lock (socket)
 - Flat 36 mm rotor with a keyed ring pocket:
   - hard stops at 0° and 45°
-  - a cam that lifts a D2F-L lever microswitch 3 mm
+  - a cam that lifts a D2F-01L lever microswitch 3 mm (verify the purchased switch fits the existing bracket)
   - a radial spring plunger that returns the rotor
   - a 6 x 2 mm magnet in a printed key cap glued to the ring
 - Mirrored for **counterclockwise** (`LOCK_TWIST = 'ccw'`).
@@ -128,8 +128,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   - The spring return is marginal by calculation (self-locking when dry, slow when greased): accepted; grease it,
     and the hand turns the ring back anyway (Kevin, 2026-10-13). A steeper ramp needs a longer spring and a
     housing reprint; see PROGRESS.md.
-  - Wiring: VCC on 5 V. Its OUT goes through a 1N5819 (stripe toward the sensor) to D1, using the internal
-    pull-up, so D1 never sees 5 V.
+  - Wiring (electrical revision): VCC directly on regulated 5 V; local 0.1 µF bypass to ground.
+    Open-collector OUT directly to D1, with 4.7 kΩ to XIAO 3V3. No series Hall diode or 5 V pull-up.
 - `socket_base` prints **bottom-down**, so the post isn't printed upside down.
 
 ### Layout (rev 8, the lock-wall layout)
@@ -172,17 +172,26 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   2. VEGER bank plus AITRIP 12 V trigger board
   3. A friend's suggestion: a bare-lead battery pack
   4. KBT 12 V 1200 mAh (70 x 55 x 20 mm)
-  5. **KBT 12 V 2400 mAh**, the current choice
-- **Current: KBT 12 V 2400 mAh 3S2P Li-ion (B0C241NS29, the "2400 mAh, bare leads" variant, $21.99),
-  70 x 55 x 40 mm, built-in protection board, charger included.**
-  - Kevin corrected an earlier misreading: B0C241NS29 is the right listing and variant. Make sure the 2400 mAh
-    bare-leads variant is the one selected.
+  5. KBT 12 V 2400 mAh (superseded by the electrical review)
+  6. **TalentCell YB1203000 3000 mAh / 3 A**, selected during the electrical review
+- **Current electrical choice: TalentCell YB1203000 (Amazon B00MHNQIR2, $22.99 observed),
+  3000 mAh, 3 A max output, 105 x 65 x 25 mm, with supplied 12.6 V/0.5 A charger.**
+  - Its output is 9–12.6 V, not regulated 12 V. The KBT product label says 2 A; earlier 2.4 A assumptions
+    were incorrect. The new pack adds current margin and capacity for a $1 price increase.
+  - Use a male DC5521 pigtail cut from the supplied splitter, verified centre-positive. Keep charge jack
+    before S1; use the supplied charger. TalentCell's own switch must be ON for operation and charging;
+    S1 remains OFF during charging. Both switches OFF for storage.
+  - **CAD remains at the old KBT 70 x 55 x 40 mm envelope.** Battery supports, connector/switch access,
+    deck height and clearances are deferred to a separate CAD PR at the owner's request. Do not treat
+    existing base exports as ready for this battery. No mechanical geometry changes in this revision.
 - The charge jack (2.1 mm panel jack, 8 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
   down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
   Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
   underneath (which needs a cable groove at the rim). The switch stops the ~15 mA idle drain while stored.
-- An LM2596 buck converter makes 5 V. The XIAO is fed through a 1N5819.
+- An LM2596 makes regulated 5.0 V directly for U1 and Hall. Only the XIAO supply branch passes through
+  an NTE585 Schottky and removable JP1. Remove JP1 before USB; follow the guide’s service sequence.
+  JP1 is a reviewable addition for supply isolation during calibration (Vetco header + shunt, $2.24).
 - **Low battery (Kevin's decision):** "We shouldn't ever go below 50% battery." No buck-boost for now; it's
   listed as an upgrade only.
   - The firmware boosts the pump's PWM as the voltage drops (k = 12/Vbat, clamped 0.8-1.4), so the pour size
@@ -200,14 +209,32 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   LEDs. `LED_RING = False`; this is an upgrade only.
 
 ### Electronics (see `docs/images/wiring.png`)
-- Seeed XIAO RP2040 (B0DRNTQ338).
-- 74AHCT125 as a 5 V gate driver (it must be **AHCT**).
-- 2x IRLZ44N low-side MOSFETs: pump on D3, LEDs on D4, 10 k pull-downs.
-- 1N5819 flyback diode across the pump.
-- A3144 on D1, D2F-L on D2, battery sense on D0 (100 k/22 k divider plus 0.1 µF).
-- Optional PRIME button on D6.
-- 2200 µF bulk capacitor.
-- No fuse; the pack's protection board cuts out on a short. A 2 A fuse is listed as an upgrade.
+- Seeed XIAO RP2040 (B0DRNTQ338); GPIO assignments and firmware behavior are unchanged.
+- Retain the original 74AHCT125 in its DIP-14 socket: pin 14 regulated 5 V, pin 7 ground;
+  D3 → input 2 / output 3 → pump gate; D4 → input 5 / output 6 → light gate. Ground OE pins
+  1/4/10/13 and unused inputs 9/12; leave outputs 8/11 open. Keep the existing C3 0.1 µF bypass
+  and two 10 kΩ input pull-downs. No new gate series resistors or gate-to-source resistors.
+  No practical need for replacing the gate driver has been established; retain the original design.
+- Two IRLZ44NPBF low-side MOSFETs, driven directly by the original buffer. Specify the exact MOSFET
+  in Item and vendor-title discrepancy in Notes. Normal startup/load/temperature checks remain necessary;
+  withdrawing the replacement is not a claim that the original hardware has been tested.
+- One added Hall capacitor C4 0.1 µF; total 0.1 µF count is three. Hall pull-up R5 4.7 kΩ,
+  twist pull-up R6 4.7 kΩ, contact-current resistor R7 3.3 kΩ. October 20 delivery cutoff remains.
+- NTE586 3 A/40 V flyback across pump, stripe to battery positive. Two NTE585 remain: XIAO supply and
+  twist input. Capacitor C2 is 2200 µF/**25 V**; higher voltage rating does not extend overload runtime.
+- Hall direct to D1 as above. D2F-01L switch: COM ground, NO through 3.3 kΩ to regulated 5 V; GPIO D2
+  through 4.7 kΩ to 3V3 and Schottky anode at D2/cathode at NO. This supplies contact current without
+  connecting the GPIO directly to 5 V. The 4-wire cable pinout remains 5V, HALL, SW/NO, GND.
+- Fast switch purchase candidate: Amazon B0DBV9JX6L, Pecafeitas D2F-01L four-pack, $7.99; Oct 14 Prime /
+  Oct 18 standard displayed for Seattle on Oct 13. Its Omron provenance is not authenticated. Verify
+  marking/mechanics and repeated operation. Owner rejected the Oct 27 alternative as too late.
+- Battery sense remains D0: 100 kΩ/22 kΩ + 0.1 µF. Optional PRIME stays on D6.
+- Common ground, separate load-return routing; verify sensor levels and full-charge LED/combined-load
+  current/heating on the bench. Startup/stall current and actual runtime are not measured yet.
+- No fuse added in this revision; the pack has protection. The 3 A output rating is not a guaranteed
+  protection-trip threshold. A jam/short is a fault to stop and investigate, not something C2 can sustain.
+- USB-only flashing: remove JP1 and socketed U1 with power off. Powered USB calibration: JP1 removed,
+  U1 installed and regulated supply present; follow guide sequencing. Ordinary operation is battery-only.
 
 ### Firmware (`firmware/green_lantern/green_lantern.ino`)
 - States: IDLE, ARMED, POURING, HOLDING, FINALE, LOCKED.
@@ -256,8 +283,8 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   superseded choices. These are background, not the current spec. Either mark them as historical or leave them, but
   the guide must never point to them for a current number.
 - `cad/NOTES-base.md` is marked superseded. Same caution applies.
-- (Fixed in the review, see PROGRESS.md phase 1.) The firmware comment at `pinMode(HALL_PIN, INPUT_PULLUP)`
-  mentioned an "A3144 divider"; the A3144 is wired through a diode.
+- Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
+  3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
 - `key_ring.stl` isn't generated; the guide says to glue `key_cap` onto any ring.
 - The Tacoma Screw and local-item prices are estimates.
 - The rendering tools are home-made:
@@ -323,3 +350,12 @@ the 2026-10-13 starting point; the sheet is the source of truth.
 - **2026-10-14, blocks, not feet.** With the drum's notch gone, the lantern stands on two blocks (books, ~2-3 cm)
   whenever it sits beside the cartridge with the tube and cables attached, so the rim doesn't pinch them. Three
   printed 15 mm feet on the drum were offered instead; Kevin chose to leave it as is.
+
+- **2026-10-14, electrical revision and board assembly:** selected TalentCell YB1203000, revised
+  Hall/twist interfaces, 25 V capacitor, NTE586 pump diode and removable USB isolation jumper;
+  original AHCT gate drive retained. See the current electronics section and `CIRCUIT_PR.md`.
+  Added the complete two-sided board viewer, combined image, printable PDF and solder schedule.
+  Keep the viewer simple, with both faces visible; maintain only final exports and their sources.
+  Physical board offsets, capacitor dimensions and assembled clearances remain unverified.
+  CAD changes are separate. Live Sheet edits wait for acceptance and separate owner review;
+  estimated parts delta is $4.69 before tax/shipping, with an October 20 delivery cutoff.

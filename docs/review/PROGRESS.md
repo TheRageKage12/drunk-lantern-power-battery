@@ -307,3 +307,17 @@ Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, 
 - No listing was re-priced except the two checked in phase 4; the prices are the ones read on 2026-10-13.
 - The pump's outline is still the contract's estimate; nothing in the review can replace measuring it.
 - Nothing was merged; the PR waits for Kevin.
+
+## Electrical revision — current handoff, 2026-10-14
+
+- Local `circuit-review` includes the connected circuit diagram, revised build instructions,
+  corrected firmware wiring comments and complete board assembly material. Firmware behavior and
+  GPIO assignments are unchanged. `CIRCUIT_PR.md` records the changes and proposed Sheet edits.
+- Board deliverables: two-sided viewer and PNG, four-page PDF, solder schedule and their sources.
+  Instructions retain mounting and fit constraints; redundant exports and review history are excluded.
+- Circuit/board generation and connectivity checks pass; viewer zoom and wire selection were checked
+  in the browser. Firmware simulations previously passed 20/20; target compilation was unavailable
+  (`arduino-cli` not installed). No hardware or populated-board CAD fit verification is claimed.
+- Next: confirm actual board offsets and C2 dimensions; update battery supports and check hardware,
+  cables and shell removal in the separate CAD PR. Live Sheet changes require separate owner review.
+  Nothing published or purchased; CAD and the shared Sheet are unchanged.

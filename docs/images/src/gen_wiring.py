@@ -1,242 +1,260 @@
-"""Wiring diagram for the budget build: 12 V Li-ion pack with charge jack, power switch and battery sense, LM2596 buck, XIAO RP2040, 74AHCT125 gate
-driver, two low-side MOSFETs (pump, plain green LED strip), A3144 Hall sensor (5 V, output through a diode), D2F-L switch.
-Writes ../wiring.svg."""
-import os, sys
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY, INK
+"""Generate one connected wiring diagram, with explicit power and signal wires.
+Run: python3 docs/images/src/gen_wiring.py
+Render: rsvg-convert -o docs/images/wiring.png docs/images/wiring.svg
+Matching battery CAD remains a separate PR.
+"""
+from pathlib import Path
+from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY
 
-MAG = "#a21caf"   # 3.3 V
-W, H = 1290, 880
-s = SVG(W, H, "Green Lantern power battery - wiring (budget build)")
-
-
-def box(x, y, w, h, title, sub=None, fill="#f5f5f5", dash=None):
-    s.rect(x, y, w, h, fill=fill, sw=1.4, rx=6, dash=dash)
-    s.text(x + w / 2, y + 20, title, size=13, anchor="middle", weight="bold")
-    if sub:
-        s.lines(x + w / 2, y + 36, sub, size=10, anchor="middle", color="#444")
+MAG = '#8b36ad'
+s = SVG(2100, 1230, 'Green Lantern — connected circuit diagram')
+bridges = []
 
 
-def pin(x, y, label, side, color=INK):
-    s.circle(x, y, 3.2, fill="#ffffff", stroke=color, sw=1.4)
-    if side == "in-left":      # label inside a box whose left edge is at x
-        s.text(x + 7, y + 4, label, size=10.5)
-    elif side == "in-right":
-        s.text(x - 7, y + 4, label, size=10.5, anchor="end")
-    elif side == "out-left":
-        s.text(x - 7, y + 4, label, size=10.5, anchor="end")
-    elif side == "out-right":
-        s.text(x + 7, y + 4, label, size=10.5)
-    elif side == "below":
-        s.text(x + 6, y + 15, label, size=10)
-    elif side == "above":
-        s.text(x + 6, y - 6, label, size=10)
+def box(x, y, w, h, title, rows=(), fill='#f1f5f9'):
+    s.rect(x, y, w, h, fill=fill, rx=6)
+    s.text(x+w/2, y+28, title, size=18, anchor='middle', weight='bold')
+    s.lines(x+w/2, y+51, rows, size=14, anchor='middle', lh=21)
 
 
-def dot(x, y, c=INK):
-    s.dot(x, y, c, r=3.4)
+def wire(points, color=GREEN, width=2.4):
+    s.wire(points, color, sw=width)
 
 
-def resistor_v(x, y_top, label, ground=True):
-    s.rect(x - 6, y_top, 12, 30, fill="#ffffff", sw=1.3)
-    s.text(x + 10, y_top + 19, label, size=9.5)
-    if ground:
-        s.wire([(x, y_top + 30), (x, y_top + 38)], BLACK, sw=1.4)
-        s.gnd(x, y_top + 38)
+def dot(x, y, color=GREEN):
+    s.dot(x, y, color, r=4)
 
 
-# ---------------------------------------------------------------- title, legend, rails
-s.text(24, 34, "Green Lantern power battery - wiring (budget build)", size=20, weight="bold")
-lx = 24
-for col, lab in ((ORANGE, "+12 V"), (RED, "+5 V"), (BLACK, "GND"), (GREEN, "signal")):
-    s.wire([(lx, 56), (lx + 26, 56)], col, sw=3)
-    s.text(lx + 32, 60, lab, size=11)
-    lx += 95
-s.text(lx + 10, 60, "All ground symbols are one net. A dot is a joint; lines that cross without a dot do not connect.",
-       size=10.5, color="#444")
-
-RAIL12, GND_Y = 120, 800
-s.wire([(400, RAIL12), (W - 20, RAIL12)], ORANGE, sw=3.2)
-s.text(W - 20, RAIL12 - 8, "+12 V rail", size=11, anchor="end", color=ORANGE, weight="bold")
-s.wire([(16, GND_Y), (W - 20, GND_Y)], BLACK, sw=3)
-s.text(W - 20, GND_Y + 18, "GND rail", size=11, anchor="end", weight="bold")
-
-# ---------------------------------------------------------------- KBT pack, charge jack, power switch S1
-box(24, 84, 170, 90, "12 V Li-ion pack", ["KBT 2400 mAh, 6 cells,", "protection board inside,", "bare leads"])
-s.text(198, 106, "+", size=12, weight="bold", color=ORANGE)
-s.text(198, 162, "-", size=13, weight="bold")
-# + lead: to the charge jack (before the switch) and through S1 to the rail
-s.wire([(194, 112), (300, 112)], ORANGE, sw=3)
-dot(290, 112, ORANGE)
-s.circle(300, 112, 3.2, fill="#ffffff", stroke=INK, sw=1.6)
-s.circle(336, 112, 3.2, fill="#ffffff", stroke=INK, sw=1.6)
-s.wire([(302, 110), (333, 96)], INK, sw=2)
-s.text(318, 86, "S1 power (pocket under the cartridge floor)", size=10, anchor="middle", weight="bold")
-s.wire([(339, 112), (400, 112), (400, RAIL12)], ORANGE, sw=3)
-# - lead: to the charge jack and GND
-s.wire([(194, 146), (226, 146)], BLACK, sw=2.4)
-dot(210, 146)
-s.wire([(210, 146), (210, 176)], BLACK, sw=2.4)
-s.gnd(210, 176)
-box(226, 128, 124, 58, "Charge jack", ["DC5521 on the deck, socket up:", "lift the lantern off to charge"], fill="#fff7e6")
-s.circle(226, 146, 3.2, fill="#ffffff", stroke=BLACK, sw=1.4)
-s.circle(290, 128, 3.2, fill="#ffffff", stroke=ORANGE, sw=1.4)
-s.wire([(290, 112), (290, 125)], ORANGE, sw=2.4)
-
-# C2 across the 12 V rail
-cx = 450
-s.wire([(cx, RAIL12), (cx, 150)], ORANGE, sw=2)
-s.path(f"M{cx-12},150 L{cx+12},150 M{cx-12},158 Q{cx},152 {cx+12},158", stroke=INK, sw=2)
-s.wire([(cx, 156), (cx, 172)], BLACK, sw=2)
-s.gnd(cx, 172)
-s.lines(cx + 16, 146, ["C2 2200 µF,", "16 V, + to rail"], size=10)
-dot(cx, RAIL12, ORANGE)
-
-# battery sense: 100 k / 22 k divider + 0.1 µF from the rail (after S1) to D0
-bx = 620
-dot(bx, RAIL12, ORANGE)
-s.wire([(bx, RAIL12), (bx, 126)], ORANGE, sw=1.8)
-s.rect(bx - 6, 126, 12, 24, fill="#ffffff", sw=1.3)
-s.text(bx + 10, 142, "100 k", size=9.5)
-s.wire([(bx, 150), (bx, 162)], GREEN, sw=1.8)
-dot(bx, 156, GREEN)
-s.rect(bx - 6, 162, 12, 22, fill="#ffffff", sw=1.3)
-s.text(bx + 10, 177, "22 k", size=9.5)
-s.wire([(bx, 184), (bx, 190)], BLACK, sw=1.4)
-s.gnd(bx, 190)
-s.wire([(bx, 156), (bx + 44, 156), (bx + 44, 168)], GREEN, sw=1.6)
-s.path(f"M{bx+34},168 L{bx+54},168 M{bx+34},174 L{bx+54},174", stroke=INK, sw=2)
-s.wire([(bx + 44, 174), (bx + 44, 190)], BLACK, sw=1.4)
-s.gnd(bx + 44, 190)
-s.text(bx + 58, 186, "0.1 µF", size=9.5)
-s.lines(bx + 90, 140, ["battery sense:", "12.6 V -> 2.27 V at D0"], size=10, color="#444")
-s.wire([(bx, 156), (570, 156), (570, 222), (470, 222), (470, 230)], GREEN, sw=1.8)
-s.text(564, 186, "to D0", size=9.5, anchor="end", color=GREEN)
-
-# ---------------------------------------------------------------- LM2596 buck -> 1N5819 -> XIAO 5V
-box(40, 230, 160, 92, "LM2596 buck", ["12 V in, 5.0 V out:", "set it to 5.0 V with a meter", "BEFORE connecting the XIAO"], fill="#fff7e6")
-pin(80, 230, "IN+", "above", ORANGE)
-s.wire([(80, 230), (80, 196), (415, 196), (415, RAIL12)], ORANGE, sw=2.2)
-dot(415, RAIL12, ORANGE)
-pin(120, 322, "GND", "below", BLACK)
-s.wire([(120, 322), (120, 344), (16, 344), (16, GND_Y)], BLACK, sw=2)
-pin(200, 260, "", "out-right", RED)
-s.text(206, 254, "OUT+ 5 V", size=10, color=RED)
-s.wire([(200, 260), (262, 260)], RED, sw=2.4)
-s.path("M262,252 L262,268 L276,260 Z M276,252 L276,268", stroke=INK, sw=1.6, fill="#dddddd")
-s.text(269, 244, "1N5819", size=10, anchor="middle")
-s.lines(278, 280, ["stripe toward", "the XIAO"], size=9.5, color="#555", anchor="end")
-s.wire([(276, 260), (330, 260)], RED, sw=2.4)
-
-# ---------------------------------------------------------------- XIAO
-XX, XY, XW, XH = 330, 230, 170, 270
-xl, xr = XX, XX + XW
-box(XX, XY, XW, XH, "XIAO RP2040")
-s.lines(XX + XW / 2, XY + XH + 16, ["3.3 V logic. Program it over USB-C", "with S1 off."], size=10, anchor="middle", color="#444")
-pin(xl, 260, "5V", "in-left", RED)
-pin(xl, 290, "GND", "in-left", BLACK)
-pin(xr, 350, "D4", "in-right", GREEN)
-pin(xr, 380, "D3", "in-right", GREEN)
-pin(xr, 420, "D1", "in-right", GREEN)
-pin(xr, 450, "D2", "in-right", GREEN)
-pin(470, XY, "D0", "below", GREEN)
-s.circle(xr, 480, 3.2, fill="#ffffff", stroke=GREY, sw=1.4)
-s.text(xr - 7, 484, "D6 (optional PRIME", size=10, anchor="end", color="#555")
-s.text(xr - 7, 496, "button to GND)", size=10, anchor="end", color="#555")
-s.wire([(xl, 290), (300, 290), (300, 304)], BLACK, sw=2)
-s.gnd(300, 304)
-
-# +5 V branch to U1 pin 14
-dot(310, 260, RED)
-s.wire([(310, 260), (310, 210), (700, 210), (700, 560)], RED, sw=2.2)
-s.text(505, 204, "+5 V to U1 pin 14", size=10, color=RED, anchor="middle")
-
-# ---------------------------------------------------------------- 74AHCT125 (U1)
-AX, AY, AW, AH = 600, 560, 200, 150
-box(AX, AY, AW, AH, "74AHCT125 (U1)", ["3.3 V -> 5 V gate driver", "14 = +5 V, 7 = GND, 0.1 µF across", "OE pins 1, 4, 10, 13 -> GND", "unused inputs 9, 12 -> GND"], fill="#eef6ff")
-s.text(706, 554, "pin 14", size=9.5, color=RED)
-pin(AX, 640, "5  2A", "in-left", GREEN)
-pin(AX + AW, 640, "2Y  6", "in-right", GREEN)
-pin(AX, 680, "2  1A", "in-left", GREEN)
-pin(AX + AW, 680, "1Y  3", "in-right", GREEN)
-s.wire([(AX + AW / 2, AY + AH), (AX + AW / 2, GND_Y)], BLACK, sw=2)
-s.text(AX + AW / 2 + 6, AY + AH + 14, "7", size=9.5)
-dot(AX + AW / 2, GND_Y)
-
-# D4 (light) -> 2A, D3 (pump) -> 1A, each with a 10 k pull-down so the outputs stay LOW while the XIAO boots
-s.wire([(xr, 350), (585, 350), (585, 640), (AX, 640)], GREEN, sw=2)
-s.wire([(xr, 380), (565, 380), (565, 680), (AX, 680)], GREEN, sw=2)
-s.text(590, 344, "LIGHT", size=9.5, color=GREEN)
-s.text(570, 374, "PUMP", size=9.5, color=GREEN)
-dot(585, 470, GREEN); s.wire([(585, 470), (618, 470), (618, 484)], GREEN, sw=1.6); resistor_v(618, 484, "10 k")
-dot(565, 470, GREEN); s.wire([(565, 470), (545, 470), (545, 484)], GREEN, sw=1.6); resistor_v(545, 484, "10 k")
+def pin(x, y, label, side='right', color=GREEN):
+    s.pin(x, y, color, r=4)
+    if side == 'left':
+        s.text(x+12, y+5, label, size=15)
+    elif side == 'right':
+        s.text(x-12, y+5, label, size=15, anchor='end')
+    elif side == 'top':
+        s.text(x+10, y-12, label, size=15)
+    else:
+        s.text(x+10, y+22, label, size=15)
 
 
-# ---------------------------------------------------------------- MOSFET stages + loads
-def stage(cx_load, load, sub, gate_y, mosfet_label, flyback):
-    lx0 = cx_load - 70
-    box(lx0, 250, 140, 70, load, sub, fill="#fff7e6")
-    plus_x, minus_x = cx_load - 40, cx_load + 40
-    s.wire([(plus_x, RAIL12), (plus_x, 250)], ORANGE, sw=2.4)
-    dot(plus_x, RAIL12, ORANGE)
-    s.text(plus_x + 5, 246, "+", size=12, weight="bold", color=ORANGE)
-    mx, my = cx_load - 30, gate_y - 56
-    s.wire([(minus_x, 320), (minus_x, my)], BLACK, sw=2.4)
-    s.text(minus_x + 6, 336, "-", size=13, weight="bold")
-    s.rect(mx, my, 100, 76, fill="#f0f0f0", sw=1.4, rx=4)
-    s.text(mx + 50, my + 30, mosfet_label, size=12, anchor="middle", weight="bold")
-    s.text(mx + 50, my + 45, "IRLZ44N", size=9.5, anchor="middle", color="#444")
-    pin(mx + 70, my, "D", "below")
-    pin(mx, gate_y, "G", "in-left")
-    pin(mx + 70, my + 76, "S", "above")
-    s.wire([(mx + 70, my + 76), (mx + 70, GND_Y)], BLACK, sw=2.4)
-    dot(mx + 70, GND_Y)
-    s.wire([(AX + AW, gate_y), (mx, gate_y)], GREEN, sw=2)
-    if flyback:
-        fx = cx_load + 100
-        s.wire([(plus_x, 236), (fx, 236), (fx, 262)], ORANGE, sw=1.6)
-        dot(plus_x, 236, ORANGE)
-        s.path(f"M{fx-8},{276} L{fx+8},{276} L{fx},{262} Z M{fx-8},{262} L{fx+8},{262}", stroke=INK, sw=1.5, fill="#dddddd")
-        s.wire([(fx, 276), (fx, 380), (minus_x, 380)], BLACK, sw=1.6)
-        dot(minus_x, 380)
-        s.lines(fx + 10, 290, ["1N5819", "flyback,", "stripe to +12 V"], size=9.5)
+def ground(x, y):
+    s.gnd(x, y, size=1.2)
 
 
-stage(900, "Green LED strip", ["green COB, 75 cm in 7 pieces,", "all in parallel, ~0.6 A"], 640, "Q2 light", False)
-stage(1070, "Kamoer KPHM200", ["12 V peristaltic pump", "~0.7 A"], 680, "Q1 pump", True)
+def cap(x, top, bottom, label, color=RED, positive=False):
+    mid=(top+bottom)/2
+    wire([(x,top),(x,mid-5)],color)
+    s.path(f'M{x-12},{mid-5} H{x+12} M{x-12},{mid+5} H{x+12}', sw=2)
+    wire([(x,mid+5),(x,bottom)],BLACK)
+    s.text(x+20,mid+5,label,size=14)
+    if positive:
+        s.text(x-27,mid-10,'+',size=18)
+    ground(x,bottom)
 
-# ---------------------------------------------------------------- charging socket (dashed group)
-s.rect(30, 560, 440, 200, fill="none", stroke=GREY, sw=1.2, rx=8, dash="6,4")
-s.rect(38, 568, 392, 17, fill="#ffffff", stroke="#ffffff", sw=0)
-s.text(42, 581, "the lock (on the lock wall in the sphere): one cable down behind the wall to the base", size=11, weight="bold", color="#555")
-box(40, 590, 190, 70, "A3144 Hall sensor", ["on a post inside the rotor,", "~3 mm under the magnet"], fill="#f3e8ff")
-pin(230, 610, "VCC", "in-right", RED)
-pin(230, 628, "OUT", "in-right", GREEN)
-pin(230, 646, "GND", "in-right", BLACK)
-s.wire([(230, 610), (285, 610), (285, 260)], RED, sw=2)
-dot(285, 260, RED)
-# 1N5819 in the output: the sensor can pull D1 low but never puts 5 V on it (stripe toward the sensor)
-s.wire([(230, 628), (356, 628)], GREEN, sw=2)
-s.path("M372,620 L372,636 L358,628 Z M358,620 L358,636", stroke=INK, sw=1.6, fill="#dddddd")
-s.wire([(372, 628), (515, 628), (515, 420), (xr, 420)], GREEN, sw=2)
-s.lines(345, 646, ["1N5819 on the board,", "stripe to the sensor"], size=9.5, color="#555")
-s.wire([(230, 646), (250, 646), (250, GND_Y)], BLACK, sw=1.8)
-dot(250, GND_Y)
-box(40, 680, 190, 64, "D2F-L microswitch", ["pressed by the rotor cam", "at ~40 deg of twist"], fill="#f3e8ff")
-pin(230, 702, "NO", "in-right", GREEN)
-pin(230, 724, "COM", "in-right", BLACK)
-s.wire([(230, 702), (525, 702), (525, 450), (xr, 450)], GREEN, sw=2)
-s.wire([(230, 724), (240, 724), (240, GND_Y)], BLACK, sw=1.8)
-dot(240, GND_Y)
 
-# ---------------------------------------------------------------- notes
-s.lines(24, GND_Y + 36, [
-    "The pump and the LED strip are switched on their low side: + to the +12 V rail, - to the MOSFET drain, source to GND.",
-    "The 10 k resistors keep both MOSFETs off while the XIAO boots. D1 and D2 use the XIAO's internal pull-ups.",
-    "S1 switches everything but the charge jack: tip the lantern to reach it; off to store and while charging. The pack's protection board cuts out on a short or a flat pack.",
-    "Plugs where the lantern unplugs from the cartridge: lock cable JST PH 4-pin = 5V, HALL OUT, SW (NO), GND, ~10 cm from the board; LED leads JST SM 2-pin = +, -.",
-], size=10.5, color="#333")
+def diode(x1, x2, y, label, color=GREEN, forward=True):
+    mid=(x1+x2)/2
+    a,k=(mid-10,mid+9) if forward else (mid+10,mid-9)
+    wire([(x1,y),(mid-11,y)],color)
+    s.path(f'M{a},{y-10} V{y+10} L{k},{y} Z M{k},{y-12} V{y+12}',sw=1.8,fill='#e2e8f0')
+    wire([(mid+11,y),(x2,y)],color)
+    s.text(mid,y-24,label,size=14,anchor='middle')
 
-open(os.path.join(HERE, "..", "wiring.svg"), "w").write(s.finish())
-print("written")
+
+def horizontal_bridge(x, y, color):
+    bridges.append((f'M{x-9},{y} Q{x},{y-17} {x+9},{y}', f'M{x-9},{y} H{x+9}', color))
+
+
+def vertical_bridge(x, y, color):
+    bridges.append((f'M{x},{y-9} Q{x+17},{y} {x},{y+9}', f'M{x},{y-9} V{y+9}', color))
+
+
+s.text(35,38,'Green Lantern power battery — connected wiring diagram',size=28,weight='bold')
+s.text(35,68,'Dots join wires. Bridge marks cross without joining. All ground symbols connect to the common GND rail.',size=16)
+for x,color,label in [(1380,ORANGE,'Battery rail'),(1570,RED,'Regulated 5 V'),(1780,MAG,'3.3 V'),(1930,GREEN,'Signal')]:
+    wire([(x,57),(x+28,57)],color,3)
+    s.text(x+36,62,label,size=14)
+
+# Battery and charging: the jack joins the battery before S1.
+box(40,140,230,110,'TalentCell YB1203000',['3000 mAh • 3 A maximum','DC5521 centre-positive'],fill='#fff7e6')
+pin(270,180,'+','right',ORANGE)
+wire([(270,180),(355,180)],ORANGE,3)
+dot(300,180,ORANGE)
+s.pin(355,180); s.pin(400,180)
+wire([(356,177),(396,158)],BLACK)
+s.text(375,142,'S1 power',size=16,anchor='middle',weight='bold')
+wire([(400,180),(440,180),(440,100)],ORANGE,3)
+wire([(440,100),(2050,100)],ORANGE,3.5)
+s.text(2050,88,'VLOAD: switched battery, 9–12.6 V (not regulated)',size=16,anchor='end',color=ORANGE,weight='bold')
+pin(155,250,'−','bottom',BLACK)
+wire([(155,250),(155,269)],BLACK); ground(155,269)
+box(40,295,230,85,'J1 charge jack',['DC5521 • third contact unused'],fill='#fff7e6')
+wire([(300,180),(300,329),(270,329)],ORANGE)
+pin(270,329,'+','right',ORANGE)
+pin(155,380,'sleeve −','bottom',BLACK)
+wire([(155,380),(155,403)],BLACK); ground(155,403)
+
+# Buck input and bulk capacitor.
+dot(560,100,ORANGE)
+wire([(560,100),(560,278),(330,278),(330,403),(260,403),(260,430)],ORANGE)
+box(60,430,250,125,'LM2596 buck',fill='#fff7e6')
+s.lines(185,516,['Set OUT to 5.0 V with a meter','before connecting electronics'],size=14,anchor='middle',lh=20)
+pin(260,430,'IN+','top',ORANGE)
+pin(175,555,'IN− / OUT−','bottom',BLACK)
+wire([(175,555),(175,590)],BLACK); ground(175,590)
+pin(310,480,'OUT+','right',RED)
+dot(670,100,ORANGE)
+cap(670,100,270,'C2 2200 µF / 25 V',ORANGE,positive=True)
+
+# 5 V: branch to Hall/driver is before the isolation diode.
+wire([(310,480),(390,480)],RED,3)
+dot(350,480,RED)
+wire([(350,480),(350,310),(1250,310),(1250,550)],RED,3)
+s.text(1010,292,'+5V_REG — U1 and Hall, before D1',size=16,color=RED,weight='bold')
+diode(390,475,480,'D1 NTE585',RED)
+wire([(475,480),(510,480)],RED)
+s.pin(510,480); s.pin(540,480)
+s.rect(504,473,42,14,fill='none',stroke=RED,sw=2)
+s.text(525,444,'JP1',size=15,anchor='middle',weight='bold')
+wire([(540,480),(600,480)],RED)
+s.lines(360,521,['D1 stripe → XIAO','JP1: remove for USB'],size=14,lh=22)
+
+# Controller, visible wire to every used GPIO.
+box(600,370,260,470,'Seeed XIAO RP2040',['3.3 V GPIO'])
+pin(600,480,'5V','left',RED)
+pin(600,560,'3V3','left',MAG)
+pin(600,620,'D1 • Hall','left')
+pin(600,680,'D2 • twist','left')
+pin(860,610,'D3 • pump PWM','right')
+pin(860,710,'D4 • light PWM','right')
+pin(800,370,'','top')
+s.text(790,355,'D0 • battery sense',size=15,anchor='end')
+pin(820,840,'GND','bottom',BLACK)
+wire([(820,840),(820,1180)],BLACK,2.8)
+pin(700,840,'D6','bottom')
+wire([(700,840),(700,920)],GREEN)
+s.pin(700,920); s.pin(700,965)
+wire([(700,965),(678,927)],BLACK)
+s.lines(715,945,['PRIME','optional'],size=14,lh=20)
+wire([(700,965),(700,995)],BLACK); ground(700,995)
+
+# Battery divider and filter connect physically to D0.
+dot(840,100,ORANGE)
+s.res_v(840,100,210,'R1 100 kΩ',ORANGE,size=14)
+dot(840,210)
+s.res_v(840,210,270,'R2 22 kΩ',lab_dx=-112,size=14)
+ground(840,270)
+wire([(840,210),(960,210)])
+dot(900,210); dot(960,210)
+cap(960,210,270,'C1 0.1 µF',GREEN)
+wire([(900,210),(900,350),(800,350),(800,370)])
+vertical_bridge(900,310,GREEN)
+s.text(1065,242,'12.6 V → 2.27 V at D0',size=14,color=GREY)
+
+# Original 74AHCT125 buffer and existing local 0.1 uF bypass.
+box(1120,550,270,330,'U1 74AHCT125',['DIP-14 • 3.3 V → 5 V'],fill='#eef6ff')
+pin(1250,550,'14 VCC','top',RED)
+pin(1250,880,'7 GND','bottom',BLACK)
+wire([(1250,880),(1250,1180)],BLACK,2.8)
+s.lines(1255,710,['OE 1, 4, 10, 13 + IN 9, 12','connect to pin 7 / GND','OUT 8, 11 unconnected'],size=13,anchor='middle',lh=22)
+wire([(1250,310),(1380,310)],RED)
+dot(1250,310,RED); dot(1380,310,RED)
+cap(1380,310,410,'C3 0.1 µF')
+s.text(1280,480,'C3: short leads at pins 14 / 7',size=13)
+pin(1120,650,'2 IN A','left'); pin(1390,650,'3 OUT A','right')
+pin(1120,830,'5 IN B','left'); pin(1390,830,'6 OUT B','right')
+wire([(860,610),(940,610),(940,650),(1120,650)])
+wire([(860,710),(900,710),(900,830),(1120,830)])
+dot(980,650); s.res_v(980,650,708,'R3 10 kΩ',size=14); ground(980,708)
+dot(1060,830); s.res_v(1060,830,925,'',size=14); ground(1060,925)
+s.text(1050,881,'R4 10 kΩ',size=14,anchor='end')
+
+# Pump / LED loads; all load supplies and gate-drive paths are wired.
+def stage(x, gate_y, title, q):
+    box(x,190,170,90,title,['12 V • + top / − bottom'],fill='#fff7e6')
+    px,dx=x+40,x+130
+    wire([(px,100),(px,190)],ORANGE,3); dot(px,100,ORANGE)
+    wire([(dx,280),(dx,gate_y-50)],BLACK,3)
+    box(x,gate_y-50,170,110,q+' IRLZ44NPBF')
+    s.text(x+85,gate_y+32,'TO-220; tab = drain',size=12,anchor='middle')
+    pin(dx,gate_y-50,'2 D','top',BLACK)
+    pin(x,gate_y,'1 G','left')
+    pin(dx,gate_y+60,'','bottom',BLACK)
+    s.text(dx-10,gate_y+53,'3 S',size=14,anchor='end')
+    wire([(dx,gate_y+60),(dx,1180)],BLACK,3)
+    dot(dx,1180,BLACK)
+
+stage(1530,650,'Kamoer KPHM200','Q1')
+stage(1840,830,'Green COB strip','Q2')
+s.lines(1950,310,['~75 cm','7 parallel pieces'],size=14,anchor='end',lh=20)
+wire([(1390,650),(1530,650)])
+wire([(1390,830),(1840,830)])
+horizontal_bridge(1660,830,GREEN)
+
+# Flyback cathode to pump positive, anode to switched negative.
+dot(1570,168,ORANGE)
+wire([(1570,168),(1760,168),(1760,227)],ORANGE)
+s.path('M1750,252 H1770 L1760,230 Z M1748,229 H1772',sw=2,fill='#e2e8f0')
+wire([(1760,252),(1760,365),(1660,365)],BLACK)
+dot(1660,365,BLACK)
+s.lines(1740,395,['D2 NTE586','3 A / 40 V','stripe toward +'],size=14,anchor='middle',lh=22)
+
+# Hall: local capacitor and external 3.3 V pull-up; OUT is direct to GPIO.
+box(80,675,260,135,'A3144',fill='#f3e8ff')
+s.lines(80,856,['Hall sensor: printed face forward,','leads down: 1 VCC, 2 GND, 3 OUT'],size=14,lh=20)
+pin(340,710,'1 VCC','right',RED)
+pin(340,750,'3 OUT','right')
+pin(340,790,'2 GND','right',BLACK)
+wire([(350,480),(350,630),(420,630),(420,710),(340,710)],RED)
+dot(370,630,RED); cap(370,630,690,'')
+s.text(330,665,'C4 0.1 µF',size=14,anchor='end')
+s.text(80,610,'C4 at the sensor, after the cable',size=14,color=GREY)
+wire([(340,790),(370,790),(370,835)],BLACK); ground(370,835)
+wire([(340,750),(550,750),(550,620),(600,620)])
+horizontal_bridge(420,750,GREEN)
+horizontal_bridge(470,750,GREEN)
+# 3V3 goes only to R5 and R6, never to the sensor supply.
+wire([(600,560),(470,560),(470,825),(530,825)],MAG)
+dot(470,610,MAG)
+wire([(470,610),(495,610),(495,650)],MAG)
+s.res_v(495,650,750,'')
+s.lines(505,690,['R5','4.7 kΩ'],size=12,lh=17)
+dot(495,750)
+s.res_v(530,825,980,'')
+s.lines(515,890,['R6','4.7 kΩ'],size=14,anchor='end',lh=20)
+dot(530,980)
+
+# Twist switch: resistor supplies contact current; Schottky cathode at NO.
+box(80,940,260,130,'D2F-01L microswitch',['NC terminal unused'],fill='#f3e8ff')
+s.text(80,1105,'Lever pressed by rotor cam',size=14)
+pin(340,980,'NO','right')
+pin(340,1040,'COM','right',BLACK)
+wire([(340,1040),(370,1040),(370,1180)],BLACK)
+dot(370,1180,BLACK)
+wire([(340,980),(440,980)])
+dot(420,980)
+dot(420,710,RED)
+wire([(420,710),(420,815)],RED)
+s.res_v(420,815,905,'',RED)
+s.lines(406,854,['R7','3.3 kΩ'],size=14,anchor='end',lh=20)
+wire([(420,905),(420,980)])
+diode(440,510,980,'D3 NTE585',forward=False)
+wire([(510,980),(575,980),(575,680),(600,680)])
+s.lines(400,1030,['D3 stripe ← switch NO','R7: ~1.5 mA through closed contacts','D1 / D2 GPIO pull-ups: 3.3 V only'],size=14,lh=24)
+
+# Common ground rail; local ground symbols use this same return.
+wire([(40,1180),(2050,1180)],BLACK,3.5)
+dot(820,1180,BLACK); dot(1250,1180,BLACK)
+ground(2050,1180)
+s.text(2030,1210,'COMMON GND',size=17,anchor='end',weight='bold')
+
+# Erase straight crossing segments and draw wire bridges above vertical wires.
+# Only specified crossings are changed; the uninterrupted path remains one wire.
+for path,straight,color in bridges:
+    s.path(straight,stroke='white',sw=7)
+    s.path(path,stroke='white',sw=7)
+    s.path(path,stroke=color,sw=2.4)
+
+out=Path(__file__).resolve().parent.parent/'wiring.svg'
+out.write_text(s.finish())
+print(out)
