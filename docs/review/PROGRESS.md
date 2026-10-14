@@ -357,3 +357,12 @@ changed or regenerated, and no hardware measurements claimed.
   Microchip TC4420 datasheet validates 5 V supply and 3.3 V control; AN798 pp. 6–7 supports film + ceramic
   bypass. No firmware behavior changed. Corrected stale troubleshooting advice about nonexistent OE pins.
 - Parts delta now $14.79 before tax/shipping. No purchase, push, PR publication, live Sheet or CAD edits.
+
+### Explain the circuit changes in practical terms
+
+- Rewrote the PR table to explain switching heat, missed twist detection, Hall signal levels and local
+  driver power. Explicitly counts three added driver capacitors; the Hall capacitor is a separate addition.
+- Separated the battery-rail capacitor from the pump protection diode so voltage tolerance is not confused
+  with motor turn-off current. Describes the gate-driver upgrade as a precaution, not measured overheating.
+- Checked the original guide/diagram and TI, Microchip and Omron specifications. Documentation only;
+  circuit, quantities, prices and firmware unchanged. `git diff --check` clean.
