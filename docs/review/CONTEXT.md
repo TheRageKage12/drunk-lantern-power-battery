@@ -392,3 +392,9 @@ the 2026-10-13 starting point; the sheet is the source of truth.
 - **2026-10-14, assembly videos in the repository:** owner requested the three MP4s in PR #14,
   without the local web page. Store them in `docs/videos/`, linked from README and BUILD_GUIDE:
   assembly order (4:08, 34 chapters), exploded view (0:12) and service access (0:12).
+
+- **2026-10-14, show the tubing route:** the owner pointed out that the assembly video did not show
+  running the tube from pump to nozzle. Added two animated cutaways before the lock wall is installed:
+  pump outlet/service loop through lower dish and bay floor, then the nozzle riser/bend and 5 mm tip.
+  Video is now 4:30 with 36 chapters. Lower routing and pump port are illustrative; the floor hole and
+  nozzle path follow the CAD. The written guide explicitly identifies the free end and service slack.

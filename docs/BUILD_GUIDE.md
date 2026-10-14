@@ -10,12 +10,14 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 
 "Your side" means the hand opening; "display side" means the window opposite it.
 
-**Assembly videos:** [Step-by-step assembly guide (4:08)](videos/assembly-guide.mp4) ·
+**Assembly videos:** [Step-by-step assembly guide (4:30)](videos/assembly-guide.mp4) ·
 [Exploded assembly (0:12)](videos/separate-and-assemble.mp4) ·
 [Opening for service (0:12)](videos/service-access.mp4).
 The assembly guide follows the build order and includes chapter markers. The exploded view illustrates
-how the parts fit together; use the guide for the actual sequence. Wiring, tubing, curtain and metal
-fasteners are described where needed but are not individually animated.
+how the parts fit together; use the guide for the actual sequence. The guide includes two orange-tube
+cutaways showing the pump-to-floor route and nozzle threading. The pump outlet and loose service loop
+are illustrative; confirm their fit with the actual parts. Wiring, curtain and metal fasteners are
+described where needed but are not individually animated.
 
 ![interaction timeline](images/interaction.png)
 
@@ -531,8 +533,11 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two short slots for the
    wall's tabs sit either side in the far half, the tube hole and the 7 mm cable hole are beyond the wall line
    (tube on the right, cables on the left; the lock cable and LED lead already pass through it, section 4
-   step 7, and their plugs go down through the lower dish to the board). Feed the tube up through the tube
-   hole. Drop `glass_well` into the long slot, its ridge end toward the display side; it hangs from its flange.
+   step 7, and their plugs go down through the lower dish to the board). Take the free end of the continuous
+   tube leaving the pump on the cartridge beside the shell. Leave about 30 cm extra between pump and bay floor
+   for the service loop, then feed the end up through the lower dish neck and the separate tube hole in
+   `bay_floor`. There is no connector at the floor. Drop `glass_well` into the long slot, its ridge end
+   toward the display side; it hangs from its flange.
 4. **Nozzle.** Push the tube up through the hole in `nozzle_guide`'s foot and along the channel, pressing it
    in through the open side where it resists (the slit is a little narrower than the tube), so 5 mm sticks out
    past the end, pointing down. Screw the foot into the bay-floor insert (1 x M3x8), open side toward you,
