@@ -7,8 +7,8 @@ pump pours about 1 oz into the shot glass under the lock while the light climbs;
 swells and goes dark. Slide the glass out and drink. Parts cost about $186 (budget build).
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
-assembly, wiring, firmware, calibration, testing, cleaning). Shopping list by store:
-[docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) (printable: [docs/SHOPPING_LIST.pdf](docs/SHOPPING_LIST.pdf); spreadsheet: [docs/SHOPPING_LIST.xlsx](docs/SHOPPING_LIST.xlsx)).
+assembly, wiring, firmware, calibration, testing, cleaning). Shopping list (who has what, what's left to buy, links and prices): the
+[shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).
 
 ## Repository map
 
