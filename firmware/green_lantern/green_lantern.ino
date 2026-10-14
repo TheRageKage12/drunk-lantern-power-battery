@@ -38,17 +38,18 @@
  *   Lock cable (JST PH 4-pin): regulated 5V, HALL OUT, SW/NO, GND. LED: JST SM 2-pin (+, -).
  *   D2  <- NTE585 anode; cathode to switch NO. COM to GND; 3.3 k from NO to regulated 5 V.
  *          External 4.7 k from D2 to 3V3; active LOW. Do not connect the 5 V switch node directly to D2.
- *   D3  -> U1 TC4420CPA IN pin 2; OUT pins 6/7 -> 47 ohm -> Q1 gate (pump).
- *   D4  -> U2 TC4420CPA IN pin 2; OUT pins 6/7 -> 47 ohm -> Q2 gate (LED).
- *          Each input has 10 k to GND; each gate has 10 k to source/GND. Each driver: pins 1/8 = regulated 5 V,
- *          pins 4/5 = GND, 0.1 uF ceramic + 1 uF film locally across supply; pin 3 unconnected.
+ *   D3  -> U1 74AHCT125 IN pin 2; OUT pin 3 -> Q1 gate (pump).
+ *   D4  -> U1 74AHCT125 IN pin 5; OUT pin 6 -> Q2 gate (LED).
+ *          Each input has 10 k to GND. U1 pin 14 = regulated 5 V, pin 7 = GND;
+ *          existing 0.1 uF locally across supply. OE pins 1/4/10/13 and unused IN 9/12 = GND;
+ *          unused OUT pins 8/11 unconnected.
  *          NTE586 3 A/40 V flyback across pump, cathode to switched battery positive.
  *   D6  <- optional PRIME button to GND.
  *   D0  <- battery sense: 100 k from switched battery rail, 22 k and 0.1 uF to GND.
  *          12.6 V full -> 2.27 V at the pin. Reads 0 V if absent: compensation/warning off.
  *   5V  <- buck through NTE585 (stripe to XIAO), then removable JP1. Remove JP1 before USB.
- *          Follow build-guide sequencing; remove U1/U2 for USB-only flashing so their unpowered inputs
- *          are not driven by the boot blink. Normal operation is battery-only.
+ *          Follow build-guide sequencing; remove U1 for USB-only flashing to disconnect GPIOs
+ *          from the unpowered buffer. Normal operation is battery-only.
  *   3V3 -> the external Hall and twist GPIO pull-ups only.
  *
  * Serial (115200) commands for bench calibration, type then Enter:
@@ -69,7 +70,7 @@
 constexpr uint8_t HALL_PIN      = D1;
 constexpr uint8_t SWITCH_PIN    = D2;
 constexpr uint8_t PUMP_PIN      = D3;
-constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through U2 TC4420CPA)
+constexpr uint8_t LED_PIN       = D4;  // PWM to the LED strip MOSFET (through U1 74AHCT125)
 constexpr uint8_t PRIME_PIN     = D6;  // momentary to GND: primes the tube while held (IDLE, no ring)
 constexpr uint8_t BATT_PIN      = A0;  // = D0: battery voltage through a 100 k / 22 k divider
 

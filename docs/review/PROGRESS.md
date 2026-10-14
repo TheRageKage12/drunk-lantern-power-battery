@@ -374,3 +374,17 @@ changed or regenerated, and no hardware measurements claimed.
   hardware remains in the local draft pending scope review. Explains Hall detection as approximately
   0 V with the ring present and 3.3 V otherwise, and shortens the battery capacitor rationale.
 - Documentation only; no circuit or purchasing changes.
+
+### Remove unjustified gate-drive replacement
+
+- Restored the original 74AHCT125 and DIP-14 socket, original two 10 kΩ input pull-downs, direct outputs
+  to the MOSFET gates and original 0.1 µF supply capacitor. Removed TC4420 drivers, three extra driver
+  capacitors, 47 Ω gate resistors and added gate pull-downs. This supersedes the optional proposal.
+- Updated the single connected diagram, build and USB instructions, firmware comments, PR title/table,
+  proposed Sheet edits and current context. Renumbered remaining sensor parts R5–R7 and C4.
+- Shortened the Hall rationale to reliable ring detection, safe 3.3 V signal and steady sensor power.
+- Read existing prices through the Google Drive connector; no Sheet changes. Remaining parts delta:
+  battery +$1, switch −$1, diode +$1.08, resistors +$0.87, Hall capacitor +$0.25, 25 V capacitor +$0.25,
+  JP1 header/shunt +$2.24 = $4.69 before tax/shipping. No CAD changes or publication.
+- Verification: SVG regenerated and visually inspected; XML parsing and deterministic regeneration pass;
+  executable firmware text unchanged; stale-driver scan, cost arithmetic and `git diff --check` pass.

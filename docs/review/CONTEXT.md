@@ -189,7 +189,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
   Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
   underneath (which needs a cable groove at the rim). The switch stops the ~15 mA idle drain while stored.
-- An LM2596 makes regulated 5.0 V directly for U1/U2 and Hall. Only the XIAO supply branch passes through
+- An LM2596 makes regulated 5.0 V directly for U1 and Hall. Only the XIAO supply branch passes through
   an NTE585 Schottky and removable JP1. Remove JP1 before USB; follow the guide’s service sequence.
   JP1 is a reviewable addition for supply isolation during calibration (Vetco header + shunt, $2.24).
 - **Low battery (Kevin's decision):** "We shouldn't ever go below 50% battery." No buck-boost for now; it's
@@ -210,19 +210,18 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 
 ### Electronics (see `docs/images/wiring.png`)
 - Seeed XIAO RP2040 (B0DRNTQ338); GPIO assignments and firmware behavior are unchanged.
-- Two TC4420CPA single-channel non-inverting drivers replace 74AHCT125: U1 pump, U2 light. Two DIP-8
-  sockets. Each chip: pins 1/8 to regulated 5 V, 4/5 to ground, pin 2 input, pins 6/7 joined as output,
-  pin 3 unused. D3 drives U1; D4 drives U2. Outputs of separate chips must never be joined.
-  Each has local 0.1 µF ceramic + 1 µF film bypass (C3/C4 at U1; C6/C7 at U2). Film plus ceramic is
-  supported by Microchip AN798, pp. 6–7; keep the bypass/gate return loops compact.
-  Current local draft: Amazon B0CWF8W713, Bridgold Direct TC4420CPA five-pack ($8.99; two used),
-  October 14 Prime / October 18 standard delivery shown October 13 for Seattle. Free standard delivery
-  requires an eligible $35 order. Vetco VUPN7538 1 µF/63 V polypropylene film, $1.06 each, two used;
-  catalog reports available; local pickup timing remains unconfirmed. Total 0.1 µF count is four.
-  Owner rejected the prior TC4427CPA $21 ten-pack and late capacitor listing; October 20 is the latest
-  acceptable arrival date. This sourcing correction changes the driver count, pinout and bypass count.
-- Two IRLZ44NPBF low-side MOSFETs: 47 Ω series at each gate, 10 kΩ gate-to-source each; keep the two
-  10 kΩ input pull-downs. Specify exact MOSFET in Item and vendor-title discrepancy in Notes.
+- Retain the original 74AHCT125 in its DIP-14 socket: pin 14 regulated 5 V, pin 7 ground;
+  D3 → input 2 / output 3 → pump gate; D4 → input 5 / output 6 → light gate. Ground OE pins
+  1/4/10/13 and unused inputs 9/12; leave outputs 8/11 open. Keep the existing C3 0.1 µF bypass
+  and two 10 kΩ input pull-downs. No new gate series resistors or gate-to-source resistors.
+  The proposed TC4420/TC4427 replacement and its extra sockets/capacitors have been removed:
+  no calculation or measurement established a practical need for the extra cost and complexity.
+  The owner rejected retaining unjustified changes as optional items in the PR.
+- Two IRLZ44NPBF low-side MOSFETs, driven directly by the original buffer. Specify the exact MOSFET
+  in Item and vendor-title discrepancy in Notes. Normal startup/load/temperature checks remain necessary;
+  withdrawing the replacement is not a claim that the original hardware has been tested.
+- One added Hall capacitor C4 0.1 µF; total 0.1 µF count is three. Hall pull-up R5 4.7 kΩ,
+  twist pull-up R6 4.7 kΩ, contact-current resistor R7 3.3 kΩ. October 20 delivery cutoff remains.
 - NTE586 3 A/40 V flyback across pump, stripe to battery positive. Two NTE585 remain: XIAO supply and
   twist input. Capacitor C2 is 2200 µF/**25 V**; higher voltage rating does not extend overload runtime.
 - Hall direct to D1 as above. D2F-01L switch: COM ground, NO through 3.3 kΩ to regulated 5 V; GPIO D2
@@ -236,8 +235,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   current/heating on the bench. Startup/stall current and actual runtime are not measured yet.
 - No fuse added in this revision; the pack has protection. The 3 A output rating is not a guaranteed
   protection-trip threshold. A jam/short is a fault to stop and investigate, not something C2 can sustain.
-- USB-only flashing: remove JP1 and both socketed U1/U2 with power off. Powered USB calibration: JP1 removed,
-  U1/U2 installed and regulated supply present; follow guide sequencing. Ordinary operation is battery-only.
+- USB-only flashing: remove JP1 and socketed U1 with power off. Powered USB calibration: JP1 removed,
+  U1 installed and regulated supply present; follow guide sequencing. Ordinary operation is battery-only.
 
 ### Firmware (`firmware/green_lantern/green_lantern.ino`)
 - States: IDLE, ARMED, POURING, HOLDING, FINALE, LOCKED.
@@ -377,3 +376,10 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   sockets, and 0.1 µF ceramic + $1.06 Vetco 1 µF film per driver. Parts delta $14.79 before tax/shipping.
   Updated connected diagram, build/service pinout instructions and firmware comments. Vetco catalog
   availability verified; local pickup timing unconfirmed. No publishing, purchase, CAD or Sheet changes.
+
+- **2026-10-13, remove unjustified gate-drive scope:** owner challenged making a significant replacement
+  without demonstrating a practical need. Restored original 74AHCT125, DIP-14 socket, two input pull-downs,
+  direct MOSFET connections and single 0.1 µF bypass. Removed new drivers, three extra driver capacitors,
+  two 47 Ω and two gate pull-down resistors from the draft and proposed Sheet changes. Diagram, guide and
+  firmware comments agree; remaining parts delta is $4.69 before tax/shipping, recalculated against the
+  live Sheet. Hall rationale shortened. Other circuit changes retained; Sheet/CAD untouched, no publishing.
