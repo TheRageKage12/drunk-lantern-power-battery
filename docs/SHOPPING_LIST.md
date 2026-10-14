@@ -102,5 +102,5 @@ test the lock (guide section 6, step 4).
 - [ ] **Shot glass**, 1.5 oz: at most **52 mm across the top** and **62 mm tall**; a heavy base helps.
   [Bargreen Ellingson](https://www.bargreen.com/locations/seattle), SoDo showroom, Mon-Fri 10-3.
 
-**Total: about $186** (Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, local spring, jar, curtain sheet and shot glass ~$14). Printable version: [SHOPPING_LIST.pdf](SHOPPING_LIST.pdf). Plus filament
+**Total: about $186** (Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, local spring, jar, curtain sheet and shot glass ~$14). Printable version: [SHOPPING_LIST.pdf](SHOPPING_LIST.pdf). Editable spreadsheet (Excel, or File > Import in Google Sheets): [SHOPPING_LIST.xlsx](SHOPPING_LIST.xlsx). Plus filament
 or tools if you need them.

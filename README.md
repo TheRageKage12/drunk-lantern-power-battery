@@ -8,7 +8,7 @@ swells and goes dark. Slide the glass out and drink. Parts cost about $186 (budg
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
 assembly, wiring, firmware, calibration, testing, cleaning). Shopping list by store:
-[docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) (printable: [docs/SHOPPING_LIST.pdf](docs/SHOPPING_LIST.pdf)).
+[docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) (printable: [docs/SHOPPING_LIST.pdf](docs/SHOPPING_LIST.pdf); spreadsheet: [docs/SHOPPING_LIST.xlsx](docs/SHOPPING_LIST.xlsx)).
 
 ## Repository map
 
