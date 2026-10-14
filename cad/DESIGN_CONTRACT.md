@@ -325,6 +325,13 @@ exception in build.py output.
   (body face 1.5 from the bore centre instead of 0.1: the tube can be pressed in, the lips print). Sensor post
   radius 4.0 (walls beside the lead slot were 0.6 mm); tray finger wells 19 mm (20 broke through the rim);
   back LED row 1 at 34 (a 0.3 mm sliver to the Hall window).
+- Hidden power port (rev 9h): no port panel, no drum notch. The power switch sits in a pocket standing on the tray
+  floor (`SWITCH_POCKET_XY` (15, 71.5), 26 x 23 outside, 20 mm deep, open at the bottom; 6.5 mm hole in its
+  ceiling, bushing and lever down, nut from inside); the charge jack in an 8 mm hole in the deck at `JACK_XY`
+  (-8, 80), socket up, body hanging under the deck clear of the pack and the pocket; the deck's +Y wire slot is
+  now an open notch (`DECK_LEAD_NOTCH`, 14 x 12 at x -25) for the pack and switch leads. The lantern is lifted
+  off to charge and stands on blocks beside the cartridge. Probed: cavity, hole, switch body, jack body, plug
+  room and the boss sweep all clear; the bottom band is solid where the notch was.
 - Wider base (rev 9f): D_MAX 180 -> 190 (base bands and the lower dish mouth; BASE_BODY_D = D_MAX - 6), so the
   raised jar and pump clear the lower dish's inner wall: pump envelope 6.0 mm, jar envelope 5.4 mm. The upper
   dish keeps a 180 mm mouth (UPPER_DISH_MOUTH_D, own cone slope): the handle legs pass its rim (2 mm), and moving

@@ -60,8 +60,12 @@ GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
 POWERBANK_L, POWERBANK_W, POWERBANK_T = 70.0, 55.0, 40.0   # KBT 12 V 2400 mAh Li-ion pack (6 cells, 2 layers, protection board), flat on the tray
-PORT_ANGLE = 90.0           # charge jack + power switch panel in the base's bottom band, on the owner's side
-PORT_W, PORT_H = 42.0, 12.0 # notch in the drum's bottom band (open at the bottom); the tray's panel fills it
+# rev 9h: nothing shows on the shell. The power switch sits in a pocket under the cartridge floor, lever down (tip
+# the lantern to flip it); the charge jack is on the deck, pointing up, reached with the lantern lifted off.
+SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray floor, +Y side, between a pillar and the rim
+SWITCH_POCKET_W, SWITCH_POCKET_L = 26.0, 23.0       # outer box; the cavity is 2 x WALL smaller
+SWITCH_POCKET_DEPTH = 20.0                          # cavity height: bushing (~7) + lever (~10) stay above the table
+JACK_XY = (-8.0, 80.0)                              # charge jack hole in the deck, +Y edge, beside the lead notch
 PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) and mini toggle switch (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)

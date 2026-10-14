@@ -40,7 +40,7 @@ parts before you print the big pieces: the Kamoer pump's outline and your jar. E
 | Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window). On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. The charge jack and the power switch sit in a small panel at the bottom edge on your side. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill: undo them and lift the lantern off; the cartridge stays on the table. To charge: plug the charger into the jack, no need to open it. |
+| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. Nothing shows on the shell: the power switch sits in a pocket under the cartridge floor (tip the lantern to flip it) and the charge jack is on the deck, pointing up. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
 
 ![fluid path and layout](images/fluid-path.png)
 
@@ -163,9 +163,9 @@ Print these first, before any big part, and check them:
 
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
-| `base` (drum) | 190 x 190 x 115 | top band down | no | green | 229 |
-| `base_tray` (cartridge floor, with the port panel) | 179 x 184 x 44 | flat | no | green | 89 |
-| `base_deck` | 178 x 177 x 47 | flat | no | any | 111 |
+| `base` (drum) | 190 x 190 x 115 | top band down | no | green | 232 |
+| `base_tray` (cartridge floor, with the switch pocket) | 179 x 179 x 44 | flat | no | green | 92 |
+| `base_deck` | 178 x 177 x 47 | flat | no | any | 112 |
 | `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 1 |
 | `dish_lower` | 190 x 190 x 91 | mouth down | the 2.8 mm ring under the rim, 8 mm up: supports touching the build plate only | green | 184 |
 | `dish_upper` | 180 x 180 x 86 | floor down, mouth up | the 2.7 mm ring under the floor, 9 mm up: supports touching the build plate only | green | 220 |
@@ -218,9 +218,10 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 2. **12 V in.** Check the pack's two bare leads with the meter (red +, about **12 V**). Its + goes two ways: to the charge jack's centre pin and to one tag of the
    power switch S1. Its − goes to the jack's outer contact and to ground. S1's other tag is the +12 V rail.
    Solder C2 (2200 µF 16 V) across the rail, stripe (−) to ground. The jack sits **before** the switch, so the
-   pack charges with S1 off and nothing else connected. Mount the jack and S1 in the panel on the tray's edge
-   (both holes are printed: 8 mm for the jack, 6.5 mm for the switch), with leads long enough (~15 cm) to reach
-   the board on the deck.
+   pack charges with S1 off and nothing else connected. The jack mounts in the 8 mm hole at the deck's edge on
+   your side, socket facing up (nut on top). S1 mounts in the 6.5 mm hole in the ceiling of the pocket under the
+   tray floor, bushing and lever pointing down into the pocket, its nut done up from inside the pocket with
+   pliers. Give both leads long enough (~15 cm) to reach the board on the deck.
 2a. **Battery sense.** A 100 k from the +12 V rail (after S1) to D0, a 22 k and a 0.1 µF from D0 to ground.
    It tells the firmware the battery voltage. Leave it out and everything still works, just without the
    pump compensation and the low-battery warning.
@@ -434,20 +435,20 @@ on a single-colour strip.
 
 Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
-1. **Cartridge.** Stand `base_tray` with its port panel toward you. The LM2596 goes in its pocket on the
-   right, zip-tied through the two slots beside it; the battery pack flat in the middle, leads toward the port
-   panel (the deck sits 2 mm above it and holds it down; a strap through the tray's slots is optional). Jack
-   and switch in the panel, nuts tight. `base_deck` drops in on top (3 x M3x8 into the three pillars that have
-   holes; it fits one way). Bring the leads from the jack, switch, pack and buck up to the board through the
-   open notch in the deck's edge at the port panel: the deck's two small slots are closed holes, so a soldered
-   lead can't be threaded through them later. Jar in its ring with a strap through the finger slots, pump in
+1. **Cartridge.** Stand `base_tray` with the switch pocket (the raised box near the rim) toward you. The
+   LM2596 goes in its pocket on the right, zip-tied through the two slots beside it; the battery pack flat in
+   the middle, leads toward you (the deck sits 2 mm above it and holds it down; a strap through the tray's
+   slots is optional). S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
+   through the open notch in the deck's edge beside the jack hole (the deck's other slot is a closed hole, so
+   a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
+   three pillars that have holes; it fits one way). Jack in the deck's 8 mm hole, socket up, nut tight. Jar in its ring with a strap through the finger slots, pump in
    its saddles with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
    drilled).
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
    its spigot goes into the top of the drum, 3 x M3x8 from outside. The drum stays with the lantern from now on.
 3. **Bay floor.** From here until step 9 the open drum has the tube and the cables coming out of its bottom,
-   so stand the lantern on two blocks, or turn it so they run out through the port notch at its bottom edge.
+   so stand the lantern on two blocks (a couple of books) to keep its rim off them.
    Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two short slots for the
    wall's tabs sit either side in the far half, the tube hole and the 7 mm cable hole are beyond the wall line
    (tube on the right, cables on the left; the lock cable and LED lead already pass through it, section 4
@@ -479,8 +480,8 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    bosses inside the drum only line up one way. Tip the lantern a little and turn the 3 thumbscrews up into the
    bosses from underneath, finger-tight.
 
-Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern on or off, use the
-switch next to the charge jack, at the bottom edge on your side.
+Keep the pump wires twisted and away from the Hall and switch wires. To turn the lantern on or off, tip it
+and flip the switch in the pocket under the cartridge floor, on your side; it is out of sight from every angle.
 
 ---
 
@@ -488,9 +489,9 @@ switch next to the charge jack, at the bottom edge on your side.
 
 **Reaching the XIAO.** Its USB port is on the cartridge, under the lantern, so every `status`, `cal` and `vcal`
 here, in sections 11 and 13 and on the day means: switch off, undo the 3 thumbscrews, lift the lantern off and
-stand it beside the cartridge, leading the tube and the two cables out under the drum through the port notch
-at its bottom edge (the rim would crush the tube anywhere else). The glass stays in the lantern under the
-nozzle; the 30 cm service loop reaches.
+stand it beside the cartridge on two blocks (a couple of books), so the tube and the two cables run out under
+the drum's rim without being crushed. The glass stays in the lantern under the nozzle; the 30 cm service loop
+reaches.
 
 Water in the jar, the shot glass in its slot (only the shot glass fits under the nozzle; weigh what it pours on
 a kitchen scale, 1 g = 1 mL, or tip it into a measuring cup), laptop on the XIAO.
@@ -556,7 +557,9 @@ nozzle (the line is empty after cleaning; empty the glass as needed). Put the la
 pour into the glass: the first pour of the night should not be the one in front of a guest. Then the empty
 glass goes in and you are ready.
 
-**Charging:** switch off, plug the pack's charger into the jack at the bottom edge on your side. Charge after
+**Charging:** switch off, lift the lantern off (3 thumbscrews) and plug the pack's charger into the jack on
+the deck, the socket pointing up at the edge on your side; the lantern can go back on while it charges if you
+route the charger lead out under the rim on blocks, or just leave it beside the cartridge. Charge after
 every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
 The double blink as you punch in (below 10.5 V) is a late warning. A full pack lasts well over 100 pours.
 

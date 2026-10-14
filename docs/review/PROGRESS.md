@@ -265,7 +265,8 @@ than the AQUANEAT 10-pack at $4.79; a single from a pet store (~$1-2) remains th
    is even better. Risk: low at these currents; the gate edges get slower (the XIAO's pins drive ~4-8 mA), so
    switching loss at 1 kHz stays under 100 mW. What changes: wiring diagram, guide section 4 steps 1 and 4,
    firmware nothing. I would keep U1: it costs $3 and removes a "why is my pump weak" question.
-2. **USB reachable without lifting the lantern: +$6-9.** A panel-mount USB-C extension (~20 cm, female to male)
+2. **(Moot since rev 9h, 2026-10-14: there is no port panel any more; Kevin chose a fully hidden switch and
+   jack.)** USB reachable without lifting the lantern: +$6-9. A panel-mount USB-C extension (~20 cm, female to male)
    from the XIAO to a third hole in the port panel would make calibration, `vcal` and the cleaning runs a
    plug-in job. Needs a 24 x 10 mm cutout in `base_tray`'s port panel (PORT_W is 42, the jack and switch use
    ~30 of it, so the panel would have to grow to ~60 mm) and a matching wider drum notch. Worth it if you expect

@@ -76,7 +76,8 @@ PILLAR_H = DECK_Z0 - P.FLOOR
 DECK_T = 3.0
 DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (47)
 DECK_R = R_IN - P.FIT                                 # drops in from the open top
-DECK_PORT_NOTCH = (30.0, 10.0)                        # notch in the deck edge at +Y to see the bank's ports
+DECK_LEAD_NOTCH = (14.0, 12.0)                        # open notch in the deck edge at +Y: the pack and switch leads come up here
+DECK_LEAD_NOTCH_X = -25.0
 
 # ------------------------------------------------------------------ pump (on the deck, axis along Y)
 PUMP_HEAD_L_EST = 40.0                                # head box length along the axis (estimate)
@@ -131,7 +132,7 @@ ZIPTIE_PITCH = 7.0
 DRAIN_D = 8.0
 DRAIN_XY = ((-40.0, -68.0), (40.0, -68.0))
 DECK_WIRE_SLOT = (14.0, 8.0)
-DECK_WIRE_SLOTS_XY = ((PUMP_X, -70.0), (-25.0, 70.0))  # pump leads down to the D4184; XIAO / bank leads
+DECK_WIRE_SLOTS_XY = ((PUMP_X, -70.0),)               # pump leads down to the spare pocket (the +Y leads use the open notch)
 
 
 # ------------------------------------------------------------------ small helpers
@@ -209,7 +210,7 @@ def _drum():
 # ------------------------------------------------------------------ base floor features
 def _bank_pocket():
     """End stops and side rails for the flat battery pack, and a strap slot pair across its middle. The +Y end
-    stop is two blocks: the pack's DC socket and its plug sit in the gap, toward the port panel."""
+    stop is two blocks: the pack's leads leave through the gap, toward +Y."""
     y_stop = BANK_HALF_L + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
     adds = [_box(2 * BANK_END_STOP_X[1], BANK_END_STOP_T, BANK_END_STOP_H, 0, -y_stop, P.FLOOR)]
     for sx in (-1, 1):   # +Y end: two blocks, the middle stays free for the plug
@@ -310,7 +311,7 @@ def build_base():
     drum = _drum()
     adds, cuts = _drum_bosses()
     drum = drum.union(_union_all(adds))
-    return _cut_all(drum, cuts + _joint_screw_cutters() + [_drum_port_notch()])
+    return _cut_all(drum, cuts + _joint_screw_cutters())
 
 
 def _tray_pads():
@@ -324,26 +325,16 @@ def _tray_pads():
     return adds, cuts
 
 
-def _port_panel():
-    """Curved panel in the drum's bottom-band notch, flush with the band: charge jack and power switch.
-    A floor tab carries it out from the tray edge; two ribs brace it."""
-    a = math.radians(P.PORT_ANGLE)
-    half = P.PORT_W / 2 - P.FIT                       # panel half-width (in the notch, with clearance)
-    r_out, r_in = R_MAX - P.FIT, R_MAX - P.FIT - 3.0  # 3 mm curved skin, flush with the band
-    window = _box(2 * half, 40.0, P.PORT_H - P.FIT, 0.0, (R_MAX + 70.0) / 2 + 2.0, 0.0)     # along +Y, then rotated
-    skin = _ring(r_out, r_in, P.PORT_H - P.FIT).intersect(window)
-    tab = _ring(r_out, TRAY_R - 1.0, P.FLOOR).intersect(window)
-    ribs = [_box(2.4, r_in - 74.0 + 0.5, P.PORT_H - P.FIT, sx * (half - 1.2), (74.0 + r_in) / 2, 0.0) for sx in (-1, 1)]
-    panel = _union_all([skin, tab] + ribs)
-    z = P.FLOOR + (P.PORT_H - P.FIT - P.FLOOR) / 2
-    for x, d in ((-half / 2, P.PORT_JACK_D), (half / 2, P.PORT_SWITCH_D)):     # jack on the left, switch on the right (seen from outside: mirrored)
-        panel = panel.cut(cq.Workplane('XZ').workplane(offset=-(R_MAX + 2)).center(x, z).circle(d / 2).extrude(R_MAX + 2 - 74.0))
-    return _rot_z(panel, P.PORT_ANGLE - 90.0)
-
-
-def _drum_port_notch():
-    """Notch in the drum's bottom band for the port panel. Open at the bottom, so the drum still lifts off."""
-    return _rot_z(_box(P.PORT_W, 30.0, P.PORT_H + 1.0, 0.0, R_MAX - 6.0, -1.0), P.PORT_ANGLE - 90.0)
+def _switch_pocket():
+    """Pocket under the cartridge floor for the power switch: a box standing on the floor, open at the bottom, the
+    switch mounted in its ceiling with the bushing and lever pointing down. Nothing shows on the shell; tip the
+    lantern to flip it. Its nut goes on from inside the cavity."""
+    x, y = P.SWITCH_POCKET_XY
+    w, l, d = P.SWITCH_POCKET_W, P.SWITCH_POCKET_L, P.SWITCH_POCKET_DEPTH
+    outer = _box(w, l, d + P.WALL, x, y, 0.0)
+    cavity = _box(w - 2 * P.WALL, l - 2 * P.WALL, d + 1.0, x, y, -1.0)
+    hole = _cyl(P.PORT_SWITCH_D / 2, d + P.WALL + 2.0, x, y, -1.0)
+    return [outer], [cavity, hole]
 
 
 def build_tray():
@@ -354,7 +345,9 @@ def build_tray():
         a, c = fn()
         adds += a
         cuts += c
-    tray = tray.union(_union_all(adds + [_port_panel()]))
+    a, c = _switch_pocket()
+    tray = tray.union(_union_all(adds + a))
+    cuts += c
     return _cut_all(tray, cuts + _floor_cutters())
 
 
@@ -441,7 +434,8 @@ def build_deck():
         cuts.append(_cyl(P.M3_CLEAR / 2, DECK_T + 2, x, y, DECK_Z0 - 1))
     for (x, y) in DECK_WIRE_SLOTS_XY:
         cuts.append(_box(DECK_WIRE_SLOT[0], DECK_WIRE_SLOT[1], DECK_T + 2, x, y, DECK_Z0 - 1))
-    cuts.append(_box(DECK_PORT_NOTCH[0], 2 * DECK_PORT_NOTCH[1], DECK_T + 2, USB_X, DECK_R, DECK_Z0 - 1))
+    cuts.append(_box(DECK_LEAD_NOTCH[0], 2 * DECK_LEAD_NOTCH[1], DECK_T + 2, DECK_LEAD_NOTCH_X, DECK_R, DECK_Z0 - 1))
+    cuts.append(_cyl(P.PORT_JACK_D / 2, DECK_T + 2, P.JACK_XY[0], P.JACK_XY[1], DECK_Z0 - 1))   # charge jack, pointing up
     for a in SERVICE_ANGLES:     # notches so the drum's bosses pass the deck when the lantern is lowered on
         cuts.append(_sector_box(BOSS_R0 - 1.5, DECK_R + 1, BOSS_W + 3.0, DECK_Z0 - 1, DECK_Z0 + DECK_T + 1, a))
     deck = _cut_all(deck, cuts)
