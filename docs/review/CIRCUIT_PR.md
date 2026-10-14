@@ -1,7 +1,7 @@
 # Revise the battery, gate drive and sensor circuits
 
-Revise the power and control circuit to give the pump and lighting more current headroom, improve
-MOSFET switching, and make ring/twist detection more reliable. Update the connected circuit diagram
+Revise the power and control circuit to give the pump and lighting more current headroom and make
+ring/twist detection more reliable. The driver replacement remains an optional proposal. Update the connected circuit diagram
 and [build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first) to match.
 
 ## Circuit changes and why
@@ -9,12 +9,12 @@ and [build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-f
 | Circuit | Change | Why |
 |---|---|---|
 | Battery | KBT 2400 mAh / 2 A → TalentCell YB1203000, 3000 mAh / 3 A. | More current headroom and capacity. |
-| Gate drive | Replace [74AHCT125](https://www.ti.com/product/SN74AHCT125) with two [TC4420CPA drivers](https://ww1.microchip.com/downloads/en/DeviceDoc/21419D.pdf), one per load. Add 47 Ω resistors in the gate leads and 10 kΩ from each gate to ground. | Pump speed and brightness are controlled by repeatedly switching the MOSFETs on and off. Stronger drivers shorten the partly-on transition, reducing wasted heat. The resistors limit switching spikes and hold the loads off when the driver is inactive. This is a precaution; overheating has not been measured. |
+| Gate drive | Replace [74AHCT125](https://www.ti.com/product/SN74AHCT125) with two [TC4420CPA drivers](https://ww1.microchip.com/downloads/en/DeviceDoc/21419D.pdf), one per load. Add 47 Ω resistors in the gate leads and 10 kΩ from each gate to ground. | The driver replacement aims to reduce heating in the switches controlling pump speed and LED brightness, but its practical benefit here has not been established. Treat it as optional. The added resistors reduce switching spikes and keep undriven gates off. |
 | 5 V supply | Move driver and Hall feeds ahead of the XIAO supply diode in the diagram. | Give both the full regulated 5 V without the diode's voltage drop. |
 | Driver capacitors | Keep the existing 0.1 µF at U1; add one 0.1 µF at U2 and one 1 µF at each driver: **three added capacitors**. Draw all four explicitly. | Each driver needs a brief burst of current whenever it switches a MOSFET on. Capacitors beside each chip supply that burst locally, keeping its 5 V supply steady despite the connecting wires. |
-| Hall sensor | Remove the output diode; add a 4.7 kΩ pull-up to 3.3 V and a 0.1 µF capacitor at the sensor. | The sensor only pulls its signal toward ground; the 3.3 V pull-up already keeps the high level safe. The diode unnecessarily raises the low level, making it easier for electrical noise to confuse ring detection. The capacitor steadies the sensor supply. |
+| Hall sensor | Remove the output diode; add a 4.7 kΩ pull-up to 3.3 V and a 0.1 µF capacitor at the sensor. | With the ring present, the sensor connects the signal to ground (about 0 V); otherwise, the resistor sets it to 3.3 V. It never sends its 5 V supply onto that signal. Removing the diode makes the detected-ring voltage closer to 0 V and less susceptible to noise. The capacitor steadies sensor power. |
 | Twist switch | Replace D2F-L with D2F-01L. Add 3.3 kΩ from 5 V to the contact, an isolating diode, and a 4.7 kΩ GPIO pull-up to 3.3 V. | [Omron’s specified minimum load](https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2f.pdf) for the original switch is 100 mA at 5 V, far above what the GPIO supplies; a mechanical click may not produce a reliable electrical connection. D2F-01L is specified down to 1 mA at 5 V. The added circuit supplies that contact current while keeping 5 V off the GPIO. |
-| Battery-rail capacitor | Replace the existing 2200 µF/16 V capacitor with 2200 µF/25 V. | This is the large capacitor that supplies brief bursts of current and smooths battery-rail disturbances. A full pack is 12.6 V; the 25 V rating tolerates larger brief voltage spikes. Its storage capacity is unchanged, and it cannot sustain an overloaded motor. |
+| Battery-rail capacitor | Replace the existing 2200 µF/16 V capacitor with 2200 µF/25 V. | Tolerates larger voltage spikes above the battery’s 12.6 V maximum; capacitance stays the same. |
 | Pump protection diode | Replace the 1 A NTE585 across the pump with a 3 A/40 V NTE586. | Motor current continues briefly after its electronic switch turns off. This diode carries that current to prevent a damaging voltage spike. A 1 A diode leaves little allowance above the pump's listed 0.7 A running current for higher current during startup; 3 A provides more room. |
 | USB power | Add removable JP1 in the XIAO battery feed; remove it during USB use. | Prevent the battery supply from feeding the USB connection. |
 

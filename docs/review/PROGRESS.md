@@ -366,3 +366,11 @@ changed or regenerated, and no hardware measurements claimed.
   with motor turn-off current. Describes the gate-driver upgrade as a precaution, not measured overheating.
 - Checked the original guide/diagram and TI, Microchip and Omron specifications. Documentation only;
   circuit, quantities, prices and firmware unchanged. `git diff --check` clean.
+
+### Further PR wording clarification
+
+- Explicitly distinguishes pump speed from LED brightness. Marks the driver replacement as optional
+  because a meaningful heating problem or practical benefit has not been established; its proposed
+  hardware remains in the local draft pending scope review. Explains Hall detection as approximately
+  0 V with the ring present and 3.3 V otherwise, and shortens the battery capacitor rationale.
+- Documentation only; no circuit or purchasing changes.
