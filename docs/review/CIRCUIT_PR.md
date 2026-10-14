@@ -1,8 +1,9 @@
-# Revise the battery, protection and sensor circuits
+# Revise the power and sensor circuits and add the board assembly layout
 
 Revise the power and control circuit to give the pump and lighting more current headroom and make
-ring/twist detection more reliable. Update the connected circuit diagram
-and [build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first) to match.
+ring/twist detection more reliable. Update the connected circuit diagram and
+[build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first), and add a complete
+two-sided prototype-board layout showing where to place components and solder every connection.
 
 ## Circuit changes and why
 
@@ -21,6 +22,23 @@ Battery CAD changes belong in a separate PR. Firmware behavior and GPIO assignme
 ![Updated circuit diagram](../images/wiring.png)
 
 [Full-size SVG](../images/wiring.svg) · [Generator](../images/src/gen_wiring.py)
+
+## Board assembly
+
+Add component-side and mirrored solder-side drawings for the planned 70 × 50 mm board, covering
+all 52 board wires, 76 occupied solder points, 14 external cable connections and mounting screw
+clearances. The interactive viewer keeps both sides visible and supports zoom, connection
+highlighting and individual wire selection. A printable PDF and solder schedule accompany it.
+
+![Two-sided prototype-board layout](protoboard/both-sides.png)
+
+[Assembly instructions](protoboard/README.md) · [Printable PDF](protoboard/board-assembly.pdf) ·
+[Interactive viewer](protoboard/index.html) (download and open locally) ·
+[Solder schedule](protoboard/WIRE_SCHEDULE.md)
+
+The [enclosure fit review](ENCLOSURE_FIT.md) records the proposed mounting and component clearances.
+Actual board hole positions and capacitor dimensions still need confirmation before assembly;
+the battery tray changes remain in the separate CAD PR.
 
 ## Spreadsheet edits after acceptance
 

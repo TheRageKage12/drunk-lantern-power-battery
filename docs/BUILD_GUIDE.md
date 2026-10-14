@@ -213,8 +213,13 @@ but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
 
 Build the circuit on the 5 x 7 cm perfboard and test it before anything goes into the lantern.
 
-1. **Board, XIAO and U1.** Drill four 3.2 mm holes on a 40 x 30 mm rectangle in the 5 x 7 cm
-   perfboard, keeping the mounting pads clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
+Use the [two-sided perfboard layout](review/protoboard/README.md) and its
+[wire-by-wire solder schedule](review/protoboard/WIRE_SCHEDULE.md). The rear view is mirrored;
+pad names stay the same. Check the actual hole-array position and C2 case size before assembly.
+
+1. **Board, XIAO and U1.** Orient the perfboard 70 mm across and 50 mm tall. Drill four 3.2 mm
+   holes at x = 15/55 mm and y = 15/45 mm from the component-side top-left corner, checking against
+   the printed panel first. Keep each 9 x 9 mm mounting area clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
    during initial USB flashing. Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
 2. **Battery, charge jack and S1.** With battery and charger unplugged, cut one male DC5521 lead
    from the supplied TalentCell splitter to make the battery pigtail. Do not cut or open the pack.

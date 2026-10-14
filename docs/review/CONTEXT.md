@@ -383,3 +383,47 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   two 47 Ω and two gate pull-down resistors from the draft and proposed Sheet changes. Diagram, guide and
   firmware comments agree; remaining parts delta is $4.69 before tax/shipping, recalculated against the
   live Sheet. Hall rationale shortened. Other circuit changes retained; Sheet/CAD untouched, no publishing.
+
+- **2026-10-13, enclosure fit review (proposals, not CAD changes):** see `ENCLOSURE_FIT.md` and
+  `fit/placement-study.svg`. Existing 70 × 50 mm board is plausible landscape on the vertical panel,
+  bottom 2 mm above the deck, holes 15/55 mm from one side and 5/35 mm from the bottom. Raw wall
+  gap is 26.4 mm at centre and 19.3 mm at ends; the 140° shell boss imposes a tighter service constraint.
+  Keep tall parts central and lay C2 flat, subject to its unpublished actual dimensions. New TalentCell
+  intersects old battery supports. Recommend preserving z=44 mm deck underside (17 mm above new pack),
+  resizing supports and checking plug/switch access in the separate CAD PR. Existing CAD checks omit
+  populated board, buck, complete jack/switch bodies and cabling. No fit sign-off, circuit or Sheet changes.
+
+- **2026-10-14, full perfboard wiring requested:** added `protoboard/README.md` and matching component
+  and mirrored solder-side diagrams, interactive HTML, four-page PDF and complete pad/wire schedule.
+  Explicit placement uses76 occupied pads,52 wire links and14 cable attachments. All16 intended nets
+  connected; NC pins unwired; pads/routes clear mounting keep-outs. Refined right-side placement keeps
+  R7 at U09/U13, R5 at V09/V13, R6 at W09/W13, D3 at W14/W18. C2 reserved case envelope25×Ø18 mm;
+  actual Vetco case size still unknown. Updated guide with offset mounting-hole positions and links.
+  No electrical net, BOM, firmware, CAD or live Sheet change. Mechanical dry-fit and CAD follow-up remain.
+
+
+### Board viewer usability — 2026-10-14
+
+- Explained mounting screw squares, solder pads and electrical nets in plain language.
+- Replaced the ineffective narrow-panel stack toggle with real zoom and face selection.
+  Connection filters now bring solder-side wiring into view with a selection summary;
+  explicit Show buttons isolate one wire and its two endpoints. Pad details support click,
+  pointer hover and keyboard focus. Browser checks passed at 1280 and 640 px widths.
+- No circuit, placement, BOM, CAD or live Sheet changes. Mechanical fit checks remain pending.
+
+
+### 2026-10-14 — Restore the simple board viewer
+
+Owner found the expanded viewer harder to read. Restored both drawings in the normal page flow,
+removed fixed-height drawing windows and face switching, and collapsed the explanatory text.
+Kept working zoom, explicit Show-wire buttons and solder-spot details. Connection filters no longer
+switch faces or jump the page. Browser checks confirmed zoom and highlighting with both faces visible.
+
+
+### 2026-10-14 — Include approved board viewer in local PR
+
+Owner approved the simplified viewer and requested its inclusion in the PR. Updated the PR title,
+summary and Board assembly section with the two-sided image, interactive HTML, printable PDF,
+solder schedule and enclosure fit review. Include their source generators and build-guide links
+on circuit-review. Connectivity checks and local PR link checks pass. PR remains local; no live
+Sheet edits, CAD changes or publication.

@@ -388,3 +388,56 @@ changed or regenerated, and no hardware measurements claimed.
   JP1 header/shunt +$2.24 = $4.69 before tax/shipping. No CAD changes or publication.
 - Verification: SVG regenerated and visually inspected; XML parsing and deterministic regeneration pass;
   executable firmware text unchanged; stale-driver scan, cost arithmetic and `git diff --check` pass.
+
+### Electronics packaging review before PR publication
+
+- Added `ENCLOSURE_FIT.md` and a dimensioned conceptual placement study, with generator. Read the exact
+  Sheet links through Google Drive and verified the Vetco board dimensions and 24 × 18 pad pattern.
+- Calculated mounting offsets, wall gaps and the 140° retaining-boss service constraint from CAD source.
+  Proposed central tall parts, flat C2, and landscape mounting; no routed board or full collision sign-off.
+- Documented off-board placements, old-tray battery interference and keeping existing deck height as a
+  proposal for the separate CAD PR. Identified unpublished dimensions and missing hardware envelopes.
+- Inspected the SVG/PNG and checked arithmetic. No CAD rebuild (CadQuery unavailable in current Python),
+  no physical fit test, no circuit/firmware/Sheet changes, and nothing published.
+
+### Full two-sided perfboard assembly drawing — 2026-10-14
+
+- Replaced abstract placement with explicit component-side pad assignments and a correctly mirrored
+  solder-side view. Added52 individual board wires,76 occupied pads,14 cable attachments, polarity,
+  notch/USB/MOSFET orientations and mounting keep-outs. Added an interactive per-net/per-wire view,
+  vector PDF with connection key and wire list, and a complete lead/pad schedule.
+- Checked XIAO footprint/pinout against Seeed's official files (15.24 mm header separation) and U1
+  against TI. Circuit connectivity matched to the existing guide; generated graph checks all16 nets,
+  NC isolation, pad uniqueness and route/pad mounting clearance. Added one quiet-ground junction to
+  keep board-wire fan-out at no more than three per pad; no added electronic parts.
+- Visually inspected both faces; browser checks confirm per-net highlighting and W52 selection,
+ 52 visible wires when reset. Four-page PDF exported. Build guide and PR draft link the layout.
+- C2's25×Ø18 mm case envelope and actual board grid registration need physical confirmation; not a
+ 1:1 drill template or a built/3D-verified assembly. Nothing published; live Sheet and CAD unchanged.
+
+
+### Board viewer usability — 2026-10-14
+
+- Explained mounting screw squares, solder pads and electrical nets in plain language.
+- Replaced the ineffective narrow-panel stack toggle with real zoom and face selection.
+  Connection filters now bring solder-side wiring into view with a selection summary;
+  explicit Show buttons isolate one wire and its two endpoints. Pad details support click,
+  pointer hover and keyboard focus. Browser checks passed at 1280 and 640 px widths.
+- No circuit, placement, BOM, CAD or live Sheet changes. Mechanical fit checks remain pending.
+
+
+### 2026-10-14 — Restore the simple board viewer
+
+Owner found the expanded viewer harder to read. Restored both drawings in the normal page flow,
+removed fixed-height drawing windows and face switching, and collapsed the explanatory text.
+Kept working zoom, explicit Show-wire buttons and solder-spot details. Connection filters no longer
+switch faces or jump the page. Browser checks confirmed zoom and highlighting with both faces visible.
+
+
+### 2026-10-14 — Include approved board viewer in local PR
+
+Owner approved the simplified viewer and requested its inclusion in the PR. Updated the PR title,
+summary and Board assembly section with the two-sided image, interactive HTML, printable PDF,
+solder schedule and enclosure fit review. Include their source generators and build-guide links
+on circuit-review. Connectivity checks and local PR link checks pass. PR remains local; no live
+Sheet edits, CAD changes or publication.

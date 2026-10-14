@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drunk Lantern — full perfboard wiring</title>
+<style>
+*{box-sizing:border-box}body{font:16px/1.5 system-ui;margin:24px;color:#243448;background:#f4f7fb}h1{font-size:28px;margin-bottom:8px}h2{font-size:21px}button,a{touch-action:manipulation}button{font:inherit;background:white;border:2px solid #8b9aae;border-radius:8px;padding:6px 10px;margin:3px;cursor:pointer}button.active{background:#dbeafe;border-color:#2563eb}button:disabled{opacity:.4;cursor:default}button:focus-visible,.pad:focus-visible{outline:3px solid #2563eb}a{color:#1858ac}.intro{max-width:950px}.legend{background:white;padding:12px 16px;border-radius:10px}.mount-symbol{display:inline-flex;width:30px;height:30px;border:1px dashed #788795;background:#edf0f5;vertical-align:middle;align-items:center;justify-content:center}.mount-symbol:after{content:'';width:12px;height:12px;border:1px solid #788795;border-radius:50%;background:white}.toolbar{background:#f4f7fbfa;border-bottom:1px solid #bcc9d9;padding:8px 0;z-index:2}.toolbar p{margin:4px 3px;font-size:14px}.boards{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.board{min-width:0;scroll-margin-top:220px}.board h2{margin:14px 0 4px}.viewport{background:white;border-radius:8px}.canvas{width:100%}.canvas svg{display:block;width:100%;height:auto}.dim{opacity:.18}.wire,.pad,.harness{transition:opacity .1s}.pad{cursor:pointer}.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}table{border-collapse:collapse;width:100%;background:white}th,td{padding:8px;text-align:left;border-bottom:1px solid #dce4ee}tr[data-id]{cursor:pointer}tr.active{background:#dbeafe}.table-scroll{overflow:auto}.trace{white-space:nowrap;font-size:14px}.drawing-scroll{overflow-x:auto}.intro summary{cursor:pointer;color:#1858ac}.intro p{margin:8px 0}.board h2{display:none}#wire-table{scroll-margin-top:160px}
+@media(max-width:1000px){.boards,.cols{grid-template-columns:minmax(0,1fr)}body{margin:12px}}
+@media print{.toolbar,.filters,.intro{display:none}.boards,.cols{display:block}.viewport{max-height:none;overflow:visible}.canvas{width:100%!important}.board{break-after:page}}
+</style>
+<h1>Full prototype-board assembly</h1>
+<p>Both sides of the board, with all wiring and solder points. Choose a connection to highlight it.</p>
+<details class="intro"><summary>How to read this diagram</summary>
+<p><b>Dashed squares and circles:</b> mounting screw clearances and holes to drill. Keep parts and wires outside each square.</p>
+<p><b>Pad:</b> the copper soldering spot around a board hole. <b>A09</b> means column A, row 09. <b>Net:</b> points joined electrically by wires, such as all ground connections.</p>
+<p>Click a coloured soldering spot to read its connection. Use <b>Show W…</b> in the <a href="#wire-table">wire list</a> to highlight one wire and its two soldering holes. Use <b>+</b> to enlarge both drawings and <b>Fit</b> to reset.</p>
+</details>
+<div class="toolbar">
+<div class="filters">{{BUTTONS}}</div>
+<div><button id="out" aria-label="Zoom out">−</button><output id="scale">Fit</output><button id="in" aria-label="Zoom in">+</button><button id="fit">Fit</button></div>
+<p id="selection" role="status">Showing all 52 board wires.</p>
+<p id="detail" aria-live="polite" hidden></p>
+</div>
+<div class="drawing-scroll"><div class="boards">
+
+<section class="board" id="front"><h2>Component side</h2><div class="viewport"><div class="canvas">{{FRONT}}</div></div></section>
+<section class="board" id="rear"><h2>Solder side — wiring</h2><div class="viewport"><div class="canvas">{{REAR}}</div></div></section>
+</div></div>
+<p><b>Rear wiring:</b> crossings stay insulated. Solder only at the marked endpoints. W01/W02/W05–W07 are bare copper links between adjacent holes. Dashed coloured lines are cables leaving the board. Pins marked NC have no wire attached. Small solid squares mark cable attachments or wire junctions.</p>
+<p><b>Build limits:</b> verify the actual board's hole positions and C2 dimensions first. Keep rear wires below the 4.5 mm panel clearance and outside the screw areas. Disconnect all power while soldering. Remove JP1 for USB. See the <a href="README.md">assembly instructions</a> for checks.</p>
+<div class="cols">
+<section><h2>Cables and off-board connections</h2><div class="table-scroll"><table><thead><tr><th>Cable</th><th>Board hole</th><th>Other end</th></tr></thead><tbody>{{CABLES}}</tbody></table></div><p>D2 NTE586 is across the pump, stripe to pump +. C4 0.1 µF is across A3144 pins 1–2 at the sensor. Microswitch NC and J1's switched contact remain unused. J1 centre connects to battery + and the S1 input; J1 sleeve to battery −. The board receives the switched S1 output at N01.</p><p>R1=100k; R2=22k; R3/R4=10k; R5/R6=4.7k; R7=3.3k. D1/D3=NTE585. C1/C3=0.1 µF. C2=2200 µF/25 V. U1=74AHCT125 DIP14. Q1/Q2=IRLZ44NPBF.</p></section>
+<section id="wire-table"><h2>Wire list — one wire per row</h2><p>Press <b>Show</b> to see that wire and its two soldering holes on the solder-side drawing.</p><div class="table-scroll"><table><thead><tr><th>Show wire</th><th>From → to hole</th><th>Connection</th><th>Type</th></tr></thead><tbody>{{WIRES}}</tbody></table></div></section>
+</div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let zoom=1;
+function resize(){ $('.boards').style.width=(zoom*100)+'%';$('#scale').textContent=zoom===1?'Fit':zoom+'×';$('#out').disabled=zoom===1;$('#in').disabled=zoom===3; }
+$('#in').onclick=()=>{zoom=Math.min(3,zoom+.5);resize()};
+$('#out').onclick=()=>{zoom=Math.max(1,zoom-.5);resize()};
+$('#fit').onclick=()=>{zoom=1;resize();$('.drawing-scroll').scrollLeft=0};
+function select(net,id=''){
+ const row=id?$('tr[data-id="'+id+'"]'):null;
+ $$('.wire,.pad,.harness').forEach(e=>{
+  let yes=!net||e.dataset.net===net;
+  if(row)yes=e.classList.contains('wire')?e.dataset.id===id:e.classList.contains('pad')&&[row.dataset.a,row.dataset.b].includes(e.dataset.pad);
+  e.classList.toggle('dim',!yes);
+ });
+ $$('button[data-net]').forEach(e=>{const active=!id&&e.dataset.net===net;e.classList.toggle('active',active);e.setAttribute('aria-pressed',active)});
+ $$('tr[data-id]').forEach(e=>e.classList.toggle('active',e===row));
+ const name=$$('button[data-net]').find(e=>e.dataset.net===net)?.textContent||net;
+ const count=$$('.wire:not(.dim)').length;
+ $('#selection').textContent=row?'Showing '+id+': solder one wire between holes '+row.dataset.a+' and '+row.dataset.b+' ('+name+').':net?'Showing '+name+': '+count+' board wire'+(count===1?'':'s')+'. Other connections are faded.':'Showing all 52 board wires.';
+}
+
+$$('button[data-net]').forEach(e=>e.onclick=()=>{select(e.dataset.net)});
+$$('tr[data-id]').forEach(e=>e.onclick=()=>{select(e.dataset.net,e.dataset.id);$('#rear').scrollIntoView({block:'start'})});
+$$('.pad').forEach(e=>{
+ const detail=()=>{$('#detail').hidden=false;$('#detail').textContent=e.dataset.detail};
+ e.addEventListener('pointerenter',detail);e.addEventListener('focus',detail);e.addEventListener('click',detail);
+ e.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();detail()}});
+});
+resize();select('');
+</script>
+</html>
