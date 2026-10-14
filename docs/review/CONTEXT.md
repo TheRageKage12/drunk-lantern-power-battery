@@ -316,3 +316,10 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   it stands on two blocks when set beside the cartridge (the tube and cables pass under the rim).
 - **2026-10-14, handoff.** `CLAUDE.md` at the repo root tells every session to read this file first and to keep
   it current.
+- **2026-10-14, filament: two green spools stay.** Kevin asked whether one green spool would do if the "any" parts
+  came from leftovers. No: the ~990 g of green is already only the visible parts, and with supports it comes to
+  ~1,030 g. One spool would only work with `base_tray` in another colour too (~940 g, no margin for a failed
+  print). Kevin kept two spools: the cost difference is small.
+- **2026-10-14, blocks, not feet.** With the drum's notch gone, the lantern stands on two blocks (books, ~2-3 cm)
+  whenever it sits beside the cartridge with the tube and cables attached, so the rim doesn't pinch them. Three
+  printed 15 mm feet on the drum were offered instead; Kevin chose to leave it as is.

@@ -2,7 +2,7 @@
 
 The text of the design sessions for this project (2026-10-11 to 2026-10-14, refreshed at the end of each working session): Kevin's messages and Claude's replies, in order. Tool calls, tool output, screenshots and system messages are left out. Sections headed "Context summary" were written when the conversation was compacted. **Later messages override earlier ones**: the design changed many times (base 180 -> 190 mm, power bank -> 12 V battery pack, DRV5032 -> A3144, 90 -> 135 degree nozzle). For the current decisions read [CONTEXT.md](CONTEXT.md) first and use this file to check why something was decided.
 
-89 messages from Kevin, 301 reply blocks from Claude.
+96 messages from Kevin, 318 reply blocks from Claude.
 
 ---
 
@@ -5346,3 +5346,225 @@ I'll set all three up now.
 ### Claude
 
 Now refreshing the transcript from this session's log.
+
+### Claude
+
+The scan only matched my own sentence about the earlier scan. No keys, email addresses or model IDs. Committing.
+
+### Claude
+
+The handoff is set up in [TheRageKage12/drunk-lantern-power-battery#10](https://github.com/TheRageKage12/drunk-lantern-power-battery/pull/10), on a new branch. Once you merge it, any Claude Code session Sky or Duncan opens on the repo starts with the full context, and they don't need to paste a prompt.
+
+- **`CLAUDE.md` (new, at the repo root):** Claude Code loads this file in every session on the repo, so this is the piece that makes the handoff automatic. It tells the session to:
+  - read `docs/review/CONTEXT.md` first, and treat its decisions as settled unless there's a real defect (ask before changing one);
+  - work on one branch and one PR per change, and check whether the PR is still open before pushing;
+  - update CONTEXT.md in any PR that changes a decision;
+  - treat the Google Sheet as the shopping list;
+  - run the CAD and firmware checks before pushing.
+- **`CONTEXT.md`:** now names the three of you and the new repo name, and ends with a dated change log. The log covers the review, your two answers, the move to the Google Sheet, the part renders and the paint decision.
+- **`transcript.md`:** now runs up to this conversation. I checked it for keys, passwords and your email address and found none. It covers my sessions only.
+
+Two things to keep in mind:
+1. **Refresh the transcript at the end of a working session, not on every push.** It can only be exported from the session where the conversation happened. When you finish a session with me, say "refresh the handoff" and I'll update both files. Sky's and Duncan's sessions will update CONTEXT.md themselves because `CLAUDE.md` tells them to.
+2. **Give Sky and Duncan access to the repo.** Add them as collaborators on GitHub, and each of them connects their own GitHub account to Claude.
+
+### Claude
+
+This session is now watching [TheRageKage12/drunk-lantern-power-battery#10](https://github.com/TheRageKage12/drunk-lantern-power-battery/pull/10). It merges cleanly into `main`, the repo has no CI checks, and there are no review comments yet, so it's only waiting for you to merge it.
+
+---
+
+### Kevin
+
+| “Any colour” parts: about 190 g of hidden parts can come from leftover filament anyone has: the deck, bay floor, glass slot, nozzle guide, lock base plate and small bits. The lock wall (23 g) can be any colour too.
+
+If we do this, wouldn't it reduce the amount of green we need, and then maybe we can get away with just a single green spool?
+
+### Claude
+
+No. Those "any colour" parts aren't counted in the green figure. The ~990 g of green is already only the visible parts; the ~215 g of "any colour" parts came on top of that and made up the rest of the 1.2 kg. So printing them from leftovers doesn't reduce the green needed.
+
+**Why 990 g doesn't fit one 1 kg spool:**
+- Green parts: ~990 g
+- Tree supports inside the two sphere halves: ~20–40 g
+- Supports under the two dish rims, plus skirt and brim: ~10–15 g
+- Total: about 1,020–1,045 g, before any failed print
+
+**What would make one spool work:** print `base_tray` (89 g) in another colour too. It's the cartridge floor, hidden inside the drum. Only its small port panel (42 × 12 mm, holding the charge jack and switch) shows at the bottom edge on your side. Green then drops to ~900 g, or about 940 g with supports. That fits a 1 kg spool, but with almost nothing to spare:
+- The weights are estimates at about ±10–15%, because they depend on your slicer's infill and walls.
+- One failed print of a big part (the drum is 229 g, the upper dish 220 g) uses up the spare.
+
+**If you want to try it**, one green spool plus a reorder plan saves about $14:
+1. Order one green spool now.
+2. Slice everything first and add up the slicer's filament estimates. That number is much more accurate than mine.
+3. Print the biggest green parts first, and weigh the spool as you go. An empty spool weighs about 200–250 g on its own, so subtract that.
+4. If what's left looks short, order the second spool then. Prime currently delivers in a day or two, so there's time before Halloween.
+
+My take: with time getting short before Halloween, the second spool is cheap insurance against a stalled print. But one spool plus the reorder plan above is a reasonable bet if you'd rather save the $14.
+
+Want me to update the sheet (green spool quantity 2 → 1, with the reorder note) and change `base_tray` to "any colour" in the guide's part table?
+
+---
+
+### Kevin
+
+is the charging port on the bottom of the lantern (hence not visible from any angle) or on the side?
+
+### Claude
+
+It's on the side, at the very bottom of the base, on your side of the lantern rather than underneath.
+
+- **Where it is:** a small curved panel, 42 mm wide and 12 mm tall, set into the bottom band of the base drum, directly below the hand opening (`PORT_ANGLE = 90` in `cad/params.py`).
+- **What's in it:** the charge jack and the power switch, both pointing straight out sideways.
+- **Why there:** the drum has a notch that's open at its bottom edge so you can lift the lantern off the cartridge. The panel fills that notch.
+
+So it's only visible from your side, low down. The display side, where the audience stands, can't see it at all. From your side it's a 4 cm strip at table height, so most people would never notice it.
+
+For the filament question, that panel is the only part of `base_tray` anyone can see. Your options if you print the tray in another colour:
+- **Leave it:** most likely nobody notices, since it's on your side and at table level.
+- **Paint just the panel:** a green paint pen or a bit of model paint on that 42 × 12 mm strip.
+- **Print it in black:** an off-colour strip in the green base is less noticeable when it's black, and it reads as a deliberate "port panel".
+
+### Claude
+
+[TheRageKage12/drunk-lantern-power-battery#10](https://github.com/TheRageKage12/drunk-lantern-power-battery/pull/10) is merged. `CLAUDE.md`, the context change log and the updated transcript are now on `main`, so any new session Sky or Duncan opens on the repo starts with them.
+
+The one-spool question is still open. Should I update the sheet (green spool 2 → 1, with the plan to reorder if it runs short) and change `base_tray` to "any colour" in the guide?
+
+---
+
+### Kevin
+
+Lets keep 2 spools for now, the cost difference isn't significant.
+
+I'd like that port to not be visible from any angle. What if we had it sticking up from the base plate inside the lantern, or fully underneath it?
+
+### Claude
+
+Let me check how the cartridge sits in the drum before answering. Whether the lantern stands on the tray decides how "underneath" would work.
+
+### Claude
+
+Both can be done, and nothing has been printed yet, so it only costs a CAD change: the drum loses its notch and the tray gets a new spot for the jack and switch. Parts and cost stay the same.
+
+The catch with putting both underneath: the tray's floor is the bottom of the lantern and sits flat on the table. A jack underneath would be blocked whenever the lantern is standing, and also when you lift the lantern off and the cartridge is standing on its own. So the two parts end up in different places:
+
+**Option A (my pick): switch underneath, jack inside.**
+- **Switch:** recessed into a pocket in the floor so it doesn't touch the table. You tip the lantern slightly to flip it, the same move as reaching the thumbscrews.
+- **Jack:** mounted on the tray inside, pointing up, next to the battery. You reach it whenever the lantern is lifted off. After every party you lift it off to clean the line anyway, so you plug in the charger then and let it charge while it sits beside the cartridge.
+- **Result:** no opening in the shell at all, from any angle. The drum's bottom band becomes a solid ring, which is also stronger.
+- **Trade-off:** you can't top up the charge without lifting the lantern off (undo 3 thumbscrews).
+
+**Option B: both underneath, with a cable groove.**
+- Both sit in a recessed pocket under the floor. A groove runs from the pocket to the edge so you can charge while it stands.
+- **Trade-off:** the groove leaves a small slot, about 8 × 6 mm, at the very bottom edge on your side. It's visible only from table height, but it's not "from any angle".
+
+**Why not the jack inside, sticking up, with the switch inside too:** you'd have to undo the 3 thumbscrews every time you turn it on or off.
+
+One thing doesn't change with either option: the switch should still be off whenever the lantern is stored. Otherwise the electronics slowly drain the pack (~15 mA, so about a week to flat).
+
+Which do you want? I'll make the CAD change on a new branch, check it with the fit checks, and update the guide, wiring notes and renders.
+
+---
+
+### Kevin
+
+Let's do option A
+
+### Claude
+
+Starting on option A. First the geometry I need from `base.py`: where the tray's pillars, wells and slots sit, so the switch pocket and the jack mount land in free space.
+
+### Claude
+
+Renders are done. Now the docs, diagram and context in one patch.
+
+### Claude
+
+The previews predate the final rebuild (rendered 03:00, STL written 03:09), so I'll re-render in the foreground this time, and fix the PROGRESS note (the last command ran from the wrong folder).
+
+### Claude
+
+The tray preview now shows the pocket (the raised block with the switch hole near the rim) and no panel, with extents 178.6 × 178.6. Everything is regenerated; committing and opening the PR.
+
+### Claude
+
+The hidden port is done in [TheRageKage12/drunk-lantern-power-battery#11](https://github.com/TheRageKage12/drunk-lantern-power-battery/pull/11), on a new branch, with every render and part preview regenerated from the final STLs.
+
+**What changed in the CAD** (`DESIGN_CONTRACT.md` rev 9h):
+- The drum's notch and the tray's port panel are gone, so the bottom band is a solid ring and nothing shows on the shell from any angle.
+- **Switch:** a 26 × 23 × 20 mm pocket on the tray floor, on your side, open at the bottom. The switch mounts in its ceiling with the lever pointing down; you tip the lantern to flip it. I made the pocket 20 mm deep rather than the 15 I first planned, because a miniature toggle's bushing plus lever is closer to 17 mm; the lever tip sits near the opening, where a finger reaches it.
+- **Jack:** an 8 mm hole through the deck at the edge on your side, socket pointing up. The jack hangs under the deck, clear of the battery and the pocket.
+- The deck's wire slot on that side is now an open notch beside the jack, so the pack and switch leads can go up after they're soldered.
+
+**Verified** with `build.py` (0 problems), the lock test, and probe solids in the assembly: the pocket is open and its hole goes through, the switch body and jack body touch nothing, there's room for the charger plug above the deck, the thumbscrew bosses still clear the pocket, and the band is solid where the notch was.
+
+**Two trade-offs**, both now in the guide:
+- Charging means undoing the 3 thumbscrews and lifting the lantern off.
+- Whenever the lantern stands beside the cartridge (charging, cleaning, calibration), it goes on two blocks so the tube and cables pass under the rim. The old notch used to serve that purpose.
+
+**Images:** the earlier background render had failed silently on a wrong working directory, so I re-ran it in the foreground and checked the tray preview shows the pocket. `docs/images/stl/` (including the README's contact sheet), the seven CAD views, the wiring diagram and the fluid-path diagram are all current.
+
+Nothing else is pending: the PR waits for you to merge.
+
+### Claude
+
+This session is now watching [TheRageKage12/drunk-lantern-power-battery#11](https://github.com/TheRageKage12/drunk-lantern-power-battery/pull/11). It merges cleanly, the repo runs no CI, and there are no review comments, so it only waits on your merge.
+
+---
+
+### Kevin
+
+> Whenever the lantern stands beside the cartridge (charging, cleaning, calibration), it goes on two blocks so the tube and cables pass under the rim. The old notch used to serve that purpose.
+
+Can you elaborate on this?
+
+### Claude
+
+It comes from how the two halves connect when they're apart.
+
+**What stays connected when you lift the lantern off.** The cartridge (tray, battery, pump, jar, board) stays on the table. The lantern (drum, dishes, sphere, nozzle) lifts off it. Three things run between them and stay attached:
+- the drink tube, in one continuous piece from the jar, through the pump, up to the nozzle (no joint anywhere, so it can't be unplugged);
+- the lock cable and the LED lead, which do have plugs, but you'd normally leave them connected.
+
+All three come out of the bottom of the lantern, through the open bottom of the drum, and then have to travel sideways to the cartridge sitting next to it. There's about 30 cm of slack in the tube (the service loop) for exactly this.
+
+**The problem.** The drum's bottom edge is a flat ring that sits on the table. If you set the lantern down on a table with those three lines still attached, the ring comes down on top of them:
+- The silicone tube gets pinched flat, so the pump can't push through it. Pinched for a while under a 1.3 kg lantern, it can also take a set.
+- The cables are 22 AWG, which won't break under that weight, but they're what the ring is resting on, so the lantern rocks.
+
+**What the notch did.** The old notch in the drum's bottom band was 42 mm wide and 12 mm tall, and open at the bottom edge. With the lantern turned so the notch faced the cartridge, the tube and cables ran out through the gap and the ring sat flat on the table. The notch did that job as a side effect; it was there for the port panel.
+
+**Now.** The ring is solid all the way round, so the lantern needs something to lift its rim off the table whenever it stands beside the cartridge with the lines attached: two blocks of wood, a couple of books, anything 2–3 cm thick. That's the cost of hiding the port completely. It comes up at:
+- calibration (laptop on the XIAO while the lantern is lifted off);
+- cleaning (the `cal` runs with water);
+- charging (the jack is on the deck);
+- the "on the day" prime before the first pour.
+
+**If you'd rather not deal with blocks**, there are two alternatives, each with its own catch:
+1. **Three printed feet** on the drum's bottom edge, say 15 mm tall, which would give a permanent gap all round. The lantern would stand 15 mm taller and the gap would be visible. The thumbscrews are reached through that gap anyway, so it isn't a new kind of opening.
+2. **Unplug and lay the lantern on its side.** The cables unplug, but the tube doesn't, so that only works for charging and not for the pump runs.
+
+Blocks are the cheapest option, and you'd need them maybe five times before Halloween. If you'd like the feet instead, it's a small CAD change and I'll do it on a new branch.
+
+### Claude
+
+[TheRageKage12/drunk-lantern-power-battery#11](https://github.com/TheRageKage12/drunk-lantern-power-battery/pull/11) is merged, so the hidden switch and jack are on `main`, and I've stopped watching that PR.
+
+The question about the blocks is still open: keep the two-blocks approach, or add the three printed feet to the drum? Either is fine; tell me which and I'll do the rest.
+
+---
+
+### Kevin
+
+leave as is
+
+### Claude
+
+Noted. The blocks approach stays, and the guide already says so wherever the lantern is set beside the cartridge. Nothing to change in the repo.
+
+---
+
+### Kevin
+
+refresh the handoff
