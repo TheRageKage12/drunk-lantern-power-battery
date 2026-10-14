@@ -214,9 +214,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   D3 → input 2 / output 3 → pump gate; D4 → input 5 / output 6 → light gate. Ground OE pins
   1/4/10/13 and unused inputs 9/12; leave outputs 8/11 open. Keep the existing C3 0.1 µF bypass
   and two 10 kΩ input pull-downs. No new gate series resistors or gate-to-source resistors.
-  The proposed TC4420/TC4427 replacement and its extra sockets/capacitors have been removed:
-  no calculation or measurement established a practical need for the extra cost and complexity.
-  The owner rejected retaining unjustified changes as optional items in the PR.
+  No practical need for replacing the gate driver has been established; retain the original design.
 - Two IRLZ44NPBF low-side MOSFETs, driven directly by the original buffer. Specify the exact MOSFET
   in Item and vendor-title discrepancy in Notes. Normal startup/load/temperature checks remain necessary;
   withdrawing the replacement is not a claim that the original hardware has been tested.
@@ -353,77 +351,11 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   whenever it sits beside the cartridge with the tube and cables attached, so the rim doesn't pinch them. Three
   printed 15 mm feet on the drum were offered instead; Kevin chose to leave it as is.
 
-- **2026-10-13, electrical correctness review (later owner decision; supersedes earlier power entries).**
-  Select TalentCell YB1203000; defer all matching CAD changes to a separate PR. Replace AHCT buffer with
-  TC4427CPA, add gate resistors/pull-downs and explicit bypass capacitors, correct 5 V supply branching,
-  use direct Hall/3.3 V pull-up and a deliberate D2F-01L contact interface, upgrade bulk capacitor and
-  pump diode. Add JP1 and USB service instructions. The shared Sheet is unchanged: proposed edits are
-  listed in `CIRCUIT_PR.md`, to apply only after PR acceptance and separate spreadsheet review.
-  Driver/capacitor sourcing and total cost remain open; near-term delivery is required, Oct 27 is too late.
-
-- **2026-10-13, circuit diagram presentation.** The owner rejected separate net-labelled panels. Keep the
-  circuit as one connected diagram with visible power and signal interconnects, junction dots and clear
-  non-connecting crossings. The corrected SVG/PNG preserves the reviewed electrical design.
-
-- **2026-10-13, PR table and purchase listings.** Show circuit changes as a Change/Why table and remove
-  the diagram's dense footer; assembly/service details stay in the build guide. Select the Amazon driver
-  and capacitor listings recorded above. The parts delta is now $24.69 plus $4.95 capacitor shipping, tax
-  and any other shipping charges. Sheet edits still wait for acceptance and separate review.
-
-- **2026-10-13, earlier/cheaper sourcing (supersedes the preceding purchase-listing follow-up):** owner
-  rejected the $21 driver ten-pack and late delivery dates; latest acceptable arrival is October 20.
-  Local draft now uses two TC4420CPA drivers from an $8.99 five-pack (Oct 18 standard), two DIP-8
-  sockets, and 0.1 µF ceramic + $1.06 Vetco 1 µF film per driver. Parts delta $14.79 before tax/shipping.
-  Updated connected diagram, build/service pinout instructions and firmware comments. Vetco catalog
-  availability verified; local pickup timing unconfirmed. No publishing, purchase, CAD or Sheet changes.
-
-- **2026-10-13, remove unjustified gate-drive scope:** owner challenged making a significant replacement
-  without demonstrating a practical need. Restored original 74AHCT125, DIP-14 socket, two input pull-downs,
-  direct MOSFET connections and single 0.1 µF bypass. Removed new drivers, three extra driver capacitors,
-  two 47 Ω and two gate pull-down resistors from the draft and proposed Sheet changes. Diagram, guide and
-  firmware comments agree; remaining parts delta is $4.69 before tax/shipping, recalculated against the
-  live Sheet. Hall rationale shortened. Other circuit changes retained; Sheet/CAD untouched, no publishing.
-
-- **2026-10-13, enclosure fit review (proposals, not CAD changes):** see `ENCLOSURE_FIT.md` and
-  `fit/placement-study.svg`. Existing 70 × 50 mm board is plausible landscape on the vertical panel,
-  bottom 2 mm above the deck, holes 15/55 mm from one side and 5/35 mm from the bottom. Raw wall
-  gap is 26.4 mm at centre and 19.3 mm at ends; the 140° shell boss imposes a tighter service constraint.
-  Keep tall parts central and lay C2 flat, subject to its unpublished actual dimensions. New TalentCell
-  intersects old battery supports. Recommend preserving z=44 mm deck underside (17 mm above new pack),
-  resizing supports and checking plug/switch access in the separate CAD PR. Existing CAD checks omit
-  populated board, buck, complete jack/switch bodies and cabling. No fit sign-off, circuit or Sheet changes.
-
-- **2026-10-14, full perfboard wiring requested:** added `protoboard/README.md` and matching component
-  and mirrored solder-side diagrams, interactive HTML, four-page PDF and complete pad/wire schedule.
-  Explicit placement uses76 occupied pads,52 wire links and14 cable attachments. All16 intended nets
-  connected; NC pins unwired; pads/routes clear mounting keep-outs. Refined right-side placement keeps
-  R7 at U09/U13, R5 at V09/V13, R6 at W09/W13, D3 at W14/W18. C2 reserved case envelope25×Ø18 mm;
-  actual Vetco case size still unknown. Updated guide with offset mounting-hole positions and links.
-  No electrical net, BOM, firmware, CAD or live Sheet change. Mechanical dry-fit and CAD follow-up remain.
-
-
-### Board viewer usability — 2026-10-14
-
-- Explained mounting screw squares, solder pads and electrical nets in plain language.
-- Replaced the ineffective narrow-panel stack toggle with real zoom and face selection.
-  Connection filters now bring solder-side wiring into view with a selection summary;
-  explicit Show buttons isolate one wire and its two endpoints. Pad details support click,
-  pointer hover and keyboard focus. Browser checks passed at 1280 and 640 px widths.
-- No circuit, placement, BOM, CAD or live Sheet changes. Mechanical fit checks remain pending.
-
-
-### 2026-10-14 — Restore the simple board viewer
-
-Owner found the expanded viewer harder to read. Restored both drawings in the normal page flow,
-removed fixed-height drawing windows and face switching, and collapsed the explanatory text.
-Kept working zoom, explicit Show-wire buttons and solder-spot details. Connection filters no longer
-switch faces or jump the page. Browser checks confirmed zoom and highlighting with both faces visible.
-
-
-### 2026-10-14 — Include approved board viewer in local PR
-
-Owner approved the simplified viewer and requested its inclusion in the PR. Updated the PR title,
-summary and Board assembly section with the two-sided image, interactive HTML, printable PDF,
-solder schedule and enclosure fit review. Include their source generators and build-guide links
-on circuit-review. Connectivity checks and local PR link checks pass. PR remains local; no live
-Sheet edits, CAD changes or publication.
+- **2026-10-14, electrical revision and board assembly:** selected TalentCell YB1203000, revised
+  Hall/twist interfaces, 25 V capacitor, NTE586 pump diode and removable USB isolation jumper;
+  original AHCT gate drive retained. See the current electronics section and `CIRCUIT_PR.md`.
+  Added the complete two-sided board viewer, combined image, printable PDF and solder schedule.
+  Keep the viewer simple, with both faces visible; maintain only final exports and their sources.
+  Physical board offsets, capacitor dimensions and assembled clearances remain unverified.
+  CAD changes are separate. Live Sheet edits wait for acceptance and separate owner review;
+  estimated parts delta is $4.69 before tax/shipping, with an October 20 delivery cutoff.

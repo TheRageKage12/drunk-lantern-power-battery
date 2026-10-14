@@ -36,9 +36,9 @@ highlighting and individual wire selection. A printable PDF and solder schedule 
 [Interactive viewer](protoboard/index.html) (download and open locally) ·
 [Solder schedule](protoboard/WIRE_SCHEDULE.md)
 
-The [enclosure fit review](ENCLOSURE_FIT.md) records the proposed mounting and component clearances.
-Actual board hole positions and capacitor dimensions still need confirmation before assembly;
-the battery tray changes remain in the separate CAD PR.
+The assembly instructions record mounting clearances and the remaining physical fit checks.
+Actual board hole positions and capacitor dimensions need confirmation before assembly; battery
+tray changes remain in the separate CAD PR.
 
 ## Spreadsheet edits after acceptance
 

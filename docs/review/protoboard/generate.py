@@ -1,7 +1,7 @@
-"""Validate and draw the two-sided perfboard plan. Standard-library Python only."""
+"""Validate and build the board viewer/schedule; --export also renders the PNG and PDF."""
 from pathlib import Path
 from collections import defaultdict
-import heapq, math, html, json
+import argparse, heapq, math, html, json
 from layout import *
 OUT=Path(__file__).resolve().parent
 ESC=html.escape
@@ -224,7 +224,7 @@ def reference_pages():
  for i,(net,(color,label)) in enumerate(NETS.items()):
   col,row=divmod(i,4);d.text(42+col*318,965+row*38,'● '+label,16,color=color)
  d.text(42,1165,'Cable H02 is an identifier, not a pad: it attaches to N02. Pad H02 is C2 positive.',17)
- d.add('</g>');(OUT/'connections.svg').write_text(svg(''.join(d.s)))
+ d.add('</g>');connections=svg(''.join(d.s))
  d=Drawing();d.add('<g font-family="Arial, sans-serif">')
  d.text(42,45,'WIRE-BY-WIRE SOLDER SCHEDULE',29)
  d.text(42,82,'Use component-side pad names on both faces. All links on rear; solder only at their two endpoints.',18)
@@ -235,18 +235,37 @@ def reference_pages():
   d.text(x+400,y,'BARE link' if w['bare'] else 'insulated',16)
  d.text(42,1140,'Q02 and L16 are wire junction pads; no component goes in these holes.',18)
  d.text(42,1175,'Crossings and bends are not joints. Keep all other bare metal inside a solder fillet.',18)
- d.add('</g>');(OUT/'wire-list.svg').write_text(svg(''.join(d.s)))
+ d.add('</g>');return connections,svg(''.join(d.s))
+
+def export(front,rear):
+ """Render kept artifacts using temporary SVG/PDF intermediates."""
+ import shutil, subprocess, tempfile
+ from pypdf import PdfWriter
+ renderer=shutil.which('rsvg-convert')
+ if not renderer:raise SystemExit('--export requires rsvg-convert on PATH')
+ with tempfile.TemporaryDirectory(prefix='lantern-board-') as directory:
+  tmp=Path(directory)
+  combined=tmp/'both-sides.svg'
+  combined.write_text(svg(front+'<g transform="translate(1330 0)">'+rear+'</g>',2660))
+  subprocess.run([renderer,'-o',str(OUT/'both-sides.png'),str(combined)],check=True)
+  writer=PdfWriter()
+  for i,page in enumerate((svg(front),svg(rear),*reference_pages())):
+   source=tmp/f'{i}.svg';target=tmp/f'{i}.pdf'
+   source.write_text(page)
+   subprocess.run([renderer,'--format','pdf','-o',str(target),str(source)],check=True)
+   writer.append(target)
+  writer.write(OUT/'board-assembly.pdf')
+  writer.close()
 
 def main():
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--export',action='store_true',help='also render PNG/PDF (requires rsvg-convert and pypdf)')
+ args=parser.parse_args()
  report=validate()
- reference_pages()
  for w in sorted(WIRES,key=lambda w:(not w['bare'], {'GATE_P':0,'GATE_L':0,'GND':2}.get(w['net'],1),math.dist(mm(w['a']),mm(w['b'])))):
   route(w)
  for w in WIRES:assert w['path'][0]==mm(w['a']) and w['path'][-1]==mm(w['b'])
  front,rear=Drawing().draw(),Drawing(True).draw()
- (OUT/'component-side.svg').write_text(svg(front));(OUT/'solder-side.svg').write_text(svg(rear))
- (OUT/'both-sides.svg').write_text(svg(front+'<g transform="translate(1330 0)">'+rear+'</g>',2660))
- (OUT/'connectivity.json').write_text(json.dumps({'validation':report,'pins':PINS,'wires':WIRES,'harness':HARNESS},indent=2)+'\n')
  rows='\n'.join(f'| {w["id"]} | {w["a"]} | {w["b"]} | {w["net"]} | {"Bare adjacent-pad link" if w["bare"] else "Insulated rear wire"} |' for w in WIRES)
  pins='\n'.join(f'| {ref} | {p["pad"]} | {p["net"]} |' for ref,p in PINS.items())
  harness='\n'.join(f'| {ref} | {pad} | {label} |' for ref,pad,net,label in HARNESS)
@@ -258,5 +277,6 @@ def main():
  for key,value in {'BUTTONS':buttons,'FRONT':svg(front),'REAR':svg(rear),'WIRES':trs,'CABLES':hrs}.items():
   page=page.replace('{{'+key+'}}',value)
  (OUT/'index.html').write_text(page)
+ if args.export:export(front,rear)
  print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

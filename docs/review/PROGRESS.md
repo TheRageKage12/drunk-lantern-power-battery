@@ -308,136 +308,16 @@ Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, 
 - The pump's outline is still the contract's estimate; nothing in the review can replace measuring it.
 - Nothing was merged; the PR waits for Kevin.
 
-## Electrical correctness revision — local draft
+## Electrical revision — current handoff, 2026-10-14
 
-- Updated circuit generator and SVG/PNG, build instructions, firmware wiring comments and context for
-  TalentCell, TC4427CPA, gate network, Hall/twist interfaces, diode/capacitor ratings and local bypass.
-- Added JP1 to isolate the XIAO battery feed during USB calibration. USB-only flashing removes socketed U1
-  to avoid GPIO drive into its unpowered inputs. No firmware behavior or pin mapping changes.
-- Kept all CAD/export files unchanged; existing battery supports still fit KBT and require a separate PR.
-- `CIRCUIT_PR.md` is the local PR description and proposed post-acceptance Sheet delta, not a second BOM.
-  Live Sheet unchanged. Fast switch listing remains a marketplace candidate. Driver and 1 µF capacitor
-  listings were subsequently selected; see the purchase-listing follow-up below.
-
-Validation: wiring SVG/PNG regenerated and visually checked; firmware simulations 20/20 pass;
-`git diff --check` clean. Target compilation unavailable (`arduino-cli` not installed). No CAD files
-changed or regenerated, and no hardware measurements claimed.
-
-### Diagram presentation correction
-
-- Replaced the separate net-labelled panels with one connected schematic. Power rails, sensor signals,
-  controller outputs and driver/load wiring are now visible end to end, with explicit crossing bridges.
-- Retained the reviewed components, values, pin assignments and electrical connections; drew the optional
-  PRIME switch explicitly. Regenerated SVG/PNG and checked the rendered labels and wire paths.
-- Checked SVG parsing, deterministic regeneration and `git diff --check`. This presentation-only follow-up
-  does not change firmware or CAD; prior firmware validation still applies.
-
-### Purchase listings and PR readability
-
-- Converted circuit-change prose to a Circuit / Change / Why table. Removed the five-line diagram footer
-  and reduced its canvas height; component labels and connections are unchanged. The original also had
-  footer notes, but assembly/service details belong in the build guide.
-- Selected Amazon B0992V3MNM: TC4427CPA PDIP-8, ten-pack, $21, seller PCComponentsCompany; three lots
-  shown in stock, free October 21 delivery. Amazon B005S3O6L8: Multicomp MCMLR50V105KX7R, 1 µF/50 V
-  X7R radial ceramic, one at $1.50 plus $4.95 shipping, seller salefolks; in stock, October 23 delivery
-  or October 19–21 expedited (extra charge not shown). Observed October 13 for Seattle.
-- Rejected Vetco VUPN1930 as an exact match: its listing specifies 1 µF/50 V ceramic but not X7R.
-  The selected Amazon capacitor meets the existing specification without changing the circuit.
-- Updated build guide, README and context; proposed parts delta $24.69 plus $4.95 capacitor shipping.
-  Sheet untouched; nothing published or purchased. Diagram regenerated and visually checked.
-
-### Earlier and cheaper parts — October 20 cutoff
-
-- Owner rejected the preceding driver/capacitor selections. Replaced them in the local draft with
-  Amazon B0CWF8W713 (Bridgold Direct TC4420CPA five-pack, $8.99, two used; Oct 14 Prime / Oct 18 standard
-  shown October 13 for Seattle). Vetco VUPN7538 film capacitor, 1 µF/63 V, $1.06 each, two used;
-  catalog availability verified through Vetco's product tool; pickup timing not exposed.
-- Two single-channel drivers require two sockets, separate bypass pairs and the TC4420 pinout. Updated
-  the one connected diagram, build/USB instructions, firmware comments and proposed Sheet quantities.
-  Microchip TC4420 datasheet validates 5 V supply and 3.3 V control; AN798 pp. 6–7 supports film + ceramic
-  bypass. No firmware behavior changed. Corrected stale troubleshooting advice about nonexistent OE pins.
-- Parts delta now $14.79 before tax/shipping. No purchase, push, PR publication, live Sheet or CAD edits.
-
-### Explain the circuit changes in practical terms
-
-- Rewrote the PR table to explain switching heat, missed twist detection, Hall signal levels and local
-  driver power. Explicitly counts three added driver capacitors; the Hall capacitor is a separate addition.
-- Separated the battery-rail capacitor from the pump protection diode so voltage tolerance is not confused
-  with motor turn-off current. Describes the gate-driver upgrade as a precaution, not measured overheating.
-- Checked the original guide/diagram and TI, Microchip and Omron specifications. Documentation only;
-  circuit, quantities, prices and firmware unchanged. `git diff --check` clean.
-
-### Further PR wording clarification
-
-- Explicitly distinguishes pump speed from LED brightness. Marks the driver replacement as optional
-  because a meaningful heating problem or practical benefit has not been established; its proposed
-  hardware remains in the local draft pending scope review. Explains Hall detection as approximately
-  0 V with the ring present and 3.3 V otherwise, and shortens the battery capacitor rationale.
-- Documentation only; no circuit or purchasing changes.
-
-### Remove unjustified gate-drive replacement
-
-- Restored the original 74AHCT125 and DIP-14 socket, original two 10 kΩ input pull-downs, direct outputs
-  to the MOSFET gates and original 0.1 µF supply capacitor. Removed TC4420 drivers, three extra driver
-  capacitors, 47 Ω gate resistors and added gate pull-downs. This supersedes the optional proposal.
-- Updated the single connected diagram, build and USB instructions, firmware comments, PR title/table,
-  proposed Sheet edits and current context. Renumbered remaining sensor parts R5–R7 and C4.
-- Shortened the Hall rationale to reliable ring detection, safe 3.3 V signal and steady sensor power.
-- Read existing prices through the Google Drive connector; no Sheet changes. Remaining parts delta:
-  battery +$1, switch −$1, diode +$1.08, resistors +$0.87, Hall capacitor +$0.25, 25 V capacitor +$0.25,
-  JP1 header/shunt +$2.24 = $4.69 before tax/shipping. No CAD changes or publication.
-- Verification: SVG regenerated and visually inspected; XML parsing and deterministic regeneration pass;
-  executable firmware text unchanged; stale-driver scan, cost arithmetic and `git diff --check` pass.
-
-### Electronics packaging review before PR publication
-
-- Added `ENCLOSURE_FIT.md` and a dimensioned conceptual placement study, with generator. Read the exact
-  Sheet links through Google Drive and verified the Vetco board dimensions and 24 × 18 pad pattern.
-- Calculated mounting offsets, wall gaps and the 140° retaining-boss service constraint from CAD source.
-  Proposed central tall parts, flat C2, and landscape mounting; no routed board or full collision sign-off.
-- Documented off-board placements, old-tray battery interference and keeping existing deck height as a
-  proposal for the separate CAD PR. Identified unpublished dimensions and missing hardware envelopes.
-- Inspected the SVG/PNG and checked arithmetic. No CAD rebuild (CadQuery unavailable in current Python),
-  no physical fit test, no circuit/firmware/Sheet changes, and nothing published.
-
-### Full two-sided perfboard assembly drawing — 2026-10-14
-
-- Replaced abstract placement with explicit component-side pad assignments and a correctly mirrored
-  solder-side view. Added52 individual board wires,76 occupied pads,14 cable attachments, polarity,
-  notch/USB/MOSFET orientations and mounting keep-outs. Added an interactive per-net/per-wire view,
-  vector PDF with connection key and wire list, and a complete lead/pad schedule.
-- Checked XIAO footprint/pinout against Seeed's official files (15.24 mm header separation) and U1
-  against TI. Circuit connectivity matched to the existing guide; generated graph checks all16 nets,
-  NC isolation, pad uniqueness and route/pad mounting clearance. Added one quiet-ground junction to
-  keep board-wire fan-out at no more than three per pad; no added electronic parts.
-- Visually inspected both faces; browser checks confirm per-net highlighting and W52 selection,
- 52 visible wires when reset. Four-page PDF exported. Build guide and PR draft link the layout.
-- C2's25×Ø18 mm case envelope and actual board grid registration need physical confirmation; not a
- 1:1 drill template or a built/3D-verified assembly. Nothing published; live Sheet and CAD unchanged.
-
-
-### Board viewer usability — 2026-10-14
-
-- Explained mounting screw squares, solder pads and electrical nets in plain language.
-- Replaced the ineffective narrow-panel stack toggle with real zoom and face selection.
-  Connection filters now bring solder-side wiring into view with a selection summary;
-  explicit Show buttons isolate one wire and its two endpoints. Pad details support click,
-  pointer hover and keyboard focus. Browser checks passed at 1280 and 640 px widths.
-- No circuit, placement, BOM, CAD or live Sheet changes. Mechanical fit checks remain pending.
-
-
-### 2026-10-14 — Restore the simple board viewer
-
-Owner found the expanded viewer harder to read. Restored both drawings in the normal page flow,
-removed fixed-height drawing windows and face switching, and collapsed the explanatory text.
-Kept working zoom, explicit Show-wire buttons and solder-spot details. Connection filters no longer
-switch faces or jump the page. Browser checks confirmed zoom and highlighting with both faces visible.
-
-
-### 2026-10-14 — Include approved board viewer in local PR
-
-Owner approved the simplified viewer and requested its inclusion in the PR. Updated the PR title,
-summary and Board assembly section with the two-sided image, interactive HTML, printable PDF,
-solder schedule and enclosure fit review. Include their source generators and build-guide links
-on circuit-review. Connectivity checks and local PR link checks pass. PR remains local; no live
-Sheet edits, CAD changes or publication.
+- Local `circuit-review` includes the connected circuit diagram, revised build instructions,
+  corrected firmware wiring comments and complete board assembly material. Firmware behavior and
+  GPIO assignments are unchanged. `CIRCUIT_PR.md` records the changes and proposed Sheet edits.
+- Board deliverables: two-sided viewer and PNG, four-page PDF, solder schedule and their sources.
+  Instructions retain mounting and fit constraints; redundant exports and review history are excluded.
+- Circuit/board generation and connectivity checks pass; viewer zoom and wire selection were checked
+  in the browser. Firmware simulations previously passed 20/20; target compilation was unavailable
+  (`arduino-cli` not installed). No hardware or populated-board CAD fit verification is claimed.
+- Next: confirm actual board offsets and C2 dimensions; update battery supports and check hardware,
+  cables and shell removal in the separate CAD PR. Live Sheet changes require separate owner review.
+  Nothing published or purchased; CAD and the shared Sheet are unchanged.
