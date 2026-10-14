@@ -85,16 +85,16 @@ works on 3.3 V and either magnet pole.
 | 7 | Hall sensor, A3144 | [Vetco, VUPN6596](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63) | $1.99 | Runs on 5 V, reacts to one magnet pole. It sits on a post inside the lock, ~3 mm from the magnet: about 90 mT there, 2.5 x its worst-case switch point. |
 | 5b | Cable plugs | Vetco: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) ($2.24) for the lock cable, [JST SM 2-pin pair](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) ($1.75) for the LED leads | $3.99 | So the lantern unplugs from the base cartridge. |
 | 5a | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
-| 10 | TC4427CPA dual non-inverting MOSFET driver, DIP-8, ten-pack (1 used) | [Amazon B0992V3MNM](https://www.amazon.com/dp/B0992V3MNM), PCComponentsCompany | $21.00 | Accepts 3.3 V inputs and drives gates from regulated 5 V. Exact TC4427CPA, PDIP-8 listing; do not substitute TC4426, TC4428 or surface-mount packages. Free delivery Oct 21 shown for Seattle on Oct 13. |
+| 10 | TC4420CPA single-channel non-inverting MOSFET drivers, DIP-8, five-pack (2 used) | [Amazon B0CWF8W713](https://www.amazon.com/dp/B0CWF8W713), Bridgold Direct | $8.99 | One per load; 3.3 V input, regulated 5 V supply. Do not substitute inverting TC4429 or surface-mount packages. Oct 18 standard / Oct 14 Prime delivery shown for Seattle on Oct 13; free standard delivery requires an eligible $35 order. |
 | 11 | 2 x IRLZ44NPBF N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | Exact required part: IRLZ44NPBF, TO-220. Vendor URL/title is stale; its detail table names IRLZ44NPBF. Verify IRLZ44N marking; review substitutions before use. |
-| 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 4 x 10 kΩ, 2 x 47 Ω, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x [Multicomp MCMLR50V105KX7R](https://www.amazon.com/dp/B005S3O6L8), 1 µF/50 V X7R radial ceramic ($1.50 + $4.95 shipping, Amazon seller salefolks; Oct 23 delivery shown, or Oct 19–21 with faster shipping at an unquoted extra charge), 1 x 2200 µF/25 V; DIP-8 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
+| 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 4 x 10 kΩ, 2 x 47 Ω, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 4 x 0.1 µF ceramic, 2 x [Vetco VUPN7538](https://vetco.net/products/vupn7538_film_capacitor_1_uf_5_63_volts_polypropylene), 1 µF/63 V polypropylene film ($1.06 each; listed available, local pickup timing unconfirmed), 1 x 2200 µF/25 V; 2 x DIP-8 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They thread straight into the printed holes, except the 3 thumbscrews, 5 at the lock and the handle's 6 lap screws, which go into the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The proposed electrical changes add $24.69 in parts plus $4.95 capacitor shipping; refresh the Sheet totals after acceptance. Two of the local items have size limits; measure in the store:
+**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The proposed electrical changes add $14.79 in parts before tax and shipping; refresh the Sheet totals after acceptance. Two of the local items have size limits; measure in the store:
 
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
@@ -213,8 +213,8 @@ but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
 
 Build the circuit on the 5 x 7 cm perfboard and test it before anything goes into the lantern.
 
-1. **Board, XIAO and U1.** Drill four 3.2 mm holes on a 40 x 30 mm rectangle in the 5 x 7 cm
-   perfboard, keeping the mounting pads clear. Fit the XIAO and a **DIP-8 socket** for U1; leave U1 out
+1. **Board, XIAO and drivers.** Drill four 3.2 mm holes on a 40 x 30 mm rectangle in the 5 x 7 cm
+   perfboard, keeping the mounting pads clear. Fit the XIAO and **two DIP-8 sockets** for U1/U2; leave both ICs out
    during initial USB flashing. Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
 2. **Battery, charge jack and S1.** With battery and charger unplugged, cut one male DC5521 lead
    from the supplied TalentCell splitter to make the battery pigtail. Do not cut or open the pack.
@@ -230,17 +230,22 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    At a full 12.6 V pack, D0 sees 2.27 V. Keep this signal away from motor wiring.
 3. **Set the buck output first.** Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
    Turn the pack and S1 on. With the meter on DC volts across OUT+/OUT−, adjust the trimmer to **5.0 V**.
-   Switch off before attaching anything else. OUT+ is **+5V_REG**: connect U1 and the Hall sensor directly
+   Switch off before attaching anything else. OUT+ is **+5V_REG**: connect U1, U2 and the Hall sensor directly
    here. Feed the XIAO 5V pin through **D1 NTE585**, stripe toward the XIAO, then **JP1** in series.
    Grounds stay connected even with JP1 removed. D1 blocks reverse flow into the buck, but does not
    isolate the USB host from battery power: **remove JP1 before connecting USB**.
-4. **U1 (TC4427CPA).** Pin 6 to +5V_REG, pin 3 to ground. Solder **C3 0.1 µF and C4 1 µF ceramic**
-   in parallel directly across those pins with short leads. Pin 1 and pin 8 are unconnected.
-   D3 goes to pin 2 (IN A, pump); D4 to pin 4 (IN B, light). R3 and R4 are 10 kΩ from each input to ground.
-   Both channels are non-inverting; do not use TC4426 or TC4428. Check the socket notch and pin numbering
-   before inserting the IC with all power disconnected.
+4. **U1/U2 (TC4420CPA).** Two separate non-inverting drivers: U1 for pump, U2 for light. On **each IC**,
+   tie **both pins 1 and 8** to +5V_REG and **both pins 4 and 5** to ground; leave pin 3 unconnected.
+   Tie output pins **6 and 7 together on that IC**; never join the outputs of U1 and U2.
+   D3 goes to U1 pin 2; D4 goes to U2 pin 2. R3/R4 are 10 kΩ from those respective inputs to ground.
+   Solder **C3 0.1 µF ceramic + C4 1 µF film at U1**, and **C6 0.1 µF ceramic + C7 1 µF film at U2**,
+   each pair in parallel between that IC's supply and ground pins with short leads. Keep the driver,
+   bypass and gate/source return paths compact; do not share their return wiring with sensor signals.
+   Film plus ceramic bypass follows [Microchip AN798, pages 6–7](https://ww1.microchip.com/downloads/en/Appnotes/00798a.pdf).
+   Check the [TC4420 DIP-8 pinout](https://ww1.microchip.com/downloads/en/DeviceDoc/21419D.pdf),
+   socket notch and numbering before inserting either IC with all power disconnected. Do not use TC4429.
 5. **MOSFETs.** IRLZ44NPBF, label facing you and leads down: pin 1 gate, pin 2 drain (also tab), pin 3 source.
-   Q1 pump: U1 pin 7 through R5 **47 Ω** to gate; R7 **10 kΩ gate-to-source**. Q2 light: U1 pin 5 through
+   Q1 pump: U1 pins 6/7 through R5 **47 Ω** to gate; R7 **10 kΩ gate-to-source**. Q2 light: U2 pins 6/7 through
    R6 **47 Ω** to gate; R8 **10 kΩ gate-to-source**. Both sources go to ground. Pump negative goes to Q1
    drain, strip negative to Q2 drain; both loads' positives go to VLOAD. Put each series resistor near its
    gate. Run pump/strip returns separately to the common power ground; do not route their current through
@@ -265,7 +270,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    wires before mounting it. Make the LED lead with a JST SM pair, VLOAD and Q2 drain, leaving the far end
    bare until section 8. Thread lantern-side wires through the bay-floor hole before fitting plug housings.
 8. **Commission before enclosure assembly.** Flash using the power procedure below. First leave pump and
-   strip disconnected. In USB calibration mode, check +5V_REG at U1 and Hall is 5.0 V; check GPIO D1/D2
+   strip disconnected. In USB calibration mode, check +5V_REG at U1, U2 and Hall is 5.0 V; check GPIO D1/D2
    are approximately 3.3 V open and below 0.8 V when asserted. `status` must follow the magnet and twist
    repeatedly, including with the cable moved; battery reading should match the meter within 0.2 V after
    `vcal`. Verify both MOSFET gates are low at idle. Then connect loads with power off.
@@ -281,17 +286,17 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 ### USB programming and calibration power
 
 Normal operation is battery-only. **Never attach USB with JP1 fitted.** JP1 isolates only the XIAO supply;
-its GPIOs still connect to U1. An unpowered U1 must not receive a HIGH GPIO signal (including the boot blink).
+its GPIOs still connect to U1/U2. Neither unpowered driver may receive a HIGH GPIO signal (including the boot blink).
 
-- **USB-only flashing:** S1 OFF, pack unplugged, JP1 removed, **U1 removed from its socket**. Connect USB,
-  upload, then unplug USB before reinserting U1. No load tests in this mode.
-- **USB calibration/testing with U1 installed:** with all power off, remove JP1. Leave the pump and
+- **USB-only flashing:** S1 OFF, pack unplugged, JP1 removed, **both U1 and U2 removed from their sockets**. Connect USB,
+  upload, then unplug USB before reinserting either driver. No load tests in this mode.
+- **USB calibration/testing with U1/U2 installed:** with all power off, remove JP1. Leave the pump and
   LED leads disconnected during the initial bench check. Turn the pack and S1 ON first, verify +5V_REG, then connect USB; USB powers
-  only the XIAO while the buck powers U1/Hall. After the controller settles at idle, power down (USB out
+  only the XIAO while the buck powers U1/U2/Hall. After the controller settles at idle, power down (USB out
   first, then S1 OFF), attach loads, and repeat this sequence for testing. End with `stop`, unplug USB,
   then switch S1 OFF. Refit JP1 only after USB is unplugged and power is off.
-- **Battery operation:** USB unplugged, U1 installed, JP1 fitted; pack switch ON, then S1 ON. Turn both
-  switches OFF for storage. Never move JP1 or insert/remove U1 with power connected.
+- **Battery operation:** USB unplugged, U1/U2 installed, JP1 fitted; pack switch ON, then S1 ON. Turn both
+  switches OFF for storage. Never move JP1 or insert/remove either driver with power connected.
 
 If the pack trips or +5V_REG fails during USB testing, unplug USB promptly and investigate before retrying.
 
@@ -328,7 +333,7 @@ cd test && make test     # 20 simulated scenarios, all must PASS
 | D1 | Hall sensor OUT (LOW = ring present) |
 | D2 | Microswitch NO (COM to GND) |
 | D3 | Pump, through U1 to Q1 |
-| D4 | LED strip, through U1 to Q2 |
+| D4 | LED strip, through U2 to Q2 |
 | D6 | Optional PRIME button to GND |
 
 Serial console at 115200 baud. Type a command and press Enter:
@@ -538,7 +543,7 @@ stand it beside the cartridge on two blocks (a couple of books), so the tube and
 the drum's rim without being crushed. The glass stays in the lantern under the nozzle; the 30 cm service loop
 reaches.
 
-**Follow section 4’s USB calibration power sequence: JP1 removed, U1 installed,
+**Follow section 4’s USB calibration power sequence: JP1 removed, U1/U2 installed,
 regulated 5 V present before USB is connected.** Unplug USB before switching S1 off.
 
 Water in the jar, the shot glass in its slot (only the shot glass fits under the nozzle; weigh what it pours on
@@ -655,7 +660,7 @@ flattened.
 | Pours shrink after a few in a row, jar dents in | The vent valve is in backwards (arrow must point into the jar) or blocked. |
 | Pump doesn't run at all | Switch on? Check the rail gives 9–12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
-| LEDs stay dark or stay on | Q2 wiring, or U1's OE pins not grounded. |
+| LEDs stay dark or stay on | Q2 wiring, U2 supply/input/output wiring, or gate pull-down shorted. |
 | Double blink when the ring goes in | Low battery (below 10.5 V): charge it. If the pack is full, check the reading against your meter and run `vcal`. |
 | Pours shrink as the night goes on | The battery reading is off or not connected (`status` says `not sensed`): check the divider on D0, then `vcal`. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |

@@ -73,8 +73,8 @@
 <path d="M660.4,270 L679.6,270 M663.664,276.0 L676.336,276.0 M667.696,282.0 L672.304,282.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M310,480 L390,480" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="350" cy="480" r="4" fill="#d62828"/>
-<path d="M350,480 L350,310 L1250,310 L1250,520" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1010" y="292" font-size="16" text-anchor="start" font-weight="bold" fill="#d62828">+5V_REG — U1 and Hall, before D1</text>
+<path d="M350,480 L350,310 L1250,310 L1250,550" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1010" y="292" font-size="16" text-anchor="start" font-weight="bold" fill="#d62828">+5V_REG — U1, U2 and Hall, before D1</text>
 <path d="M390,480 L421.5,480" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M422.5,470 V490 L441.5,480 Z M441.5,468 V492" fill="#e2e8f0" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M443.5,480 L475,480" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -139,53 +139,84 @@
 <path d="M950.4,270 L969.6,270 M953.664,276.0 L966.336,276.0 M957.696,282.0 L962.304,282.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M900,210 L900,350 L800,350 L800,370" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="1065" y="242" font-size="14" text-anchor="start" font-weight="normal" fill="#777777">12.6 V → 2.27 V at D0</text>
-<rect x="1120" y="520" width="270" height="260" rx="6" fill="#eef6ff" stroke="#222222" stroke-width="1.2"/>
-<text x="1255.0" y="548" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">U1 TC4427CPA</text>
-<text x="1255.0" y="571" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">Dual non-inverting driver</text>
-<text x="1255.0" y="592" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">DIP-8 • pins 1, 8 unused</text>
-<circle cx="1250" cy="520" r="4" fill="#ffffff" stroke="#d62828" stroke-width="1.5"/>
-<text x="1260" y="508" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">6 VDD</text>
-<circle cx="1250" cy="780" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
-<text x="1260" y="802" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">3 GND</text>
-<path d="M1250,780 L1250,1180" fill="none" stroke="#222222" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1250,310 L1460,310" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1120" y="550" width="270" height="120" rx="6" fill="#eef6ff" stroke="#222222" stroke-width="1.2"/>
+<text x="1255.0" y="578" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">U1 TC4420CPA</text>
+<text x="1255.0" y="601" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">Pump • DIP-8 • pin 3 unused</text>
+<rect x="1120" y="750" width="270" height="120" rx="6" fill="#eef6ff" stroke="#222222" stroke-width="1.2"/>
+<text x="1255.0" y="778" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">U2 TC4420CPA</text>
+<text x="1255.0" y="801" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">Light • DIP-8 • pin 3 unused</text>
+<circle cx="1250" cy="550" r="4" fill="#ffffff" stroke="#d62828" stroke-width="1.5"/>
+<text x="1260" y="538" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">1 + 8 VDD</text>
+<circle cx="1250" cy="670" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<text x="1260" y="692" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">4 + 5 GND</text>
+<path d="M1250,670 L1250,700 L1100,700 L1100,1180" fill="none" stroke="#222222" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1100" cy="1180" r="4" fill="#222222"/>
+<circle cx="1330" cy="750" r="4" fill="#ffffff" stroke="#d62828" stroke-width="1.5"/>
+<text x="1340" y="738" font-size="15" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<text x="1320" y="739" font-size="15" text-anchor="end" font-weight="normal" fill="#222222">1 + 8 VDD</text>
+<path d="M1410,310 L1410,730 L1330,730 L1330,750" fill="none" stroke="#d62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1410" cy="310" r="4" fill="#d62828"/>
+<circle cx="1250" cy="870" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<text x="1260" y="892" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">4 + 5 GND</text>
+<path d="M1250,870 L1250,1180" fill="none" stroke="#222222" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1060,310 L1500,310" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="1250" cy="310" r="4" fill="#d62828"/>
-<circle cx="1300" cy="310" r="4" fill="#d62828"/>
-<path d="M1300,310 L1300,355.0" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1288,355.0 H1312 M1288,365.0 H1312" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1300,365.0 L1300,410" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1320" y="365.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222">C3 0.1 µF</text>
-<path d="M1290.4,410 L1309.6,410 M1293.664,416.0 L1306.336,416.0 M1297.696,422.0 L1302.304,422.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1460" cy="310" r="4" fill="#d62828"/>
-<path d="M1460,310 L1460,355.0" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1448,355.0 H1472 M1448,365.0 H1472" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1460,365.0 L1460,410" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1480" y="365.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222">C4 1 µF</text>
-<path d="M1450.4,410 L1469.6,410 M1453.664,416.0 L1466.336,416.0 M1457.696,422.0 L1462.304,422.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1265" y="475" font-size="13" text-anchor="start" font-weight="normal" fill="#222222">C3 + C4: short leads at pins 6 / 3</text>
+<circle cx="1060" cy="310" r="4" fill="#d62828"/>
+<path d="M1060,310 L1060,355.0" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1048,355.0 H1072 M1048,365.0 H1072" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1060,365.0 L1060,410" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1080" y="365.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<path d="M1050.4,410 L1069.6,410 M1053.664,416.0 L1066.336,416.0 M1057.696,422.0 L1062.304,422.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1060" y="440" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">C3 (U1)</text>
+<text x="1060" y="459" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">0.1 µF ceramic</text>
+<circle cx="1180" cy="310" r="4" fill="#d62828"/>
+<path d="M1180,310 L1180,355.0" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1168,355.0 H1192 M1168,365.0 H1192" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1180,365.0 L1180,410" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1200" y="365.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<path d="M1170.4,410 L1189.6,410 M1173.664,416.0 L1186.336,416.0 M1177.696,422.0 L1182.304,422.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1180" y="440" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">C4 (U1)</text>
+<text x="1180" y="459" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">1 µF film</text>
+<circle cx="1340" cy="310" r="4" fill="#d62828"/>
+<path d="M1340,310 L1340,355.0" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1328,355.0 H1352 M1328,365.0 H1352" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1340,365.0 L1340,410" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1360" y="365.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<path d="M1330.4,410 L1349.6,410 M1333.664,416.0 L1346.336,416.0 M1337.696,422.0 L1342.304,422.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1340" y="440" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">C6 (U2)</text>
+<text x="1340" y="459" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">0.1 µF ceramic</text>
+<circle cx="1500" cy="310" r="4" fill="#d62828"/>
+<path d="M1500,310 L1500,355.0" fill="none" stroke="#d62828" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1488,355.0 H1512 M1488,365.0 H1512" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1500,365.0 L1500,410" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1520" y="365.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<path d="M1490.4,410 L1509.6,410 M1493.664,416.0 L1506.336,416.0 M1497.696,422.0 L1502.304,422.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1500" y="440" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">C7 (U2)</text>
+<text x="1500" y="459" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">1 µF film</text>
+<text x="1090" y="505" font-size="13" text-anchor="middle" font-weight="normal" fill="#222222">Bypass pairs: short leads at each IC</text>
 <circle cx="1120" cy="650" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
-<text x="1132" y="655" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">2 IN A</text>
+<text x="1132" y="655" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">2 IN</text>
 <circle cx="1390" cy="650" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
-<text x="1378" y="655" font-size="15" text-anchor="end" font-weight="normal" fill="#222222">7 OUT A</text>
-<circle cx="1120" cy="730" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
-<text x="1132" y="735" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">4 IN B</text>
-<circle cx="1390" cy="730" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
-<text x="1378" y="735" font-size="15" text-anchor="end" font-weight="normal" fill="#222222">5 OUT B</text>
+<text x="1378" y="655" font-size="15" text-anchor="end" font-weight="normal" fill="#222222">6 + 7 OUT</text>
+<circle cx="1120" cy="830" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
+<text x="1132" y="835" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">2 IN</text>
+<circle cx="1390" cy="830" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
+<text x="1378" y="835" font-size="15" text-anchor="end" font-weight="normal" fill="#222222">6 + 7 OUT</text>
 <path d="M860,610 L940,610 L940,650 L1120,650" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M860,710 L900,710 L900,730 L1120,730" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M860,710 L900,710 L900,830 L1120,830" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="980" cy="650" r="4" fill="#2a9d2a"/>
 <path d="M980,650 L980,659.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M980,699.0 L980,708" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="974" y="659.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
 <text x="990" y="683.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222">R3 10 kΩ</text>
 <path d="M970.4,708 L989.6,708 M973.664,714.0 L986.336,714.0 M977.696,720.0 L982.304,720.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1060" cy="730" r="4" fill="#2a9d2a"/>
-<path d="M1060,730 L1060,757.5" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1060,797.5 L1060,825" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1054" y="757.5" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="1070" y="781.5" font-size="14" text-anchor="start" font-weight="normal" fill="#222222"></text>
-<path d="M1050.4,825 L1069.6,825 M1053.664,831.0 L1066.336,831.0 M1057.696,837.0 L1062.304,837.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1050" y="781" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">R4 10 kΩ</text>
+<circle cx="1060" cy="830" r="4" fill="#2a9d2a"/>
+<path d="M1060,830 L1060,857.5" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1060,897.5 L1060,925" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1054" y="857.5" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1070" y="881.5" font-size="14" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<path d="M1050.4,925 L1069.6,925 M1053.664,931.0 L1066.336,931.0 M1057.696,937.0 L1062.304,937.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1050" y="881" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">R4 10 kΩ</text>
 <rect x="1530" y="190" width="170" height="90" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.2"/>
 <text x="1615.0" y="218" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">Kamoer KPHM200</text>
 <text x="1615.0" y="241" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">12 V • + top / − bottom</text>
@@ -217,27 +248,27 @@
 <text x="1925.0" y="241" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">12 V • + top / − bottom</text>
 <path d="M1880,100 L1880,190" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="1880" cy="100" r="4" fill="#f77f00"/>
-<path d="M1970,280 L1970,680" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1840" y="680" width="170" height="110" rx="6" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
-<text x="1925.0" y="708" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">Q2 IRLZ44NPBF</text>
-<text x="1925" y="762" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">TO-220; tab = drain</text>
-<circle cx="1970" cy="680" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
-<text x="1980" y="668" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">2 D</text>
-<circle cx="1840" cy="730" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
-<text x="1852" y="735" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">1 G</text>
-<circle cx="1970" cy="790" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
-<text x="1980" y="812" font-size="15" text-anchor="start" font-weight="normal" fill="#222222"></text>
-<text x="1960" y="783" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">3 S</text>
-<path d="M1970,790 L1970,1180" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1970,280 L1970,780" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1840" y="780" width="170" height="110" rx="6" fill="#f1f5f9" stroke="#222222" stroke-width="1.2"/>
+<text x="1925.0" y="808" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">Q2 IRLZ44NPBF</text>
+<text x="1925" y="862" font-size="12" text-anchor="middle" font-weight="normal" fill="#222222">TO-220; tab = drain</text>
+<circle cx="1970" cy="780" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<text x="1980" y="768" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">2 D</text>
+<circle cx="1840" cy="830" r="4" fill="#ffffff" stroke="#2a9d2a" stroke-width="1.5"/>
+<text x="1852" y="835" font-size="15" text-anchor="start" font-weight="normal" fill="#222222">1 G</text>
+<circle cx="1970" cy="890" r="4" fill="#ffffff" stroke="#222222" stroke-width="1.5"/>
+<text x="1980" y="912" font-size="15" text-anchor="start" font-weight="normal" fill="#222222"></text>
+<text x="1960" y="883" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">3 S</text>
+<path d="M1970,890 L1970,1180" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="1970" cy="1180" r="4" fill="#222222"/>
-<circle cx="1820" cy="730" r="4" fill="#2a9d2a"/>
-<path d="M1820,730 L1820,820" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1820,820 L1820,835.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1820,875.0 L1820,890" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1814" y="835.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="1710" y="859.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222">R8 10 kΩ</text>
-<path d="M1820,890 L1970,890" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="1970" cy="890" r="4" fill="#222222"/>
+<circle cx="1820" cy="830" r="4" fill="#2a9d2a"/>
+<path d="M1820,830 L1820,920" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1820,920 L1820,935.0" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1820,975.0 L1820,990" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1814" y="935.0" width="12" height="40" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1710" y="959.0" font-size="14" text-anchor="start" font-weight="normal" fill="#222222">R8 10 kΩ</text>
+<path d="M1820,990 L1970,990" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1970" cy="990" r="4" fill="#222222"/>
 <text x="1950" y="310" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">~75 cm</text>
 <text x="1950" y="330" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">7 parallel pieces</text>
 <path d="M1390,650 L1425.0,650" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -245,11 +276,11 @@
 <rect x="1425.0" y="644" width="40" height="12" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
 <text x="1445.0" y="642" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">R5 47 Ω</text>
 <path d="M1500,650 L1530,650" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1390,730 L1425.0,730" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1465.0,730 L1500,730" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1425.0" y="724" width="40" height="12" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
-<text x="1445.0" y="722" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">R6 47 Ω</text>
-<path d="M1500,730 L1840,730" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1390,830 L1425.0,830" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1465.0,830 L1500,830" fill="none" stroke="#2a9d2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1425.0" y="824" width="40" height="12" rx="0" fill="#ffffff" stroke="#222222" stroke-width="1.4"/>
+<text x="1445.0" y="822" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">R6 47 Ω</text>
+<path d="M1500,830 L1840,830" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="1570" cy="168" r="4" fill="#f77f00"/>
 <path d="M1570,168 L1760,168 L1760,227" fill="none" stroke="#f77f00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M1750,252 H1770 L1760,230 Z M1748,229 H1772" fill="#e2e8f0" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -334,12 +365,15 @@
 <path d="M900,301 V319" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M900,301 Q917,310 900,319" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M900,301 Q917,310 900,319" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1501,730 H1519" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1501,730 Q1510,713 1519,730" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1501,730 Q1510,713 1519,730" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1651,730 H1669" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1651,730 Q1660,713 1669,730" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1651,730 Q1660,713 1669,730" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1091,830 H1109" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1091,830 Q1100,813 1109,830" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1091,830 Q1100,813 1109,830" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1401,650 H1419" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1401,650 Q1410,633 1419,650" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1401,650 Q1410,633 1419,650" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1651,830 H1669" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1651,830 Q1660,813 1669,830" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1651,830 Q1660,813 1669,830" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M411,750 H429" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M411,750 Q420,733 429,750" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M411,750 Q420,733 429,750" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>

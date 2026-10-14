@@ -345,3 +345,15 @@ changed or regenerated, and no hardware measurements claimed.
   The selected Amazon capacitor meets the existing specification without changing the circuit.
 - Updated build guide, README and context; proposed parts delta $24.69 plus $4.95 capacitor shipping.
   Sheet untouched; nothing published or purchased. Diagram regenerated and visually checked.
+
+### Earlier and cheaper parts — October 20 cutoff
+
+- Owner rejected the preceding driver/capacitor selections. Replaced them in the local draft with
+  Amazon B0CWF8W713 (Bridgold Direct TC4420CPA five-pack, $8.99, two used; Oct 14 Prime / Oct 18 standard
+  shown October 13 for Seattle). Vetco VUPN7538 film capacitor, 1 µF/63 V, $1.06 each, two used;
+  catalog availability verified through Vetco's product tool; pickup timing not exposed.
+- Two single-channel drivers require two sockets, separate bypass pairs and the TC4420 pinout. Updated
+  the one connected diagram, build/USB instructions, firmware comments and proposed Sheet quantities.
+  Microchip TC4420 datasheet validates 5 V supply and 3.3 V control; AN798 pp. 6–7 supports film + ceramic
+  bypass. No firmware behavior changed. Corrected stale troubleshooting advice about nonexistent OE pins.
+- Parts delta now $14.79 before tax/shipping. No purchase, push, PR publication, live Sheet or CAD edits.

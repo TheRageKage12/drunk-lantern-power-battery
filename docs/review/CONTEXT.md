@@ -189,7 +189,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
   Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
   underneath (which needs a cable groove at the rim). The switch stops the ~15 mA idle drain while stored.
-- An LM2596 makes regulated 5.0 V directly for U1 and Hall. Only the XIAO supply branch passes through
+- An LM2596 makes regulated 5.0 V directly for U1/U2 and Hall. Only the XIAO supply branch passes through
   an NTE585 Schottky and removable JP1. Remove JP1 before USB; follow the guide’s service sequence.
   JP1 is a reviewable addition for supply isolation during calibration (Vetco header + shunt, $2.24).
 - **Low battery (Kevin's decision):** "We shouldn't ever go below 50% battery." No buck-boost for now; it's
@@ -210,12 +210,17 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 
 ### Electronics (see `docs/images/wiring.png`)
 - Seeed XIAO RP2040 (B0DRNTQ338); GPIO assignments and firmware behavior are unchanged.
-- TC4427CPA dual non-inverting driver replaces 74AHCT125. DIP-8 socket; VDD pin 6 directly at regulated
-  5 V, GND pin 3, pins 1/8 unused. Pump IN/OUT 2/7, LED IN/OUT 4/5. Local 0.1 µF + 1 µF ceramic bypass.
-  Purchase listings selected: Amazon B0992V3MNM, TC4427CPA ten-pack from PCComponentsCompany ($21; one used),
-  and B005S3O6L8, Multicomp MCMLR50V105KX7R from salefolks ($1.50 + $4.95 shipping). October 13
-  delivery estimates to Seattle: driver October 21; capacitor October 23, or October 19–21 expedited
-  with an unquoted extra charge. No circuit substitution and no additional retail supplier.
+- Two TC4420CPA single-channel non-inverting drivers replace 74AHCT125: U1 pump, U2 light. Two DIP-8
+  sockets. Each chip: pins 1/8 to regulated 5 V, 4/5 to ground, pin 2 input, pins 6/7 joined as output,
+  pin 3 unused. D3 drives U1; D4 drives U2. Outputs of separate chips must never be joined.
+  Each has local 0.1 µF ceramic + 1 µF film bypass (C3/C4 at U1; C6/C7 at U2). Film plus ceramic is
+  supported by Microchip AN798, pp. 6–7; keep the bypass/gate return loops compact.
+  Current local draft: Amazon B0CWF8W713, Bridgold Direct TC4420CPA five-pack ($8.99; two used),
+  October 14 Prime / October 18 standard delivery shown October 13 for Seattle. Free standard delivery
+  requires an eligible $35 order. Vetco VUPN7538 1 µF/63 V polypropylene film, $1.06 each, two used;
+  catalog reports available; local pickup timing remains unconfirmed. Total 0.1 µF count is four.
+  Owner rejected the prior TC4427CPA $21 ten-pack and late capacitor listing; October 20 is the latest
+  acceptable arrival date. This sourcing correction changes the driver count, pinout and bypass count.
 - Two IRLZ44NPBF low-side MOSFETs: 47 Ω series at each gate, 10 kΩ gate-to-source each; keep the two
   10 kΩ input pull-downs. Specify exact MOSFET in Item and vendor-title discrepancy in Notes.
 - NTE586 3 A/40 V flyback across pump, stripe to battery positive. Two NTE585 remain: XIAO supply and
@@ -231,8 +236,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   current/heating on the bench. Startup/stall current and actual runtime are not measured yet.
 - No fuse added in this revision; the pack has protection. The 3 A output rating is not a guaranteed
   protection-trip threshold. A jam/short is a fault to stop and investigate, not something C2 can sustain.
-- USB-only flashing: remove JP1 and socketed U1 with power off. Powered USB calibration: JP1 removed,
-  U1 installed and regulated supply present; follow guide sequencing. Ordinary operation is battery-only.
+- USB-only flashing: remove JP1 and both socketed U1/U2 with power off. Powered USB calibration: JP1 removed,
+  U1/U2 installed and regulated supply present; follow guide sequencing. Ordinary operation is battery-only.
 
 ### Firmware (`firmware/green_lantern/green_lantern.ino`)
 - States: IDLE, ARMED, POURING, HOLDING, FINALE, LOCKED.
@@ -365,3 +370,10 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   the diagram's dense footer; assembly/service details stay in the build guide. Select the Amazon driver
   and capacitor listings recorded above. The parts delta is now $24.69 plus $4.95 capacitor shipping, tax
   and any other shipping charges. Sheet edits still wait for acceptance and separate review.
+
+- **2026-10-13, earlier/cheaper sourcing (supersedes the preceding purchase-listing follow-up):** owner
+  rejected the $21 driver ten-pack and late delivery dates; latest acceptable arrival is October 20.
+  Local draft now uses two TC4420CPA drivers from an $8.99 five-pack (Oct 18 standard), two DIP-8
+  sockets, and 0.1 µF ceramic + $1.06 Vetco 1 µF film per driver. Parts delta $14.79 before tax/shipping.
+  Updated connected diagram, build/service pinout instructions and firmware comments. Vetco catalog
+  availability verified; local pickup timing unconfirmed. No publishing, purchase, CAD or Sheet changes.

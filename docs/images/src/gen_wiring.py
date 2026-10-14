@@ -1,7 +1,7 @@
 """Generate one connected wiring diagram, with explicit power and signal wires.
 Run: python3 docs/images/src/gen_wiring.py
 Render: rsvg-convert -o docs/images/wiring.png docs/images/wiring.svg
-Electrical design is unchanged; matching battery CAD remains a separate PR.
+Matching battery CAD remains a separate PR.
 """
 from pathlib import Path
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY
@@ -109,8 +109,8 @@ cap(670,100,270,'C2 2200 µF / 25 V',ORANGE,positive=True)
 # 5 V: branch to Hall/driver is before the isolation diode.
 wire([(310,480),(390,480)],RED,3)
 dot(350,480,RED)
-wire([(350,480),(350,310),(1250,310),(1250,520)],RED,3)
-s.text(1010,292,'+5V_REG — U1 and Hall, before D1',size=16,color=RED,weight='bold')
+wire([(350,480),(350,310),(1250,310),(1250,550)],RED,3)
+s.text(1010,292,'+5V_REG — U1, U2 and Hall, before D1',size=16,color=RED,weight='bold')
 diode(390,475,480,'D1 NTE585',RED)
 wire([(475,480),(510,480)],RED)
 s.pin(510,480); s.pin(540,480)
@@ -151,24 +151,35 @@ wire([(900,210),(900,350),(800,350),(800,370)])
 vertical_bridge(900,310,GREEN)
 s.text(1065,242,'12.6 V → 2.27 V at D0',size=14,color=GREY)
 
-# Driver supply, explicit local bypass, and common ground.
-box(1120,520,270,260,'U1 TC4427CPA',['Dual non-inverting driver','DIP-8 • pins 1, 8 unused'],fill='#eef6ff')
-pin(1250,520,'6 VDD','top',RED)
-pin(1250,780,'3 GND','bottom',BLACK)
-wire([(1250,780),(1250,1180)],BLACK,2.8)
-wire([(1250,310),(1460,310)],RED)
+# Two single-channel drivers, each with its own bypass pair.
+box(1120,550,270,120,'U1 TC4420CPA',['Pump • DIP-8 • pin 3 unused'],fill='#eef6ff')
+box(1120,750,270,120,'U2 TC4420CPA',['Light • DIP-8 • pin 3 unused'],fill='#eef6ff')
+pin(1250,550,'1 + 8 VDD','top',RED)
+pin(1250,670,'4 + 5 GND','bottom',BLACK)
+wire([(1250,670),(1250,700),(1100,700),(1100,1180)],BLACK,2.8)
+dot(1100,1180,BLACK)
+pin(1330,750,'','top',RED)
+s.text(1320,739,'1 + 8 VDD',size=15,anchor='end')
+wire([(1410,310),(1410,730),(1330,730),(1330,750)],RED,3)
+dot(1410,310,RED)
+pin(1250,870,'4 + 5 GND','bottom',BLACK)
+wire([(1250,870),(1250,1180)],BLACK,2.8)
+wire([(1060,310),(1500,310)],RED)
 dot(1250,310,RED)
-for x,label in [(1300,'C3 0.1 µF'),(1460,'C4 1 µF')]:
+for x,ref,value in [(1060,'C3 (U1)','0.1 µF ceramic'),(1180,'C4 (U1)','1 µF film'),
+                    (1340,'C6 (U2)','0.1 µF ceramic'),(1500,'C7 (U2)','1 µF film')]:
     dot(x,310,RED)
-    cap(x,310,410,label)
-s.text(1265,475,'C3 + C4: short leads at pins 6 / 3',size=13)
-pin(1120,650,'2 IN A','left'); pin(1390,650,'7 OUT A','right')
-pin(1120,730,'4 IN B','left'); pin(1390,730,'5 OUT B','right')
+    cap(x,310,410,'')
+    s.lines(x,440,[ref,value],size=13,anchor='middle',lh=19)
+s.text(1090,505,'Bypass pairs: short leads at each IC',size=13,anchor='middle')
+pin(1120,650,'2 IN','left'); pin(1390,650,'6 + 7 OUT','right')
+pin(1120,830,'2 IN','left'); pin(1390,830,'6 + 7 OUT','right')
 wire([(860,610),(940,610),(940,650),(1120,650)])
-wire([(860,710),(900,710),(900,730),(1120,730)])
+wire([(860,710),(900,710),(900,830),(1120,830)])
+horizontal_bridge(1100,830,GREEN)
 dot(980,650); s.res_v(980,650,708,'R3 10 kΩ',size=14); ground(980,708)
-dot(1060,730); s.res_v(1060,730,825,'',size=14); ground(1060,825)
-s.text(1050,781,'R4 10 kΩ',size=14,anchor='end')
+dot(1060,830); s.res_v(1060,830,925,'',size=14); ground(1060,925)
+s.text(1050,881,'R4 10 kΩ',size=14,anchor='end')
 
 # Pump / LED loads; all load supplies and gate-drive paths are wired.
 def stage(x, gate_y, title, q, rpd):
@@ -193,14 +204,14 @@ def stage(x, gate_y, title, q, rpd):
     dot(dx,gate_y+160,BLACK)
 
 stage(1530,650,'Kamoer KPHM200','Q1','R7')
-stage(1840,730,'Green COB strip','Q2','R8')
+stage(1840,830,'Green COB strip','Q2','R8')
 s.lines(1950,310,['~75 cm','7 parallel pieces'],size=14,anchor='end',lh=20)
 s.res_h(1390,1500,650,'R5 47 Ω',size=14)
 wire([(1500,650),(1530,650)])
-s.res_h(1390,1500,730,'R6 47 Ω',size=14)
-wire([(1500,730),(1840,730)])
-horizontal_bridge(1510,730,GREEN)
-horizontal_bridge(1660,730,GREEN)
+s.res_h(1390,1500,830,'R6 47 Ω',size=14)
+wire([(1500,830),(1840,830)])
+horizontal_bridge(1410,650,GREEN)
+horizontal_bridge(1660,830,GREEN)
 
 # Flyback cathode to pump positive, anode to switched negative.
 dot(1570,168,ORANGE)
