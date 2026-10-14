@@ -8,7 +8,7 @@ python3 build.py            # all parts -> output/*.stl + *.step, output/assembl
 python3 build.py socket     # one module (base, dishes, sphere, socket, handle)
 python3 tests/test_socket.py   # rotor sweep: collisions, hard stops, lever contact
 python3 render_views.py     # docs/images/cad-*.png (iso, front, rear, top, cutaway, exploded, parts sheet)
-python3 render_stl.py output /tmp/r   # quick per-part previews
+python3 render_stl.py output ../docs/images/stl   # per-part previews + parts-iso.png contact sheet
 ```
 
 | File | What |

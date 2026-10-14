@@ -10,12 +10,19 @@ Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with link
 assembly, wiring, firmware, calibration, testing, cleaning). Shopping list (who has what, what's left to buy, links and prices): the
 [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).
 
+## The printed parts
+
+All 25 parts as exported from `cad/output/` (iso view). Front, top and iso views of each part are in
+[`docs/images/stl/`](docs/images/stl/).
+
+![the 25 printed parts](docs/images/stl/parts-iso.png)
+
 ## Repository map
 
 | Path | What it is |
 |---|---|
 | `docs/BUILD_GUIDE.md` | The build guide. |
-| `docs/images/` | Wiring, fluid path, state machine, socket mechanism diagrams and CAD renders. |
+| `docs/images/` | Wiring, fluid path, state machine, socket mechanism diagrams and CAD renders; `stl/` has a preview of every printed part. |
 | `docs/review/` | The design-review handoff: `CONTEXT.md` (every decision and why), `PROGRESS.md` (what the review checked and changed, and the open questions), the prompt and the conversation transcript. |
 | `docs/research/` | Early research notes (historical: several choices were later superseded, see `docs/review/CONTEXT.md`), the project brief, and the original ChatGPT transcript. |
 | `cad/` | Parametric CadQuery model. `params.py` holds every dimension; `parts/*.py` build the parts; `python3 build.py` exports `cad/output/*.stl` and `*.step`, an assembly, and runs fit checks. See `cad/README.md` and `cad/DESIGN_CONTRACT.md`. |
@@ -31,7 +38,7 @@ pip install cadquery trimesh manifold3d numpy pillow networkx scipy shapely
 cd cad
 python3 build.py            # all parts -> cad/output/, assembly, checks
 python3 build.py socket     # one module only
-python3 render_stl.py output /tmp/renders   # PNG previews of every STL
+python3 render_stl.py output ../docs/images/stl   # PNG previews of every printed part + parts-iso.png sheet (--all adds the check volumes)
 ```
 
 ## Firmware

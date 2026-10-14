@@ -35,11 +35,35 @@ def render(mesh, out, size=700, az=35, el=25, color=(70,170,90), bg=(255,255,255
         d.text((10, size+8), title, fill=(0,0,0))
     img.save(out)
 
+def contact_sheet(files, out, tile=400, cols=5):
+    """One image with every file in `files` scaled to a tile, labelled with its part name."""
+    from PIL import ImageFont
+    font = ImageFont.load_default(size=18)
+    rows = (len(files) + cols - 1) // cols
+    sheet = Image.new('RGB', (cols * tile, rows * (tile + 28)), 'white')
+    for i, fn in enumerate(files):
+        im = Image.open(fn).convert('RGB'); im.thumbnail((tile, tile))
+        x, y = (i % cols) * tile, (i // cols) * (tile + 28)
+        sheet.paste(im, (x + (tile - im.width) // 2, y))
+        ImageDraw.Draw(sheet).text((x + 8, y + tile + 6), os.path.basename(fn).rsplit('_', 1)[0], fill='black', font=font)
+    sheet.save(out)
+
+
 if __name__ == '__main__':
+    # python3 render_stl.py <stl dir> <out dir> [--all]
+    # Renders each printed part from three angles plus a contact sheet of the iso views (parts-iso.png).
+    # --all also renders assembly.stl and the *_envelope.stl check volumes, which are not printed.
     src, outdir = sys.argv[1], sys.argv[2]
+    include_all = '--all' in sys.argv[3:]
+    os.makedirs(outdir, exist_ok=True)
+    isos = []
     for fn in sorted(os.listdir(src)):
         if not fn.lower().endswith('.stl'): continue
+        if not include_all and (fn.endswith('_envelope.stl') or fn == 'assembly.stl'): continue
         m = trimesh.load(os.path.join(src, fn), force='mesh')
         for az, el, tag in [(35,25,'iso'),(0,0,'front'),(0,89,'top')]:
             render(m, os.path.join(outdir, f"{fn[:-4]}_{tag}.png"), az=az, el=el, title=f"{fn} {tag}  ext={np.round(m.extents,1)}")
+        isos.append(os.path.join(outdir, f"{fn[:-4]}_iso.png"))
         print("rendered", fn)
+    contact_sheet(isos, os.path.join(outdir, 'parts-iso.png'))
+    print("contact sheet", os.path.join(outdir, 'parts-iso.png'))
