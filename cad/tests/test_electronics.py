@@ -41,9 +41,37 @@ assert inter_volume(strap, placed['base_deck']) < .5
 # oversized capacitor hitting the wall, even if the PCB itself still fits.
 bad_edge_part = E.board_place(E.board_box(65, 15, 5, 10, 5, 10))
 assert inter_volume(bad_edge_part, placed['service_sweep_envelope']) > .5
-old_d = P.PERFBOARD_CAP_D
-P.PERFBOARD_CAP_D = 30
-assert inter_volume(E.build()['board_components_envelope'], placed['base']) > .5
-P.PERFBOARD_CAP_D = old_d
+oversized_cap = E.board_place(E.board_box(25,-2,25,30,0,31))
+assert inter_volume(oversized_cap, placed['base']) > .5
+
+# Former near-touching C3 and a moved socket must fail body spacing checks,
+# even though a fused component envelope would hide their overlap.
+def rejects(action):
+    try: action()
+    except AssertionError: return
+    raise AssertionError('Negative control was incorrectly accepted')
+bodies=E.M.bounds()
+u=bodies['U1']
+bodies['C3']=(u[0]+u[2]+.01,u[1],10,4,0,13)
+rejects(lambda:E.M.validate(bodies))
+bodies=E.M.bounds()
+bodies['R1']=(18-2,17-2,4,4,0,3)
+rejects(lambda:E.M.validate(bodies))
+
+import routing, json, copy
+routes=json.loads((Path(__file__).resolve().parents[2]/'docs/review/protoboard/routing.json').read_text())
+routing.validate(routes)
+bad=copy.deepcopy(routes)
+next(w for w in bad if not w['bare'])['depth']=9.5
+rejects(lambda:routing.validate(bad))
+bad=copy.deepcopy(routes)
+next(w for w in bad if not w['bare'])['od']=1.2
+rejects(lambda:routing.validate(bad))
+# Artificial same-layer crossing between unrelated wires, preserving endpoints.
+bad=copy.deepcopy(routes)
+a,b=[w for w in bad if w['id'] in ('W13','W41')]
+a['path']=[a['path'][0],b['path'][0],a['path'][-1]]
+a['depth']=b['depth']
+rejects(lambda:routing.validate(bad))
 
 print('ELECTRONICS FIT OK: battery, fixed deck, rear wiring, strap route; oversized capacitor and boss collision detected')

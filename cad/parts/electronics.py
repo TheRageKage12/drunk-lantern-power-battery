@@ -5,17 +5,16 @@ models. Unpublished dimensions must fit these limits before printing/soldering. 
 cad/README.md. Board positions follow docs/review/protoboard/{layout,generate}.py.
 All solids here are already in the assembly frame; none are printable parts.
 """
-import importlib.util
 from pathlib import Path
 
 import cadquery as cq
 import params as P
 from parts import base as B
 
-spec = importlib.util.spec_from_file_location(
-    'board_layout', Path(__file__).resolve().parents[2] / 'docs/review/protoboard/layout.py')
-L = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(L)
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'docs/review/protoboard'))
+import layout as L
+import mechanical as M
 
 BOARD_BACK = B.EPANEL_R + B.EPANEL_T / 2 + B.EPANEL_PAD_PROUD
 BOARD_FACE = BOARD_BACK + P.PERFBOARD_T
@@ -52,30 +51,16 @@ def build():
         cutter = cq.Workplane(cq.Plane(origin=(BOARD_BACK-1, x-P.PERFBOARD_W/2, BOARD_TOP-y),
                                      normal=(1, 0, 0))).circle(1.6).extrude(P.PERFBOARD_T+2)
         pcb = pcb.cut(cutter)
-        rear = rear.cut(board_box(x-4.6, y-4.6, 9.2, 9.2, -10, 1))
-    components = [
-        board_box(3, 22.45, 21, 17.8, 0, 12),             # XIAO including soldered headers
-        board_box(0.5, 27, 4, 8.8, 0, 12),               # USB socket, cable attached only for service
-        board_box(27.2, 21.6, 10.5, 19.6, 0, 9),         # U1 and DIP socket
-        board_box(25, .5, P.PERFBOARD_CAP_L, P.PERFBOARD_CAP_D, 0, P.PERFBOARD_CAP_D),
-    ]
-    for row in (10, 14):
-        x, y = L.mm('Q'+str(row))
-        components.append(board_box(x-5.2, y-2.25, 10.4, 4.5, 0, P.PERFBOARD_MOSFET_PROJECTION))
-    for part in L.PARTS:
-        if part['ref'] == 'C2':
-            continue
-        a, b = L.mm(part['a']), L.mm(part['b'])
-        x0, y0 = min(a[0], b[0])-1.1, min(a[1], b[1])-1.1
-        w, h = abs(a[0]-b[0])+2.2, abs(a[1]-b[1])+2.2
-        height = 8 if part['ref'] == 'JP1' else (5 if part['kind'] == 'ceramic' else 3)
-        components.append(board_box(x0, y0, w, h, 0, height))
+        rear = rear.cut(board_box(x-4.6, y-4.6, 9.2, 9.2, -P.PERFBOARD_T-B.EPANEL_PAD_PROUD-1, 1))
+    bodies = M.bounds()
+    M.validate(bodies)
+    components = [board_box(*bounds) for bounds in bodies.values()]
     out = {
         'perfboard_envelope': board_place(pcb),
         'board_components_envelope': board_place(compound(components)),
         'board_wiring_envelope': board_place(rear),
         # Local cable exit above the board, behind the component face; tie to the panel.
-        'board_cable_exit_envelope': board_place(board_box(27, -5, 38, 5, -5.5, -1.4)),
+        'board_cable_exit_envelope': board_place(board_box(25, -7, 42, 7, -P.PERFBOARD_T-9.2, -P.PERFBOARD_T-.2)),
         'battery_connector_envelope': box(-P.POWERBANK_W/2, P.POWERBANK_W/2,
             -P.POWERBANK_L/2-P.BATTERY_PORT_CLEARANCE, -P.POWERBANK_L/2,
             P.BATTERY_PLUG_Z0, P.BATTERY_PLUG_Z0+P.BATTERY_PLUG_H),

@@ -67,8 +67,7 @@ BATTERY_STRAP_T = 1.0       # recessed underfloor strap allowance; use <=1 mm st
 # Electronics fit limits, not claims that unmeasured supplier parts have these dimensions.
 PERFBOARD_W, PERFBOARD_H, PERFBOARD_T = 70.0, 50.0, 1.2
 PERFBOARD_BOTTOM_GAP = 2.0
-PERFBOARD_MOSFET_PROJECTION = 22.0
-PERFBOARD_CAP_L, PERFBOARD_CAP_D = 25.0, 18.0
+# Component sizes and mounting coordinates: docs/review/protoboard/mechanical.py and layout.py
 BUCK_L, BUCK_W, BUCK_H = 43.0, 21.0, 14.0  # reserve above printed corner supports; measure actual module
 BUCK_STANDOFF = 2.0
 BATTERY_PLUG_Z0, BATTERY_PLUG_H = 7.0, 24.0  # plug/switch access reserve above the low front stop

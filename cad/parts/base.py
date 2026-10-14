@@ -20,6 +20,10 @@ Assembly frame: Z up, origin at the centre of the base bottom, +Y = the owner's 
 All numbers derive from params.py; the layout and the reasons are in NOTES-base.md.
 """
 import math
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "docs/review/protoboard"))
+import layout as board_layout
 import cadquery as cq
 import params as P
 from common import insert_boss, radial_hole, joint_angles
@@ -106,11 +110,10 @@ BOTTLE_FINGER_ANGLES = (0.0, 120.0, 240.0)
 # ------------------------------------------------------------------ electronics
 # XIAO perfboard: vertical panel on the deck, rear-left, face toward the wall / visible through the door
 EPANEL_ANGLE = 115.0                                  # direction (deg from +X) of the panel's normal
-EPANEL_R = 56.0                                       # radius of the panel mid-plane
+EPANEL_R = 50.5                                       # radius of the panel mid-plane
 EPANEL_W, EPANEL_H, EPANEL_T = 52.0, 44.0, 3.0
-EPANEL_GRID = (40.0, 30.0)                            # M3 insert pads (across, up)
 EPANEL_PAD = 9.0
-EPANEL_PAD_PROUD = P.M3_INSERT_DEPTH + 1.0 - EPANEL_T  # pad depth so insert pocket + 1 mm floor fit (4.5)
+EPANEL_PAD_PROUD = 10.0 # rear wiring gap; board face stays at its previous radius
 # Spare pocket on the base floor, right crescent (under the deck): fits a D4184 MOSFET module if you use one
 # (the budget build puts its two MOSFETs on the perfboard instead)
 D4184_XY = (56.0, 0.0)
@@ -404,23 +407,18 @@ def _pump_cradle():
 
 
 def _electronics_panel():
-    """Vertical plate on the deck with 4 M3 insert pads (EPANEL_GRID) on its wall-facing side.
+    """Vertical plate on the deck with 4 M3 screw pads following board_layout.MOUNTS on its wall-facing side.
     Built facing +X at the origin, then rotated to EPANEL_ANGLE and pushed out to EPANEL_R."""
     plate = _box(EPANEL_T, EPANEL_W, EPANEL_H, 0, 0, DECK_TOP)
     adds, cuts = [plate], []
-    zc = DECK_TOP + EPANEL_H / 2
-    for sy in (-1, 1):
-        for sz in (-1, 1):
-            yc, zp = sy * EPANEL_GRID[0] / 2, zc + sz * EPANEL_GRID[1] / 2
-            x0, x1 = EPANEL_T / 2, EPANEL_T / 2 + EPANEL_PAD_PROUD
-            # Stay inside the board drawing's 9 x 9 mm screw keep-outs. The old
-            # descending gusset occupied rear-wire space below each pad. Use
-            # build-plate supports beneath these four short overhangs when printing.
-            pad = _box(x1-x0, EPANEL_PAD, EPANEL_PAD, (x0+x1)/2, yc, zp-EPANEL_PAD/2)
-            adds.append(pad)
-            hole = cq.Workplane(cq.Plane(origin=cq.Vector(x1 + 0.5, yc, zp), normal=cq.Vector(-1, 0, 0))) \
-                .circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5)
-            cuts.append(hole)
+    for mx, my in board_layout.MOUNTS:
+        yc, zp = mx-P.PERFBOARD_W/2, DECK_TOP+P.PERFBOARD_BOTTOM_GAP+P.PERFBOARD_H-my
+        x0, x1 = EPANEL_T/2, EPANEL_T/2+EPANEL_PAD_PROUD
+        pad = _box(x1-x0, EPANEL_PAD, EPANEL_PAD, (x0+x1)/2, yc, zp-EPANEL_PAD/2)
+        adds.append(pad)
+        hole = cq.Workplane(cq.Plane(origin=cq.Vector(x1+.5,yc,zp),normal=cq.Vector(-1,0,0))) \
+            .circle(P.M3_INSERT_HOLE/2).extrude(P.M3_INSERT_DEPTH+.5)
+        cuts.append(hole)
     move = lambda wp: _rot_z(wp.translate((EPANEL_R, 0, 0)), EPANEL_ANGLE)
     return [move(a) for a in adds], [move(c) for c in cuts]
 

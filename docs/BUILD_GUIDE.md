@@ -501,7 +501,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    its saddles with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
    drilled). Keep the inline lock/LED plugs above the unused module pocket, clear of the battery supports.
    Remove all print support from the four board pads; clipped leads and rear wiring must stay within
-   the 4.5 mm gap. Verify access to JP1 and the pack switch with the shell off; undo the three deck screws
+   the 10 mm gap (use the revised pad positions and wire layers in the board guide). Verify access to JP1 and the pack switch with the shell off; undo the three deck screws
    if needed for pack service. Route and tie the battery lead along the tray edge, clear of retaining bosses.
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:

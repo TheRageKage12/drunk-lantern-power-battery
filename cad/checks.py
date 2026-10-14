@@ -73,6 +73,20 @@ def electronics_checks(all_parts, placements):
     electronic = [n for n, (_, module) in all_parts.items() if module == 'parts.electronics']
     targets = electronic + ['powerbank_envelope']
     problems = 0
+    # Check individual bodies before fusion can hide their overlaps. Drawing and
+    # CAD share these bounds, including the screw-head / driver access circles.
+    from parts import electronics as E, base as B
+    import json
+    import routing
+    from generate import validate as validate_connectivity
+    validate_connectivity()
+    from pathlib import Path
+    gaps = E.M.validate(E.M.bounds())
+    assert B.EPANEL_PAD_PROUD == E.M.REAR_GAP
+    assert P.PERFBOARD_T == E.M.BOARD_THICKNESS
+    route_path = Path(__file__).resolve().parents[1] / 'docs/review/protoboard/routing.json'
+    report = routing.validate(json.loads(route_path.read_text()))
+    print(f"board: smallest body gap {gaps[0][0]:.2f} mm; {report['routes']} wire corridors; rear extent {report['maximum_rear_extent_mm']:.1f}/{E.M.REAR_GAP:g} mm")
     pairs = set()
     for en in targets:
         for other in placed:
