@@ -7,7 +7,7 @@ from pathlib import Path
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY
 
 MAG = '#8b36ad'
-s = SVG(2100, 1380, 'Green Lantern — connected circuit diagram')
+s = SVG(2100, 1230, 'Green Lantern — connected circuit diagram')
 bridges = []
 
 
@@ -265,14 +265,6 @@ for path,straight,color in bridges:
     s.path(straight,stroke='white',sw=7)
     s.path(path,stroke='white',sw=7)
     s.path(path,stroke=color,sw=2.4)
-
-s.lines(40,1235,[
-    'POWER: TalentCell switch ON for use/charging; S1 OFF to charge. Use the supplied 12.6 V charger. Both switches OFF for storage.',
-    'USB: remove JP1 before connecting USB. USB-only flashing: remove socketed U1 first. Powered calibration: follow the build-guide sequence.',
-    'CABLES: lock JST PH 4-pin = regulated 5 V, Hall OUT, switch NO, GND. LED JST SM 2-pin = battery rail, Q2 drain. R9–R11 and D3 stay on the board.',
-    'LAYOUT: keep gate resistors at the MOSFETs, C3/C4 at U1, C5 at Hall. Keep pump/LED return currents out of sensor and MCU wiring.',
-    'CAD: existing battery supports still fit the old KBT pack; TalentCell mechanical changes belong in a separate PR.',
-],size=16,lh=27)
 
 out=Path(__file__).resolve().parent.parent/'wiring.svg'
 out.write_text(s.finish())

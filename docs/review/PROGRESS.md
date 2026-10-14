@@ -316,8 +316,8 @@ Final checks on the branch head: `build.py` 0 problems (34 parts, all one body, 
   to avoid GPIO drive into its unpowered inputs. No firmware behavior or pin mapping changes.
 - Kept all CAD/export files unchanged; existing battery supports still fit KBT and require a separate PR.
 - `CIRCUIT_PR.md` is the local PR description and proposed post-acceptance Sheet delta, not a second BOM.
-  Live Sheet unchanged. Fast switch listing remains a marketplace candidate; driver and 1 µF capacitor
-  sourcing within Amazon/Vetco is still open. Do not call this ready to order before resolving those items.
+  Live Sheet unchanged. Fast switch listing remains a marketplace candidate. Driver and 1 µF capacitor
+  listings were subsequently selected; see the purchase-listing follow-up below.
 
 Validation: wiring SVG/PNG regenerated and visually checked; firmware simulations 20/20 pass;
 `git diff --check` clean. Target compilation unavailable (`arduino-cli` not installed). No CAD files
@@ -331,3 +331,17 @@ changed or regenerated, and no hardware measurements claimed.
   PRIME switch explicitly. Regenerated SVG/PNG and checked the rendered labels and wire paths.
 - Checked SVG parsing, deterministic regeneration and `git diff --check`. This presentation-only follow-up
   does not change firmware or CAD; prior firmware validation still applies.
+
+### Purchase listings and PR readability
+
+- Converted circuit-change prose to a Circuit / Change / Why table. Removed the five-line diagram footer
+  and reduced its canvas height; component labels and connections are unchanged. The original also had
+  footer notes, but assembly/service details belong in the build guide.
+- Selected Amazon B0992V3MNM: TC4427CPA PDIP-8, ten-pack, $21, seller PCComponentsCompany; three lots
+  shown in stock, free October 21 delivery. Amazon B005S3O6L8: Multicomp MCMLR50V105KX7R, 1 µF/50 V
+  X7R radial ceramic, one at $1.50 plus $4.95 shipping, seller salefolks; in stock, October 23 delivery
+  or October 19–21 expedited (extra charge not shown). Observed October 13 for Seattle.
+- Rejected Vetco VUPN1930 as an exact match: its listing specifies 1 µF/50 V ceramic but not X7R.
+  The selected Amazon capacitor meets the existing specification without changing the circuit.
+- Updated build guide, README and context; proposed parts delta $24.69 plus $4.95 capacitor shipping.
+  Sheet untouched; nothing published or purchased. Diagram regenerated and visually checked.

@@ -212,7 +212,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 - Seeed XIAO RP2040 (B0DRNTQ338); GPIO assignments and firmware behavior are unchanged.
 - TC4427CPA dual non-inverting driver replaces 74AHCT125. DIP-8 socket; VDD pin 6 directly at regulated
   5 V, GND pin 3, pins 1/8 unused. Pump IN/OUT 2/7, LED IN/OUT 4/5. Local 0.1 µF + 1 µF ceramic bypass.
-  Exact Amazon/Vetco driver and 1 µF capacitor purchase listings remain open; no new supplier approved.
+  Purchase listings selected: Amazon B0992V3MNM, TC4427CPA ten-pack from PCComponentsCompany ($21; one used),
+  and B005S3O6L8, Multicomp MCMLR50V105KX7R from salefolks ($1.50 + $4.95 shipping). October 13
+  delivery estimates to Seattle: driver October 21; capacitor October 23, or October 19–21 expedited
+  with an unquoted extra charge. No circuit substitution and no additional retail supplier.
 - Two IRLZ44NPBF low-side MOSFETs: 47 Ω series at each gate, 10 kΩ gate-to-source each; keep the two
   10 kΩ input pull-downs. Specify exact MOSFET in Item and vendor-title discrepancy in Notes.
 - NTE586 3 A/40 V flyback across pump, stripe to battery positive. Two NTE585 remain: XIAO supply and
@@ -357,3 +360,8 @@ the 2026-10-13 starting point; the sheet is the source of truth.
 - **2026-10-13, circuit diagram presentation.** The owner rejected separate net-labelled panels. Keep the
   circuit as one connected diagram with visible power and signal interconnects, junction dots and clear
   non-connecting crossings. The corrected SVG/PNG preserves the reviewed electrical design.
+
+- **2026-10-13, PR table and purchase listings.** Show circuit changes as a Change/Why table and remove
+  the diagram's dense footer; assembly/service details stay in the build guide. Select the Amazon driver
+  and capacitor listings recorded above. The parts delta is now $24.69 plus $4.95 capacitor shipping, tax
+  and any other shipping charges. Sheet edits still wait for acceptance and separate review.

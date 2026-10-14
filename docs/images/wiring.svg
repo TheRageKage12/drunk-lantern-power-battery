@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2100 1380" width="2100" height="1380" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2100 1230" width="2100" height="1230" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#222222">
 <title>Green Lantern — connected circuit diagram</title>
 <defs>
 <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker>
@@ -10,7 +10,7 @@
 <marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f77f00"/></marker>
 <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d62828"/></marker>
 </defs>
-<rect x="0" y="0" width="2100" height="1380" fill="#ffffff"/>
+<rect x="0" y="0" width="2100" height="1230" fill="#ffffff"/>
 <text x="35" y="38" font-size="28" text-anchor="start" font-weight="bold" fill="#222222">Green Lantern power battery — connected wiring diagram</text>
 <text x="35" y="68" font-size="16" text-anchor="start" font-weight="normal" fill="#222222">Dots join wires. Bridge marks cross without joining. All ground symbols connect to the common GND rail.</text>
 <path d="M1380,57 L1408,57" fill="none" stroke="#f77f00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -346,9 +346,4 @@
 <path d="M461,750 H479" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M461,750 Q470,733 479,750" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M461,750 Q470,733 479,750" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="40" y="1235" font-size="16" text-anchor="start" font-weight="normal" fill="#222222">POWER: TalentCell switch ON for use/charging; S1 OFF to charge. Use the supplied 12.6 V charger. Both switches OFF for storage.</text>
-<text x="40" y="1262" font-size="16" text-anchor="start" font-weight="normal" fill="#222222">USB: remove JP1 before connecting USB. USB-only flashing: remove socketed U1 first. Powered calibration: follow the build-guide sequence.</text>
-<text x="40" y="1289" font-size="16" text-anchor="start" font-weight="normal" fill="#222222">CABLES: lock JST PH 4-pin = regulated 5 V, Hall OUT, switch NO, GND. LED JST SM 2-pin = battery rail, Q2 drain. R9–R11 and D3 stay on the board.</text>
-<text x="40" y="1316" font-size="16" text-anchor="start" font-weight="normal" fill="#222222">LAYOUT: keep gate resistors at the MOSFETs, C3/C4 at U1, C5 at Hall. Keep pump/LED return currents out of sensor and MCU wiring.</text>
-<text x="40" y="1343" font-size="16" text-anchor="start" font-weight="normal" fill="#222222">CAD: existing battery supports still fit the old KBT pack; TalentCell mechanical changes belong in a separate PR.</text>
 </svg>
