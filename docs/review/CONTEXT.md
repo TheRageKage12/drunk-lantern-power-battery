@@ -7,7 +7,7 @@ Each decision here was made on purpose, usually by Kevin. Don't reverse one unle
 and even then, ask Kevin first (see the review prompt).
 
 The original brief and ChatGPT plan are in `docs/research/BRIEF.md` and `docs/research/chatgpt-transcript.md`.
-Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository is
+Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository is
 `TheRageKage12/drunk-lantern-power-battery` (renamed from `temprepo` on 2026-10-14).
 
 ---
@@ -21,9 +21,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   for the hardware.
 - **Team:** Kevin (owner, wears the ring), Sky and Duncan.
 - **Deadline:** Halloween 2026. Written on 2026-10-13. Every part has to arrive in time to print, build and test.
-  Amazon items show Prime delivery Oct 14-15. The filament is the slowest at Oct 18.
-- **Status:** designed, modelled and simulated, not built. Nothing has been measured yet. As of the last message,
-  Kevin had not confirmed any order. Ask before assuming anything has been bought.
+  Re-checked 2026-10-15: every Amazon item in stock, Prime delivery Oct 16-17, free delivery Oct 20; the Auber tubing
+  had 2 left and the pump 12, so order those first.
+- **Status:** designed, modelled and simulated, not built. Nothing has been measured yet. As of 2026-10-15 the Sheet
+  shows nothing bought except what Sky and Kevin already own (tools, white PETG). Ask before assuming anything has been bought.
 - **Printer:** Kevin's heavily modified Ender 3, 230 x 230 x 240 mm bed. Every part must fit, and the build checks
   this.
 - **Location:** Seattle, so local stores are in the Seattle area (see the shopping list).
@@ -56,7 +57,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 - Use **a new branch for each feature or piece of work**, then open a PR to merge it.
 - Check a PR's state before pushing to it or saying it's ready. Earlier sessions twice pushed to, or described as
   open, PRs that were already merged.
-- Every PR so far (#1-#9) is merged into `main`.
+- Every PR so far (#1-#14) is merged into `main`. #13 (Duncan, electrical revision) and #14 (Duncan, CAD fit,
+  inserts, videos) were merged on 2026-10-14; #15 is this review.
 - Any PR that changes a decision, part, quantity, price or dimension also updates this file and its Change
   log. Refresh `transcript.md` at the end of a working session, not on every push.
 
@@ -175,8 +177,12 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 - Moved the twist-switch mounting screw 1.5 mm away from the cavity, with its bracket and base slot,
   to leave plastic around the wider insert. Switch-body and nozzle positions remain unchanged.
 - Install inserts before mechanical assembly. The existing screw clearance holes, countersinks and
-  14 nut joints remain unchanged. Sheet changes wait for acceptance: record 32 inserts and verify
-  their selected listing/price; no insert price or purchase is assumed.
+  14 nut joints remain unchanged.
+- Listing (2026-10-15 review): ruthex RX-M3x5.7, 100 for $9.99 (Amazon B08BCRZZS3, Prime Oct 17). Its data
+  sheet calls for exactly a 4.0 mm hole, and at 5.7 mm long it leaves 0.8 mm of the 6.5 mm bore under it. Any plain
+  M3 x 5.7 x 4.6 mm insert is the same part; the 5 mm-wide "M3 x 4 x 5" type does not fit. In the Sheet as a
+  Fasteners row. Engagement with the existing screw lengths (checked): drum/dish and sphere/dish M3x8 reach 5.3 mm
+  into the insert, the deck M3x8 5 mm, the board M3x6 4.8 mm, the handle M3x12 4 mm, the switch-bracket M3x8 ~4.5 mm.
 
 ### Power (the latest decision wins; this changed several times)
 - History:
@@ -193,6 +199,14 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   - Use a male DC5521 pigtail cut from the supplied splitter, verified centre-positive. Keep charge jack
     before S1; use the supplied charger. TalentCell's own switch must be ON for operation and charging;
     S1 remains OFF during charging. Both switches OFF for storage.
+  - Verified 2026-10-15 against TalentCell's 12 V manual: the YB1203000 has ONE DC5521 port, labelled
+    "Input/Output", a power button and an LED; "push the switch to position I to make the charging circuit
+    breakover"; it "can output while charging"; input 12.6 V 3 A max, charger 12.6 V 0.5 A, ~6 h, 190 g. So J1
+    wired across the pack lead ahead of S1 is the right place, and the pack's switch has to be reachable: it is,
+    from the -Y side with the lantern lifted off (the tray has no rim wall there, only a 3 mm lip). A 2019
+    independent test (SotaBeams) measured 2.4 Ah (80 % of rated) and 11 V at 3 A on one unit; at our ~1.3 A peak
+    and ~5 mAh per pour that is still hundreds of pours.
+  - J1's third (switched) contact is unused; the charger's LED (red charging, green done) is the charge indicator.
   - CAD now uses the 105 × 65 × 25 mm case, connector/switch end toward -Y. Revised tray rails,
     end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
     z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
@@ -238,9 +252,12 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 - Hall direct to D1 as above. D2F-01L switch: COM ground, NO through 3.3 kΩ to regulated 5 V; GPIO D2
   through 4.7 kΩ to 3V3 and Schottky anode at D2/cathode at NO. This supplies contact current without
   connecting the GPIO directly to 5 V. The 4-wire cable pinout remains 5V, HALL, SW/NO, GND.
-- Fast switch purchase candidate: Amazon B0DBV9JX6L, Pecafeitas D2F-01L four-pack, $7.99; Oct 14 Prime /
-  Oct 18 standard displayed for Seattle on Oct 13. Its Omron provenance is not authenticated. Verify
-  marking/mechanics and repeated operation. Owner rejected the Oct 27 alternative as too late.
+- Switch: Amazon B0DBV9JX6L, Pecafeitas D2F-01L four-pack, $7.97 (2026-10-15; Prime Oct 17). Its Omron
+  provenance is not authenticated (the listing never says Omron). Verify marking/mechanics and repeated
+  operation. Owner rejected the Oct 27 alternative as too late. Omron's D2F datasheet (checked 2026-10-15):
+  minimum applicable load 100 mA at 5 V for the plain D2F, 1 mA at 5 V for the D2F-01; the 0.1 A hinge-lever
+  model's operating force is 0.78 N max, same body and lever as the D2F-L the CAD was drawn for. R7 puts
+  ~1.5 mA through the closed contact, plus ~0.65 mA from R6 through D3: 2x the minimum.
 - Battery sense remains D0: 100 kΩ/22 kΩ + 0.1 µF. Optional PRIME stays on D6.
 - Common ground, separate load-return routing; verify sensor levels and full-charge LED/combined-load
   current/heating on the bench. Startup/stall current and actual runtime are not measured yet.
@@ -262,7 +279,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
 ### Shopping (the shared Google Sheet, https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit; guide section 2)
 Since 2026-10-14 the list lives only in the Google Sheet, edited by Kevin, Sky and Duncan (columns: Have, Still to get,
 Who has it). The markdown, PDF and .xlsx copies were removed from the repo so they can't drift. Totals below are
-the 2026-10-13 starting point; the sheet is the source of truth.
+the 2026-10-13 starting point; the sheet is the source of truth. **2026-10-15:** parts total about $205 before tax
+(Amazon $127.99 with the $9.99 inserts, Vetco $46.57, Tacoma ~$12, Ace ~$1.50, jar/glass/curtain ~$12, straps and
+ties ~$5); tools and filament (now $16.99 a green spool) are extra. The increase since $186: the electrical revision
+$4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total, and the switch 2 cents cheaper.
 | Store | Total | Notes |
 |---|---|---|
 | Amazon | $118.02 | 9 items |
@@ -304,8 +324,8 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   - `cad/render_views.py` is a painter's-algorithm renderer. It now subdivides large faces, because large faces
     used to make the back panel look wrong.
   - Don't read rendering artefacts as CAD defects. Check against `checks.py` and the STL itself.
-- Totals and counts appear in several places: README, guide section 2, the shopping list, the PDF, guide
-  section 3's part table (~850 g of filament) and the diagrams. **They drift.** Check them against each other.
+- Totals and counts appear in several places: guide section 2, the Sheet, guide section 3's part table (~1.24 kg
+  of filament) and the diagrams. **They drift.** Check them against each other.
 
 ## 7. Tooling notes for a fresh container
 
@@ -402,3 +422,16 @@ the 2026-10-13 starting point; the sheet is the source of truth.
 - **2026-10-14, make pump-tube timing explicit:** Step 17 is now titled “Fit the tube, then mount the
   pump” and instructs opening the head/loading the tube while the cartridge is exposed, leaving the
   outlet end free before joining the shell. The build guide repeats this order. Video timing stays unchanged.
+
+- **2026-10-15, review of Duncan's revisions (PR #15).** Re-ran every check on the merged PRs #13 and #14: CAD build
+  0 problems (553 electronics pairs), socket, electronics and insert tests OK, firmware 20/20 and 63136 bytes.
+  Verified against sources: the TalentCell manual (one input/output port, switch ON to charge, 0.5 A charger),
+  Omron's D2F datasheet (1 mA minimum load for the D2F-01) and the ruthex insert data (4.0 mm hole). Nothing in
+  the circuit or the CAD needed changing. Fixed: the committed `dish_lower.stl` had one coarse facet 0.7 mm inside
+  the outer cone (re-exported, with the assembly and renders); the guide's board-hole coordinates (15/55, 15/45)
+  disagreed with the board drawing's (18,17), (55,15), (15,45), (58,45); three "pending a separate PR" leftovers;
+  the charge-jack position in section 12 (it is on your left now, not your side); the Sheet's protoboard note and
+  strap count (4, battery strap <= 1 mm). Added: the heat-set inserts to the Sheet and the guide ($9.99), a
+  2026-10-15 Amazon stock/delivery check (tubing: 2 left), the new total (~$205). The three videos were checked
+  chapter by chapter against the guide and the CAD (inserts, strap, underside switch, relocated jack, tube route)
+  and match; they have no source in the repo, so a design change means re-recording them.

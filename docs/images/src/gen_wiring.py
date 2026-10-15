@@ -1,7 +1,6 @@
 """Generate one connected wiring diagram, with explicit power and signal wires.
 Run: python3 docs/images/src/gen_wiring.py
 Render: rsvg-convert -o docs/images/wiring.png docs/images/wiring.svg
-Matching battery CAD remains a separate PR.
 """
 from pathlib import Path
 from svgkit import SVG, RED, ORANGE, BLACK, GREEN, GREY

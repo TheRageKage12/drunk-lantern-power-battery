@@ -12,7 +12,7 @@ assembly, wiring, firmware, calibration, testing, cleaning). Shopping list (who 
 
 **Current build:** [circuit](docs/images/wiring.svg), [board assembly](docs/review/protoboard/README.md),
 and [CAD fit limits](cad/README.md#electronics-fit-limits). The tray now fits the selected TalentCell case;
-verify the listed component and connector dimensions before printing. PR #13 is merged and its shopping Sheet updates are complete.
+verify the listed component and connector dimensions before printing. The shopping Sheet matches this circuit.
 
 **Assembly videos:** [Build order (4:30)](docs/videos/assembly-guide.mp4) ·
 [Exploded assembly (0:12)](docs/videos/separate-and-assemble.mp4) ·
