@@ -61,11 +61,12 @@ The drink touches only the jar, the platinum-silicone tube and the glass. No pri
 ## 2. Shopping list
 
 The live list, with who has each item and what is left to buy, is the [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit). The tables
-below describe this proposed circuit. **The Sheet has not been changed**; apply the
-[PR change list](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) only after acceptance and separate spreadsheet review.
+below describe the current circuit (the 2026-10-14 electrical revision, recorded in [CIRCUIT_PR.md](review/CIRCUIT_PR.md));
+the Sheet carries the same parts, plus the heat-set inserts and straps.
 
-Amazon and Vetco prices were read from their listings on 2026-10-13; prices with "~" are estimates.
-Confirm at checkout.
+Amazon prices, stock and delivery were re-checked on 2026-10-15: everything in stock, Prime delivery Oct 16-17 and
+free delivery Oct 20 (Amazon's default address; Seattle should match within a day). The Auber tubing showed only 2 left
+and the pump 12: order those first. Vetco prices are from 2026-10-13; prices with "~" are estimates. Confirm at checkout.
 
 ### 2.1 Order online
 
@@ -78,8 +79,9 @@ Confirm at checkout.
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
 | 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
-| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger and a male DC5521 lead from its supplied splitter. Pack switch must be ON while charging. CAD fit is pending a separate PR. |
-| 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.99 | Selected fast-delivery candidate: Pecafeitas listing, fulfilled by Amazon; Oct 14 Prime / Oct 18 standard shown for Seattle on Oct 13. Omron provenance/contact material is not independently verified. Check marking, mounting and repeated operation. Use the interface in section 4. |
+| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger (12.6 V, 0.5 A, ~6 h) and a male DC5521 lead cut from its supplied splitter. Its one DC5521 port is both input and output, and its own switch must be ON to charge (TalentCell manual). The cartridge tray is built for this case (rev 9i). |
+| 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.97 | Third-party (Pecafeitas) listing of the 0.1 A hinge-lever version. Omron's datasheet gives its minimum load as 1 mA at 5 V (the plain D2F needs 100 mA), which the section 4 interface supplies. Omron provenance is not verified: check the marking, the peg spacing against `switch_bracket`, and that it clicks reliably 50 times. |
+| 13a | Heat-set inserts | [ruthex RX-M3x5.7 brass, 100-pack (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3) | $9.99 | 32 used. 5.7 mm long, made for a 4.0 mm hole: the 32 receiving bores are 4.0 x 6.5 mm (section 3). Any plain M3 x 5.7 x 4.6 mm brass insert is the same part. |
 
 **Hall sensor alternative (not recommended: Adafruit ships slowly, and the board sits 7.7 mm from the magnet
 instead of 3).** The lock is built for the A3144 from Vetco (item 7), on a post that reaches up
@@ -99,18 +101,22 @@ works on 3.3 V and either magnet pole.
 | 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. Use 32 M3-thread brass heat-set inserts in the receiving holes (4 mm bore, 6.5 mm deep). The 3 thumbscrews, 5 lock screws and 6 handle lap screws still use the 14 nuts. Insert price is not included. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 13a), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The accepted electrical changes added $4.69 in parts before tax and shipping; the live Sheet has been updated. Two of the local items have size limits; measure in the store:
+**Total: about $205 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $46.57, Tacoma Screw ~$12, straps and
+zip ties ~$5, and ~$13.50 of local estimates for the spring, the jar, the curtain sheet and the shot glass. The
+[shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the live store-by-store figures and who already has what. The 2026-10-13
+design was about $186: the electrical revision added $4.69, the heat-set inserts $9.99, the straps and ties ~$5 (listed before,
+but left out of the old total) and the green filament rose by $3 a spool. Two of the local items have size limits; measure in the store:
 
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
 
 The total assumes you already have:
 
-- **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the rest, the supports and one failed big part) plus ~30 g of white or natural for the diffusers (~$43 for two green spools and one white).
+- **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the rest, the supports and one failed big part) plus ~30 g of white or natural for the diffusers (~$49 for two green spools and one white).
 - Basic tools: soldering iron and solder, multimeter, calipers, a drill with 3.2, 5 and 6 mm bits, flush cutters, a
   2.5 mm hex key (a long or ball-end one for the sphere's flange screws and the handle) and a 2 mm hex key for the
   countersunk screws, a small flat screwdriver for the LM2596's trimmer, a hobby knife and ruler, a USB-C data
@@ -152,7 +158,8 @@ first layers, with 0.3 mm of clearance a side, and a flared first layer on both 
 binds, sand the smaller part's edge. Turn "print thin walls" on for `socket_base` (the sensor post's walls).
 
 **Install the brass heat-set inserts before assembly.** All 32 receiving holes are **4 mm diameter ×
-6.5 mm deep**. Use inserts with M3 internal threads compatible with those bores. Fit them flush with the
+6.5 mm deep**. The listed ruthex RX-M3x5.7 (5.7 mm long, 4.6 mm across, made for a 4.0 mm hole) or any plain M3 x 5.7 x 4.6 mm
+brass insert fits; a 5 mm-wide "M3 x 4 x 5" insert does not. Fit them flush with the
 entry face, let them cool, and check that each screw turns freely before mounting components. Follow the
 insert supplier's installation temperature and test one in a scrap print first. The 3.4 mm screw
 through-holes, countersinks and captured-nut pockets retain their separate dimensions.
@@ -240,8 +247,8 @@ Use the [two-sided perfboard layout](review/protoboard/README.md) and its
 pad names stay the same. Check the actual hole-array position and C2 case size before assembly.
 
 1. **Board, XIAO and U1.** Orient the perfboard 70 mm across and 50 mm tall. Drill four 3.2 mm
-   holes at x = 15/55 mm and y = 15/45 mm from the component-side top-left corner, checking against
-   the printed panel first. Keep each 9 x 9 mm mounting area clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
+   holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left corner
+   (the [board layout](review/protoboard/README.md) is the reference), checking against the printed panel first. Keep each 9 x 9 mm mounting area clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
    during initial USB flashing. Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
 2. **Battery, charge jack and S1.** With battery and charger unplugged, cut one male DC5521 lead
    from the supplied TalentCell splitter to make the battery pigtail. Do not cut or open the pack.
@@ -252,7 +259,7 @@ pad names stay the same. Check the actual hole-array position and C2 case size b
    Identify J1's contacts with a plug and continuity meter; its third, switched contact is unused and insulated.
    Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It buffers short disturbances;
    it cannot sustain an overloaded or stalled motor. Charge with **S1 OFF, pack switch ON**, using only
-   the supplied 12.6 V charger through J1. Mechanical placement is deferred to the battery CAD PR.
+   the supplied 12.6 V charger through J1. The pack lies flat on the cartridge floor under a 20 mm strap (section 9).
 2a. **Battery sense.** R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground.
    At a full 12.6 V pack, D0 sees 2.27 V. Keep this signal away from motor wiring.
 3. **Set the buck output first.** Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
@@ -647,8 +654,9 @@ pour into the glass: the first pour of the night should not be the one in front 
 glass goes in and you are ready.
 
 **Charging:** S1 OFF, TalentCell pack switch ON, USB unplugged. Lift the lantern off (3 thumbscrews)
-and plug the supplied TalentCell 12.6 V charger into the jack on the deck, the socket pointing up at the edge on your side; the lantern can go back on while it charges if you
-route the charger lead out under the rim on blocks, or just leave it beside the cartridge. Charge after
+and plug the supplied TalentCell 12.6 V charger into the jack on the deck: it points up at the deck's edge on your left, a
+little toward the display side (the side away from the buck converter). The lantern can go back on while it charges if you
+route the charger lead out under the rim on blocks, or just leave it beside the cartridge. A full charge takes about 6 h at the charger's 0.5 A. Charge after
 every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
 The double blink as you punch in (below 10.5 V) is a late warning. Runtime and state of charge versus voltage
 need checking on the assembled prop; do not treat the voltage threshold as a precise 50% fuel gauge.

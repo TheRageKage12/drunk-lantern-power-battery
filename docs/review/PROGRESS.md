@@ -347,3 +347,58 @@ bore/depth/side-wall/closed-end checks. The nozzle boss clears its new lower-dis
 switch screw aligns with the bracket and slot. Full CAD build has zero problems, socket and electronics
 tests pass, firmware simulations pass 20/20, and RP2040 compilation succeeds (63,136 bytes). See BUILD_GUIDE section 3 for the insert count by part
 and the changed bay-floor print orientation. Existing screw and nut quantities stay the same.
+
+## Review of Duncan's revisions (PRs #13 and #14) — 2026-10-15
+
+Branch `claude/review-2`, PR #15. Scope: everything merged since the handoff (the electrical revision, the
+protoboard layout, the TalentCell tray, the 32 heat-set inserts, the relocated jack, the three videos).
+
+**Checks on `main` before any change:** `build.py` 0 problems (all parts fit the bed, every printed part one
+body, 553 electronics / shell-removal pairs clean), `test_socket.py` OK (lever contact 29-40 deg, post clear),
+`test_electronics.py` OK, `test_inserts.py` OK (32 bores), firmware 20/20, compile 63136 bytes. Regenerating every
+render, the wiring SVG and the board viewer from source reproduced the committed files, with one exception below.
+
+**Verified against primary sources (no change needed):**
+- TalentCell YB1203000 manual: one DC5521 "Input/Output" port, so the lantern's J1 across the pack lead (ahead of
+  S1) is the only way to charge it in place; its switch must be at "I" to charge; it can output while charging;
+  input 12.6 V 3 A max; the supplied charger is 12.6 V 0.5 A (~6 h); 25 x 65 x 105 mm, 190 g; the box has the
+  1-to-2 splitter the pigtail is cut from. The pack's switch is reachable from the -Y side with the lantern off.
+- Omron D2F datasheet: minimum applicable load 100 mA at 5 V (D2F), 1 mA at 5 V (D2F-01); the D2F-01L is the
+  0.1 A, 30 V DC hinge-lever model, OF 0.78 N max, same body as the D2F-L in the CAD. R7 (3.3 k from 5 V) gives
+  ~1.5 mA through the closed contact and R6/D3 ~0.65 mA more; D2 sits at ~0.2-0.3 V closed (NTE585 at <1 mA)
+  and 3.3 V open (D3 reverse-biased by 1.7 V, leakage in the µA, ~0.05 V across R6).
+- Hall: 4.7 k to 3V3 plus the internal pull-up sinks ~0.7 mA into the A3144's open collector (25 mA rated).
+- XIAO 5V through the NTE585: ~4.65 V into its regulator, fine; JP1 plus the "buck first, then USB" sequence
+  keeps the 74AHCT125 from being driven unpowered.
+- Protoboard: `generate.py`'s connectivity check passes; every net in `layout.py` was traced against the wiring
+  diagram and guide section 4 (R5 V09-V13, R6 X09-X13, R7 T03-X03, D3 X14->X18, D1 R08->W08->JP1->A09, U1 pins,
+  C1/C3, harness H01-H14): consistent. Mount holes (18,17), (55,15), (15,45), (58,45) are shared with the CAD.
+- Inserts: 3 + 4 + 6 + 11 + 4 + 2 + 1 + 1 = 32; screw engagement 4-5.3 mm in every insert with the existing
+  lengths; a 5.7 mm insert leaves 0.8 mm of the 6.5 mm bore.
+- Amazon (2026-10-15, default address): all 11 listings in stock, Prime Oct 16-17, free delivery Oct 20. Tubing
+  2 left, pump 12 left. Prices: switch $7.97 (was 7.99), green PETG $16.99 (was 13.99), others unchanged.
+- Videos: one frame per chapter (36 + 2) checked against the guide's order and the CAD: cartridge order (tray,
+  buck, strap then pack, S1, leads and deck, jack on the +X side, jar, tube then pump, board), two blocks under
+  the drum, tube route and 5 mm tip, flange screws before the upper dish, handle from the display side: all match.
+
+**Fixed:**
+- `dish_lower.stl`: the committed export had one coarse triangle on the outer cone between 17 and 38 mm up (print
+  frame), 0.7-0.8 mm inside the true surface; the source was unchanged (boolean difference against a fresh export:
+  142 mm3, only on the fresh side). Re-exported with the assembly and the renders that contain it. The other
+  regenerated STLs were identical (surface distance 0.000 mm); their STEP/PNG byte differences are timestamps and
+  font anti-aliasing and were discarded.
+- Guide: board holes now (18,17), (55,15), (15,45), (58,45) (were 15/55 x 15/45); three "pending a separate PR"
+  / "deferred to the battery CAD PR" leftovers and the contradictory "the Sheet has not been changed"; section 12
+  said the jack is "at the edge on your side", it is on your left (+X, display-side half); charger 0.5 A / ~6 h
+  added; switch row rewritten with the datasheet minimum load; inserts row 13a added; filament ~$49; total ~$205.
+- Sheet: inserts row (Fasteners / Amazon, $9.99, 1 pack, 32 used); straps 4 not 2-3, battery strap <= 1 mm;
+  protoboard note's hole pattern; the Oct 15 delivery/stock notes; two prices.
+- CONTEXT: the verifications above, PR count, the new total; README and `gen_wiring.py` lost their "PR #13
+  pending" wording; `CIRCUIT_PR.md` marked as the merged record.
+
+**Not changed, noted:** the videos have no source in the repo (they were rendered outside it); any further
+design change means re-recording them. The pump outline and every supplier dimension in `cad/README.md` are
+still limits to measure, not measurements.
+
+Checks after the review: build 0 problems, all four tests OK, firmware 20/20, compile 63136 bytes.
+

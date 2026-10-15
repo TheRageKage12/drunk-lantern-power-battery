@@ -1,5 +1,8 @@
 # Revise the power and sensor circuits and add the board assembly layout
 
+*(Record of PR #13, merged 2026-10-14. The battery CAD fit followed in PR #14, and the Sheet edits listed at the end
+have been applied.)*
+
 Revise the power and control circuit to give the pump and lighting more current headroom and make
 ring/twist detection more reliable. Update the connected circuit diagram and
 [build instructions](../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first), and add a complete
