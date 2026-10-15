@@ -4,22 +4,22 @@ Generated from `layout.py`. Front coordinates are retained on the mirrored rear 
 
 ## Cable attachments (solder side)
 
-| Cable | Pad | Other end |
-|---|---|---|
-| H01 | N01 | S1 switched output |
-| H02 | N02 | Battery negative / J1 sleeve |
-| H03 | O01 | Buck IN+ |
-| H04 | O02 | Buck IN− |
-| H05 | P01 | Buck OUT+ (set to 5.0 V) |
-| H06 | P02 | Buck OUT− |
-| H07 | R01 | Pump + / D2 striped end |
-| H08 | R02 | Pump − / D2 unstriped end |
-| H09 | S01 | LED + (JST SM) |
-| H10 | S02 | LED − (JST SM) |
-| H11 | U08 | Lock +5 V: A3144 pin 1 / C4 |
-| H12 | V08 | Lock HALL: A3144 pin 3 |
-| H13 | W08 | Lock SW: microswitch NO |
-| H14 | X08 | Lock GND: Hall pin 2 / COM / C4 |
+| Cable | Pad | Other end | Centre behind board |
+|---|---|---|---|
+| H01 | N01 | S1 switched output | 2.7 mm |
+| H02 | N02 | Battery negative / J1 sleeve | 6.5 mm |
+| H03 | O01 | Buck IN+ | 6.5 mm |
+| H04 | O02 | Buck IN− | 4.6 mm |
+| H05 | P01 | Buck OUT+ (set to 5.0 V) | 4.6 mm |
+| H06 | P02 | Buck OUT− | 8.4 mm |
+| H07 | R01 | Pump + / D2 striped end | 4.6 mm |
+| H08 | R02 | Pump − / D2 unstriped end | 8.4 mm |
+| H09 | S01 | LED + (JST SM) | 2.7 mm |
+| H10 | S02 | LED − (JST SM) | 2.7 mm |
+| H11 | U01 | Lock +5 V: A3144 pin 1 / C4 | 2.7 mm |
+| H12 | V01 | Lock HALL: A3144 pin 3 | 2.7 mm |
+| H13 | W01 | Lock SW: microswitch NO | 2.7 mm |
+| H14 | X01 | Lock GND: Hall pin 2 / COM / C4 | 2.7 mm |
 
 ## Every board wire
 
@@ -27,56 +27,56 @@ Generated from `layout.py`. Front coordinates are retained on the mirrored rear 
 |---|---|---|---|---|
 | W01 | N01 | O01 | VLOAD | Bare adjacent-pad link |
 | W02 | R01 | S01 | VLOAD | Bare adjacent-pad link |
-| W03 | O01 | R01 | VLOAD | Insulated rear wire |
-| W04 | H02 | N01 | VLOAD | Insulated rear wire |
+| W03 | O01 | R01 | VLOAD | Insulated; centre 2.7 mm behind board |
+| W04 | F02 | N01 | VLOAD | Insulated; centre 2.7 mm behind board |
 | W05 | N02 | O02 | GND | Bare adjacent-pad link |
 | W06 | O02 | P02 | GND | Bare adjacent-pad link |
 | W07 | P02 | Q02 | GND | Bare adjacent-pad link |
-| W08 | H04 | N02 | GND | Insulated rear wire |
-| W09 | R10 | Q02 | GND | Insulated rear wire |
-| W10 | R14 | P02 | GND | Insulated rear wire |
-| W11 | L16 | O02 | GND | Insulated rear wire |
-| W12 | B09 | L16 | GND | Insulated rear wire |
-| W13 | B09 | B07 | GND | Insulated rear wire |
-| W14 | B07 | B02 | GND | Insulated rear wire |
-| W15 | J15 | M17 | GND | Insulated rear wire |
-| W16 | M17 | M18 | GND | Insulated rear wire |
-| W17 | J15 | O08 | GND | Insulated rear wire |
-| W18 | M14 | M13 | GND | Insulated rear wire |
-| W19 | M13 | M11 | GND | Insulated rear wire |
-| W20 | M11 | M10 | GND | Insulated rear wire |
-| W21 | J09 | M10 | GND | Insulated rear wire |
-| W22 | J12 | M14 | GND | Insulated rear wire |
-| W23 | O08 | M10 | GND | Insulated rear wire |
-| W24 | X08 | O08 | GND | Insulated rear wire |
-| W25 | P01 | N08 | 5V_REG | Insulated rear wire |
-| W26 | N08 | M09 | 5V_REG | Insulated rear wire |
-| W27 | N08 | U08 | 5V_REG | Insulated rear wire |
-| W28 | U08 | U09 | 5V_REG | Insulated rear wire |
-| W29 | P01 | N17 | 5V_REG | Insulated rear wire |
-| W30 | Q17 | N18 | AFTER_D1 | Insulated rear wire |
-| W31 | O18 | A09 | XIAO_5V | Insulated rear wire |
-| W32 | C09 | V09 | 3V3 | Insulated rear wire |
-| W33 | V09 | W09 | 3V3 | Insulated rear wire |
-| W34 | A06 | B06 | ADC | Insulated rear wire |
-| W35 | B06 | A07 | ADC | Insulated rear wire |
-| W36 | A07 | A15 | ADC | Insulated rear wire |
-| W37 | A02 | H02 | VLOAD | Insulated rear wire |
-| W38 | V13 | V08 | HALL | Insulated rear wire |
-| W39 | V13 | B15 | HALL | Insulated rear wire |
-| W40 | W13 | C15 | TWIST | Insulated rear wire |
-| W41 | W13 | W14 | TWIST | Insulated rear wire |
-| W42 | U13 | W18 | SW | Insulated rear wire |
-| W43 | U13 | W08 | SW | Insulated rear wire |
-| W44 | D15 | J10 | PWM_P | Insulated rear wire |
-| W45 | J10 | J17 | PWM_P | Insulated rear wire |
-| W46 | E15 | J13 | PWM_L | Insulated rear wire |
-| W47 | J13 | J18 | PWM_L | Insulated rear wire |
-| W48 | J11 | P10 | GATE_P | Insulated rear wire |
-| W49 | J14 | P14 | GATE_L | Insulated rear wire |
-| W50 | Q10 | R02 | DRAIN_P | Insulated rear wire |
-| W51 | Q14 | S02 | DRAIN_L | Insulated rear wire |
-| W52 | L16 | J15 | GND | Insulated rear wire |
+| W08 | F04 | N02 | GND | Insulated; centre 2.7 mm behind board |
+| W09 | R13 | Q02 | GND | Insulated; centre 2.7 mm behind board |
+| W10 | R17 | P02 | GND | Insulated; centre 6.5 mm behind board |
+| W11 | I16 | O02 | GND | Insulated; centre 2.7 mm behind board |
+| W12 | A01 | F02 | VLOAD | Insulated; centre 4.6 mm behind board |
+| W13 | M10 | M09 | GND | Insulated; centre 2.7 mm behind board |
+| W14 | M13 | M12 | GND | Insulated; centre 2.7 mm behind board |
+| W15 | B09 | B07 | GND | Insulated; centre 2.7 mm behind board |
+| W16 | M12 | M10 | GND | Insulated; centre 2.7 mm behind board |
+| W17 | J14 | I16 | GND | Insulated; centre 4.6 mm behind board |
+| W18 | N16 | M18 | GND | Insulated; centre 4.6 mm behind board |
+| W19 | J08 | J11 | GND | Insulated; centre 6.5 mm behind board |
+| W20 | J11 | J14 | GND | Insulated; centre 4.6 mm behind board |
+| W21 | J08 | M09 | GND | Insulated; centre 2.7 mm behind board |
+| W22 | M13 | N16 | GND | Insulated; centre 2.7 mm behind board |
+| W23 | M09 | R09 | GND | Insulated; centre 2.7 mm behind board |
+| W24 | C01 | B07 | GND | Insulated; centre 2.7 mm behind board |
+| W25 | B09 | J08 | GND | Insulated; centre 6.5 mm behind board |
+| W26 | R09 | X01 | GND | Insulated; centre 4.6 mm behind board |
+| W27 | R08 | P09 | 5V_REG | Insulated; centre 4.6 mm behind board |
+| W28 | T03 | U01 | 5V_REG | Insulated; centre 2.7 mm behind board |
+| W29 | M08 | P09 | 5V_REG | Insulated; centre 2.7 mm behind board |
+| W30 | T03 | P01 | 5V_REG | Insulated; centre 6.5 mm behind board |
+| W31 | T03 | R08 | 5V_REG | Insulated; centre 2.7 mm behind board |
+| W32 | W08 | G17 | AFTER_D1 | Insulated; centre 2.7 mm behind board |
+| W33 | A09 | H17 | XIAO_5V | Insulated; centre 2.7 mm behind board |
+| W34 | V09 | X09 | 3V3 | Insulated; centre 2.7 mm behind board |
+| W35 | C09 | V09 | 3V3 | Insulated; centre 6.5 mm behind board |
+| W36 | A05 | A07 | ADC | Insulated; centre 2.7 mm behind board |
+| W37 | A05 | C05 | ADC | Insulated; centre 4.6 mm behind board |
+| W38 | A15 | A07 | ADC | Insulated; centre 8.4 mm behind board |
+| W39 | V13 | V01 | HALL | Insulated; centre 2.7 mm behind board |
+| W40 | B15 | V13 | HALL | Insulated; centre 4.6 mm behind board |
+| W41 | X13 | X14 | TWIST | Insulated; centre 2.7 mm behind board |
+| W42 | C15 | X14 | TWIST | Insulated; centre 8.4 mm behind board |
+| W43 | X03 | W01 | SW | Insulated; centre 4.6 mm behind board |
+| W44 | X03 | X18 | SW | Insulated; centre 6.5 mm behind board |
+| W45 | D15 | J16 | PWM_P | Insulated; centre 8.4 mm behind board |
+| W46 | J09 | J16 | PWM_P | Insulated; centre 8.4 mm behind board |
+| W47 | E15 | I18 | PWM_L | Insulated; centre 6.5 mm behind board |
+| W48 | E15 | J12 | PWM_L | Insulated; centre 4.6 mm behind board |
+| W49 | J10 | P13 | GATE_P | Insulated; centre 4.6 mm behind board |
+| W50 | J13 | P17 | GATE_L | Insulated; centre 2.7 mm behind board |
+| W51 | Q13 | R02 | DRAIN_P | Insulated; centre 6.5 mm behind board |
+| W52 | Q17 | S02 | DRAIN_L | Insulated; centre 4.6 mm behind board |
 
 ## Every component lead and attachment pad
 
@@ -98,52 +98,52 @@ For resistors/capacitors `.1` and `.2` are drawing lead IDs. C2.1 is +; C2.2 is 
 | MCU.D4 | E15 | PWM_L |
 | MCU.D5 | F15 | NC_D5 |
 | MCU.D6 | G15 | NC_D6 |
-| U1.1 | J09 | GND |
-| U1.2 | J10 | PWM_P |
-| U1.3 | J11 | GATE_P |
-| U1.4 | J12 | GND |
-| U1.5 | J13 | PWM_L |
-| U1.6 | J14 | GATE_L |
-| U1.7 | J15 | GND |
-| U1.8 | M15 | NC_U8 |
-| U1.9 | M14 | GND |
-| U1.10 | M13 | GND |
-| U1.11 | M12 | NC_U11 |
-| U1.12 | M11 | GND |
-| U1.13 | M10 | GND |
-| U1.14 | M09 | 5V_REG |
-| Q1.G | P10 | GATE_P |
-| Q1.D | Q10 | DRAIN_P |
-| Q1.S | R10 | GND |
-| Q2.G | P14 | GATE_L |
-| Q2.D | Q14 | DRAIN_L |
-| Q2.S | R14 | GND |
-| R1.1 | A02 | VLOAD |
-| R1.2 | A06 | ADC |
-| R2.1 | B02 | GND |
-| R2.2 | B06 | ADC |
-| R3.1 | J17 | PWM_P |
-| R3.2 | M17 | GND |
-| R4.1 | J18 | PWM_L |
+| U1.1 | J08 | GND |
+| U1.2 | J09 | PWM_P |
+| U1.3 | J10 | GATE_P |
+| U1.4 | J11 | GND |
+| U1.5 | J12 | PWM_L |
+| U1.6 | J13 | GATE_L |
+| U1.7 | J14 | GND |
+| U1.8 | M14 | NC_U8 |
+| U1.9 | M13 | GND |
+| U1.10 | M12 | GND |
+| U1.11 | M11 | NC_U11 |
+| U1.12 | M10 | GND |
+| U1.13 | M09 | GND |
+| U1.14 | M08 | 5V_REG |
+| Q1.G | P13 | GATE_P |
+| Q1.D | Q13 | DRAIN_P |
+| Q1.S | R13 | GND |
+| Q2.G | P17 | GATE_L |
+| Q2.D | Q17 | DRAIN_L |
+| Q2.S | R17 | GND |
+| R1.1 | A01 | VLOAD |
+| R1.2 | A05 | ADC |
+| R2.1 | C01 | GND |
+| R2.2 | C05 | ADC |
+| R3.1 | J16 | PWM_P |
+| R3.2 | N16 | GND |
+| R4.1 | I18 | PWM_L |
 | R4.2 | M18 | GND |
 | R5.1 | V09 | 3V3 |
 | R5.2 | V13 | HALL |
-| R6.1 | W09 | 3V3 |
-| R6.2 | W13 | TWIST |
-| R7.1 | U09 | 5V_REG |
-| R7.2 | U13 | SW |
-| D1.1 | N17 | 5V_REG |
-| D1.2 | Q17 | AFTER_D1 |
-| D3.1 | W14 | TWIST |
-| D3.2 | W18 | SW |
+| R6.1 | X09 | 3V3 |
+| R6.2 | X13 | TWIST |
+| R7.1 | T03 | 5V_REG |
+| R7.2 | X03 | SW |
+| D1.1 | R08 | 5V_REG |
+| D1.2 | W08 | AFTER_D1 |
+| D3.1 | X14 | TWIST |
+| D3.2 | X18 | SW |
 | C1.1 | A07 | ADC |
 | C1.2 | B07 | GND |
-| C3.1 | N08 | 5V_REG |
-| C3.2 | O08 | GND |
-| C2.1 | H02 | VLOAD |
-| C2.2 | H04 | GND |
-| JP1.1 | N18 | AFTER_D1 |
-| JP1.2 | O18 | XIAO_5V |
+| C3.1 | P09 | 5V_REG |
+| C3.2 | R09 | GND |
+| C2.1 | F02 | VLOAD |
+| C2.2 | F04 | GND |
+| JP1.1 | G17 | AFTER_D1 |
+| JP1.2 | H17 | XIAO_5V |
 | H01 | N01 | VLOAD |
 | H02 | N02 | GND |
 | H03 | O01 | VLOAD |
@@ -154,9 +154,9 @@ For resistors/capacitors `.1` and `.2` are drawing lead IDs. C2.1 is +; C2.2 is 
 | H08 | R02 | DRAIN_P |
 | H09 | S01 | VLOAD |
 | H10 | S02 | DRAIN_L |
-| H11 | U08 | 5V_REG |
-| H12 | V08 | HALL |
-| H13 | W08 | SW |
-| H14 | X08 | GND |
+| H11 | U01 | 5V_REG |
+| H12 | V01 | HALL |
+| H13 | W01 | SW |
+| H14 | X01 | GND |
 | BUS.GND | Q02 | GND |
-| BUS.LOGIC | L16 | GND |
+| BUS.LOGIC | I16 | GND |

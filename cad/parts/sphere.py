@@ -76,6 +76,8 @@ NOZZLE_TIP_DXZ = (ARC_END[0] + P.NOZZLE_TIP_OUT * NOZZLE_DIR[0], ARC_END[1] + P.
 GROMMET_XY = (P.NOZZLE_TIP_XY[0] - NOZZLE_TIP_DXZ[0], P.NOZZLE_TIP_XY[1])   # (-37, -31.1): tube exit
 NOZZLE_TIP_Z = WALL_Z0 + NOZZLE_TIP_DXZ[1]                 # -30.3: tube end, 6.7 mm above the rim
 GUIDE_SCREW = (GROMMET_XY[0] - 8.0, GROMMET_XY[1] - 10.0)   # nozzle guide foot screw
+GUIDE_INSERT_BOSS_R = 4.0                   # 2 mm plastic wall around the 4 mm insert bore
+GUIDE_INSERT_BOSS_BOTTOM = P.FLOOR - P.M3_INSERT_DEPTH - 1.5  # 1.5 mm closed end below the insert
 WIRE_SLOT_XY = (35.0, -32.0)                               # cables down, behind the wall
 WIRE_HOLE_D = 7.0
 
@@ -166,6 +168,11 @@ def handle_boss(sign):
                      HANDLE_PLANE_Y - BOSS_POCKET_T / 2, HANDLE_PLANE_Y + BOSS_POCKET_T / 2, -BOSS_POCKET_DEPTH, 1.0)
     # insert in the pocket's inner (sphere-side) wall, axis along X, from the pocket face inward
     ins_x = sign * (LEG_X - BOSS_POCKET_W / 2)
+    # Continue the receiving boss through the curved inner shell so the insert
+    # has a closed end and full surrounding wall, rather than breaking into the sphere.
+    blk = blk.union(cq.Workplane('YZ').workplane(offset=ins_x)
+                    .center(HANDLE_PLANE_Y, BOSS_SCREW_Z).circle(4.5)
+                    .extrude(-sign * (P.M3_INSERT_DEPTH + 1.5)))
     insert = (cq.Workplane('YZ').workplane(offset=ins_x).center(HANDLE_PLANE_Y, BOSS_SCREW_Z)
               .circle(P.M3_INSERT_HOLE / 2).extrude(-sign * P.M3_INSERT_DEPTH))
     # access hole through the pocket's outer wall, so the leg screw's head can be reached with a hex key
@@ -230,7 +237,10 @@ def bay_floor():
         f = f.cut(big_box(x0, x1, yc - WALL_T / 2 - 0.4, yc + WALL_T / 2 + 0.4, -1, P.FLOOR + 1))
     f = f.cut(cyl(P.TUBE_GROMMET_D / 2, -1, P.FLOOR + 3, *GROMMET_XY))
     f = f.cut(cyl(WIRE_HOLE_D / 2, -1, P.FLOOR + 3, *WIRE_SLOT_XY))
-    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, -1, P.FLOOR + 1, *GUIDE_SCREW))   # nozzle guide screw
+    # The 2 mm tray floor alone cannot retain a 6 mm insert. Extend its boss
+    # downward into a matching relief in the lower dish; the nozzle stays at its existing height.
+    f = f.union(cyl(GUIDE_INSERT_BOSS_R, GUIDE_INSERT_BOSS_BOTTOM, P.FLOOR, *GUIDE_SCREW))
+    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, P.FLOOR - P.M3_INSERT_DEPTH, P.FLOOR + .5, *GUIDE_SCREW))
     return f
 
 
@@ -360,7 +370,7 @@ def build():
         'sphere_front': front.rotate((0, 0, 0), (1, 0, 0), -90),   # dome up, split face on the bed
         'sphere_rear': rear.rotate((0, 0, 0), (1, 0, 0), 90),
         'diffuser': diffuser(),
-        'bay_floor': bay_floor(),
+        'bay_floor': bay_floor().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.FLOOR + 2)),  # insert boss up
         'glass_well': glass_well(),
         'lock_wall': lock_wall().rotate((0, 0, 0), (1, 0, 0), -90),     # lie flat: back face (rows, posts) up
         'curtain_clamp': curtain_clamp(),
@@ -395,7 +405,7 @@ def placements():
         'sphere_front': unflat('sphere_front', 90, (0, 0, Z)),
         'sphere_rear': unflat('sphere_rear', -90, (0, 0, Z)),
         'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
-        'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
+        'bay_floor': ((1, 0, 0), 180, (0, 0, Z + BAY_FLOOR_Z + P.FLOOR + 2)),
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
         'lock_wall': unflat('lock_wall', 90, (0, WALL_BACK_Y, Z + WALL_Z0)),
         'curtain_clamp': ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_TOP - UPPER_PLUG_H - CLAMP_T)),   # under the upper dish plug

@@ -4,15 +4,19 @@ A Halloween prop: a 3D-printed Green Lantern power battery (about 470 mm tall, 1
 with a hidden peristaltic pump, a hidden nozzle, and a twist-to-pour lock inside the sphere.
 Punch in through a strip curtain so the ring seats in the lock, then twist and hold it through the oath: the
 pump pours about 1 oz into the shot glass under the lock while the light climbs; turn back and the light
-swells and goes dark. Slide the glass out and drink. The previous parts estimate was about $186; the proposed electrical revision adds about $5 in parts before tax and shipping.
+swells and goes dark. Slide the glass out and drink. Current prices and purchase status are maintained in the shared shopping Sheet.
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
 assembly, wiring, firmware, calibration, testing, cleaning). Shopping list (who has what, what's left to buy, links and prices): the
 [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).
 
-**Electrical revision:** [updated circuit](docs/images/wiring.svg) and [local PR draft](docs/review/CIRCUIT_PR.md).
-The selected TalentCell battery does **not** fit the existing KBT supports unchanged; matching CAD changes
-are deferred to a separate PR. The shared shopping Sheet remains unchanged pending acceptance.
+**Current build:** [circuit](docs/images/wiring.svg), [board assembly](docs/review/protoboard/README.md),
+and [CAD fit limits](cad/README.md#electronics-fit-limits). The tray now fits the selected TalentCell case;
+verify the listed component and connector dimensions before printing. PR #13 is merged and its shopping Sheet updates are complete.
+
+**Assembly videos:** [Build order (4:30)](docs/videos/assembly-guide.mp4) ·
+[Exploded assembly (0:12)](docs/videos/separate-and-assemble.mp4) ·
+[Opening for service (0:12)](docs/videos/service-access.mp4).
 
 ## The printed parts
 

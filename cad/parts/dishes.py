@@ -205,6 +205,13 @@ def build_dish_lower():
     for a in JOINT_BOSS_ANGLES:
         body = body.cut(_radial_pilot(z_base_screw, a, r_sp_o))        # pilot from the spigot OD inward
         body = body.cut(_radial_pilot(z_sphere_screw, a, r_ring_o))    # pilot from the ring OD inward
+    # Clearance for the bay floor's downward nozzle-guide insert boss.
+    from parts import sphere as S
+    z_floor = BAY_FLOOR_SEAT_Z - LOWER_PRINT_TO_ASSEMBLY_DZ
+    relief = (cq.Workplane('XY').workplane(offset=z_floor + S.GUIDE_INSERT_BOSS_BOTTOM - P.FIT)
+              .center(*S.GUIDE_SCREW).circle(S.GUIDE_INSERT_BOSS_R + P.FIT)
+              .extrude(-S.GUIDE_INSERT_BOSS_BOTTOM + 2 * P.FIT))
+    body = body.cut(relief)
     return body
 
 

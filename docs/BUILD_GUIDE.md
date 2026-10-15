@@ -10,12 +10,21 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 
 "Your side" means the hand opening; "display side" means the window opposite it.
 
+**Assembly videos:** [Step-by-step assembly guide (4:30)](videos/assembly-guide.mp4) ·
+[Exploded assembly (0:12)](videos/separate-and-assemble.mp4) ·
+[Opening for service (0:12)](videos/service-access.mp4).
+The assembly guide follows the build order and includes chapter markers. The exploded view illustrates
+how the parts fit together; use the guide for the actual sequence. The guide includes two orange-tube
+cutaways showing the pump-to-floor route and nozzle threading. The pump outlet and loose service loop
+are illustrative; confirm their fit with the actual parts. Wiring, curtain and metal fasteners are
+described where needed but are not individually animated.
+
 ![interaction timeline](images/interaction.png)
 
 **Status.** Designed, modelled and simulated; not yet built. The firmware previously compiled and still passes 20 simulated
-safety scenarios (`firmware/test`). The existing CAD passed its previous fit checks, but **still models the old KBT battery**.
-The selected TalentCell pack needs revised supports and clearance checks in a separate CAD PR;
-do not print the battery tray/deck for this revision yet. Also measure the Kamoer pump and your jar. Every bay is parametric
+safety scenarios (`firmware/test`). The CAD now includes the TalentCell mount and electronics clearance envelopes.
+The fit checks cover the reserved dimensions in [CAD fit limits](../cad/README.md#electronics-fit-limits);
+measure the actual capacitor, connectors, buck, switch, pump and jar before printing. Every bay is parametric
 (`cad/params.py`), so a measured number is a one-line change and a re-run of `python3 build.py`.
 
 ---
@@ -90,11 +99,11 @@ works on 3.3 V and either magnet pole.
 | 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
-| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They thread straight into the printed holes, except the 3 thumbscrews, 5 at the lock and the handle's 6 lap screws, which go into the 14 nuts. |
+| 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. Use 32 M3-thread brass heat-set inserts in the receiving holes (4 mm bore, 6.5 mm deep). The 3 thumbscrews, 5 lock screws and 6 handle lap screws still use the 14 nuts. Insert price is not included. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The proposed electrical changes add $4.69 in parts before tax and shipping; refresh the Sheet totals after acceptance. Two of the local items have size limits; measure in the store:
+**Previous design total (not a quote for this revision): about $186 before tax**: Amazon $118.02, Vetco $41.88, Tacoma Screw ~$12, and ~$14 of local estimates for the spring, the jar, the curtain sheet and the shot glass (the [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the store-by-store list). The accepted electrical changes added $4.69 in parts before tax and shipping; the live Sheet has been updated. Two of the local items have size limits; measure in the store:
 
 - **A food-safe jar no bigger than 73 mm across (lid included) and 76 mm tall** (Micro Homebrew in Kenmore has small food-safe jars; measure with the lid on).
 - **A 1.5 oz shot glass** up to 52 mm across the top and 62 mm tall (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps.
@@ -107,7 +116,7 @@ The total assumes you already have:
   countersunk screws, a small flat screwdriver for the LM2596's trimmer, a hobby knife and ruler, a USB-C data
   cable for the XIAO, and a kitchen scale or measuring cup for calibration (1 g of water = 1 mL).
 - A dab of silicone grease or petroleum jelly for the lock's ramp and plunger.
-- 2-3 hook-and-loop straps 20 mm wide (pump and jar; the battery's is optional) and about 10 small zip ties
+- 4 hook-and-loop straps 20 mm wide (two pump, one jar, one battery; battery strap <=1 mm thick beneath tray) and about 10 small zip ties
   (2.5 mm wide, for the LM2596 and cable tidying). Any hardware store, ~$5 if you have none.
 
 ### 2.3 Seattle-area stores (verified open on 2026-10-11; call before driving for specific stock)
@@ -142,9 +151,22 @@ initial layer horizontal expansion -0.2): the spigots, the locating rings and th
 first layers, with 0.3 mm of clearance a side, and a flared first layer on both parts eats that. If a ring still
 binds, sand the smaller part's edge. Turn "print thin walls" on for `socket_base` (the sensor post's walls).
 
-**Screws go straight into the plastic.** Every screw hole is a 2.7 mm pilot. Drive each M3 in slowly the
-first time so it cuts its own thread, and don't over-tighten. If a hole strips, a heat-set insert rescues it
-(see section 15).
+**Install the brass heat-set inserts before assembly.** All 32 receiving holes are **4 mm diameter ×
+6.5 mm deep**. Use inserts with M3 internal threads compatible with those bores. Fit them flush with the
+entry face, let them cool, and check that each screw turns freely before mounting components. Follow the
+insert supplier's installation temperature and test one in a scrap print first. The 3.4 mm screw
+through-holes, countersinks and captured-nut pockets retain their separate dimensions.
+
+| Printed part | Inserts | Entry side |
+|---|---:|---|
+| `base_tray` | 3 | Tops of the deck-support pillars |
+| `base_deck` | 4 | Faces of the circuit-board mounting pads |
+| `dish_lower` | 6 | Outside faces of the two rings, three per ring |
+| `dish_upper` | 11 | Four top-diffuser holes, three outer radial holes, four underside curtain-clamp holes |
+| `sphere_front` | 4 | Split-face bosses |
+| `sphere_rear` | 2 | Inner walls of the two handle sockets; insert before fitting the legs |
+| `bay_floor` | 1 | Top face, under the nozzle-guide foot |
+| `socket_housing` | 1 | Open back, beside the switch cavity |
 
 Print these first, before any big part, and check them:
 
@@ -166,8 +188,8 @@ Print these first, before any big part, and check them:
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
 | `base` (drum) | 190 x 190 x 115 | top band down | no | green | 232 |
-| `base_tray` (cartridge floor, with the switch pocket) | 179 x 179 x 44 | flat | no | green | 92 |
-| `base_deck` | 178 x 177 x 47 | flat | no | any | 112 |
+| `base_tray` (cartridge floor, with the switch pocket) | 179 x 179 x 44 | flat | no | green | 91 |
+| `base_deck` | 179 x 179 x 47 | flat | under the four electronics mounting pads; remove fully before fitting board | any | 111 |
 | `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 1 |
 | `dish_lower` | 190 x 190 x 91 | mouth down | the 2.8 mm ring under the rim, 8 mm up: supports touching the build plate only | green | 184 |
 | `dish_upper` | 180 x 180 x 86 | floor down, mouth up | the 2.7 mm ring under the floor, 9 mm up: supports touching the build plate only | green | 220 |
@@ -177,7 +199,7 @@ Print these first, before any big part, and check them:
 | `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 13 |
 | `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 23 |
 | `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 3 |
-| `bay_floor` | 131 x 131 x 4 | flat | no | any | 21 |
+| `bay_floor` | 131 x 131 x 10 | insert boss up, as exported | under the recessed floor inside the drip lip | any | 21 |
 | `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 38 |
 | `nozzle_guide` | 47 x 17 x 34 | foot down, as exported | a small tree support under the end of the bend | any | 3 |
 | `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 17 |
@@ -187,12 +209,12 @@ Print these first, before any big part, and check them:
 | `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 32 |
 | `rotor` | 44 x 37 x 8 | bottom face down (skirt on the bed, key pocket up) | no | green | 7 |
 | `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
-| `switch_bracket` | 21 x 10 x 7 | flat, pegs up | no | any | 1 |
+| `switch_bracket` | 23 x 10 x 7 | flat, pegs up | no | any | 1 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
 | `key_cap` | 28 x 24 x 3 | flat face down | no | green | 2 |
 | **Total** | | | | | **~1240 g** |
 
-Supports: none, except inside the two sphere halves, under the nozzle guide's bend, and the thin rings under the
+Supports: none, except inside the two sphere halves, beneath the inverted bay floor, under the nozzle guide's bend, and the thin rings under the
 two dishes' bearing faces (they start in mid-air 8-9 mm up; "touching build plate only" support is a short ring
 that pulls off clean). Print the halves split-face
 down; the last 15 mm of dome around the window and the hand opening overhang more than 45 degrees, so enable
@@ -474,7 +496,7 @@ on a single-colour strip.
    (4 x M3x8 flat-head, from above).
 5. **Curtain.** From one frosted sheet, cut 13 strips 12 mm wide and 97 mm long. Lay them side by side, each
    overlapping the next by 2 mm, along the curved `curtain_clamp`, and screw the clamp to the underside of
-   `dish_upper`'s plug (4 x M3x8 into the four pilots that bracket one of the plug's three radial screw holes;
+   `dish_upper`'s plug (4 x M3x8 into the four inserts that bracket one of the plug's three radial screw holes;
    that side faces the hand opening), the strips sandwiched between. A strip of double-sided tape or a few
    dots of glue on the clamp hold the 13 strips while you screw it. They hang down behind the hand opening once the dish is on.
 6. **Display diffuser.** It sits on the ledge behind the window of `sphere_front`. A few dots of glue hold it.
@@ -486,14 +508,25 @@ on a single-colour strip.
 Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
 
 1. **Cartridge.** Stand `base_tray` with the switch pocket (the raised box near the rim) toward you. The
-   LM2596 goes in its pocket on the right, zip-tied through the two slots beside it; the battery pack flat in
-   the middle, leads toward you (the deck sits 2 mm above it and holds it down; a strap through the tray's
-   slots is optional). S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
-   through the open notch in the deck's edge beside the jack hole (the deck's other slot is a closed hole, so
+   LM2596 goes in its pocket on the right, on its four 2 mm printed corner supports, zip-tied through the slots beside it.
+   Check that no underside solder joint rests on a support.
+   The TalentCell lies flat in the middle, **connector/switch end away from you (-Y)**, at the low end stop.
+   Thread a 20 mm strap through both slots before fitting the pack; its lower run sits in the underside
+   recess and must be no thicker than 1 mm. Tighten the strap: the deck is 17 mm above the case and does
+   not retain it. Check the plugged-in lead and bend fit the 25 mm space beyond the battery end.
+   S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
+   through the open notch at the deck's edge (the deck's other slot is a closed hole, so
    a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
-   three pillars that have holes; it fits one way). Jack in the deck's 8 mm hole, socket up, nut tight. Jar in its ring with a strap through the finger slots, pump in
-   its saddles with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
-   drilled).
+   three pillars that have holes; it fits one way). The jack goes socket-up in the relocated 8 mm hole
+   on the side opposite the buck converter (+X, y=-25), clear of the populated board. Check its charging
+   plug fits with the shell off. Jar in its ring with a strap through the finger slots. **Fit the tube
+   to the pump now, while the cartridge is exposed:** open the head, lay the continuous tube around
+   the rollers and close the cap. Leave the outlet end free for later threading to the nozzle. Then
+   seat the pump in its saddles and secure it with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
+   drilled). Keep the inline lock/LED plugs above the unused module pocket, clear of the battery supports.
+   Remove all print support from the four board pads; clipped leads and rear wiring must stay within
+   the 10 mm gap (use the revised pad positions and wire layers in the board guide). Verify access to JP1 and the pack switch with the shell off; undo the three deck screws
+   if needed for pack service. Route and tie the battery lead along the tray edge, clear of retaining bosses.
 2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
    holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
    its spigot goes into the top of the drum, 3 x M3x8 from outside. The drum stays with the lantern from now on.
@@ -502,12 +535,15 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    Lay `bay_floor` on the lower dish's locating ring: the long slot points at you, the two short slots for the
    wall's tabs sit either side in the far half, the tube hole and the 7 mm cable hole are beyond the wall line
    (tube on the right, cables on the left; the lock cable and LED lead already pass through it, section 4
-   step 7, and their plugs go down through the lower dish to the board). Feed the tube up through the tube
-   hole. Drop `glass_well` into the long slot, its ridge end toward the display side; it hangs from its flange.
+   step 7, and their plugs go down through the lower dish to the board). Take the free end of the continuous
+   tube leaving the pump on the cartridge beside the shell. Leave about 30 cm extra between pump and bay floor
+   for the service loop, then feed the end up through the lower dish neck and the separate tube hole in
+   `bay_floor`. There is no connector at the floor. Drop `glass_well` into the long slot, its ridge end
+   toward the display side; it hangs from its flange.
 4. **Nozzle.** Push the tube up through the hole in `nozzle_guide`'s foot and along the channel, pressing it
    in through the open side where it resists (the slit is a little narrower than the tube), so 5 mm sticks out
-   past the end, pointing down. Screw the foot down (1 x M3x8; its tip comes out 3 mm under the bay floor, into
-   the dish neck, which is fine), open side toward you, the curve reaching toward the middle.
+   past the end, pointing down. Screw the foot into the bay-floor insert (1 x M3x8), open side toward you,
+   the curve reaching toward the middle. The insert boss below the floor fits the matching relief in the lower dish.
 5. **Lock wall.** Stand the wall in its two slots, lock facing you. Its back closes the nozzle guide's open
    side; check the tube sits in the channel and its end still points down into the glass slot. Take up the
    slack in the lock cable and LED leads down through the cable hole.
@@ -522,7 +558,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    curtain goes down behind the hand opening, feeding the slack down behind the wall, and screw it on, 3 x M3x8.
 8. **Handle.** The part names are from the display side, so `handle_leg_left` goes on your right. Each leg
    plugs into a boss on the rear half, counterbore facing outward; one M3x12 each goes in horizontally through
-   the round hole in the boss's outer wall, 6 mm into the leg's counterbore and on into the pilot on the sphere
+   the round hole in the boss's outer wall, 6 mm into the leg's counterbore and on into the insert on the sphere
    side, pointing at the lantern's axis (a long 2.5 mm hex key). The two arcs lap-joint to the legs and to
    each other with 6 x M3x12 and nuts, left leg with left arc.
 9. **Join the lantern and the cartridge.** Plug the lock and LED plugs together, coil the tube's slack above
@@ -677,7 +713,6 @@ flattened.
 | Upgrade | Cost | How |
 |---|---|---|
 | Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
-| Heat-set inserts instead of screwing into plastic | ~$10 | Set `M3_INSERT_HOLE = 4.0` in `cad/params.py` and re-run `build.py`. Inserts: [ruthex M3 x 5.7 mm (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3). |
 | Fuse | ~$3 | An inline 2 A slow-blow fuse between the pack and S1. The pack's protection board already cuts out on a short. |
 | Steady LED brightness on a draining battery | ~$6 | A small buck-boost converter set to 12.0 V between the +12 V rail and the LED strip's + (the pump keeps its firmware compensation). Without it the strip dims as the pack drains: ~70 % of its current at half charge (~11.3 V), a third to a half at 10 V. Charging at half keeps it bright enough. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |

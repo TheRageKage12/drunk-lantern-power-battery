@@ -50,6 +50,7 @@ def main():
     t0 = time.time()
     all_parts = {}      # name -> (print-oriented Workplane, module name)
     placements = {}     # name -> (axis, angle, translate)
+    problems = 0
     for mod in discover(selected):
         t = time.time()
         built = mod.build()
@@ -57,8 +58,11 @@ def main():
         for name, wp in built.items():
             if not wp.val().isValid():
                 print(f'  ! INVALID solid: {name}')
+                problems += 1
             x, y, z = (wp.val().BoundingBox().xlen, wp.val().BoundingBox().ylen, wp.val().BoundingBox().zlen)
             fits = x <= PRINT_BED[0] + 1e-6 and y <= PRINT_BED[1] + 1e-6 and z <= PRINT_BED[2] + 1e-6
+            if not fits and not name.endswith('_envelope'):
+                problems += 1
             vol = wp.val().Volume() / 1000.0
             print(f'  {name:24s} {x:6.1f} x {y:6.1f} x {z:6.1f} mm  {vol:7.1f} cm3  {"fits bed" if fits else "!! TOO BIG"}')
             export(name, wp)
@@ -74,13 +78,16 @@ def main():
             assembly.write_assembly(all_parts, placements, OUT)
         except Exception as e:
             print(f'assembly step skipped: {e}')
+            problems += 1
         try:
             import checks
-            checks.run(all_parts, placements)
+            problems += checks.run(all_parts, placements)
         except Exception as e:
             print(f'checks failed to run: {e}')
+            problems += 1
     print(f'done in {time.time() - t0:.1f}s -> {OUT}')
+    return 1 if problems else 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

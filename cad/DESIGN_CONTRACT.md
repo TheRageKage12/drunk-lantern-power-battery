@@ -336,3 +336,31 @@ exception in build.py output.
   raised jar and pump clear the lower dish's inner wall: pump envelope 6.0 mm, jar envelope 5.4 mm. The upper
   dish keeps a 180 mm mouth (UPPER_DISH_MOUTH_D, own cone slope): the handle legs pass its rim (2 mm), and moving
   them out would make sphere_rear ~231 mm wide, past the Ender 3 bed. The sphere is unchanged.
+
+
+## Revision 9i — circuit fit (2026-10-14)
+
+TalentCell YB1203000 replaces the old battery envelope: 105 × 65 × 25 mm, ports toward -Y. Resize tray
+rails, stops, pillars and matching deck holes. Keep deck underside at z=44 mm (`CARTRIDGE_DECK_Z`),
+so jar/pump/board positions stay fixed. A 20 mm strap at y=25 is required; its <=1 mm underside run sits
+in a recessed channel, clear of pillars. Reserve 25 mm beyond the battery end for its plug and bend.
+Four rectangular electronics mounting pads replace the sloped gussets to preserve the board drawing's
+rear-wire space; support their undersides during printing. Model populated-board and off-board
+component allowances and test shell removal with the retaining-boss sweep. See `README.md` for exact
+fit limits and remaining measurements. No outer-shell, circuit, GPIO or firmware behavior change.
+
+- CAD fit follow-up: the charging plug at the old jack position overlapped the populated board. Move
+  the deck jack to (74, -25), retaining upward access with the shell off; model both jack and plugged-in
+  lead. Compound-solid collision checks now examine solid pairs to avoid operand-order false negatives.
+
+
+### Heat-set insert mounting update (2026-10-14)
+
+Supersedes the earlier self-tapping screw plan: all 32 printed receiving bores are Ø4.0 × 6.5 mm
+for M3-thread brass inserts. Clearance holes, countersinks and the 14 captured-nut connections are unchanged.
+The bay floor now has an 8 mm diameter boss beneath the nozzle screw, with a 1.5 mm closed end;
+the lower dish has a matching relief with 0.3 mm clearance. The floor exports inverted (boss up),
+requiring support under the floor inside its drip lip. The handle sockets have inward boss extensions
+so their bores retain a closed end. The switch-bracket screw moves 1.5 mm away from the switch cavity;
+the bracket and matching base-plate slot follow it, leaving 1.5 mm plastic between the bore and cavity.
+These changes preserve nozzle, handle-leg and microswitch-body positions.

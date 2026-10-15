@@ -166,6 +166,18 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
     from the side, and raising the handle didn't help.
   - `DECK_GAP = 2` keeps the pack held down.
 
+### Threaded mounts — 2026-10-14
+
+- The owner selected brass heat-set inserts and requested 4 mm holes at least 6 mm deep. All 32
+  receiving bores are now Ø4 × 6.5 mm, for M3 internal threads; this supersedes the self-tapping plan.
+- Added backing at the handle mounts and a nozzle insert boss beneath the bay floor, with a matching
+  lower-dish relief. The bay floor now prints inverted with support inside its drip lip.
+- Moved the twist-switch mounting screw 1.5 mm away from the cavity, with its bracket and base slot,
+  to leave plastic around the wider insert. Switch-body and nozzle positions remain unchanged.
+- Install inserts before mechanical assembly. The existing screw clearance holes, countersinks and
+  14 nut joints remain unchanged. Sheet changes wait for acceptance: record 32 inserts and verify
+  their selected listing/price; no insert price or purchase is assumed.
+
 ### Power (the latest decision wins; this changed several times)
 - History:
   1. INIU power bank plus Adafruit PD trigger cable
@@ -181,9 +193,10 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9g). The repository
   - Use a male DC5521 pigtail cut from the supplied splitter, verified centre-positive. Keep charge jack
     before S1; use the supplied charger. TalentCell's own switch must be ON for operation and charging;
     S1 remains OFF during charging. Both switches OFF for storage.
-  - **CAD remains at the old KBT 70 x 55 x 40 mm envelope.** Battery supports, connector/switch access,
-    deck height and clearances are deferred to a separate CAD PR at the owner's request. Do not treat
-    existing base exports as ready for this battery. No mechanical geometry changes in this revision.
+  - CAD now uses the 105 × 65 × 25 mm case, connector/switch end toward -Y. Revised tray rails,
+    end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
+    z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
+    lower run is recessed under the tray. Verify the supplied plug and bend fit the 25 mm end allowance.
 - The charge jack (2.1 mm panel jack, 8 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
   down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
@@ -359,3 +372,33 @@ the 2026-10-13 starting point; the sheet is the source of truth.
   Physical board offsets, capacitor dimensions and assembled clearances remain unverified.
   CAD changes are separate. Live Sheet edits wait for acceptance and separate owner review;
   estimated parts delta is $4.69 before tax/shipping, with an October 20 delivery cutoff.
+
+- **2026-10-14, CAD circuit fit:** resize TalentCell tray supports and matching deck holes while keeping
+  the deck at z=44 mm. Ports face -Y to avoid the hidden switch pocket. Strap slots move clear of pillars;
+  add an underside recess for the required strap. Remove mounting-pad gussets that intruded into board
+  wiring space (four small print supports now required). Add non-printing electronic/component/cable
+  envelopes and strict assembly/removal checks; dimensions not published by suppliers remain explicit
+  limits to measure. Outer shell and circuit unchanged. PR #13 merged; its live Sheet updates are complete.
+
+- CAD fit follow-up: the charging plug at the old jack position overlapped the populated board. Move
+  the deck jack to (74, -25), retaining upward access with the shell off; model both jack and plugged-in
+  lead. Compound-solid collision checks now examine solid pairs to avoid operand-order false negatives.
+
+- **2026-10-14, brass inserts:** owner requested Ø4 mm bores at least 6 mm deep. Updated all 32 to
+  6.5 mm depth, reinforced handle/nozzle mounts, relieved the lower dish and moved the switch screw
+  with its bracket/slot. Added solid-geometry bore, wall, end-depth and mating-clearance checks;
+  regenerated ten changed printed parts and the assembly previews. See the threaded-mount decision above.
+
+- **2026-10-14, assembly videos in the repository:** owner requested the three MP4s in PR #14,
+  without the local web page. Store them in `docs/videos/`, linked from README and BUILD_GUIDE:
+  assembly order (4:08, 34 chapters), exploded view (0:12) and service access (0:12).
+
+- **2026-10-14, show the tubing route:** the owner pointed out that the assembly video did not show
+  running the tube from pump to nozzle. Added two animated cutaways before the lock wall is installed:
+  pump outlet/service loop through lower dish and bay floor, then the nozzle riser/bend and 5 mm tip.
+  Video is now 4:30 with 36 chapters. Lower routing and pump port are illustrative; the floor hole and
+  nozzle path follow the CAD. The written guide explicitly identifies the free end and service slack.
+
+- **2026-10-14, make pump-tube timing explicit:** Step 17 is now titled “Fit the tube, then mount the
+  pump” and instructs opening the head/loading the tube while the cartridge is exposed, leaving the
+  outlet end free before joining the shell. The build guide repeats this order. Video timing stays unchanged.

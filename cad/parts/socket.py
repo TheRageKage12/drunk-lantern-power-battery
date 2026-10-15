@@ -13,8 +13,8 @@ Parts (print orientation noted in build()):
   socket_base     plate OD 76 x 3.5 that closes the housing from below: the Hall sensor post (A3144) or board
                   pocket, the switch bracket recess, 3 countersunk screw holes (M3x8 flat head, from below, into nuts
                   in the housing) and a countersunk radial slot for the bracket screw (M3x8 flat head, from below,
-                  into a pilot in the housing): the plate's underside stays flat, it sits flat on the lock wall
-  switch_bracket  21 x 10 x 2 slide with two pegs for the D2F-L and a round hole for its screw, which moves
+                  into an insert in the housing): the plate's underside stays flat, it sits flat on the lock wall
+  switch_bracket  23 x 10 x 2 slide with two pegs for the D2F-L and a round hole for its screw, which moves
                   with it in the plate's slot: loosen from below, push the screw +/- 1 mm, tighten
   plunger         4.5 mm long spring plunger with a rounded nose
   halo            (only if LED_RING) translucent ring over a 24-px NeoPixel ring
@@ -98,10 +98,11 @@ SWITCH_N1 = SWITCH_N0 + P.D2F_H            # 14.5
 SWITCH_Z_TOP = -3.9                        # body top (just under the ring recess floor at -3.4)
 SWITCH_Z_BOT = SWITCH_Z_TOP - P.D2F_W      # -9.7 = housing bottom: the body stands on the bracket
 PEG_D, PEG_H = 2.3, 4.5
-BRACKET_W, BRACKET_L, BRACKET_T = 21.4, 10.0, 2.0   # along t: from SWITCH_SCREW_T - 3 to the body's far end + 1.6
-SWITCH_SCREW_T, SWITCH_SCREW_N = -4.0, SWITCH_N0 + 3.5   # bracket screw beside the lever tip end of the body
-BRACKET_T_CENTRE = (SWITCH_SCREW_T - 3.0 + SWITCH_T1 + 1.6) / 2   # 3.7
-SWITCH_PILOT_DEPTH = 6.0                                   # pilot in the housing: HOUSING_BOT up to -3.7 (faceplate at -3)
+SWITCH_SCREW_T, SWITCH_SCREW_N = -5.5, SWITCH_N0 + 3.5   # leaves 1.5 mm plastic beside the 4 mm insert
+BRACKET_W = SWITCH_T1 + 1.6 - (SWITCH_SCREW_T - 3.0)
+BRACKET_L, BRACKET_T = 10.0, 2.0
+BRACKET_T_CENTRE = (SWITCH_SCREW_T - 3.0 + SWITCH_T1 + 1.6) / 2
+SWITCH_PILOT_DEPTH = P.M3_INSERT_DEPTH                     # insert bore from HOUSING_BOT up to -3.2
 
 # plunger + ramp
 PLUNGER_ANGLE = 300.0
@@ -253,7 +254,7 @@ def housing_solid():
         cuts.append(cq.Workplane('XY').workplane(offset=HOUSING_BOT - 1).center(x, y)
                     .polygon(6, NUT_AF / math.cos(math.radians(30))).extrude(NUT_T + 1))
         cuts.append(cyl(P.M3_CLEAR / 2, HOUSING_BOT - 1, -3.8, x, y))
-    # pilot for the switch bracket screw (M3x8 flat head from under the base plate), beside the switch body
+    # insert bore for the switch bracket screw (M3x8 flat head from under the base plate), beside the switch body
     sx, sy = switch_screw_xy()
     cuts.append(cyl(P.M3_INSERT_HOLE / 2, HOUSING_BOT - 1, HOUSING_BOT + SWITCH_PILOT_DEPTH, sx, sy))
     for c in cuts:
@@ -289,7 +290,7 @@ def base_solid():
         cuts.append(cq.Workplane('XY').workplane(offset=BASE_BOT - 1).rect(SENSOR_WINDOW, SENSOR_WINDOW)
                     .extrude(BASE_T + 2))
     # switch bracket recess (top) and the bracket screw's radial slot, countersunk from below (the screw goes up
-    # through the bracket into a pilot in the housing; the old captured nut did not fit in the 1.5 mm floor)
+    # through the bracket into an insert in the housing; the old captured nut did not fit in the 1.5 mm floor)
     bt0, bt1 = SWITCH_SCREW_T - 3.6, SWITCH_T0 + (SWITCH_T1 - SWITCH_T0) / 2 + 9.0
     bn0, bn1 = SWITCH_N0 - 2.5, SWITCH_N0 + 9.5   # recess spans the body footprint + slide room
     cuts.append(frame_box(bt0, bt1, bn0, bn1, HOUSING_BOT - BRACKET_T, HOUSING_BOT + 1, LEVER_TIP_ANGLE, LEVER_REST_R))
@@ -460,4 +461,3 @@ def placements():
     if MIRROR:    # print geometry is mirrored: mirror every step up to the socket frame, not the mount step
         pl = {n: [_mirror_step(st) for st in steps[:-1]] + [steps[-1]] for n, steps in pl.items()}
     return pl
-

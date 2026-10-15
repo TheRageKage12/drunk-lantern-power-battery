@@ -5,10 +5,19 @@ from assembly import place
 
 
 def inter_volume(a, b):
-    try:
-        return a.intersect(b).val().Volume()
-    except Exception:
-        return 0.0
+    # A failed boolean is an unverified clearance, never evidence of zero overlap.
+    # Intersect solid pairs explicitly: OCC common on a compound containing
+    # overlapping component allowances can otherwise depend on operand order.
+    volume = 0.0
+    for left in a.solids().vals():
+        lb = left.BoundingBox()
+        for right in b.solids().vals():
+            rb = right.BoundingBox()
+            if any(min(getattr(lb, ax+'max'), getattr(rb, ax+'max')) -
+                   max(getattr(lb, ax+'min'), getattr(rb, ax+'min')) <= 1e-7 for ax in 'xyz'):
+                continue
+            volume += left.intersect(right).Volume()
+    return volume
 
 
 def run(all_parts, placements):
@@ -29,7 +38,7 @@ def run(all_parts, placements):
     SHELL = ('base', 'dish_lower')   # parts that move with the lantern when it is lifted off the base cartridge
     for en, env in envelopes.items():
         if en.endswith('_sweep_envelope'):   # must also clear the hardware the cartridge carries
-            for hn in ('bottle_envelope', 'pump_envelope', 'powerbank_envelope'):
+            for hn in (k for k in envelopes if not k.endswith('_sweep_envelope')):
                 v = inter_volume(env, envelopes[hn]) if hn in envelopes else 0.0
                 if v > 200.0:
                     print(f'FAIL clearance: {en} intersects {hn} by {v / 1000:.1f} cm3'); problems += 1
@@ -48,5 +57,46 @@ def run(all_parts, placements):
             v = inter_volume(placed[names[i]], placed[names[j]])
             if v > 100.0:    # > 0.1 cm3: smaller values are coincident mating faces (1 cm3 hid real clashes, rev 7)
                 print(f'FAIL overlap: {names[i]} vs {names[j]} by {v / 1000:.1f} cm3'); problems += 1
+    problems += electronics_checks(all_parts, placements)
     print(f'--- checks done: {problems} problem(s) ---')
+    return problems
+
+
+def electronics_checks(all_parts, placements):
+    """Strict checks for the small electronic parts and their reserved wiring space.
+
+    Do not use the older 200 mm3 general tolerance: it could hide a thin PCB or
+    solder joint cutting through plastic. Mounting holes/pads are cut out explicitly.
+    Also test the continuous retaining-boss sweep, not just the installed shell.
+    """
+    placed = {n: place(wp, placements.get(n)) for n, (wp, _) in all_parts.items()}
+    electronic = [n for n, (_, module) in all_parts.items() if module == 'parts.electronics']
+    targets = electronic + ['powerbank_envelope']
+    problems = 0
+    # Check individual bodies before fusion can hide their overlaps. Drawing and
+    # CAD share these bounds, including the screw-head / driver access circles.
+    from parts import electronics as E, base as B
+    import json
+    import routing
+    from generate import validate as validate_connectivity
+    validate_connectivity()
+    from pathlib import Path
+    gaps = E.M.validate(E.M.bounds())
+    assert B.EPANEL_PAD_PROUD == E.M.REAR_GAP
+    assert P.PERFBOARD_T == E.M.BOARD_THICKNESS
+    route_path = Path(__file__).resolve().parents[1] / 'docs/review/protoboard/routing.json'
+    report = routing.validate(json.loads(route_path.read_text()))
+    print(f"board: smallest body gap {gaps[0][0]:.2f} mm; {report['routes']} wire corridors; rear extent {report['maximum_rear_extent_mm']:.1f}/{E.M.REAR_GAP:g} mm")
+    pairs = set()
+    for en in targets:
+        for other in placed:
+            pair = tuple(sorted((en, other)))
+            if en == other or pair in pairs:
+                continue
+            pairs.add(pair)
+            v = inter_volume(placed[en], placed[other])
+            if v > 0.5:
+                print(f'FAIL electronics: {en} vs {other}: {v:.2f} mm3')
+                problems += 1
+    print(f'electronics: {len(pairs)} component / shell-removal checks, {problems} problem(s); reserved dimensions require measurement')
     return problems

@@ -123,9 +123,19 @@ def main():
     for n, m in envelopes.items():
         if n in ('fist_envelope', 'forearm_envelope'):
             cut.append((m, (230, 190, 160)))        # the hand, skin tone
-        elif n not in ('switch_envelope', 'glass_path_envelope'):
+        elif n not in ('switch_envelope', 'glass_path_envelope', 'service_sweep_envelope', 'charge_plug_envelope'):
             cut.append((m, ORANGE))
-    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway at x=0 seen from the side; orange = jar, pump, battery, glass; tan = the hand (fist + forearm)')
+    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway; orange = hardware / electronics fit allowances; tan = hand; service sweep hidden')
+
+    cartridge_names = ('base_tray', 'base_deck', 'powerbank_envelope', 'bottle_envelope', 'pump_envelope',
+                       'perfboard_envelope', 'board_components_envelope', 'buck_envelope',
+                       'power_switch_envelope', 'charge_jack_envelope', 'pump_diode_envelope')
+    cartridge_colors = {'powerbank_envelope': ORANGE, 'pump_envelope': GREY,
+                        'bottle_envelope': (195, 210, 220), 'perfboard_envelope': (190, 145, 85),
+                        'board_components_envelope': (75, 110, 165), 'buck_envelope': (75, 110, 165)}
+    render([(meshes[n], cartridge_colors.get(n, COLORS.get(n, GREY))) for n in cartridge_names],
+           os.path.join(IMG, 'cad-cartridge.png'), az=145, el=35,
+           title='cartridge; hardware shown as fit allowances, not supplier models; outer shell removed')
 
     # exploded: lift each printed part by its order in Z
     names = sorted(printed, key=lambda n: printed[n].bounds[0][2])
