@@ -10,6 +10,7 @@ python3 tests/test_socket.py   # rotor sweep: collisions, hard stops, lever cont
 python3 tests/test_electronics.py  # battery, strap, board clearance and collision negative controls
 python3 render_views.py     # docs/images/cad-*.png (iso, front, rear, top, cutaway, exploded, parts sheet)
 python3 render_stl.py output ../docs/images/stl   # per-part previews + parts-iso.png contact sheet
+python3 export_viewer.py    # docs/assembly-viewer/index.html, the 3D assembly viewer (meshes inlined)
 ```
 
 | File | What |

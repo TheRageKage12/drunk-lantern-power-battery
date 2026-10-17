@@ -435,3 +435,11 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   2026-10-15 Amazon stock/delivery check (tubing: 2 left), the new total (~$205). The three videos were checked
   chapter by chapter against the guide and the CAD (inserts, strap, underside switch, relocated jack, tube route)
   and match; they have no source in the repo, so a design change means re-recording them.
+
+- **2026-10-17, 3D assembly viewer.** Kevin asked for a colour-coded assembly view. `docs/assembly-viewer/index.html`
+  shows every part from the CAD in its own colour, 14 assembly steps (the four subassemblies, the cartridge, the
+  lantern, the final join) and an adjustable exploded view; bought parts appear as their size allowances. It is one
+  self-contained file (meshes inlined, three.js from a CDN), viewable at https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html
+  or from a downloaded copy. `cad/export_viewer.py` regenerates it; part colours, offsets and step text are in
+  `viewer.template.html`. Re-run it after any CAD change, like the renders.
+
