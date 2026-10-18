@@ -10,6 +10,9 @@ light swells to full, then goes dark. Grip the glass, slide it toward you, lift 
 
 "Your side" means the hand opening; "display side" means the window opposite it.
 
+**3D assembly viewer:** [open it in the browser](https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html). Each printed part has its own colour; the 14 steps follow
+section 9 and the subassemblies, and an exploded view shows how everything stacks. Click a part for its name and print notes.
+
 **Assembly videos:** [Step-by-step assembly guide (4:30)](videos/assembly-guide.mp4) ·
 [Exploded assembly (0:12)](videos/separate-and-assemble.mp4) ·
 [Opening for service (0:12)](videos/service-access.mp4).
