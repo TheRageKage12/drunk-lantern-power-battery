@@ -123,6 +123,12 @@ A3144_ELEMENT_DEPTH = 0.5   # Hall element below the printed face
 KEY_D = 24.0                # ring key cap disc diameter
 KEY_T = 3.0
 KEY_TAB_W, KEY_TAB_L = 6.0, 4.0
+# key_ring (2026-10-19): the ring and its key in one print, the magnet hidden inside. Worn on the LEFT MIDDLE finger.
+RING_ID = 20.5              # finger hole: measure the middle finger across the knuckle and change this one number
+RING_HEAD_D = 27.0          # emblem head, as Hedo3D's fingerring_20mm (rests on the rotor face, outside the 24.6 mm pocket)
+RING_HEAD_T = 6.1           # plastic between the face and the finger (the magnet pocket runs through it)
+RING_PALM_W = 8.0           # band width on the palm side
+RING_MAGNET_SKIN = 0.6      # plastic left over the magnet on the visible face (3 layers): hides it, +0.6 mm to the sensor
 ROTOR_FLOOR_T = 1.2         # plastic between magnet (in key cap) and Hall sensor
 SOCKET_HOUSING_OD = 76.0    # rev 3: MUST pass through the DISH_NECK_HOLE_D (80) hole from above
 SOCKET_HOUSING_H = 22.0     # below the faceplate (rev 3: shorter, frees bay height for the nozzle)

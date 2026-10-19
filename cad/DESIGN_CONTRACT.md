@@ -364,3 +364,18 @@ requiring support under the floor inside its drip lip. The handle sockets have i
 so their bores retain a closed end. The switch-bracket screw moves 1.5 mm away from the switch cavity;
 the bracket and matching base-plate slot follow it, leaving 1.5 mm plastic between the bore and cavity.
 These changes preserve nozzle, handle-leg and microswitch-body positions.
+
+### Key ring (2026-10-19)
+
+`key_ring` (parts/socket.py) is the ring and the key in one part. The key is the raised emblem (`EM_*`): a circle
+(r 6.0) and two bars across the finger, standing out of the 27 mm head face; the circle and bars end `EM_END_GAP` above
+the pocket floor minus `EM_STEP`, the centre disc (r 3.6) `EM_STEP` (0.6) higher, just above `POCKET_FLOOR`. The rotor
+pocket is the emblem grown by `FIT`, with a centre floor at `POCKET_FLOOR` (0.4 mm of rotor over the post hole under
+the annulus). The head rests on the rotor face; the bars key the rotation (~1.5 degrees of play); the emblem is
+symmetric, so the ring fits at 0 and 180 degrees. No tab. The magnet pocket opens inside the band and stops
+`RING_MAGNET_SKIN` short of the centre disc's face: magnet to Hall element 3.7 mm nominal, 4.1 mm with the rotor at the
+lip (~53 mT, N35). Printed emblem down, support under the head. `key_cap` is the same emblem key on a 2 mm disc. `checks.py` skips it against the fist and forearm (it is on the hand), the glass path (the fist is
+withdrawn first) and `key_cap` (the glued alternative for a bought ring).
+Two colours by a filament change, no geometry: printed emblem down, the layers below `EM_STEP` hold only the circle
+and bar faces, so they print white and the rest green (white outline, green centre over the magnet). Keep `EM_STEP` a
+whole number of 0.2 mm layers if it changes.

@@ -113,7 +113,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
   - hard stops at 0° and 45°
   - a cam that lifts a D2F-01L lever microswitch 3 mm (verify the purchased switch fits the existing bracket)
   - a radial spring plunger that returns the rotor
-  - a 6 x 2 mm magnet in a printed key cap glued to the ring
+  - a 6 x 2 mm magnet hidden inside `key_ring`, a printed Green Lantern ring whose raised emblem is the key;
+    the rotor pocket is the emblem's negative, no tab (since 2026-10-19; `key_cap` is the fallback for a bought ring)
 - Mirrored for **counterclockwise** (`LOCK_TWIST = 'ccw'`).
 - Kevin asked if it could be simpler. The decision was to **keep it as is**.
 - **Spring:** about 0.4-0.5 mm wire, 5 mm OD (fits a 5.6 mm pocket), ~10 mm long. Buy one from Ace's Hillman
@@ -318,7 +319,8 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
 - `cad/NOTES-base.md` is marked superseded. Same caution applies.
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
-- `key_ring.stl` isn't generated; the guide says to glue `key_cap` onto any ring.
+- `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
+  `cad/render_ring_colour.py` re-renders its two-colour picture after a ring change.
 - The Tacoma Screw and local-item prices are estimates.
 - The rendering tools are home-made:
   - `cad/render_views.py` is a painter's-algorithm renderer. It now subdivides large faces, because large faces
@@ -442,4 +444,29 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   self-contained file (meshes inlined, three.js from a CDN), viewable at https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html
   or from a downloaded copy. `cad/export_viewer.py` regenerates it; part colours, offsets and step text are in
   `viewer.template.html`. Re-run it after any CAD change, like the renders.
+
+- **2026-10-19, printed key ring, left middle finger.** Kevin asked whether the ring would both fit the lock and look
+  like a Green Lantern ring. Gluing the plain 24 mm key cap onto Hedo3D's ring would have hidden its emblem, and the
+  27 mm head would land on the rotor face before the 3 mm cap reached the 3.5 mm pocket floor. `key_ring` replaces
+  both: the ring and key in one print, the key a full 3.5 mm deep, the emblem cut 0.6 mm into its face, and (Kevin's
+  request) the magnet hidden in a pocket opened from inside the band, 0.6 mm under the face. Cost: the magnet is
+  0.6 mm farther from the sensor, ~55 mT at the worst rotor position against a 35 mT maximum operate point (1.6x;
+  was 2.1x). Worn on the left middle finger, as Green Lanterns wear it; `RING_ID` 20.5 mm from Kevin's 20 mm
+  measurement, to confirm on the middle finger. Same day, Kevin asked for the bold emblem and no tab: the raised
+  emblem (circle and bars, 4 mm proud, the centre disc 0.6 mm lower like the real emblem) is now the key, and the rotor
+  pocket is its negative, so the bars turn the rotor; it fits either way up. **The rotor must be (re)printed from this
+  version.** Magnet to sensor 3.7 mm nominal, ~53 mT worst case (1.5x). The ring now needs support under its head
+  when printed emblem-down.
+  Kevin's middle finger measured 20-25 mm with calipers, too wide a range to print from, so `cad/ring_sizer.py` makes
+  ten labelled test bands (18.5-23 mm); `RING_ID` = the band that fits over the knuckle + 0.5 mm.
+- **2026-10-19, white emblem outline on the ring.** Kevin chose a white outline (option C of three mock-ups: all
+  green, whole emblem white, outline white). The ring prints emblem down and its first 0.6 mm (`EM_STEP`) are only
+  the circle and bar faces, so a filament change before layer 4 (Z 0.8 mm) gives white faces and a green centre with
+  no CAD change, using the white PETG the team already has (<1 g). The whole-white emblem was rejected because the
+  magnet sits behind only 0.6 mm of the centre disc and would show through white. Three white layers over green may
+  look pale; the guide says to test the first 1.5 mm. Kevin dropped ring LEDs (glove-wired coin cell) and glow
+  filament (cost). `cad/render_ring_colour.py` renders `docs/images/ring-white-outline.png`.
+  Step 2 of `docs/videos/assembly-guide.mp4` (9-16 s) still showed the old tabbed key cap glued onto a ring; that
+  slide was replaced with the white-outline `key_ring` and the new magnet step (same timing and chapters). The video
+  has no source in the repo, so any later change to it is a frame edit like this one.
 

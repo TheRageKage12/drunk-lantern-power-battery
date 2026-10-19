@@ -43,7 +43,9 @@ def run(all_parts, placements):
                 if v > 200.0:
                     print(f'FAIL clearance: {en} intersects {hn} by {v / 1000:.1f} cm3'); problems += 1
         for n, wp in placed.items():
-            if en in ('fist_envelope', 'forearm_envelope') and n.startswith('switch'):
+            if en in ('fist_envelope', 'forearm_envelope') and (n.startswith('switch') or n in ('key_ring', 'key_cap')):   # both are worn on the hand
+                continue
+            if en == 'glass_path_envelope' and n in ('key_ring', 'key_cap'):   # the fist (with the ring) is drawn back before the glass comes out
                 continue
             if en.endswith('_sweep_envelope') and n in SHELL:
                 continue
@@ -54,6 +56,8 @@ def run(all_parts, placements):
     names = list(placed)
     for i in range(len(names)):
         for j in range(i + 1, len(names)):
+            if {names[i], names[j]} == {'key_cap', 'key_ring'}:   # alternatives for the same pocket
+                continue
             v = inter_volume(placed[names[i]], placed[names[j]])
             if v > 100.0:    # > 0.1 cm3: smaller values are coincident mating faces (1 cm3 hid real clashes, rev 7)
                 print(f'FAIL overlap: {names[i]} vs {names[j]} by {v / 1000:.1f} cm3'); problems += 1
