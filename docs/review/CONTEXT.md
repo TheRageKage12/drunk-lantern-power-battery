@@ -320,6 +320,7 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
 - `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
+  `cad/render_ring_colour.py` re-renders its two-colour picture after a ring change.
 - The Tacoma Screw and local-item prices are estimates.
 - The rendering tools are home-made:
   - `cad/render_views.py` is a painter's-algorithm renderer. It now subdivides large faces, because large faces
@@ -458,4 +459,14 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   when printed emblem-down.
   Kevin's middle finger measured 20-25 mm with calipers, too wide a range to print from, so `cad/ring_sizer.py` makes
   ten labelled test bands (18.5-23 mm); `RING_ID` = the band that fits over the knuckle + 0.5 mm.
+- **2026-10-19, white emblem outline on the ring.** Kevin chose a white outline (option C of three mock-ups: all
+  green, whole emblem white, outline white). The ring prints emblem down and its first 0.6 mm (`EM_STEP`) are only
+  the circle and bar faces, so a filament change before layer 4 (Z 0.8 mm) gives white faces and a green centre with
+  no CAD change, using the white PETG the team already has (<1 g). The whole-white emblem was rejected because the
+  magnet sits behind only 0.6 mm of the centre disc and would show through white. Three white layers over green may
+  look pale; the guide says to test the first 1.5 mm. Kevin dropped ring LEDs (glove-wired coin cell) and glow
+  filament (cost). `cad/render_ring_colour.py` renders `docs/images/ring-white-outline.png`.
+  Step 2 of `docs/videos/assembly-guide.mp4` (9-16 s) still showed the old tabbed key cap glued onto a ring; that
+  slide was replaced with the white-outline `key_ring` and the new magnet step (same timing and chapters). The video
+  has no source in the repo, so any later change to it is a frame edit like this one.
 

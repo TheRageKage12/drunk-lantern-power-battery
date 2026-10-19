@@ -376,3 +376,6 @@ symmetric, so the ring fits at 0 and 180 degrees. No tab. The magnet pocket open
 `RING_MAGNET_SKIN` short of the centre disc's face: magnet to Hall element 3.7 mm nominal, 4.1 mm with the rotor at the
 lip (~53 mT, N35). Printed emblem down, support under the head. `key_cap` is the same emblem key on a 2 mm disc. `checks.py` skips it against the fist and forearm (it is on the hand), the glass path (the fist is
 withdrawn first) and `key_cap` (the glued alternative for a bought ring).
+Two colours by a filament change, no geometry: printed emblem down, the layers below `EM_STEP` hold only the circle
+and bar faces, so they print white and the rest green (white outline, green centre over the magnet). Keep `EM_STEP` a
+whole number of 0.2 mm layers if it changes.

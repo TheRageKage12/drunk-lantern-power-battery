@@ -12,6 +12,7 @@ python3 render_views.py     # docs/images/cad-*.png (iso, front, rear, top, cuta
 python3 render_stl.py output ../docs/images/stl   # per-part previews + parts-iso.png contact sheet
 python3 export_viewer.py    # docs/assembly-viewer/index.html, the 3D assembly viewer (meshes inlined)
 python3 ring_sizer.py       # output/ring_sizer.stl: ten test bands to choose RING_ID for key_ring
+python3 render_ring_colour.py  # docs/images/ring-white-outline.png: key_ring with its white emblem outline
 ```
 
 | File | What |

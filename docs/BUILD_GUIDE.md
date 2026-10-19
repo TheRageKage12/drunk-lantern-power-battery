@@ -119,7 +119,7 @@ but left out of the old total) and the green filament rose by $3 a spool. Two of
 
 The total assumes you already have:
 
-- **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the rest, the supports and one failed big part) plus ~30 g of white or natural for the diffusers (~$49 for two green spools and one white).
+- **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the rest, the supports and one failed big part) plus ~30 g of white or natural for the diffusers and under 1 g of white for the ring's emblem outline (~$49 for two green spools and one white).
 - Basic tools: soldering iron and solder, multimeter, calipers, a drill with 3.2, 5 and 6 mm bits, flush cutters, a
   2.5 mm hex key (a long or ball-end one for the sphere's flange screws and the handle) and a 2 mm hex key for the
   countersunk screws, a small flat screwdriver for the LM2596's trimmer, a hobby knife and ruler, a USB-C data
@@ -225,7 +225,7 @@ Print these first, before any big part, and check them:
 | `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
 | `switch_bracket` | 23 x 10 x 7 | flat, pegs up | no | any | 1 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
-| `key_ring` | 27 x 27 x 34 | emblem down, as exported | under the head (around the emblem, touching the plate) and inside the finger hole | green | 8 |
+| `key_ring` | 27 x 27 x 34 | emblem down, as exported | under the head (around the emblem, touching the plate) and inside the finger hole | white for 3 layers, then green (below) | 8 |
 | `key_cap` (only for a bought ring) | 24 x 24 x 6 | glue face down, emblem up | no | green | 2 |
 | **Total** | | | | | **~1240 g** |
 
@@ -237,6 +237,18 @@ tree supports on the inside only. The `nozzle_guide` prints foot down; the last 
 horizontal, so give it a small tree support there. The grams column assumes the settings above (the parts are
 mostly wall, so count about 1.1 g per cm3; the diffusers are solid). Print both diffusers (`diffuser`, `top_diffuser`) in white or natural PETG at 100 % infill: green works
 but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
+
+**The ring's white outline.** `key_ring` prints emblem down, and its first 0.6 mm (three 0.2 mm layers, with a
+0.2 mm first layer) are only the faces of the emblem's circle and bars; the centre disc starts at 0.6 mm. Start the
+print with **white** PETG loaded and add a filament change before **layer 4 (Z 0.8 mm)**: in Cura, Extensions >
+Post Processing > Filament Change at layer 4; in PrusaSlicer or Orca, the "+" on the layer slider at 0.8 mm. Both
+insert `M600`; if your firmware lacks it, use "Pause at height" and swap by hand. When the green goes in, push it
+through until it runs clean green, with no white streaks, and wipe the nozzle: the first green layer is the visible
+centre disc. The result is a white circle and bars on a green ring, with the magnet behind green plastic. Three layers
+of white over green can look pale mint: let the first ring run about 1.5 mm past the swap, cancel it and look at the
+emblem before printing the whole ring. A plain green ring (no swap) works the same in the lock.
+
+![key_ring with a white emblem outline](images/ring-white-outline.png)
 
 ![all printed parts](images/cad-parts-sheet.png)
 
@@ -415,7 +427,7 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing`. A dab of super glue
    holds each.
 2. **Ring.** `key_ring` is the ring and the lock's key in one print. Its raised Green Lantern emblem (the circle and
-   two bars, 4 mm proud) is the key: the rotor's pocket is the emblem's negative, so the bars turn the rotor when you
+   two bars, 4 mm proud, their faces printed white: section 3) is the key: the rotor's pocket is the emblem's negative, so the bars turn the rotor when you
    twist. There is no tab. The magnet pocket opens inside the band, so the magnet never shows. The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and `status`
    running, hold each face of the magnet to the sensor's printed face: the face that gives `ring=present` goes
    **down**, toward the ring's face. Mark it, put a drop of super glue in the pocket from inside the band, push the
