@@ -80,9 +80,9 @@ def build():
     out['power_switch_envelope'] = stem.union(nut).union(box(sx-6.5, sx+6.5, sy-4.5, sy+4.5, ceiling, ceiling+18))
     jx, jy = P.JACK_XY
     # Body/terminals below deck, bushing in hole, nut above. Includes solder-joint allowance.
-    jack = box(jx-6, jx+6, jy-6, jy+6, B.DECK_Z0-20, B.DECK_Z0)
-    jack = jack.union(cq.Workplane('XY').workplane(offset=B.DECK_Z0).center(jx, jy).circle(3.9).extrude(B.DECK_T))
-    jack = jack.union(cq.Workplane('XY').workplane(offset=B.DECK_TOP).center(jx, jy).circle(6).extrude(3))
+    jack = box(jx-6.5, jx+6.5, jy-6.5, jy+6.5, B.DECK_Z0-20, B.DECK_Z0)   # 321B body 12.4 mm wide
+    jack = jack.union(cq.Workplane('XY').workplane(offset=B.DECK_Z0).center(jx, jy).circle(P.PORT_JACK_D/2-0.1).extrude(B.DECK_T))
+    jack = jack.union(cq.Workplane('XY').workplane(offset=B.DECK_TOP).center(jx, jy).circle(8.5).extrude(3))   # 7/16" nut across corners
     out['charge_jack_envelope'] = jack
     # Charger attached only with the shell removed; this reserve also clears the closed
     # shell geometry, but does not grant access through it. Cable exits upward.

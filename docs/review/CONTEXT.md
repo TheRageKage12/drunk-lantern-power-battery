@@ -212,7 +212,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
     end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
     z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
     lower run is recessed under the tray. Verify the supplied plug and bend fit the 25 mm end allowance.
-- The charge jack (2.1 mm panel jack, 8 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
+- The charge jack (2.1 mm panel jack, Vetco 321B since 2026-10-19, 11.3 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
   down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
   Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
@@ -469,4 +469,8 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   Step 2 of `docs/videos/assembly-guide.mp4` (9-16 s) still showed the old tabbed key cap glued onto a ring; that
   slide was replaced with the white-outline `key_ring` and the new magnet step (same timing and chapters). The video
   has no source in the repo, so any later change to it is a frame edit like this one.
-
+- **2026-10-19, charge jack is the Vetco 321B.** Vetco ran out of the 2112 (8 mm hole). Kevin's first find, the
+  Velleman CD021, is an inline jack with no thread or nut, so it can't sit in the deck. The 321B is the same DC5521
+  female panel jack, in stock, $2.99, but takes a 7/16" (11.1 mm) hole and is 12.4 mm wide: `PORT_JACK_D` 11.3 mm,
+  jack envelope 13 x 13 mm below the deck and a 17 mm nut allowance above it. The deck stays solid round the hole and
+  all checks pass. A deck already printed with the 8 mm hole can be opened up instead of reprinted.
