@@ -74,7 +74,7 @@ nonzero exit status. Individual component bodies also require at least 1 mm sepa
 | Battery plug / switch face | Full case width, 25 mm beyond the -Y end, z=7–31 mm reserved for connector, wire bend and switch operation. Verify the supplied lead fits; this is not a measured plug model. Deck can be unscrewed for service. |
 | Buck | 43 × 21 × 14 mm above four 2 mm printed corner supports; 10 mm lead allowance beyond each end. Check the delivered module and ties. |
 | Lock/LED inline plugs | Combined 20 × 64 × 16 mm space above the unused right-side module pocket (x=47–67, y=-32–32, z=10–26); secure leads clear of the sliding shell bosses. |
-| S1 / charge jack | S1 body + terminals <=13 × 9 × 18 mm above pocket ceiling, nut Ø11 mm, stem/lever within Ø6.2 mm to z=7. Jack body/terminals <=12 × 12 × 20 mm below deck, Ø7.8 mm bushing, Ø12 × 3 mm nut above. Charging plug allowance: Ø12 × 30 mm above the nut, then 10 mm for its cable exit. Verify actual parts. |
+| S1 / charge jack | S1 body + terminals <=13 × 9 × 18 mm above pocket ceiling, nut Ø11 mm, stem/lever within Ø6.2 mm to z=7. Jack (Vetco 321B) body/terminals <=13 × 13 × 20 mm below deck, Ø11.2 mm bushing, Ø17 × 3 mm nut above. Charging plug allowance: Ø12 × 30 mm above the nut, then 10 mm for its cable exit. Verify actual parts. |
 | D2 / C4 | D2: 20 × 10 × 8 mm including insulation beyond motor end. C4: 8 × 6 × 8 mm including joints behind the fixed lock wall's Hall window; keep clear of rotor. |
 | D2F-01L | Existing D2F-family body/lever model and bracket retained. Check the supplied switch's terminals, lever, peg spacing and action; existing rotor test covers the model, not supplier authenticity. |
 

@@ -76,7 +76,7 @@ SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray 
 SWITCH_POCKET_W, SWITCH_POCKET_L = 26.0, 23.0       # outer box; the cavity is 2 x WALL smaller
 SWITCH_POCKET_DEPTH = 20.0                          # cavity height: bushing (~7) + lever (~10) stay above the table
 JACK_XY = (74.0, -25.0)                             # charge jack on free +X deck edge; clears board and shell bosses
-PORT_JACK_D, PORT_SWITCH_D = 8.0, 6.5   # panel-mount DC5521 jack (8 mm hole) and mini toggle switch (1/4" or M6 bushing)
+PORT_JACK_D, PORT_SWITCH_D = 11.3, 6.5  # panel-mount DC5521 jack, Vetco 321B (7/16" = 11.1 mm hole) and mini toggle switch (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 115.0              # base drum height (rev 3: taller for the jar + cap; rev 9: open drum over the cartridge)

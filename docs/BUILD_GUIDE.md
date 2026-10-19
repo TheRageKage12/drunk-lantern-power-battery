@@ -103,12 +103,12 @@ works on 3.3 V and either magnet pole.
 | 11 | 2 x IRLZ44NPBF N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | Exact required part: IRLZ44NPBF, TO-220. Vendor URL/title is stale; its detail table names IRLZ44NPBF. Verify IRLZ44N marking; review substitutions before use. |
 | 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
-| 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
+| 12b | Charge jack | [Vetco 321B, 2.1 mm DC panel jack](https://vetco.net/products/321b_2-1mm_dc_power_panel_mount_jack) | $2.99 | DC5521 (5.5 x 2.1 mm) female, 7/16" (11.1 mm) panel hole, 12.4 mm wide, 22 mm tall; the battery's charger plugs into it. The 8 mm Vetco 2112 was out of stock (2026-10-19); a deck printed before then has an 8 mm hole: open it to 11.3 mm with a step drill or a knife. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 13a), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $205 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $46.57, Tacoma Screw ~$12, straps and
+**Total: about $205 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $46.68, Tacoma Screw ~$12, straps and
 zip ties ~$5, and ~$13.50 of local estimates for the spring, the jar, the curtain sheet and the shot glass. The
 [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the live store-by-store figures and who already has what. The 2026-10-13
 design was about $186: the electrical revision added $4.69, the heat-set inserts $9.99, the straps and ties ~$5 (listed before,
@@ -548,7 +548,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
    through the open notch at the deck's edge (the deck's other slot is a closed hole, so
    a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
-   three pillars that have holes; it fits one way). The jack goes socket-up in the relocated 8 mm hole
+   three pillars that have holes; it fits one way). The jack goes socket-up in the relocated 11.3 mm hole
    on the side opposite the buck converter (+X, y=-25), clear of the populated board. Check its charging
    plug fits with the shell off. Jar in its ring with a strap through the finger slots. **Fit the tube
    to the pump now, while the cartridge is exposed:** open the head, lay the continuous tube around
