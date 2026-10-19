@@ -18,7 +18,8 @@ Parts (print orientation noted in build()):
                   with it in the plate's slot: loosen from below, push the screw +/- 1 mm, tighten
   plunger         4.5 mm long spring plunger with a rounded nose
   halo            (only if LED_RING) translucent ring over a 24-px NeoPixel ring
-  key_cap         24 mm keyed disc with the magnet pocket, glued to the ring's face
+  key_cap         24 mm keyed disc with the magnet pocket, glued to the ring's face (fallback for a bought ring)
+  key_ring        ring + key in one print, emblem on the face, magnet hidden in a pocket opened from the finger side
   switch_envelope D2F-L body + lever at rest, for the collision test (not printed)
 
 LOCK_TWIST = 'ccw' (params): every part below is mirrored left-right (x -> -x in the socket frame) on output,
@@ -365,6 +366,42 @@ def key_cap_solid():
     return k
 
 
+def key_ring_solid():
+    """Ring + key in one part, socket frame: the key drops into the rotor pocket (its face on the pocket floor), the
+    27 mm head rests on the rotor face, the band rises out of the lock along +Z. The finger axis is Y (perpendicular
+    to the tab at +X), so the emblem's bars sit across the finger. The magnet goes in from inside the band, down a
+    blind pocket that stops RING_MAGNET_SKIN short of the face: nothing shows from outside."""
+    key_h = KEY_POCKET_DEPTH                       # 3.5: key face on the pocket floor when the head meets the rotor top
+    z_face = POCKET_FLOOR                          # visible face (enters the lock first)
+    z_head = ROTOR_TOP                             # head bottom = rotor top
+    r_hole, r_out = P.RING_ID / 2, P.RING_HEAD_D / 2
+    zc = z_head + P.RING_HEAD_T + r_hole           # finger axis height
+    z_top = zc + r_out                             # outside of the band on the palm side
+    # key: the key_cap outline, full pocket depth
+    key = cq.Workplane('XY').workplane(offset=z_face).circle(P.KEY_D / 2).extrude(key_h)
+    key = key.union(cq.Workplane('XY').workplane(offset=z_face).center(P.KEY_D / 2 + P.KEY_TAB_L / 2 - 0.5, 0)
+                    .rect(P.KEY_TAB_L + 1.0, P.KEY_TAB_W).extrude(key_h))
+    # head and band: vertical 27 mm cylinder, rounded over the finger, tapering along the finger to the palm side
+    body = cyl(r_out, z_head, z_top)
+    band = (cq.Workplane('XZ').center(0, zc).circle(r_out).extrude(r_out, both=True)
+            .union(cq.Workplane('XY').box(2 * r_out, 2 * r_out, zc - z_head, centered=(True, True, False)).translate((0, 0, z_head))))
+    taper = (cq.Workplane('YZ').polyline([(-r_out, z_head), (r_out, z_head), (P.RING_PALM_W / 2, z_top), (-P.RING_PALM_W / 2, z_top)])
+             .close().extrude(r_out, both=True))
+    ring = body.intersect(band).intersect(taper).union(key)
+    ring = ring.cut(cq.Workplane('XZ').center(0, zc).circle(r_hole).extrude(r_out + 1, both=True))
+    # magnet: blind pocket from inside the band, stopping RING_MAGNET_SKIN above the face
+    ring = ring.cut(cyl(P.MAGNET_POCKET_D / 2, z_face + P.RING_MAGNET_SKIN, zc))
+    # emblem cut 0.6 mm into the face: thick centre circle between two bars, inside a border ring
+    d = 0.6
+    def groove(sk):
+        return sk.extrude(d + 0.01).translate((0, 0, z_face - 0.01))
+    em = groove(cq.Workplane('XY').circle(6.3).circle(3.9))
+    for sy in (-1, 1):
+        em = em.union(groove(cq.Workplane('XY').center(0, sy * 8.4).rect(11.2, 1.6)))
+    em = em.union(groove(cq.Workplane('XY').circle(11.5).circle(10.9)))
+    return ring.cut(em)
+
+
 def switch_envelope_solid():
     """D2F-L body at rest + lever (0.5 mm plate at the rest line), socket frame."""
     body = frame_box(SWITCH_T0, SWITCH_T1, SWITCH_N0, SWITCH_N1, SWITCH_Z_BOT, SWITCH_Z_TOP, LEVER_TIP_ANGLE, LEVER_REST_R)
@@ -410,6 +447,7 @@ def build():
     out['switch_bracket'] = bracket_solid()
     out['plunger'] = plunger_solid()
     out['key_cap'] = key_cap_solid().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.KEY_T))  # flat top down
+    out['key_ring'] = key_ring_solid().translate((0, 0, -POCKET_FLOOR))   # face (emblem) down on the bed
     if P.SOCKET_IN_SPHERE and P.SOCKET_STANDOFF > 0:
         st = cyl(STANDOFF_OD / 2, 0, P.SOCKET_STANDOFF).cut(cyl(P.M3_CLEAR / 2, -1, P.SOCKET_STANDOFF + 1))
         out['socket_standoff'] = st          # print 2
@@ -453,6 +491,7 @@ def placements():
     pl['switch_bracket'] = [((0, 0, 1), LEVER_TIP_ANGLE - 90.0, (bx, by, HOUSING_BOT - BRACKET_T)), m]
     pl['plunger'] = [((0, 1, 0), 90, (px - P.PLUNGER_L / 2, py, (PLUNGER_CH_Z0 + PLUNGER_CH_Z1) / 2)), m]
     pl['key_cap'] = [(X, 180, (0, 0, POCKET_FLOOR + P.KEY_T)), m]
+    pl['key_ring'] = [((0, 0, 1), 0, (0, 0, POCKET_FLOOR)), m]
     if P.SOCKET_IN_SPHERE and P.SOCKET_STANDOFF > 0:
         ex, ey = pol(P.SOCKET_EAR_R, EAR_ANGLES[0])
         pl['socket_standoff'] = [((0, 0, 1), 0, (ex, ey, BASE_BOT - P.SOCKET_STANDOFF)), m]

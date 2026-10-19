@@ -113,7 +113,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
   - hard stops at 0° and 45°
   - a cam that lifts a D2F-01L lever microswitch 3 mm (verify the purchased switch fits the existing bracket)
   - a radial spring plunger that returns the rotor
-  - a 6 x 2 mm magnet in a printed key cap glued to the ring
+  - a 6 x 2 mm magnet hidden inside `key_ring`, a printed Green Lantern ring with the key on its face
+    (since 2026-10-19; the glued `key_cap` stays as the fallback for a bought ring)
 - Mirrored for **counterclockwise** (`LOCK_TWIST = 'ccw'`).
 - Kevin asked if it could be simpler. The decision was to **keep it as is**.
 - **Spring:** about 0.4-0.5 mm wire, 5 mm OD (fits a 5.6 mm pocket), ~10 mm long. Buy one from Ace's Hillman
@@ -318,7 +319,7 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
 - `cad/NOTES-base.md` is marked superseded. Same caution applies.
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
-- `key_ring.stl` isn't generated; the guide says to glue `key_cap` onto any ring.
+- `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
 - The Tacoma Screw and local-item prices are estimates.
 - The rendering tools are home-made:
   - `cad/render_views.py` is a painter's-algorithm renderer. It now subdivides large faces, because large faces
@@ -442,4 +443,14 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   self-contained file (meshes inlined, three.js from a CDN), viewable at https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html
   or from a downloaded copy. `cad/export_viewer.py` regenerates it; part colours, offsets and step text are in
   `viewer.template.html`. Re-run it after any CAD change, like the renders.
+
+- **2026-10-19, printed key ring, left middle finger.** Kevin asked whether the ring would both fit the lock and look
+  like a Green Lantern ring. Gluing the plain 24 mm key cap onto Hedo3D's ring would have hidden its emblem, and the
+  27 mm head would land on the rotor face before the 3 mm cap reached the 3.5 mm pocket floor. `key_ring` replaces
+  both: the ring and key in one print, the key a full 3.5 mm deep, the emblem cut 0.6 mm into its face, and (Kevin's
+  request) the magnet hidden in a pocket opened from inside the band, 0.6 mm under the face. Cost: the magnet is
+  0.6 mm farther from the sensor, ~55 mT at the worst rotor position against a 35 mT maximum operate point (1.6x;
+  was 2.1x). Worn on the left middle finger, as Green Lanterns wear it; `RING_ID` 20.5 mm from Kevin's 20 mm
+  measurement, to confirm on the middle finger. The tab stays: it is what turns the rotor, and the printed rotor
+  pocket needs it.
 

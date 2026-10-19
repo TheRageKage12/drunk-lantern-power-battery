@@ -36,7 +36,7 @@ measure the actual capacitor, connectors, buck, switch, pump and jar before prin
 
 ```
  0. before: push the empty glass in under the lock until it clicks over the ridge at the stop
- 1. punch in, ring face first (6x2 mm magnet in a printed key cap) -> Hall sensor sees it -> light fades up to ~15 %
+ 1. punch in, ring face first (6x2 mm magnet hidden in the printed ring) -> Hall sensor sees it -> light fades up to ~15 %
  2. twist 45 deg counterclockwise and HOLD -> a cam clicks the microswitch -> pump starts, light starts climbing
  3. keep holding through the oath: the pump runs ~11 s while the light climbs to ~90 %
  4. let the ring turn back (spring) -> light swells to 100 % and goes dark
@@ -106,7 +106,7 @@ works on 3.3 V and either magnet pole.
 | 12b | Charge jack | [Vetco 2112, 2.1 mm DC panel jack](https://vetco.net/products/2112_2-1mm_dc_power_panel_mount_jack) | $2.88 | DC5521 (5.5 x 2.1 mm) female, 8 mm panel hole; the battery's charger plugs into it. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 13a), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
-| 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the key cap, the nuts, the Hall sensor and a few dots on the diffuser. |
+| 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
 
 **Total: about $205 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $46.57, Tacoma Screw ~$12, straps and
 zip ties ~$5, and ~$13.50 of local estimates for the spring, the jar, the curtain sheet and the shot glass. The
@@ -147,7 +147,7 @@ Hardwick's in the U-District closed in 2020. Sound Homebrew Supply could not be 
 
 ## 3. Print the parts
 
-All files are in `cad/output/` (STL for slicing, STEP for editing). Print only the 25 parts in the table:
+All files are in `cad/output/` (STL for slicing, STEP for editing). Print only the 26 parts in the table (`key_cap` only if you use a bought ring instead of `key_ring`):
 `assembly.stl` and the `*_envelope.stl` files are check volumes, not parts. Everything fits your 230 x 230 x
 240 mm Ender 3. The widest part is the rear sphere half at 221 mm (because of the handle bosses), the tallest is
 the base at 115 mm. Centre the big parts. A skirt is enough, except for the two sphere halves and `dish_lower`,
@@ -182,7 +182,8 @@ Print these first, before any big part, and check them:
 
 1. `socket_housing`, `rotor`, `socket_base`, `plunger`: the rotor turns 45 degrees with slight drag and the
    plunger snaps it back. If it binds, raise `FIT` in `cad/params.py` by 0.05 and reprint the rotor.
-2. `key_cap`: drops into the rotor pocket one way only, with a little play.
+2. `key_ring`: slides onto your left middle finger past the knuckle, and its face drops into the rotor pocket one way
+   only, with a little play. If the finger hole is wrong, change `RING_ID` in `cad/params.py` and reprint (about 9 g).
 3. `glass_well` with your real shot glass: it slides the length of the slot, clicks over the ridge at the far
    end, and comes back out. If your glass is wider than 52 mm at the top it won't fit; pick another glass.
 3a. The other sliding fits, each as soon as both parts exist: `base_tray` up into `base` (sand the tray's edge,
@@ -221,7 +222,8 @@ Print these first, before any big part, and check them:
 | `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
 | `switch_bracket` | 23 x 10 x 7 | flat, pegs up | no | any | 1 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
-| `key_cap` | 28 x 24 x 3 | flat face down | no | green | 2 |
+| `key_ring` | 30 x 27 x 33 | emblem face down, as exported | tree support inside the finger hole only | green | 9 |
+| `key_cap` (only for a bought ring) | 28 x 24 x 3 | flat face down | no | green | 2 |
 | **Total** | | | | | **~1240 g** |
 
 Supports: none, except inside the two sphere halves, beneath the inverted bay floor, under the nozzle guide's bend, and the thin rings under the
@@ -398,7 +400,7 @@ pump run.
 
 ![socket mechanism](images/socket-mechanism.png)
 
-Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_cap`. Plus 3 x M3x8 flat-head and 3
+Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_ring`. Plus 3 x M3x8 flat-head and 3
 nuts for the base plate, 1 x M3x8 flat-head for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
 lock wall, the spring, the microswitch, the A3144 and one magnet.
 
@@ -409,16 +411,19 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
 
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing`. A dab of super glue
    holds each.
-2. **Ring key.** The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and
-   `status` running, hold each face of the magnet to the sensor's printed face: the face that gives
-   `ring=present` must face **out** of the pocket in `key_cap`. The cap has a closed flat face (the one that was
-   on the print bed) and a face with the open magnet pocket: the pocket face goes into the rotor, toward the
-   sensor, and the flat face is glued to the ring. Mark the magnet, then glue it in. Scuff
-   the ring's flat face and the key cap. Put the ring on your left hand and make the fist you will punch with,
-   ring face forward, held the way you start the twist (for example palm down). Glue the key cap on so its tab
-   points to your right. In the lock the tab then sits at the rest position, and the twist is counterclockwise
-   as you see it (from palm down, your thumb rolls up). The lock is built mirrored for this;
+2. **Ring.** `key_ring` is the ring and the lock's key in one print: the Green Lantern emblem on its face, the
+   keyed 24 mm disc and tab under the emblem, and a magnet pocket that opens inside the band, so the magnet never
+   shows. The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and `status`
+   running, hold each face of the magnet to the sensor's printed face: the face that gives `ring=present` goes
+   **down**, toward the ring's face. Mark it, put a drop of super glue in the pocket from inside the band, push the
+   magnet to the bottom with a hex key, and let it set before you wear it. The magnet sits under 0.6 mm of plastic,
+   about 3.6 mm from the sensor: about 55 mT at the worst rotor position against the A3144's 35 mT maximum.
+   Wear it on your **left middle finger**, tab toward your thumb. Make the fist you will punch with, ring face
+   forward, palm down: the tab points to your right, which is the lock's rest position, and the twist is
+   counterclockwise as you see it (your thumb rolls up). The lock is built mirrored for this;
    `LOCK_TWIST = 'cw'` in `cad/params.py` gives the clockwise version.
+   **Bought ring instead:** print `key_cap`, glue the magnet into its open pocket (switching face out), and glue
+   the cap's flat face onto a ring face at least 24 mm across, tab pointing to your right as above.
 3. **Hall sensor.** `socket_base` has a short round post in the middle with a small pocket on its tip. Bend
    the A3144's three leads 90 degrees right at the body, toward its unprinted back, so that with the printed
    face up they point straight down; feed them down the slot at the pocket's edge and out through the bottom
@@ -641,7 +646,7 @@ Set the lantern on a table with the hand opening toward you. Reach through the c
 into the near end of its slot and push it all the way back until it clicks over the ridge: that is the pour
 position, under the lock.
 
-1. Make a fist (ring on your left hand) and punch in through the curtain, ring face first, until the ring
+1. Make a fist (ring on your left middle finger) and punch in through the curtain, ring face first, until the ring
    seats in the lock. The lantern glows faintly.
 2. Twist 45 degrees counterclockwise and hold it as you start the oath. The pump starts and the light begins to climb.
 3. Keep holding through the oath. After about 11 seconds the pour is done; the light sits at 90 % until you
@@ -699,7 +704,7 @@ flattened.
 | Symptom | Check |
 |---|---|
 | Ring not detected | Are both cable plugs connected (easy to forget after a refill)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face facing out of the key cap (section 6, step 2)? Is pin 1 on 5 V? |
-| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The key cap's tab must point at the rest notch. |
+| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The ring's tab must point at the rest notch (toward your thumb). |
 | Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. Plugs connected? |
 | Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, section 6 step 6) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |

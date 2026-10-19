@@ -21,7 +21,7 @@ python3 export_viewer.py    # docs/assembly-viewer/index.html, the 3D assembly v
 | `parts/electronics.py` | non-printing board, component, connector and wire-space envelopes; coordinates follow the board assembly drawing |
 | `parts/dishes.py` | lower and upper reflector dishes with the spigot / locating rings; `top_diffuser` (frosted disc) in the upper dish floor; pilots for the curtain clamp; `NOTES-dishes.md` |
 | `parts/sphere.py` | sphere halves (hand opening, display window), diffuser, bay floor, glass slot, nozzle guide, lock wall, curtain clamp, handle bosses, glass / glass-path / fist / forearm envelopes |
-| `parts/socket.py` | the lock: housing, rotor, base plate with two mounting ears, switch bracket, plunger, key cap; screwed to the lock wall facing the hand opening (`LED_RING = True` adds a NeoPixel ring recess and halo) |
+| `parts/socket.py` | the lock: housing, rotor, base plate with two mounting ears, switch bracket, plunger, key ring (and key cap for a bought ring); screwed to the lock wall facing the hand opening (`LED_RING = True` adds a NeoPixel ring recess and halo) |
 | `parts/handle.py` | four-piece handle with lap joints; `NOTES-handle.md` |
 | `checks.py` | validity, hardware and hand envelope clearance, the glass's way out, part overlap (> 0.1 cm3 fails) |
 | `output/` | ready-to-slice STL (and STEP) files |
@@ -46,7 +46,9 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - The sphere halves need interior supports around the window and the hand opening, and the two dishes need a short
   ring of build-plate support under their bearing faces (see the guide's part table).
 - The rear sphere half is 221 mm wide because of the integral handle bosses.
-- `key_ring.stl` (the kit ring with the key cap merged in) is not generated; glue `key_cap` to any ring.
+- `key_ring` is sized by `RING_ID` (finger hole, 20.5 mm). Its magnet sits under `RING_MAGNET_SKIN` (0.6 mm), so the
+  Hall field is ~55 mT at the worst rotor position instead of 73. The fit checks skip it against the fist and the glass
+  path (the hand is withdrawn before the glass comes out) and against `key_cap` (the alternative for the same pocket).
 
 ## Electronics fit limits
 

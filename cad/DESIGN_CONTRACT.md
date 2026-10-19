@@ -364,3 +364,13 @@ requiring support under the floor inside its drip lip. The handle sockets have i
 so their bores retain a closed end. The switch-bracket screw moves 1.5 mm away from the switch cavity;
 the bracket and matching base-plate slot follow it, leaving 1.5 mm plastic between the bore and cavity.
 These changes preserve nozzle, handle-leg and microswitch-body positions.
+
+### Key ring (2026-10-19)
+
+`key_ring` (parts/socket.py) is the ring and the key in one part: a 24 mm keyed disc with the tab, `KEY_POCKET_DEPTH`
+(3.5) deep so its face reaches the pocket floor while the 27 mm head rests on the rotor face; above it the head and a
+band with a `RING_ID` finger hole whose axis is perpendicular to the tab. The Green Lantern emblem is cut 0.6 mm into
+the face. The magnet pocket opens inside the band and stops `RING_MAGNET_SKIN` (0.6 mm) short of the face, so the
+magnet is hidden: magnet face to Hall element 3.6 mm nominal, 4.0 mm with the rotor at the lip (~55 mT, N35). Printed
+emblem face down. `checks.py` skips it against the fist and forearm (it is on the hand), the glass path (the fist is
+withdrawn first) and `key_cap` (the glued alternative for a bought ring).
