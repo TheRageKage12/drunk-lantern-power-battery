@@ -456,4 +456,6 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   pocket is its negative, so the bars turn the rotor; it fits either way up. **The rotor must be (re)printed from this
   version.** Magnet to sensor 3.7 mm nominal, ~53 mT worst case (1.5x). The ring now needs support under its head
   when printed emblem-down.
+  Kevin's middle finger measured 20-25 mm with calipers, too wide a range to print from, so `cad/ring_sizer.py` makes
+  ten labelled test bands (18.5-23 mm); `RING_ID` = the band that fits over the knuckle + 0.5 mm.
 

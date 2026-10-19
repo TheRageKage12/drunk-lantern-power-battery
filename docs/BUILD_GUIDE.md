@@ -182,7 +182,10 @@ Print these first, before any big part, and check them:
 
 1. `socket_housing`, `rotor`, `socket_base`, `plunger`: the rotor turns 45 degrees with slight drag and the
    plunger snaps it back. If it binds, raise `FIT` in `cad/params.py` by 0.05 and reprint the rotor.
-2. `key_ring`: slides onto your left middle finger past the knuckle, and its raised emblem drops into the rotor's
+2. **Size the ring first** with `ring_sizer.stl` (ten labelled test bands, 18.5–23 mm, ~12 g, no supports): pick the
+   band that slides over the knuckle of your left middle finger with slight resistance, and set `RING_ID` in
+   `cad/params.py` to that size **plus 0.5 mm** (the ring's band is much wider than the test bands, so it fits
+   tighter). Re-run `python3 build.py`, then print `key_ring`: it slides onto your left middle finger past the knuckle, and its raised emblem drops into the rotor's
    emblem-shaped pocket (bars level, either way up) and turns the rotor with it, with a little play. If the finger hole is wrong, change `RING_ID` in `cad/params.py` and reprint (about 9 g).
 3. `glass_well` with your real shot glass: it slides the length of the slot, clicks over the ridge at the far
    end, and comes back out. If your glass is wider than 52 mm at the top it won't fit; pick another glass.
