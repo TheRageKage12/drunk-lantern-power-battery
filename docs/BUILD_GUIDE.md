@@ -182,8 +182,8 @@ Print these first, before any big part, and check them:
 
 1. `socket_housing`, `rotor`, `socket_base`, `plunger`: the rotor turns 45 degrees with slight drag and the
    plunger snaps it back. If it binds, raise `FIT` in `cad/params.py` by 0.05 and reprint the rotor.
-2. `key_ring`: slides onto your left middle finger past the knuckle, and its face drops into the rotor pocket one way
-   only, with a little play. If the finger hole is wrong, change `RING_ID` in `cad/params.py` and reprint (about 9 g).
+2. `key_ring`: slides onto your left middle finger past the knuckle, and its raised emblem drops into the rotor's
+   emblem-shaped pocket (bars level, either way up) and turns the rotor with it, with a little play. If the finger hole is wrong, change `RING_ID` in `cad/params.py` and reprint (about 9 g).
 3. `glass_well` with your real shot glass: it slides the length of the slot, clicks over the ridge at the far
    end, and comes back out. If your glass is wider than 52 mm at the top it won't fit; pick another glass.
 3a. The other sliding fits, each as soon as both parts exist: `base_tray` up into `base` (sand the tray's edge,
@@ -222,8 +222,8 @@ Print these first, before any big part, and check them:
 | `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
 | `switch_bracket` | 23 x 10 x 7 | flat, pegs up | no | any | 1 |
 | `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
-| `key_ring` | 30 x 27 x 33 | emblem face down, as exported | tree support inside the finger hole only | green | 9 |
-| `key_cap` (only for a bought ring) | 28 x 24 x 3 | flat face down | no | green | 2 |
+| `key_ring` | 27 x 27 x 34 | emblem down, as exported | under the head (around the emblem, touching the plate) and inside the finger hole | green | 8 |
+| `key_cap` (only for a bought ring) | 24 x 24 x 6 | glue face down, emblem up | no | green | 2 |
 | **Total** | | | | | **~1240 g** |
 
 Supports: none, except inside the two sphere halves, beneath the inverted bay floor, under the nozzle guide's bend, and the thin rings under the
@@ -411,19 +411,20 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
 
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing`. A dab of super glue
    holds each.
-2. **Ring.** `key_ring` is the ring and the lock's key in one print: the Green Lantern emblem on its face, the
-   keyed 24 mm disc and tab under the emblem, and a magnet pocket that opens inside the band, so the magnet never
-   shows. The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and `status`
+2. **Ring.** `key_ring` is the ring and the lock's key in one print. Its raised Green Lantern emblem (the circle and
+   two bars, 4 mm proud) is the key: the rotor's pocket is the emblem's negative, so the bars turn the rotor when you
+   twist. There is no tab. The magnet pocket opens inside the band, so the magnet never shows. The A3144 reacts to one magnet pole only. With the sensor wired to the board (section 4) and `status`
    running, hold each face of the magnet to the sensor's printed face: the face that gives `ring=present` goes
    **down**, toward the ring's face. Mark it, put a drop of super glue in the pocket from inside the band, push the
-   magnet to the bottom with a hex key, and let it set before you wear it. The magnet sits under 0.6 mm of plastic,
-   about 3.6 mm from the sensor: about 55 mT at the worst rotor position against the A3144's 35 mT maximum.
-   Wear it on your **left middle finger**, tab toward your thumb. Make the fist you will punch with, ring face
-   forward, palm down: the tab points to your right, which is the lock's rest position, and the twist is
-   counterclockwise as you see it (your thumb rolls up). The lock is built mirrored for this;
+   magnet to the bottom with a hex key, and let it set before you wear it. The magnet sits behind the centre disc under 0.6 mm of plastic,
+   about 3.7 mm from the sensor: about 53 mT at the worst rotor position against the A3144's 35 mT maximum.
+   Wear it on your **left middle finger**. Make the fist you will punch with, ring face forward, palm down: the
+   emblem's bars lie level, which is how the pocket sits at rest, and the twist is counterclockwise as you see it
+   (your thumb rolls up). The lock is built mirrored for this;
    `LOCK_TWIST = 'cw'` in `cad/params.py` gives the clockwise version.
-   **Bought ring instead:** print `key_cap`, glue the magnet into its open pocket (switching face out), and glue
-   the cap's flat face onto a ring face at least 24 mm across, tab pointing to your right as above.
+   **Bought ring instead:** print `key_cap` (a 24 mm disc carrying the same raised emblem). Glue the magnet into
+   the pocket in its flat top, switching face toward the emblem, then glue that flat top onto a ring face at least
+   24 mm across, with the bars across the finger.
 3. **Hall sensor.** `socket_base` has a short round post in the middle with a small pocket on its tip. Bend
    the A3144's three leads 90 degrees right at the body, toward its unprinted back, so that with the printed
    face up they point straight down; feed them down the slot at the pocket's edge and out through the bottom
@@ -704,7 +705,7 @@ flattened.
 | Symptom | Check |
 |---|---|
 | Ring not detected | Are both cable plugs connected (easy to forget after a refill)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face facing out of the key cap (section 6, step 2)? Is pin 1 on 5 V? |
-| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The ring's tab must point at the rest notch (toward your thumb). |
+| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The emblem's bars must be level (the rotor's rest position) to drop into the pocket. |
 | Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. Plugs connected? |
 | Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, section 6 step 6) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |

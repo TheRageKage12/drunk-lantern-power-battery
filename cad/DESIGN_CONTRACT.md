@@ -367,10 +367,12 @@ These changes preserve nozzle, handle-leg and microswitch-body positions.
 
 ### Key ring (2026-10-19)
 
-`key_ring` (parts/socket.py) is the ring and the key in one part: a 24 mm keyed disc with the tab, `KEY_POCKET_DEPTH`
-(3.5) deep so its face reaches the pocket floor while the 27 mm head rests on the rotor face; above it the head and a
-band with a `RING_ID` finger hole whose axis is perpendicular to the tab. The Green Lantern emblem is cut 0.6 mm into
-the face. The magnet pocket opens inside the band and stops `RING_MAGNET_SKIN` (0.6 mm) short of the face, so the
-magnet is hidden: magnet face to Hall element 3.6 mm nominal, 4.0 mm with the rotor at the lip (~55 mT, N35). Printed
-emblem face down. `checks.py` skips it against the fist and forearm (it is on the hand), the glass path (the fist is
+`key_ring` (parts/socket.py) is the ring and the key in one part. The key is the raised emblem (`EM_*`): a circle
+(r 6.0) and two bars across the finger, standing out of the 27 mm head face; the circle and bars end `EM_END_GAP` above
+the pocket floor minus `EM_STEP`, the centre disc (r 3.6) `EM_STEP` (0.6) higher, just above `POCKET_FLOOR`. The rotor
+pocket is the emblem grown by `FIT`, with a centre floor at `POCKET_FLOOR` (0.4 mm of rotor over the post hole under
+the annulus). The head rests on the rotor face; the bars key the rotation (~1.5 degrees of play); the emblem is
+symmetric, so the ring fits at 0 and 180 degrees. No tab. The magnet pocket opens inside the band and stops
+`RING_MAGNET_SKIN` short of the centre disc's face: magnet to Hall element 3.7 mm nominal, 4.1 mm with the rotor at the
+lip (~53 mT, N35). Printed emblem down, support under the head. `key_cap` is the same emblem key on a 2 mm disc. `checks.py` skips it against the fist and forearm (it is on the hand), the glass path (the fist is
 withdrawn first) and `key_cap` (the glued alternative for a bought ring).

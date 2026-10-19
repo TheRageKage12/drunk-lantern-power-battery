@@ -43,9 +43,9 @@ def run(all_parts, placements):
                 if v > 200.0:
                     print(f'FAIL clearance: {en} intersects {hn} by {v / 1000:.1f} cm3'); problems += 1
         for n, wp in placed.items():
-            if en in ('fist_envelope', 'forearm_envelope') and (n.startswith('switch') or n == 'key_ring'):   # the ring is on the hand
+            if en in ('fist_envelope', 'forearm_envelope') and (n.startswith('switch') or n in ('key_ring', 'key_cap')):   # both are worn on the hand
                 continue
-            if en == 'glass_path_envelope' and n == 'key_ring':   # the fist (with the ring) is drawn back before the glass comes out
+            if en == 'glass_path_envelope' and n in ('key_ring', 'key_cap'):   # the fist (with the ring) is drawn back before the glass comes out
                 continue
             if en.endswith('_sweep_envelope') and n in SHELL:
                 continue

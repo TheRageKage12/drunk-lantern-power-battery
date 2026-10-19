@@ -66,10 +66,11 @@ def top_view(cx, cy, theta, title):
     s.path("M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in ramp) + " Z", stroke=INK, sw=1.2, fill="#a5a5a5")
     # stop lug at 180 deg (-X), 4 mm wide, out to r 22.5
     s.path("M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in [pol(cx, cy, 17, 186), pol(cx, cy, 22.5, 186), pol(cx, cy, 22.5, 174), pol(cx, cy, 17, 174)]) + " Z", stroke=INK, sw=1.2, fill="#777")
-    # keyed pocket: 24 mm disc + 6 mm tab pointing to 12 o'clock
-    s.circle(cx, cy, 12 * SC, fill="#8d8d8d", sw=1)
-    s.rect(cx - 3 * SC, cy - 17.5 * SC, 6 * SC, 6 * SC, fill="#8d8d8d", sw=1)
-    s.circle(cx, cy, 12 * SC, fill="none", sw=1)
+    # emblem pocket: the ring's raised emblem (circle + two bars) is the key; bars level at rest
+    s.circle(cx, cy, 6.3 * SC, fill="#8d8d8d", sw=1)
+    for sy in (-1, 1):
+        s.rect(cx - 7.8 * SC, cy + (sy * 9.0 - 1.7) * SC, 15.6 * SC, 3.4 * SC, fill="#8d8d8d", sw=1)
+    s.circle(cx, cy, 3.3 * SC, fill="#a5a5a5", sw=0.8)
     # magnet pocket (hidden under the pocket floor)
     s.circle(cx, cy, 3 * SC, fill="#616161", sw=1, dash="2,2")
     # cam lobe on the rim, 50..70 deg at rest, 3 mm lift: presses the lever between 33 and 45 deg of twist
@@ -122,8 +123,8 @@ lab(165, 112, ["cam lobe on the rim", "(50\u201370\u00b0 at rest, 3 mm lift)"], 
 lab(165, 150, ["rotor drops in from below; the", "base plate closes the housing", "and carries the Hall sensor post"], *pol(cx, cy, 18.3, 10), anchor="end")
 lab(165, 200, ["housing, 76 mm across: its", "face is flush with the ring pocket"], *pol(cx, cy, 38, 300), anchor="end")
 lab(165, 240, ["stop lug (printed, at %s o'clock)" % ("3" if MIRROR else "9"), "in a 59\u00b0 channel: its walls are", "the hard stops at 0\u00b0 and 45\u00b0"], *pol(cx, cy, 20, 180), anchor="end")
-lab(165, 290, ["keyed pocket: 24 mm disc +", "6\u00d74 mm tab (matches the", "ring key cap)"], *pol(cx, cy, 12, 270), anchor="end")
-lab(165, 340, ["6\u00d72 mm magnet in the key cap,", "on the axis: it never moves", "when the ring is twisted"], cx - 4, cy + 4, anchor="end")
+lab(165, 290, ["emblem pocket: the ring's", "raised emblem is the key;", "its bars turn the rotor"], *pol(cx, cy, 9, 270), anchor="end")
+lab(165, 340, ["6\u00d72 mm magnet hidden in", "the ring, on the axis: it never", "moves when the ring is twisted"], cx - 4, cy + 4, anchor="end")
 lab(165, 390, ["0.5\u00d75\u00d710 mm spring + plunger in a", "radial pocket press on the rim", "ramp: it pushes the rotor back to 0\u00b0"], *pol(cx, cy, 30, 300), anchor="end")
 lab(165, 440, ["two ears on the base plate:", "M3x10 + nut through the lock wall"], *pol(cx, cy, 53, 230), anchor="end")
 lab(165, 478, ["ramp on the rim, 300\u2013345\u00b0"], *pol(cx, cy, 20, 322), anchor="end")
@@ -132,8 +133,8 @@ cx, cy = 720, 262
 PANEL_CX = cx
 lab(875, 112, ["twist the ring 45\u00b0 %s" % ("counterclockwise" if MIRROR else "clockwise"), "(as you see it)"], *pol(cx, cy, 39, 30), anchor="start")
 lab(875, 160, ["stop lug against the channel", "wall = 45\u00b0 hard stop"], *pol(cx, cy, 20, 135), anchor="start")
-lab(875, 205, ["D2F-L on a sliding bracket", "(its screw rides in a slot: loosen,", "push, tighten to tune the click)"], cx + 26 * SC + 17, cy - 17, anchor="start")
-lab(875, 250, ["cam lobe has pressed the D2F-L", "lever 3 mm after ~40\u00b0 of twist:", "click (SW goes LOW)"], *pol(cx, cy, 23, 20), anchor="start")
+lab(875, 205, ["D2F-01L on a sliding bracket", "(its screw rides in a slot: loosen,", "push, tighten to tune the click)"], cx + 26 * SC + 17, cy - 17, anchor="start")
+lab(875, 250, ["cam lobe has pressed the D2F-01L", "lever 3 mm after ~40\u00b0 of twist:", "click (SW goes LOW)"], *pol(cx, cy, 23, 20), anchor="start")
 lab(875, 300, ["magnet still centred on the", "Hall sensor: Hall stays LOW", "through the whole twist"], cx + 4, cy + 4, anchor="start")
 lab(875, 350, ["plunger pushed out 4 mm by the", "ramp; let go and it pushes the", "rotor back to 0\u00b0 (switch releases)"], *pol(cx, cy, 30, 300), anchor="start")
 lab(875, 400, ["ramp now under the plunger"], *pol(cx, cy, 21, 290), anchor="start")
@@ -159,13 +160,14 @@ s.rect(cx + 70, Y0, 5, 9, fill="#f4f4f4", sw=1.2)
 # rotor: 44 OD body, flange tab under the lip, pocket on top, recess underneath for the sensor
 s.rect(cx - 66, Y0 + 3, 132, 54, fill="#bdbdbd", sw=1.2)
 s.rect(cx - 72, Y0 + 9, 6, 6, fill="#9e9e9e", sw=1)            # flange tab (left, 9 o'clock)
-s.rect(cx - 36, Y0 + 3, 72, 8, fill="#8d8d8d", sw=1)           # key pocket
+s.rect(cx - 19, Y0 + 3, 38, 12, fill="#8d8d8d", sw=1)          # emblem pocket (circle section)
 s.rect(cx - 16, Y0 + 18, 32, 39, fill="#ffffff", sw=1)         # blind hole from below (1 mm skin under the magnet)
-# ring key cap in the pocket, magnet centred
-s.rect(cx - 36, Y0 + 3, 72, 8, fill="#2e7d32", sw=1)
+# the ring's raised emblem in the pocket; magnet hidden behind the centre disc
+s.rect(cx - 18, Y0 - 2, 36, 16, fill="#2e7d32", sw=1)
 s.rect(cx - 9, Y0 + 4, 18, 6, fill="#616161", sw=0.8)
 s.text(cx, Y0 + 9, "N  S", size=6, anchor="middle", color="#fff", weight="bold")
-# the ring standing on its key cap
+s.rect(cx - 40, Y0 - 6, 80, 5, fill="#2e7d32", sw=1)           # ring head resting on the rotor face
+# the ring band
 s.circle(cx, Y0 - 34, 34, fill="none", stroke="#2e7d32", sw=9)
 # A3144 on a post that rises from the base plate into the rotor's blind hole, on the axis
 s.rect(cx - 12, Y0 + 30, 24, 67, fill="#d7d7d7", sw=1)         # post (stationary; the rotor turns around it)
@@ -186,17 +188,17 @@ s.path(f"M{cx},{Y0 - 80} L{cx},{Y0 + 115}", stroke="#999", sw=0.8, dash="8,3,2,3
 
 # section labels: left
 LXS = 300
-lab(LXS, 567, ["Green Lantern ring (20 mm), inserted", "face-down; the printed key cap is", "glued to its emblem face"], cx - 30, Y0 - 50, anchor="end", size=9.5)
+lab(LXS, 567, ["printed Green Lantern ring, emblem", "first: the emblem drops into the", "pocket, the head rests on the rotor"], cx - 30, Y0 - 50, anchor="end", size=9.5)
 lab(LXS, 617, ["stop lug on the rotor rim rides in", "a channel under the housing's lip;", "the lip also retains the rotor"], cx - 50, Y0 + 40, anchor="end", size=9.5)
 lab(LXS, 667, ["lock wall behind the base plate;", "a window in it passes the cables", "to the hidden side"], cx - 140, Y0 + 108, anchor="end", size=9.5)
 lab(LXS, 717, ["spring + plunger (out of plane,", "lower right) in a radial pocket,", "10 mm spring, 4 mm stroke"], cx - 94, Y0 + 80, anchor="end", size=9.5)
 lab(LXS, 762, ["housing puck 76 OD, 6.7 deep;", "base plate 3.5 mm, 3× M3 + nuts"], cx - 120, Y0 + 100, anchor="end", size=9.5)
 # section labels: right
 RXS = 760
-lab(RXS, 567, ["6×2 mm magnet in the key cap,", "on the rotation axis"], cx + 9, Y0 + 7, anchor="start", size=9.5)
+lab(RXS, 567, ["6×2 mm magnet inside the ring,", "0.6 mm behind the emblem's centre"], cx + 9, Y0 + 7, anchor="start", size=9.5)
 lab(RXS, 612, ["rotor 36 OD × 8 flat disc; its rim", "lug rides under the housing's lip"], cx + 66, Y0 + 20, anchor="start", size=9.5)
-lab(RXS, 657, ["A3144 on a post up inside the rotor,", "~3 mm below the magnet; the rotor", "turns around the post"], cx + 8, Y0 + 33, anchor="start", size=9.5)
-lab(RXS, 707, ["D2F-L on its pegged bracket in the", "base plate (lobe dashed: at 50–70°,", "out of this plane)"], cx + 90, Y0 + 70, anchor="start", size=9.5)
+lab(RXS, 657, ["A3144 on a post up inside the rotor,", "~3.7 mm below the magnet; the rotor", "turns around the post"], cx + 8, Y0 + 33, anchor="start", size=9.5)
+lab(RXS, 707, ["D2F-01L on its pegged bracket in the", "base plate (lobe dashed: at 50–70°,", "out of this plane)"], cx + 90, Y0 + 70, anchor="start", size=9.5)
 lab(RXS, 757, ["cables through the wall window,", "down behind the wall to the base"], cx + 40, Y0 + 115, anchor="start", size=9.5)
 
 open(os.path.join(HERE, "..", "socket-mechanism.svg"), "w").write(s.finish())

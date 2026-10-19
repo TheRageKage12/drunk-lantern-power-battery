@@ -113,8 +113,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
   - hard stops at 0° and 45°
   - a cam that lifts a D2F-01L lever microswitch 3 mm (verify the purchased switch fits the existing bracket)
   - a radial spring plunger that returns the rotor
-  - a 6 x 2 mm magnet hidden inside `key_ring`, a printed Green Lantern ring with the key on its face
-    (since 2026-10-19; the glued `key_cap` stays as the fallback for a bought ring)
+  - a 6 x 2 mm magnet hidden inside `key_ring`, a printed Green Lantern ring whose raised emblem is the key;
+    the rotor pocket is the emblem's negative, no tab (since 2026-10-19; `key_cap` is the fallback for a bought ring)
 - Mirrored for **counterclockwise** (`LOCK_TWIST = 'ccw'`).
 - Kevin asked if it could be simpler. The decision was to **keep it as is**.
 - **Spring:** about 0.4-0.5 mm wire, 5 mm OD (fits a 5.6 mm pocket), ~10 mm long. Buy one from Ace's Hillman
@@ -451,6 +451,9 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   request) the magnet hidden in a pocket opened from inside the band, 0.6 mm under the face. Cost: the magnet is
   0.6 mm farther from the sensor, ~55 mT at the worst rotor position against a 35 mT maximum operate point (1.6x;
   was 2.1x). Worn on the left middle finger, as Green Lanterns wear it; `RING_ID` 20.5 mm from Kevin's 20 mm
-  measurement, to confirm on the middle finger. The tab stays: it is what turns the rotor, and the printed rotor
-  pocket needs it.
+  measurement, to confirm on the middle finger. Same day, Kevin asked for the bold emblem and no tab: the raised
+  emblem (circle and bars, 4 mm proud, the centre disc 0.6 mm lower like the real emblem) is now the key, and the rotor
+  pocket is its negative, so the bars turn the rotor; it fits either way up. **The rotor must be (re)printed from this
+  version.** Magnet to sensor 3.7 mm nominal, ~53 mT worst case (1.5x). The ring now needs support under its head
+  when printed emblem-down.
 

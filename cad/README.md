@@ -46,8 +46,9 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - The sphere halves need interior supports around the window and the hand opening, and the two dishes need a short
   ring of build-plate support under their bearing faces (see the guide's part table).
 - The rear sphere half is 221 mm wide because of the integral handle bosses.
-- `key_ring` is sized by `RING_ID` (finger hole, 20.5 mm). Its magnet sits under `RING_MAGNET_SKIN` (0.6 mm), so the
-  Hall field is ~55 mT at the worst rotor position instead of 73. The fit checks skip it against the fist and the glass
+- `key_ring` is sized by `RING_ID` (finger hole, 20.5 mm). Its raised emblem is the key: the rotor pocket is the
+  emblem's negative (no tab). The magnet sits behind the centre disc under `RING_MAGNET_SKIN` (0.6 mm), so the Hall
+  field is ~53 mT at the worst rotor position instead of 73. The fit checks skip it against the fist and the glass
   path (the hand is withdrawn before the glass comes out) and against `key_cap` (the alternative for the same pocket).
 
 ## Electronics fit limits
