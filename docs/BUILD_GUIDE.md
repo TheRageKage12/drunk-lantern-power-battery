@@ -20,7 +20,8 @@ The assembly guide follows the build order and includes chapter markers. The exp
 how the parts fit together; use the guide for the actual sequence. The guide includes two orange-tube
 cutaways showing the pump-to-floor route and nozzle threading. The pump outlet and loose service loop
 are illustrative; confirm their fit with the actual parts. Wiring, curtain and metal fasteners are
-described where needed but are not individually animated.
+described where needed but are not individually animated. Skip the "Install the charge jack" chapter: the jack is
+not fitted for now (you charge at the battery, section 12).
 
 ![interaction timeline](images/interaction.png)
 
@@ -53,7 +54,7 @@ measure the actual capacitor, connectors, buck, switch, pump and jar before prin
 | Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window). On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-01L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. Nothing shows on the shell: the power switch sits in a pocket under the cartridge floor (tip the lantern to flip it) and the charge jack is on the deck, pointing up. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
+| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. Nothing shows on the shell: the power switch sits in a pocket under the cartridge floor (tip the lantern to flip it), and the battery charges at its own port. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
 
 ![fluid path and layout](images/fluid-path.png)
 
@@ -103,12 +104,12 @@ works on 3.3 V and either magnet pole.
 | 11 | 2 x IRLZ44NPBF N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | Exact required part: IRLZ44NPBF, TO-220. Vendor URL/title is stale; its detail table names IRLZ44NPBF. Verify IRLZ44N marking; review substitutions before use. |
 | 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
-| 12b | Charge jack | [Vetco 321B, 2.1 mm DC panel jack](https://vetco.net/products/321b_2-1mm_dc_power_panel_mount_jack) | $2.99 | DC5521 (5.5 x 2.1 mm) female, 7/16" (11.1 mm) panel hole, 12.4 mm wide, 22 mm tall; the battery's charger plugs into it. The 8 mm Vetco 2112 was out of stock (2026-10-19); a deck printed before then has an 8 mm hole: open it to 11.3 mm with a step drill or a knife. |
+| 12b | Charge jack (**not fitted for now**) | [Vetco 321B, 2.1 mm DC panel jack](https://vetco.net/products/321b_2-1mm_dc_power_panel_mount_jack) | - | Optional, $2.99. Since 2026-10-20 you charge by plugging the charger straight into the battery (section 12), so the jack is skipped. The deck keeps its 11.3 mm hole so it can be added later: DC5521 (5.5 x 2.1 mm) female, 7/16" hole, wired across the battery lead ahead of S1. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 13a), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $205 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $46.68, Tacoma Screw ~$12, straps and
+**Total: about $202 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $43.69, Tacoma Screw ~$12, straps and
 zip ties ~$5, and ~$13.50 of local estimates for the spring, the jar, the curtain sheet and the shot glass. The
 [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the live store-by-store figures and who already has what. The 2026-10-13
 design was about $186: the electrical revision added $4.69, the heat-set inserts $9.99, the straps and ties ~$5 (listed before,
@@ -132,7 +133,7 @@ The total assumes you already have:
 
 | Store | Address, hours | Buy here |
 |---|---|---|
-| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch, charge jack and the two JST plugs. Not stocked: XIAO, magnets, check valves. |
+| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch and the two JST plugs. Not stocked: XIAO, magnets, check valves. |
 | [Tacoma Screw Products, Ballard](https://www.tacomascrew.com/LocationFinder) | 3930 Leary Way NW, Seattle 98107, (206) 632-7565. Mon-Fri 7-5, Sat 9-1 | M3 screws and nuts by the piece, springs. Georgetown branch: 1121 S Bailey St, Mon-Fri 7-5. |
 | [McLendon Hardware](https://www.mclendons.com/locations) | White Center: 10210 16th Ave SW, Seattle 98146. Renton: 440 Rainier Ave S | Spring drawers, metric screws, glue. |
 | Ace Hardware (Magnolia, Maple Leaf, West Seattle Junction), Stoneway Hardware | Seattle neighbourhoods | The lock spring (Hillman spring drawer), fasteners by the piece. |
@@ -270,16 +271,16 @@ pad names stay the same. Check the actual hole-array position and C2 case size b
    holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left corner
    (the [board layout](review/protoboard/README.md) is the reference), checking against the printed panel first. Keep each 9 x 9 mm mounting area clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
    during initial USB flashing. Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
-2. **Battery, charge jack and S1.** With battery and charger unplugged, cut one male DC5521 lead
+2. **Battery and S1.** With battery and charger unplugged, cut one male DC5521 lead
    from the supplied TalentCell splitter to make the battery pigtail. Do not cut or open the pack.
    Identify centre-positive and sleeve-negative with a continuity meter; do not rely on wire colour.
    Plug the finished, insulated pigtail into the pack. With its own switch ON, confirm 9–12.6 V and polarity.
-   Power off and unplug again before soldering. Positive goes to J1 centre and S1; S1's other terminal is
-   **VLOAD**, the switched battery rail. Negative goes to J1 sleeve and the common ground.
-   Identify J1's contacts with a plug and continuity meter; its third, switched contact is unused and insulated.
+   Power off and unplug again before soldering. Positive goes to S1; S1's other terminal is
+   **VLOAD**, the switched battery rail. Negative goes to the common ground. There is no charge jack for now
+   (an optional one would go across the pigtail ahead of S1).
    Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It buffers short disturbances;
-   it cannot sustain an overloaded or stalled motor. Charge with **S1 OFF, pack switch ON**, using only
-   the supplied 12.6 V charger through J1. The pack lies flat on the cartridge floor under a 20 mm strap (section 9).
+   it cannot sustain an overloaded or stalled motor. To charge, unplug the pigtail from the pack and plug
+   the supplied 12.6 V charger into the pack's port instead, pack switch ON (section 12). The pack lies flat on the cartridge floor under a 20 mm strap (section 9).
 2a. **Battery sense.** R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground.
    At a full 12.6 V pack, D0 sees 2.27 V. Keep this signal away from motor wiring.
 3. **Set the buck output first.** Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
@@ -548,9 +549,8 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
    through the open notch at the deck's edge (the deck's other slot is a closed hole, so
    a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
-   three pillars that have holes; it fits one way). The jack goes socket-up in the relocated 11.3 mm hole
-   on the side opposite the buck converter (+X, y=-25), clear of the populated board. Check its charging
-   plug fits with the shell off. Jar in its ring with a strap through the finger slots. **Fit the tube
+   three pillars that have holes; it fits one way). The deck's 11.3 mm hole (+X, y=-25) is for an optional charge jack and stays empty for now.
+   Check you can reach the pack's port and switch from the -Y side with the lantern lifted off. Jar in its ring with a strap through the finger slots. **Fit the tube
    to the pump now, while the cartridge is exposed:** open the head, lay the continuous tube around
    the rollers and close the cap. Leave the outlet end free for later threading to the nozzle. Then
    seat the pump in its saddles and secure it with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
@@ -649,7 +649,7 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
 - [ ] On the day: `status` reads about 11.5 V or more (roughly half charge or better). Below that, charge first.
 - [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring double-blinks before the glow.
-- [ ] S1 OFF, pack switch ON, USB unplugged: the supplied charger indicates charging through J1.
+- [ ] Lantern lifted off, battery lead unplugged from the pack, charger plugged into the pack, pack switch ON: the charger's LED shows charging. Plug the battery lead back in afterwards.
 - [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
 - [ ] Your fist goes through the curtain and into the lock, and back out, without catching.
 - [ ] With the lights on in a dim room, the curtain, the display window and the top all glow; you can't see the nozzle.
@@ -677,10 +677,11 @@ nozzle (the line is empty after cleaning; empty the glass as needed). Put the la
 pour into the glass: the first pour of the night should not be the one in front of a guest. Then the empty
 glass goes in and you are ready.
 
-**Charging:** S1 OFF, TalentCell pack switch ON, USB unplugged. Lift the lantern off (3 thumbscrews)
-and plug the supplied TalentCell 12.6 V charger into the jack on the deck: it points up at the deck's edge on your left, a
-little toward the display side (the side away from the buck converter). The lantern can go back on while it charges if you
-route the charger lead out under the rim on blocks, or just leave it beside the cartridge. A full charge takes about 6 h at the charger's 0.5 A. Charge after
+**Charging:** S1 OFF, USB unplugged. Lift the lantern off (3 thumbscrews). The battery's port and switch are at its
+-Y end, under the deck's edge between two pillars. Pull the battery lead's plug out of the port and plug the supplied
+TalentCell 12.6 V charger in instead, with the pack switch ON (the charger's LED is red while charging, green when done).
+Leave the lantern off while it charges. When it's done, unplug the charger and **plug the battery lead back in**: the
+lantern does nothing without it. A full charge takes about 6 h at the charger's 0.5 A. Charge after
 every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
 The double blink as you punch in (below 10.5 V) is a late warning. Runtime and state of charge versus voltage
 need checking on the assembled prop; do not treat the voltage threshold as a precise 50% fuel gauge.

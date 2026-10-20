@@ -212,9 +212,9 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
     end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
     z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
     lower run is recessed under the tray. Verify the supplied plug and bend fit the 25 mm end allowance.
-- The charge jack (2.1 mm panel jack, Vetco 321B since 2026-10-19, 11.3 mm hole) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
+- The charge jack (2.1 mm panel jack, 11.3 mm deck hole; **not fitted since 2026-10-20**, see the change log) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
-  down (tip the lantern to flip it); the jack is on the deck, socket up, reached with the lantern lifted off.
+  down (tip the lantern to flip it); the jack hole is on the deck, socket up, reached with the lantern lifted off.
   Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
   underneath (which needs a cable groove at the rim). The switch stops the ~15 mA idle drain while stored.
 - An LM2596 makes regulated 5.0 V directly for U1 and Hall. Only the XIAO supply branch passes through
@@ -474,3 +474,11 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   female panel jack, in stock, $2.99, but takes a 7/16" (11.1 mm) hole and is 12.4 mm wide: `PORT_JACK_D` 11.3 mm,
   jack envelope 13 x 13 mm below the deck and a 17 mm nut allowance above it. The deck stays solid round the hole and
   all checks pass. A deck already printed with the 8 mm hole can be opened up instead of reprinted.
+- **2026-10-20, no charge jack for now.** Vetco's shelf had no 2.1 mm panel jack (the 2.5 mm one they offered won't
+  take the charger's 2.1 mm plug). Kevin chose to skip the jack: the TalentCell's single DC5521 port is both input
+  and output, so you charge by unplugging the battery lead at the pack and plugging the charger in, pack switch ON.
+  The port and switch are at the pack's -Y end, about 12 mm in from the tray edge between two pillars, with nothing
+  but the drum in the way (probed), so they're reachable with the lantern lifted off. Cost: you swap plugs to charge,
+  and must remember to plug the lead back in. The CAD is unchanged: the deck keeps its 11.3 mm hole and the jack
+  envelope, so a jack can be added later across the lead ahead of S1. Guide, board docs (J1 removed) and the Sheet
+  updated; Vetco -$2.99. Chapter "Install the charge jack" in `docs/videos/assembly-guide.mp4` is now optional.

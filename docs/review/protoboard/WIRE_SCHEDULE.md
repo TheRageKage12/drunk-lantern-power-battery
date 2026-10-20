@@ -7,7 +7,7 @@ Generated from `layout.py`. Front coordinates are retained on the mirrored rear 
 | Cable | Pad | Other end | Centre behind board |
 |---|---|---|---|
 | H01 | N01 | S1 switched output | 2.7 mm |
-| H02 | N02 | Battery negative / J1 sleeve | 6.5 mm |
+| H02 | N02 | Battery negative | 6.5 mm |
 | H03 | O01 | Buck IN+ | 6.5 mm |
 | H04 | O02 | Buck IN− | 4.6 mm |
 | H05 | P01 | Buck OUT+ (set to 5.0 V) | 4.6 mm |

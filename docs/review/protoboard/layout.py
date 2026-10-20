@@ -103,7 +103,7 @@ PARTS=[
 ]
 HARNESS=[
     ('H01', 'N01', 'VLOAD', 'S1 switched output'),
-    ('H02', 'N02', 'GND', 'Battery negative / J1 sleeve'),
+    ('H02', 'N02', 'GND', 'Battery negative'),
     ('H03', 'O01', 'VLOAD', 'Buck IN+'),
     ('H04', 'O02', 'GND', 'Buck IN−'),
     ('H05', 'P01', '5V_REG', 'Buck OUT+ (set to 5.0 V)'),

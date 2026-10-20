@@ -140,8 +140,8 @@ def reference_pages():
   y=135+i*38;d.text(48,y,ref,18);d.text(130,y,pad,18);d.text(230,y,label,18,color=NETS[net][0]);d.text(1140,y,f"{next(w for w in ALL_ROUTES if w['id']==ref)['depth']:g} mm",17)
  d.text(42,705,'OFF-BOARD CONNECTIONS',23)
  lines=[
- 'Battery + → J1 centre and S1 input. S1 output → H01. Battery − → J1 sleeve and H02.',
- 'Leave J1 switched contact unused. Set the buck output to 5.0 V before connecting H05/H06.',
+ 'Battery + → S1 input. S1 output → H01. Battery − → H02. (No charge jack for now: charge at the pack.)',
+ 'Set the buck output to 5.0 V before connecting H05/H06.',
  'D2 NTE586 across pump terminals: stripe to pump +. C4 0.1 µF across A3144 pins 1–2.',
  'A3144: printed face toward you, leads down; pins 1/2/3 = +5V/GND/HALL.',
  'Twist switch COM → GND, NO → SW; NC unused. Lock cable uses the JST PH pair.',
