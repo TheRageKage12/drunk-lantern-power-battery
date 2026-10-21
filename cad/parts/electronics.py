@@ -61,9 +61,15 @@ def build():
         'board_wiring_envelope': board_place(rear),
         # Local cable exit above the board, behind the component face; tie to the panel.
         'board_cable_exit_envelope': board_place(board_box(25, -7, 42, 7, -P.PERFBOARD_T-9.2, -P.PERFBOARD_T-.2)),
-        'battery_connector_envelope': box(-P.POWERBANK_W/2, P.POWERBANK_W/2,
-            -P.POWERBANK_L/2-P.BATTERY_PORT_CLEARANCE, -P.POWERBANK_L/2,
-            P.BATTERY_PLUG_Z0, P.BATTERY_PLUG_Z0+P.BATTERY_PLUG_H),
+        # The splitter's straight male plug in the pack port (pack LED face down, port at PACK_PORT_X), its cord folded
+        # back in a U-turn that reaches BATTERY_PLUG_TURN from the battery's end, then up toward the deck.
+        'battery_connector_envelope': compound([
+            cq.Workplane('XZ').workplane(offset=P.POWERBANK_L/2-P.PACK_Y).center(P.PACK_PORT_X, P.FLOOR+P.POWERBANK_T/2)
+              .circle(P.BATTERY_PLUG_D/2).extrude(P.BATTERY_PLUG_OUT),
+            box(P.PACK_PORT_X-4, P.PACK_PORT_X+4, P.PACK_Y-P.POWERBANK_L/2-P.BATTERY_PLUG_TURN, P.PACK_Y-P.POWERBANK_L/2-P.BATTERY_PLUG_OUT+1,
+                P.FLOOR+P.POWERBANK_T/2-4, P.FLOOR+P.POWERBANK_T/2+P.BATTERY_PLUG_D/2+5),
+            box(P.PACK_PORT_X-3, P.PACK_PORT_X+3, P.PACK_Y-P.POWERBANK_L/2-P.BATTERY_PLUG_TURN, P.PACK_Y-P.POWERBANK_L/2,
+                P.FLOOR+P.POWERBANK_T/2+P.BATTERY_PLUG_D/2, P.BATTERY_PLUG_Z1)]),
     }
     bx, by = B.BOOST_XY
     out['buck_envelope'] = box(bx-P.BUCK_W/2, bx+P.BUCK_W/2,

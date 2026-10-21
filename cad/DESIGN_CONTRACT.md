@@ -379,3 +379,14 @@ withdrawn first) and `key_cap` (the glued alternative for a bought ring).
 Two colours by a filament change, no geometry: printed emblem down, the layers below `EM_STEP` hold only the circle
 and bar faces, so they print white and the rest green (white outline, green centre over the magnet). Keep `EM_STEP` a
 whole number of 0.2 mm layers if it changes.
+
+### Battery LED slot (2026-10-21)
+
+The pack lies LED face down (turned 180 degrees about Y, end face still -Y), so its port is at `PACK_PORT_X` (18.2) and
+its rocker at `PACK_SWITCH_X` (-12.0), from Kevin's caliper numbers. `_led_slot` in parts/base.py cuts a
+`PACK_LED_X` x `PACK_LED_SLOT` (26 x 6 mm, 14 to 40 mm from the port-side edge: `PACK_LED_FROM_PORT`, Kevin) slot through the tray floor under the LED row, `PACK_LED_IN` (12.7 mm) in
+from the battery's end; `docs/images/src/gen_battery_seat.py` draws it with dimensions. The battery lead is the
+splitter's straight male plug (28.6 mm out, Ø12) with its cord in a U-turn reaching `BATTERY_PLUG_TURN` (35 mm) from
+the battery's end (`battery_connector_envelope`). The pack sits `PACK_Y` (7 mm) toward +Y, its +Y stop merging into
+the S1 pocket, so that envelope clears the drum wall by ~6 mm. The splitter's female end is the charge socket, loose inside, reached with the lantern
+lifted off. An exposed underside charge slot was tried and dropped the same day.
