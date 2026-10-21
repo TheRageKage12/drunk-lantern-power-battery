@@ -380,16 +380,12 @@ Two colours by a filament change, no geometry: printed emblem down, the layers b
 and bar faces, so they print white and the rest green (white outline, green centre over the magnet). Keep `EM_STEP` a
 whole number of 0.2 mm layers if it changes.
 
-### Underside access (2026-10-21)
+### Battery LED slot (2026-10-21)
 
-Kevin: nothing on the sides; reach the pack from below and prop the lantern up a little to charge. The pack lies LED
-face down (turned 180 degrees about Y, end face still -Y), so its port is at `PACK_PORT_X` (18.2) and its rocker at
-`PACK_SWITCH_X` (-12.0), from his caliper numbers. `_underside_access` in parts/base.py cuts the tray floor: a 30 x 6 mm
-slot under the LED row (12.7 mm in from the end) and a charge slot
-(the plug's footprint + 1 mm a side, 4 mm past its end; kept 3 mm inside the rim) along the lane. The splitter's female end is the charge socket: it lies on the floor in a two-wall cradle along x at
-y=-75.5, mouth at x=-6 toward the opening, tied through two slot pairs; the charger plug (12.7 mm metal + 28.6 mm
-rubber, Ø12) slides in horizontally from -X over the opening. The battery lead uses a right-angle plug (15.5 mm out of
-the port, cable up) because a straight one sticks out 28.6 mm and fills the lane. Envelopes: `battery_connector`,
-`charge_socket`, `charger_plug`; all clear (build.py 0 problems). No hole for the rocker: the pack switch stays ON (S1
-is the power switch); a lane search found no other floor spot for the 71 mm socket-plus-plug run.
-
+The pack lies LED face down (turned 180 degrees about Y, end face still -Y), so its port is at `PACK_PORT_X` (18.2) and
+its rocker at `PACK_SWITCH_X` (-12.0), from Kevin's caliper numbers. `_led_slot` in parts/base.py cuts a
+`PACK_LED_X` x `PACK_LED_SLOT` (30 x 6 mm) slot through the tray floor under the LED row, `PACK_LED_IN` (12.7 mm) in
+from the battery's end; `docs/images/src/gen_battery_seat.py` draws it with dimensions. The battery lead is the
+splitter's straight male plug (28.6 mm out, Ø12; `battery_connector_envelope`), its cable turning up at the plug's end
+about 1 mm inside the drum wall. The splitter's female end is the charge socket, loose inside, reached with the lantern
+lifted off. An exposed underside charge slot was tried and dropped the same day.

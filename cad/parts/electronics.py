@@ -61,18 +61,13 @@ def build():
         'board_wiring_envelope': board_place(rear),
         # Local cable exit above the board, behind the component face; tie to the panel.
         'board_cable_exit_envelope': board_place(board_box(25, -7, 42, 7, -P.PERFBOARD_T-9.2, -P.PERFBOARD_T-.2)),
-        # Right-angle plug in the pack port (pack LED face down, port at PACK_PORT_X), its cable rising to the deck.
-        'battery_connector_envelope': box(P.PACK_PORT_X-P.BATTERY_RA_PLUG_W/2, P.PACK_PORT_X+P.BATTERY_RA_PLUG_W/2,
-            -P.POWERBANK_L/2-P.BATTERY_RA_PLUG_OUT, -P.POWERBANK_L/2, P.BATTERY_PLUG_Z0, P.BATTERY_RA_PLUG_Z1),
-        # The splitter's female end lying in its cradle, plus 6 mm at its back for the cable to turn up.
-        'charge_socket_envelope': compound([
-            cq.Workplane('YZ').workplane(offset=P.CHARGE_SOCKET_MOUTH_X).center(P.CHARGE_SOCKET_Y, P.FLOOR+P.CHARGE_SOCKET_D/2)
-              .circle(P.CHARGE_SOCKET_D/2).extrude(P.CHARGE_SOCKET_L),
-            box(P.CHARGE_SOCKET_MOUTH_X+P.CHARGE_SOCKET_L, P.CHARGE_SOCKET_MOUTH_X+P.CHARGE_SOCKET_L+6,
-                P.CHARGE_SOCKET_Y-4, P.CHARGE_SOCKET_Y+4, P.FLOOR, P.FLOOR+28)]),
-        # The charger plug pushed home, lying in the lane over the floor opening (only while charging).
-        'charger_plug_envelope': cq.Workplane('YZ').workplane(offset=P.CHARGE_SOCKET_MOUTH_X-P.CHARGE_PLUG_L)
-            .center(P.CHARGE_SOCKET_Y, P.FLOOR+P.CHARGE_SOCKET_D/2).circle(P.CHARGE_PLUG_D/2).extrude(P.CHARGE_PLUG_L),
+        # The splitter's straight male plug in the pack port (pack LED face down, port at PACK_PORT_X), and its cable
+        # turning up just past the plug's end.
+        'battery_connector_envelope': compound([
+            cq.Workplane('XZ').workplane(offset=P.POWERBANK_L/2).center(P.PACK_PORT_X, P.FLOOR+P.POWERBANK_T/2)
+              .circle(P.BATTERY_PLUG_D/2).extrude(P.BATTERY_PLUG_OUT),
+            box(P.PACK_PORT_X-3, P.PACK_PORT_X+3, -P.POWERBANK_L/2-P.BATTERY_PLUG_OUT-5, -P.POWERBANK_L/2-P.BATTERY_PLUG_OUT+2,
+                P.FLOOR+P.POWERBANK_T/2-3, P.BATTERY_PLUG_Z1)]),
     }
     bx, by = B.BOOST_XY
     out['buck_envelope'] = box(bx-P.BUCK_W/2, bx+P.BUCK_W/2,

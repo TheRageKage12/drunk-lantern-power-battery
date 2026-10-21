@@ -343,41 +343,18 @@ def _switch_pocket():
     return [outer], [cavity, hole]
 
 
-UNDERSIDE_OPEN_R = TRAY_R - 3.0                          # keep a 3 mm floor ring at the rim
-
-
-def _underside_access():
-    """2026-10-21: the pack from below, nothing on the sides. A slot under its fuel-gauge LEDs (pack LED face down);
-    and a plain slot, the plug's own size, where the charger plug slides horizontally into the splitter's female end,
-    which lies in a cradle on the floor with two cable-tie slot pairs. No hole for the pack's rocker: it stays ON
-    (S1 is the power switch) and is reachable from the -Y side whenever the lantern is lifted off."""
-    y_end = -BANK_HALF_L
+def _led_slot():
+    """2026-10-21: a thin slot in the floor under the pack's fuel-gauge LEDs (the pack lies LED face down)."""
     x0, x1 = P.PACK_LED_X
-    led = _box(x1 - x0, P.PACK_LED_SLOT, P.FLOOR + 2, (x0 + x1) / 2, y_end + P.PACK_LED_IN, -1)
-    y_lane = P.CHARGE_SOCKET_Y
-    mouth = P.CHARGE_SOCKET_MOUTH_X
-    # charge slot: just the plug's own footprint (+1 mm a side) and 4 mm past its end for the cord to turn down
-    slot_w = P.CHARGE_PLUG_D + 2.0
-    lane_x0 = mouth - P.CHARGE_PLUG_L - 4.0
-    lane = _box(mouth - lane_x0, slot_w, P.FLOOR + 2, (mouth + lane_x0) / 2, y_lane, -1)
-    opening = lane.intersect(_cyl(UNDERSIDE_OPEN_R, P.FLOOR + 4, z0=-1))
-    # cradle: two low walls either side of the socket body, and tie slots through the floor beside them
-    w_in = P.CHARGE_SOCKET_D + 0.6
-    body_x0, body_x1 = mouth + 4.0, mouth + P.CHARGE_SOCKET_L - 6.0
-    adds, cuts = [], [led, opening]
-    for sy in (-1, 1):
-        yw = y_lane + sy * (w_in / 2 + 0.8)
-        adds.append(_box(body_x1 - body_x0, 1.6, 5.0, (body_x0 + body_x1) / 2, yw, P.FLOOR))
-        for xt in (body_x0 + 6.0, body_x1 - 6.0):
-            cuts.append(_box(ZIPTIE_SLOT[0], ZIPTIE_SLOT[1], P.FLOOR + 2, xt, yw + sy * 2.4, -1))
-    return adds, cuts
+    y = -BANK_HALF_L + P.PACK_LED_IN
+    return [], [_box(x1 - x0, P.PACK_LED_SLOT, P.FLOOR + 2, (x0 + x1) / 2, y, -1)]
 
 
 def build_tray():
     """Cartridge floor: everything that used to stand on the base floor."""
     tray = _cyl(TRAY_R, P.FLOOR)
     adds, cuts = [], []
-    for fn in (_bank_pocket, _pillars, _floor_electronics, _tray_pads, _underside_access):
+    for fn in (_bank_pocket, _pillars, _floor_electronics, _tray_pads, _led_slot):
         a, c = fn()
         adds += a
         cuts += c
