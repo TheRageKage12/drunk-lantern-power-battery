@@ -34,7 +34,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 - Kamoer KPHM200: modelled as a 64 x 63 x 40 mm head box plus a 40 mm motor can, 118 mm overall. Kamoer
   publishes no drawing. Measure the pump and adjust `PUMP_*` in `params.py` and `PUMP_HEAD_L_EST` in `parts/base.py`.
 - Reservoir jar: a 76 x 76 mm envelope (`BOTTLE_D`, `BOTTLE_H`); buy one at most 73 mm across the cap (`BOTTLE_NECK_D`) and 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
-- Battery: [TalentCell YB1203000](https://talentcell.com/upload/download/12v-user-manual.pdf), 105 × 65 × 25 mm (`POWERBANK_*`), connector/switch end toward -Y, away from the hidden S1 pocket. The 20 mm strap is required; the deck remains at z=44 mm independently of battery thickness, with 17 mm above the case. Strap slots at y=25 clear the pillars; the underside recess accepts a <=1 mm strap. Nothing shows on the shell: S1 stays underneath; since 2026-10-21 the pack lies LED face down and its fuel-gauge LEDs show through a 26 x 6 mm floor slot (14 to 40 mm from the port-side edge) (`_led_slot` in parts/base.py, `PACK_*` in params.py; dimensioned in docs/images/battery-seat.png).
+- Battery: [TalentCell YB1203000](https://talentcell.com/upload/download/12v-user-manual.pdf), 105 × 65 × 25 mm (`POWERBANK_*`), connector/switch end toward -Y, away from the hidden S1 pocket. The 20 mm strap (a cut length of VELCRO One-Wrap) is required; the deck remains at z=44 mm independently of battery thickness, with 17 mm above the case. Strap slots at y=25 clear the pillars; the underside recess accepts a <=1 mm strap. Nothing shows on the shell: S1 stays underneath; since 2026-10-21 the pack lies LED face down and its fuel-gauge LEDs show through a 26 x 5 mm floor slot (14 to 40 mm from the port-side edge, 12 to 17 mm in from the end) (`_led_slot` in parts/base.py, `PACK_*` in params.py; dimensioned in docs/images/battery-seat.png).
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
 - Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, plus a 60 mm forearm through the 120 x 96 mm hand opening.
 - Hall sensor (`HALL_SENSOR`): the A3144 lies face up in a 4.4 x 3.4 mm pocket on a post on `socket_base`, inside a blind hole in the rotor, ~3 mm from the magnet. With `'DRV5032'` the board goes in a 31.6 x 18.4 mm pocket under the plate instead (~8 mm from the magnet).
@@ -57,7 +57,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 
 ![Updated cartridge](../docs/images/cad-cartridge.png)
 
-The updated tray/deck retain the 190 mm outer base and all pump/jar/board heights. The charge jack moves to (74, -25) on the deck to clear the populated board with its charger plugged in. Four deck mounting
+The updated tray/deck retain the 190 mm outer base and all pump/jar/board heights. The deck keeps an empty 11.3 mm hole at (74, -25) for an optional charge jack; none is fitted (since 2026-10-20 the splitter's female end inside the cartridge is the charge socket). Four deck mounting
 pads now stay inside the board's 9 × 9 mm screw areas; print supports beneath them and remove these
 before installing the board. Their former sloped undersides intruded into rear wiring space.
 
@@ -71,11 +71,11 @@ nonzero exit status. Individual component bodies also require at least 1 mm sepa
 | XIAO and U1 | 12 mm projection including XIAO headers; 10.5 mm for U1 and socket. USB cable is attached with the shell off; detach the board if the plug needs more room. |
 | C2 | Case <=25 mm long × Ø18 mm, laid flat and secured as drawn. [Vetco's listing](https://vetco.net/products/2200uf25vdc_2200uf_25_volt_electrolytic_capacitor) does not specify the case dimensions. |
 | Q1/Q2 and small parts | MOSFET projection <=22 mm; sensor resistors <=3.2 mm, diode <=3.4 mm. Keep edge parts within the drawing's individual bounds so the retaining boss can pass. |
-| Battery plug / switch face | Full case width, 25 mm beyond the -Y end, z=7–31 mm reserved for connector, wire bend and switch operation. Verify the supplied lead fits; this is not a measured plug model. Deck can be unscrewed for service. |
 | Buck | 43 × 21 × 14 mm above four 2 mm printed corner supports; 10 mm lead allowance beyond each end. Check the delivered module and ties. |
 | Lock/LED inline plugs | Combined 20 × 64 × 16 mm space above the unused right-side module pocket (x=47–67, y=-32–32, z=10–26); secure leads clear of the sliding shell bosses. |
-| S1 / charge jack | S1 body + terminals <=13 × 9 × 18 mm above pocket ceiling, nut Ø11 mm, stem/lever within Ø6.2 mm to z=7. Jack (Vetco 321B) body/terminals <=13 × 13 × 20 mm below deck, Ø11.2 mm bushing, Ø17 × 3 mm nut above. Charging plug allowance: Ø12 × 30 mm above the nut, then 10 mm for its cable exit. Verify actual parts. |
-| Battery plug | The splitter's straight male plug, Ø12 mm, 28.6 mm out of the port (at `PACK_PORT_X`), its cord in a U-turn reaching 35 mm from the battery's end, then up (`battery_connector_envelope`). The pack sits `PACK_Y` = 7 mm toward +Y for it. |
+| S1 | Body + terminals <=13 × 9 × 18 mm above pocket ceiling, nut Ø11 mm, stem/lever within Ø6.2 mm to z=7. Verify the actual switch. |
+| Optional charge jack (not fitted) | Kept so a jack can be added later. Jack (Vetco 321B) body/terminals <=13 × 13 × 20 mm below deck, Ø11.2 mm bushing, Ø17 × 3 mm nut above. Charging plug allowance: Ø12 × 30 mm above the nut, then 10 mm for its cable exit (`charge_jack_envelope`, `charge_plug_envelope`). |
+| Battery plug | The splitter's straight male plug, Ø12 mm, 28.6 mm out of the port (at `PACK_PORT_X`), its cord in a U-turn reaching 35 mm from the battery's end, then up (`battery_connector_envelope`). The pack sits `PACK_Y` = 7 mm toward +Y for it. The pack's rocker stays ON and has no floor hole. |
 | D2 / C4 | D2: 20 × 10 × 8 mm including insulation beyond motor end. C4: 8 × 6 × 8 mm including joints behind the fixed lock wall's Hall window; keep clear of rotor. |
 | D2F-01L | Existing D2F-family body/lever model and bracket retained. Check the supplied switch's terminals, lever, peg spacing and action; existing rotor test covers the model, not supplier authenticity. |
 

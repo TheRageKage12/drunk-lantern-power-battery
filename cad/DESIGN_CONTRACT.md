@@ -1,7 +1,7 @@
 # CAD design contract (read before touching any part file)
 
 Units mm. Assembly frame: Z up, origin at the centre of the base bottom. "Front" = -Y (audience side,
-diffuser window). "Rear" = +Y (owner side: base service door, sphere hatch). All numbers come from
+diffuser window). "Rear" = +Y (owner side: the hand opening). All numbers come from
 `params.py`; part files import it and never hard-code mating dimensions.
 
 Every part module lives in `cad/parts/<name>.py` and exposes:
@@ -97,7 +97,7 @@ Parts: **socket_housing** (faceplate + housing in one, printed faceplate DOWN on
   print a ready-made key ring.
 
 ## Print orientations and bed
-All parts fit a 220 x 220 x 220 bed (largest: base/dish/sphere halves at 180 dia x <= 100 tall).
+All parts fit a 230 x 230 x 240 bed (the owner's Ender 3, `PRINT_BED` in build.py; widest: the rear sphere half at 221 mm, tallest: the base at 115 mm).
 No part needs supports except the sphere halves (print open side down... i.e. the split plane on the bed,
 the dome up; the window/hatch overhangs are < 60 deg because the arch tops are rounded). Document any
 exception in build.py output.
@@ -112,7 +112,7 @@ exception in build.py output.
 - Rotor can be inserted (slot loading gap) and turns 0..45 deg without the cam/pin/arm hitting walls
   (sweep check at 0, 15, 30, 40, 45 deg by boolean intersection of rotor vs housing == 0 except the
   spring pocket volume).
-- Print envelope: bounding box of each part <= 220 x 220 x 220.
+- Print envelope: bounding box of each part <= 230 x 230 x 240 (`PRINT_BED`).
 
 ## Revision 2 (after hardware research) - supersedes anything above that conflicts
 - The pump is the Kamoer KPHM200 (12 V): envelope ~116 x 64 x 63 mm, 300 g, tube ports on the head face
@@ -384,9 +384,9 @@ whole number of 0.2 mm layers if it changes.
 
 The pack lies LED face down (turned 180 degrees about Y, end face still -Y), so its port is at `PACK_PORT_X` (18.2) and
 its rocker at `PACK_SWITCH_X` (-12.0), from Kevin's caliper numbers. `_led_slot` in parts/base.py cuts a
-`PACK_LED_X` x `PACK_LED_SLOT` (26 x 6 mm, 14 to 40 mm from the port-side edge: `PACK_LED_FROM_PORT`, Kevin) slot through the tray floor under the LED row, `PACK_LED_IN` (12.7 mm) in
+`PACK_LED_X` x `PACK_LED_SLOT` (26 x 5 mm, 14 to 40 mm from the port-side edge: `PACK_LED_FROM_PORT`, Kevin) slot through the tray floor under the LED row, `PACK_LED_IN` (14.5 mm; the slot runs 12 to 17 mm, `PACK_LED_FROM_END`) in
 from the battery's end; `docs/images/src/gen_battery_seat.py` draws it with dimensions. The battery lead is the
 splitter's straight male plug (28.6 mm out, Ø12) with its cord in a U-turn reaching `BATTERY_PLUG_TURN` (35 mm) from
 the battery's end (`battery_connector_envelope`). The pack sits `PACK_Y` (7 mm) toward +Y, its +Y stop merging into
 the S1 pocket, so that envelope clears the drum wall by ~6 mm. The splitter's female end is the charge socket, loose inside, reached with the lantern
-lifted off. An exposed underside charge slot was tried and dropped the same day.
+lifted off; the deck's 11.3 mm jack hole stays empty. An exposed underside charge slot was tried and dropped the same day.

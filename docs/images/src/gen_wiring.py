@@ -74,7 +74,7 @@ for x,color,label in [(1380,ORANGE,'Battery rail'),(1570,RED,'Regulated 5 V'),(1
     wire([(x,57),(x+28,57)],color,3)
     s.text(x+36,62,label,size=14)
 
-# Battery and charging: the jack joins the battery before S1.
+# Battery and charging: the splitter's female end (the charge socket) joins the battery before S1.
 box(40,140,230,110,'TalentCell YB1203000',['3000 mAh • 3 A maximum','DC5521 centre-positive'],fill='#fff7e6')
 pin(270,180,'+','right',ORANGE)
 wire([(270,180),(355,180)],ORANGE,3)
@@ -87,7 +87,7 @@ wire([(440,100),(2050,100)],ORANGE,3.5)
 s.text(2050,88,'VLOAD: switched battery, 9–12.6 V (not regulated)',size=16,anchor='end',color=ORANGE,weight='bold')
 pin(155,250,'−','bottom',BLACK)
 wire([(155,250),(155,269)],BLACK); ground(155,269)
-box(40,295,230,85,'J1 charge jack',['DC5521 • third contact unused'],fill='#fff7e6')
+box(40,295,230,85,'Charge socket',['splitter female end (DC5521)','supplied 12.6 V charger only'],fill='#fff7e6')
 wire([(300,180),(300,329),(270,329)],ORANGE)
 pin(270,329,'+','right',ORANGE)
 pin(155,380,'sleeve −','bottom',BLACK)

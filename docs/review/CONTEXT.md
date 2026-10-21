@@ -284,6 +284,8 @@ the 2026-10-13 starting point; the sheet is the source of truth. **2026-10-15:**
 (Amazon $127.99 with the $9.99 inserts, Vetco $46.57, Tacoma ~$12, Ace ~$1.50, jar/glass/curtain ~$12, straps and
 ties ~$5); tools and filament (now $16.99 a green spool) are extra. The increase since $186: the electrical revision
 $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total, and the switch 2 cents cheaper.
+**2026-10-21:** about $206 (Amazon $127.99, Vetco $43.69 after the jack came off, Tacoma ~$12, the VELCRO One-Wrap
+roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the store table.
 | Store | Total | Notes |
 |---|---|---|
 | Amazon | $118.02 | 9 items |
@@ -497,4 +499,17 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   35.2 mm away, so at Kevin's request the battery moved 7 mm toward +Y (`PACK_Y`; its +Y end stop now merges into
   the S1 pocket): ~6 mm clear. Moving the S1 pocket to go further was considered and not needed. The deck's
   11.3 mm jack hole stays, empty.
-
+- **2026-10-21, whole-repo audit and build guide reformat.** Kevin asked for everything to be checked and the guide
+  made easy to read. No design decision changed. Guide: contents list; viewer and video notes as bullets; shopping
+  items renumbered 1-23 with the strap roll, jar and shot glass as their own rows, small parts priced from the Sheet
+  ($24.47), a "no charge jack" note and a store-by-store total (about $206, up from $202 because the One-Wrap roll is
+  $9, not the ~$5 estimated); print settings, inserts and test prints as tables and lists (`ring_sizer` added to the
+  part list); section 4's invalid "2a" step renumbered (cross-references now say step 8 for the lock wires); the
+  power modes as a table; section 9 step 1 split into labelled sub-steps; section 12 reordered (on the day, the
+  performance, charging, refilling). Stale "charge jack fitted" text fixed in the `params.py` and `electronics.py`
+  comments, `cad/README.md` (the old 25 mm plug/switch-face row removed; the jack reserve marked optional),
+  `DESIGN_CONTRACT.md` (LED slot 26 x 5 mm, centred 14.5 mm in; print bed 230 x 230 x 240; no service door),
+  `gen_wiring.py` (J1 box now "Charge socket", the splitter's female end), the protoboard sheet ("charge at the
+  splitter's female end") and the viewer's cartridge steps (battery LED face down, U-turn, switch ON in step 1). The
+  cartridge and cutaway renders no longer draw the optional jack's reserve. Unused `BATTERY_PLUG_Z0` removed. The
+  optional-jack envelopes stay in the fit checks so a jack can still be added later.

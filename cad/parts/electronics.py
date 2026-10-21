@@ -85,13 +85,13 @@ def build():
     nut = cq.Workplane('XY').workplane(offset=17).center(sx, sy).circle(5.5).extrude(3)
     out['power_switch_envelope'] = stem.union(nut).union(box(sx-6.5, sx+6.5, sy-4.5, sy+4.5, ceiling, ceiling+18))
     jx, jy = P.JACK_XY
-    # Body/terminals below deck, bushing in hole, nut above. Includes solder-joint allowance.
+    # Optional charge jack (not fitted since 2026-10-20; the splitter's female end is the charge socket). This reserve
+    # keeps the deck hole usable for a later jack: body/terminals below deck, bushing in hole, nut above.
     jack = box(jx-6.5, jx+6.5, jy-6.5, jy+6.5, B.DECK_Z0-20, B.DECK_Z0)   # 321B body 12.4 mm wide
     jack = jack.union(cq.Workplane('XY').workplane(offset=B.DECK_Z0).center(jx, jy).circle(P.PORT_JACK_D/2-0.1).extrude(B.DECK_T))
     jack = jack.union(cq.Workplane('XY').workplane(offset=B.DECK_TOP).center(jx, jy).circle(8.5).extrude(3))   # 7/16" nut across corners
     out['charge_jack_envelope'] = jack
-    # Charger attached only with the shell removed; this reserve also clears the closed
-    # shell geometry, but does not grant access through it. Cable exits upward.
+    # The optional jack's charger plug, attached only with the lantern lifted off. Cable exits upward.
     plug = cq.Workplane('XY').workplane(offset=B.DECK_TOP+3).center(jx, jy).circle(6).extrude(30)
     out['charge_plug_envelope'] = plug.union(box(jx-4, jx+4, jy-4, jy+4, B.DECK_TOP+33, B.DECK_TOP+43))
     # D2 is across the motor terminals, beyond the motor's -Y end; includes insulation/leads.

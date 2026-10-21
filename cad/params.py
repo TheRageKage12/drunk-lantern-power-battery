@@ -68,7 +68,6 @@ PERFBOARD_BOTTOM_GAP = 2.0
 # Component sizes and mounting coordinates: docs/review/protoboard/mechanical.py and layout.py
 BUCK_L, BUCK_W, BUCK_H = 43.0, 21.0, 14.0  # reserve above printed corner supports; measure actual module
 BUCK_STANDOFF = 2.0
-BATTERY_PLUG_Z0 = 7.0      # the battery plug's reserve starts above the low front stop
 # 2026-10-21: the pack lies LED face DOWN (turned 180 deg about Y, end face still toward -Y) so its five fuel-gauge
 # LEDs show through a thin slot in the floor; its port and rocker are therefore mirrored in X. Kevin's caliper
 # numbers: port centre 14.3 mm and rocker centre 44.5 mm from the end face's left edge (port on the left, LEDs up);
@@ -80,20 +79,21 @@ PACK_LED_X = (32.5 - PACK_LED_FROM_PORT[1], 32.5 - PACK_LED_FROM_PORT[0])   # (-
 PACK_LED_FROM_END = (12.0, 17.0)   # Kevin: the slot runs 12 to 17 mm in from the battery's end edge
 PACK_LED_IN = sum(PACK_LED_FROM_END) / 2          # slot centre, 14.5
 PACK_LED_SLOT = PACK_LED_FROM_END[1] - PACK_LED_FROM_END[0]   # 5.0
-# The battery lead is the splitter's straight male plug in the port (Kevin: 28.6 mm out, ~12 mm across); its cable
-# turns up just past the plug's end, a few mm inside the drum wall.
+# The battery lead is the splitter's straight male plug in the port (Kevin: 28.6 mm out, ~12 mm across); its cord
+# folds back in a U-turn reaching BATTERY_PLUG_TURN from the battery's end, then rises toward the deck.
 BATTERY_PLUG_OUT, BATTERY_PLUG_D, BATTERY_PLUG_Z1 = 28.6, 12.0, 36.0
 BATTERY_PLUG_TURN = 35.0   # Kevin: plugged in with the cord folded in a U-turn, it reaches 35 mm from the battery's end
 # The pack sits 7 mm toward +Y (the owner's side, Kevin) so the plug and its U-turn clear the drum wall by ~7 mm (centred,
 # the wall is only 35.2 mm from the battery's end at the port). Its +Y end stop then meets the S1 pocket and merges into it.
 PACK_Y = 7.0
 # rev 9h: nothing shows on the shell. The power switch sits in a pocket under the cartridge floor, lever down (tip
-# the lantern to flip it); the charge jack is on the deck, pointing up, reached with the lantern lifted off.
+# the lantern to flip it). No charge jack is fitted (2026-10-20): the splitter's female end, inside the cartridge
+# beside the battery's end, is the charge socket. The deck keeps an empty hole at JACK_XY for a later jack.
 SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray floor, +Y side, between a pillar and the rim
 SWITCH_POCKET_W, SWITCH_POCKET_L = 26.0, 23.0       # outer box; the cavity is 2 x WALL smaller
 SWITCH_POCKET_DEPTH = 20.0                          # cavity height: bushing (~7) + lever (~10) stay above the table
-JACK_XY = (74.0, -25.0)                             # charge jack on free +X deck edge; clears board and shell bosses
-PORT_JACK_D, PORT_SWITCH_D = 11.3, 6.5  # panel-mount DC5521 jack, Vetco 321B (7/16" = 11.1 mm hole) and mini toggle switch (1/4" or M6 bushing)
+JACK_XY = (74.0, -25.0)                             # empty hole for an optional charge jack (not fitted); clears board and shell bosses
+PORT_JACK_D, PORT_SWITCH_D = 11.3, 6.5  # optional DC5521 panel jack (Vetco 321B fits, 7/16" = 11.1 mm hole; not fitted) and the S1 mini toggle (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)
 BASE_H = 115.0              # base drum height (rev 3: taller for the jar + cap; rev 9: open drum over the cartridge)

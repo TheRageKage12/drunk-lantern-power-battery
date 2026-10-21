@@ -83,8 +83,8 @@ The two dishes have identical cone / rim / neck silhouettes (mirror images), so 
     it inside the dish. The socket housing's +Y wire notch lines up with it; the faceplate covers it.
 11. Socket bosses at 45/135/225/315 deg (not 0/90/...) so none collides with the +Y wire notch; each pocket keeps a
     1.7 mm wall to the 80 hole (BC 88 - insert 4.6 OD).
-12. No hardware envelopes are returned by this module: the four envelope names `checks.py` knows (bottle, pump,
-    powerbank, glass) belong to the base / sphere modules. The full build's clearance check (base envelopes vs
+12. No hardware envelopes are returned by this module (`checks.py` checks every `*_envelope`; they belong to the
+    base / sphere / electronics modules). The full build's clearance check (base envelopes vs
     dish_lower) passes with 0 problems.
 
 ## Print orientation
