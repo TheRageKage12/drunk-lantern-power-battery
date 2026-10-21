@@ -212,7 +212,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
     end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
     z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
     lower run is recessed under the tray. Verify the supplied plug and bend fit the 25 mm end allowance.
-- The charge jack (2.1 mm panel jack, 11.3 mm deck hole; **not fitted since 2026-10-20**, see the change log) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
+- The charge jack (2.1 mm panel jack, 11.3 mm deck hole; **not fitted since 2026-10-20**; since 2026-10-21 the splitter's female end under the floor is the charge socket, see the change log) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
   down (tip the lantern to flip it); the jack hole is on the deck, socket up, reached with the lantern lifted off.
   Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
@@ -482,3 +482,19 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   and must remember to plug the lead back in. The CAD is unchanged: the deck keeps its 11.3 mm hole and the jack
   envelope, so a jack can be added later across the lead ahead of S1. Guide, board docs (J1 removed) and the Sheet
   updated; Vetco -$2.99. Chapter "Install the charge jack" in `docs/videos/assembly-guide.mp4` is now optional.
+- **2026-10-21, charge socket, pack switch and LEDs all reached from underneath (supersedes the 2026-10-20 plug
+  swap).** Kevin pointed out the supplied splitter is "1 female to 2 male", all ends joined, so its female end is a
+  ready-made charge socket that charges the pack while it powers the lantern (the manual says it can output while
+  charging). His rules: nothing on the sides of the lantern; everything from the bottom; the charge socket lies
+  horizontal; prop the lantern up a little to charge. So the pack lies LED face down over a thin floor slot (its five
+  fuel-gauge dots, 12.7 mm in from the end); a
+  rectangular charge slot, just the plug's size (14 x 37 mm), runs along the rim; the splitter's female end lies in a cradle along the rim with its mouth toward the opening, and the
+  charger plug (28.6 mm rubber + 12.7 mm metal, ~12 mm across, Kevin's measurements) slides in sideways. A straight
+  plug in the battery's port sticks out 28.6 mm and would fill the lane, so the battery lead gets a right-angle plug
+  (Vetco VUPN7577, $3.99). Rejected: a socket pointing straight down (the plug would hang 28.6 mm below the floor) and
+  a notch at the drum's bottom edge (visible from the side). Port/rocker/LED positions are Kevin's caliper numbers;
+  the LED row's offset across the pack is from TalentCell's photo. The deck's 11.3 mm jack hole stays, empty.
+  No floor hole for the pack's rocker (Kevin chose this over a 2-4 mm bar between it and the charge slot, which looked
+  thin and odd; no other floor spot fits the 71 mm socket-plus-plug lane): the pack switch stays ON, S1 is the power
+  switch, and the rocker is reachable from the -Y side whenever the lantern is lifted off.
+

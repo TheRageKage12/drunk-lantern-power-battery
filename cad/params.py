@@ -60,7 +60,6 @@ GLASS_H = 62.0
 
 POWERBANK_L, POWERBANK_W, POWERBANK_T = 105.0, 65.0, 25.0  # TalentCell YB1203000; connector/switch end toward -Y
 CARTRIDGE_DECK_Z = 44.0     # deck underside; independent of pack thickness to preserve pump/jar/board heights
-BATTERY_PORT_CLEARANCE = 25.0  # reserved beyond -Y end for plug + wire bend; verify supplied lead fits
 BATTERY_STRAP_Y = 25.0      # strap crosses here, clear of the deck pillars at y=0 and +/-55
 BATTERY_STRAP_T = 1.0       # recessed underfloor strap allowance; use <=1 mm strap beneath the tray
 # Electronics fit limits, not claims that unmeasured supplier parts have these dimensions.
@@ -69,7 +68,23 @@ PERFBOARD_BOTTOM_GAP = 2.0
 # Component sizes and mounting coordinates: docs/review/protoboard/mechanical.py and layout.py
 BUCK_L, BUCK_W, BUCK_H = 43.0, 21.0, 14.0  # reserve above printed corner supports; measure actual module
 BUCK_STANDOFF = 2.0
-BATTERY_PLUG_Z0, BATTERY_PLUG_H = 7.0, 24.0  # plug/switch access reserve above the low front stop
+BATTERY_PLUG_Z0 = 7.0      # the battery plug's reserve starts above the low front stop
+# 2026-10-21: the pack is reached from UNDER the cartridge; nothing shows on the sides. It lies LED face DOWN (turned
+# 180 deg about Y, end face still toward -Y), so its port and rocker are mirrored in X. Kevin's caliper numbers: port
+# centre 14.3 mm and rocker centre 44.5 mm from the end face's left edge (port on the left, LEDs up); LED row 12.7 mm in
+# from the end edge, 25.4 mm long (its offset across the pack is from TalentCell's photo).
+PACK_PORT_X = 32.5 - 14.3       # 18.2 in the assembly frame
+PACK_SWITCH_X = 32.5 - 44.5     # -12.0; no floor hole for it: the pack switch stays ON (S1 is the power switch)
+PACK_LED_X = (-10.0, 20.0)      # floor slot across the LED row
+PACK_LED_IN, PACK_LED_SLOT = 12.7, 6.0
+# The battery lead plugs in with a right-angle plug (Vetco VUPN7577) whose cable rises toward the deck: a straight
+# plug sticks out 28.6 mm and would leave no room for the charge socket.
+BATTERY_RA_PLUG_OUT, BATTERY_RA_PLUG_W, BATTERY_RA_PLUG_Z1 = 15.5, 16.0, 36.0
+# The splitter's female end is the charge socket. It lies flat on the floor along the rim, mouth toward -X, held by
+# two cable ties; the charger plug (12.7 mm metal, 28.6 mm rubber) slides in from -X over an opening in the floor.
+CHARGE_SOCKET_Y, CHARGE_SOCKET_MOUTH_X = -75.5, -6.0
+CHARGE_SOCKET_D, CHARGE_SOCKET_L = 12.0, 38.1
+CHARGE_PLUG_D, CHARGE_PLUG_L = 12.0, 28.6
 # rev 9h: nothing shows on the shell. The power switch sits in a pocket under the cartridge floor, lever down (tip
 # the lantern to flip it); the charge jack is on the deck, pointing up, reached with the lantern lifted off.
 SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray floor, +Y side, between a pillar and the rim

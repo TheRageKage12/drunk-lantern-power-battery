@@ -54,7 +54,7 @@ measure the actual capacitor, connectors, buck, switch, pump and jar before prin
 | Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window). On its face, facing you: the lock (a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-01L microswitch and the A3144 Hall sensor) and a column of LEDs either side. Under the lock: the glass, in a slot. Behind the wall, out of sight: the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
 | Sphere, display side | The white diffuser window. |
 | Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. Nothing shows on the shell: the power switch sits in a pocket under the cartridge floor (tip the lantern to flip it), and the battery charges at its own port. It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
+| Base | A removable **cartridge**: the 12 V battery pack flat on its floor, a deck above it with the jar, the Kamoer pump and the electronics board, and the buck converter beside the pack. Nothing shows on the shell: the power switch sits in a pocket under the cartridge floor (tip the lantern to flip it), and the charge socket, the battery's own switch and its charge LEDs are all reached through openings in the floor (prop the lantern up a little to charge). It slides up into the base drum and is held by 3 thumbscrews underneath, out of sight. To refill or charge: undo them and lift the lantern off; the cartridge stays on the table. |
 
 ![fluid path and layout](images/fluid-path.png)
 
@@ -83,7 +83,7 @@ and the pump 12: order those first. Vetco prices are from 2026-10-13; prices wit
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
 | 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
-| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger (12.6 V, 0.5 A, ~6 h) and a male DC5521 lead cut from its supplied splitter. Its one DC5521 port is both input and output, and its own switch must be ON to charge (TalentCell manual). The cartridge tray is built for this case (rev 9i). |
+| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger (12.6 V, 0.5 A, ~6 h) and its supplied 1-female-to-2-male splitter: the female end becomes the charge socket under the floor (section 4, step 2). Its one DC5521 port is both input and output, and its own switch must be ON to charge (TalentCell manual). The cartridge tray is built for this case (rev 9i). |
 | 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.97 | Third-party (Pecafeitas) listing of the 0.1 A hinge-lever version. Omron's datasheet gives its minimum load as 1 mA at 5 V (the plain D2F needs 100 mA), which the section 4 interface supplies. Omron provenance is not verified: check the marking, the peg spacing against `switch_bracket`, and that it clicks reliably 50 times. |
 | 13a | Heat-set inserts | [ruthex RX-M3x5.7 brass, 100-pack (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3) | $9.99 | 32 used. 5.7 mm long, made for a 4.0 mm hole: the 32 receiving bores are 4.0 x 6.5 mm (section 3). Any plain M3 x 5.7 x 4.6 mm brass insert is the same part. |
 
@@ -104,12 +104,12 @@ works on 3.3 V and either magnet pole.
 | 11 | 2 x IRLZ44NPBF N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | Exact required part: IRLZ44NPBF, TO-220. Vendor URL/title is stale; its detail table names IRLZ44NPBF. Verify IRLZ44N marking; review substitutions before use. |
 | 12 | Small parts | Vetco and Amazon; proposed Sheet edits in [electrical PR draft](review/CIRCUIT_PR.md#spreadsheet-edits-after-acceptance) | Reprice after review | 2 x NTE585, 1 x NTE586 (3 A/40 V); 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic, 1 x 2200 µF/25 V; DIP-14 socket; JP1 two-pin header and shunt; existing perfboard, wire and heat-shrink. |
 | 12a | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
-| 12b | Charge jack (**not fitted for now**) | [Vetco 321B, 2.1 mm DC panel jack](https://vetco.net/products/321b_2-1mm_dc_power_panel_mount_jack) | - | Optional, $2.99. Since 2026-10-20 you charge by plugging the charger straight into the battery (section 12), so the jack is skipped. The deck keeps its 11.3 mm hole so it can be added later: DC5521 (5.5 x 2.1 mm) female, 7/16" hole, wired across the battery lead ahead of S1. |
+| 12b | Right-angle DC plug for the battery lead | [Vetco VUPN7577, 2.1 mm inline plug, right angle](https://vetco.net/products/vupn7577_2-1mm_dc_power_inline_plug_-_right_angle) | $3.99 | 5.5 x 2.1 mm male. Replaces the splitter's straight plug in the battery's port: a straight one sticks out 28.6 mm and leaves no room for the charge socket. No charge jack is needed: the splitter's own female end is the charge socket (section 4, step 2). The deck's 11.3 mm hole stays empty. |
 | 13 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 13a), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
 | 14 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1-2 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 15 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
 
-**Total: about $202 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $43.69, Tacoma Screw ~$12, straps and
+**Total: about $206 before tax** (2026-10-15): Amazon $127.99 (the inserts included), Vetco $47.68, Tacoma Screw ~$12, straps and
 zip ties ~$5, and ~$13.50 of local estimates for the spring, the jar, the curtain sheet and the shot glass. The
 [shopping sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) has the live store-by-store figures and who already has what. The 2026-10-13
 design was about $186: the electrical revision added $4.69, the heat-set inserts $9.99, the straps and ties ~$5 (listed before,
@@ -271,16 +271,19 @@ pad names stay the same. Check the actual hole-array position and C2 case size b
    holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left corner
    (the [board layout](review/protoboard/README.md) is the reference), checking against the printed panel first. Keep each 9 x 9 mm mounting area clear. Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out
    during initial USB flashing. Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
-2. **Battery and S1.** With battery and charger unplugged, cut one male DC5521 lead
-   from the supplied TalentCell splitter to make the battery pigtail. Do not cut or open the pack.
-   Identify centre-positive and sleeve-negative with a continuity meter; do not rely on wire colour.
-   Plug the finished, insulated pigtail into the pack. With its own switch ON, confirm 9–12.6 V and polarity.
+2. **Battery, charge socket and S1.** The supplied TalentCell splitter is "1 female to 2 male", all three ends
+   joined. Its female end stays as it is: that is the **charge socket**. With battery and charger unplugged, cut
+   **both** male plugs off, leaving their leads long:
+   - one lead gets the **right-angle plug** (item 12b) soldered on; it goes in the battery's port;
+   - the other lead is the battery pigtail to the board.
+   Do not cut or open the pack. Identify centre-positive and sleeve-negative on every end with a continuity meter;
+   do not rely on wire colour, and make the right-angle plug centre-positive. Plug it into the pack and, with the
+   pack's switch ON, confirm 9–12.6 V and polarity on the pigtail and at the female end.
    Power off and unplug again before soldering. Positive goes to S1; S1's other terminal is
-   **VLOAD**, the switched battery rail. Negative goes to the common ground. There is no charge jack for now
-   (an optional one would go across the pigtail ahead of S1).
+   **VLOAD**, the switched battery rail. Negative goes to the common ground.
    Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It buffers short disturbances;
-   it cannot sustain an overloaded or stalled motor. To charge, unplug the pigtail from the pack and plug
-   the supplied 12.6 V charger into the pack's port instead, pack switch ON (section 12). The pack lies flat on the cartridge floor under a 20 mm strap (section 9).
+   it cannot sustain an overloaded or stalled motor. The charger plugs into the female end and charges the pack
+   through the right-angle plug; nothing needs unplugging (section 12). The pack lies flat on the cartridge floor under a 20 mm strap (section 9).
 2a. **Battery sense.** R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground.
    At a full 12.6 V pack, D0 sees 2.27 V. Keep this signal away from motor wiring.
 3. **Set the buck output first.** Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
@@ -345,8 +348,9 @@ Removing U1 for USB-only flashing also disconnects the GPIO signals from the unp
   only the XIAO while the buck powers U1/Hall. After the controller settles at idle, power down (USB out
   first, then S1 OFF), attach loads, and repeat this sequence for testing. End with `stop`, unplug USB,
   then switch S1 OFF. Refit JP1 only after USB is unplugged and power is off.
-- **Battery operation:** USB unplugged, U1 installed, JP1 fitted; pack switch ON, then S1 ON. Turn both
-  switches OFF for storage. Never move JP1 or insert/remove U1 with power connected.
+- **Battery operation:** USB unplugged, U1 installed, JP1 fitted; pack switch ON, then S1 ON. The pack switch then stays ON:
+  S1 is the on/off switch, and the pack's rocker has no hole in the floor. For storage, S1 OFF; for more than a few
+  weeks, also turn the pack switch OFF next time the lantern is lifted off (it's at the battery's end, under the deck's edge). Never move JP1 or insert/remove U1 with power connected.
 
 If the pack trips or +5V_REG fails during USB testing, unplug USB promptly and investigate before retrying.
 
@@ -542,15 +546,20 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
 1. **Cartridge.** Stand `base_tray` with the switch pocket (the raised box near the rim) toward you. The
    LM2596 goes in its pocket on the right, on its four 2 mm printed corner supports, zip-tied through the slots beside it.
    Check that no underside solder joint rests on a support.
-   The TalentCell lies flat in the middle, **connector/switch end away from you (-Y)**, at the low end stop.
+   The TalentCell lies flat in the middle, **LED face down** (the five fuel-gauge dots over the thin floor slot) and
+   **connector/switch end away from you (-Y)**, at the low end stop. Its right-angle plug goes in the port with the
+   cable pointing up.
    Thread a 20 mm strap through both slots before fitting the pack; its lower run sits in the underside
    recess and must be no thicker than 1 mm. Tighten the strap: the deck is 17 mm above the case and does
-   not retain it. Check the plugged-in lead and bend fit the 25 mm space beyond the battery end.
+   not retain it. Lay the splitter's female end in the cradle on the floor along the rim, beyond the battery end,
+   **mouth toward the long rectangular charge slot in the floor** (to your right), and hold it with two cable ties
+   through the small slots beside it.
    S1 in the pocket's ceiling from below, nut tight. Bring the pack's and S1's leads up
    through the open notch at the deck's edge (the deck's other slot is a closed hole, so
    a soldered lead can't be threaded through it later), then `base_deck` drops in on top (3 x M3x8 into the
-   three pillars that have holes; it fits one way). The deck's 11.3 mm hole (+X, y=-25) is for an optional charge jack and stays empty for now.
-   Check you can reach the pack's port and switch from the -Y side with the lantern lifted off. Jar in its ring with a strap through the finger slots. **Fit the tube
+   three pillars that have holes; it fits one way). The deck's 11.3 mm hole (+X, y=-25) stays empty.
+   Turn the battery's own switch ON now (it stays ON). Turn the cartridge over and check from underneath: the
+   LEDs show through the thin slot, and the charger plug slides along the charge slot into the female end. Jar in its ring with a strap through the finger slots. **Fit the tube
    to the pump now, while the cartridge is exposed:** open the head, lay the continuous tube around
    the rollers and close the cap. Leave the outlet end free for later threading to the nozzle. Then
    seat the pump in its saddles and secure it with two straps. Electronics board on the deck's vertical panel (4 x M3x6 through the holes you
@@ -649,7 +658,7 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
 - [ ] On the day: `status` reads about 11.5 V or more (roughly half charge or better). Below that, charge first.
 - [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring double-blinks before the glow.
-- [ ] Lantern lifted off, battery lead unplugged from the pack, charger plugged into the pack, pack switch ON: the charger's LED shows charging. Plug the battery lead back in afterwards.
+- [ ] Lantern propped up, S1 OFF, pack switch ON, charger slid into the socket under the floor: the charger's LED shows charging, and the battery's LEDs show through the floor slot.
 - [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
 - [ ] Your fist goes through the curtain and into the lock, and back out, without catching.
 - [ ] With the lights on in a dim room, the curtain, the display window and the top all glow; you can't see the nozzle.
@@ -677,11 +686,12 @@ nozzle (the line is empty after cleaning; empty the glass as needed). Put the la
 pour into the glass: the first pour of the night should not be the one in front of a guest. Then the empty
 glass goes in and you are ready.
 
-**Charging:** S1 OFF, USB unplugged. Lift the lantern off (3 thumbscrews). The battery's port and switch are at its
--Y end, under the deck's edge between two pillars. Pull the battery lead's plug out of the port and plug the supplied
-TalentCell 12.6 V charger in instead, with the pack switch ON (the charger's LED is red while charging, green when done).
-Leave the lantern off while it charges. When it's done, unplug the charger and **plug the battery lead back in**: the
-lantern does nothing without it. A full charge takes about 6 h at the charger's 0.5 A. Charge after
+**Charging** (nothing to open, nothing to unplug): S1 OFF, USB unplugged. Tip the lantern back and look underneath:
+near the rim on the display side is a rectangular charge slot; the charge socket lies flat at its far end. (The
+battery's own switch must be ON to charge; it stays ON.) Lay the supplied TalentCell 12.6 V charger's plug in the slot and slide it along
+until it seats. Set the lantern down on a book or a
+block under that side, about 2 cm, so the cord can run out. The charger's LED is red while charging and green
+when done; the battery's own LEDs show through the thin slot in the floor. A full charge takes about 6 h at the charger's 0.5 A. Charge after
 every party, or whenever `status` reads below about 11.5 V (roughly half): the strip dims as the pack drains.
 The double blink as you punch in (below 10.5 V) is a late warning. Runtime and state of charge versus voltage
 need checking on the assembled prop; do not treat the voltage threshold as a precise 50% fuel gauge.
