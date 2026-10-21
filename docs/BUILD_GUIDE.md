@@ -21,7 +21,7 @@ how the parts fit together; use the guide for the actual sequence. The guide inc
 cutaways showing the pump-to-floor route and nozzle threading. The pump outlet and loose service loop
 are illustrative; confirm their fit with the actual parts. Wiring, curtain and metal fasteners are
 described where needed but are not individually animated. Skip the "Install the charge jack" chapter: the jack is
-not fitted for now (you charge at the battery, section 12).
+not fitted (you charge through the splitter's female end, section 12).
 
 ![interaction timeline](images/interaction.png)
 
@@ -83,7 +83,7 @@ and the pump 12: order those first. Vetco prices are from 2026-10-13; prices wit
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
 | 5c | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
 | 6 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
-| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger (12.6 V, 0.5 A, ~6 h) and its supplied 1-female-to-2-male splitter: the female end becomes the charge socket under the floor (section 4, step 2). Its one DC5521 port is both input and output, and its own switch must be ON to charge (TalentCell manual). The cartridge tray is built for this case (rev 9i). |
+| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm. Output varies from 12.6 to 9 V. Use its supplied charger (12.6 V, 0.5 A, ~6 h) and its supplied 1-female-to-2-male splitter: one male stays in the battery, the other is cut for the board, and the female end is the charge socket inside the cartridge (section 4, step 2). Its one DC5521 port is both input and output, and its own switch must be ON to charge (TalentCell manual). The cartridge tray is built for this case (rev 9i). |
 | 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.97 | Third-party (Pecafeitas) listing of the 0.1 A hinge-lever version. Omron's datasheet gives its minimum load as 1 mA at 5 V (the plain D2F needs 100 mA), which the section 4 interface supplies. Omron provenance is not verified: check the marking, the peg spacing against `switch_bracket`, and that it clicks reliably 50 times. |
 | 13a | Heat-set inserts | [ruthex RX-M3x5.7 brass, 100-pack (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3) | $9.99 | 32 used. 5.7 mm long, made for a 4.0 mm hole: the 32 receiving bores are 4.0 x 6.5 mm (section 3). Any plain M3 x 5.7 x 4.6 mm brass insert is the same part. |
 
