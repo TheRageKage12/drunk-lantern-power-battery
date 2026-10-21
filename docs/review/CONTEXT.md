@@ -486,12 +486,15 @@ $4.69, the inserts $9.99, the straps ~$5 that were listed but never in the total
   swap).** Kevin pointed out the supplied splitter is "1 female to 2 male", all ends joined: one male stays in the
   battery, the other is cut for the board, and the female end is the charge socket, so charging never needs anything
   unplugged (the manual says the pack can output while charging). The female end stays inside, beside the battery's
-  end; charge with the lantern lifted off. The pack lies LED face down over a 30 x 6 mm floor slot so its five
+  end; charge with the lantern lifted off. The pack lies LED face down over a 26 x 6 mm floor slot so its five
   fuel-gauge dots show from underneath (12.7 mm in from the end and 25.4 mm long are Kevin's caliper numbers; the
-  row's offset across the pack is from TalentCell's photo, so `docs/images/battery-seat.png` asks him to confirm it).
+  row's offset across the pack is from TalentCell's photo, so `docs/images/battery-seat.png` asked him to confirm it; after checking the battery he set the slot to run 14 to
+  40 mm from the port-side edge, `PACK_LED_FROM_PORT`).
   Tried the same day and dropped by Kevin: an exposed horizontal charge slot under the floor (it needed a right-angle
   battery plug and sat next to the rocker's finger hole; no other floor spot fits the 71 mm socket-plus-plug run).
-  The pack's rocker has no floor hole: it stays ON, S1 is the power switch. The battery lead's straight plug sticks
-  out 28.6 mm (Kevin); its cable has to turn up right at the plug's end, about 1 mm inside the drum wall. The deck's
+  The pack's rocker has no floor hole: it stays ON, S1 is the power switch. The battery lead's straight plug with its cord
+  folded back in a U-turn reaches 35 mm from the battery's end (Kevin). Centred, the drum wall at the port is only
+  35.2 mm away, so at Kevin's request the battery moved 7 mm toward +Y (`PACK_Y`; its +Y end stop now merges into
+  the S1 pocket): ~6 mm clear. Moving the S1 pocket to go further was considered and not needed. The deck's
   11.3 mm jack hole stays, empty.
 

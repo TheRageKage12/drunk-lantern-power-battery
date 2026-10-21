@@ -546,10 +546,10 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
 1. **Cartridge.** Stand `base_tray` with the switch pocket (the raised box near the rim) toward you. The
    LM2596 goes in its pocket on the right, on its four 2 mm printed corner supports, zip-tied through the slots beside it.
    Check that no underside solder joint rests on a support.
-   The TalentCell lies flat in the middle, **LED face down** (the five fuel-gauge dots over the thin floor slot) and
+   The TalentCell lies flat, 7 mm toward you from the middle, **LED face down** (the five fuel-gauge dots over the thin floor slot) and
    **connector/switch end away from you (-Y)**, at the low end stop (the [battery seat drawing](images/battery-seat.png) has the
-   measurements). The splitter's male plug goes in the port; its cable turns up right at the plug's end (there are only
-   a few mm to the drum wall).
+   measurements). The splitter's male plug goes in the port; fold its cord back in a U-turn over the plug (plug and
+   U-turn reach about 35 mm from the battery's end, which leaves ~6 mm to the drum wall).
    Thread a 20 mm strap through both slots before fitting the pack; its lower run sits in the underside
    recess and must be no thicker than 1 mm. Tighten the strap: the deck is 17 mm above the case and does
    not retain it. Tuck the splitter's female end (the charge socket) beside the battery's end where you can reach it

@@ -75,11 +75,18 @@ BATTERY_PLUG_Z0 = 7.0      # the battery plug's reserve starts above the low fro
 # LED row 12.7 mm in from the end edge, 25.4 mm long (its offset across the pack is from TalentCell's photo).
 PACK_PORT_X = 32.5 - 14.3       # 18.2 in the assembly frame
 PACK_SWITCH_X = 32.5 - 44.5     # -12.0; reached from the -Y side with the lantern lifted off
-PACK_LED_X = (-10.0, 20.0)      # floor slot across the LED row
-PACK_LED_IN, PACK_LED_SLOT = 12.7, 6.0
+PACK_LED_FROM_PORT = (14.0, 40.0)   # Kevin: the slot runs 14 to 40 mm from the port-side edge
+PACK_LED_X = (32.5 - PACK_LED_FROM_PORT[1], 32.5 - PACK_LED_FROM_PORT[0])   # (-7.5, 18.5) in the assembly frame
+PACK_LED_FROM_END = (12.0, 17.0)   # Kevin: the slot runs 12 to 17 mm in from the battery's end edge
+PACK_LED_IN = sum(PACK_LED_FROM_END) / 2          # slot centre, 14.5
+PACK_LED_SLOT = PACK_LED_FROM_END[1] - PACK_LED_FROM_END[0]   # 5.0
 # The battery lead is the splitter's straight male plug in the port (Kevin: 28.6 mm out, ~12 mm across); its cable
 # turns up just past the plug's end, a few mm inside the drum wall.
 BATTERY_PLUG_OUT, BATTERY_PLUG_D, BATTERY_PLUG_Z1 = 28.6, 12.0, 36.0
+BATTERY_PLUG_TURN = 35.0   # Kevin: plugged in with the cord folded in a U-turn, it reaches 35 mm from the battery's end
+# The pack sits 7 mm toward +Y (the owner's side, Kevin) so the plug and its U-turn clear the drum wall by ~7 mm (centred,
+# the wall is only 35.2 mm from the battery's end at the port). Its +Y end stop then meets the S1 pocket and merges into it.
+PACK_Y = 7.0
 # rev 9h: nothing shows on the shell. The power switch sits in a pocket under the cartridge floor, lever down (tip
 # the lantern to flip it); the charge jack is on the deck, pointing up, reached with the lantern lifted off.
 SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray floor, +Y side, between a pillar and the rim

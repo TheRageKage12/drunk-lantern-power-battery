@@ -214,13 +214,13 @@ def _bank_pocket():
     """TalentCell rails and strap slots. Low -Y stop clears the connector/switch face;
     full-height +Y stop faces S1. The strap, not the deck, holds the pack down."""
     y_stop = BANK_HALF_L + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
-    adds = [_box(P.POWERBANK_W, BANK_END_STOP_T, BANK_END_STOP_H, 0, y_stop, P.FLOOR),
-            _box(P.POWERBANK_W, BANK_END_STOP_T, BANK_PORT_STOP_H, 0, -y_stop, P.FLOOR)]
+    adds = [_box(P.POWERBANK_W, BANK_END_STOP_T, BANK_END_STOP_H, 0, P.PACK_Y + y_stop, P.FLOOR),
+            _box(P.POWERBANK_W, BANK_END_STOP_T, BANK_PORT_STOP_H, 0, P.PACK_Y - y_stop, P.FLOOR)]
     x_rail = BANK_HALF_W + BANK_END_STOP_GAP + BANK_END_STOP_T / 2
     gap0 = P.BATTERY_STRAP_Y - STRAP_SLOT_L / 2 - 4.0
     gap1 = P.BATTERY_STRAP_Y + STRAP_SLOT_L / 2 + 4.0
     for sx in (-1, 1):   # side rails either side of the strap, so the narrow bank cannot slide sideways
-        for y0, y1 in ((-BANK_HALF_L, gap0), (gap1, BANK_HALF_L)):
+        for y0, y1 in ((P.PACK_Y - BANK_HALF_L, gap0), (gap1, P.PACK_Y + BANK_HALF_L)):
             adds.append(_box(BANK_END_STOP_T, y1-y0, BANK_END_STOP_H, sx*x_rail, (y0+y1)/2, P.FLOOR))
     x_slot = x_rail + BANK_END_STOP_T / 2 + 1.0 + STRAP_SLOT_W / 2
     cuts = [_box(STRAP_SLOT_W, STRAP_SLOT_L, P.FLOOR + 2, sx * x_slot, P.BATTERY_STRAP_Y, -1) for sx in (-1, 1)]
@@ -346,7 +346,7 @@ def _switch_pocket():
 def _led_slot():
     """2026-10-21: a thin slot in the floor under the pack's fuel-gauge LEDs (the pack lies LED face down)."""
     x0, x1 = P.PACK_LED_X
-    y = -BANK_HALF_L + P.PACK_LED_IN
+    y = P.PACK_Y - BANK_HALF_L + P.PACK_LED_IN
     return [], [_box(x1 - x0, P.PACK_LED_SLOT, P.FLOOR + 2, (x0 + x1) / 2, y, -1)]
 
 
@@ -458,7 +458,7 @@ def _envelopes():
     motor = cq.Workplane('XZ').workplane(offset=-(PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST + 0.01)) \
         .center(PUMP_X, P.PUMP_H / 2).circle(P.PUMP_MOTOR_D / 2).extrude(PUMP_MOTOR_L)
     pump = head.union(motor)
-    bank = _box(P.POWERBANK_W, P.POWERBANK_L, P.POWERBANK_T, 0, 0, 0)
+    bank = _box(P.POWERBANK_W, P.POWERBANK_L, P.POWERBANK_T, 0, P.PACK_Y, 0)
     return {'bottle_envelope': bottle, 'pump_envelope': pump, 'powerbank_envelope': bank}
 
 
