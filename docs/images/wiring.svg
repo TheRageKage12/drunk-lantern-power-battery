@@ -41,8 +41,9 @@
 <path d="M155,250 L155,269" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M145.4,269 L164.6,269 M148.664,275.0 L161.336,275.0 M152.696,281.0 L157.304,281.0" fill="none" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="40" y="295" width="230" height="85" rx="6" fill="#fff7e6" stroke="#222222" stroke-width="1.2"/>
-<text x="155.0" y="323" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">J1 charge jack</text>
-<text x="155.0" y="346" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">DC5521 • third contact unused</text>
+<text x="155.0" y="323" font-size="18" text-anchor="middle" font-weight="bold" fill="#222222">Charge socket</text>
+<text x="155.0" y="346" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">splitter female end (DC5521)</text>
+<text x="155.0" y="367" font-size="14" text-anchor="middle" font-weight="normal" fill="#222222">supplied 12.6 V charger only</text>
 <path d="M300,180 L300,329 L270,329" fill="none" stroke="#f77f00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="270" cy="329" r="4" fill="#ffffff" stroke="#f77f00" stroke-width="1.5"/>
 <text x="258" y="334" font-size="15" text-anchor="end" font-weight="normal" fill="#222222">+</text>

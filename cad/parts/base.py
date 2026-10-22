@@ -79,7 +79,7 @@ PILLAR_H = DECK_Z0 - P.FLOOR
 DECK_T = 3.0
 DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (47)
 DECK_R = R_IN - P.FIT                                 # drops in from the open top
-DECK_LEAD_NOTCH = (14.0, 12.0)                        # open notch in the deck edge at +Y: the pack and switch leads come up here
+DECK_LEAD_NOTCH = (14.0, 12.0)                        # open notch in the deck edge at +Y: S1's output and the pack's negative come up here
 DECK_LEAD_NOTCH_X = -25.0
 
 # ------------------------------------------------------------------ pump (on the deck, axis along Y)
@@ -443,7 +443,7 @@ def build_deck():
     for (x, y) in DECK_WIRE_SLOTS_XY:
         cuts.append(_box(DECK_WIRE_SLOT[0], DECK_WIRE_SLOT[1], DECK_T + 2, x, y, DECK_Z0 - 1))
     cuts.append(_box(DECK_LEAD_NOTCH[0], 2 * DECK_LEAD_NOTCH[1], DECK_T + 2, DECK_LEAD_NOTCH_X, DECK_R, DECK_Z0 - 1))
-    cuts.append(_cyl(P.PORT_JACK_D / 2, DECK_T + 2, P.JACK_XY[0], P.JACK_XY[1], DECK_Z0 - 1))   # charge jack, pointing up
+    cuts.append(_cyl(P.PORT_JACK_D / 2, DECK_T + 2, P.JACK_XY[0], P.JACK_XY[1], DECK_Z0 - 1))   # empty hole for an optional charge jack
     for a in SERVICE_ANGLES:     # notches so the drum's bosses pass the deck when the lantern is lowered on
         cuts.append(_sector_box(BOSS_R0 - 1.5, DECK_R + 1, BOSS_W + 3.0, DECK_Z0 - 1, DECK_Z0 + DECK_T + 1, a))
     deck = _cut_all(deck, cuts)
