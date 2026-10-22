@@ -27,7 +27,7 @@ ORANGE = (235, 150, 60)     # hardware envelopes
 WHITE = (235, 235, 235)     # diffuser / halo
 COLORS = {'diffuser': WHITE, 'halo': WHITE, 'top_diffuser': WHITE, 'base_tray': DARK,
           'lock_wall': WHITE, 'socket_housing': GREY, 'rotor': GREY, 'socket_base': GREY, 'key_cap': GREY,
-          'switch_bracket': GREY, 'plunger': GREY, 'glass_well': DARK, 'bay_floor': DARK, 'nozzle_guide': DARK}
+          'switch_bracket': GREY, 'plunger': GREY, 'glass_well': DARK, 'bay_floor': DARK, 'guide_boss': DARK, 'nozzle_guide': DARK}
 
 
 def placements():

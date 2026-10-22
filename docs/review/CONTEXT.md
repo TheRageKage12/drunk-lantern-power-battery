@@ -513,3 +513,11 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   splitter's female end") and the viewer's cartridge steps (battery LED face down, U-turn, switch ON in step 1). The
   cartridge and cutaway renders no longer draw the optional jack's reserve. Unused `BATTERY_PLUG_Z0` removed. The
   optional-jack envelopes stay in the fit checks so a jack can still be added later.
+- **2026-10-22, the bay floor's insert boss is a separate glued-on part.** Kevin pointed out that `bay_floor` had
+  features on both faces (the drip lip up, the nozzle guide's insert boss down), so it printed boss-up with the
+  whole 2 mm floor on supports. The boss is now `guide_boss` (8 x 6 mm, printed bore up), super-glued under the
+  floor and lined up with a 4 mm drill bit; the insert is then set from the top through the floor into the boss.
+  The screw's pull presses the boss against the floor, so the glue only locates it. `bay_floor` prints floor down,
+  lip up, no supports. The placed geometry is unchanged (checked against the old part to 0.000002 mm), so the lower
+  dish relief, the nozzle height and the insert count (32) stay as they were. The drip lip stays: it keeps spills
+  on the tray, off the cartridge below.
