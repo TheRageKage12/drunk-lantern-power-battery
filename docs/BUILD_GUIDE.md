@@ -192,7 +192,7 @@ Hardwick's in the U-District closed in 2020. Sound Homebrew Supply could not be 
 
 All files are in `cad/output/` (STL for slicing, STEP for editing).
 
-- **What to print:** the 25 parts in the [part list](#part-list) below, plus `ring_sizer` first. Print `key_cap`
+- **What to print:** the 26 parts in the [part list](#part-list) below, plus `ring_sizer` first. Print `key_cap`
   only if you use a bought ring instead of `key_ring`. `assembly.stl` and the `*_envelope.stl` files are check
   volumes, not parts.
 - **Bed size:** everything fits your 230 x 230 x 240 mm Ender 3. The widest part is the rear sphere half at
@@ -228,6 +228,15 @@ Install the brass inserts before assembly.
 - Test one in a scrap print first, at the supplier's installation temperature.
 - Fit each flush with the entry face, let it cool, and check that a screw turns freely before mounting anything.
 - The 3.4 mm screw through-holes, countersinks and captured-nut pockets are separate features: no inserts there.
+- **The bay floor's insert needs its boss glued on first.** The 2 mm floor is too thin to hold an insert, so its bore
+  carries on into `guide_boss`, a small separate puck (printed apart so the floor prints flat without supports):
+  1. Put a thin ring of super glue round the boss's open (bore) face and press it onto the underside of the floor
+     (the side without the lip), over the insert hole near the tube hole.
+  2. Line the two bores up with a 4 mm drill bit pushed through both, and hold it until the glue sets. Pull the bit
+     out.
+  3. Stand the floor on the boss on the bench (prop the far edge level on a book) and set the insert from the top,
+     through the floor and into the boss. Pressing pushes the two parts together, and the insert locks them. In the
+     lantern the nozzle guide's screw pulls the boss up against the floor too.
 
 | Printed part | Inserts | Entry side |
 |---|---:|---|
@@ -237,7 +246,7 @@ Install the brass inserts before assembly.
 | `dish_upper` | 11 | Four top-diffuser holes, three outer radial holes, four underside curtain-clamp holes |
 | `sphere_front` | 4 | Split-face bosses |
 | `sphere_rear` | 2 | Inner walls of the two handle sockets; insert before fitting the legs |
-| `bay_floor` | 1 | Top face, under the nozzle-guide foot |
+| `bay_floor` + `guide_boss` | 1 | Top face, under the nozzle-guide foot, through the floor into the glued-on boss (below) |
 | `socket_housing` | 1 | Open back, beside the switch cavity |
 
 ### Test prints (before any big part)
@@ -279,7 +288,8 @@ Install the brass inserts before assembly.
 | `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 13 |
 | `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 23 |
 | `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 3 |
-| `bay_floor` | 131 x 131 x 10 | insert boss up, as exported | under the recessed floor inside the drip lip | any | 21 |
+| `bay_floor` | 131 x 131 x 4 | floor down, drip lip up, as exported | no | any | 21 |
+| `guide_boss` (glued under `bay_floor`) | 8 x 8 x 6 | bore up, as exported | no | any | <1 |
 | `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 38 |
 | `nozzle_guide` | 47 x 17 x 34 | foot down, as exported | a small tree support under the end of the bend | any | 3 |
 | `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 17 |
@@ -302,7 +312,6 @@ Install the brass inserts before assembly.
   hand opening overhang more than 45 degrees, so enable tree supports on the inside only.
 - **Under the two dishes' bearing rings.** They start in mid-air 8-9 mm up; "touching build plate only" support is
   a short ring that pulls off clean.
-- **Beneath the bay floor's recessed floor**, inside the drip lip.
 - **Under the nozzle guide's bend.** It prints foot down, and the last 45 degrees of its bend hang past horizontal,
   so give it a small tree support there.
 - **Under the key ring's head and inside its finger hole.**
@@ -698,7 +707,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
 4. **Nozzle.** Push the tube up through the hole in `nozzle_guide`'s foot and along the channel, pressing it
    in through the open side where it resists (the slit is a little narrower than the tube), so 5 mm sticks out
    past the end, pointing down. Screw the foot into the bay-floor insert (1 x M3x8), open side toward you,
-   the curve reaching toward the middle. The insert boss below the floor fits the matching relief in the lower dish.
+   the curve reaching toward the middle. The glued-on boss below the floor fits the matching relief in the lower dish.
 5. **Lock wall.** Stand the wall in its two slots, lock facing you. Its back closes the nozzle guide's open
    side; check the tube sits in the channel and its end still points down into the glass slot. Take up the
    slack in the lock cable and LED leads down through the cable hole.

@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import cadquery as cq
 import params as P
 from parts import base as B, sphere as S, dishes as D, socket as K
-solids={'base_tray':B.build_tray(),'base_deck':B.build_deck(), 'dish_lower':D.build_dish_lower(), 'dish_upper':D.build_dish_upper(), 'bay_floor':S.bay_floor(), 'socket_housing':K.housing_solid()}
+solids={'base_tray':B.build_tray(),'base_deck':B.build_deck(), 'dish_lower':D.build_dish_lower(), 'dish_upper':D.build_dish_upper(), 'bay_floor':S.bay_floor().union(S.guide_boss()), 'socket_housing':K.housing_solid()}
 solids['sphere_front'],solids['sphere_rear']=S.build_halves()
 rows=[]
 def add(n,p,d): rows.append((n,p,d))

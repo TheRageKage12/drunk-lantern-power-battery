@@ -23,10 +23,10 @@ verify the listed component and connector dimensions before printing. The shoppi
 
 ## The printed parts
 
-All 26 parts as exported from `cad/output/` (iso view). Front, top and iso views of each part are in
+All 28 parts (including the ring sizer) as exported from `cad/output/` (iso view). Front, top and iso views of each part are in
 [`docs/images/stl/`](docs/images/stl/).
 
-![the 26 printed parts](docs/images/stl/parts-iso.png)
+![the 28 printed parts](docs/images/stl/parts-iso.png)
 
 ## Repository map
 

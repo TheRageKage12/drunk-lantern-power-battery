@@ -237,11 +237,17 @@ def bay_floor():
         f = f.cut(big_box(x0, x1, yc - WALL_T / 2 - 0.4, yc + WALL_T / 2 + 0.4, -1, P.FLOOR + 1))
     f = f.cut(cyl(P.TUBE_GROMMET_D / 2, -1, P.FLOOR + 3, *GROMMET_XY))
     f = f.cut(cyl(WIRE_HOLE_D / 2, -1, P.FLOOR + 3, *WIRE_SLOT_XY))
-    # The 2 mm tray floor alone cannot retain a 6 mm insert. Extend its boss
-    # downward into a matching relief in the lower dish; the nozzle stays at its existing height.
-    f = f.union(cyl(GUIDE_INSERT_BOSS_R, GUIDE_INSERT_BOSS_BOTTOM, P.FLOOR, *GUIDE_SCREW))
-    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, P.FLOOR - P.M3_INSERT_DEPTH, P.FLOOR + .5, *GUIDE_SCREW))
+    # The nozzle guide's insert bore goes through the 2 mm floor into guide_boss, glued underneath
+    f = f.cut(cyl(P.M3_INSERT_HOLE / 2, -1, P.FLOOR + .5, *GUIDE_SCREW))
     return f
+
+
+def guide_boss():
+    """Insert boss glued under the bay floor (bay-floor frame). The 2 mm floor alone cannot retain a 6 mm insert, so
+    the bore continues into this boss, which hangs into a matching relief in the lower dish. A separate part so the
+    bay floor prints flat, lip up, without supports."""
+    b = cyl(GUIDE_INSERT_BOSS_R, GUIDE_INSERT_BOSS_BOTTOM, 0, *GUIDE_SCREW)
+    return b.cut(cyl(P.M3_INSERT_HOLE / 2, P.FLOOR - P.M3_INSERT_DEPTH, 0.5, *GUIDE_SCREW))
 
 
 def slot(w, l, z0, z1, yc=None):
@@ -370,7 +376,8 @@ def build():
         'sphere_front': front.rotate((0, 0, 0), (1, 0, 0), -90),   # dome up, split face on the bed
         'sphere_rear': rear.rotate((0, 0, 0), (1, 0, 0), 90),
         'diffuser': diffuser(),
-        'bay_floor': bay_floor().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, P.FLOOR + 2)),  # insert boss up
+        'bay_floor': bay_floor(),                       # floor on the bed, drip lip up, no supports
+        'guide_boss': guide_boss().translate((-GUIDE_SCREW[0], -GUIDE_SCREW[1], -GUIDE_INSERT_BOSS_BOTTOM)),   # glue face up
         'glass_well': glass_well(),
         'lock_wall': lock_wall().rotate((0, 0, 0), (1, 0, 0), -90),     # lie flat: back face (rows, posts) up
         'curtain_clamp': curtain_clamp(),
@@ -405,7 +412,8 @@ def placements():
         'sphere_front': unflat('sphere_front', 90, (0, 0, Z)),
         'sphere_rear': unflat('sphere_rear', -90, (0, 0, Z)),
         'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
-        'bay_floor': ((1, 0, 0), 180, (0, 0, Z + BAY_FLOOR_Z + P.FLOOR + 2)),
+        'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
+        'guide_boss': ((0, 0, 1), 0, (GUIDE_SCREW[0], GUIDE_SCREW[1], Z + BAY_FLOOR_Z + GUIDE_INSERT_BOSS_BOTTOM)),
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
         'lock_wall': unflat('lock_wall', 90, (0, WALL_BACK_Y, Z + WALL_Z0)),
         'curtain_clamp': ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_TOP - UPPER_PLUG_H - CLAMP_T)),   # under the upper dish plug

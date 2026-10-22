@@ -95,7 +95,7 @@ for sgn in (-1, 1):
 for n in sorted(M):
     if n.endswith("_envelope") or n.startswith("handle"):
         continue
-    fill = "#ffffff" if n in ("diffuser", "top_diffuser") else ("#e0e0e0" if n in ("bay_floor", "glass_well", "lock_wall", "curtain_clamp", "base_tray", "base_deck") else PRINT)
+    fill = "#ffffff" if n in ("diffuser", "top_diffuser") else ("#e0e0e0" if n in ("bay_floor", "guide_boss", "glass_well", "lock_wall", "curtain_clamp", "base_tray", "base_deck") else PRINT)
     draw_polys(section(n), fill, PRINT_EDGE if fill == PRINT else "#616161", sw=0.9)
 
 # ------------------------------------------------------------------ LED strips (green) and the strip curtain
