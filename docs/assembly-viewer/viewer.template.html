@@ -112,7 +112,7 @@ button:focus-visible, input:focus-visible, .prow:focus-visible { outline: 2px so
     <div class="stage-top">
       <div class="brand">
         <h1>Power battery assembly</h1>
-        <p>From the CAD in cad/parts, every printed part in its built position</p>
+        <p>Rev C, from the CAD in cad/parts: every printed part in its built position</p>
       </div>
       <div class="modes" role="group" aria-label="View">
         <button id="m-steps" aria-pressed="true">Steps</button>
@@ -165,95 +165,134 @@ button:focus-visible, input:focus-visible, .prow:focus-visible { outline: 2px so
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" integrity="sha384-wagZhIFgY4hD+7awjQjR4e2E294y6J2HSnd8eTNc15ZubTeQeVRZwhQJ+W6hnBsf" crossorigin="anonymous"></script>
 <script>
 (() => {
-// ---------------------------------------------------------------- parts: name, colour, explode offset (mm), notes
-// Offsets move a part away from its built position when the view is spread; z is up, +y is your (hand-opening) side.
-const G = { shell: 'Outer shell', lock: 'Lock', inside: 'Inside the sphere', cart: 'Base cartridge', handle: 'Handle', bought: 'Bought parts (size allowances)' };
+// ---------------------------------------------------------------- parts: name, colour, group, explode offset (mm), notes[, opacity]
+// Rev C (2026-10-23). Offsets move a part away from its built position when the view is spread; z is up,
+// -y is the audience (front lens) side, +y is your (hand-opening) side.
+// Colours follow the print colour: green shell (shades vary so neighbours read apart), white parts white,
+// the inside parts dark green, the lock grey, bought parts as striped allowances.
+const G = { shell: 'Lantern shell', top: 'Top cap and lid', bells: 'Bells', inside: 'Inside the sphere', lock: 'Lock', handle: 'Handle', cart: 'Cartridge', bought: 'Bought parts (size allowances)' };
 const P = {
-  base:            ['Base drum', '#2f7d4f', 'shell', [0,0,0], 'Green. Prints top band down. Nut bosses inside take the 3 thumbscrews.'],
-  dish_lower:      ['Lower dish', '#56a865', 'shell', [0,0,70], 'Green. Prints mouth down. Spigot drops into the drum: 3 × M3×8 from outside.'],
-  sphere_front:    ['Sphere front half (display side)', '#3c9383', 'shell', [0,-170,150], 'Green. Prints split face down, tree supports inside. Holds the display diffuser.'],
-  sphere_rear:     ['Sphere rear half (your side)', '#7ab648', 'shell', [0,190,150], 'Green. Hand opening and the two handle sockets. 4 × M3×10 through its inner flange.'],
-  dish_upper:      ['Upper dish', '#256b58', 'shell', [0,0,300], 'Green. Prints floor down. LED ring, top diffuser and curtain clamp go on before it is fitted.'],
-  socket_housing:  ['Lock housing', '#1d8fb3', 'lock', [0,170,150], 'Green. Ring face down. 3 nuts glued in its hex pockets.'],
-  rotor:           ['Rotor', '#f0b232', 'lock', [0,105,150], 'Green. Bottom face down. Turns 45°; its cam presses the switch.'],
-  plunger:         ['Spring plunger', '#ec6d32', 'lock', [-55,120,150], 'Any colour. Nose up. Rides on the rotor ramp; greased.'],
-  socket_base:     ['Lock base plate', '#5fc0e3', 'lock', [0,30,150], 'Any colour. Sensor post up. A3144 lies face up on the post.'],
-  switch_bracket:  ['Switch bracket', '#9d6be0', 'lock', [40,65,150], 'Any colour. Carries the D2F-01L microswitch; slides 1 mm to tune.'],
-  key_ring:        ['Lantern ring', '#de4b84', 'lock', [0,240,150], 'Green, with the first 3 layers white so the emblem outline is white. Emblem face down, support inside the finger hole. Its raised emblem is the key that turns the rotor. Magnet glued in from inside the band; worn on the left middle finger.'],
-  lock_wall:       ['Lock wall', '#e7e1d2', 'inside', [0,0,150], 'White. Front face down. LED strips both faces; the lock screws to its front.'],
-  diffuser:        ['Display diffuser', '#f3f6fb', 'inside', [0,-120,150], 'White, 100 % infill. Glued on the ledge inside the front half.', 0.75],
-  bay_floor:       ['Bay floor', '#7d70b8', 'inside', [0,0,110], 'Any colour. Floor on the bed, drip lip up, no supports. Sits on the lower dish ring.'],
-  guide_boss:      ['Nozzle insert boss', '#a99be0', 'inside', [0,0,95], 'Any colour. Glued under the bay floor, its bore lined up with the floor hole; the nozzle guide\'s insert goes in through both. Hangs into a relief in the lower dish.'],
-  glass_well:      ['Glass well', '#c5a6ea', 'inside', [0,0,80], 'Any colour. Drops into the bay floor slot; ridge end toward the display side.'],
-  nozzle_guide:    ['Nozzle guide', '#ff5f5f', 'inside', [-40,-40,135], 'Any colour. Foot down, small tree support under the bend. 1 × M3×8 into the bay floor.'],
-  curtain_clamp:   ['Curtain clamp', '#5f9a3a', 'inside', [0,40,250], 'Green. Clamps 13 curtain strips under the upper dish: 4 × M3×8.'],
-  top_diffuser:    ['Top diffuser', '#f3f6fb', 'inside', [0,0,360], 'White. Countersunk face down. 4 × M3×8 flat-head from above.', 0.8],
-  handle_leg_left: ['Handle leg (left from display side)', '#8f9b32', 'handle', [150,60,330], 'Green. Fits the boss on your right as you face the hand opening. 1 × M3×12.'],
-  handle_leg_right:['Handle leg (right from display side)', '#a7ae3e', 'handle', [-150,60,330], 'Green. Fits the boss on your left. 1 × M3×12.'],
-  handle_arc_left: ['Handle arc (left)', '#6f7f2a', 'handle', [90,60,440], 'Green. Laps onto the left leg and the other arc: M3×12 + nuts.'],
-  handle_arc_right:['Handle arc (right)', '#bfc35a', 'handle', [-90,60,440], 'Green. 6 × M3×12 and nuts across the three lap joints.'],
-  base_tray:       ['Cartridge tray', '#c8863a', 'cart', [0,0,-230], 'Green. Flat. Battery pocket, buck supports, switch pocket underneath.'],
-  base_deck:       ['Cartridge deck', '#e2b469', 'cart', [0,0,-120], 'Any colour. Support under the four board pads. 3 × M3×8 into the pillars.'],
-  thumb_knob:      ['Thumbscrew knob', '#8b5527', 'cart', [0,0,-300], 'Any colour. Print 3. An M3×12 glued in head-first.'],
-  thumb_knob_2:    ['Thumbscrew knob', '#8b5527', 'cart', [0,0,-300], 'Any colour. Print 3. An M3×12 glued in head-first.'],
-  thumb_knob_3:    ['Thumbscrew knob', '#8b5527', 'cart', [0,0,-300], 'Any colour. Print 3. An M3×12 glued in head-first.'],
-  powerbank_envelope:        ['TalentCell battery', '#3b4a5c', 'bought', [0,0,-190], '105 × 65 × 25 mm, LED face down over the floor slot, connector end away from you, under a 20 mm strap.'],
-  buck_envelope:             ['LM2596 buck converter', '#2f6aa0', 'bought', [0,0,-190], 'On four printed corner supports, zip-tied. Set to 5.0 V first.'],
-  bottle_envelope:           ['Jar (allowance)', '#a8c2d4', 'bought', [0,0,-60], 'Up to 73 mm across and 108 mm tall with the lid (an 8 oz Ball jelly jar). Strapped in its ring.', 0.7],
-  pump_envelope:             ['Kamoer pump (allowance)', '#6d7e90', 'bought', [0,0,-60], 'Measured outline: head 63.5 mm square, motor Ø40 × ~50 mm. Tube on the rollers before strapping it down; slide it so the motor rests in its cradle.'],
-  perfboard_envelope:        ['Electronics board', '#b98b4f', 'bought', [0,0,-60], '70 × 50 mm board on the deck panel, 4 × M3×6 into inserts.'],
-  board_components_envelope: ['Board components (allowance)', '#3e63a8', 'bought', [0,0,-60], 'XIAO, 74AHCT125, MOSFETs, C2: the space they may use.'],
-  glass_envelope:            ['Shot glass (allowance)', '#cfe9f5', 'bought', [0,120,130], 'Up to 52 mm across the top and 62 mm tall. Clicks over the ridge under the lock.', 0.55],
+  base:            ['Drum', '#23693b', 'shell', [0,0,-140], 'Green. Printed upright. 3 bayonet lugs inside its bottom edge lock onto the cartridge; 3 × M3×8 through its top band into the foot.'],
+  screw_cap:       ['Screw cap', '#2e7d48', 'shell', [0,32,-140], 'Green, print 25: 3 on the drum screws (shown), 18 on the handle lap heads and nuts, 4 on the pivot heads inside the sphere. Pressed in flush so no screw shows.'],
+  foot:            ['Foot', '#2a7a45', 'shell', [0,0,-60], 'Green. Spigot into the drum; its riser carries the bay floor. 3 thumbscrews from inside its neck into the sphere\'s bottom collar.'],
+  sphere_front:    ['Sphere front half', '#2e8b4e', 'shell', [0,-150,0], 'Green. Audience side, holds the front bell collar. Its bosses take the 4 M3×10 from the rear half\'s flange (M3 inserts).'],
+  sphere_rear:     ['Sphere rear half', '#3fa45f', 'shell', [0,170,0], 'Green. Your side, hand opening and rear bell collar. 4 × M3×10 through its inner flange into the front half.'],
+  handle_pivot_left:  ['Handle pivot (left)', '#4f9a36', 'handle', [-35,0,0], 'Green. 2 × M3×12 from inside the sphere into its inserts; green caps on the heads.'],
+  handle_pivot_right: ['Handle pivot (right)', '#4f9a36', 'handle', [35,0,0], 'Green. 2 × M3×12 from inside the sphere into its inserts; green caps on the heads.'],
+  handle_end_left:  ['Handle end (left)', '#5aa83a', 'handle', [-80,0,20], 'Green. Its axle goes into the left pivot.'],
+  handle_end_right: ['Handle end (right)', '#5aa83a', 'handle', [80,0,20], 'Green. Its axle goes into the right pivot.'],
+  handle_arc_1:     ['Handle arc 1', '#69b546', 'handle', [110,0,60], 'Green. Laps onto an end piece and the other arc: 3 × M3×8 + nuts per lap, epoxy, green caps.'],
+  handle_arc_2:     ['Handle arc 2', '#69b546', 'handle', [-110,0,60], 'Green. Laps onto an end piece and the other arc: 3 × M3×8 + nuts per lap, epoxy, green caps.'],
+  top_cap:         ['Top cap', '#35995a', 'top', [0,0,60], 'Green. Plugs into the sphere\'s top collar: 3 thumbscrews from inside its neck (lid and cap floor out).'],
+  cap_floor:       ['Cap floor', '#1f4f36', 'top', [0,0,160], 'Inside part (any colour). Carries the battery, the board, the buck module, S1 and the charge socket. Sits on its ledge in the cap: 3 thumbscrews.'],
+  halo_ring:       ['Halo ring', '#eef1ec', 'top', [0,0,200], 'White. The lid: push down and twist clockwise to lock (click); anticlockwise to lift off.'],
+  emblem_lid:      ['Emblem lid', '#1f8a47', 'top', [0,0,230], 'Green. Glued onto the halo ring; two 1.75 mm filament pins line it up.'],
+  emblem_centre:   ['Emblem centre', '#2fa859', 'top', [0,0,245], 'Green. Glued in the emblem; the emblem_jig centres it.'],
+  bell_front:      ['Front bell', '#47b06a', 'bells', [0,-360,0], 'Green. LED ring in its collar band, diffuser in its pocket. Slides onto the front collar: 2 thumbscrews from inside the sphere.'],
+  diffuser:        ['Front lens diffuser', '#f4f7f5', 'bells', [0,-290,0], 'White, frosted, 118 mm. Pressed into the front bell\'s pocket.', 0.8],
+  bell_rear:       ['Rear bell', '#3a9c5c', 'bells', [0,370,0], 'Green. LED ring inside, the one-piece cover and clamp ring at its mouth. 2 thumbscrews from inside the sphere.'],
+  curtain_clamp:   ['Cover clamp ring', '#4a9a5a', 'bells', [0,260,0], 'Green, full ring. Clamps the frosted cover at the rear bell\'s mouth: 4 countersunk M3×8 from inside the bell.'],
+  lock_wall:       ['Lock wall', '#e6e9e2', 'inside', [0,0,10], 'White. 2 × 5 cm LED columns on its face; the lock bolts to it (2 × M3×10 + nuts). Two tabs into the bay floor\'s slots.'],
+  led_panel:       ['LED panel', '#f1f3ef', 'inside', [0,-50,0], 'White. 4 × 10 cm LED rows on its front; its collars slip over the 4 posts on the lock wall, a dot of glue each.'],
+  wall_extension:  ['Wall extension', '#dde2da', 'inside', [0,0,45], 'White. Fits onto the lock wall\'s top edge.'],
+  bay_floor:       ['Bay floor', '#1d4a32', 'inside', [0,0,-8], 'Inside part. Sits on the foot\'s riser; glass well slot, grommet hole and the lock wall\'s two slots.'],
+  guide_boss:      ['Nozzle insert boss', '#2a5c40', 'inside', [0,0,-30], 'Inside part. Glued under the bay floor; carries the M3 insert for the nozzle guide.'],
+  glass_well:      ['Glass well', '#24553a', 'inside', [0,0,-20], 'Inside part. Drops into the bay floor\'s slot.'],
+  nozzle_guide:    ['Nozzle guide', '#2f6a48', 'inside', [-60,0,15], 'Inside part. 1 × M3×8 into the guide boss insert; the tube is pressed into it.'],
+  socket_housing:  ['Lock housing', '#8a9096', 'lock', [0,80,0], 'Grey in renders. Front plate of the lock.'],
+  rotor:           ['Rotor', '#a9aeb3', 'lock', [0,55,0], 'Grey in renders. Turns 45° with the key ring; magnet inside.'],
+  plunger:         ['Spring plunger', '#5e6469', 'lock', [-35,40,0], 'Grey in renders. Rides on the rotor ramp on its spring.'],
+  switch_bracket:  ['Switch bracket', '#b8bdc1', 'lock', [-30,25,0], 'Grey in renders. Carries the microswitch.'],
+  socket_base:     ['Lock base plate', '#70767c', 'lock', [0,10,0], 'Grey in renders. A3144 Hall sensor on its post; 3 × M3×8 flat-head close the lock, 1 more through the bracket.'],
+  key_ring:        ['Lantern ring (key)', '#9aa0a5', 'lock', [0,130,0], 'Worn on the finger; its raised emblem is the key that turns the rotor. Magnet glued in.'],
+  base_tray:       ['Cartridge', '#1b4430', 'cart', [0,0,-370], 'Inside part. One-piece floor with the bayonet collar, pump saddles and splash wall. Stays on the table at refill.'],
+  bag_cover:       ['Bag cover', '#2c6044', 'cart', [0,0,-230], 'Inside part. Lies over the bag; lift it to take the bag out.'],
+  pump_envelope:             ['Pump (allowance)', '#6d7e90', 'bought', [0,0,-280], 'KPHM200 on its saddles with one strap; tube on, plug up.'],
+  bag_envelope:              ['Drink bag (allowance)', '#c9d9a8', 'bought', [0,0,-280], '32 oz spouted pouch lying flat in the bay, spout at the back-corner well.', 0.6],
+  glass_envelope:            ['Shot glass (allowance)', '#cfe9f5', 'bought', [0,120,0], 'Up to 52 mm across and 62 mm tall, in the glass well under the nozzle.', 0.55],
+  powerbank_envelope:        ['Battery', '#3b4a5c', 'bought', [0,0,165], 'On the cap floor, LED face down over the slot, under a strap.'],
+  perfboard_envelope:        ['Electronics board', '#b98b4f', 'bought', [0,0,165], 'On its 4 standoffs on the cap floor, 4 × M3×6.'],
+  board_components_envelope: ['Board components (allowance)', '#3e63a8', 'bought', [0,0,165], 'XIAO RP2040 and the board parts: the space they may use.'],
+  buck_envelope:             ['Buck module', '#2f6aa0', 'bought', [0,0,165], 'On the cap floor. Set to 5.0 V first.'],
+  power_switch_envelope:     ['Power switch S1', '#41484f', 'bought', [0,0,165], 'In its box on the cap floor; reached with the lid off.'],
+  charge_socket_envelope:    ['Charge socket', '#545b62', 'bought', [0,0,165], 'Zip-tied on the cap floor; reached with the lid off.'],
+  front_led_envelope:        ['Front bell LED ring', '#7fe39a', 'bought', [0,-260,0], 'Green COB strip, ~37.5 cm, inside the front bell\'s collar band.'],
+  rear_led_envelope:         ['Rear bell LED ring', '#7fe39a', 'bought', [0,230,0], 'Green COB strip, ~45 cm full ring, inside the rear bell.'],
+  panel_led_envelope:        ['LED panel strips', '#7fe39a', 'bought', [0,-60,0], '4 × 10 cm green COB rows on the LED panel\'s front.'],
+  curtain_envelope:          ['Hand-side cover', '#e3ebe5', 'bought', [0,285,0], 'Frosted polypropylene, 171 mm disc with 8 cuts from the centre; clamped at the rear bell\'s mouth.', 0.65],
 };
-const LOCK = ['socket_housing','rotor','plunger','socket_base','switch_bracket','key_ring'];
-const KNOBS = ['thumb_knob','thumb_knob_2','thumb_knob_3'];
-const CART = ['base_tray','powerbank_envelope','buck_envelope','base_deck','bottle_envelope','pump_envelope','perfboard_envelope','board_components_envelope'];
+// copies of one printed part (same STL, more places): name -> part it copies, and its own explode offset
+const COPY = { screw_cap_2: ['screw_cap', [-28,-16,-140]], screw_cap_3: ['screw_cap', [28,-16,-140]] };
+for (const [n, [src, off]] of Object.entries(COPY)) { P[n] = P[src].slice(); P[n][3] = off; }
+const base = n => (COPY[n] ? COPY[n][0] : n);
+const copiesOf = n => [n, ...Object.keys(COPY).filter(c => COPY[c][0] === n)];
 
-// ---------------------------------------------------------------- steps (build guide sections 6, 8 and 9)
-// track: parts built in earlier steps of the same tracks stay on screen as faded context.
+const LOCK = ['socket_housing','rotor','plunger','switch_bracket','socket_base','key_ring'];
+const CAPS = copiesOf('screw_cap');
+const CAPFLOOR = ['cap_floor','powerbank_envelope','perfboard_envelope','board_components_envelope','buck_envelope','power_switch_envelope','charge_socket_envelope'];
+const LID = ['halo_ring','emblem_lid','emblem_centre'];
+const FRONT_BELL = ['bell_front','front_led_envelope','diffuser'];
+const REAR_BELL = ['bell_rear','rear_led_envelope','curtain_envelope','curtain_clamp'];
+const HANDLE = ['handle_end_left','handle_end_right','handle_arc_1','handle_arc_2'];
+const CART = ['base_tray','pump_envelope','bag_envelope','bag_cover'];
+const LANTERN = Object.keys(P).filter(n => !CART.includes(n));
+const PRINTED = Object.keys(P).filter(n => P[n][2] !== 'bought');
+
+// ---------------------------------------------------------------- steps (build order, rev C; same numbers and names as the build guide)
+// track: parts from earlier steps of the same track (and of the tracks in ctx) stay on screen as faded context.
+// hold: how far apart the step's parts stay (fraction of their explode offset). fly: a shared vector the parts fly in from.
 const STEPS = [
- { stage:'Subassemblies', title:'Build and test the lock', track:'lock', ctx:[], parts:LOCK, hold:0.55, view:[1,0.25,0.45],
-   body:['Glue an M3 nut into each of the three hex pockets under the housing.','Grease the rotor rim, the plunger nose and the bore. Lay the spring in its trough, closed end out, then the plunger, rounded nose toward the bore.','Lower the rotor in, stop lug down into its channel. Twist to 45° and let go: it should snap back.','Lay the A3144 face up on the base plate post, leads down the slot. Press the wired microswitch onto the bracket pegs and set it in its recess.','Close it: 3 × M3×8 flat-head up into the nuts, a 4th through the slot and bracket, left loose to tune. The lever should click at about 40°, before the 45° stop.','Glue the magnet into the ring from inside the band, switching face toward the ring face. Wear it on your left middle finger, bars level when you punch in.'],
-   hw:['3 × M3 nut','4 × M3×8 flat-head','spring','D2F-01L','A3144','6×2 magnet'], ref:'Build guide section 6, steps 1–7' },
- { stage:'Subassemblies', title:'Mount the lock on the wall', track:'wall', ctx:['lock'], parts:['lock_wall'],
-   body:['Stick a 10 cm LED piece in each of the four channels on the back of the wall, and a 5 cm piece either side of the lock on the front.','Screw the lock to the front face, ears down: one M3×10 through each ear and the wall, nut on the back.','Pass the sensor joints through the rectangular window and the switch wires through the small window under it. Solder the strips to the LED lead.'],
-   hw:['2 × M3×10','2 × M3 nut','LED strip 4 × 10 cm + 2 × 5 cm'], ref:'Build guide sections 6.8 and 8.1–8.3' },
- { stage:'Subassemblies', title:'Diffuser into the front half', track:'front', ctx:[], parts:['sphere_front','diffuser'],
-   body:['Lay the white diffuser on the ledge behind the window of the front half.','A few dots of glue hold it. Set the half aside.'],
-   hw:['super glue'], ref:'Build guide section 8.6' },
- { stage:'Subassemblies', title:'Dress the upper dish', track:'upper', ctx:[], parts:['dish_upper','top_diffuser','curtain_clamp'],
-   body:['Stick the 25 cm LED piece once round the inside of the floor hole, LEDs facing the centre. Let its leads hang from the display side.','Screw the top diffuser into the counterbore above it.','Cut 13 frosted strips, 12 × 97 mm. Lay them along the clamp, 2 mm overlap, and screw the clamp under the dish plug on the hand-opening side.'],
-   hw:['4 × M3×8 flat-head (diffuser)','4 × M3×8 (clamp)','LED strip 25 cm'], ref:'Build guide sections 8.4–8.5' },
- { stage:'Cartridge', title:'Tray, buck converter and battery', track:'cart', ctx:[], parts:['base_tray','buck_envelope','powerbank_envelope'],
-   body:['Stand the tray with the switch pocket (the raised box near the rim) toward you.','Set the LM2596 on its four printed supports on the right and zip-tie it through the slots.','Thread the 20 mm strap through both floor slots first. Plug the splitter\'s male plug into the battery, lay it LED face down over the floor slot, connector end away from you, fold the plug\'s cord back in a U-turn, and tighten the strap.','Tuck the splitter\'s female end (the charge socket) beside the battery\'s end and tie it to a floor slot. Turn the battery\'s own switch ON (it stays ON).','Fit S1 up through the pocket ceiling from below, nut tight.'],
-   hw:['20 mm strap (≤ 2 mm under the tray)','2 zip ties','S1 toggle'], ref:'Build guide section 9.1' },
- { stage:'Cartridge', title:'Deck, jar, pump and board', track:'cart', ctx:[], parts:['base_deck','bottle_envelope','pump_envelope','perfboard_envelope','board_components_envelope'],
-   body:['Bring the battery and switch leads up through the open notch at the deck edge, then drop the deck on: 3 × M3×8 into the pillars with inserts.','The 11.3 mm deck hole stays empty.','Strap the jar into its ring. Open the pump head, lay the tube round the rollers, close it, then strap the pump into its saddles. Leave the tube end free.','Screw the board to the deck panel, components outward.'],
-   hw:['3 × M3×8','4 × M3×6','3 × 20 mm strap'], ref:'Build guide section 9.1' },
- { stage:'Lantern', title:'Drum and lower dish', track:'shell', ctx:[], parts:['base','dish_lower'],
-   body:['Push an M3 nut into the slot in each of the three bosses inside the bottom of the drum.','Drop the lower dish spigot into the top of the drum and fix it with 3 × M3×8 from outside.','Glue an M3×12 head-first into each thumb knob and keep them with the cartridge.'],
-   hw:['3 × M3 nut','3 × M3×8','3 × M3×12 (knobs)'], ref:'Build guide section 9.2' },
- { stage:'Lantern', title:'Bay floor, glass well and nozzle', track:'shell', ctx:[], parts:['bay_floor','guide_boss','glass_well','nozzle_guide'],
-   body:['Stand the drum on two blocks so its rim is off the tube and cables.','Before this step: the insert boss is glued under the bay floor and the nozzle guide\'s insert is set through both (build guide section 3).','Lay the bay floor on the lower dish ring, long slot toward you. Feed the cables through the 7 mm hole and the tube up through its own hole.','Drop the glass well into the slot, ridge end toward the display side.','Push the tube through the guide, 5 mm out past the end. Screw the guide foot down with 1 × M3×8, open side toward you.'],
-   hw:['1 × M3×8','two blocks'], ref:'Build guide sections 9.3–9.4' },
- { stage:'Lantern', title:'Stand the lock wall', track:'shell', ctx:[], parts:['lock_wall', ...LOCK],
-   body:['Stand the wall in its two floor slots, lock facing you.','Its back closes the nozzle guide: check the tube is in the channel and points down into the slot.','Take up the cable slack down through the cable hole.'],
-   hw:[], ref:'Build guide section 9.5' },
- { stage:'Lantern', title:'Close the sphere', track:'shell', ctx:[], parts:['sphere_front','diffuser','sphere_rear'],
-   body:['Slide the front half in from the display side until the wall posts touch the diffuser.','Slide the rear half in from your side.','From inside, through the hand and top openings: 4 × M3×10 through the flange into the front bosses. Then 3 × M3×8 at the lower joint.'],
-   hw:['4 × M3×10','3 × M3×8','long 2.5 mm hex key'], ref:'Build guide section 9.6' },
- { stage:'Lantern', title:'Fit the upper dish', track:'shell', ctx:[], parts:['dish_upper','top_diffuser','curtain_clamp'],
-   body:['Solder the top ring leads to the wall LED lead, sleeved.','Lower the dish so the curtain hangs behind the hand opening, feeding slack behind the wall.','Screw it on with 3 × M3×8.'],
-   hw:['3 × M3×8'], ref:'Build guide section 9.7' },
- { stage:'Lantern', title:'Handle', track:'shell', ctx:[], parts:['handle_leg_left','handle_leg_right','handle_arc_left','handle_arc_right'],
-   body:['Names are from the display side, so the left leg goes on your right.','Each leg plugs into a boss on the rear half: one M3×12 through the boss hole into its insert.','Lap the arcs onto the legs and each other: 6 × M3×12 with nuts.'],
-   hw:['2 × M3×12 (legs)','6 × M3×12 + 6 nuts (arcs)'], ref:'Build guide section 9.8' },
- { stage:'Final join', title:'Lower the lantern onto the cartridge', track:'final', ctx:['shell'], parts:[...CART, ...KNOBS],
-   body:['Plug the lock and LED plugs together and coil the tube slack above the jar.','Lower the lantern over the cartridge. The three deck notches meet the drum bosses only one way.','Tip it a little and turn the three thumbscrews up into the bosses, finger-tight.'],
-   hw:['3 thumb knobs'], ref:'Build guide section 9.9' },
- { stage:'Final join', title:'Glass in, ready to calibrate', track:'final', ctx:['shell','final'], parts:['glass_envelope'],
-   body:['Lower the shot glass into the near end of its slot and push it back until it clicks over the ridge.','That is the pour position, under the lock. Go to calibration (section 10).'],
-   hw:[], ref:'Build guide sections 10 and 12' },
+ { n:0, stage:'Prepare', title:'Print everything and set the inserts', track:'print', ctx:[], parts:PRINTED, hold:1, view:[1,-0.8,0.4],
+   body:['Print every part (green unless noted; white: diffuser, LED panel, halo ring, lock wall, wall extension).','Print thumb_test first and check which 6-32 hole (4.6 / 4.8 / 5.0 mm) grips the insert.','Melt in the 17 M3 inserts and the 13 6-32 inserts (one per thumbscrew).'],
+   hw:['17 × M3 insert','13 × 6-32 insert','soldering iron'] },
+ { n:1, stage:'Inside parts', title:'Lock', track:'lock', ctx:[], parts:LOCK, hold:0.6, view:[1,0.35,0.3],
+   body:['Housing, rotor with its magnet, plunger and spring, switch bracket with the microswitch, the A3144 Hall sensor, then the base plate. Unchanged from rev 9.','Glue the magnet into the key ring.'],
+   hw:['spring','microswitch','A3144','2 magnets','3 + 1 × M3×8 flat-head'] },
+ { n:2, stage:'Inside parts', title:'Lock wall', track:'wall', ctx:['lock'], parts:['lock_wall'], view:[0.6,1,0.45],
+   body:['Stick a 5 cm LED column either side of the lock on the wall\'s face.','Mount the lock: 2 × M3×10 through the ears and the wall, nuts behind.','Pass the leads through.'],
+   hw:['2 × M3×10','2 × M3 nut','LED strip 2 × 5 cm'] },
+ { n:3, stage:'Inside parts', title:'LED panel', track:'wall', ctx:['lock'], parts:['led_panel','panel_led_envelope'], view:[0.5,-1,0.35],
+   body:['Stick the four 10 cm strips on the panel\'s front, leads through the holes at the row ends.','Slip its collars over the 4 posts on the back of the lock wall, a dot of glue each.'],
+   hw:['LED strip 4 × 10 cm','super glue'] },
+ { n:4, stage:'Inside parts', title:'Bay floor', track:'wall', ctx:['lock'], parts:['bay_floor','guide_boss','glass_well','nozzle_guide','glass_envelope'], view:[0.7,0.9,0.8],
+   body:['Glue the guide boss under the floor. Drop the glass well into its slot.','Nozzle guide on the floor: 1 × M3×8 into the guide boss insert. Tube up through the grommet hole and pressed into the guide.','Lock wall\'s two tabs into the floor\'s slots.'],
+   hw:['1 × M3×8','tube'] },
+ { n:5, stage:'Lantern body', title:'Drum and foot', track:'body', ctx:[], parts:['base','foot',...CAPS], view:[0.8,-1,0.5],
+   body:['Push the foot\'s spigot into the top of the drum.','3 × M3×8 from outside through the drum\'s top band into the spigot\'s inserts.','Press the 3 green caps over the heads.'],
+   hw:['3 × M3×8','3 screw caps'] },
+ { n:6, stage:'Lantern body', title:'Sphere', track:'body', ctx:['lock','wall'], parts:['sphere_front','sphere_rear'], view:[0.9,-1,0.45],
+   body:['Set the bay floor assembly on the foot\'s riser.','Close the two sphere halves round it: 4 × M3×10 through the rear half\'s flange from inside.','3 thumbscrews from inside the foot\'s neck into the sphere\'s bottom collar.'],
+   hw:['4 × M3×10','3 thumbscrews'] },
+ { n:7, stage:'Lantern body', title:'Pivots', track:'body', ctx:['lock','wall'], parts:['handle_pivot_left','handle_pivot_right'], view:[1,-0.35,0.35],
+   body:['On each side, 2 × M3×12 from inside the sphere into the pivot\'s inserts.','Green caps on the heads.'],
+   hw:['4 × M3×12','4 screw caps'] },
+ { n:8, stage:'Lantern body', title:'Wall extension', track:'body', ctx:['lock','wall'], parts:['wall_extension'], view:[0.5,1,0.8],
+   body:['Fit the wall extension onto the lock wall\'s top edge.'],
+   hw:[] },
+ { n:9, stage:'Lantern body', title:'Top cap', track:'body', ctx:['lock','wall'], parts:['top_cap'], view:[0.8,-1,0.6],
+   body:['Plug the top cap into the sphere\'s top collar.','3 thumbscrews from inside its neck out into the collar\'s inserts.'],
+   hw:['3 thumbscrews'] },
+ { n:10, stage:'Lantern body', title:'Cap floor', track:'body', ctx:['lock','wall'], parts:CAPFLOOR, view:[0.35,-0.7,1.2],
+   body:['Battery on its strap, LED face down over the slot. Board on its 4 standoffs (M3×6). Buck module. S1 in its box. Charge socket with zip ties.','Lead plugs up through the wire hole.','Drop the floor on its ledge in the cap: 3 thumbscrews.'],
+   hw:['4 × M3×6','3 thumbscrews','1 strap','zip ties'] },
+ { n:11, stage:'Lantern body', title:'Lid', track:'body', ctx:['lock','wall'], parts:LID, view:[0.5,-0.9,0.9],
+   body:['Glue the emblem lid onto the white halo ring; two 1.75 mm filament pins line it up. The emblem jig centres the emblem centre.','Push the lid down and twist clockwise to lock (click).'],
+   hw:['2 filament pins','glue'] },
+ { n:12, stage:'Bells and handle', title:'Front bell', track:'body', ctx:['lock','wall'], parts:FRONT_BELL, view:[0.6,-1,0.3],
+   body:['LED ring inside the collar band; press the diffuser into its pocket.','Slide the bell onto the front collar: 2 thumbscrews from inside (reach in through the hand opening, past the end of the lock wall).'],
+   hw:['LED strip ~37.5 cm','2 thumbscrews'] },
+ { n:13, stage:'Bells and handle', title:'Rear bell', track:'body', ctx:['lock','wall'], parts:REAR_BELL, view:[0.6,1,0.3],
+   body:['LED ring inside.','One-piece cover and clamp ring at the mouth: 4 flat-head M3×8 from inside the bell.','Slide it on: 2 thumbscrews from inside, reaching in through the cover flaps.'],
+   hw:['LED strip ~45 cm','4 × M3×8 flat-head','2 thumbscrews'] },
+ { n:14, stage:'Bells and handle', title:'Handle', track:'body', ctx:['lock','wall'], parts:HANDLE, view:[0.4,-1,0.45],
+   body:['End pieces\' axles into the pivots, then the two arcs.','3 laps × 3 M3×8 + nuts, with epoxy.','Green caps over the heads and nuts.'],
+   hw:['9 × M3×8','9 × M3 nut','epoxy','18 screw caps'] },
+ { n:15, stage:'Cartridge', title:'Cartridge', track:'cart', ctx:[], parts:CART, view:[0.5,-0.8,0.9],
+   body:['Pump in its saddle with one strap; tube to the pump.','Bag (32 oz pouch) flat in the bay, spout at the back-corner well; tube end pressed into the clip at the well.','Bag cover on; pump plug up.'],
+   hw:['1 strap','32 oz pouch'] },
+ { n:16, stage:'Final', title:'Set the lantern on the cartridge', track:'final', ctx:['cart'], parts:LANTERN, fly:[0,0,240], view:[0.75,-1,0.4],
+   body:['Join the pump plug.','Lower the lantern onto the cartridge and twist clockwise to lock.'],
+   hw:[] },
 ];
 
 // ---------------------------------------------------------------- DOM
@@ -305,11 +344,12 @@ function build(buf, idx) {
     scene.add(mesh);
     const edges = new THREE.LineSegments(new THREE.EdgesGeometry(g, 28), new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.18 }));
     mesh.add(edges);
-    objs[p.name] = { mesh, mat, edges, off: new THREE.Vector3(...info[3]), cur: 0, target: 0, vis: 1, alpha: info[5] || 1, info, bbox: p.bbox };
+    objs[p.name] = { mesh, mat, edges, off: new THREE.Vector3(...info[3]), pos: new THREE.Vector3(), cur: 0, target: 0, vis: 1, alpha: info[5] || 1, info, bbox: p.bbox };
     parts.push(p.name);
   }
   $('loading').hidden = true;
   buildLegend(); buildStepList(); setMode('steps', true); resize(); loop();
+  window.viewer.ready = true;
 }
 
 // ---------------------------------------------------------------- state -> per-part targets
@@ -317,23 +357,24 @@ function stepSets(i) {
   const s = STEPS[i], focus = new Set(s.parts), ctx = new Set();
   const tracks = new Set([s.track, ...s.ctx]);
   for (let j = 0; j < i; j++) if (tracks.has(STEPS[j].track)) STEPS[j].parts.forEach(n => ctx.add(n));
-  if (s.track === 'wall') LOCK.forEach(n => ctx.add(n));
   focus.forEach(n => ctx.delete(n));
   return { focus, ctx };
 }
 let animStart = 0;
 function apply(resetCam) {
-  const fresh = performance.now();
+  const fresh = clock();
   if (mode === 'steps') {
     const { focus, ctx } = stepSets(step);
     for (const n of parts) {
       const o = objs[n];
       if (focus.has(n)) { o.state = 'focus'; o.cur = 1; o.target = 0; }
-      else if (ctx.has(n)) { o.state = 'ctx'; o.target = 0; o.cur = 0; }
+      else if (ctx.has(n)) { o.state = 'ctx'; o.target = 0; o.cur = 0; o.pos.set(0, 0, 0); }
       else { o.state = 'hidden'; }
     }
     animStart = fresh;
     if (resetCam) frame([...focus, ...ctx], 0, STEPS[step]);
+  } else if (mode === 'pose') {
+    for (const n of parts) objs[n].state = poseHide.has(n) ? 'hidden' : 'all';
   } else {
     for (const n of parts) { const o = objs[n]; o.state = 'all'; o.target = mode === 'explode' ? spread : 0; }
     if (resetCam) frame(parts, mode === 'explode' ? spread : 0);
@@ -359,7 +400,7 @@ function mixGrey(hex) { const c = new THREE.Color(hex); return c.lerp(new THREE.
 function frame(names, k = 0, st = null) {
   const box = new THREE.Box3();
   for (const n of names) { const o = objs[n]; if (!o) continue;
-    const off = o.off.clone().multiplyScalar(st && st.parts.includes(n) ? (st.hold || 0) : k);
+    const off = mode === 'pose' ? new THREE.Vector3(...(pose[n] || [0, 0, 0])) : o.off.clone().multiplyScalar(st && st.parts.includes(n) ? (st.hold || 0) : k);
     box.expandByPoint(new THREE.Vector3(...o.bbox[0]).add(off)); box.expandByPoint(new THREE.Vector3(...o.bbox[1]).add(off)); }
   if (box.isEmpty()) return;
   const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3()).length();
@@ -371,31 +412,46 @@ function frame(names, k = 0, st = null) {
 let camTo = null;
 
 // ---------------------------------------------------------------- render loop
+// Time-based, so the page animates the same at any frame rate; viewer.manual() lets a script drive the clock (videos).
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-function loop() {
-  requestAnimationFrame(loop);
-  const now = performance.now();
+let manual = false, vnow = 0, last = performance.now(), spin = 0;
+let pose = {}, poseHide = new Set();
+const clock = () => (manual ? vnow : performance.now());
+const ease = (rate, dt) => (reduce ? 1 : 1 - Math.pow(1 - rate, dt / 16.67));   // rate per 60 Hz frame
+const goal = new THREE.Vector3();
+function update(now, dt) {
+  const a = ease(0.14, dt);
   for (const n of parts) {
     const o = objs[n];
-    let k;
     if (mode === 'steps' && o.state === 'focus') {
-      const t = reduce ? 1 : Math.min(1, (now - animStart - 250) / 900);
-      const e = t <= 0 ? 0 : 1 - Math.pow(1 - t, 3);
-      const hold = STEPS[step].hold || 0;
-      k = hold + (1 - e) * 0.45;                // fly in from 45 % further out, settle at the step's spread
+      const s = STEPS[step], t = reduce ? 1 : Math.min(1, (now - animStart - 250) / 900);
+      const e = t <= 0 ? 0 : 1 - Math.pow(1 - t, 3), hold = s.hold || 0;
+      if (s.fly) o.pos.copy(o.off).multiplyScalar(hold).addScaledVector(new THREE.Vector3(...s.fly), 1 - e);
+      else o.pos.copy(o.off).multiplyScalar(hold + (1 - e) * 0.45);   // fly in from 45 % further out, settle at the step's spread
     } else {
-      o.cur += (o.target - o.cur) * (reduce ? 1 : 0.14);
-      k = o.cur;
+      if (mode === 'pose') goal.set(...(pose[n] || [0, 0, 0])); else goal.copy(o.off).multiplyScalar(o.target);
+      o.pos.lerp(goal, a);
     }
-    o.mesh.position.copy(o.off).multiplyScalar(k);
+    o.mesh.position.copy(o.pos);
+  }
+  if (spin) {
+    const ang = THREE.MathUtils.degToRad(spin) * dt / 1000, z = new THREE.Vector3(0, 0, 1);
+    const tgt = camTo ? camTo.tgt : controls.target;
+    camera.position.sub(tgt).applyAxisAngle(z, ang).add(tgt);
+    if (camTo) camTo.pos.sub(camTo.tgt).applyAxisAngle(z, ang).add(camTo.tgt);
   }
   if (camTo) {
-    const a = reduce ? 1 : 0.1;
-    camera.position.lerp(camTo.pos, a); controls.target.lerp(camTo.tgt, a);
+    const c = ease(0.1, dt);
+    camera.position.lerp(camTo.pos, c); controls.target.lerp(camTo.tgt, c);
     if (camera.position.distanceTo(camTo.pos) < 1) camTo = null;
   }
   controls.update();
   renderer.render(scene, camera);
+}
+function loop() {
+  requestAnimationFrame(loop);
+  const t = performance.now(), dt = Math.min(100, t - last); last = t;
+  if (!manual) update(t, dt);
 }
 
 // ---------------------------------------------------------------- picking
@@ -413,7 +469,7 @@ canvas.addEventListener('pointerup', e => {
 function showPick(n) {
   const o = objs[n]; hot = n; styleAll();
   $('pick-name').textContent = o.info[0];
-  $('pick-file').textContent = o.info[2] === 'bought' ? 'bought part, shown as its size allowance' : n.replace(/_\d$/, '') + '.stl';
+  $('pick-file').textContent = o.info[2] === 'bought' ? 'bought part, shown as its size allowance' : base(n) + '.stl';
   $('pick-info').textContent = o.info[4];
   $('pick-sw').style.background = o.info[1];
   $('pick-sw').className = 'sw' + (o.info[2] === 'bought' ? ' bought' : '');
@@ -429,21 +485,22 @@ function legendOn(n) { return !off.has(n); }
 function buildLegend() {
   const L = $('legend'); L.innerHTML = '';
   const intro = document.createElement('p'); intro.className = 'note';
-  intro.textContent = 'Each printed part has its own colour. Striped swatches are bought parts, drawn at the size the CAD leaves for them. Untick a part to hide it.';
+  intro.textContent = 'Colours follow the print colour: green shell (shades vary so neighbouring parts read apart), white parts white, the inside parts dark green, the lock grey. Striped swatches are bought parts, drawn at the size the CAD leaves for them. Untick a part to hide it.';
   L.append(intro);
   for (const g of Object.keys(G)) {
     const sec = document.createElement('div');
     const h = document.createElement('h4'); h.textContent = G[g]; sec.append(h);
-    for (const n of parts.filter(n => objs[n].info[2] === g && !/_\d$/.test(n))) {
+    for (const n of parts.filter(n => objs[n].info[2] === g && !COPY[n])) {
       const o = objs[n], row = document.createElement('label');
       row.className = 'prow'; row.dataset.name = n;
       const sw = document.createElement('span'); sw.className = 'sw' + (g === 'bought' ? ' bought' : ''); sw.style.background = o.info[1];
       const nm = document.createElement('span'); nm.className = 'nm';
-      nm.textContent = o.info[0] + (n === 'thumb_knob' ? ' ×3' : '');
+      const k = copiesOf(n).filter(c => objs[c]).length;
+      nm.textContent = o.info[0] + (k > 1 ? ` ×${k}` : '');
       const sm = document.createElement('small'); sm.textContent = g === 'bought' ? 'bought' : n + '.stl'; nm.append(sm);
       const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = true; cb.id = 'show-' + n;
       cb.setAttribute('aria-label', 'Show ' + o.info[0]);
-      cb.onchange = () => { const names = n === 'thumb_knob' ? KNOBS : [n]; names.forEach(x => cb.checked ? off.delete(x) : off.add(x)); styleAll(); };
+      cb.onchange = () => { const names = copiesOf(n); names.forEach(x => cb.checked ? off.delete(x) : off.add(x)); styleAll(); };
       row.append(sw, nm, cb);
       row.addEventListener('mouseenter', () => { hot = n; styleAll(); });
       row.addEventListener('mouseleave', () => { if ($('pick').hidden) { hot = null; styleAll(); } });
@@ -459,7 +516,7 @@ function buildStepList() {
   STEPS.forEach((s, i) => {
     if (s.stage !== last) { const d = document.createElement('div'); d.className = 'grp'; d.textContent = s.stage; L.append(d); last = s.stage; }
     const b = document.createElement('button');
-    b.innerHTML = `<span class="n">${String(i + 1).padStart(2, '0')}</span><span></span>`;
+    b.innerHTML = `<span class="n">${String(s.n).padStart(2, '0')}</span><span></span>`;
     b.lastChild.textContent = s.title;
     b.onclick = () => { step = i; setMode('steps', true); };
     L.append(b);
@@ -467,24 +524,25 @@ function buildStepList() {
 }
 function renderStepText() {
   const s = STEPS[step];
-  $('count').textContent = `${step + 1} / ${STEPS.length}`;
+  $('count').textContent = `Step ${s.n} of ${STEPS[STEPS.length - 1].n}`;
   $('prev').disabled = step === 0; $('next').disabled = step === STEPS.length - 1;
-  $('s-stage').textContent = s.stage; $('s-title').textContent = s.title;
+  $('s-stage').textContent = s.stage; $('s-title').textContent = `${s.n} · ${s.title}`;
   const ol = $('s-body'); ol.innerHTML = '';
   s.body.forEach(t => { const li = document.createElement('li'); li.textContent = t; ol.append(li); });
   const hw = $('s-hw'); hw.innerHTML = '';
   s.hw.forEach(t => { const sp = document.createElement('span'); sp.textContent = t; hw.append(sp); });
   const np = $('s-parts'); np.innerHTML = '<h4>In this step</h4>';
-  [...new Set(s.parts.map(n => n.replace(/_\d$/, '')))].forEach(n => {
+  [...new Set(s.parts.map(base))].forEach(n => {
     const o = objs[n]; if (!o) return;
     const row = document.createElement('div'); row.className = 'prow'; row.tabIndex = 0; row.dataset.name = n;
     row.innerHTML = '<span class="sw"></span><span class="nm"></span><span></span>';
     row.firstChild.style.background = o.info[1]; if (o.info[2] === 'bought') row.firstChild.classList.add('bought');
-    row.children[1].textContent = o.info[0] + (n === 'thumb_knob' ? ' ×3' : '');
+    const k = s.parts.filter(c => base(c) === n).length;
+    row.children[1].textContent = o.info[0] + (k > 1 ? ` ×${k}` : '');
     row.onclick = () => showPick(n); row.onkeydown = e => { if (e.key === 'Enter') showPick(n); };
     np.append(row);
   });
-  $('s-ref').textContent = s.ref;
+  $('s-ref').textContent = `Build guide, step ${s.n}`;
   document.querySelectorAll('#steplist button').forEach((b, i) => {
     if (i === step) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
   });
@@ -495,6 +553,7 @@ function setMode(m, resetCam) {
   mode = m;
   for (const [id, v] of [['m-steps','steps'],['m-explode','explode'],['m-built','built']]) $(id).setAttribute('aria-pressed', String(m === v));
   $('explode-box').hidden = m !== 'explode';
+  spin = 0;
   if (m !== 'steps') hidePick();
   apply(resetCam);
 }
@@ -512,7 +571,27 @@ function selectTab(t) {
 }
 $('t-step').onclick = () => selectTab('step');
 $('t-parts').onclick = () => selectTab('parts');
+
+// ---------------------------------------------------------------- script hooks (cad/make_videos.py drives the page with these)
+window.viewer = {
+  ready: false,
+  steps: STEPS.map(s => ({ n: s.n, stage: s.stage, title: s.title, body: s.body, hw: s.hw })),
+  parts: () => parts.slice(),
+  groups: { LOCK, CAPS, CAPFLOOR, LID, FRONT_BELL, REAR_BELL, HANDLE, CART, LANTERN },
+  go(i) { step = i; setMode('steps', true); },                        // jump to step index i
+  mode(m) { setMode(m, true); },                                      // 'steps' | 'explode' | 'built'
+  spread(k, reframe = false) { spread = k; $('explode').value = Math.round(k * 100); if (mode !== 'explode') setMode('explode', false);
+    for (const n of parts) objs[n].target = k; if (reframe) frame(parts, k); },
+  pose(map, hide = [], reframe = false) { pose = map || {}; poseHide = new Set(hide); mode = 'pose'; apply(false); if (reframe) frame(parts.filter(n => !poseHide.has(n)), 0); },
+  view(dir, names = null, k = 0, zoom = 1) { frame(names || parts.filter(n => objs[n].mesh.visible), k, { parts: [], view: dir });
+    if (camTo && zoom !== 1) camTo.pos.sub(camTo.tgt).divideScalar(zoom).add(camTo.tgt); },
+  jump() { if (camTo) { camera.position.copy(camTo.pos); controls.target.copy(camTo.tgt); camTo = null; } },
+  spin(degPerSec) { spin = degPerSec; },
+  manual(on = true) { manual = on; vnow = performance.now(); },       // stop the real-time clock
+  tick(ms) { vnow += ms; update(vnow, ms); },                         // advance the manual clock and render one frame
+};
 })();
+
 </script>
 </body>
 </html>
