@@ -148,8 +148,10 @@ It is the only list: this section summarises what the build uses so you can chec
   (6.5 mm panel hole).
 - Inline plugs: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired)
   for the lock cable, and [JST SM 2-pin pairs](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector)
-  for the LED and pump leads. Rev C uses one 4-pin pair and **five 2-pin pairs**: the LED lead and the pump lead at
-  the cap floor, the pump at the cartridge, and one for each bell's LED ring.
+  for the pump. Rev C uses **one 4-pin pair** (the lock cable, at the cap floor) and **one 2-pin pair** (the pump, at
+  the cartridge, so the lantern lifts off). The LED and pump leads at the cap floor and the two bells' LED leads are
+  soldered straight through with slack instead (decided 2026-10-23; plugs there are an easy add later, about $1.75 a
+  pair).
 - Small parts: 2 x NTE585 and 1 x NTE586 (3 A/40 V) diodes; resistors 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ,
   1 x 22 kΩ; 3 x 0.1 µF ceramic and 1 x 2200 µF/25 V capacitors; a DIP-14 socket; a breakaway header and a shunt for
   JP1; the 5 x 7 cm protoboard, 22 AWG stranded wire and 1/8" heat-shrink.
@@ -425,10 +427,11 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 - Read [USB programming and calibration power](#usb-programming-and-calibration-power) before you plug in USB.
 
 **Where it all lives (rev C).** The board, the battery, the buck, S1 and the charge socket sit on `cap_floor` in the
-top cap ([picture](#the-cap-floor)). Only three leads leave the cap floor, each through an inline plug sitting over
-the cap floor's wire hole: the **lock cable** (4-pin), the **LED lead** (2-pin) and the **pump lead** (2-pin). They
-run down the top cap's neck, behind the wall extension and the lock wall. The pump lead carries on through the bay
-floor and the foot to a second 2-pin plug on the cartridge, so the lantern can be lifted off.
+top cap ([picture](#the-cap-floor)). Only three leads leave the cap floor, through its wire hole: the **lock cable**
+(through its 4-pin plug just above the hole), the **LED lead** and the **pump lead** (both soldered straight through,
+with about 15 cm of slack coiled on the cap floor so the plate can be lifted out and set on the cap's rim still
+connected). They run down the top cap's neck, behind the wall extension and the lock wall. The pump lead carries on
+through the bay floor and the foot to the 2-pin plug on the cartridge, so the lantern can be lifted off.
 
 1. **Board, XIAO and U1.**
    - Orient the perfboard 70 mm across and 50 mm tall.
@@ -479,8 +482,8 @@ floor and the foot to a second 2-pin plug on the cartridge, so the lantern can b
    - Pump negative to Q1's drain, strip negative to Q2's drain; both loads' positives to VLOAD.
    - Run the pump and strip returns separately to the common power ground; don't route their current through the
      Hall/XIAO ground wiring.
-7. **Pump lead and flyback diode.** The pump lead is VLOAD and Q1's drain, through a 2-pin plug at the cap floor; its
-   lantern side runs down to the 2-pin plug on the cartridge. Solder D2 **NTE586, 3 A/40 V** straight across the pump's
+7. **Pump lead and flyback diode.** The pump lead is VLOAD and Q1's drain, soldered to the board and run down (with
+   slack at the cap floor) to the 2-pin plug on the cartridge. Solder D2 **NTE586, 3 A/40 V** straight across the pump's
    own terminals, on the cartridge side: stripe (cathode) to the + terminal (VLOAD), anode to the − terminal (Q1's
    drain). Do not use the 1 A NTE585 here. Twist the pump wires together and keep them away from the Hall and switch
    wires.
@@ -499,9 +502,9 @@ floor and the foot to a second 2-pin plug on the cartridge, so the lantern can b
      leave enough slack to lift the cap floor out. R5–R7 and D3 stay on the board.
    - **Do not solder the Hall sensor to the cable yet:** its leads must first pass through the sensor post's slot
      (step 1). Clip it on temporarily for the bench checks. Solder the switch wires before mounting the switch.
-   - **LED lead:** VLOAD (+) and Q2's drain (−), through a JST SM 2-pin plug at the cap floor. Every LED piece joins
-     the lantern side of this plug (section 7, "The light harness").
-   - Thread each lead through the cap floor's wire hole before crimping or fitting its plug housing.
+   - **LED lead:** VLOAD (+) and Q2's drain (−), soldered to the board, with slack at the cap floor. Every LED piece
+     joins it (section 7, "The light harness").
+   - Thread each lead through the cap floor's wire hole before soldering it or fitting the lock cable's plug housing.
 9. **Commission it before assembly.** Flash it using the power procedure below.
    - **Without loads** (pump and strip disconnected), in USB calibration mode:
      - +5V_REG at U1 and at the Hall sensor reads 5.0 V;
@@ -844,14 +847,14 @@ Parts: `halo_ring` (white), `emblem_lid`, `emblem_centre`, `emblem_jig`, two sho
 
 ### Step 12. Front bell (lens)
 
-Parts: `bell_front`, `diffuser`, the 37.5 cm LED piece, a 2-pin inline plug, 2 thumbscrews.
+Parts: `bell_front`, `diffuser`, the 37.5 cm LED piece, 2 thumbscrews.
 
 1. Stick the 37.5 cm piece round the inside of the bell's collar band, behind the lens ledge, LEDs facing the axis.
 2. Press `diffuser` into its pocket in the bell, onto the ledge. A few dots of glue hold it.
-3. Fit the bell's 2-pin plug to its ring's lead; its partner is on the LED harness. Lead the lantern side in through
-   the lens opening and round the top of the LED panel to the back of the wall. Leave enough lead to slide the bell
-   off a few centimetres and reach the plug.
-4. Plug it in and slide the bell straight onto the front collar. The bosses on its throat fill the flat spots on the
+3. Lead the ring's wires in through the lens opening and round the top of the LED panel to the back of the wall, and
+   solder them into the LED harness. Leave about 20 cm of slack so the bell can slide off and rest beside the
+   lantern still connected.
+4. Slide the bell straight onto the front collar. The bosses on its throat fill the flat spots on the
    shell, so it only sits one way.
 5. **Thumbscrews:** reach in through the hand opening (the hand bell isn't on yet), past the end of the lock wall and
    back behind it, to the top of the lens opening. Drive 2 thumbscrews from inside the sphere, parallel to the bell's
@@ -859,14 +862,15 @@ Parts: `bell_front`, `diffuser`, the 37.5 cm LED piece, a 2-pin inline plug, 2 t
 
 ### Step 13. Rear bell (hand side)
 
-Parts: `bell_rear`, the ~45 cm LED piece, a 2-pin inline plug, the cover, `curtain_clamp`, 4 x M3x8 flat-head,
+Parts: `bell_rear`, the ~45 cm LED piece, the cover, `curtain_clamp`, 4 x M3x8 flat-head,
 2 thumbscrews.
 
 1. Stick the ~45 cm piece all the way round the band inside the bell's throat, LEDs facing the axis.
 2. Cut the cover and clamp it into the bell's mouth with the ring and 4 countersunk M3x8 ([section 8](#8-the-hand-side-cover)).
-3. Fit the bell's 2-pin plug and lead the lantern side in through the hand opening, along the inside top of the
-   shell, to the back of the wall. Keep it tight against the shell (a few dots of glue) so it doesn't show.
-4. Plug it in and slide the bell straight onto the hand-opening collar.
+3. Lead the ring's wires in through the hand opening, along the inside top of the shell, to the back of the wall, and
+   solder them into the LED harness, with about 20 cm of slack. Keep the run tight against the shell (a few dots of
+   glue) so it doesn't show; tuck the slack behind the wall.
+4. Slide the bell straight onto the hand-opening collar.
 5. **Thumbscrews:** reach in through the cover's flaps and up to the top of the hand opening. Drive 2 thumbscrews from
    inside the sphere, parallel to the bell's axis, into the inserts in its throat. The heads hide behind the top
    edge of the opening.
@@ -919,12 +923,12 @@ Parts: `base_tray`, `bag_cover`, the pump, 1 VELCRO strap, the tube, the 32 oz p
 
 ### The light harness
 
-All 10 LED pieces are in parallel on the one light channel (Q2), ending in one 2-pin plug at the cap floor:
+All 10 LED pieces are in parallel on the one light channel (Q2), on one soldered LED lead to the board:
 
-- **Behind the lock wall:** the 2 lock-face columns, the 4 panel rows, and the two bells' inline plugs join into one
-  pair that runs up behind the wall extension and the top cap's neck.
-- **In the top cap:** the two 12.5 cm pieces join that pair on the lantern side of the plug, so unplugging it frees
-  the cap floor.
+- **Behind the lock wall:** the 2 lock-face columns, the 4 panel rows and the two bells' leads join into one pair that
+  runs up behind the wall extension and the top cap's neck.
+- **In the top cap:** the two 12.5 cm pieces join that pair below the cap floor, then it goes up through the wire hole
+  to the board with its slack.
 - Join every + to +, every − to −, with sleeved solder joints. A star or a chain both work.
 
 ---
@@ -1104,9 +1108,10 @@ The [opening for service video](videos/service-access.mp4) shows these.
 - **Refill:** section 12.
 - **A bell:** reach in from inside the sphere (for the hand bell, through the cover's flaps; for the lens bell, through
   the hand opening, past the end of the lock wall and back behind it) and undo its 2 thumbscrews at the top of the
-  opening. Slide the bell straight off a few centimetres and unplug its LED lead.
-- **The cap floor:** lid off, unplug the lock, LED and pump plugs over the wire hole, undo the 3 thumbscrews and lift
-  the plate out.
+  opening. Slide the bell straight off and rest it beside the lantern on its LED lead's slack (no plug; desolder
+  the lead if the bell must go away).
+- **The cap floor:** lid off, undo the 3 thumbscrews and lift the plate out, still connected, onto the cap's rim
+  (unplug the lock cable if you need more room).
 - **The top cap:** lid off, cap floor out, then reach down the neck and undo the 3 thumbscrews inside it, and lift
   the cap off the sphere (the wall extension stays on the lock wall).
 - **The foot and drum from the sphere:** lift the lantern off the cartridge, lay it on its side or lift it, reach up
@@ -1142,8 +1147,8 @@ months. Replace the pump tube when it looks cloudy or flattened.
 |---|---|
 | Ring not detected | Are the plugs on the cap floor connected (easy to forget after taking the cap floor out)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face toward the ring's face (step 1)? Is pin 1 on 5 V? |
 | Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, step 1). The emblem's bars must be level (the rotor's rest position) to drop into the pocket. |
-| Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. LED plug on the cap floor connected? |
-| One bell stays dark | Its inline plug came apart, or wasn't plugged back in after the bell was off. |
+| Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. LED lead's joints at the board and behind the wall intact? |
+| One bell stays dark | Its lead's joint at the harness broke (check it after taking the bell off). |
 | Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, step 1) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump doesn't run at all | Pump plug at the cartridge and at the cap floor connected (easy to forget after a refill)? Switch on? The rail gives 9–12.6 V (meter)? Check Q1's pins (gate, drain, source) and the 10 k on D3. |

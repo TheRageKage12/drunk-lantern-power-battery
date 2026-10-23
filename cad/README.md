@@ -90,7 +90,7 @@ dimensional sources and limits. These are clearance allowances, not detailed sup
 | Perfboard | 70 x 50 x 1.2 mm, component face up on four 10 mm standoffs (`BOARD_STANDOFF`) with M3 inserts; rear wires fit in the 10 mm under it, outside the four screw areas. |
 | XIAO and U1 | 12 mm projection including XIAO headers; 10.5 mm for U1 and socket. The USB cable reaches it with the lid off. |
 | Buck | 43 x 21 x 14 mm above four 2 mm printed corner supports, two cable ties; 10 mm lead allowance beyond each end. Check the delivered module. |
-| Lock/LED/pump inline plugs | 22 x 20 x 16 mm over the cap floor's wire hole (`CAP_WIRE_HOLE_XY`): unplug them to lift the cap floor right out. |
+| Lock plug and lead slack | 22 x 20 x 16 mm over the cap floor's wire hole (`CAP_WIRE_HOLE_XY`): the lock cable's 4-pin plug and the coiled slack of the soldered LED and pump leads. |
 | S1 | Hangs from the roof of a printed box on the plate, lever up through a 6.5 mm hole; body <= 13 x 9 x 18 mm. Verify the actual switch. |
 | Charge socket | The splitter's female end, tied along X on the plate (`CHARGE_SOCKET_XY`); plug the charger in with the lid off. |
 | Battery plug | The splitter's straight male plug, Ø12 mm, 28.6 mm out of the port, its cord in a U-turn and up (`battery_connector_envelope`). The pack's rocker stays ON. |
@@ -98,4 +98,4 @@ dimensional sources and limits. These are clearance allowances, not detailed sup
 | D2F-01L | Existing D2F-family body/lever model and bracket retained. Check the supplied switch's terminals, lever, peg spacing and action. |
 
 Cable envelopes cover local exits and connector bends, not the full harness. Leave enough slack in the leads up
-the neck to lift the cap floor, or unplug the inline plugs first.
+the neck (~15 cm) to lift the cap floor out onto the cap's rim still connected.

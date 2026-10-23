@@ -11,7 +11,7 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
 Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
 Its throat slides over the collar round the opening (sphere.bell_collar) and two thumbscrews hold it (2026-10-23): no
 tools needed. They run parallel to the axis from inside the sphere (sphere.bell_mounts) into 6-32 inserts in the
-throat, which is 8.5 mm thick for them; a small boss under each fills the flat spot on the shell. Nothing shows. Unplug its LED strip's lead before pulling it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
+throat, which is 8.5 mm thick for them; a small boss under each fills the flat spot on the shell. Nothing shows. Its LED strip's lead is soldered with slack, so it rests beside the lantern when off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
 
 Bell frame: the bell axis is +Z, the sphere centre at the origin, s (= z) the distance out from the centre.
 """

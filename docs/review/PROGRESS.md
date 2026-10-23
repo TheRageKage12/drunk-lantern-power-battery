@@ -425,5 +425,5 @@ Kevin's redesign, built and refined in one day (decisions and reasons in `CONTEX
 
 **Open (ask Kevin):** see `CONTEXT.md` §6 — spout "rotate 90°", refill procedure, handle rest direction, drum-to-foot
 M3 vs thumbscrews, filament (2.8 kg if solid; slice to check), reach test, `thumb_test` hole size, `RING_ID`, and
-approval for 4 more JST SM 2-pin pairs (~$7) and epoxy. The step-by-step video's step 9 doesn't mention the emblem
-strips yet (the viewer does); re-run `make_videos.py guide` after any further change.
+epoxy for the handle laps. Plugs: Kevin kept the one 2-pin pair (pump at the cartridge); the cap floor's LED and
+pump leads and the bells' leads are soldered with slack. Re-run `make_videos.py` after any further change.

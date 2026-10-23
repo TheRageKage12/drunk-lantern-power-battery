@@ -91,7 +91,7 @@ def build():
     out['buck_wires_envelope'] = cap(compound([      # leads off both short ends
         box(bx+sign*lx/2-(10 if sign < 0 else 0), bx+sign*lx/2+(10 if sign > 0 else 0), by-9, by+9, 6, 18)
         for sign in (-1, 1)]))
-    # Inline plugs for the lock, LED and pump leads, over the hole they come up through.
+    # The lock cable's plug and the coiled slack of the soldered LED and pump leads, over the hole they come up through.
     out['inline_connectors_envelope'] = cap(box(-58, -36, -66, -46, 0.2, 16))
     sx, sy = P.SWITCH_CAP_XY
     roof = T.SWITCH_BOX[2]

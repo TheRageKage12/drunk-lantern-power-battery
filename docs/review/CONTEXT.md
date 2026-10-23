@@ -158,7 +158,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i and C). The repo
   openings: the lens opening (r 57) in front and the **hand opening, 140 mm** (r 70) behind, widened from 130 so a
   hand holding a full glass has room (Kevin, 16:40).
 - **Bells** slide over plain collars round the openings: front 64 mm long (mouth r 84), rear 60 mm (mouth r 90);
-  throats 8.5 mm thick for the thumbscrews' inserts. Each bell's LED lead has an inline plug so it can come off.
+  throats 8.5 mm thick for the thumbscrews' inserts. Each bell's LED lead is soldered into the harness with ~20 cm of slack, so the bell slides off and rests beside the lantern (no plug, see below).
 - The internals keep their height relative to the sphere centre, so the **lock wall** (2.5 cm past the centre, toward
   the audience), bay floor, guide boss, glass well, nozzle guide and the lock carry over unchanged; the foot's riser
   now holds the bay floor. The glass sits in its slot under the lock and hangs into the foot's neck; a 1.5 mm ridge
@@ -277,8 +277,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i and C). The repo
   over a slot, so its charge dots show looking up through the hand opening), the board on four 10 mm standoffs, the
   buck, S1 in a box with its lever up (6.5 mm hole), and the charge socket (the splitter's female end, tied down).
   Lid off to switch on, charge, plug in USB or pull JP1; no lifting the lantern off for these. The lock, LED and pump
-  leads come up behind the lock wall and the wall extension to inline plugs at the cap floor's wire hole; unplug them to
-  lift the floor right out. Nothing shows on the shell. The switch stops the ~15 mA idle drain while stored. About
+  leads come up behind the lock wall and the wall extension through the cap floor's wire hole: the lock cable through
+  its 4-pin plug, the LED and pump leads soldered with ~15 cm of slack so the floor lifts out still connected. Nothing shows on the shell. The switch stops the ~15 mA idle drain while stored. About
   230 g sits up top (accepted). The rev 9h switch pocket under the cartridge and the deck jack hole are gone.
 - An LM2596 makes regulated 5.0 V directly for U1 and Hall. Only the XIAO supply branch passes through
   an NTE585 Schottky and removable JP1. Remove JP1 before USB; follow the guide’s service sequence.
@@ -393,10 +393,11 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   the spout from the audience); the refill procedure for the pouch under its cover (unscrew the bag from its cap with
   the tube left in place, or fill in place); the handle's rest direction; drum-to-foot M3s vs inside thumbscrews;
   another green spool vs white hidden parts; the reach test; the 6-32 hole from `thumb_test.py`; `RING_ID`.
-- **Possible purchases to approve (not on the Sheet yet):** rev C needs five JST SM 2-pin pairs (LED and pump leads
-  at the cap floor, the pump plug at the cartridge, one per bell) and the Sheet has one, so 4 more (Vetco ~$1.75
-  each, ~$7); and a little two-part epoxy for the three handle laps (if no one has some). Super glue would be the
-  fallback for the laps (weaker on PETG).
+- **Plugs (Kevin, 2026-10-23): no more for now.** The one JST SM 2-pin pair stays on the pump at the cartridge (it
+  unplugs at every refill); the LED and pump leads at the cap floor and the two bells' LED leads are soldered with
+  slack instead (those only come apart for repairs). Revisit later: each extra plug is a Vetco pair, ~$1.75.
+- **Possible purchase to approve:** a little two-part epoxy for the three handle laps, if no one has some. Super glue
+  would be the fallback (weaker on PETG).
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
 - `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
@@ -636,3 +637,5 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   (~158 cm of strip), and a one-piece slit hand-side cover with a full clamp ring, template and stencil. Retired:
   dishes, display window, strip curtain, jar and vent lid, cartridge battery and deck, thumb knobs, top diffuser.
   Guide, viewer, videos, renders, CAD README and design contract updated. Open items in §6.
+- **2026-10-23, no extra plugs.** Rev C would have needed 4 more JST SM 2-pin pairs (cap floor LED and pump leads,
+  both bells). Kevin: leave it at the one pair for now (the pump at the cartridge); the rest are soldered with slack.

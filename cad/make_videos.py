@@ -252,7 +252,7 @@ def service(pw, d):
     go(LIFT, BAG_OUT, 1.6, c); stay(1.2, c); go(BAG_OUT, LIFT, 1.2, c)
     c = 'Lantern back on the cartridge, twist clockwise to lock.'
     go(LIFT, BUILT, 1.6, c)
-    c = 'Bells: 2 thumbscrews each from inside the sphere, then slide straight off (unplug the LED lead).'
+    c = 'Bells: 2 thumbscrews each from inside the sphere, then slide straight off (its LED lead has slack).'
     go(BUILT, BELLS, 1.6, c); stay(1.2, c); go(BELLS, BUILT, 1.3, c)
     stay(0.6, '')
     rec.encode(os.path.join(OUT, 'service-access.mp4'), 'Lantern opening for service')
