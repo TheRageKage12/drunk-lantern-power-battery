@@ -23,7 +23,7 @@ it and bring it out.
 - The firmware compiles and passes 20 simulated safety scenarios (`firmware/test`).
 - The CAD passes its fit checks, including the TalentCell mount and the electronics clearance envelopes. Those
   checks use the reserved sizes in [CAD fit limits](../cad/README.md#electronics-fit-limits), so measure the real
-  capacitor, connectors, buck, switch, pump and jar before printing.
+  capacitor, connectors, buck, switch and jar before printing. The battery and the pump are already measured.
 - Every bay is parametric (`cad/params.py`): a measured number is a one-line change and a re-run of
   `python3 build.py`.
 
@@ -683,7 +683,7 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
    - **Jar.** Into its ring, with a strap through the finger slots.
    - **Pump.** Fit the tube now, while the cartridge is open: open the head, lay the continuous tube around the
      rollers and close the cap. Leave the outlet end free for threading to the nozzle later. Then seat the pump in
-     its saddles and secure it with two straps.
+     its saddles, sliding it along until the silver motor rests in its curved cradle, and secure it with two straps.
    - **Board.** Remove all print support from the four board pads, then screw the board to the deck's vertical
      panel (4 x M3x6 through the holes you drilled). Clipped leads and rear wiring must stay within the 10 mm gap
      behind it (see the board guide's pad positions and wire layers). Keep the inline lock and LED plugs above the

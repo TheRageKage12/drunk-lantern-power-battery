@@ -304,7 +304,7 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 
 | Item | Risk | What the guide says |
 |---|---|---|
-| Pump outline | Estimated; ~6 mm clearance | Measure, update `PUMP_*`, re-run `build.py` before printing the base |
+| Pump outline | Measured 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall); ~6 mm clearance | Nothing to do: slide it so the motor rests in its cradle |
 | Jar | Bought locally | Must be ≤ 73 mm across with the lid, ≤ 76 mm tall |
 | Shot glass | Bought locally | ≤ 52 mm across the top, ≤ 62 mm tall |
 | COB current | ~0.6 A estimated | Measure with the multimeter |
@@ -527,3 +527,9 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   of floor stays over the recess. Nothing else moves: the deck stays at z=44 (16 mm over the pack instead of 17),
   the lantern's height is unchanged, the LED slot cuts through the bed too, and the battery plug envelope rises
   1 mm with the pack. All checks pass; `test_electronics.py` now runs its strap route with a 2 mm strap.
+- **2026-10-23, pump measured.** Kevin measured the Kamoer KPHM200: head 2.5 x 2.5 in (63.5 mm square), silver
+  motor can 40 mm across and just under 5 cm long, 4.5 in (114 mm) overall from the motor's tabs. Everything fits
+  the existing cradles; the only change is `PUMP_H` 63 -> 64 mm (the head is 0.5 mm taller than reserved), which
+  raises the pump axis and motor saddle 0.5 mm. The envelope keeps ~6 mm to the drum and lower dish. "Measure the
+  pump" removed from the guide, CAD notes and viewer (the assembly video never said it). The head box length
+  (`PUMP_HEAD_L_EST`, 40 mm) stays an allowance; the pump slides along the saddles to seat the motor.

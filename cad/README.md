@@ -31,8 +31,10 @@ python3 render_ring_colour.py  # docs/images/ring-white-outline.png: key_ring wi
 Assembly order and the print table are in `docs/BUILD_GUIDE.md` section 3 and 9.
 
 ## Hardware envelopes to verify against the real parts
-- Kamoer KPHM200: modelled as a 64 x 63 x 40 mm head box plus a 40 mm motor can, 118 mm overall. Kamoer
-  publishes no drawing. Measure the pump and adjust `PUMP_*` in `params.py` and `PUMP_HEAD_L_EST` in `parts/base.py`.
+- Kamoer KPHM200: measured by Kevin on 2026-10-23: head 2.5 x 2.5 in (63.5 mm square), silver motor can 40 mm
+  across and ~50 mm long, 114 mm overall from the motor tabs. Modelled as a 64 x 64 x 40 mm head box plus a 40 mm
+  can, 118 mm overall (`PUMP_*` in `params.py`); ~6 mm clear of the drum and lower dish. The head box's length
+  (`PUMP_HEAD_L_EST` in `parts/base.py`) is still a 40 mm allowance: the pump slides along its saddles.
 - Reservoir jar: a 76 x 76 mm envelope (`BOTTLE_D`, `BOTTLE_H`); buy one at most 73 mm across the cap (`BOTTLE_NECK_D`) and 76 mm tall. The ring on the deck is `BOTTLE_D` + 1.
 - Battery: [TalentCell YB1203000](https://talentcell.com/upload/download/12v-user-manual.pdf), 105 × 65 × 25 mm (`POWERBANK_*`), connector/switch end toward -Y, away from the hidden S1 pocket. The 20 mm strap (a cut length of VELCRO One-Wrap) is required; the deck remains at z=44 mm independently of battery thickness, with 16 mm above the case (the pack lies on a 1 mm bed, `PACK_BED_T`). Strap slots at y=25 clear the pillars; the underside recess accepts a <=2 mm strap (`BATTERY_STRAP_T`). Nothing shows on the shell: S1 stays underneath; since 2026-10-21 the pack lies LED face down and its fuel-gauge LEDs show through a 26 x 5 mm floor slot (14 to 40 mm from the port-side edge, 12 to 17 mm in from the end) (`_led_slot` in parts/base.py, `PACK_*` in params.py; dimensioned in docs/images/battery-seat.png).
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
@@ -81,4 +83,4 @@ nonzero exit status. Individual component bodies also require at least 1 mm sepa
 
 Cable envelopes cover local exits and connector bends, not the full off-board harness. Board screw access is checked with the shell removed; other service/tool access still needs a dry fit. Wire paths do not specify or verify a manufacturer bend radius.
 Tie the remaining leads to the cartridge and manually check the complete shell-removal motion before
-powering. Pump dimensions remain estimated; fit checks cannot qualify unknown real-part dimensions.
+powering. The pump outline is from Kevin's measurements; other unmeasured parts stay at their reserved sizes.
