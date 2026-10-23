@@ -66,7 +66,9 @@ STRAP_SLOT_W = 3.0
 # ------------------------------------------------------------------ splash wall and bag bay
 SPLASH_X = (2.0, 4.4)                                # right against the pump head
 SPLASH_H = 66.0                                      # to just above the pump
-BAG_X1, BAG_R, BAG_Z = SPLASH_X[0] - 1.0, COLLAR_RI - 2.0, (FLOOR_T, 68.0)
+COVER_T, COVER_LIP = 2.0, (2.0, 3.0)                  # bag cover on the splash wall and the raised rim; locating lip under it
+BAG_X1, BAG_R, BAG_Z = SPLASH_X[0] - P.FIT - COVER_LIP[0] - 0.5, COLLAR_RI - 2.6, (FLOOR_T, SPLASH_H)   # under the cover
+COVER_FINGER = ((-62.0, -20.0), 22.0)                 # finger hole to lift it
 # bag floor (2026-10-23): a shallow cone falling 2 deg toward a well at the back end by the splash wall, where the
 # bag's spout and the tube's tip sit, so the last of the drink runs to the tube; 45 deg fillets along the walls
 WELL_XY, WELL_R, WELL_D = (-32.0, 52.0), 12.0, 2.0
@@ -76,6 +78,7 @@ TUBE_NOTCH_Y, TUBE_NOTCH = 62.0, (8.0, 12.0)          # notch in the splash wall
 # tube clip by the well: the tube's end stays inside the bag; press it, bag film and all, down into this C-clip so
 # its notched tip lies in the well. Sized for the 6.4 mm tube plus two layers of pouch film.
 CLIP_BORE, CLIP_OPEN, CLIP_WALL, CLIP_L = P.TUBE_OD + 0.8, P.TUBE_OD - 0.6, 2.0, 10.0
+CLIP_TILT = 15.0                                     # deg down toward the well: the tube's tip rests on the well's bottom
 CLIP_X = WELL_XY[0] + WELL_R + 2.0 + CLIP_L / 2      # between the well and the splash wall: the tube comes in from the
                                                      # spout and pump side (+X) and its tip points into the well (-X)
 DRAIN_D, DRAIN_XY = 8.0, ((-40.0, -68.0), (40.0, -68.0))
@@ -146,11 +149,13 @@ def build_base():
 # ------------------------------------------------------------------ cartridge
 def _collar():
     adds = [_cyl(TRAY_R, COLLAR_H).cut(_cyl(COLLAR_RI, COLLAR_H + 2, z0=-1))]
+    a0 = math.degrees(math.acos(SPLASH_X[1] / TRAY_R))   # round the bag bay the rim goes up to the cover
+    adds.append(_sector(COLLAR_RI, TRAY_R, a0, 360.0 - a0, COLLAR_H - 0.01, SPLASH_H))
     cuts = []
     hs, hl = _half_deg(SLOT_W, TRAY_R), _half_deg(LUG_W, TRAY_R) + 1.0
     for a in LUG_ANGLES:
         entry = a + LUG_TWIST
-        cuts.append(_sector(COLLAR_RI - 0.5, TRAY_R + 0.5, entry - hs, entry + hs, LEG_Z[0], COLLAR_H + 1))
+        cuts.append(_sector(COLLAR_RI - 0.5, TRAY_R + 0.5, entry - hs, entry + hs, LEG_Z[0], SPLASH_H + 1))
         cuts.append(_sector(COLLAR_RI - 0.5, TRAY_R + 0.5, a - hl, entry + hs, LEG_Z[0], LEG_Z[1]))
     bumps = [_sector(COLLAR_RI, TRAY_R, a + BUMP_DEG - 0.8, a + BUMP_DEG + 0.8, LEG_Z[1] - BUMP_DROP, LEG_Z[1] + 0.1)
              for a in LUG_ANGLES]
@@ -213,19 +218,28 @@ def _bag_floor():
         f = f.union(tri.intersect(_cyl(COLLAR_RI + 0.3, SPLASH_H)))
     rb = (WELL_R ** 2 + WELL_D ** 2) / (2 * WELL_D)  # spherical dish: WELL_R across, WELL_D deep, its bottom on the tray floor
     f = f.cut(cq.Workplane('XY').sphere(rb).translate((wx, wy, FLOOR_T + rb)))
-    # the C-clip: a short ring along Y, open on top, standing on the floor (rounded so it can't cut the bag)
-    z_floor = FLOOR_T + FLOOR_RISE + FLOOR_SLOPE * (CLIP_X - wx)
-    ro, zc = CLIP_BORE / 2 + CLIP_WALL, z_floor + CLIP_BORE / 2 + CLIP_WALL - 0.5
-    x0 = CLIP_X - CLIP_L / 2
-    clip = cq.Workplane('YZ').workplane(offset=x0).center(wy, zc).circle(ro).extrude(CLIP_L)
-    clip = clip.union(_box(CLIP_L, 2 * ro, zc - FLOOR_T, CLIP_X, wy, FLOOR_T))
-    clip = clip.cut(cq.Workplane('YZ').workplane(offset=x0 - 1).center(wy, zc).circle(CLIP_BORE / 2).extrude(CLIP_L + 2))
-    clip = clip.cut(_box(CLIP_L + 2, CLIP_OPEN, ro + 1, CLIP_X, wy, zc))
+    # the C-clip: a short ring along the tube, open on top, tilted CLIP_TILT down toward the well so the tube's tip
+    # (over one layer of bag film) rests on the well's bottom; rounded so it can't cut the bag
+    ro = CLIP_BORE / 2 + CLIP_WALL
+    zc = clip_axis_z(CLIP_X)
+    clip = cq.Workplane('YZ').workplane(offset=-CLIP_L / 2).circle(ro).extrude(CLIP_L)
+    clip = clip.cut(cq.Workplane('YZ').workplane(offset=-CLIP_L / 2 - 1).circle(CLIP_BORE / 2).extrude(CLIP_L + 2))
+    clip = clip.cut(_box(CLIP_L + 2, CLIP_OPEN, ro + 1, 0, 0, 0))
     try:
         clip = clip.edges('|X').fillet(0.6)
     except Exception:
         pass
-    return f.union(clip)
+    clip = clip.rotate((0, 0, 0), (0, 1, 0), -CLIP_TILT).translate((CLIP_X, wy, zc))
+    foot = _box(CLIP_L * math.cos(math.radians(CLIP_TILT)), 2 * ro - 1.0, zc - FLOOR_T, CLIP_X, wy, FLOOR_T) \
+        .cut(cq.Workplane('YZ').workplane(offset=-CLIP_L).circle(ro - 0.3).extrude(2 * CLIP_L)
+             .rotate((0, 0, 0), (0, 1, 0), -CLIP_TILT).translate((CLIP_X, wy, zc)))
+    return f.union(clip).union(foot)
+
+
+def clip_axis_z(x):
+    """Height of the tube's axis in the clip at x: it falls toward the well, reaching the well's bottom at its centre."""
+    z_tip = FLOOR_T + 0.3 + P.TUBE_OD / 2            # bag film under the tube
+    return z_tip + math.tan(math.radians(CLIP_TILT)) * (x - WELL_XY[0])
 
 
 def build_tray():
@@ -251,13 +265,32 @@ def _envelopes():
     sweep = []
     hl = _half_deg(LUG_W, LUG_R0)
     for a in LUG_ANGLES:     # down the entry slot from above the collar, then the twist along the leg
-        sweep.append(_sector(LUG_R0, R_IN, a + LUG_TWIST - hl, a + LUG_TWIST + hl, LUG_Z[0] - 2.5, COLLAR_H + 10))
+        sweep.append(_sector(LUG_R0, R_IN, a + LUG_TWIST - hl, a + LUG_TWIST + hl, LUG_Z[0] - 2.5, SPLASH_H + COVER_T + 3))
         sweep.append(_sector(LUG_R0, R_IN, a - hl, a + LUG_TWIST + hl, LUG_Z[0] - 2.5, LUG_Z[1]))
     return {'pump_envelope': head.union(motor), 'bag_envelope': bag, 'lug_sweep_envelope': _union_all(sweep)}
 
 
+def build_cover():
+    """Lid over the bag bay (assembly position): rests on the splash wall and the raised rim, a lip under it keeps it
+    in place, a notch lets the drum's lug pass on its way down, a finger hole lifts it. The bag stays flat under it."""
+    z0 = SPLASH_H
+    c = _bay_region(TRAY_R - 0.3, z0, z0 + COVER_T).intersect(_box(200, 400, 200, SPLASH_X[1] - 0.2 - 100, 0, 0))
+    lw, lh = COVER_LIP
+    a0 = math.degrees(math.acos(SPLASH_X[0] / COLLAR_RI))
+    c = c.union(_sector(COLLAR_RI - P.FIT - lw, COLLAR_RI - P.FIT, a0 + 2, 360 - a0 - 2, z0 - lh, z0 + 0.01))
+    c = c.union(_box(lw, 2 * math.sqrt(COLLAR_RI ** 2 - SPLASH_X[0] ** 2) - 20, lh + 0.01,
+                     SPLASH_X[0] - P.FIT - lw / 2, 0, z0 - lh))
+    hs = _half_deg(SLOT_W, TRAY_R) + 1.0
+    for a in LUG_ANGLES:
+        e = a + LUG_TWIST
+        c = c.cut(_sector(LUG_R0 - 0.5, TRAY_R + 1, e - hs, e + hs, z0 - lh - 1, z0 + COVER_T + 1))
+    (fx, fy), fd = COVER_FINGER
+    return c.cut(_cyl(fd / 2, COVER_T + 2, fx, fy, z0 - 1))
+
+
 def build():
-    parts = {'base': build_base(), 'base_tray': build_tray()}
+    parts = {'base': build_base(), 'base_tray': build_tray(),
+             'bag_cover': build_cover().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, SPLASH_H + COVER_T))}   # top down
     parts.update(_envelopes())
     return parts
 
@@ -266,6 +299,7 @@ def placements():
     return {
         'base': ((0, 0, 1), 0, (0, 0, 0)),
         'base_tray': ((0, 0, 1), 0, (0, 0, 0)),
+        'bag_cover': ((1, 0, 0), 180, (0, 0, SPLASH_H + COVER_T)),
         'pump_envelope': ((0, 0, 1), 0, (0, 0, FLOOR_T)),
         'bag_envelope': ((0, 0, 1), 0, (0, 0, 0)),
         'lug_sweep_envelope': ((0, 0, 1), 0, (0, 0, 0)),
