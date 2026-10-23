@@ -69,10 +69,15 @@ SPLASH_H = 66.0                                      # to just above the pump
 BAG_X1, BAG_R, BAG_Z = SPLASH_X[0] - 1.0, COLLAR_RI - 2.0, (FLOOR_T, 68.0)
 # bag floor (2026-10-23): a shallow cone falling 2 deg toward a well at the back end by the splash wall, where the
 # bag's spout and the tube's tip sit, so the last of the drink runs to the tube; 45 deg fillets along the walls
-WELL_XY, WELL_R, WELL_D = (-30.0, 55.0), 12.0, 2.0
+WELL_XY, WELL_R, WELL_D = (-32.0, 52.0), 12.0, 2.0
 FLOOR_RISE, FLOOR_SLOPE = WELL_D, math.tan(math.radians(2.0))
 FILLET = 8.0
 TUBE_NOTCH_Y, TUBE_NOTCH = 62.0, (8.0, 12.0)          # notch in the splash wall's top for the tube to the pump's inlet
+# tube clip by the well: the tube's end stays inside the bag; press it, bag film and all, down into this C-clip so
+# its notched tip lies in the well. Sized for the 6.4 mm tube plus two layers of pouch film.
+CLIP_BORE, CLIP_OPEN, CLIP_WALL, CLIP_L = P.TUBE_OD + 0.8, P.TUBE_OD - 0.6, 2.0, 10.0
+CLIP_X = WELL_XY[0] + WELL_R + 2.0 + CLIP_L / 2      # between the well and the splash wall: the tube comes in from the
+                                                     # spout and pump side (+X) and its tip points into the well (-X)
 DRAIN_D, DRAIN_XY = 8.0, ((-40.0, -68.0), (40.0, -68.0))
 
 
@@ -207,7 +212,20 @@ def _bag_floor():
             [(x0 + 0.3, s * (yt + 0.3)), (x0 + 0.3, s * (yt - FILLET)), (x0 - FILLET, s * (yc + 0.3))]).close().extrude(SPLASH_H - FLOOR_T)
         f = f.union(tri.intersect(_cyl(COLLAR_RI + 0.3, SPLASH_H)))
     rb = (WELL_R ** 2 + WELL_D ** 2) / (2 * WELL_D)  # spherical dish: WELL_R across, WELL_D deep, its bottom on the tray floor
-    return f.cut(cq.Workplane('XY').sphere(rb).translate((wx, wy, FLOOR_T + rb)))
+    f = f.cut(cq.Workplane('XY').sphere(rb).translate((wx, wy, FLOOR_T + rb)))
+    # the C-clip: a short ring along Y, open on top, standing on the floor (rounded so it can't cut the bag)
+    z_floor = FLOOR_T + FLOOR_RISE + FLOOR_SLOPE * (CLIP_X - wx)
+    ro, zc = CLIP_BORE / 2 + CLIP_WALL, z_floor + CLIP_BORE / 2 + CLIP_WALL - 0.5
+    x0 = CLIP_X - CLIP_L / 2
+    clip = cq.Workplane('YZ').workplane(offset=x0).center(wy, zc).circle(ro).extrude(CLIP_L)
+    clip = clip.union(_box(CLIP_L, 2 * ro, zc - FLOOR_T, CLIP_X, wy, FLOOR_T))
+    clip = clip.cut(cq.Workplane('YZ').workplane(offset=x0 - 1).center(wy, zc).circle(CLIP_BORE / 2).extrude(CLIP_L + 2))
+    clip = clip.cut(_box(CLIP_L + 2, CLIP_OPEN, ro + 1, CLIP_X, wy, zc))
+    try:
+        clip = clip.edges('|X').fillet(0.6)
+    except Exception:
+        pass
+    return f.union(clip)
 
 
 def build_tray():
