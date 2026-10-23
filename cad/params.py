@@ -8,6 +8,7 @@ print orientation and exposes `assembly_transform()` info via build.py.
 Everything here is a design decision that other modules depend on. Change values here,
 never hard-code mating dimensions inside a part file. See DESIGN_CONTRACT.md.
 """
+import math
 
 # ---------------------------------------------------------------- global look
 SCALE = 1.8                 # original Hedo3D model was ~100 mm dia; we are ~180 mm
@@ -58,71 +59,71 @@ GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and 
 GLASS_D_BASE = 40.0
 GLASS_H = 62.0
 
-POWERBANK_L, POWERBANK_W, POWERBANK_T = 105.0, 65.0, 25.0  # TalentCell YB1203000; connector/switch end toward -Y
-CARTRIDGE_DECK_Z = 44.0     # deck underside; independent of pack thickness to preserve pump/jar/board heights
-BATTERY_STRAP_Y = 25.0      # strap crosses here, clear of the deck pillars at y=0 and +/-55
-BATTERY_STRAP_T = 2.0       # recessed underfloor strap allowance (VELCRO One-Wrap measured ~1 mm; 2 mm for margin)
-PACK_BED_T = 1.0            # the pack lies on a 1 mm bed, so the 2 mm recess under it still leaves 1 mm of floor
-PACK_Z = FLOOR + PACK_BED_T  # underside of the pack
+POWERBANK_L, POWERBANK_W, POWERBANK_T = 105.0, 65.0, 25.0  # TalentCell YB1203000
+# rev C: the battery and the board live in the top cap, on a separate cap floor plate.
+# PACK FRAME (the measured numbers below): pack centred on the origin, length along Y, end face (port, rocker) at -Y,
+# LED face down (2026-10-21) so its five fuel-gauge LEDs show through a slot in the plate under it.
+BATTERY_STRAP_Y = 18.0      # pack frame: the hook-and-loop strap crosses here
+BATTERY_STRAP_T = 2.0       # recessed under-plate strap allowance (VELCRO One-Wrap measured ~1 mm; 2 mm for margin)
+PACK_BED_T = 1.0            # the pack lies on a 1 mm bed over the strap recess
 # Electronics fit limits, not claims that unmeasured supplier parts have these dimensions.
 PERFBOARD_W, PERFBOARD_H, PERFBOARD_T = 70.0, 50.0, 1.2
-PERFBOARD_BOTTOM_GAP = 2.0
 # Component sizes and mounting coordinates: docs/review/protoboard/mechanical.py and layout.py
 BUCK_L, BUCK_W, BUCK_H = 43.0, 21.0, 14.0  # reserve above printed corner supports; measure actual module
 BUCK_STANDOFF = 2.0
-# 2026-10-21: the pack lies LED face DOWN (turned 180 deg about Y, end face still toward -Y) so its five fuel-gauge
-# LEDs show through a thin slot in the floor; its port and rocker are therefore mirrored in X. Kevin's caliper
-# numbers: port centre 14.3 mm and rocker centre 44.5 mm from the end face's left edge (port on the left, LEDs up);
-# LED row 12.7 mm in from the end edge, 25.4 mm long (its offset across the pack is from TalentCell's photo).
-PACK_PORT_X = 32.5 - 14.3       # 18.2 in the assembly frame
-PACK_SWITCH_X = 32.5 - 44.5     # -12.0; reached from the -Y side with the lantern lifted off
-PACK_LED_FROM_PORT = (14.0, 40.0)   # Kevin: the slot runs 14 to 40 mm from the port-side edge
-PACK_LED_X = (32.5 - PACK_LED_FROM_PORT[1], 32.5 - PACK_LED_FROM_PORT[0])   # (-7.5, 18.5) in the assembly frame
-PACK_LED_FROM_END = (12.0, 17.0)   # Kevin: the slot runs 12 to 17 mm in from the battery's end edge
+# Kevin's caliper numbers: port centre 14.3 mm and rocker centre 44.5 mm from the end face's left edge (port on the
+# left, LEDs up); LED slot 12-17 mm in from the end edge and 14-40 mm from the port-side edge. LED face down mirrors X.
+PACK_PORT_X = 32.5 - 14.3       # 18.2 (pack frame)
+PACK_SWITCH_X = 32.5 - 44.5     # -12.0
+PACK_LED_FROM_PORT = (14.0, 40.0)
+PACK_LED_X = (32.5 - PACK_LED_FROM_PORT[1], 32.5 - PACK_LED_FROM_PORT[0])   # (-7.5, 18.5)
+PACK_LED_FROM_END = (12.0, 17.0)
 PACK_LED_IN = sum(PACK_LED_FROM_END) / 2          # slot centre, 14.5
 PACK_LED_SLOT = PACK_LED_FROM_END[1] - PACK_LED_FROM_END[0]   # 5.0
 # The battery lead is the splitter's straight male plug in the port (Kevin: 28.6 mm out, ~12 mm across); its cord
-# folds back in a U-turn reaching BATTERY_PLUG_TURN from the battery's end, then rises toward the deck.
-BATTERY_PLUG_OUT, BATTERY_PLUG_D, BATTERY_PLUG_Z1 = 28.6, 12.0, 36.0
-BATTERY_PLUG_TURN = 35.0   # Kevin: plugged in with the cord folded in a U-turn, it reaches 35 mm from the battery's end
-# The pack sits 7 mm toward +Y (the owner's side, Kevin) so the plug and its U-turn clear the drum wall by ~7 mm (centred,
-# the wall is only 35.2 mm from the battery's end at the port). Its +Y end stop then meets the S1 pocket and merges into it.
-PACK_Y = 7.0
-# rev 9h: nothing shows on the shell. The power switch sits in a pocket under the cartridge floor, lever down (tip
-# the lantern to flip it). No charge jack is fitted (2026-10-20): the splitter's female end, inside the cartridge
-# beside the battery's end, is the charge socket. The deck keeps an empty hole at JACK_XY for a later jack.
-SWITCH_POCKET_XY = (15.0, 71.5)                     # pocket centre on the tray floor, +Y side, between a pillar and the rim
-SWITCH_POCKET_W, SWITCH_POCKET_L = 26.0, 23.0       # outer box; the cavity is 2 x WALL smaller
-SWITCH_POCKET_DEPTH = 20.0                          # cavity height: bushing (~7) + lever (~10) stay above the table
-JACK_XY = (74.0, -25.0)                             # empty hole for an optional charge jack (not fitted); clears board and shell bosses
-PORT_JACK_D, PORT_SWITCH_D = 11.3, 6.5  # optional DC5521 panel jack (Vetco 321B fits, 7/16" = 11.1 mm hole; not fitted) and the S1 mini toggle (1/4" or M6 bushing)
+# folds back in a U-turn reaching BATTERY_PLUG_TURN from the battery's end.
+BATTERY_PLUG_OUT, BATTERY_PLUG_D = 28.6, 12.0
+BATTERY_PLUG_TURN = 35.0
+# Cap layout. CAP-FLOOR FRAME: the lantern axis at the origin, z = 0 the top of the cap floor plate, -Y the display side.
+PACK_CAP_XY = (27.5, -2.5)      # pack centre; turned 180 deg, so its end face (port) points to +Y and its LED row sits
+                                # at y 35.5, x 9..35: inside the neck bore and on the hand side of the lock wall, so you
+                                # read the charge dots by looking up through the hand opening
+PACK_CAP_ROT = 180.0
+BOARD_CAP_XY = (-38.0, 0.0)     # perfboard centre, component face up, turned 90 deg: its drawing's top edge toward -X
+BOARD_CAP_ROT = 90.0            # (the cable exit to the wall side), its USB end toward -Y
+BUCK_CAP_XY = (0.0, -69.5)      # LM2596 module, long side along X, past the battery's far end
+SWITCH_CAP_XY = (-30.0, 60.0)   # S1 in a box on the plate, lever up, reached with the lid off
+CHARGE_SOCKET_XY = (40.0, 60.0)    # the splitter's female end (the charge socket) stows here, along X, tied down loosely;
+                                   # lift it out on its cord to charge with the lid off
+CAP_WIRE_HOLE_XY = (-47.0, -55.0)  # the lock, LED and pump leads come up the neck and through the plate here
+PORT_SWITCH_D = 6.5             # S1 mini toggle (1/4" or M6 bushing)
 
-# ---------------------------------------------------------------- stack (bottom to top)
-BASE_H = 147.0              # base drum height (rev 3: taller for the jar + cap; rev 9: open drum over the cartridge; 2026-10-23: +32 for the 8 oz jar)
+# ---------------------------------------------------------------- stack (bottom to top), rev C (2026-10-23)
+# Classic proportions (Hal Jordan's battery): 80 mm drum, short flared foot neck, 224 mm sphere with lens bells, a
+# mirrored top (neck, flare, 190 mm cap) holding the battery and board, emblem lid. Lower/upper dishes retired.
+BASE_H = 80.0               # drum height: the pump (64 tall on a 3 mm floor) is the tallest thing in the cartridge
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
 BASE_BODY_D = D_MAX - 6.0   # drum body between the bands (184)
-SERVICE_SCREW_ANGLES = (0.0, 140.0, 225.0)   # rev 9: 3 thumbscrews from underneath hold the base cartridge in the drum (no door)
-
-JOINT_SPIGOT_H = 8.0        # spigot height for base->lower dish and sphere->upper dish joints
+FLARE_ANGLE = 45.0          # foot and top flares, from vertical: the steepest overhang the printer takes unsupported
+NECK_H = 25.0               # straight neck between each flare and the sphere flat (foot and top)
+CAP_H = 80.0                # top cap cylinder, 190 mm across like the drum
+CARTRIDGE_FLOOR_T = 3.0     # one-piece cartridge floor (replaces tray + deck)
+JOINT_SPIGOT_H = 8.0        # spigot height: foot -> drum
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)
-JOINT_SCREW_ABOVE_FLAT = 3.0  # sphere<->dish screws this far from the sphere flats: a 5.5 mm socket head then clears the dish flange
+JOINT_SCREW_ABOVE_FLAT = 3.0  # sphere <-> neck screws this far from the sphere flats
 
-DISH_H = 77.0               # reflector dish height (43 x 1.8)
-DISH_MOUTH_D = D_MAX        # lower dish wide end outer diameter (matches the base)
-UPPER_DISH_MOUTH_D = 180.0  # upper dish mouth: kept at 180 so the handle legs (which pass its rim) and the sphere bosses stay on the bed
-DISH_NECK_D = 110.0         # narrow end outer diameter (sits on the sphere flat)
-DISH_NECK_HOLE_D = 80.0     # through hole in the narrow floor (tube, wires, socket module)
-DISH_RIM_H = 6.0            # straight cylindrical rim at the mouth
-
-SPHERE_D = 180.0
-SPHERE_CUT = 58.5           # flats at +/- SPHERE_CUT from the sphere centre (-> flat dia ~136.8)
+SPHERE_D = 224.0            # rev C: 180 -> 224, the largest half that fits the bed split front/back
+SPHERE_FLAT_D = 136.8       # flats keep their size, so the neck joints are the old dish joints
+SPHERE_CUT = math.sqrt((SPHERE_D / 2) ** 2 - (SPHERE_FLAT_D / 2) ** 2)   # 88.69: flats at +/- SPHERE_CUT
 SPHERE_SPLIT = 'front-back' # halves split on the XZ plane (front half y<0 toward audience, rear half y>0 toward owner)
 SPHERE_FLANGE_W = 8.0       # internal joining flange width
 SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/bottom
-WINDOW_W, WINDOW_H = 90.0, 87.0     # front arched window: must clear the 9 mm collars at both flats
-DIFFUSER_D = 118.0          # front diffuser disc (sits behind the window on an internal ledge)
+DIFFUSER_D = 118.0          # front lens: a full round 118 mm white disc in the front bell (rev C: no flats)
 DIFFUSER_T = 1.0
-HATCH_W, HATCH_H = 120.0, 96.0      # hand opening on the owner's side (rev 6: open, no door; 120 wide so a 90 mm fist clears even 15 mm off-centre; 96 = all the height between the collars)
+LENS_OPENING_R = 57.0       # rev C: round opening in the front half; the lens bell's throat
+HAND_OPENING_R = 65.0       # rev C: round hand opening in the rear half (fist 106 x 76 passes with 12 mm all round)
+FRONT_BELL_L, REAR_BELL_L = 64.0, 60.0   # bell length from the sphere surface at the opening edge to the mouth
+FRONT_BELL_MOUTH_R, REAR_BELL_MOUTH_R = 84.0, 90.0   # outer mouth radii
 # Unused since rev 8 (kept so old notes still read): the glass tray, the 90 deg wall nozzle and the WS2812B strip channel.
 GLASS_TRAY_TRAVEL = 45.0
 NOZZLE_ANGLE_DEG = 45.0
@@ -149,7 +150,7 @@ RING_HEAD_T = 6.1           # plastic between the face and the finger (the magne
 RING_PALM_W = 8.0           # band width on the palm side
 RING_MAGNET_SKIN = 0.6      # plastic left over the magnet on the visible face (3 layers): hides it, +0.6 mm to the sensor
 ROTOR_FLOOR_T = 1.2         # plastic between magnet (in key cap) and Hall sensor
-SOCKET_HOUSING_OD = 76.0    # rev 3: MUST pass through the DISH_NECK_HOLE_D (80) hole from above
+SOCKET_HOUSING_OD = 76.0    # rev 3
 SOCKET_HOUSING_H = 22.0     # below the faceplate (rev 3: shorter, frees bay height for the nozzle)
 CAM_LIFT = 3.0              # D2F-L hinge lever rests 8 mm above its mounting face (2 mm preloaded from the 10 mm free position); the cam presses it to 5 mm
 # Return spring (rev 4): a RADIAL spring plunger pressing on a ramp on the rotor's edge (rotary-switch detent).
@@ -162,19 +163,22 @@ PLUNGER_L = 4.5
 SPRING_FREE_L = 10.0        # 0.5 x 5 x 10 mm; compressed 1.2 at rest, 5.2 at 45 deg (solid height ~3)
 SPRING_POCKET_D = 5.6       # spring OD + 0.6; closed ends; depth = free length + 1
 
-# handle
+# handle (rev C): a loop on ring pivots at the sphere's sides. Spokes run out along X from the pivots, a 30 mm corner
+# turns them up, and a 230 mm arc goes over the top. It swings flat (either way) to lie around the middle for display.
 HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 10.0
-HANDLE_INNER_GAP = 6.0      # clearance between sphere surface and handle leg (original: legs nearly tangent)
-HANDLE_TOP_CLEAR = 80.0     # clearance above the upper dish mouth for a hand + ring
-HANDLE_PIECES = 4           # 2 legs + 2 quarter arcs, lap joints with 2 x M3 each
+HANDLE_LOOP_R = 235.0       # big arc radius (centreline): its inside clears the lid's edge by ~12 mm as it swings
+HANDLE_CORNER_R = 30.0      # spoke -> arc corner; the big arc's centre is this far above the sphere centre
+PIVOT_D, PIVOT_T = 44.0, 16.0   # ring pivot boss on each side of the sphere, over the seam
+HANDLE_SHAFT_D = 12.0       # round shaft on the end of each spoke, turning in the pivot (flats at +/- T/2 for printing)
 
 # derived heights (assembly, Z from the ground)
+FLARE_H = (D_MAX - SPHERE_FLAT_D) / 2 / math.tan(math.radians(FLARE_ANGLE))   # 26.6
 Z_BASE_TOP = BASE_H
-Z_LOWER_DISH_TOP = BASE_H + DISH_H
-Z_SPHERE_CENTER = Z_LOWER_DISH_TOP + SPHERE_CUT
-Z_SPHERE_TOP = Z_SPHERE_CENTER + SPHERE_CUT
-Z_UPPER_DISH_TOP = Z_SPHERE_TOP + DISH_H
-Z_HANDLE_TOP = Z_UPPER_DISH_TOP + HANDLE_TOP_CLEAR
+Z_FOOT_FLAT = BASE_H + FLARE_H + NECK_H         # 131.6: foot neck top = sphere bottom flat
+Z_SPHERE_CENTER = Z_FOOT_FLAT + SPHERE_CUT      # 220.3
+Z_SPHERE_TOP = Z_SPHERE_CENTER + SPHERE_CUT     # 309.0: sphere top flat
+Z_CAP0 = Z_SPHERE_TOP + NECK_H + FLARE_H        # 360.6: cap cylinder starts
+Z_CAP_TOP = Z_CAP0 + CAP_H                      # 440.6: cap rim (the halo and lid sit on it)
 
 # ---------------------------------------------------------------- lock wall layout (rev 8)
 # Two openings in the sphere: the hand port on your side (+Y) and the display window on the far side (-Y).
@@ -204,9 +208,7 @@ NOZZLE_RISE = 11.0           # straight rise above the bay floor before the bend
 NOZZLE_BEND_R = 18.0         # bend radius (~3 x the tube OD): the riser stands outside the slot
 NOZZLE_BEND_DEG = 135.0      # past horizontal: the tip points 45 deg down, so the stream dives into the glass
                              # instead of being thrown across it (a level tip threw it onto the rim at 70 % speed)
-DISH_LOWER_HOLE_D = 104.0    # lower dish floor hole: the slot and the tube pass through it into the dish cone
 FIST_W, FIST_H, FIST_LEN, FOREARM_R = 106.0, 76.0, 85.0, 30.0   # owner's fist is under 4 x 3 in
 FIST_Z_OFFSET = 3.0          # fist centre above the ring centre
-CURTAIN_R = 62.0             # strip curtain hangs from the upper dish plug on this radius, behind the hand port
-CURTAIN_HALF_ANGLE = 62.0    # arc spans +-62 deg either side of +Y (covers the 120 mm port seen from inside)
-CURTAIN_SCREW_ANGLES = (40.0, 70.0, 110.0, 140.0)   # clamp screws into the upper dish plug (90 deg has the dish's radial screw)
+# rev C: the strip curtain is a frosted disc slit into strips, clamped by its upper arc in the rear bell's mouth.
+CURTAIN_HALF_ANGLE = 70.0    # clamped arc either side of the top

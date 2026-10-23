@@ -35,7 +35,7 @@ def run(all_parts, placements):
     envelopes = {}
     for n in [k for k in list(placed) if k.endswith('_envelope') and k != 'switch_envelope']:
         envelopes[n] = placed.pop(n)
-    SHELL = ('base', 'dish_lower')   # parts that move with the lantern when it is lifted off the base cartridge
+    SHELL = ('base',)   # the drum carries the lugs; the sweeps stay below the foot
     for en, env in envelopes.items():
         if en.endswith('_sweep_envelope'):   # must also clear the hardware the cartridge carries
             for hn in (k for k in envelopes if not k.endswith('_sweep_envelope')):
@@ -43,7 +43,7 @@ def run(all_parts, placements):
                 if v > 200.0:
                     print(f'FAIL clearance: {en} intersects {hn} by {v / 1000:.1f} cm3'); problems += 1
         for n, wp in placed.items():
-            if en in ('fist_envelope', 'forearm_envelope') and (n.startswith('switch') or n in ('key_ring', 'key_cap')):   # both are worn on the hand
+            if en in ('fist_envelope', 'hand_path_envelope') and (n.startswith('switch') or n in ('key_ring', 'key_cap')):   # both are worn on the hand
                 continue
             if en == 'glass_path_envelope' and n in ('key_ring', 'key_cap'):   # the fist (with the ring) is drawn back before the glass comes out
                 continue
@@ -61,8 +61,28 @@ def run(all_parts, placements):
             v = inter_volume(placed[names[i]], placed[names[j]])
             if v > 100.0:    # > 0.1 cm3: smaller values are coincident mating faces (1 cm3 hid real clashes, rev 7)
                 print(f'FAIL overlap: {names[i]} vs {names[j]} by {v / 1000:.1f} cm3'); problems += 1
+    problems += handle_swing_checks(all_parts, placements)
     problems += electronics_checks(all_parts, placements)
     print(f'--- checks done: {problems} problem(s) ---')
+    return problems
+
+
+def handle_swing_checks(all_parts, placements, angles=(-90, -60, -30, 30, 60, 90)):
+    """Rev C: the loop handle turns about its spokes from up to flat on either side; at each angle it must clear
+    everything that does not turn with it (the pivots carry it)."""
+    from parts import handle as H
+    placed = {n: place(wp, placements.get(n)) for n, (wp, _m) in all_parts.items() if not n.endswith('_envelope')}
+    loop = [n for n, (_, m) in all_parts.items() if m == 'parts.handle' and 'pivot' not in n]
+    fixed = [n for n in placed if n not in loop and 'pivot' not in n]
+    problems = 0
+    for a in angles:
+        for ln in loop:
+            moved = H.swing(placed[ln], a)
+            for n in fixed:
+                v = inter_volume(moved, placed[n])
+                if v > 1.0:
+                    print(f'FAIL handle swing {a:+d} deg: {ln} hits {n} by {v:.1f} mm3'); problems += 1
+    print(f'handle swing: {len(loop)} pieces at {len(angles)} angles, {problems} problem(s)')
     return problems
 
 
@@ -75,18 +95,18 @@ def electronics_checks(all_parts, placements):
     """
     placed = {n: place(wp, placements.get(n)) for n, (wp, _) in all_parts.items()}
     electronic = [n for n, (_, module) in all_parts.items() if module == 'parts.electronics']
-    targets = electronic + ['powerbank_envelope']
+    targets = electronic
     problems = 0
     # Check individual bodies before fusion can hide their overlaps. Drawing and
     # CAD share these bounds, including the screw-head / driver access circles.
-    from parts import electronics as E, base as B
+    from parts import electronics as E, top as T
     import json
     import routing
     from generate import validate as validate_connectivity
     validate_connectivity()
     from pathlib import Path
     gaps = E.M.validate(E.M.bounds())
-    assert B.EPANEL_PAD_PROUD == E.M.REAR_GAP
+    assert T.BOARD_STANDOFF == E.M.REAR_GAP
     assert P.PERFBOARD_T == E.M.BOARD_THICKNESS
     route_path = Path(__file__).resolve().parents[1] / 'docs/review/protoboard/routing.json'
     report = routing.validate(json.loads(route_path.read_text()))
