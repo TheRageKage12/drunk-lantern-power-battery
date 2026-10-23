@@ -6,9 +6,11 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
     diffuser       the front lens: a full round 118 mm white disc (the rev-9 diffuser had 98 mm flats: reprint)
     curtain_clamp  arc that clamps the curtain's top edge to the inside of the rear bell's mouth lip
 
-Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell,
-and held by 3 M3 screws from pads inside the sphere into inserts in the throat (sphere.bell_pads). Printed mouth down:
-the inner cone is under 35 deg from vertical; the inward steps are 45 deg chamfers or under 3 mm.
+Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
+It twists on (2026-10-23): its throat slides over the bayonet collar round the opening (sphere.bell_collar), the 3 lugs
+run down entry slots, a BELL_TWIST turn clockwise (seen from outside, like a jar lid) takes them along the L-slots past a click bump,
+and one M3 from below through the throat into the collar's insert locks it. Unplug its LED strip's lead before twisting
+it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
 
 Bell frame: the bell axis is +Z, the sphere centre at the origin, s (= z) the distance out from the centre.
 """
@@ -29,13 +31,13 @@ def _s_surface(r):
 F_EDGE = _s_surface(S.LENS_R)                # 96.4: sphere surface at the opening edge
 F_MOUTH = F_EDGE + P.FRONT_BELL_L            # 160.4
 F_OUT = P.FRONT_BELL_MOUTH_R                 # 84
-F_THROAT_OUT = 64.0                          # throat band outer radius: 1 mm outside the inserts at r 61
+F_THROAT_OUT = 66.0                          # throat band: 3 mm of wall outside the L-slots
 F_LED_R, F_LED_S = 61.0, (106.0, 116.0)      # LED collar band: 37.5 cm of 10 mm COB strip, facing the axis
 F_LEDGE_S = 117.5                            # the lens rests on this face (toward the mouth)
 LENS_R = P.DIFFUSER_D / 2                    # 59
 F_LENS_POCKET = LENS_R + P.SNUG              # 59.15: the lens presses in, a few dots of glue hold it
 F_CONE_S = 120.0                             # the inner chamfer starts here
-F_OUTER_CONE_S = 106.0                       # outer: the throat band (inserts), then a cone to the mouth
+F_OUTER_CONE_S = 106.0                       # outer: the throat band (bayonet), then a cone to the mouth
 F_WALL = 2.6                                 # radial wall of the cone (2.5 mm normal: 4 perimeters)
 
 
@@ -53,10 +55,8 @@ def _meet_45(r0, s0, outer, wall):
 def front_profile():
     s0 = S.CUT - 10                          # well inside the sphere; the sphere cut trims it
     return [
-        (S.LENS_R, s0),
-        (S.LENS_R, F_LED_S[0] - 4.0),          # throat (= the opening)
-        (F_LED_R, F_LED_S[0]),                 # 45 deg chamfer (prints mouth down without support)
-        (F_LED_R, F_LED_S[1]),                 # LED band
+        (F_LED_R, s0),                         # bore over the bayonet collar, then the LED band
+        (F_LED_R, F_LED_S[1]),
         (S.LENS_R, F_LED_S[1]),                # ledge (2 mm overhang when printed)
         (S.LENS_R, F_LEDGE_S),
         (F_LENS_POCKET, F_LEDGE_S),            # lens pocket
@@ -73,7 +73,7 @@ def front_profile():
 R_EDGE = _s_surface(S.HAND_R)                # 91.2
 R_MOUTH = R_EDGE + P.REAR_BELL_L             # 151.2
 R_OUT = P.REAR_BELL_MOUTH_R                  # 90
-R_THROAT_OUT = 76.5                          # inserts at r 73.5
+R_THROAT_OUT = 79.5                          # throat band: 3 mm of wall outside the L-slots
 R_LED_R, R_LED_S = 74.0, (104.0, 114.0)      # LED rim band: 25-30 cm of strip on the 46 cm circumference
 R_LIP_R = 78.0                               # the mouth lip: the curtain sits against its inner face
 R_LIP_T = 4.0
@@ -98,10 +98,8 @@ def _r_outer(s):
 def rear_profile():
     s0 = S.CUT - 10
     return [
-        (S.HAND_R, s0),
-        (S.HAND_R, R_LED_S[0] - 4.0),          # throat (= the hand opening)
-        (R_LED_R, R_LED_S[0]),                 # 45 deg chamfer
-        (R_LED_R, R_LED_S[1]),                 # LED band
+        (R_LED_R, s0),                         # bore over the bayonet collar, then the LED band
+        (R_LED_R, R_LED_S[1]),
         _meet_45(R_LED_R, R_LED_S[1], _r_outer, R_WALL),       # 45 deg chamfer out to the wall
         (R_OUT - R_WALL, R_MOUTH_BAND_S),      # inner cone
         (R_OUT - R_WALL, R_LIP_S),
@@ -119,29 +117,36 @@ def _revolve(pts):
     return cq.Workplane('XZ').polyline(pts).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
 
 
-def _bell(pts, screw_r, up):
-    """up: +1 if the bell frame's +Y ends up as assembly +Z (front bell), -1 if as -Z (rear bell)."""
+def _bell(pts, sign):
+    """The revolved bell, cut by the sphere, with its 3 L-slots, click bumps and the lock screw's hole."""
     b = _revolve(pts).cut(cq.Workplane('XY').sphere(R))
-    for a in S.BELL_SCREW_ANGLES:            # inserts from the throat face, matching the sphere's pads
-        x, y = screw_r * math.cos(math.radians(a)), up * screw_r * math.sin(math.radians(a))
-        s0 = insert_entry(screw_r)
-        b = b.cut(cq.Workplane('XY').workplane(offset=s0 - 5.0).center(x, y)
-                  .circle(P.M3_INSERT_HOLE / 2).extrude(5.0 + P.M3_INSERT_DEPTH))
-    return b
-
-
-def insert_entry(screw_r):
-    """The throat face is the sphere's surface, tilted asin(r/R) across the insert: a full 1 mm wall around the bore
-    starts this far out."""
-    return _s_surface(screw_r) + (P.M3_INSERT_HOLE / 2 + 1.0) * math.tan(math.asin(screw_r / R))
+    r, ro, s_end, (l0, l1) = S.collar_dims(sign)
+    bore = ro + P.FIT
+    groove = ro + S.LUG_D + P.FIT
+    s0, s1 = l0 - S.LUG_D - 1.0, l1 + 0.5                 # the leg clears the lug and its 45 deg underside
+    hs = math.degrees((S.LUG_W / 2 + 1.0) / bore)
+    for a in S.BELL_LUG_ANGLES:
+        lock = S.bell_frame_angle(sign, a)
+        entry = S.bell_frame_angle(sign, S.entry_angle(sign, a))
+        lo, hi = sorted((lock, entry))
+        b = b.cut(S.sector(bore - 0.5, groove, entry - hs, entry + hs, S.CUT - 10, s1))   # entry slot from the throat face
+        b = b.cut(S.sector(bore - 0.5, groove, lo - hs, hi + hs, s0, s1))                  # the leg
+        bump = lock + (6.0 + math.degrees(S.LUG_W / 2 / bore)) * (1 if entry > lock else -1)
+        b = b.union(S.sector(groove - 0.5, groove + 0.1, bump - 0.8, bump + 0.8, s0, s1))   # 0.5 mm click bump
+    ab = S.bell_frame_angle(sign, S.BELL_LOCK_ANGLE)
+    sl = S.lock_s(sign)
+    out = (F_THROAT_OUT if sign < 0 else R_THROAT_OUT) + 1
+    hole = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.M3_CLEAR / 2).extrude(out - bore + 1)
+    cb = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.M3_HEAD_D / 2 + 0.3).extrude(1 + 1.5)
+    return b.cut(hole.union(cb).rotate((0, 0, 0), (0, 0, 1), ab))
 
 
 def bell_front():
-    return _bell(front_profile(), S.FRONT_BELL_SCREW_R, +1)
+    return _bell(front_profile(), -1)
 
 
 def bell_rear():
-    b = _bell(rear_profile(), S.REAR_BELL_SCREW_R, -1)
+    b = _bell(rear_profile(), +1)
     for a in CLAMP_SCREW_ANGLES:             # countersunk clamp screws through the lip (top = -Y in this frame)
         x, y = CLAMP_SCREW_R * math.cos(math.radians(a)), -CLAMP_SCREW_R * math.sin(math.radians(a))
         b = b.cut(cq.Workplane('XY').workplane(offset=R_LIP_S - 1).center(x, y).circle(P.M3_CLEAR / 2).extrude(R_LIP_T + 2))

@@ -28,9 +28,8 @@ for sx in (-1, 1):
     for y, z in S.PIVOT_SCREWS:
         x = math.sqrt(S.R_OUT ** 2 - y * y - z * z) - S.PIVOT_ENTRY
         add('sphere_front' if y < 0 else 'sphere_rear', (sx * x, y, z), (-sx, 0, 0))
-for n, r, up in (('bell_front', S.FRONT_BELL_SCREW_R, 1), ('bell_rear', S.REAR_BELL_SCREW_R, -1)):
-    for a in S.BELL_SCREW_ANGLES:
-        x, y = pol(r, a); add(n, (x, up * y, BL.insert_entry(r)), (0, 0, 1))
+for sign, n in ((-1, 'sphere_front'), (1, 'sphere_rear')):   # bell lock screws: inserts in the collars, from below
+    add(n, (0, sign * S.lock_s(sign), -S.collar_dims(sign)[1]), (0, 0, 1))
 for a in BL.CLAMP_SCREW_ANGLES: add('curtain_clamp', (*pol(BL.CLAMP_SCREW_R, a), 0), (0, 0, 1))
 for a in F.JOINT_ANGLES:
     for r, z in ((F.SPIGOT_R, F.Z_DRUM_SCREWS), (F.RISER_R, F.Z_SPHERE_SCREWS)):
@@ -57,7 +56,7 @@ for i, (n, p, d) in enumerate(rows):
     blocked = volume(bore.intersect(solid)); missing = volume(wall.cut(solid)); opened = volume(end.cut(solid))
     print(i + 1, n, 'blocked', round(blocked, 4), 'missing 1mm wall', round(missing, 4), 'missing end', round(opened, 4), flush=True)
     if max(blocked, missing, opened) > .02: fail.append((n, p, blocked, missing, opened))
-assert len(rows) == 35, len(rows)
+assert len(rows) == 31, len(rows)
 assert not fail, fail
 # Regression controls: detect the old 2.7 mm bore and a shallow 2 mm floor.
 p, d = (0, 0, 0), (0, 0, 1)
@@ -76,11 +75,9 @@ for m in mods:
             placed[n] = place(wp, pl.get(n))
 ZC = P.Z_SPHERE_CENTER
 shanks = []   # (label, start point, direction, length, parts it passes through)
-for a in S.BELL_SCREW_ANGLES:   # M3x12 (front) and M3x14 (rear) from the pads inside the sphere into the bells
-    x, z = pol(S.FRONT_BELL_SCREW_R, a)
-    shanks.append(('front bell', (x, -S.FRONT_PAD_Y, ZC + z), (0, -1, 0), 12, ('sphere_front', 'bell_front')))
-    x, z = pol(S.REAR_BELL_SCREW_R, a)
-    shanks.append(('rear bell', (x, S.REAR_PAD_Y, ZC + z), (0, 1, 0), 14, ('sphere_rear', 'bell_rear')))
+for sign, n, half in ((-1, 'bell_front', 'sphere_front'), (1, 'bell_rear', 'sphere_rear')):   # M3x10 bell locks, from below
+    out = (BL.F_THROAT_OUT if sign < 0 else BL.R_THROAT_OUT) + 1 - 2.5      # the counterbore's floor
+    shanks.append(('bell lock', (0, sign * S.lock_s(sign), ZC - out), (0, 0, 1), 10, (n, half)))
 for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x20 from the pivot's counterbore
     for y, z in S.PIVOT_SCREWS:
         shanks.append(('pivot', (sx * (H.PIVOT_X1 - 3.0), y, ZC + z), (-sx, 0, 0), 20, (n, 'sphere_front' if y < 0 else 'sphere_rear')))
@@ -108,7 +105,20 @@ print(f'{len(shanks)} screw shanks checked through their parts')
 assert not bad, bad
 # negative control: a shank 3 mm off its holes must be caught
 p0 = shanks[0][1]
-assert inter_volume(cylinder((p0[0] + 3, p0[1], p0[2]), (0, -1, 0), 1.4, 0, 12), placed['bell_front']) > 1
+assert inter_volume(cylinder((p0[0] + 3, p0[1], p0[2]), (0, 0, 1), 1.4, 0, 10), placed['bell_front']) > 1
+
+# Bayonet bells: locked they clear the sphere; turned back BELL_TWIST they pull straight off; turned the wrong way, the
+# lugs block. Positive turns are about each bell's outward axis (anticlockwise seen from outside: unlocking).
+for sign, n, half in ((-1, 'bell_front', 'sphere_front'), (1, 'bell_rear', 'sphere_rear')):
+    turn = lambda w, t, s=sign: w.rotate((0, 0, ZC), (0, s, ZC), t)
+    bell, shell = placed[n], placed[half]
+    assert inter_volume(bell, shell) < .01, n
+    assert inter_volume(turn(bell, 20), shell) < .01 and inter_volume(turn(bell, S.BELL_TWIST), shell) < .01, n
+    for d in (3, 6, 12):
+        assert inter_volume(turn(bell, S.BELL_TWIST).translate((0, sign * d, 0)), shell) < .01, (n, d)
+    assert inter_volume(turn(bell, -5), shell) > 50, n
+    assert inter_volume(bell.translate((0, sign * 3, 0)), shell) > 10, n   # locked, it cannot pull off (1 mm play)
+print('BELL BAYONETS OK: lock, unlock path, wrong-way stop')
 
 # Insert boss under the bay floor vs the foot's notch, at the real assembly height.
 floor = solids['bay_floor'].translate((0, 0, S.Z_ASM + S.BAY_FLOOR_Z))

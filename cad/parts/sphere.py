@@ -39,11 +39,16 @@ FLANGE_SCREW_ANGLES = (30.0, 150.0, 210.0, 330.0)   # in the XZ plane from +X; |
 FLANGE_SCREW_R = FLANGE_R_IN + FLANGE_W / 2 # 83.3
 BOSS_L = 9.0                                # insert boss length along -Y on the front half
 
-# rev C openings and the bell screws: 3 M3 per bell from pads inside the shell into inserts in the bell's throat
-LENS_R, HAND_R = P.LENS_OPENING_R, P.HAND_OPENING_R    # 57, 65
-BELL_SCREW_ANGLES = (90.0, 210.0, 330.0)    # in the XZ plane from +X (one on top, two below)
-FRONT_BELL_SCREW_R, REAR_BELL_SCREW_R = LENS_R + 4.0, HAND_R + 3.5   # 61, 73.5
-FRONT_PAD_Y, REAR_PAD_Y = 89.0, 79.0        # |y| of each pad's flat face (screw head seat): M3x12 front, M3x14 rear, ~5 mm of thread
+# rev C openings and the bell bayonets (2026-10-23): a collar stands out round each opening with 3 lugs; the bell
+# slides over it, turns BELL_TWIST and clicks; one M3 from below through the bell's throat into the collar locks it.
+# Bell frame: the bell's axis is +Z (s = distance out from the sphere centre); sign -1 front (-Y), +1 rear (+Y).
+LENS_R, HAND_R = P.LENS_OPENING_R, P.HAND_OPENING_R    # 57, 70
+COLLAR_T, LUG_D, LUG_H, LUG_W = 3.7, 2.0, 5.0, 10.0    # collar wall; lugs radial, along the axis, tangential
+COLLAR_OUT = 7.6                            # collar end, this far out from the sphere surface at the opening edge
+BELL_LUG_ANGLES = (90.0, 210.0, 330.0)      # locked lug angles in the XZ plane from +X (270, the bottom, has the lock)
+BELL_TWIST = 30.0                           # each bell goes on this far anticlockwise of locked and turns clockwise to lock
+                                            # (both as seen from outside, like a jar lid)
+BELL_LOCK_ANGLE = 270.0
 PAD_R = 4.5
 PIVOT_ENTRY = 0.6                           # the curved surface over a 4 mm bore: full wall starts this far in
 # ring pivots for the handle: each pivot boss (parts/handle.py) sits over the seam and screws into both halves
@@ -116,17 +121,63 @@ def y_cyl(r, y0, y1, x=0.0, z=0.0):
     return cq.Workplane('XZ').workplane(offset=-hi).center(x, z).circle(r).extrude(hi - lo)
 
 
-def bell_pads(sign):
-    """Pads inside the shell around an opening (sign -1 front, +1 rear): flat seat for the screw head at |y| = pad
-    face, an M3 clearance hole through pad and shell into the bell's insert."""
-    rs, face = (FRONT_BELL_SCREW_R, FRONT_PAD_Y) if sign < 0 else (REAR_BELL_SCREW_R, REAR_PAD_Y)
-    adds, cuts = [], []
-    for a in BELL_SCREW_ANGLES:
-        x, z = rs * math.cos(math.radians(a)), rs * math.sin(math.radians(a))
-        adds.append(y_cyl(PAD_R, sign * face, sign * (R_OUT + 1), x, z).intersect(cq.Workplane('XY').sphere(R_OUT - 0.2)))
-        cuts.append(y_cyl(P.M3_CLEAR / 2, sign * (face - 1), sign * (R_OUT + 2), x, z))
-        cuts.append(y_cyl(P.M3_HEAD_D / 2 + 0.4, 0, sign * face, x, z))    # head clearance in front of the seat
-    return adds, cuts
+def bell_frame_angle(sign, a):
+    """Assembly XZ angle -> bell-frame angle (the rear bell's frame is upside down: its +Y is the assembly's -Z)."""
+    return a if sign < 0 else -a
+
+
+def entry_angle(sign, a):
+    """Assembly XZ angle where the lug at locked angle a enters its bell's L-slot (clockwise to lock, from outside)."""
+    return a + sign * BELL_TWIST
+
+
+def to_sphere(wp, sign):
+    """Bell frame -> sphere frame."""
+    return wp.rotate((0, 0, 0), (1, 0, 0), 90 if sign < 0 else -90)
+
+
+def sector(r0, r1, a0, a1, z0, z1):
+    """Annular sector r0..r1 between angles a0 < a1 (deg) about Z, z0..z1."""
+    n = max(4, int((a1 - a0) / 3) + 1)
+    pt = lambda r, a: (r * math.cos(math.radians(a)), r * math.sin(math.radians(a)))
+    pts = [pt(r1, a0 + (a1 - a0) * i / n) for i in range(n + 1)] + [pt(r0, a1 - (a1 - a0) * i / n) for i in range(n + 1)]
+    return cq.Workplane('XY').workplane(offset=z0).polyline(pts).close().extrude(z1 - z0)
+
+
+def collar_dims(sign):
+    """(opening r, collar outer r, collar end s, lug s range) for the front (-1) or rear (+1) opening."""
+    r = LENS_R if sign < 0 else HAND_R
+    s_end = math.sqrt(R_OUT ** 2 - r * r) + COLLAR_OUT
+    return r, r + COLLAR_T, s_end, (s_end - 6.0, s_end - 1.0)
+
+
+def lock_s(sign):
+    return collar_dims(sign)[2] - 3.5
+
+
+def bell_collar(sign):
+    """Bayonet collar round an opening, in the bell frame: 3 lugs (45 deg undersides, printed dome up) and a boss inside
+    it at the bottom for the lock screw's insert (45 deg underside too)."""
+    r, ro, s_end, (l0, l1) = collar_dims(sign)
+    c = cq.Workplane('XY').circle(ro).circle(r).extrude(s_end)
+    c = c.cut(cq.Workplane('XY').sphere(R_IN + 0.5))               # stops inside the shell
+    half = math.degrees(LUG_W / 2 / ro)
+    for a in BELL_LUG_ANGLES:
+        ab = bell_frame_angle(sign, a)
+        lug = sector(ro - 0.5, ro + LUG_D, ab - half, ab + half, l0, l1)
+        prof = [(ro - 0.5, l0 - LUG_D - 0.5), (ro + LUG_D, l0), (ro + LUG_D, l0 + 0.01), (ro - 0.5, l0 + 0.01)]
+        ch = cq.Workplane('XZ').polyline(prof).close().extrude(LUG_W / 2, both=True).rotate((0, 0, 0), (0, 0, 1), ab)
+        c = c.union(lug).union(ch)
+    ab = bell_frame_angle(sign, BELL_LOCK_ANGLE)
+    sl = lock_s(sign)
+    r0 = ro - (P.M3_INSERT_DEPTH + 1.5)
+    prof = [(r0, sl - 4.0), (ro - 0.5, sl - 4.0 - (ro - 0.5 - r0)), (ro - 0.5, s_end), (r0, s_end)]
+    boss = cq.Workplane('XZ').polyline(prof).close().extrude(5.0, both=True).rotate((0, 0, 0), (0, 0, 1), ab)
+    boss = boss.cut(cq.Workplane('XY').sphere(R_IN - 0.01).cut(cq.Workplane('XY').circle(ro).extrude(200)))
+    c = c.union(boss)
+    hole = cq.Workplane(cq.Plane(origin=(ro + 0.5, 0, sl), normal=(-1, 0, 0))).circle(P.M3_INSERT_HOLE / 2) \
+        .extrude(P.M3_INSERT_DEPTH + 0.5).rotate((0, 0, 0), (0, 0, 1), ab)
+    return c.intersect(cq.Workplane('XY').sphere(R_OUT + 40)), hole
 
 
 def pivot_bosses(half):
@@ -187,27 +238,27 @@ def build_halves():
     front = s.intersect(big_box(-130, 130, -130, 0, -130, 130))
     rear = s.intersect(big_box(-130, 130, 0, 130, -130, 130))
 
-    # ---- front: lens opening, bell pads, flange bosses, pivot bosses
+    # ---- front: lens opening and its bayonet collar, flange bosses, pivot bosses
     adds, fcuts = front_bosses()
-    for fn in (lambda: bell_pads(-1), lambda: pivot_bosses('front')):
-        a, c = fn()
-        adds += a
-        fcuts += c
+    a, c = pivot_bosses('front')
+    adds += a
+    fcuts += c
     for a in adds:
         front = front.union(a)
     front = front.cut(y_cyl(LENS_R, -40, -130))
+    collar, hole = bell_collar(-1)
+    front = front.union(to_sphere(collar, -1)).cut(to_sphere(hole, -1))
     for c in fcuts:
         front = front.cut(c)
 
-    # ---- rear: flange, hand opening (the fist goes in here), bell pads, pivot bosses
+    # ---- rear: flange, hand opening (the fist goes in here) and its bayonet collar, pivot bosses
     rear = rear.union(flange_solid())
-    adds, rcuts = bell_pads(+1)
-    a, c = pivot_bosses('rear')
-    adds += a
-    rcuts += c
+    adds, rcuts = pivot_bosses('rear')
     for a in adds:
         rear = rear.union(a)
     rear = rear.cut(y_cyl(HAND_R, 40, 130))
+    collar, hole = bell_collar(+1)
+    rear = rear.union(to_sphere(collar, +1)).cut(to_sphere(hole, +1))
     for c in rcuts:
         rear = rear.cut(c)
     return front, rear
