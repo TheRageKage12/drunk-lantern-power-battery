@@ -64,12 +64,12 @@ def build():
         # The splitter's straight male plug in the pack port (pack LED face down, port at PACK_PORT_X), its cord folded
         # back in a U-turn that reaches BATTERY_PLUG_TURN from the battery's end, then up toward the deck.
         'battery_connector_envelope': compound([
-            cq.Workplane('XZ').workplane(offset=P.POWERBANK_L/2-P.PACK_Y).center(P.PACK_PORT_X, P.FLOOR+P.POWERBANK_T/2)
+            cq.Workplane('XZ').workplane(offset=P.POWERBANK_L/2-P.PACK_Y).center(P.PACK_PORT_X, P.PACK_Z+P.POWERBANK_T/2)
               .circle(P.BATTERY_PLUG_D/2).extrude(P.BATTERY_PLUG_OUT),
             box(P.PACK_PORT_X-4, P.PACK_PORT_X+4, P.PACK_Y-P.POWERBANK_L/2-P.BATTERY_PLUG_TURN, P.PACK_Y-P.POWERBANK_L/2-P.BATTERY_PLUG_OUT+1,
-                P.FLOOR+P.POWERBANK_T/2-4, P.FLOOR+P.POWERBANK_T/2+P.BATTERY_PLUG_D/2+5),
+                P.PACK_Z+P.POWERBANK_T/2-4, P.PACK_Z+P.POWERBANK_T/2+P.BATTERY_PLUG_D/2+5),
             box(P.PACK_PORT_X-3, P.PACK_PORT_X+3, P.PACK_Y-P.POWERBANK_L/2-P.BATTERY_PLUG_TURN, P.PACK_Y-P.POWERBANK_L/2,
-                P.FLOOR+P.POWERBANK_T/2+P.BATTERY_PLUG_D/2, P.BATTERY_PLUG_Z1)]),
+                P.PACK_Z+P.POWERBANK_T/2+P.BATTERY_PLUG_D/2, P.BATTERY_PLUG_Z1)]),
     }
     bx, by = B.BOOST_XY
     out['buck_envelope'] = box(bx-P.BUCK_W/2, bx+P.BUCK_W/2,

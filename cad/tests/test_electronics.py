@@ -12,7 +12,7 @@ placed = {n: place(s, B.placements().get(n)) for n, s in parts.items()}
 electronic = E.build()
 
 assert B.DECK_Z0 == 44 and B.DECK_TOP == 47, 'Battery thickness must not move the deck loads'
-assert B.DECK_GAP == 17
+assert B.DECK_GAP == 16   # deck at z=44 over the pack on its 1 mm bed
 for n in ('base_tray', 'base_deck', 'base'):
     assert inter_volume(placed['powerbank_envelope'], placed[n]) < .5, n
 assert inter_volume(electronic['board_wiring_envelope'], placed['base_deck']) < .5
@@ -24,11 +24,11 @@ forward = inter_volume(old_plug, electronic['board_components_envelope'])
 reverse = inter_volume(electronic['board_components_envelope'], old_plug)
 assert forward > .5 and abs(forward-reverse) < .01
 
-# A <=1 mm strap must pass both floor slots, under the floor and over the pack
+# A <=2 mm strap must pass both floor slots, under the floor and over the pack
 # without intersecting the side rails or the six pillars.
 xslot = B.BANK_HALF_W+B.BANK_END_STOP_GAP+B.BANK_END_STOP_T+1+B.STRAP_SLOT_W/2
 y0, y1 = P.BATTERY_STRAP_Y-10, P.BATTERY_STRAP_Y+10
-top = P.FLOOR+P.POWERBANK_T
+top = P.PACK_Z+P.POWERBANK_T
 strap = E.compound([
     E.box(-xslot, xslot, y0, y1, 0, P.BATTERY_STRAP_T),
     E.box(-xslot, xslot, y0, y1, top, top+P.BATTERY_STRAP_T),

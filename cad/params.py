@@ -61,7 +61,9 @@ GLASS_H = 62.0
 POWERBANK_L, POWERBANK_W, POWERBANK_T = 105.0, 65.0, 25.0  # TalentCell YB1203000; connector/switch end toward -Y
 CARTRIDGE_DECK_Z = 44.0     # deck underside; independent of pack thickness to preserve pump/jar/board heights
 BATTERY_STRAP_Y = 25.0      # strap crosses here, clear of the deck pillars at y=0 and +/-55
-BATTERY_STRAP_T = 1.0       # recessed underfloor strap allowance; use <=1 mm strap beneath the tray
+BATTERY_STRAP_T = 2.0       # recessed underfloor strap allowance (VELCRO One-Wrap measured ~1 mm; 2 mm for margin)
+PACK_BED_T = 1.0            # the pack lies on a 1 mm bed, so the 2 mm recess under it still leaves 1 mm of floor
+PACK_Z = FLOOR + PACK_BED_T  # underside of the pack
 # Electronics fit limits, not claims that unmeasured supplier parts have these dimensions.
 PERFBOARD_W, PERFBOARD_H, PERFBOARD_T = 70.0, 50.0, 1.2
 PERFBOARD_BOTTOM_GAP = 2.0

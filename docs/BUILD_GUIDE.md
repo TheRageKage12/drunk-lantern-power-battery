@@ -134,7 +134,7 @@ quantities, prices and who has what.
 | 16 | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
 | 17 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 10), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
 | 18 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1.50 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
-| 19 | Straps and zip ties | Hardware store: VELCRO One-Wrap roll, 3/4" x 12 ft, model 90340 (Kevin has it), plus ~10 small zip ties (2.5 mm wide) | ~$9 | Cut the roll into 4 straps: two for the pump, one for the jar, one for the battery. The battery strap's lower run sits in a 1 mm recess under the tray, so check that it is no thicker than 1 mm. The zip ties hold the LM2596 and tidy the cables. |
+| 19 | Straps and zip ties | Hardware store: VELCRO One-Wrap roll, 3/4" x 12 ft, model 90340 (Kevin has it), plus ~10 small zip ties (2.5 mm wide) | ~$9 | Cut the roll into 4 straps: two for the pump, one for the jar, one for the battery. The battery strap's lower run sits in a 2 mm recess under the tray, so it must be no thicker than 2 mm (One-Wrap measures about 1 mm). The zip ties hold the LM2596 and tidy the cables. |
 | 20 | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
 | 21 | Food-safe jar | Micro Homebrew (Kenmore) or any kitchen store | ~$5 | **No bigger than 73 mm across (lid included) and 76 mm tall**; measure it in the store with the lid on. The lid must be drillable. |
 | 22 | Shot glass, 1.5 oz | Bargreen Ellingson or any kitchen store | ~$4 | **Up to 52 mm across the top and 62 mm tall** (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps. |
@@ -662,16 +662,16 @@ Bottom to top. "Left" and "right" are as you see them standing at the hand openi
      through the slots beside it. Check that no solder joint on its underside rests on a support.
    - **Power switch.** S1 goes up into the pocket's ceiling from below, nut tight.
    - **Strap first.** Thread a 20 mm strap through both battery slots before fitting the pack. Its lower run sits in
-     the recess under the tray and must be no thicker than 1 mm.
-   - **Battery.** Push the splitter's male plug into the battery's port. Lay the TalentCell flat, 7 mm toward you
-     from the middle:
+     the recess under the tray and must be no thicker than 2 mm.
+   - **Battery.** Push the splitter's male plug into the battery's port. Lay the TalentCell flat on its 1 mm printed bed, 7 mm toward
+     you from the middle:
      - **LED face down**, the five fuel-gauge dots over the thin floor slot;
      - **connector and switch end away from you**, against the low end stop;
      - the plug's cord folded back in a U-turn over the plug. Plug and U-turn reach about 35 mm from the battery's
        end, which leaves ~6 mm to the drum wall.
 
      The [battery seat drawing](images/battery-seat.png) has the measurements. Turn the battery's own switch ON (it
-     stays ON), then tighten the strap: the deck is 17 mm above the case and does not hold it down.
+     stays ON), then tighten the strap: the deck is 16 mm above the case and does not hold it down.
    - **Charge socket.** Tuck the splitter's female end beside the battery's end, where you can reach it with the
      lantern lifted off, and tie it to a floor tie slot so it can't fall into the pump's way.
    - **Leads.** Route and tie the battery lead along the tray edge to S1, clear of the retaining bosses. Bring the
