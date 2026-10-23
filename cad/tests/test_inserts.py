@@ -139,11 +139,11 @@ for a in T.CAP_FLOOR_SCREW_ANGLES:   # thumbscrews down through the cap floor; h
     p = (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR)
     shanks.append(('cap floor', p, (0, 0, -1), P.THUMB_THREAD_L, ('cap_floor', 'top_cap')))
     clear_of_all(knob(p, (0, 0, 1), 0), 'cap floor thumbscrew head')
-for a in BL.CLAMP_SCREW_ANGLES:   # M3x8 from the clamp's back (inside the bell) into the lip's pilots
+for a in BL.CLAMP_SCREW_ANGLES:   # countersunk M3x8 flush in the clamp ring's back (inside the bell) into the lip's pilots
     x, z = pol(BL.CLAMP_SCREW_R, a)
-    p = (x, BL.R_LIP_S - BL.CURTAIN_T - BL.CLAMP_T + BL.CLAMP_CB, ZC + z)
-    shanks.append(('curtain clamp', p, (0, 1, 0), 8, ('curtain_clamp',)))
-    clear_of_all(cylinder(p, (0, -1, 0), P.M3_HEAD_D / 2 - .3, .05, 3.0), 'clamp screw head')
+    back = BL.R_LIP_S - BL.CURTAIN_T - BL.CLAMP_T
+    shanks.append(('curtain clamp', (x, back, ZC + z), (0, 1, 0), 8, ('curtain_clamp',)))
+    assert back + 8 <= BL.R_LIP_S + BL.CLAMP_PILOT_DEPTH, 'clamp screw longer than its pilot'
 for a in B.BASE_JOINT_ANGLES:   # the green caps fit over the heads, flush with the band
     p = (*pol(B.R_MAX - P.SCREW_CAP_T, a), B.BASE_JOINT_Z)
     cap = cylinder(p, (*pol(1, a), 0), P.SCREW_CAP_D / 2, 0, P.SCREW_CAP_T)

@@ -4,8 +4,9 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
     bell_front     on the lens opening (-Y). LED collar band behind the lens, the lens on a ledge in front of it.
     bell_rear      on the hand opening (+Y). LED rim band in the throat, the frosted strip curtain held at the mouth.
     diffuser       the front lens: a full round 118 mm white disc (the rev-9 diffuser had 98 mm flats: reprint)
-    curtain_clamp  arc that clamps the curtain's top edge to the inside of the rear bell's mouth lip (3 M3 x 8 from
-                   behind it, inside the bell, into pilots in the lip: the mouth face shows no screws)
+    curtain_clamp  full ring that clamps the one-piece frosted cover's uncut edge to the inside of the rear bell's
+                   mouth lip, holding it flat (6 countersunk M3 x 8 from behind it, inside the bell, into pilots in the
+                   lip: the mouth face shows no screws)
 
 Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
 Its throat slides over the collar round the opening (sphere.bell_collar) and two thumbscrews hold it (2026-10-23): no
@@ -73,7 +74,7 @@ def front_profile():
 R_EDGE = _s_surface(S.HAND_R)                # 91.2
 R_MOUTH = R_EDGE + P.REAR_BELL_L             # 151.2
 R_OUT = P.REAR_BELL_MOUTH_R                  # 90
-R_LED_R, R_LED_S = 74.0, (104.0, 114.0)      # LED rim band: 25-30 cm of strip on the 46 cm circumference
+R_LED_R, R_LED_S = 74.0, (104.0, 114.0)      # LED rim band: a full ring, ~45 cm of strip (2026-10-23, was 25-30 cm)
 R_THROAT_OUT = R_LED_R + S.BELL_THROAT_T     # 82.5: throat band, 8.5 mm wall round the thumbscrews' inserts
 R_LIP_R = 78.0                               # the mouth lip: the curtain sits against its inner face
 R_LIP_T = 4.0
@@ -81,14 +82,14 @@ R_LIP_S = R_MOUTH - R_LIP_T                  # 147.2: lip inner face (curtain se
 R_MOUTH_BAND_S = R_MOUTH - 16.0              # outer: cylindrical mouth band from here
 R_OUTER_CONE_S = 100.0
 R_WALL = 2.8
-CURTAIN_R = 85.5                             # frosted disc radius (cut into vertical strips below its top arc)
+CURTAIN_R = 85.5                             # the one-piece frosted cover (see params CURTAIN_SLITS): 171 mm across
 CURTAIN_T = 0.5
 CLAMP_R = (R_LIP_R, R_OUT - R_WALL - 0.5)    # 78 .. 85.5
-CLAMP_T = 8.0
-CLAMP_CB = 3.5                               # head counterbore in the clamp's back: an M3 x 8 then bites 3 mm into the lip
+CLAMP_T = 4.5                                # a countersunk M3 x 8 flush in its back bites 3 mm into the lip
+CLAMP_CSK = (P.M3_HEAD_D + 0.4, 1.9)         # countersink: diameter at the face, depth (90 deg flat head)
 CLAMP_PILOT, CLAMP_PILOT_DEPTH = 2.5, 3.2    # self-tapping pilot in the 4 mm lip: 0.8 mm (4 layers) left on the mouth face
 CLAMP_SCREW_R = sum(CLAMP_R) / 2             # 81.75
-CLAMP_SCREW_ANGLES = (90.0 - 55.0, 90.0, 90.0 + 55.0)   # around the bell axis, from +X (90 = top)
+CLAMP_SCREW_ANGLES = tuple(30.0 + 60.0 * k for k in range(6))   # around the bell axis, from +X
 
 
 def _r_outer(s):
@@ -154,20 +155,17 @@ def diffuser():
 
 
 def curtain_clamp():
-    """Arc over the top of the curtain (+-CURTAIN_HALF_ANGLE): it presses the curtain's top edge against the rear bell's
-    lip; 3 M3 x 8 from its back (inside the bell), heads counterbored, through the curtain into pilots in the lip.
-    Printed flat, curtain face down; frame: the bell axis at the origin, the arc centred on +Y (= up once placed), z = 0 the
-    face against the curtain."""
+    """Full ring: it presses the cover's uncut edge against the rear bell's lip all the way round, so the cover stays
+    flat and its flaps spring back closed; 6 countersunk M3 x 8 from its back (inside the bell), through the cover into
+    pilots in the lip (punch the cover's 6 holes using the ring as a guide). Printed flat, curtain face down; frame: the
+    bell axis at the origin, z = 0 the face against the curtain."""
     r0, r1 = CLAMP_R
-    a = P.CURTAIN_HALF_ANGLE
-    ring = cq.Workplane('XY').circle(r1).circle(r0).extrude(CLAMP_T)
-    pts = [(0, 0)] + [(1.5 * r1 * math.cos(math.radians(90 + t)), 1.5 * r1 * math.sin(math.radians(90 + t)))
-                      for t in (-a, -a / 2, 0, a / 2, a)]
-    c = ring.intersect(cq.Workplane('XY').polyline(pts).close().extrude(CLAMP_T))
+    c = cq.Workplane('XY').circle(r1).circle(r0).extrude(CLAMP_T)
+    d, h = CLAMP_CSK
     for t in CLAMP_SCREW_ANGLES:
         x, y = CLAMP_SCREW_R * math.cos(math.radians(t)), CLAMP_SCREW_R * math.sin(math.radians(t))
         c = c.cut(cq.Workplane('XY').workplane(offset=-0.5).center(x, y).circle(P.M3_CLEAR / 2).extrude(CLAMP_T + 1))
-        c = c.cut(cq.Workplane('XY').workplane(offset=CLAMP_T - CLAMP_CB).center(x, y).circle(P.M3_HEAD_D / 2 + 0.2).extrude(CLAMP_CB + 0.5))
+        c = c.cut(cq.Workplane('XY').add(cq.Solid.makeCone(P.M3_CLEAR / 2, d / 2, h, pnt=cq.Vector(x, y, CLAMP_T - h + 0.001))))
     return c
 
 
@@ -204,7 +202,7 @@ def placements():
         'bell_rear': [flip(R_MOUTH), rear],
         'diffuser': [((0, 0, 1), 0, (0, 0, F_LEDGE_S)), front],
         # printed flat with its arc on +Y; turned 180 so the arc is on top once in the rear bell, against the lip
-        'curtain_clamp': [((1, 0, 0), 180, (0, 0, R_LIP_S - CURTAIN_T)), rear],   # X-flip puts the arc on -Y and the face up
+        'curtain_clamp': [((1, 0, 0), 180, (0, 0, R_LIP_S - CURTAIN_T)), rear],   # flipped: its face against the cover
         'front_led_envelope': front,
         'rear_led_envelope': rear,
         'curtain_envelope': rear,

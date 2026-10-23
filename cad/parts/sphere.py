@@ -362,6 +362,42 @@ def glass_well():
     return w.union(ridge.intersect(slot(P.WELL_ID + 0.2, WELL_L + 0.2, 0, top)))
 
 
+# LED panel (2026-10-23, Kevin): a plain white panel on the wall's four posts, in front of everything on the display side
+# (nozzle, glass, the wall's back), with the 4 LED rows on ITS front facing the lens ~5 cm away. It hides the hardware
+# and the light passes one frosted layer (the lens), not two. The wall's back-face channels are no longer used.
+PANEL_BACK_Y = DIFF_Y - DIFF_T              # -61.0: the posts' free ends
+PANEL_T = 2.4
+PANEL_R, PANEL_Z = 86.0, (WALL_Z0 + 2.5, 74.0)   # round, cut flat over the drip lip and under the top cap's plug
+PANEL_ROWS_Z, PANEL_ROW_L = (-36.0, -12.0, 12.0, 36.0), BACK_ROW_L   # 4 x 10 cm of strip, as on the wall's back before
+PANEL_CH_D = 0.6                            # shallow guide channels for the strips
+PANEL_WIRE_X, PANEL_WIRE_D = 56.0, 4.0      # a lead hole at the end of each row, to the back
+COLLAR_IN, COLLAR_WALL, COLLAR_H = 6.0 + 2 * P.FIT, 1.2, 5.0   # sockets on the back that slip over the posts (+ glue)
+
+
+def led_panel():
+    """Sphere frame. The front face (y = PANEL_BACK_Y - PANEL_T) carries the strips; collars on the back fit the posts."""
+    y0, y1 = PANEL_BACK_Y - PANEL_T, PANEL_BACK_Y
+    p = y_cyl(PANEL_R, y0, y1).intersect(big_box(-130, 130, y0 - 1, y1 + 1, *PANEL_Z))
+    for z in PANEL_ROWS_Z:
+        p = p.cut(big_box(-PANEL_ROW_L / 2, PANEL_ROW_L / 2, y0 - 1, y0 + PANEL_CH_D, z - STRIP_CH_W / 2, z + STRIP_CH_W / 2))
+        p = p.cut(y_cyl(PANEL_WIRE_D / 2, y0 - 1, y1 + 1, PANEL_WIRE_X, z))
+    for (x, zw) in WALL_POSTS:
+        z = WALL_Z0 + zw
+        o, i = COLLAR_IN / 2 + COLLAR_WALL, COLLAR_IN / 2
+        p = p.union(big_box(x - o, x + o, y1 - 0.01, y1 + COLLAR_H, z - o, z + o).cut(big_box(x - i, x + i, y1 - 1, y1 + COLLAR_H + 1, z - i, z + i)))
+    return p
+
+
+def panel_leds():
+    """The 4 strips on the panel's front (2 mm COB strip), for renders and checks."""
+    y0 = PANEL_BACK_Y - PANEL_T + PANEL_CH_D
+    out = None
+    for z in PANEL_ROWS_Z:
+        b = big_box(-PANEL_ROW_L / 2 + 0.5, PANEL_ROW_L / 2 - 0.5, y0 - 2.0, y0 - 0.05, z - 4.0, z + 4.0)
+        out = b if out is None else out.union(b)
+    return out
+
+
 HAND_PATH_Y1 = 160.0                        # rev C: the hand and the glass travel out past the rear bell's mouth (151)
 
 
@@ -402,8 +438,8 @@ def nozzle_guide():
 
 
 def lock_wall():
-    """The wall just inside the hand port: the lock on its front face, the nozzle hidden behind it, LED strips on
-    both faces. Wall-local frame: x as the sphere, y = 0 the back face (display side), y = WALL_T the front face
+    """The wall just inside the hand port: the lock on its front face, the nozzle hidden behind it, LED strips on its
+    front face (the back-face rows moved to led_panel on 2026-10-23; their channels stay, unused). Wall-local frame: x as the sphere, y = 0 the back face (display side), y = WALL_T the front face
     (your side), z = 0 the bay floor top."""
     T = WALL_T
     w = big_box(-WALL_W / 2, WALL_W / 2, 0, T, 0, WALL_H)
@@ -452,6 +488,8 @@ def build():
         'glass_well': glass_well(),
         'lock_wall': lock_wall().rotate((0, 0, 0), (1, 0, 0), -90),     # lie flat: back face (rows, posts) up
         'nozzle_guide': nozzle_guide(),
+        'led_panel': led_panel().rotate((0, 0, 0), (1, 0, 0), 90).translate((0, 0, PANEL_T - PANEL_BACK_Y)),   # front face down
+        'panel_led_envelope': panel_leds(),
         'glass_envelope': cq.Workplane('XY').add(cq.Solid.makeCone(P.GLASS_D_BASE / 2 + 1.0, P.GLASS_D_TOP / 2, P.GLASS_H)),
         'glass_path_envelope': glass_path(),
         # the hand: a fist (ring face on the socket), and the fist's path in through the rear bell (rev C)
@@ -486,6 +524,8 @@ def placements():
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
         'lock_wall': unflat('lock_wall', 90, (0, WALL_BACK_Y, Z + WALL_Z0)),
         'nozzle_guide': ((0, 0, 1), 0, (gx, gy, Z + gz)),
+        'led_panel': [((0, 0, 1), 0, (0, 0, PANEL_BACK_Y - PANEL_T)), ((1, 0, 0), -90, (0, 0, Z))],
+        'panel_led_envelope': ((0, 0, 1), 0, (0, 0, Z)),
         'glass_envelope': ((0, 0, 1), 0, (0, P.GLASS_POUR_Y, Z + GLASS_BASE_Z)),
         'glass_path_envelope': ((0, 0, 1), 0, (0, 0, Z)),
         'fist_envelope': ((0, 0, 1), 0, (0, face_y, hand_z)),

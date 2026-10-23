@@ -239,5 +239,7 @@ NOZZLE_BEND_DEG = 135.0      # past horizontal: the tip points 45 deg down, so t
                              # instead of being thrown across it (a level tip threw it onto the rim at 70 % speed)
 FIST_W, FIST_H, FIST_LEN, FOREARM_R = 106.0, 76.0, 85.0, 30.0   # owner's fist is under 4 x 3 in
 FIST_Z_OFFSET = 3.0          # fist centre above the ring centre
-# rev C: the strip curtain is a frosted disc slit into strips, clamped by its upper arc in the rear bell's mouth.
-CURTAIN_HALF_ANGLE = 70.0    # clamped arc either side of the top
+# 2026-10-23 (Kevin): the hand-side cover is ONE frosted polypropylene disc (from the binder divider) so it looks like the
+# front window: CURTAIN_SLITS cuts from the centre, CURTAIN_SLIT_R long, each ending in a small punched hole, make
+# springy flaps that fold round the arm and close flat again; the uncut ring is clamped all round in the rear bell's mouth.
+CURTAIN_SLITS, CURTAIN_SLIT_R, CURTAIN_HOLE_D = 8, 62.0, 3.0
