@@ -402,3 +402,28 @@ still limits to measure, not measurements.
 
 Checks after the review: build 0 problems, all four tests OK, firmware 20/20, compile 63136 bytes.
 
+
+## 2026-10-23 — rev C (classic battery shape), branch `claude/classic-battery`
+
+Kevin's redesign, built and refined in one day (decisions and reasons in `CONTEXT.md`, revision C section of
+`cad/DESIGN_CONTRACT.md`). Then the full doc pass for it.
+
+**Done:**
+- CAD: 224 mm sphere with lens and hand bells, foot, 80 mm drum, one-piece cartridge with the 32 oz pouch bay
+  (draining floor, well, tube clip, cover), electronics on a cap floor in the mirrored top cap, emblem lid on a white
+  halo ring, loop handle on ring pivots (printed axles); every fastener hidden (thumbscrews from inside into 6-32
+  inserts, other heads under 25 green caps); white LED panel; full rear LED ring; a 25 cm emblem LED space in the cap;
+  one-piece slit hand-side cover with a full clamp ring; tool prints `thumb_test`, `emblem_jig`, `curtain_stencil`.
+- Docs: build guide rewritten; CONTEXT, README, `cad/README.md`, design contract, board guide; old notes marked
+  superseded; renders, part previews, fluid-path, wiring and interaction diagrams regenerated; cover template PDF.
+- Viewer: every rev C part and envelope, steps 0-16 matching the guide, script hooks; 3.3 MB, self-contained.
+- Videos: now reproducible (`cad/make_videos.py`): build order 1:56 with 17 chapters, exploded 0:15, service 0:19.
+- Sheet: 6-32 inserts, 32 oz pouch (to buy), thumbscrews added; Velcro 2 straps; M3 inserts 17 used.
+
+**Checks:** build 0 problems; `test_inserts` (17 M3 bores, 13 6-32 inserts, 33 shanks, hidden heads), `test_socket`,
+`test_electronics` OK; firmware 20/20, compile 63136 bytes.
+
+**Open (ask Kevin):** see `CONTEXT.md` §6 — spout "rotate 90°", refill procedure, handle rest direction, drum-to-foot
+M3 vs thumbscrews, filament (2.8 kg if solid; slice to check), reach test, `thumb_test` hole size, `RING_ID`, and
+approval for 4 more JST SM 2-pin pairs (~$7) and epoxy. The step-by-step video's step 9 doesn't mention the emblem
+strips yet (the viewer does); re-run `make_videos.py guide` after any further change.

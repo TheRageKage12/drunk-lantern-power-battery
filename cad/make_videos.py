@@ -198,7 +198,7 @@ def explode(pw, d):
         a = math.radians(-37 + SPIN * t)                       # start from the audience side, front right
         d3 = [math.cos(a), math.sin(a), 0.3]
         pg.evaluate(f'viewer.spread({k:.4f})')
-        pg.evaluate(f'viewer.view([{d3[0]:.4f}, {d3[1]:.4f}, {d3[2]}], null, {k:.4f}, {1.3 + 0.25 * k:.4f}); viewer.jump()')
+        pg.evaluate(f'viewer.view([{d3[0]:.4f}, {d3[1]:.4f}, {d3[2]}], null, {k:.4f}, {1.0 + 0.18 * k:.4f}); viewer.jump()')
         text(pg, kick, title, cap, u)
     rec.run(T, each)
     rec.encode(os.path.join(OUT, 'separate-and-assemble.mp4'), 'Lantern exploded assembly')
@@ -221,12 +221,12 @@ def service(pw, d):
     BUILT = {}
     LID_OFF = offsets((g['LID'], [0, 0, 120]))
     LIFT = offsets((g['LANTERN'], [0, 0, 250]))
-    BAG_OUT = offsets((g['LANTERN'], [0, 0, 250]), (['bag_cover'], [-130, 0, 40]), (['bag_envelope'], [0, 0, 120]))
+    BAG_OUT = offsets((g['LANTERN'], [0, 0, 250]), (['bag_cover'], [-110, -70, 30]), (['bag_envelope'], [0, 0, 120]))
     BELLS = offsets((g['FRONT_BELL'], [0, -150, 0]), (g['REAR_BELL'], [0, 150, 0]))
     # frame the camera once round every pose so it holds still
-    pg.evaluate('m => viewer.pose(m)', offsets((g['LANTERN'], [0, 0, 250]), (g['LID'], [0, 0, 120]),
-                                               (g['FRONT_BELL'], [0, -150, 0]), (g['REAR_BELL'], [0, 150, 0])))
-    pg.evaluate('viewer.view([1, -0.8, 0.32])'); pg.evaluate('viewer.jump()')
+    pg.evaluate('m => viewer.pose(m)', offsets((g['LANTERN'], [0, 0, 250]), (g['FRONT_BELL'], [0, -150, 0]),
+                                               (g['REAR_BELL'], [0, 150, 0])))
+    pg.evaluate('viewer.view([-0.75, -1, 0.3], null, 0, 1.12)'); pg.evaluate('viewer.jump()')   # front left: the bag side
     pg.evaluate('m => viewer.pose(m)', BUILT); rec.run(0.6)
 
     T = [0.0]
@@ -243,7 +243,7 @@ def service(pw, d):
     def stay(secs, cap):
         rec.run(secs, lambda t: text(pg, kick, title, cap, (T[0] + t * secs) / total)); T[0] += secs
 
-    stay(1.0, 'Nothing needs a tool except the bells and the top cap.')
+    stay(1.0, 'Everything here comes apart by hand: twist locks and knurled thumbscrews.')
     c = 'Charge or power switch: twist the lid anticlockwise and lift it off. S1 and the charge socket are on the cap floor.'
     go(BUILT, LID_OFF, 1.5, c); stay(1.6, c); go(LID_OFF, BUILT, 1.0, c)
     c = 'Refill: twist the lantern a little anticlockwise and lift it off by the handle. The cartridge stays on the table.'

@@ -218,6 +218,7 @@ const P = {
   charge_socket_envelope:    ['Charge socket', '#545b62', 'bought', [0,0,165], 'Zip-tied on the cap floor; reached with the lid off.'],
   front_led_envelope:        ['Front bell LED ring', '#7fe39a', 'bought', [0,-260,0], 'Green COB strip, ~37.5 cm, inside the front bell\'s collar band.'],
   rear_led_envelope:         ['Rear bell LED ring', '#7fe39a', 'bought', [0,230,0], 'Green COB strip, ~45 cm full ring, inside the rear bell.'],
+  cap_led_envelope:          ['Emblem LED strips', '#7fe39a', 'bought', [0,0,60], 'Green COB strip, 2 x 12.5 cm on the top cap\'s inner wall under the rim, facing in: they light the halo ring and the emblem.'],
   panel_led_envelope:        ['LED panel strips', '#7fe39a', 'bought', [0,-60,0], '4 × 10 cm green COB rows on the LED panel\'s front.'],
   curtain_envelope:          ['Hand-side cover', '#e3ebe5', 'bought', [0,285,0], 'Frosted polypropylene, 171 mm disc with 8 cuts from the centre; clamped at the rear bell\'s mouth.', 0.65],
 };
@@ -269,8 +270,8 @@ const STEPS = [
  { n:8, stage:'Lantern body', title:'Wall extension', track:'body', ctx:['lock','wall'], parts:['wall_extension'], view:[0.5,1,0.8],
    body:['Fit the wall extension onto the lock wall\'s top edge.'],
    hw:[] },
- { n:9, stage:'Lantern body', title:'Top cap', track:'body', ctx:['lock','wall'], parts:['top_cap'], view:[0.8,-1,0.6],
-   body:['Plug the top cap into the sphere\'s top collar.','3 thumbscrews from inside its neck out into the collar\'s inserts.'],
+ { n:9, stage:'Lantern body', title:'Top cap', track:'body', ctx:['lock','wall'], parts:['top_cap','cap_led_envelope'], view:[0.8,-1,0.6],
+   body:['Stick the 2 emblem LED strips (12.5 cm each) on the cap\'s inner wall under the rim, front and back.','Plug the top cap into the sphere\'s top collar.','3 thumbscrews from inside its neck out into the collar\'s inserts.'],
    hw:['3 thumbscrews'] },
  { n:10, stage:'Lantern body', title:'Cap floor', track:'body', ctx:['lock','wall'], parts:CAPFLOOR, view:[0.35,-0.7,1.2],
    body:['Battery on its strap, LED face down over the slot. Board on its 4 standoffs (M3×6). Buck module. S1 in its box. Charge socket with zip ties.','Lead plugs up through the wire hole.','Drop the floor on its ledge in the cap: 3 thumbscrews.'],

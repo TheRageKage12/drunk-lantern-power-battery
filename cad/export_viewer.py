@@ -18,7 +18,7 @@ DOCS = os.path.join(HERE, '..', 'docs', 'assembly-viewer')
 SKIP = {'key_cap'}                         # alternative to key_ring for the same pocket; key_ring is the default
 KEEP_ENV = {'pump_envelope', 'bag_envelope', 'powerbank_envelope', 'perfboard_envelope', 'board_components_envelope',
             'buck_envelope', 'power_switch_envelope', 'charge_socket_envelope', 'glass_envelope',
-            'front_led_envelope', 'rear_led_envelope', 'panel_led_envelope', 'curtain_envelope'}
+            'front_led_envelope', 'rear_led_envelope', 'panel_led_envelope', 'cap_led_envelope', 'curtain_envelope'}
 TOL, ANG_TOL = 0.12, 0.2                   # tessellation: linear (mm) and angular (rad) tolerance
 
 meshes = {}
