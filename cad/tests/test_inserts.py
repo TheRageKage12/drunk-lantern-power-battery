@@ -76,11 +76,11 @@ for m in mods:
             placed[n] = place(wp, pl.get(n))
 ZC = P.Z_SPHERE_CENTER
 shanks = []   # (label, start point, direction, length, parts it passes through)
-for a in S.BELL_SCREW_ANGLES:   # M3x12 from the pads inside the sphere into the bells
+for a in S.BELL_SCREW_ANGLES:   # M3x12 (front) and M3x14 (rear) from the pads inside the sphere into the bells
     x, z = pol(S.FRONT_BELL_SCREW_R, a)
     shanks.append(('front bell', (x, -S.FRONT_PAD_Y, ZC + z), (0, -1, 0), 12, ('sphere_front', 'bell_front')))
     x, z = pol(S.REAR_BELL_SCREW_R, a)
-    shanks.append(('rear bell', (x, S.REAR_PAD_Y, ZC + z), (0, 1, 0), 12, ('sphere_rear', 'bell_rear')))
+    shanks.append(('rear bell', (x, S.REAR_PAD_Y, ZC + z), (0, 1, 0), 14, ('sphere_rear', 'bell_rear')))
 for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x20 from the pivot's counterbore
     for y, z in S.PIVOT_SCREWS:
         shanks.append(('pivot', (sx * (H.PIVOT_X1 - 3.0), y, ZC + z), (-sx, 0, 0), 20, (n, 'sphere_front' if y < 0 else 'sphere_rear')))

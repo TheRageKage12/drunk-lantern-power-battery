@@ -73,8 +73,8 @@ def front_profile():
 R_EDGE = _s_surface(S.HAND_R)                # 91.2
 R_MOUTH = R_EDGE + P.REAR_BELL_L             # 151.2
 R_OUT = P.REAR_BELL_MOUTH_R                  # 90
-R_THROAT_OUT = 71.5                          # inserts at r 68.5
-R_LED_R, R_LED_S = 69.0, (104.0, 114.0)      # LED rim band: 25-30 cm of strip on the 43 cm circumference
+R_THROAT_OUT = 76.5                          # inserts at r 73.5
+R_LED_R, R_LED_S = 74.0, (104.0, 114.0)      # LED rim band: 25-30 cm of strip on the 46 cm circumference
 R_LIP_R = 78.0                               # the mouth lip: the curtain sits against its inner face
 R_LIP_T = 4.0
 R_LIP_S = R_MOUTH - R_LIP_T                  # 147.2: lip inner face (curtain seat)

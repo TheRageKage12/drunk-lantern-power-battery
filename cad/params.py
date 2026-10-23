@@ -121,7 +121,7 @@ SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/b
 DIFFUSER_D = 118.0          # front lens: a full round 118 mm white disc in the front bell (rev C: no flats)
 DIFFUSER_T = 1.0
 LENS_OPENING_R = 57.0       # rev C: round opening in the front half; the lens bell's throat
-HAND_OPENING_R = 65.0       # rev C: round hand opening in the rear half (fist 106 x 76 passes with 12 mm all round)
+HAND_OPENING_R = 70.0       # rev C: round hand opening in the rear half (2026-10-23: 130 -> 140 mm, room for a hand holding a glass)
 FRONT_BELL_L, REAR_BELL_L = 64.0, 60.0   # bell length from the sphere surface at the opening edge to the mouth
 FRONT_BELL_MOUTH_R, REAR_BELL_MOUTH_R = 84.0, 90.0   # outer mouth radii
 # Unused since rev 8 (kept so old notes still read): the glass tray, the 90 deg wall nozzle and the WS2812B strip channel.

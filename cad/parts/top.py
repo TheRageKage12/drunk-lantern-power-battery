@@ -66,6 +66,8 @@ LID_R, LID_T = 91.0, 2.4                             # green lid disc: the halo 
 # the emblem (as seen from the front): a ring with a bar over and under it, bars parallel to X
 EMBLEM_RING = (26.0, 38.0)
 EMBLEM_BAR_X, EMBLEM_BAR_Y = 64.0, (41.0, 51.0)
+# the lid lines up on the halo ring with two short pins of 1.75 mm filament in matching holes (asymmetric: one way only)
+LID_PIN_R, LID_PIN_ANGLES, LID_PIN_D = 89.0, (90.0, 200.0), 2.0
 
 
 def _ang_point(r, a):
@@ -272,6 +274,9 @@ def build_halo_ring():
     h = h.union(cq.Workplane('XY').workplane(offset=Z_TOP).circle(R_CAP).extrude(HALO_FLANGE_H))
     h = h.cut(cq.Workplane('XY').workplane(offset=Z_TOP - 1).circle(r0).extrude(HALO_FLANGE_H - HALO_SKIN + 1))
     half = math.degrees(LUG_W / 2 / HALO_TUBE_R)
+    for a in LID_PIN_ANGLES:                         # pin holes in the flange top (on the bed when printed)
+        x, y = _ang_point(LID_PIN_R, a - LID_TWIST)
+        h = h.cut(cq.Workplane('XY').workplane(offset=Z_TOP + HALO_FLANGE_H - 2.0).center(x, y).circle(LID_PIN_D / 2).extrude(2.1))
     for a in LID_LUG_ANGLES:                         # lugs at their locked angle
         h = h.union(_sector(HALO_TUBE_R - 0.5, HALO_TUBE_R + LUG_D, a - LID_TWIST - half, a - LID_TWIST + half,
                             Z_LUG0, Z_LUG0 + LUG_H))
@@ -290,6 +295,9 @@ def build_emblem_lid():
     z0 = Z_TOP + HALO_FLANGE_H
     lid = cq.Workplane('XY').workplane(offset=z0).circle(LID_R).extrude(LID_T)
     lid = lid.edges('>Z').chamfer(1.0)
+    for a in LID_PIN_ANGLES:                         # matching pin holes in its underside (assembled position)
+        x, y = _ang_point(LID_PIN_R, a - LID_TWIST)
+        lid = lid.cut(cq.Workplane('XY').workplane(offset=z0 - 0.1).center(x, y).circle(LID_PIN_D / 2).extrude(1.1))
     return lid.cut(_emblem(z0 - 1, LID_T + 2)).cut(cq.Workplane('XY').workplane(offset=z0 - 1).circle(EMBLEM_RING[0]).extrude(LID_T + 2))
 
 

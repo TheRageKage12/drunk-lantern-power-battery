@@ -42,8 +42,8 @@ BOSS_L = 9.0                                # insert boss length along -Y on the
 # rev C openings and the bell screws: 3 M3 per bell from pads inside the shell into inserts in the bell's throat
 LENS_R, HAND_R = P.LENS_OPENING_R, P.HAND_OPENING_R    # 57, 65
 BELL_SCREW_ANGLES = (90.0, 210.0, 330.0)    # in the XZ plane from +X (one on top, two below)
-FRONT_BELL_SCREW_R, REAR_BELL_SCREW_R = LENS_R + 4.0, HAND_R + 3.5   # 61, 68.5
-FRONT_PAD_Y, REAR_PAD_Y = 89.0, 84.0        # |y| of each pad's flat face (screw head seat): an M3x12 then gets ~5 mm of thread
+FRONT_BELL_SCREW_R, REAR_BELL_SCREW_R = LENS_R + 4.0, HAND_R + 3.5   # 61, 73.5
+FRONT_PAD_Y, REAR_PAD_Y = 89.0, 79.0        # |y| of each pad's flat face (screw head seat): M3x12 front, M3x14 rear, ~5 mm of thread
 PAD_R = 4.5
 PIVOT_ENTRY = 0.6                           # the curved surface over a 4 mm bore: full wall starts this far in
 # ring pivots for the handle: each pivot boss (parts/handle.py) sits over the seam and screws into both halves
