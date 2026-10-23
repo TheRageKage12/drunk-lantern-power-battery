@@ -2,7 +2,7 @@
 bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, the front lens and the curtain clamp.
 
     bell_front     on the lens opening (-Y). LED collar band behind the lens, the lens on a ledge in front of it.
-    bell_rear      on the hand opening (+Y). LED rim band in the throat, the frosted strip curtain held at the mouth.
+    bell_rear      on the hand opening (+Y). LED rim band in the throat, the one-piece frosted cover clamped at the mouth.
     diffuser       the front lens: a full round 118 mm white disc (the rev-9 diffuser had 98 mm flats: reprint)
     curtain_clamp  full ring that clamps the one-piece frosted cover's uncut edge to the inside of the rear bell's
                    mouth lip, holding it flat (4 countersunk M3 x 8 from behind it, inside the bell, into pilots in the
@@ -84,7 +84,7 @@ R_OUTER_CONE_S = 100.0
 R_WALL = 2.8
 CURTAIN_R = 85.5                             # the one-piece frosted cover (see params CURTAIN_SLITS): 171 mm across
 CURTAIN_T = 0.5
-CLAMP_R = (R_LIP_R, R_OUT - R_WALL - 0.5)    # 78 .. 85.5
+CLAMP_R = (R_LIP_R, R_OUT - R_WALL - 0.5)    # 78 .. 86.7
 CLAMP_T = 4.5                                # a countersunk M3 x 8 flush in its back bites 3 mm into the lip
 CLAMP_CSK = (P.M3_HEAD_D + 0.4, 1.9)         # countersink: diameter at the face, depth (90 deg flat head)
 CLAMP_PILOT, CLAMP_PILOT_DEPTH = 2.5, 3.2    # self-tapping pilot in the 4 mm lip: 0.8 mm (4 layers) left on the mouth face

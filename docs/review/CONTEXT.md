@@ -299,7 +299,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i and C). The repo
   (a full ring since 2026-10-23, was 25-30 cm), `led_panel` 4 x 10 cm, lock-face columns 2 x 5 cm, and ~25 cm in the
   top cap for the emblem (two 12.5 cm pieces on the cap wall under the rim; Kevin 14:56 "keep 25 cm").
 - Current: ~0.8 A/m estimated, so ~1.25 A at full and ~2.0 A peak with the pump, inside the pack's 3 A (measure it).
-  Runtime is not a concern: the light is only on during a pour (idle 0, capped at 200/255), so hundreds of pours per
+  Runtime is not a concern: the light is only on during a pour (idle 0 by default; `leds` caps the maximum, default 255), so hundreds of pours per
   charge (Kevin, 21:46).
 - Plain strip on one MOSFET channel. Dropped in the budget cut: the NeoPixel ring around the lock and addressable
   LEDs. `LED_RING = False`; this is an upgrade only.
@@ -381,7 +381,7 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 | Pen spring fallback | ~1/3 stiffness | Test the lock's snap-back (guide section 6, step 4) |
 | Sphere halves | 224 mm, dome up; short flat overhang under each bell thumbscrew pad | Print notes in the guide |
 | Fist envelope | Estimated | A mock-up print is suggested |
-| Filament | ~2.1 kg solid, ~1.95 kg green; Kevin has ~1.8 kg green | Buy a green spool or print hidden parts (cap floor, cartridge, clamp) in white: not decided |
+| Filament | ~2.8 kg if solid (~2.6 kg green; STL volumes), less at real infill; Kevin has ~1.8 kg green | Slice everything and read the total; then buy a green spool or print hidden parts (cap floor, cartridge, bag cover, bay floor parts) in white: not decided |
 
 ## 6. Known loose ends a reviewer should look at
 
@@ -393,6 +393,10 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   the spout from the audience); the refill procedure for the pouch under its cover (unscrew the bag from its cap with
   the tube left in place, or fill in place); the handle's rest direction; drum-to-foot M3s vs inside thumbscrews;
   another green spool vs white hidden parts; the reach test; the 6-32 hole from `thumb_test.py`; `RING_ID`.
+- **Possible purchases to approve (not on the Sheet yet):** rev C needs five JST SM 2-pin pairs (LED and pump leads
+  at the cap floor, the pump plug at the cartridge, one per bell) and the Sheet has one, so 4 more (Vetco ~$1.75
+  each, ~$7); and a little two-part epoxy for the three handle laps (if no one has some). Super glue would be the
+  fallback for the laps (weaker on PETG).
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
 - `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
@@ -402,7 +406,7 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   - `cad/render_views.py` is a painter's-algorithm renderer. It now subdivides large faces, because large faces
     used to make the back panel look wrong.
   - Don't read rendering artefacts as CAD defects. Check against `checks.py` and the STL itself.
-- Totals and counts appear in several places: the guide, the Sheet, the guide's part table (~2.1 kg of filament
+- Totals and counts appear in several places: the guide, the Sheet, the guide's part table (~2.8 kg if solid
   in rev C) and the diagrams. **They drift.** Check them against each other. `docs/images/fluid-path.*` is redrawn for
   rev C; `battery-seat.*` still shows the rev 9 cartridge seat (the cap floor's seat follows the same `PACK_*` numbers)
   and is kept as history until redrawn.
