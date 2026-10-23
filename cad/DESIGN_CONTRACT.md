@@ -342,8 +342,8 @@ exception in build.py output.
 
 TalentCell YB1203000 replaces the old battery envelope: 105 × 65 × 25 mm, ports toward -Y. Resize tray
 rails, stops, pillars and matching deck holes. Keep deck underside at z=44 mm (`CARTRIDGE_DECK_Z`),
-so jar/pump/board positions stay fixed. A 20 mm strap at y=25 is required; its <=1 mm underside run sits
-in a recessed channel, clear of pillars. Reserve 25 mm beyond the battery end for its plug and bend.
+so jar/pump/board positions stay fixed. A 20 mm strap at y=25 is required; its <=2 mm underside run sits
+in a recessed channel (since 2026-10-23; the pack lies on a 1 mm bed so 1 mm of floor stays over it), clear of pillars. Reserve 25 mm beyond the battery end for its plug and bend.
 Four rectangular electronics mounting pads replace the sloped gussets to preserve the board drawing's
 rear-wire space; support their undersides during printing. Model populated-board and off-board
 component allowances and test shell removal with the retaining-boss sweep. See `README.md` for exact

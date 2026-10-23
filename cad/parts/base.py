@@ -74,7 +74,7 @@ PILLAR_X = BANK_HALF_W + 1.0 + PILLAR_S / 2           # inner faces guide the ba
 PILLAR_Y = (-55.0, 0.0, 55.0)
 PILLAR_INSERTS = ((PILLAR_X, 0.0), (-PILLAR_X, 0.0), (PILLAR_X, 55.0))   # 3 = unambiguous orientation
 DECK_Z0 = P.CARTRIDGE_DECK_Z                         # MATING: fixed at 44; strap retains the thinner pack
-DECK_GAP = DECK_Z0 - P.FLOOR - P.POWERBANK_T         # 17 mm above the TalentCell case
+DECK_GAP = DECK_Z0 - P.PACK_Z - P.POWERBANK_T        # 16 mm above the TalentCell case
 PILLAR_H = DECK_Z0 - P.FLOOR
 DECK_T = 3.0
 DECK_TOP = DECK_Z0 + DECK_T                           # MATING: everything on the deck starts here (47)
@@ -225,6 +225,9 @@ def _bank_pocket():
     x_slot = x_rail + BANK_END_STOP_T / 2 + 1.0 + STRAP_SLOT_W / 2
     cuts = [_box(STRAP_SLOT_W, STRAP_SLOT_L, P.FLOOR + 2, sx * x_slot, P.BATTERY_STRAP_Y, -1) for sx in (-1, 1)]
     cuts.append(_box(2*x_slot, STRAP_SLOT_L, P.BATTERY_STRAP_T+1, 0, P.BATTERY_STRAP_Y, -1))
+    # bed under the pack, bridged out to the slots across the strap band, so the recess leaves PACK_BED_T of floor
+    adds.append(_box(P.POWERBANK_W, P.POWERBANK_L, P.PACK_BED_T, 0, P.PACK_Y, P.FLOOR))
+    adds.append(_box(2*x_slot - STRAP_SLOT_W, STRAP_SLOT_L, P.PACK_BED_T, 0, P.BATTERY_STRAP_Y, P.FLOOR))
     return adds, cuts
 
 
@@ -347,7 +350,7 @@ def _led_slot():
     """2026-10-21: a thin slot in the floor under the pack's fuel-gauge LEDs (the pack lies LED face down)."""
     x0, x1 = P.PACK_LED_X
     y = P.PACK_Y - BANK_HALF_L + P.PACK_LED_IN
-    return [], [_box(x1 - x0, P.PACK_LED_SLOT, P.FLOOR + 2, (x0 + x1) / 2, y, -1)]
+    return [], [_box(x1 - x0, P.PACK_LED_SLOT, P.PACK_Z + 2, (x0 + x1) / 2, y, -1)]   # through floor and bed
 
 
 def build_tray():
@@ -471,7 +474,6 @@ def build():
 
 
 def placements():
-    on_floor = ((0, 0, 1), 0, (0, 0, P.FLOOR))
     on_deck = ((0, 0, 1), 0, (0, 0, DECK_TOP))
     kx, ky = _service_xy(SERVICE_ANGLES[0])
     return {
@@ -482,5 +484,5 @@ def placements():
         'base_deck': ((0, 0, 1), 0, (0, 0, DECK_Z0)),
         'bottle_envelope': on_deck,
         'pump_envelope': on_deck,
-        'powerbank_envelope': on_floor,
+        'powerbank_envelope': ((0, 0, 1), 0, (0, 0, P.PACK_Z)),   # on its bed
     }

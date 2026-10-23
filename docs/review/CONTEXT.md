@@ -210,8 +210,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
   - J1's third (switched) contact is unused; the charger's LED (red charging, green done) is the charge indicator.
   - CAD now uses the 105 × 65 × 25 mm case, connector/switch end toward -Y. Revised tray rails,
     end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
-    z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=1 mm
-    lower run is recessed under the tray. Verify the supplied plug and bend fit the 25 mm end allowance.
+    z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=2 mm
+    lower run is recessed under the tray (2 mm since 2026-10-23, the pack on a 1 mm bed). Verify the supplied plug and bend fit the 25 mm end allowance.
 - The charge jack (2.1 mm panel jack, 11.3 mm deck hole; **not fitted since 2026-10-20**; since 2026-10-21 the splitter's female end inside the cartridge is the charge socket, see the change log) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
   2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
   down (tip the lantern to flip it); the jack hole is on the deck, socket up, reached with the lantern lifted off.
@@ -521,3 +521,9 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   lip up, no supports. The placed geometry is unchanged (checked against the old part to 0.000002 mm), so the lower
   dish relief, the nozzle height and the insert count (32) stay as they were. The drip lip stays: it keeps spills
   on the tray, off the cartridge below.
+- **2026-10-23, battery strap recess 2 mm.** Kevin measured the VELCRO One-Wrap at about 1 mm but wasn't sure, and
+  asked for 2 mm. The tray floor is only 2 mm, so `BATTERY_STRAP_T` = 2 alone would have cut through it. Instead
+  the pack lies on a 1 mm printed bed (`PACK_BED_T`, bridged out to the strap slots across the strap band), so 1 mm
+  of floor stays over the recess. Nothing else moves: the deck stays at z=44 (16 mm over the pack instead of 17),
+  the lantern's height is unchanged, the LED slot cuts through the bed too, and the battery plug envelope rises
+  1 mm with the pack. All checks pass; `test_electronics.py` now runs its strap route with a 2 mm strap.
