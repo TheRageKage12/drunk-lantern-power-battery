@@ -99,9 +99,9 @@ for sign, n, half in ((-1, 'bell_front', 'sphere_front'), (1, 'bell_rear', 'sphe
         knob = knob.union(cylinder((p_h[0], sign * S.lock_s(sign), ZC + p_h[1]), (-dx, 0, -dz), P.THUMB_HEAD_D / 2, 0, 8.7))
         for n_ in (n, half, 'foot'):
             assert inter_volume(knob, placed[n_]) < .01, ('bell thumbscrew head hits', n_)
-for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x20 from the pivot's counterbore
+for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x12 from the pivot's deep counterbore
     for y, z in S.PIVOT_SCREWS:
-        shanks.append(('pivot', (sx * (H.PIVOT_X1 - 3.0), y, ZC + z), (-sx, 0, 0), 20, (n, 'sphere_front' if y < 0 else 'sphere_rear')))
+        shanks.append(('pivot', (sx * H.pivot_seat_x(y, z), y, ZC + z), (-sx, 0, 0), H.PIVOT_SCREW_L, (n, 'sphere_front' if y < 0 else 'sphere_rear')))
 for a in B.BASE_JOINT_ANGLES:   # M3x8 through the drum's band into the foot
     shanks.append(('drum-foot', (*pol(B.R_MAX - B.BASE_JOINT_CBORE_DEPTH, a), B.BASE_JOINT_Z), (*pol(-1, a), 0), 8, ('base', 'foot')))
 for a, z, part in [(a, S.Z_LOWER_SCREWS, 'foot') for a in S.JOINT_ANGLES] + [(a, S.Z_UPPER_SCREWS, 'top_cap') for a in S.TOP_JOINT_ANGLES]:
@@ -113,12 +113,12 @@ for a, z, part in [(a, S.Z_LOWER_SCREWS, 'foot') for a in S.JOINT_ANGLES] + [(a,
         assert inter_volume(collar.union(head), placed[n_]) < .01, ('thumbscrew head/collar hits', n_, part, a)
 for a in T.CAP_FLOOR_SCREW_ANGLES:
     shanks.append(('cap floor', (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR), (0, 0, -1), 8, ('cap_floor', 'top_cap')))
-for a in BL.CLAMP_SCREW_ANGLES:   # countersunk M3x10 from the rear bell's mouth face into the clamp
+for a in BL.CLAMP_SCREW_ANGLES:   # countersunk M3x8 from the rear bell's mouth face into the clamp
     x, z = pol(BL.CLAMP_SCREW_R, a)
-    shanks.append(('curtain clamp', (x, BL.R_MOUTH, ZC + z), (0, -1, 0), 10, ('bell_rear', 'curtain_clamp')))
+    shanks.append(('curtain clamp', (x, BL.R_MOUTH, ZC + z), (0, -1, 0), 8, ('bell_rear', 'curtain_clamp')))
 for phi in H.JOINTS:   # M3x10 through each lap
     for x, z in H.screw_points(phi):
-        shanks.append(('handle lap', (x, -P.HANDLE_SECTION_T / 2, ZC + z), (0, 1, 0), 10, [n for n in placed if n.startswith('handle_')]))
+        shanks.append(('handle lap', (x, -P.HANDLE_SECTION_T / 2 + H.LAP_CB, ZC + z), (0, 1, 0), 8, [n for n in placed if n.startswith('handle_')]))
 bad = []
 for label, p0, d, length, names in shanks:
     shank = cylinder(p0, d, 1.4, 0, length)

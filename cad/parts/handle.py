@@ -18,8 +18,8 @@ Nothing holds the axles in their bores axially: the two spokes face each other, 
 both at once. Fit the two end pieces into the pivots first, then join the arcs.
 
 Joints (2026-10-23): the loop is split at 45, 90 and 135 deg, away from the corners where the load is highest. Each
-joint is a LAP_L long half-thickness lap split on the arch mid-plane with 3 x M3 (nut in a hex pocket on the +Y face),
-glued with epoxy. Each piece keeps the same half at both its laps; it prints flat with the cut side up, at 100% infill.
+joint is a LAP_L long half-thickness lap split on the arch mid-plane with 3 x M3x8 (head sunk 2 mm in the -Y face, nut
+in a hex pocket on the +Y face), glued with epoxy. Each piece keeps the same half at both its laps; it prints flat with the cut side up, at 100% infill.
 Section HANDLE_SECTION_W (in the plane) x HANDLE_SECTION_T (along Y), 2 mm rounded edges.
 """
 import math
@@ -47,6 +47,8 @@ STOP_DEPTH = 3.0                                     # arc groove in the pivot's
 STOP_HALF = 90.0 + math.degrees(math.atan(TAB_W / 2 / TAB_R)) + 1.0   # the groove runs this far either side of the top
 RING_GROOVES = (20.0,)                               # decorative ring on the pivot face (the mount screws sit inside it)
 NUT_AF, NUT_POCKET_DEPTH = 5.6, 2.6
+LAP_CB = 2.0                                         # lap screw heads sink 2 mm: M3x8 through the 10 mm lap into the nut
+PIVOT_SCREW_L, PIVOT_SCREW_BITE = 12.0, 6.0          # M3x12 into the sphere's inserts: counterbored deep enough for it
 # laps
 LAP_L = 40.0
 LAP_SCREWS = 3
@@ -161,12 +163,20 @@ def pieces():
                     p = p.cut(_y_hole(x, z, P.M3_CLEAR))
                     if keeps == 'rear':
                         p = p.cut(_nut_pocket(x, z))
+                    else:
+                        p = p.cut(cq.Workplane(cq.Plane(origin=(x, -T / 2 - 0.01, z), normal=(0, 1, 0), xDir=(1, 0, 0)))
+                                  .circle(P.M3_HEAD_D / 2 + 0.2).extrude(LAP_CB + 0.01))
         for sign, end in ((1, 'handle_end_right'), (-1, 'handle_end_left')):
             if name == end:
                 p = p.union(hub(sign))
                 p = p.union(shaft(sign)) if PRINTED else p.cut(pin_hole(sign))
         out[name] = p
     return out
+
+
+def pivot_seat_x(y, z):
+    """|x| of the counterbore floor for a pivot screw at (y, z): an M3x12 then bites PIVOT_SCREW_BITE into the insert."""
+    return math.sqrt(S.R_OUT ** 2 - y * y - z * z) + PIVOT_SCREW_L - PIVOT_SCREW_BITE
 
 
 def pivot(sign):
@@ -182,7 +192,7 @@ def pivot(sign):
     for y, z in S.PIVOT_SCREWS:                      # into the sphere's inserts, heads counterbored
         b = b.cut(cq.Workplane('YZ').workplane(offset=x0 - 1).center(y, z).circle(P.M3_CLEAR / 2).extrude(x1 - x0 + 2))
         b = b.cut(cq.Workplane('YZ').workplane(offset=face + sign * 0.01).center(y, z)
-                  .circle(P.M3_HEAD_D / 2 + 0.3).extrude(-sign * 3.0))
+                  .circle(P.M3_HEAD_D / 2 + 0.3).extrude(-sign * (PIVOT_X1 - pivot_seat_x(y, z))))
     # arc groove for the hub's stop tab: from level on one side, over the top, to level on the other
     n = 24
     pt = lambda r, t: (r * math.cos(math.radians(90 + t)), r * math.sin(math.radians(90 + t)))
