@@ -103,7 +103,7 @@ def build():
     out['charge_socket_envelope'] = cap(cq.Workplane('YZ').workplane(offset=cx-15).center(cy, 6.2).circle(6).extrude(30))
     # D2 is across the motor terminals, beyond the motor's -Y end; includes insulation/leads.
     yend = B.PUMP_HEAD_FACE_Y-P.PUMP_L
-    out['pump_diode_envelope'] = box(B.PUMP_X-10, B.PUMP_X+10, yend-11, yend-1,
+    out['pump_diode_envelope'] = box(B.PUMP_X-8, B.PUMP_X+8, yend-6, yend-1,
                                     B.PUMP_AXIS_Z-4, B.PUMP_AXIS_Z+4)
     # The pump's 2-pin plug, unplugged when the lantern is lifted off the cartridge.
     out['pump_plug_envelope'] = box(6, 26, -80, -70, 42, 62)

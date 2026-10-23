@@ -52,21 +52,27 @@ BUMP_DEG, BUMP_DROP = 6.0, 0.7                       # click bump hanging from t
 FLOOR_T = P.CARTRIDGE_FLOOR_T
 PUMP_HEAD_L_EST = 40.0
 PUMP_MOTOR_L = P.PUMP_L - PUMP_HEAD_L_EST
-PUMP_X = 30.0
+PUMP_X = 37.0                                        # 2026-10-23: 7 mm right (head corner 0.5 mm off the rim) for a bigger bay
 PUMP_HEAD_FACE_Y = 52.0                              # head face (tube ports) toward the owner's side
 PUMP_AXIS_Z = FLOOR_T + P.PUMP_H / 2                 # 35
 PUMP_HEAD_SADDLE_Y = PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST + 2.0 + 4.0
 PUMP_HEAD_SADDLE_H, PUMP_SADDLE_T, PUMP_SADDLE_WALL = 20.0, 8.0, 8.0
 PUMP_MOTOR_SADDLE_Y = PUMP_HEAD_FACE_Y - P.PUMP_L + 8.0 + 4.0
-PUMP_HEAD_STRAP_Y = (28.0, 50.0)
-PUMP_MOTOR_STRAP_Y = (-50.0, -28.0)
+PUMP_MOTOR_STRAP_Y = (-50.0, -28.0)                  # one strap round the motor; the head sits in its U-saddle (no room for
+                                                     # a head strap once the pump moved right)
 PUMP_STRAP_GAP = 1.5
 STRAP_SLOT_W = 3.0
 
 # ------------------------------------------------------------------ splash wall and bag bay
-SPLASH_X = (-9.4, -7.0)                              # left of the pump's strap slots, so the head strap passes inside it
+SPLASH_X = (2.0, 4.4)                                # right against the pump head
 SPLASH_H = 66.0                                      # to just above the pump
 BAG_X1, BAG_R, BAG_Z = SPLASH_X[0] - 1.0, COLLAR_RI - 2.0, (FLOOR_T, 68.0)
+# bag floor (2026-10-23): a shallow cone falling 2 deg toward a well at the back end by the splash wall, where the
+# bag's spout and the tube's tip sit, so the last of the drink runs to the tube; 45 deg fillets along the walls
+WELL_XY, WELL_R, WELL_D = (-30.0, 55.0), 12.0, 2.0
+FLOOR_RISE, FLOOR_SLOPE = WELL_D, math.tan(math.radians(2.0))
+FILLET = 8.0
+TUBE_NOTCH_Y, TUBE_NOTCH = 62.0, (8.0, 12.0)          # notch in the splash wall's top for the tube to the pump's inlet
 DRAIN_D, DRAIN_XY = 8.0, ((-40.0, -68.0), (40.0, -68.0))
 
 
@@ -160,16 +166,48 @@ def _pump_cradle():
     motor = motor.cut(bore)
     cuts = []
     for sx in (-1, 1):
-        x_h = PUMP_X + sx * (P.PUMP_W / 2 + PUMP_STRAP_GAP + STRAP_SLOT_W / 2)
         x_m = PUMP_X + sx * (P.PUMP_MOTOR_D / 2 + PUMP_STRAP_GAP + STRAP_SLOT_W / 2)
-        for (y0, y1), x in ((PUMP_HEAD_STRAP_Y, x_h), (PUMP_MOTOR_STRAP_Y, x_m)):
-            cuts.append(_box(STRAP_SLOT_W, y1 - y0, FLOOR_T + 2, x, (y0 + y1) / 2, -1))
+        y0, y1 = PUMP_MOTOR_STRAP_Y
+        cuts.append(_box(STRAP_SLOT_W, y1 - y0, FLOOR_T + 2, x_m, (y0 + y1) / 2, -1))
     return [head, motor], cuts
 
 
 def _splash_wall():
     x0, x1 = SPLASH_X
-    return _box(x1 - x0, 2 * COLLAR_RI, SPLASH_H - FLOOR_T, (x0 + x1) / 2, 0, FLOOR_T).intersect(_cyl(COLLAR_RI + 0.5, SPLASH_H))
+    w = _box(x1 - x0, 2 * COLLAR_RI, SPLASH_H - FLOOR_T, (x0 + x1) / 2, 0, FLOOR_T).intersect(_cyl(COLLAR_RI + 0.5, SPLASH_H))
+    nw, nd = TUBE_NOTCH
+    notch = _box(x1 - x0 + 2, nw, nd, (x0 + x1) / 2, TUBE_NOTCH_Y, SPLASH_H - nd + nw / 2) \
+        .union(cq.Workplane('YZ').workplane(offset=x0 - 1).center(TUBE_NOTCH_Y, SPLASH_H - nd + nw / 2).circle(nw / 2).extrude(x1 - x0 + 2))
+    return w.cut(notch)
+
+
+def _bay_region(r, z0, z1):
+    """The D-shaped bay left of the splash wall, inside radius r."""
+    return _cyl(r, z1 - z0, z0=z0).intersect(_box(200, 400, 200, SPLASH_X[0] - 100, 0, 0))
+
+
+def _bag_floor():
+    """Raised floor of the bag bay: a cone rising FLOOR_SLOPE away from the well (the well's rim FLOOR_RISE above the
+    tray floor), 45 deg fillets along the splash wall, the rim and the bay's two corners, and the well itself."""
+    wx, wy = WELL_XY
+    cone = cq.Workplane('XZ').polyline([(0, 0), (0, FLOOR_RISE), (300, FLOOR_RISE + 300 * FLOOR_SLOPE), (300, 0)]) \
+        .close().revolve(360.0, (0, 0, 0), (0, 1, 0)).translate((wx, wy, FLOOR_T))
+    f = _bay_region(COLLAR_RI + 0.3, FLOOR_T - 0.01, FLOOR_T + 20).intersect(cone)
+    x0 = SPLASH_X[0]
+    wall_f = cq.Workplane('XZ').polyline([(x0 + 0.3, FLOOR_T), (x0 - FILLET, FLOOR_T), (x0 + 0.3, FLOOR_T + FILLET + 0.3)]) \
+        .close().extrude(COLLAR_RI, both=True)
+    rim_f = cq.Workplane('XZ').polyline([(COLLAR_RI + 0.3, FLOOR_T), (COLLAR_RI - FILLET, FLOOR_T),
+                                          (COLLAR_RI + 0.3, FLOOR_T + FILLET + 0.3)]).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
+    f = f.union(wall_f.intersect(_bay_region(COLLAR_RI + 0.3, FLOOR_T, FLOOR_T + 20)))
+    f = f.union(rim_f.intersect(_bay_region(COLLAR_RI + 0.3, FLOOR_T, FLOOR_T + 20)))
+    yt = math.sqrt(COLLAR_RI ** 2 - x0 ** 2)
+    for s in (-1, 1):                                # the bay's two corners, where the wall meets the rim
+        yc = math.sqrt(COLLAR_RI ** 2 - (x0 - FILLET) ** 2)
+        tri = cq.Workplane('XY').workplane(offset=FLOOR_T).polyline(
+            [(x0 + 0.3, s * (yt + 0.3)), (x0 + 0.3, s * (yt - FILLET)), (x0 - FILLET, s * (yc + 0.3))]).close().extrude(SPLASH_H - FLOOR_T)
+        f = f.union(tri.intersect(_cyl(COLLAR_RI + 0.3, SPLASH_H)))
+    rb = (WELL_R ** 2 + WELL_D ** 2) / (2 * WELL_D)  # spherical dish: WELL_R across, WELL_D deep, its bottom on the tray floor
+    return f.cut(cq.Workplane('XY').sphere(rb).translate((wx, wy, FLOOR_T + rb)))
 
 
 def build_tray():
@@ -178,7 +216,7 @@ def build_tray():
     a, c = _pump_cradle()
     adds += a + [_splash_wall()]
     cuts += c
-    tray = tray.union(_union_all(adds))
+    tray = tray.union(_union_all(adds)).union(_bag_floor())
     for c in cuts:
         tray = tray.cut(c)
     for (x, y) in DRAIN_XY:
@@ -191,7 +229,7 @@ def _envelopes():
     head = _box(P.PUMP_W, PUMP_HEAD_L_EST, P.PUMP_H, PUMP_X, PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST / 2, 0)
     motor = cq.Workplane('XZ').workplane(offset=-(PUMP_HEAD_FACE_Y - PUMP_HEAD_L_EST + 0.01)) \
         .center(PUMP_X, P.PUMP_H / 2).circle(P.PUMP_MOTOR_D / 2).extrude(PUMP_MOTOR_L)
-    bag = _cyl(BAG_R, BAG_Z[1] - BAG_Z[0], z0=BAG_Z[0]).intersect(_box(200, 400, 200, BAG_X1 - 100, 0, 0))
+    bag = _cyl(BAG_R, BAG_Z[1] - BAG_Z[0], z0=BAG_Z[0]).intersect(_box(200, 400, 200, BAG_X1 - 100, 0, 0)).cut(_bag_floor())
     sweep = []
     hl = _half_deg(LUG_W, LUG_R0)
     for a in LUG_ANGLES:     # down the entry slot from above the collar, then the twist along the leg
