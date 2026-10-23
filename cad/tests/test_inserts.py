@@ -143,10 +143,16 @@ for a in BL.CLAMP_SCREW_ANGLES:   # M3x8 from the clamp's back (inside the bell)
     shanks.append(('curtain clamp', p, (0, 1, 0), 8, ('curtain_clamp',)))
     clear_of_all(cylinder(p, (0, -1, 0), P.M3_HEAD_D / 2 - .3, .05, 3.0), 'clamp screw head')
 for a in B.BASE_JOINT_ANGLES:   # the green caps fit over the heads, flush with the band
-    p = (*pol(B.R_MAX - B.DRUM_CAP_T, a), B.BASE_JOINT_Z)
-    cap = cylinder(p, (*pol(1, a), 0), B.DRUM_CAP_D / 2, 0, B.DRUM_CAP_T)
+    p = (*pol(B.R_MAX - P.SCREW_CAP_T, a), B.BASE_JOINT_Z)
+    cap = cylinder(p, (*pol(1, a), 0), P.SCREW_CAP_D / 2, 0, P.SCREW_CAP_T)
     assert inter_volume(cap, placed['base']) < .01, ('drum cap', a)
-for phi in H.JOINTS:   # M3x10 through each lap
+for phi in H.JOINTS:   # caps over the lap screws' heads (-Y face) and nuts (+Y face) sit flush and clear
+    for x, z in H.screw_points(phi):
+        for yc, dy in ((-P.HANDLE_SECTION_T / 2, 1), (P.HANDLE_SECTION_T / 2, -1)):
+            cap = cylinder((x, yc, ZC + z), (0, dy, 0), P.SCREW_CAP_D / 2, 0.02, P.SCREW_CAP_T)
+            for n_ in [n for n in placed if n.startswith('handle_')]:
+                assert inter_volume(cap, placed[n_]) < .01, ('lap cap', phi, n_)
+for phi in H.JOINTS:   # M3x8 through each lap
     for x, z in H.screw_points(phi):
         shanks.append(('handle lap', (x, -P.HANDLE_SECTION_T / 2 + H.LAP_CB, ZC + z), (0, 1, 0), 8, [n for n in placed if n.startswith('handle_')]))
 bad = []

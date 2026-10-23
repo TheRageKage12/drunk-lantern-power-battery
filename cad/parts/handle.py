@@ -19,8 +19,8 @@ Nothing holds the axles in their bores axially: the two spokes face each other, 
 both at once. Fit the two end pieces into the pivots first, then join the arcs.
 
 Joints (2026-10-23): the loop is split at 45, 90 and 135 deg, away from the corners where the load is highest. Each
-joint is a LAP_L long half-thickness lap split on the arch mid-plane with 3 x M3x8 (head sunk 2 mm in the -Y face, nut
-in a hex pocket on the +Y face), glued with epoxy. Each piece keeps the same half at both its laps; it prints flat with the cut side up, at 100% infill.
+joint is a LAP_L long half-thickness lap split on the arch mid-plane with 3 x M3x8 (head sunk in the -Y face, nut in a
+hex pocket on the +Y face, both under green screw caps flush with the faces), glued with epoxy. Each piece keeps the same half at both its laps; it prints flat with the cut side up, at 100% infill.
 Section HANDLE_SECTION_W (in the plane) x HANDLE_SECTION_T (along Y), 2 mm rounded edges.
 """
 import math
@@ -28,7 +28,7 @@ import cadquery as cq
 import params as P
 from parts import sphere as S
 
-W, T = P.HANDLE_SECTION_W, P.HANDLE_SECTION_T        # 14 x 10
+W, T = P.HANDLE_SECTION_W, P.HANDLE_SECTION_T        # 14 x 13.5
 EDGE_R = 2.0
 LOOP_R, CORNER_R = P.HANDLE_LOOP_R, P.HANDLE_CORNER_R
 ZC = CORNER_R                                        # big arc centre height in the sphere frame
@@ -48,7 +48,8 @@ STOP_DEPTH = 3.0                                     # arc groove in the pivot's
 STOP_HALF = 90.0 + math.degrees(math.atan(TAB_W / 2 / TAB_R)) + 1.0   # the groove runs this far either side of the top
 RING_GROOVES = (20.0,)                               # decorative ring on the pivot face (the mount screws sit inside it)
 NUT_AF, NUT_POCKET_DEPTH = 5.6, 2.6
-LAP_CB = 2.0                                         # lap screw heads sink 2 mm: M3x8 through the 10 mm lap into the nut
+CAP_WELL = P.SCREW_CAP_T + 0.1                       # round well for the green cap over each head and nut
+LAP_CB = 3.0 + CAP_WELL                              # head + cap: an M3x8 then ends inside the nut, short of its cap
 PIVOT_SCREW_L = 12.0                                 # M3 x 12 from inside the sphere into inserts in the pivot
 # laps
 LAP_L = 40.0
@@ -144,8 +145,11 @@ def _y_hole(x, z, d):
 
 
 def _nut_pocket(x, z):
+    """The cap's round well at the +Y face, then the hex pocket under it."""
     plane = cq.Plane(origin=(x, T / 2 + 0.01, z), normal=(0, -1, 0), xDir=(1, 0, 0))
-    return cq.Workplane(plane).polygon(6, NUT_AF / math.cos(math.radians(30))).extrude(NUT_POCKET_DEPTH + 0.01)
+    well = cq.Workplane(plane).circle(P.SCREW_CAP_CB_D / 2).extrude(CAP_WELL + 0.01)
+    plane = cq.Plane(origin=(x, T / 2 - CAP_WELL, z), normal=(0, -1, 0), xDir=(1, 0, 0))
+    return well.union(cq.Workplane(plane).polygon(6, NUT_AF / math.cos(math.radians(30))).extrude(NUT_POCKET_DEPTH))
 
 
 def pieces():
@@ -166,7 +170,7 @@ def pieces():
                         p = p.cut(_nut_pocket(x, z))
                     else:
                         p = p.cut(cq.Workplane(cq.Plane(origin=(x, -T / 2 - 0.01, z), normal=(0, 1, 0), xDir=(1, 0, 0)))
-                                  .circle(P.M3_HEAD_D / 2 + 0.2).extrude(LAP_CB + 0.01))
+                                  .circle(P.SCREW_CAP_CB_D / 2).extrude(LAP_CB + 0.01))
         for sign, end in ((1, 'handle_end_right'), (-1, 'handle_end_left')):
             if name == end:
                 p = p.union(hub(sign))

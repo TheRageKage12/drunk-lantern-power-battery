@@ -19,9 +19,9 @@ import common as C
 from parts import sphere as S
 
 R_RIM = P.D_MAX / 2                                  # 95
-DRUM_BORE_R = P.BASE_BODY_D / 2 - P.WALL             # 89.6: the drum's one straight bore (base.R_IN)
-SPIGOT_R = DRUM_BORE_R - P.FIT                       # 89.3
-SPIGOT_RI = SPIGOT_R - P.WALL                        # 86.9
+DRUM_BORE_R = P.BASE_BODY_D / 2 - P.WALL - P.DRUM_TOP_THICKEN   # 87.6: the drum's top band bore (base.R_TOP_IN)
+SPIGOT_R = DRUM_BORE_R - P.FIT                       # 87.3
+SPIGOT_RI = SPIGOT_R - P.WALL                        # 84.9
 Z_SPIGOT0 = P.BASE_H - P.JOINT_SPIGOT_H              # 72
 Z_RIM = P.BASE_H                                     # 80: bears on the drum's top band
 Z_NECK0 = Z_RIM + P.FLARE_H                          # 106.6

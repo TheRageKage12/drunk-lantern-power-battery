@@ -41,6 +41,11 @@ THUMB_WEB = 2.0             # plastic left under the collar's counterbore: what 
 THUMB_CB_D = THUMB_COLLAR_D + 0.8
 THUMB_HEAD_L = 8.7          # knurled head length
 THUMB_INSET = 7.0           # sphere <-> top cap / foot thumbscrews this far inside the sphere's flats
+# green caps over the M3 heads and nuts that would otherwise show (drum and handle laps): a 1 mm disc pressed into a
+# 6.8 mm counterbore (wide enough for a nut's corners), flush with the surface; a dot of glue if it's loose
+SCREW_CAP_T, SCREW_CAP_CB_D = 1.0, 6.8
+SCREW_CAP_D = SCREW_CAP_CB_D - 2 * SNUG
+DRUM_TOP_THICKEN = 2.0      # the drum's top band is this much thicker inward over the foot's spigot (screws bite 3.3 mm)
 MAGNET_D = 6.0              # 6 x 2 mm neodymium disc (owner has 45)
 MAGNET_T = 2.0
 MAGNET_POCKET_D = MAGNET_D + 0.3   # press fit pocket
@@ -182,7 +187,8 @@ SPRING_POCKET_D = 5.6       # spring OD + 0.6; closed ends; depth = free length 
 
 # handle (rev C): a loop on ring pivots at the sphere's sides. Spokes run out along X from the pivots, a 30 mm corner
 # turns them up, and a 230 mm arc goes over the top. It swings flat (either way) to lie around the middle for display.
-HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 10.0
+# 2026-10-23: 10 -> 13.5 mm along Y so the lap screws' heads and nuts sink under green caps (screw_cap)
+HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 13.5
 HANDLE_LOOP_R = 235.0       # big arc radius (centreline): its inside clears the lid's edge by ~12 mm as it swings
 HANDLE_CORNER_R = 30.0      # spoke -> arc corner; the big arc's centre is this far above the sphere centre
 PIVOT_D, PIVOT_T = 44.0, 16.0   # ring pivot boss on each side of the sphere, over the seam

@@ -8,8 +8,8 @@ Only the tube and the pump's two wires (through one plug) cross between the lant
 
 Parts (print orientation, bed = XY, min z = 0):
   base               drum, open both ends, printed upright; 3 bayonet lugs inside its bottom edge (45 deg undersides)
-  drum_cap           GREEN, print 3: a 1 mm disc pressed over each drum screw's head (a peg into its hex), flush with the
-                     band, so the outside shows no screws (2026-10-23)
+  screw_cap          GREEN, print 21: a 1 mm disc pressed over each drum screw's head (3) and each handle lap screw's head
+                     and nut (18), flush with the surface, so the outside shows no screws (2026-10-23)
   base_tray          the cartridge: floor, bayonet collar with 3 L-slots and click bumps, pump saddles and strap slots,
                      splash wall between the pump and the bag
   pump_envelope      KPHM200: head box PUMP_W x PUMP_H x PUMP_HEAD_L_EST + motor can PUMP_MOTOR_D, PUMP_L long,
@@ -36,10 +36,9 @@ BOTTOM_CHAMFER = 1.5
 # ------------------------------------------------------------------ foot joint screws (contract)
 BASE_JOINT_Z = P.BASE_H - 5.0                        # MATING: foot.Z_DRUM_SCREWS (75)
 BASE_JOINT_ANGLES = joint_angles()                   # 90, 210, 330 deg (first at +Y)
-DRUM_CAP_T = 1.0                                     # green cap over each head (2026-10-23)
-BASE_JOINT_CBORE_DEPTH = 3.0 + DRUM_CAP_T + 0.1      # head + cap: 1.3 mm of band left under the head (snug it, don't crank)
-DRUM_CAP_D = P.M3_HEAD_D - 2 * P.SNUG
-DRUM_CAP_PEG = (2.4, 1.5)                            # hex peg across flats, length: into the M3 head's 2.5 mm socket
+R_TOP_IN = R_IN - P.DRUM_TOP_THICKEN                 # 87.6: the top band thickened inward over the foot's spigot
+TOP_THICK_Z0 = P.BASE_H - P.JOINT_SPIGOT_H - 0.5     # 71.5: from just under the spigot (45 deg step below it)
+BASE_JOINT_CBORE_DEPTH = 3.0 + P.SCREW_CAP_T + 0.1   # head + green cap: 3.3 mm of band left under the head
 
 # ------------------------------------------------------------------ bayonet (replaces the rev-9 thumbscrews)
 LUG_ANGLES = (30.0, 150.0, 270.0)                    # drum lugs, at their LOCKED position
@@ -130,7 +129,11 @@ def _drum():
     step = cq.Workplane('XY').add(cq.Solid.makeCone(R_BODY, R_MAX, BAND_STEP, pnt=cq.Vector(0, 0, BAND_TOP_Z0 - BAND_STEP)))
     top_band = _cyl(R_MAX, P.BASE_BAND_H, z0=BAND_TOP_Z0)
     drum = _union_all([bottom_band, step_b, body, step, top_band])
-    return drum.cut(_cyl(R_IN, P.BASE_H + 2, z0=-1))
+    drum = drum.cut(_cyl(R_IN, P.BASE_H + 2, z0=-1))
+    t = P.DRUM_TOP_THICKEN                     # top band thickened inward, a 45 deg step under it (prints upright)
+    ring = cq.Workplane('XZ').polyline([(R_TOP_IN, TOP_THICK_Z0), (R_IN + 0.3, TOP_THICK_Z0 - t - 0.3), (R_IN + 0.3, P.BASE_H),
+                                         (R_TOP_IN, P.BASE_H)]).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
+    return drum.union(ring)
 
 
 def _lug(angle):
@@ -146,16 +149,14 @@ def build_base():
     for a in LUG_ANGLES:
         drum = drum.union(_lug(a))
     for a in BASE_JOINT_ANGLES:     # 3 radial M3 through the top band into the foot's spigot, counterbored from outside
-        drum = drum.cut(radial_hole(BASE_JOINT_Z, a, R_MAX + 1, 1 + BASE_JOINT_CBORE_DEPTH, P.M3_HEAD_D))
-        drum = drum.cut(radial_hole(BASE_JOINT_Z, a, R_MAX + 1, R_MAX - R_IN + 2, P.M3_CLEAR))
+        drum = drum.cut(radial_hole(BASE_JOINT_Z, a, R_MAX + 1, 1 + BASE_JOINT_CBORE_DEPTH, P.SCREW_CAP_CB_D))
+        drum = drum.cut(radial_hole(BASE_JOINT_Z, a, R_MAX + 1, R_MAX - R_TOP_IN + 2, P.M3_CLEAR))
     return drum
 
 
-def build_drum_cap():
-    """Disc on the bed, hex peg up (it presses into the screw head's socket)."""
-    c = _cyl(DRUM_CAP_D / 2, DRUM_CAP_T)
-    af, l = DRUM_CAP_PEG
-    return c.union(cq.Workplane('XY').workplane(offset=DRUM_CAP_T).polygon(6, af / math.cos(math.radians(30))).extrude(l))
+def build_screw_cap():
+    """A plain disc, printed flat."""
+    return _cyl(P.SCREW_CAP_D / 2, P.SCREW_CAP_T).edges('>Z').chamfer(0.3)
 
 
 # ------------------------------------------------------------------ cartridge
@@ -301,7 +302,7 @@ def build_cover():
 
 
 def build():
-    parts = {'base': build_base(), 'base_tray': build_tray(), 'drum_cap': build_drum_cap(),
+    parts = {'base': build_base(), 'base_tray': build_tray(), 'screw_cap': build_screw_cap(),
              'bag_cover': build_cover().rotate((0, 0, 0), (1, 0, 0), 180).translate((0, 0, SPLASH_H + COVER_T))}   # top down
     parts.update(_envelopes())
     return parts
@@ -312,7 +313,7 @@ def placements():
         'base': ((0, 0, 1), 0, (0, 0, 0)),
         'base_tray': ((0, 0, 1), 0, (0, 0, 0)),
         # the one at +Y (90 deg): disc face flush with the band, peg pointing in toward the axis
-        'drum_cap': [((1, 0, 0), 90, (0, R_MAX, BASE_JOINT_Z))],
+        'screw_cap': [((1, 0, 0), -90, (0, R_MAX - P.SCREW_CAP_T, BASE_JOINT_Z))],
         'bag_cover': ((1, 0, 0), 180, (0, 0, SPLASH_H + COVER_T)),
         'pump_envelope': ((0, 0, 1), 0, (0, 0, FLOOR_T)),
         'bag_envelope': ((0, 0, 1), 0, (0, 0, 0)),
