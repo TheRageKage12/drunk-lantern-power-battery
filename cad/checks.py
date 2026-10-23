@@ -67,13 +67,14 @@ def run(all_parts, placements):
     return problems
 
 
-def handle_swing_checks(all_parts, placements, angles=(-90, -60, -30, 30, 60, 90)):
-    """Rev C: the loop handle turns about its spokes from up to flat on either side; at each angle it must clear
-    everything that does not turn with it (the pivots carry it)."""
+def handle_swing_checks(all_parts, placements, angles=(-88, -60, -30, 30, 60, 88)):
+    """Rev C: the loop handle turns about its spokes from up to (just short of) flat on either side; at each angle it
+    must clear everything that does not turn with it, the pivots included. Past level the hub's tab must hit the end
+    of its groove in the pivot."""
     from parts import handle as H
     placed = {n: place(wp, placements.get(n)) for n, (wp, _m) in all_parts.items() if not n.endswith('_envelope')}
-    loop = [n for n, (_, m) in all_parts.items() if m == 'parts.handle' and 'pivot' not in n]
-    fixed = [n for n in placed if n not in loop and 'pivot' not in n]
+    loop = [n for n, (_, m) in all_parts.items() if m == 'parts.handle' and 'pivot' not in n and not n.endswith('_envelope')]
+    fixed = [n for n in placed if n not in loop]
     problems = 0
     for a in angles:
         for ln in loop:
@@ -82,7 +83,11 @@ def handle_swing_checks(all_parts, placements, angles=(-90, -60, -30, 30, 60, 90
                 v = inter_volume(moved, placed[n])
                 if v > 1.0:
                     print(f'FAIL handle swing {a:+d} deg: {ln} hits {n} by {v:.1f} mm3'); problems += 1
-    print(f'handle swing: {len(loop)} pieces at {len(angles)} angles, {problems} problem(s)')
+    for a in (-100, 100):
+        for side in ('right', 'left'):
+            if inter_volume(H.swing(placed[f'handle_end_{side}'], a), placed[f'handle_pivot_{side}']) < 1.0:
+                print(f'FAIL handle stop: the {side} hub does not stop at {a:+d} deg'); problems += 1
+    print(f'handle swing: {len(loop)} pieces at {len(angles)} angles, stops at level; {problems} problem(s)')
     return problems
 
 

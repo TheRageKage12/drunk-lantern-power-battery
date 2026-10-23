@@ -2,18 +2,23 @@
 handle.py - rev C (2026-10-23): the loop handle on ring pivots at the sphere's sides (as on the classic battery).
 
     handle_pivot_left / _right  ring pivot boss over the sphere's seam: 2 M3 into inserts in the two halves, a bore for
-                                the handle's shaft, a cross screw riding in a groove on the shaft
-    handle_end_left / _right    shaft + spoke out along X + a 30 mm corner + the first 30 deg of the big arc
-    handle_arc_1 .. _3          the rest of the big arc in 40 deg pieces
+                                the axle, and an arc groove in its face that stops the handle level on both sides
+    handle_end_left / _right    hub + spoke out along X + a 30 mm corner + the first 45 deg of the big arc
+    handle_arc_1, _2            the rest of the big arc, 45 deg each
 
 Shape (in the arch plane, sphere frame): each spoke runs out along X from its pivot to x = LOOP_R - CORNER_R, the corner
 turns it up, and the big arc (radius LOOP_R about a point CORNER_R above the sphere centre) goes over the top. The
-spokes lie on the pivot axis, so the whole loop turns about its own spokes, like the replica's wire handle: up to
-carry, or down flat to either side to lie around the lantern's middle for display. The groove on each shaft spans
-+-105 deg, so the cross screw stops the loop at level on both sides and keeps the shaft in its bore.
+spokes lie on the pivot axis, so the whole loop turns about them, like the replica's wire handle: up to carry, or down
+flat to either side to lie around the lantern's middle for display.
 
-Joints: every joint between pieces is a LAP_L long half-thickness lap split on the arch mid-plane with 2 x M3 (nut in a
-hex pocket on the +Y face). Each piece keeps the same half at both its laps; it prints flat with the cut side up.
+Axles: a steel 1/4 x 2 in dowel pin is glued into each spoke's end and turns in the pivot's bore. A tab on the spoke's
+hub rides in the pivot's arc groove and stops the loop just past level either way. Nothing holds the pins in their
+bores axially: the two spokes face each other, so the assembled loop cannot pull off both at once. Fit the two end
+pieces on their pins into the pivots first, then join the arcs.
+
+Joints (2026-10-23): the loop is split at 45, 90 and 135 deg, away from the corners where the load is highest. Each
+joint is a LAP_L long half-thickness lap split on the arch mid-plane with 3 x M3 (nut in a hex pocket on the +Y face),
+glued with epoxy. Each piece keeps the same half at both its laps; it prints flat with the cut side up, at 100% infill.
 Section HANDLE_SECTION_W (in the plane) x HANDLE_SECTION_T (along Y), 2 mm rounded edges.
 """
 import math
@@ -28,22 +33,24 @@ ZC = CORNER_R                                        # big arc centre height in 
 X_CORNER = LOOP_R - CORNER_R                         # spoke ends / corner starts
 # pivot
 PIVOT_R, PIVOT_X1 = P.PIVOT_D / 2, S.R_OUT + P.PIVOT_T   # outer face at x = 128
-SHAFT_R = P.HANDLE_SHAFT_D / 2                       # 6
-BORE_R = SHAFT_R + P.FIT
-SHAFT_X0 = S.R_OUT + 1.5                             # shaft tip, 1.5 mm off the sphere
-SPOKE_X0 = PIVOT_X1 + 0.5                            # the flat-bar section starts just outside the pivot face
-GROOVE_X, GROOVE_W, GROOVE_D = (SHAFT_X0 + PIVOT_X1) / 2, P.M3_CLEAR + 0.4, 1.5
-GROOVE_HALF = 105.0                                  # deg either side of the top
-CROSS_Z = SHAFT_R - GROOVE_D + P.M3_CLEAR / 2 - 0.2  # cross screw axis height over the shaft axis (rides the groove floor)
-RING_GROOVES = (10.0, 20.0)                          # decorative rings on the pivot face (the mount screws sit between)
+PIN_R, PIN_L = P.HANDLE_PIN_D / 2, P.HANDLE_PIN_L
+BORE_R = PIN_R + 0.2                                 # the pin turns in the pivot
+PIN_HOLE_R = PIN_R + 0.1                             # glued into the spoke
+PIN_X0 = S.R_OUT + 1.5                               # pin tip, 1.5 mm off the sphere
+SPOKE_X0 = PIVOT_X1 + 0.5                            # the hub starts just outside the pivot face
+HUB_R, HUB_T = 10.0, 6.0                             # hub on the spoke's end: round seen end-on, flat sides
+TAB_R, TAB_W, TAB_H = 7.5, 3.0, 2.5                  # stop tab on the hub's face (radius, width, how far it stands out)
+STOP_DEPTH = 3.0                                     # arc groove in the pivot's face
+STOP_HALF = 90.0 + math.degrees(math.atan(TAB_W / 2 / TAB_R)) + 1.0   # the groove runs this far either side of the top
+RING_GROOVES = (20.0,)                               # decorative ring on the pivot face (the mount screws sit inside it)
 NUT_AF, NUT_POCKET_DEPTH = 5.6, 2.6
 # laps
-LAP_L = 24.0
+LAP_L = 40.0
+LAP_SCREWS = 3
 TIP_GAP = P.FIT
-JOINTS = (30.0, 70.0, 110.0, 150.0)                  # big-arc angles (deg, 0 = right, 90 = top)
-PIECES = [('handle_end_right', -90.0, 30.0, 'rear'), ('handle_arc_1', 30.0, 70.0, 'front'),
-          ('handle_arc_2', 70.0, 110.0, 'rear'), ('handle_arc_3', 110.0, 150.0, 'front'),
-          ('handle_end_left', 150.0, 270.0, 'rear')]
+JOINTS = (45.0, 90.0, 135.0)                         # big-arc angles (deg, 0 = right, 90 = top)
+PIECES = [('handle_end_right', -90.0, 45.0, 'rear'), ('handle_arc_1', 45.0, 90.0, 'front'),
+          ('handle_arc_2', 90.0, 135.0, 'rear'), ('handle_end_left', 135.0, 270.0, 'front')]
 BIG = 800.0
 
 
@@ -71,17 +78,25 @@ def loop_solid():
     return sec.sweep(path, transition='round')
 
 
-def shaft(sign):
-    """Round shaft (flats at y = +-T/2 so it prints flat) from the spoke into the pivot, with its stop groove."""
-    x0, x1 = sorted((sign * SHAFT_X0, sign * (SPOKE_X0 + 3.0)))
-    s = cq.Workplane('YZ').workplane(offset=x0).circle(SHAFT_R).extrude(x1 - x0)
-    s = s.intersect(cq.Workplane('XY').box(BIG, T, BIG))
-    g0, g1 = sorted((sign * (GROOVE_X - GROOVE_W / 2), sign * (GROOVE_X + GROOVE_W / 2)))
-    ring = cq.Workplane('YZ').workplane(offset=g0).circle(SHAFT_R + 1).circle(SHAFT_R - GROOVE_D).extrude(g1 - g0)
-    pts = [(0, 0)] + [(0 + 2 * SHAFT_R * math.sin(math.radians(t)), 2 * SHAFT_R * math.cos(math.radians(t)))
-                      for t in range(-int(GROOVE_HALF), int(GROOVE_HALF) + 1, 15)]
-    sector = cq.Workplane('YZ').workplane(offset=g0 - 1).polyline(pts).close().extrude(g1 - g0 + 2)
-    return s.cut(ring.intersect(sector))
+def hub(sign):
+    """Round hub on the spoke's end with the stop tab on its face (toward the pivot) and the hole the pin is glued in."""
+    x0, x1 = sorted((sign * SPOKE_X0, sign * (SPOKE_X0 + HUB_T)))
+    h = cq.Workplane('YZ').workplane(offset=x0).circle(HUB_R).extrude(x1 - x0)
+    h = h.intersect(cq.Workplane('XY').box(BIG, T, BIG))   # flat sides: the piece still prints flat
+    t0, t1 = sorted((sign * (SPOKE_X0 - TAB_H), sign * SPOKE_X0))
+    h = h.union(cq.Workplane('XY').box(t1 - t0 + 0.5, TAB_W, TAB_W).translate(((t0 + t1) / 2 + sign * 0.25, 0, TAB_R)))
+    return h
+
+
+def pin_hole(sign):
+    x0, x1 = sorted((sign * (SPOKE_X0 - TAB_H - 1), sign * (PIN_X0 + PIN_L + 0.5)))
+    return cq.Workplane('YZ').workplane(offset=x0).circle(PIN_HOLE_R).extrude(x1 - x0)
+
+
+def pin(sign):
+    """The steel dowel pin, as placed (an envelope: bought, not printed)."""
+    x0, x1 = sorted((sign * PIN_X0, sign * (PIN_X0 + PIN_L)))
+    return cq.Workplane('YZ').workplane(offset=x0).circle(PIN_R).extrude(x1 - x0)
 
 
 def _wedge(a0, a1):
@@ -107,8 +122,8 @@ def _lap_deg():
 
 def screw_points(phi):
     d, _ = _lap_deg()
-    return [(LOOP_R * math.cos(math.radians(phi + s * d / 2)), ZC + LOOP_R * math.sin(math.radians(phi + s * d / 2)))
-            for s in (-1, 1)]
+    return [(LOOP_R * math.cos(math.radians(phi + k * d * 0.6)), ZC + LOOP_R * math.sin(math.radians(phi + k * d * 0.6)))
+            for k in range(-(LAP_SCREWS // 2), LAP_SCREWS // 2 + 1)]
 
 
 def _y_hole(x, z, d):
@@ -136,10 +151,9 @@ def pieces():
                     p = p.cut(_y_hole(x, z, P.M3_CLEAR))
                     if keeps == 'rear':
                         p = p.cut(_nut_pocket(x, z))
-        if name == 'handle_end_right':
-            p = p.union(shaft(+1))
-        if name == 'handle_end_left':
-            p = p.union(shaft(-1))
+        for sign, end in ((1, 'handle_end_right'), (-1, 'handle_end_left')):
+            if name == end:
+                p = p.union(hub(sign)).cut(pin_hole(sign))
         out[name] = p
     return out
 
@@ -158,12 +172,14 @@ def pivot(sign):
         b = b.cut(cq.Workplane('YZ').workplane(offset=x0 - 1).center(y, z).circle(P.M3_CLEAR / 2).extrude(x1 - x0 + 2))
         b = b.cut(cq.Workplane('YZ').workplane(offset=face + sign * 0.01).center(y, z)
                   .circle(P.M3_HEAD_D / 2 + 0.3).extrude(-sign * 3.0))
-    # cross screw along Y over the shaft, riding in its groove: nut pocket at -Y, head counterbore at +Y
-    b = b.cut(cq.Workplane('XZ').workplane(offset=-BIG / 2).center(sign * GROOVE_X, CROSS_Z).circle(P.M3_CLEAR / 2).extrude(BIG))
-    b = b.cut(cq.Workplane('XZ').workplane(offset=-(PIVOT_R + 1)).center(sign * GROOVE_X, CROSS_Z)
-              .circle(P.M3_HEAD_D / 2 + 0.3).extrude(4.0 + 1))
-    b = b.cut(cq.Workplane(cq.Plane(origin=(sign * GROOVE_X, -PIVOT_R - 1, CROSS_Z), normal=(0, 1, 0), xDir=(1, 0, 0)))
-              .polygon(6, NUT_AF / math.cos(math.radians(30))).extrude(NUT_POCKET_DEPTH + 1 + 1.5))
+    # arc groove for the hub's stop tab: from level on one side, over the top, to level on the other
+    n = 24
+    pt = lambda r, t: (r * math.cos(math.radians(90 + t)), r * math.sin(math.radians(90 + t)))
+    ts = [-STOP_HALF + 2 * STOP_HALF * i / n for i in range(n + 1)]
+    r0, r1 = TAB_R - TAB_W / 2 - 0.5, TAB_R + TAB_W / 2 + 0.5
+    arc = cq.Workplane('YZ').workplane(offset=face - sign * STOP_DEPTH).polyline(
+        [pt(r1, t) for t in ts] + [pt(r0, t) for t in reversed(ts)]).close().extrude(sign * (STOP_DEPTH + 1))
+    b = b.cut(arc)
     return b
 
 
@@ -203,12 +219,18 @@ def build():
     global _CACHE
     if _CACHE is None:
         _CACHE = _frames()
-    return _CACHE[0]
+    out = dict(_CACHE[0])
+    out['handle_pin_right_envelope'] = pin(1)
+    out['handle_pin_left_envelope'] = pin(-1)
+    return out
 
 
 def placements():
     build()
-    return _CACHE[1]
+    pl = dict(_CACHE[1])
+    for n in ('handle_pin_right_envelope', 'handle_pin_left_envelope'):
+        pl[n] = ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_CENTER))
+    return pl
 
 
 def swing(placed, angle):
