@@ -9,8 +9,8 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
 
 Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
 Its throat slides over the collar round the opening (sphere.bell_collar) and two thumbscrews hold it (2026-10-23): no
-tools needed. They turn from inside the opening and bite outward into blind pilots in the throat, which is 8.5 mm thick
-for them, so the bell's outside shows no screws. Unplug its LED strip's lead before pulling it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
+tools needed. They run parallel to the axis from inside the sphere (sphere.bell_mounts) into 6-32 inserts in the
+throat, which is 8.5 mm thick for them; a small boss under each fills the flat spot on the shell. Nothing shows. Unplug its LED strip's lead before pulling it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
 
 Bell frame: the bell axis is +Z, the sphere centre at the origin, s (= z) the distance out from the centre.
 """
@@ -31,8 +31,8 @@ def _s_surface(r):
 F_EDGE = _s_surface(S.LENS_R)                # 96.4: sphere surface at the opening edge
 F_MOUTH = F_EDGE + P.FRONT_BELL_L            # 160.4
 F_OUT = P.FRONT_BELL_MOUTH_R                 # 84
-F_THROAT_OUT = 69.5                          # throat band: 8.5 mm wall, deep enough for the thumbscrews' blind pilots
 F_LED_R, F_LED_S = 61.0, (106.0, 116.0)      # LED collar band: 37.5 cm of 10 mm COB strip, facing the axis
+F_THROAT_OUT = F_LED_R + S.BELL_THROAT_T     # 69.5: throat band, 8.5 mm wall round the thumbscrews' inserts
 F_LEDGE_S = 117.5                            # the lens rests on this face (toward the mouth)
 LENS_R = P.DIFFUSER_D / 2                    # 59
 F_LENS_POCKET = LENS_R + P.SNUG              # 59.15: the lens presses in, a few dots of glue hold it
@@ -73,8 +73,8 @@ def front_profile():
 R_EDGE = _s_surface(S.HAND_R)                # 91.2
 R_MOUTH = R_EDGE + P.REAR_BELL_L             # 151.2
 R_OUT = P.REAR_BELL_MOUTH_R                  # 90
-R_THROAT_OUT = 82.5                          # throat band: 8.5 mm wall, deep enough for the thumbscrews' blind pilots
 R_LED_R, R_LED_S = 74.0, (104.0, 114.0)      # LED rim band: 25-30 cm of strip on the 46 cm circumference
+R_THROAT_OUT = R_LED_R + S.BELL_THROAT_T     # 82.5: throat band, 8.5 mm wall round the thumbscrews' inserts
 R_LIP_R = 78.0                               # the mouth lip: the curtain sits against its inner face
 R_LIP_T = 4.0
 R_LIP_S = R_MOUTH - R_LIP_T                  # 147.2: lip inner face (curtain seat)
@@ -124,15 +124,15 @@ def bell_bore(sign):
 
 
 def _bell(pts, sign):
-    """The revolved bell, cut by the sphere, with the two thumbscrews' blind pilots (from the bore outward)."""
+    """The revolved bell, cut by the sphere, with a boss filling each flat spot on the shell and a 6-32 insert bore up
+    its axis (the bell prints mouth down, so the insert goes in from the throat end, pointing up: no overhang)."""
     b = _revolve(pts).cut(cq.Workplane('XY').sphere(R))
-    bore = bell_bore(sign)
-    sl = S.lock_s(sign)
+    rs, sf = S.bell_screw_r(sign), S.bell_screw_s(sign)
     for a in S.BELL_LOCK_ANGLES[sign]:
-        ab = S.bell_frame_angle(sign, a)
-        pilot = cq.Workplane(cq.Plane(origin=(bore - 0.5, 0, sl), normal=(1, 0, 0))).circle(P.THUMB_PILOT / 2) \
-            .extrude(S.THUMB_PILOT_DEPTH + 0.5)
-        b = b.cut(pilot.rotate((0, 0, 0), (0, 0, 1), ab))
+        rot = lambda w: w.rotate((0, 0, 0), (0, 0, 1), S.bell_frame_angle(sign, a))
+        b = b.union(rot(cq.Workplane('XY').workplane(offset=sf).center(rs, 0).circle(S.BELL_SPOT_R - P.SNUG).extrude(8.0)))
+        b = b.cut(rot(cq.Workplane('XY').workplane(offset=sf - 0.5).center(rs, 0).circle(P.THUMB_INSERT_HOLE / 2)
+                      .extrude(P.THUMB_INSERT_DEPTH + 0.5)))
     return b
 
 

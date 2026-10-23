@@ -31,14 +31,14 @@ for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # from th
         add(n, (sx * x, y, z), (sx, 0, 0))
 for a in F.JOINT_ANGLES:
     x, y = pol(F.face_r(F.SPIGOT_R), a); dx, dy = pol(-1, a); add('foot', (x, y, F.Z_DRUM_SCREWS), (dx, dy, 0))
-pilots = []   # thumbscrew pilot holes (self-tapping, no insert); all blind, the heads inside the lantern
+pilots = []   # 6-32 insert bores for the thumbscrews; all blind, the heads inside the lantern
 for z, angles in ((S.Z_LOWER_SCREWS, S.JOINT_ANGLES), (S.Z_UPPER_SCREWS, S.TOP_JOINT_ANGLES)):   # out into the collars
     for a in angles:
         pilots.append(('sphere_rear', (*pol(S.OPENING_ID / 2, a), z), (*pol(1, a), 0)))
-for sign, n in ((-1, 'bell_front'), (1, 'bell_rear')):   # bell thumbscrews, out into the throats (bell frame)
+for sign, n in ((-1, 'bell_front'), (1, 'bell_rear')):   # bell thumbscrews, up the throats parallel to the axis (bell frame)
     for a in S.BELL_LOCK_ANGLES[sign]:
         ab = S.bell_frame_angle(sign, a)
-        pilots.append((n, (*pol(BL.bell_bore(sign), ab), S.lock_s(sign)), (*pol(1, ab), 0)))
+        pilots.append((n, (*pol(S.bell_screw_r(sign), ab), S.bell_screw_s(sign)), (0, 0, 1)))
 for a in T.CAP_FLOOR_SCREW_ANGLES:
     pilots.append(('top_cap', (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR0), (0, 0, -1)))
 for mx, my in T.board_layout.MOUNTS: add('cap_floor', (*T.board_point(mx, my), T.BOARD_STANDOFF), (0, 0, -1))
@@ -62,12 +62,13 @@ for i, (n, p, d) in enumerate(rows):
     if max(blocked, missing, opened) > .02: fail.append((n, p, blocked, missing, opened))
 assert len(rows) == 17, len(rows)
 assert not fail, fail
-# Thumbscrew pilots: open for the thread's length, 1.5 mm of plastic round them and 1 mm behind the tip.
+# 6-32 insert bores: open for the insert, 1.2 mm of plastic round them and 1 mm behind.
+ri, di = P.THUMB_INSERT_HOLE / 2, P.THUMB_INSERT_DEPTH
 for n, p, d in pilots:
     solid = solids[n]
-    bore = cylinder(p, d, P.THUMB_PILOT / 2 - .001, 0, F.THUMB_PILOT_DEPTH - .001)
-    wall = cylinder(p, d, P.THUMB_PILOT / 2 + 1.5, .15, F.THUMB_PILOT_DEPTH - .05, P.THUMB_PILOT / 2 + .001)
-    end = cylinder(p, d, P.THUMB_PILOT / 2 - .01, F.THUMB_PILOT_DEPTH + .5 + .001, F.THUMB_PILOT_DEPTH + 1.5)
+    bore = cylinder(p, d, ri - .001, 0, di - .001)
+    wall = cylinder(p, d, ri + 1.2, .15, di - .05, ri + .001)
+    end = cylinder(p, d, ri - .01, di + .001, di + 1.0)
     v = (volume(bore.intersect(solid)), volume(wall.cut(solid)), volume(end.cut(solid)))
     print('pilot', n, [round(x, 4) for x in v])
     assert max(v) < .02, (n, p, v)
@@ -113,11 +114,12 @@ def knob(p, d, r_floor):
 shanks = []   # (label, start point, direction, length, parts it passes through)
 for sign, n, half in ((-1, 'bell_front', 'sphere_front'), (1, 'bell_rear', 'sphere_rear')):   # bell thumbscrews
     for a in S.BELL_LOCK_ANGLES[sign]:
-        r_floor = S.collar_dims(sign)[1] - P.THUMB_WEB        # counterbore floor: the collar bears here
-        x, z = pol(r_floor, a); dx, dz = pol(1, a)
-        p = (x, sign * S.lock_s(sign), ZC + z)
-        shanks.append(('bell thumbscrew', p, (dx, 0, dz), P.THUMB_THREAD_L, (n, half)))
-        clear_of_all(knob(p, (-dx, 0, -dz), r_floor), 'bell thumbscrew head')
+        x, z = pol(S.bell_screw_r(sign), a)                    # parallel to the axis, from inside the sphere
+        p = (x, sign * S.bell_seat_s(sign), ZC + z)
+        shanks.append(('bell thumbscrew', p, (0, sign, 0), P.THUMB_THREAD_L, (n, half)))
+        clear_of_all(knob(p, (0, -sign, 0), 0), 'bell thumbscrew head')
+        # hidden: looking straight in, the head lies wholly behind the opening's edge
+        assert S.bell_screw_r(sign) - P.THUMB_HEAD_D / 2 > S.collar_dims(sign)[0] + 1.0, ('bell thumbscrew head shows', sign)
 for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x12 from inside the sphere
     for y, z in S.PIVOT_SCREWS:
         half = 'sphere_front' if y < 0 else 'sphere_rear'
@@ -165,8 +167,8 @@ for label, p0, d, length, names in shanks:
 print(f'{len(shanks)} screw shanks checked through their parts')
 assert not bad, bad
 # negative control: a shank 3 mm off its holes must be caught
-p0 = shanks[0][1]
-assert inter_volume(cylinder((p0[0] + 3, p0[1], p0[2]), (0, 0, 1), 1.4, 0, 10), placed['bell_front']) > 1
+_, p0, d0, l0, _ = shanks[0]
+assert inter_volume(cylinder((p0[0], p0[1], p0[2] + 3), d0, 1.4, 0, l0), placed['bell_front']) > 1
 
 # Bells: they clear the sphere in place, and with the thumbscrews out they slide straight off their collars.
 for sign, n, half in ((-1, 'bell_front', 'sphere_front'), (1, 'bell_rear', 'sphere_rear')):

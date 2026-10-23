@@ -8,8 +8,8 @@ Only the tube and the pump's two wires (through one plug) cross between the lant
 
 Parts (print orientation, bed = XY, min z = 0):
   base               drum, open both ends, printed upright; 3 bayonet lugs inside its bottom edge (45 deg undersides)
-  screw_cap          GREEN, print 21: a 1 mm disc pressed over each drum screw's head (3) and each handle lap screw's head
-                     and nut (18), flush with the surface, so the outside shows no screws (2026-10-23)
+  screw_cap          GREEN, print 25: a 1 mm disc pressed over each drum screw's head (3), each handle lap screw's head
+                     and nut (18) and each pivot screw's head inside the sphere (4), flush, so no screws show (2026-10-23)
   base_tray          the cartridge: floor, bayonet collar with 3 L-slots and click bumps, pump saddles and strap slots,
                      splash wall between the pump and the bag
   pump_envelope      KPHM200: head box PUMP_W x PUMP_H x PUMP_HEAD_L_EST + motor can PUMP_MOTOR_D, PUMP_L long,

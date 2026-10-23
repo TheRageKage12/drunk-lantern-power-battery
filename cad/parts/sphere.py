@@ -22,8 +22,8 @@ FLAT_D = C.sphere_flat_d(P.SPHERE_D, CUT)   # 136.8
 OPENING_ID = FLAT_D - 2 * P.WALL            # 132.0: MATING with the neck locating rings (OD 131.4)
 OPENING_DEPTH = 9.0                         # collar depth from each flat
 COLLAR_R_OUT = OPENING_ID / 2 + 4.5         # 70.5: the collar ring inside each flat (the shell alone gives 1.2 mm)
-Z_LOWER_SCREWS = -CUT + P.THUMB_INSET            # -81.7, matches foot.Z_SPHERE_SCREWS
-Z_UPPER_SCREWS = CUT - P.THUMB_INSET             # +81.7, matches top.Z_SPHERE_SCREWS
+Z_LOWER_SCREWS = -CUT + P.THUMB_INSET            # -80.7, matches foot.Z_SPHERE_SCREWS
+Z_UPPER_SCREWS = CUT - P.THUMB_INSET             # +80.7, matches top.Z_SPHERE_SCREWS
 # Thumbscrews (2026-10-23) at both flats, toward the back and sides, away from the front lens (and clear of the wall
 # extension's tabs at the top): the top cap and the base come off with them, leaving the sphere. They turn from inside
 # the neck (heads in the top cap's plug / the foot's riser) and bite outward into blind pilots in the collar, so the
@@ -45,24 +45,30 @@ FLANGE_SCREW_R = FLANGE_R_IN + FLANGE_W / 2 # 83.3
 BOSS_L = 9.0                                # insert boss length along -Y on the front half
 
 # rev C openings and the bell mounts (2026-10-23): a plain collar stands out round each opening; the bell slides over it
-# and two thumbscrews hold it. No tools needed. They turn from INSIDE the opening (reach in and round the corner): the
-# head sits on a pad inside the collar, the thread bites outward into a blind pilot in the bell's thickened throat.
+# and two thumbscrews hold it. No tools needed. They run parallel to the bell's axis (the way the hand goes in), from
+# INSIDE the sphere: the head sits on a pad on the shell's inside, behind the opening's edge, so nothing shows looking
+# in; the thread goes out through the shell into a 6-32 insert in the bell's thickened throat. Under the throat a flat
+# pocket is sunk into the shell round each screw and a matching boss on the bell fills it, so the insert starts square.
 # Bell frame: the bell's axis is +Z (s = distance out from the sphere centre); sign -1 front (-Y), +1 rear (+Y).
 LENS_R, HAND_R = P.LENS_OPENING_R, P.HAND_OPENING_R    # 57, 70
 COLLAR_T = 3.7                              # collar wall
 COLLAR_OUT = 7.6                            # collar end, this far out from the sphere surface at the opening edge
-# thumbscrews in the XZ plane from +X. Front: at the sides, reached from the hand opening past the lock wall's ends.
-# Rear: under the bell either side, reached through the bell's mouth.
-BELL_LOCK_ANGLES = {-1: (0.0, 180.0), 1: (225.0, 315.0)}
-BELL_PAD_IN = P.THUMB_PAD_T - COLLAR_T      # 0.8: the pad stands this far into the opening
-BELL_PAD_W = 11.0
-THUMB_PILOT_DEPTH = 6.5
+# thumbscrews in the XZ plane from +X, all four over the top: looking in from anywhere above the table, the rear ones
+# hide behind the opening's top edge and the front ones behind the lock wall and its extension (at the sides or
+# underneath, renders showed them through the hand opening). Rear: reach in and up. Front: reach in past the end of
+# the lock wall and back in behind it.
+BELL_LOCK_ANGLES = {-1: (45.0, 135.0), 1: (45.0, 135.0)}
+BELL_THROAT_T = 8.5                         # the bell's throat wall: the inserts sit in its middle
+BELL_SPOT_R = 4.0                           # flat spot under each screw: stays inside the throat's footprint
+BELL_PAD_R = 5.5                            # flat face under the thumbscrew's collar; a 45 deg skirt up to the shell
 PAD_R = 4.5
 PIVOT_ENTRY = 0.6                           # the curved surface over a 4 mm bore: full wall starts this far in
 # ring pivots for the handle: each pivot boss (parts/handle.py) sits over the seam. 2026-10-23: the 2 M3 x 12 come from
 # INSIDE the sphere (heads on pads inside the shell) into inserts in the pivot, so the pivot's face shows no screws.
 PIVOT_SCREWS = ((-12.0, -10.0), (12.0, -10.0))   # (y, z) of the two M3 on each side, axis along X
 PIVOT_CLAMP = 6.0                           # shell + pad under each head: an M3 x 12 then bites 6 mm into the pivot
+PIVOT_CB = 3.0 + P.SCREW_CAP_T + 0.1        # each head sinks in the pad under a green screw cap (seen at an angle
+PIVOT_PAD_R = 5.5                           # through the hand opening otherwise)
 
 # bay floor and lock wall (rev 8)
 BAY_FLOOR_OD = 131.0
@@ -157,37 +163,48 @@ def collar_dims(sign):
     return r, r + COLLAR_T, s_end, (s_end - 6.0, s_end - 1.0)
 
 
-def lock_s(sign):
-    """Thumbscrew axis: far enough in from the collar's end that its counterbore stays whole."""
-    return collar_dims(sign)[2] - 5.5
+def bell_screw_r(sign):
+    """Distance of a bell thumbscrew from the bell's axis: the middle of the throat's wall."""
+    return collar_dims(sign)[1] + P.FIT + BELL_THROAT_T / 2      # front 65.25, rear 78.25
 
 
-def bell_pad_r(sign):
-    """Inner face of the pad under a bell thumbscrew (its head sits here, inside the opening)."""
-    return collar_dims(sign)[0] - BELL_PAD_IN
+def bell_screw_s(sign):
+    """The flat joint face under a bell thumbscrew, set so the knurled head hangs wholly inside the shell with room for
+    fingers (the shell slopes in toward the centre further out, so its far edge sets it); the flat spot is sunk through
+    the shell to here and the pad behind it supplies the plastic."""
+    r_edge = bell_screw_r(sign) + P.THUMB_HEAD_D / 2 + 0.5
+    return math.sqrt(R_IN ** 2 - r_edge ** 2) - 0.1 + P.THUMB_COLLAR_L + P.THUMB_WEB   # front 87.8, rear 74.6
+
+
+def bell_seat_s(sign):
+    """Where the thumbscrew's collar bears: THUMB_WEB inside the joint face."""
+    return bell_screw_s(sign) - P.THUMB_WEB
 
 
 def bell_collar(sign):
-    """Locating collar round an opening, in the bell frame, with a pad inside it at each thumbscrew (the pads run
-    along the axis: no overhang, the halves print dome up). Returns (collar, the thumbscrews' counterbores and
-    clearance holes)."""
+    """Plain locating collar round an opening, in the bell frame."""
     r, ro, s_end, _ = collar_dims(sign)
     c = cq.Workplane('XY').circle(ro).circle(r).extrude(s_end)
-    sl = lock_s(sign)
-    rp = bell_pad_r(sign)
-    hole = None
-    for a in BELL_LOCK_ANGLES[sign]:
-        ab = bell_frame_angle(sign, a)
-        pad = cq.Workplane('XY').box(r - rp + 1.0, BELL_PAD_W, s_end, centered=(False, True, False)).translate((rp, 0, 0))
-        c = c.union(pad.rotate((0, 0, 0), (0, 0, 1), ab))
-        cb_depth = ro - rp - P.THUMB_WEB
-        h = cq.Workplane(cq.Plane(origin=(rp - 0.5, 0, sl), normal=(1, 0, 0))).circle(P.THUMB_CB_D / 2).extrude(cb_depth + 0.5)
-        h = h.union(cq.Workplane(cq.Plane(origin=(rp - 0.5, 0, sl), normal=(1, 0, 0))).circle(P.THUMB_CLEAR / 2)
-                    .extrude(ro - rp + 1.0))
-        h = h.rotate((0, 0, 0), (0, 0, 1), ab)
-        hole = h if hole is None else hole.union(h)
     c = c.cut(cq.Workplane('XY').sphere(R_IN + 0.5))               # stops inside the shell
-    return c.intersect(cq.Workplane('XY').sphere(R_OUT + 40)), hole
+    return c.intersect(cq.Workplane('XY').sphere(R_OUT + 40))
+
+
+def bell_mounts(sign):
+    """The two thumbscrew mounts for a bell, in the bell frame: (pads to add inside the shell, cuts: the collar's
+    counterbore, the clearance hole and the flat spot outside)."""
+    rs, sf = bell_screw_r(sign), bell_screw_s(sign)
+    sp = sf - P.THUMB_PAD_T                                      # pad face (head side)
+    pads, cuts = [], []
+    for a in BELL_LOCK_ANGLES[sign]:
+        rot = lambda w: w.rotate((0, 0, 0), (0, 0, 1), bell_frame_angle(sign, a))
+        pad = cq.Workplane('XY').workplane(offset=sp).center(rs, 0).circle(BELL_PAD_R).extrude(sf - sp + 3)
+        pad = pad.union(cq.Workplane('XY').add(cq.Solid.makeCone(BELL_PAD_R, BELL_PAD_R + 16, 16, pnt=cq.Vector(rs, 0, sp))))
+        pads.append(rot(pad.intersect(cq.Workplane('XY').sphere(R_OUT - 0.05))))
+        c = cq.Workplane('XY').workplane(offset=sp - 1).center(rs, 0).circle(P.THUMB_CB_D / 2).extrude(bell_seat_s(sign) - sp + 1)
+        c = c.union(cq.Workplane('XY').workplane(offset=sp - 1).center(rs, 0).circle(P.THUMB_CLEAR / 2).extrude(sf - sp + 2))
+        c = c.union(cq.Workplane('XY').workplane(offset=sf).center(rs, 0).circle(BELL_SPOT_R).extrude(15))
+        cuts.append(rot(c))
+    return pads, cuts
 
 
 def pivot_seat_x(y, z):
@@ -204,17 +221,23 @@ def pivot_bosses(half):
             if (y < 0) != (half == 'front'):
                 continue
             x0 = sx * pivot_seat_x(y, z)
-            boss = cq.Workplane('YZ').workplane(offset=x0).center(y, z).circle(PAD_R).extrude(sx * (PIVOT_CLAMP + 2))
-            adds.append(boss.intersect(cq.Workplane('XY').sphere(R_OUT - 0.2)))
+            xf = x0 - sx * PIVOT_CB                  # the pad's inner face: the cap sits flush with it
+            boss = cq.Workplane('YZ').workplane(offset=xf).center(y, z).circle(PIVOT_PAD_R).extrude(sx * (PIVOT_CLAMP + PIVOT_CB + 2))
+            boss = boss.union(cq.Workplane('XY').add(cq.Solid.makeCone(PIVOT_PAD_R, PIVOT_PAD_R + 12, 12, pnt=cq.Vector(xf, y, z),
+                                                                        dir=cq.Vector(sx, 0, 0))))   # 45 deg skirt to the shell
+            y0, y1 = (-130, -P.FIT) if half == 'front' else (0, 130)     # the skirt stops at the seam
+            adds.append(boss.intersect(cq.Workplane('XY').sphere(R_OUT - 0.2)).intersect(big_box(-130, 130, y0, y1, -130, 130)))
             cuts.append(cq.Workplane('YZ').workplane(offset=x0 - sx * 1.0).center(y, z)
                         .circle(P.M3_CLEAR / 2).extrude(sx * (PIVOT_CLAMP + 3)))
+            cuts.append(cq.Workplane('YZ').workplane(offset=xf - sx * 0.5).center(y, z)
+                        .circle(P.SCREW_CAP_CB_D / 2).extrude(sx * (PIVOT_CB + 0.5)))
     return adds, cuts
 
 
 def radial_screw_cutters(z, angles):
-    """Blind thumbscrew pilots at height z, from the collar's bore outward (the screws come from inside the neck)."""
+    """6-32 insert bores at height z, from the collar's bore outward (the thumbscrews come from inside the neck)."""
     r0 = OPENING_ID / 2
-    return [C.radial_hole(z, a, r0 + THUMB_PILOT_DEPTH + 0.5, THUMB_PILOT_DEPTH + 1.5, P.THUMB_PILOT) for a in angles]
+    return [C.radial_hole(z, a, r0 + P.THUMB_INSERT_DEPTH, P.THUMB_INSERT_DEPTH + 1.0, P.THUMB_INSERT_HOLE) for a in angles]
 
 
 def thumb_bosses():
@@ -264,23 +287,23 @@ def build_halves():
     a, c = pivot_bosses('front')
     adds += a
     fcuts += c
-    for a in adds:
+    pads, mcuts = bell_mounts(-1)
+    for a in adds + [to_sphere(p, -1) for p in pads]:
         front = front.union(a)
     front = front.cut(y_cyl(LENS_R, -40, -130))
-    collar, hole = bell_collar(-1)
-    front = front.union(to_sphere(collar, -1)).cut(to_sphere(hole, -1))
-    for c in fcuts:
+    front = front.union(to_sphere(bell_collar(-1), -1))
+    for c in [to_sphere(c, -1) for c in mcuts] + fcuts:
         front = front.cut(c)
 
     # ---- rear: flange, hand opening (the fist goes in here) and its bell collar, pivot bosses
     rear = rear.union(flange_solid())
     adds, rcuts = pivot_bosses('rear')
-    for a in adds:
+    pads, mcuts = bell_mounts(+1)
+    for a in adds + [to_sphere(p, +1) for p in pads]:
         rear = rear.union(a)
     rear = rear.cut(y_cyl(HAND_R, 40, 130))
-    collar, hole = bell_collar(+1)
-    rear = rear.union(to_sphere(collar, +1)).cut(to_sphere(hole, +1))
-    for c in rcuts:
+    rear = rear.union(to_sphere(bell_collar(+1), +1))
+    for c in [to_sphere(c, +1) for c in mcuts] + rcuts:
         rear = rear.cut(c)
     return front, rear
 

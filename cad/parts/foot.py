@@ -35,12 +35,11 @@ NECK_RI = R_NECK - P.WALL                            # 66.0
 BEARING_T = 2.5                                      # ring joining the neck to the riser, under the sphere's flat
 
 Z_DRUM_SCREWS = P.BASE_H - 5.0                       # 75: MATING base.BASE_JOINT_Z
-Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_LOWER_SCREWS   # 138.6
+Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_LOWER_SCREWS   # 139.6
 JOINT_ANGLES = C.joint_angles()                      # 90, 210, 330: drum screws
 SPHERE_ANGLES = S.JOINT_ANGLES                       # thumbscrews out into the sphere
 BOSS_W, BOSS_DEPTH = 10.0, P.M3_INSERT_DEPTH + 1.5   # radial insert bosses (8 deep)
 PAD_W = 14.0                                         # thumbscrew pads inside the riser
-THUMB_PILOT_DEPTH = 6.5                              # the thumbscrew's thread and tip; 1.5 mm of boss left behind it
 
 
 def _inner_cone(z):

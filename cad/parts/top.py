@@ -35,7 +35,7 @@ R_NECK = S.FLAT_D / 2                                # 68.4
 PLUG_R = S.OPENING_ID / 2 - P.FIT                    # 65.7: into the sphere's top collar
 PLUG_RI = PLUG_R - P.WALL                            # 63.3
 Z_FLAT = P.Z_SPHERE_TOP                              # 309.0
-PLUG_L = 13.0                                        # 2026-10-23: 4 mm below the collar, to take the thumbscrews 7 mm down
+PLUG_L = 13.0                                        # 2026-10-23: 4 mm below the collar, to take the thumbscrews 8 mm down
 Z_PLUG0 = Z_FLAT - PLUG_L                            # 296.0
 Z_NECK1 = Z_FLAT + P.NECK_H                          # 334.0
 Z_CAP0, Z_TOP = P.Z_CAP0, P.Z_CAP_TOP                # 360.6, 440.6
@@ -49,11 +49,10 @@ CAP_FLOOR_R = R_CAP_IN - P.FIT                       # 92.3
 CAP_FLOOR_SCREW_R = 85.0                             # far enough in that each insert stays inside the flare wall
 CAP_FLOOR_SCREW_ANGLES = (60.0, 180.0, 300.0)        # clear of the battery, board, buck, S1 and the charge socket
 RIM_RI, RIM_H = 89.0, 14.0                           # thickened rim for the lid's L-grooves
-Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_UPPER_SCREWS   # 302.0
+Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_UPPER_SCREWS   # 301.0
 JOINT_ANGLES = S.TOP_JOINT_ANGLES                  # thumbscrews out into the sphere: clear of the wall extension's tabs
-THUMB_PILOT_DEPTH = 6.5
 PAD_W = 14.0
-CAP_FLOOR_PILOT_DEPTH = 7.0                          # thumbscrew pilots in the cap floor's bosses
+CAP_FLOOR_BOSS_IN = 4.5                              # the cap floor bosses reach this far inside the screw circle
 BOSS_W, BOSS_DEPTH = 10.0, P.M3_INSERT_DEPTH + 1.5
 
 # lid bayonet: lugs on the halo ring's tube, L-grooves in the cap rim; push down, twist LID_TWIST clockwise (from above)
@@ -131,7 +130,7 @@ def build_top_cap():
     for a in JOINT_ANGLES:                                   # pads under the 3 thumbscrews (heads inside the plug)
         c = c.union(_boss(PLUG_R, Z_PLUG0, Z_FLAT + BEARING_T, a, w=PAD_W, depth=math.sqrt(PLUG_R ** 2 - (PAD_W / 2) ** 2) - rp))
     for a in CAP_FLOOR_SCREW_ANGLES:                         # cap floor bosses under the ledge (45 deg corbels)
-        r0 = CAP_FLOOR_SCREW_R - 3.3
+        r0 = CAP_FLOOR_SCREW_R - CAP_FLOOR_BOSS_IN
         pts = [(r0, Z_CAP_FLOOR0 - 8.0), (R_CAP_IN + 0.5, Z_CAP_FLOOR0 - 8.0 - (R_CAP_IN + 0.5 - r0)),
                (R_CAP_IN + 0.5, Z_CAP_FLOOR0), (r0, Z_CAP_FLOOR0)]
         c = c.union(cq.Workplane('XZ').polyline(pts).close().extrude(BOSS_W / 2, both=True)
@@ -139,10 +138,10 @@ def build_top_cap():
     for a in JOINT_ANGLES:                                   # clearance through, the collar's counterbore from inside
         c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R + 0.5, PLUG_R - rp + 1.0, P.THUMB_CLEAR))
         c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R - P.THUMB_WEB, PLUG_R - P.THUMB_WEB - rp + 0.5, P.THUMB_CB_D))
-    for a in CAP_FLOOR_SCREW_ANGLES:                         # cap floor thumbscrew pilots
+    for a in CAP_FLOOR_SCREW_ANGLES:                         # 6-32 inserts for the cap floor's thumbscrews
         x, y = _ang_point(CAP_FLOOR_SCREW_R, a)
-        c = c.cut(cq.Workplane('XY').workplane(offset=Z_CAP_FLOOR0 - CAP_FLOOR_PILOT_DEPTH).center(x, y)
-                  .circle(P.THUMB_PILOT / 2).extrude(CAP_FLOOR_PILOT_DEPTH + 0.5))
+        c = c.cut(cq.Workplane('XY').workplane(offset=Z_CAP_FLOOR0 - P.THUMB_INSERT_DEPTH).center(x, y)
+                  .circle(P.THUMB_INSERT_HOLE / 2).extrude(P.THUMB_INSERT_DEPTH + 0.5))
     # lid L-grooves: an entry slot down from the rim, then a leg turning clockwise seen from above (negative angle)
     half = math.degrees(LUG_W / 2 / GROOVE_R) + 1.0
     for a in LID_LUG_ANGLES:

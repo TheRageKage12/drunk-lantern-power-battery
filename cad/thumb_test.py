@@ -1,29 +1,32 @@
-"""Test coupon for the knurled thumbscrews: a block with three pilot holes and a 3 mm plate like the sphere's collar.
+"""Test coupon for the 6-32 heat-set inserts the thumbscrews thread into: a block with three insert holes and a 2 mm
+plate (THUMB_WEB, what each thumbscrew clamps in the lantern) with its counterbore.
 
-    cd cad && python3 thumb_test.py        # -> output/thumb_test.stl (print in PETG like the lantern, ~6 g)
+    cd cad && python3 thumb_test.py        # -> output/thumb_test.stl (print in PETG like the lantern, ~8 g)
 
-Drive a thumbscrew (6-32, PC-case thread) through the plate into each pilot hole. Pick the hole where it cuts a firm
-thread and still turns by hand, and set THUMB_PILOT in params.py to that size (2.8 is designed in).
-Not part of build.py: it is a tool, not a part of the lantern.
+Melt an insert (initeq #6-32 long) into each hole with the soldering iron, top flush. Pick the hole where it goes in
+straight, sits flush and doesn't spin when the thumbscrew is tightened through the plate, and set THUMB_INSERT_HOLE in
+params.py to that size (4.8 is designed in). Not part of build.py: it is a tool, not a part of the lantern.
 """
 import os
 import cadquery as cq
 import params as P
 
-PILOTS = (2.6, 2.8, 3.0)
-DEPTH = 6.5 + 1.0
+HOLES = (4.6, 4.8, 5.0)
+PITCH = 16.0
 
 
 def build():
-    w = 16.0 * len(PILOTS)
-    block = cq.Workplane('XY').box(w, 14, DEPTH + 1.5, centered=(True, True, False))
-    for i, d in enumerate(PILOTS):
-        x = (i - (len(PILOTS) - 1) / 2) * 16.0
-        block = block.cut(cq.Workplane('XY').workplane(offset=1.5).center(x, 0).circle(d / 2).extrude(DEPTH + 1))
-        label = cq.Workplane('XZ').workplane(offset=7.0).center(x, (DEPTH + 1.5) / 2).text(f'{d:.1f}', 3.5, 0.6, combine=False)
+    h = P.THUMB_INSERT_DEPTH + 1.5
+    block = cq.Workplane('XY').box(PITCH * len(HOLES), 14, h, centered=(True, True, False))
+    for i, d in enumerate(HOLES):
+        x = (i - (len(HOLES) - 1) / 2) * PITCH
+        block = block.cut(cq.Workplane('XY').workplane(offset=h - P.THUMB_INSERT_DEPTH).center(x, 0).circle(d / 2).extrude(P.THUMB_INSERT_DEPTH + 1))
+        label = cq.Workplane('XZ').workplane(offset=7.0).center(x, h / 2).text(f'{d:.1f}', 3.5, 0.6, combine=False)
         block = block.cut(label.translate((0, 0.01, 0)))
-    plate = cq.Workplane('XY').box(16, 14, P.THUMB_GRIP, centered=(True, True, False)).translate((0, 22, 0))
-    plate = plate.cut(cq.Workplane('XY').workplane(offset=-1).center(0, 22).circle(P.THUMB_CLEAR / 2).extrude(P.THUMB_GRIP + 2))
+    t = P.THUMB_PAD_T
+    plate = cq.Workplane('XY').box(16, 14, t, centered=(True, True, False)).translate((0, 22, 0))
+    plate = plate.cut(cq.Workplane('XY').workplane(offset=-1).center(0, 22).circle(P.THUMB_CLEAR / 2).extrude(t + 2))
+    plate = plate.cut(cq.Workplane('XY').workplane(offset=P.THUMB_WEB).center(0, 22).circle(P.THUMB_CB_D / 2).extrude(t))
     return block.union(plate)
 
 

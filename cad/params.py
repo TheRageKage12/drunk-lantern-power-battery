@@ -26,21 +26,24 @@ M3_HEAD_D = 6.0             # socket head diameter (for counterbores)
 # Kevin's knurled thumbscrews (2026-10-23; he has 23): PC-case thumbscrews, so 6-32 UNC machine thread (3.5 mm), about
 # 6.5 mm long, a 7 mm x 2.6 mm collar under an 11 mm x 8.7 mm knurled head (sizes from his photo). Rule: whatever is
 # taken apart now and then uses these (top cap and base to the sphere, the bell locks); the rest uses M3.
-# They cut their own thread in a pilot hole in the PETG (fine for occasional use; 6-32 heat-set inserts would also fit).
+# They thread into 6-32 brass heat-set inserts (below), so they don't wear the plastic.
 THUMB_THREAD_L, THUMB_COLLAR_D, THUMB_HEAD_D = 6.5, 7.0, 11.0
 THUMB_COLLAR_L = 2.6
-THUMB_PILOT = 2.8           # pilot hole it threads into (PETG; 6-32 tap drill is 2.7)
 THUMB_CLEAR = 3.9           # clearance hole through the part it clamps
-THUMB_GRIP = 3.0            # clamped thickness under the collar: leaves ~3 mm of thread biting the boss
 # 2026-10-23 (Kevin): every thumbscrew turns from INSIDE the lantern, so the outside shows no screws. The head sits
 # in the cap's neck, the foot's neck or a bell's opening; its collar sinks into a counterbore in a THUMB_PAD_T pad,
-# leaving THUMB_WEB of plastic clamped, and the thread bites THUMB_THREAD_L - THUMB_WEB - FIT = 4.2 mm into the part
-# outside it (3 mm before), which is thickened to take a blind pilot.
+# leaving THUMB_WEB of plastic clamped, and the thread reaches THUMB_THREAD_L - THUMB_WEB - FIT = 4.2 mm into the
+# insert in the part outside it, which is thickened to take the insert blind.
 THUMB_PAD_T = 4.5           # pad on the inner part (plug, riser, bell collar) under each thumbscrew
 THUMB_WEB = 2.0             # plastic left under the collar's counterbore: what the thumbscrew clamps
 THUMB_CB_D = THUMB_COLLAR_D + 0.8
 THUMB_HEAD_L = 8.7          # knurled head length
-THUMB_INSET = 7.0           # sphere <-> top cap / foot thumbscrews this far inside the sphere's flats
+THUMB_INSET = 8.0           # sphere <-> top cap / foot thumbscrews this far inside the sphere's flats
+# 6-32 brass heat-set inserts for every thumbscrew (2026-10-23, Kevin bought initeq #6-32 long, amazon.com/dp/B076QY9858:
+# 0.25 in long, 0.206 in tapering to 0.185 in), so the threads never wear. Hole between the two diameters; print
+# thumb_test.py to confirm the size.
+THUMB_INSERT_HOLE = 4.8
+THUMB_INSERT_DEPTH = 7.0    # insert 6.35 + 0.65 for the plastic it pushes ahead of it
 # green caps over the M3 heads and nuts that would otherwise show (drum and handle laps): a 1 mm disc pressed into a
 # 6.8 mm counterbore (wide enough for a nut's corners), flush with the surface; a dot of glue if it's loose
 SCREW_CAP_T, SCREW_CAP_CB_D = 1.0, 6.8
