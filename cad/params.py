@@ -40,10 +40,10 @@ D2F_HOLE_D, D2F_HOLE_PITCH = 2.4, 6.5               # two mounting holes through
 D2F_LEVER_LEN = 13.5                                # free end measured from the hinge pivot
 
 # ---------------------------------------------------------------- pump / fluid (Kamoer KPHM200, 12 V)
-PUMP_L = 118.0              # Kamoer KPHM200 overall 115.6 mm (Amazon dims) + margin; head end = tube ports
-PUMP_HEAD_D = 64.0          # KPHM200 is ~64 x 63 mm across the head (box-like); saddle for a 64 mm round/box
-PUMP_MOTOR_D = 40.0         # motor can diameter (estimate; a 300 g 1:8 gear motor)
-PUMP_W, PUMP_H = 64.0, 63.0 # envelope width/height when lying with the motor axis horizontal
+PUMP_L = 118.0              # Kamoer KPHM200 overall, measured 114 mm (Kevin, 2026-10-23) + margin; head end = tube ports
+PUMP_HEAD_D = 64.0          # head measured 2.5 x 2.5 in (63.5 mm square, Kevin); saddle for a 64 mm box
+PUMP_MOTOR_D = 40.0         # silver motor can, measured 40 mm across and ~50 mm long (Kevin, 2026-10-23)
+PUMP_W, PUMP_H = 64.0, 64.0 # envelope width/height when lying with the motor axis horizontal (63.5 measured)
 TUBE_OD = 6.4               # 1/8" ID x 1/4" OD food-grade silicone for the head
 TUBE_ID = 3.2
 TUBE_GROMMET_D = 7.0        # hole for the tube to pass a wall

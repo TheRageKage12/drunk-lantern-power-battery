@@ -299,7 +299,7 @@ exception in build.py output.
   ~1.3 A peak with a COB strip). The deck rises 18 mm (DECK_GAP 4 -> 2, the deck now holds the pack down).
   Fit checks pass, but the closest gaps are now radial, to the lower dish's inner wall above z 107: pump
   envelope top corner 0.98 mm, jar envelope 0.51 mm (the real jar, <= 73 mm with its lid, has ~2 mm). The
-  pump envelope is an estimate: measure the head before printing base and dish_lower.
+  pump envelope was an estimate then; measured 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall).
 - LED strip: green COB, 8 mm, cut every 25 mm (HAMRVL B0CKYFLZFQ): back rows one 10 cm piece each, front
   columns 5 cm each, the top ring one 25 cm piece; ~0.6 A estimated for 75 cm.
 - Review fixes (rev 9g): the sphere's six dish-joint holes started at r = 92 and never reached the collar wall
