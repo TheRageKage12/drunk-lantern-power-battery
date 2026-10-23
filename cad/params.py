@@ -178,7 +178,10 @@ HANDLE_SECTION_W, HANDLE_SECTION_T = 14.0, 10.0
 HANDLE_LOOP_R = 235.0       # big arc radius (centreline): its inside clears the lid's edge by ~12 mm as it swings
 HANDLE_CORNER_R = 30.0      # spoke -> arc corner; the big arc's centre is this far above the sphere centre
 PIVOT_D, PIVOT_T = 44.0, 16.0   # ring pivot boss on each side of the sphere, over the seam
-HANDLE_PIN_D, HANDLE_PIN_L = 6.35, 50.8   # steel 1/4 x 2 in dowel pin: the axle in each pivot, glued into the spoke's end
+HANDLE_AXLE = 'printed'     # 'printed': a 12 mm shaft printed on each spoke's end (2026-10-23 default: no pins to buy);
+                            # 'pin': a steel 1/4 x 2 in dowel pin glued into each spoke's end (stronger; reprint both ends)
+HANDLE_SHAFT_D = 12.0       # printed axle (flats at +/- T/2 so the end pieces print flat)
+HANDLE_PIN_D, HANDLE_PIN_L = 6.35, 50.8   # steel dowel pin option
 
 # derived heights (assembly, Z from the ground)
 FLARE_H = (D_MAX - SPHERE_FLAT_D) / 2 / math.tan(math.radians(FLARE_ANGLE))   # 26.6

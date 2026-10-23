@@ -11,10 +11,11 @@ turns it up, and the big arc (radius LOOP_R about a point CORNER_R above the sph
 spokes lie on the pivot axis, so the whole loop turns about them, like the replica's wire handle: up to carry, or down
 flat to either side to lie around the lantern's middle for display.
 
-Axles: a steel 1/4 x 2 in dowel pin is glued into each spoke's end and turns in the pivot's bore. A tab on the spoke's
-hub rides in the pivot's arc groove and stops the loop just past level either way. Nothing holds the pins in their
-bores axially: the two spokes face each other, so the assembled loop cannot pull off both at once. Fit the two end
-pieces on their pins into the pivots first, then join the arcs.
+Axles (P.HANDLE_AXLE): by default a 12 mm shaft printed on each spoke's end turns in the pivot's bore; the 'pin' option
+glues a steel 1/4 x 2 in dowel pin in instead (stronger: the printed shaft is the first thing to break if the handle is
+yanked). A tab on the spoke's hub rides in the pivot's arc groove and stops the loop just past level either way.
+Nothing holds the axles in their bores axially: the two spokes face each other, so the assembled loop cannot pull off
+both at once. Fit the two end pieces into the pivots first, then join the arcs.
 
 Joints (2026-10-23): the loop is split at 45, 90 and 135 deg, away from the corners where the load is highest. Each
 joint is a LAP_L long half-thickness lap split on the arch mid-plane with 3 x M3 (nut in a hex pocket on the +Y face),
@@ -34,12 +35,14 @@ X_CORNER = LOOP_R - CORNER_R                         # spoke ends / corner start
 # pivot
 PIVOT_R, PIVOT_X1 = P.PIVOT_D / 2, S.R_OUT + P.PIVOT_T   # outer face at x = 128
 PIN_R, PIN_L = P.HANDLE_PIN_D / 2, P.HANDLE_PIN_L
-BORE_R = PIN_R + 0.2                                 # the pin turns in the pivot
+PRINTED = P.HANDLE_AXLE == 'printed'
+SHAFT_R = P.HANDLE_SHAFT_D / 2
+BORE_R = SHAFT_R + P.FIT if PRINTED else PIN_R + 0.2  # the axle turns in the pivot
 PIN_HOLE_R = PIN_R + 0.1                             # glued into the spoke
 PIN_X0 = S.R_OUT + 1.5                               # pin tip, 1.5 mm off the sphere
 SPOKE_X0 = PIVOT_X1 + 0.5                            # the hub starts just outside the pivot face
-HUB_R, HUB_T = 10.0, 6.0                             # hub on the spoke's end: round seen end-on, flat sides
-TAB_R, TAB_W, TAB_H = 7.5, 3.0, 2.5                  # stop tab on the hub's face (radius, width, how far it stands out)
+HUB_R, HUB_T = 12.0, 6.0                             # hub on the spoke's end: round seen end-on, flat sides
+TAB_R, TAB_W, TAB_H = 9.5, 3.0, 2.5                  # stop tab on the hub's face (radius, width, how far it stands out)
 STOP_DEPTH = 3.0                                     # arc groove in the pivot's face
 STOP_HALF = 90.0 + math.degrees(math.atan(TAB_W / 2 / TAB_R)) + 1.0   # the groove runs this far either side of the top
 RING_GROOVES = (20.0,)                               # decorative ring on the pivot face (the mount screws sit inside it)
@@ -91,6 +94,13 @@ def hub(sign):
 def pin_hole(sign):
     x0, x1 = sorted((sign * (SPOKE_X0 - TAB_H - 1), sign * (PIN_X0 + PIN_L + 0.5)))
     return cq.Workplane('YZ').workplane(offset=x0).circle(PIN_HOLE_R).extrude(x1 - x0)
+
+
+def shaft(sign):
+    """Printed axle: round, with flats at y = +-T/2 so the end piece prints flat, from the pivot's depth into the hub."""
+    x0, x1 = sorted((sign * PIN_X0, sign * (SPOKE_X0 + HUB_T)))
+    s = cq.Workplane('YZ').workplane(offset=x0).circle(SHAFT_R).extrude(x1 - x0)
+    return s.intersect(cq.Workplane('XY').box(BIG, T, BIG))
 
 
 def pin(sign):
@@ -153,7 +163,8 @@ def pieces():
                         p = p.cut(_nut_pocket(x, z))
         for sign, end in ((1, 'handle_end_right'), (-1, 'handle_end_left')):
             if name == end:
-                p = p.union(hub(sign)).cut(pin_hole(sign))
+                p = p.union(hub(sign))
+                p = p.union(shaft(sign)) if PRINTED else p.cut(pin_hole(sign))
         out[name] = p
     return out
 
@@ -220,16 +231,18 @@ def build():
     if _CACHE is None:
         _CACHE = _frames()
     out = dict(_CACHE[0])
-    out['handle_pin_right_envelope'] = pin(1)
-    out['handle_pin_left_envelope'] = pin(-1)
+    if not PRINTED:
+        out['handle_pin_right_envelope'] = pin(1)
+        out['handle_pin_left_envelope'] = pin(-1)
     return out
 
 
 def placements():
     build()
     pl = dict(_CACHE[1])
-    for n in ('handle_pin_right_envelope', 'handle_pin_left_envelope'):
-        pl[n] = ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_CENTER))
+    if not PRINTED:
+        for n in ('handle_pin_right_envelope', 'handle_pin_left_envelope'):
+            pl[n] = ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_CENTER))
     return pl
 
 
