@@ -121,6 +121,8 @@ SPHERE_FLANGE_W = 8.0       # internal joining flange width
 SPHERE_SCREWS = 4           # M3 through the flange at the equator sides + top/bottom
 WINDOW_W, WINDOW_H = 90.0, 87.0     # front arched window: must clear the 9 mm collars at both flats
 DIFFUSER_D = 118.0          # front diffuser disc (sits behind the window on an internal ledge)
+LENS_BEZEL_ID, LENS_BEZEL_OD = 92.0, 108.0   # glue-on round lens rim around the display window (cosmetic, 2026-10-23)
+LENS_BEZEL_PROUD = 2.0      # its flat front face stands this far in front of the sphere's front point
 DIFFUSER_T = 1.0
 HATCH_W, HATCH_H = 120.0, 96.0      # hand opening on the owner's side (rev 6: open, no door; 120 wide so a 90 mm fist clears even 15 mm off-centre; 96 = all the height between the collars)
 # Unused since rev 8 (kept so old notes still read): the glass tray, the 90 deg wall nozzle and the WS2812B strip channel.

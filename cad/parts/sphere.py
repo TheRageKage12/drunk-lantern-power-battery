@@ -222,6 +222,16 @@ def diffuser():
         cq.Workplane('XY').rect(DIFF_D + 2, h).extrude(DIFF_T))
 
 
+
+def lens_bezel():
+    """Cosmetic round lens rim, glued over the display window so it reads as the power battery's lens. Concentric
+    with the window's arch (centre z = 0); its back follows the sphere, its front is flat (prints face down)."""
+    y_front = -(R_OUT + P.LENS_BEZEL_PROUD)
+    ring = (cq.Workplane('XZ').workplane(offset=-y_front)          # XZ normal is -Y: this plane sits at y_front
+            .circle(P.LENS_BEZEL_OD / 2).circle(P.LENS_BEZEL_ID / 2).extrude(y_front + 60.0))   # toward +Y, into the sphere
+    return ring.cut(cq.Workplane('XY').sphere(R_OUT))
+
+
 def bay_floor():
     """Floor of the glass bay (drip tray): slot for the glass well, tube hole, cable hole, carrier slots."""
     f = cyl(BAY_FLOOR_OD / 2, 0, P.FLOOR)
@@ -376,6 +386,7 @@ def build():
         'sphere_front': front.rotate((0, 0, 0), (1, 0, 0), -90),   # dome up, split face on the bed
         'sphere_rear': rear.rotate((0, 0, 0), (1, 0, 0), 90),
         'diffuser': diffuser(),
+        'lens_bezel': lens_bezel().rotate((0, 0, 0), (1, 0, 0), 90).translate((0, 0, R_OUT + P.LENS_BEZEL_PROUD)),   # front face down
         'bay_floor': bay_floor(),                       # floor on the bed, drip lip up, no supports
         'guide_boss': guide_boss().translate((-GUIDE_SCREW[0], -GUIDE_SCREW[1], -GUIDE_INSERT_BOSS_BOTTOM)),   # glue face up
         'glass_well': glass_well(),
@@ -412,6 +423,7 @@ def placements():
         'sphere_front': unflat('sphere_front', 90, (0, 0, Z)),
         'sphere_rear': unflat('sphere_rear', -90, (0, 0, Z)),
         'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
+        'lens_bezel': [((0, 0, 1), 0, (0, 0, -(R_OUT + P.LENS_BEZEL_PROUD))), ((1, 0, 0), -90, (0, 0, Z))],
         'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
         'guide_boss': ((0, 0, 1), 0, (GUIDE_SCREW[0], GUIDE_SCREW[1], Z + BAY_FLOOR_Z + GUIDE_INSERT_BOSS_BOTTOM)),
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
