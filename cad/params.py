@@ -51,7 +51,7 @@ TUBE_GROMMET_D = 7.0        # hole for the tube to pass a wall
 # Reservoir (rev 3): a SQUAT wide-mouth jar on the cartridge deck (rev 9: lift the lantern off to refill it).
 # 8 oz straight-sided PET jar, 70-400 neck, ~71 mm dia x ~72 mm tall with cap. Envelope below.
 BOTTLE_D = 76.0             # jar envelope diameter (71 + cap/clearance)
-BOTTLE_H = 76.0             # jar envelope height incl. cap, standing on the deck
+BOTTLE_H = 108.0            # jar envelope height incl. cap, standing on the deck (Kevin's 8 oz Ball jar: 100-105 mm, 73 mm across)
 BOTTLE_NECK_D = 73.0        # 70-400 cap OD (tube + vent holes are drilled in the cap)
 
 GLASS_D_TOP = 52.0          # envelope covers Libbey 5120 (51 top, 60 tall) and Torque 92440 Tritan (48 top, 54 tall)
@@ -98,7 +98,7 @@ JACK_XY = (74.0, -25.0)                             # empty hole for an optional
 PORT_JACK_D, PORT_SWITCH_D = 11.3, 6.5  # optional DC5521 panel jack (Vetco 321B fits, 7/16" = 11.1 mm hole; not fitted) and the S1 mini toggle (1/4" or M6 bushing)
 
 # ---------------------------------------------------------------- stack (bottom to top)
-BASE_H = 115.0              # base drum height (rev 3: taller for the jar + cap; rev 9: open drum over the cartridge)
+BASE_H = 147.0              # base drum height (rev 3: taller for the jar + cap; rev 9: open drum over the cartridge; 2026-10-23: +32 for the 8 oz jar)
 BASE_BAND_H = 12.0          # decorative bands top and bottom at D_MAX
 BASE_BODY_D = D_MAX - 6.0   # drum body between the bands (184)
 SERVICE_SCREW_ANGLES = (0.0, 140.0, 225.0)   # rev 9: 3 thumbscrews from underneath hold the base cartridge in the drum (no door)
