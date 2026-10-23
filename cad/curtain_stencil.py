@@ -6,7 +6,7 @@ A 1.6 mm open frame the exact size of the cover: a rim, a rail either side of ea
 bars tying it together (2026-10-23: was a solid plate, ~45 g). Hold it down on the divider (tape or a hand flat on it):
   1. punch or melt the 8 small holes through the round holes at the ends of the slots (a hot nail or a hole punch);
   2. run a sharp hobby knife along each of the 8 slots, from the centre out to its hole;
-  3. mark the 6 clamp-screw holes through the small holes near the edge, and punch them;
+  3. mark the 4 clamp-screw holes through the small holes near the edge, and punch them;
   4. cut round the stencil's edge.
 The slots never reach the edge, so the stencil (and the cover) stays in one piece. The same shapes as the paper
 template (docs/images/curtain_template.pdf), from the same numbers. Not part of build.py: it is a tool, not a part.

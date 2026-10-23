@@ -5,7 +5,7 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
     bell_rear      on the hand opening (+Y). LED rim band in the throat, the frosted strip curtain held at the mouth.
     diffuser       the front lens: a full round 118 mm white disc (the rev-9 diffuser had 98 mm flats: reprint)
     curtain_clamp  full ring that clamps the one-piece frosted cover's uncut edge to the inside of the rear bell's
-                   mouth lip, holding it flat (6 countersunk M3 x 8 from behind it, inside the bell, into pilots in the
+                   mouth lip, holding it flat (4 countersunk M3 x 8 from behind it, inside the bell, into pilots in the
                    lip: the mouth face shows no screws)
 
 Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
@@ -89,7 +89,7 @@ CLAMP_T = 4.5                                # a countersunk M3 x 8 flush in its
 CLAMP_CSK = (P.M3_HEAD_D + 0.4, 1.9)         # countersink: diameter at the face, depth (90 deg flat head)
 CLAMP_PILOT, CLAMP_PILOT_DEPTH = 2.5, 3.2    # self-tapping pilot in the 4 mm lip: 0.8 mm (4 layers) left on the mouth face
 CLAMP_SCREW_R = sum(CLAMP_R) / 2             # 81.75
-CLAMP_SCREW_ANGLES = tuple(30.0 + 60.0 * k for k in range(6))   # around the bell axis, from +X
+CLAMP_SCREW_ANGLES = tuple(45.0 + 90.0 * k for k in range(4))   # around the bell axis, from +X: 4 of Kevin's 8 flat heads (the lock uses the other 4)
 
 
 def _r_outer(s):
@@ -156,8 +156,8 @@ def diffuser():
 
 def curtain_clamp():
     """Full ring: it presses the cover's uncut edge against the rear bell's lip all the way round, so the cover stays
-    flat and its flaps spring back closed; 6 countersunk M3 x 8 from its back (inside the bell), through the cover into
-    pilots in the lip (punch the cover's 6 holes using the ring as a guide). Printed flat, curtain face down; frame: the
+    flat and its flaps spring back closed; 4 countersunk M3 x 8 from its back (inside the bell), through the cover into
+    pilots in the lip (punch the cover's 4 holes using the ring as a guide). Printed flat, curtain face down; frame: the
     bell axis at the origin, z = 0 the face against the curtain."""
     r0, r1 = CLAMP_R
     c = cq.Workplane('XY').circle(r1).circle(r0).extrude(CLAMP_T)

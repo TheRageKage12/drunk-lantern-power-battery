@@ -1,32 +1,36 @@
 # Green Lantern power battery that pours a shot
 
-A Halloween prop: a 3D-printed Green Lantern power battery (about 470 mm tall, 190 mm across at the base)
-with a hidden peristaltic pump, a hidden nozzle, and a twist-to-pour lock inside the sphere.
-Punch in through a strip curtain so the ring seats in the lock, then twist and hold it through the oath: the
-pump pours about 1 oz into the shot glass under the lock while the light climbs; turn back and the light
-swells and goes dark. Slide the glass out and drink. Current prices and purchase status are maintained in the shared shopping Sheet.
+A Halloween prop: a 3D-printed Green Lantern power battery in the classic shape (rev C: about 45 cm tall to the
+lid, 49 cm with the handle up; a 224 mm sphere with a lens bell in front and a hand bell behind, on a 190 mm drum)
+with a hidden peristaltic pump, a hidden spout, and a twist-to-pour lock inside the sphere. No screws show anywhere.
+Punch in through the frosted cover on your side so the ring seats in the lock, then twist and hold it through the
+oath: the pump pours about 1 oz into the shot glass under the lock while the light climbs; turn back and the light
+swells and goes dark. Slide the glass out and drink. Current prices and purchase status are maintained in the shared
+shopping Sheet.
 
 Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with links, printing,
 assembly, wiring, firmware, calibration, testing, cleaning). Shopping list (who has what, what's left to buy, links and prices): the
 [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).
 
 **Current build:** [circuit](docs/images/wiring.svg), [board assembly](docs/review/protoboard/README.md),
-and [CAD fit limits](cad/README.md#electronics-fit-limits). The tray now fits the selected TalentCell case;
-verify the listed component and connector dimensions before printing. The shopping Sheet matches this circuit.
+and [CAD fit limits](cad/README.md#electronics-fit-limits). The battery, board and switches live on the cap floor
+inside the top cap; the drink (a 32 oz spouted pouch) and the pump live in the cartridge under the drum. Verify the
+listed component and connector dimensions before printing. The shopping Sheet matches this build.
 
-**3D assembly viewer:** [open in the browser](https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html): every part colour-coded, 14 assembly steps and an exploded view
+**3D assembly viewer:** [open in the browser](https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html): every part colour-coded, the assembly steps and an exploded view
 (`docs/assembly-viewer/index.html`; it also opens from a downloaded copy).
 
-**Assembly videos:** [Build order (4:30)](docs/videos/assembly-guide.mp4) ·
-[Exploded assembly (0:12)](docs/videos/separate-and-assemble.mp4) ·
-[Opening for service (0:12)](docs/videos/service-access.mp4).
+**Assembly videos:** [Build order](docs/videos/assembly-guide.mp4) ·
+[Exploded assembly](docs/videos/separate-and-assemble.mp4) ·
+[Opening for service](docs/videos/service-access.mp4).
 
 ## The printed parts
 
-All 28 parts (including the ring sizer) as exported from `cad/output/` (iso view). Front, top and iso views of each part are in
+Every part as exported from `cad/output/` (iso view, print orientation), including the four tool prints
+(`thumb_test`, `emblem_jig`, `curtain_stencil`, `ring_sizer`). Front, top and iso views of each part are in
 [`docs/images/stl/`](docs/images/stl/).
 
-![the 28 printed parts](docs/images/stl/parts-iso.png)
+![the printed parts](docs/images/stl/parts-iso.png)
 
 ## Repository map
 
@@ -50,6 +54,7 @@ cd cad
 python3 build.py            # all parts -> cad/output/, assembly, checks
 python3 build.py socket     # one module only
 python3 render_stl.py output ../docs/images/stl   # PNG previews of every printed part + parts-iso.png sheet (--all adds the check volumes)
+python3 thumb_test.py; python3 emblem_jig.py; python3 curtain_stencil.py   # tool prints (insert-hole test, emblem guide, cover stencil)
 ```
 
 ## Firmware

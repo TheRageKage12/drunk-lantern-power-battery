@@ -8,7 +8,7 @@ top.py - rev C (2026-10-23): the mirrored top (replaces dish_upper and top_diffu
                     standoffs, the buck module, the power switch S1 in a box (lever up) and the charge socket. 3
                     thumbscrews (2026-10-23): lid off, 3 thumbscrews, lift it out (unplug the inline plugs if the leads
                     are short), and the 3 thumbscrews holding the top cap to the sphere are down the neck.
-    halo_ring       WHITE. A cup: the tube drops into the cap rim and carries the 3 bayonet lugs (quarter-turn twist-lock
+    halo_ring       WHITE. A cup: the tube drops into the cap rim and carries the 3 bayonet lugs (20 deg twist-lock
                     with a click), the flange shows as a glowing band around the rim, and its 1.2 mm top is the emblem's
                     diffuser. Printed top down.
     emblem_lid      green disc glued on the halo ring, with the lantern emblem cut through it
@@ -318,6 +318,22 @@ def build_emblem_centre():
     return cq.Workplane('XY').workplane(offset=z0).circle(EMBLEM_RING[0] - P.FIT).extrude(LID_T)
 
 
+# ------------------------------------------------------------------ emblem LEDs (the halo ring and emblem glow)
+# ~25 cm of the green COB strip inside the cap (Kevin, 2026-10-23: "keep 25 cm"): two 12.5 cm pieces stuck on the
+# cap's inner wall just under the rim, front and back, facing in. The closed white cup of the halo ring spreads it.
+CAP_LED_Z = (Z_TOP - RIM_H - (R_CAP_IN - RIM_RI) - 12.0, Z_TOP - RIM_H - (R_CAP_IN - RIM_RI) - 2.0)   # 10 mm strip
+CAP_LED_ANGLES, CAP_LED_L = (-90.0, 90.0), 125.0
+
+
+def cap_leds():
+    half = math.degrees(CAP_LED_L / 2 / R_CAP_IN)
+    out = None
+    for a in CAP_LED_ANGLES:
+        arc = _sector(R_CAP_IN - 2.0, R_CAP_IN - 0.05, a - half, a + half, *CAP_LED_Z)
+        out = arc if out is None else out.union(arc)
+    return out
+
+
 # ------------------------------------------------------------------ module API
 def build():
     out = {
@@ -328,6 +344,7 @@ def build():
         'emblem_lid': build_emblem_lid().translate((0, 0, -(Z_TOP + HALO_FLANGE_H))),
         'emblem_centre': build_emblem_centre().translate((0, 0, -(Z_TOP + HALO_FLANGE_H))),
         'wall_extension': build_wall_extension().translate((0, 0, -(WEXT_Z0 - WEXT_LEG))),   # standing on its legs
+        'cap_led_envelope': cap_leds(),                                               # assembly frame
     }
     return out
 

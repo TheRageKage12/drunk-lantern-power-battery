@@ -73,7 +73,7 @@ s.text(X((P0 + R1) / 2), 140, "the oath", size=8.5, anchor="middle", color="#1b5
 callout(1, 0, 60, 348, ["Punch in, ring face first:", "the light fades up to ~15 %."], False)
 callout(3, P0, 260, 348, ["On the first line, twist 45° and", "hold: the cam clicks the switch", "and the pump starts."], False, width=200)
 callout(5, P1, 520, 348, ["The pour finishes (~11 s) while", "you are still holding; the light", "stays at 90 %."], False, width=200)
-callout(7, OUT + 1, 800, 348, ["Bring the glass out", "through the curtain.", "Cheers."], False)
+callout(7, OUT + 1, 800, 348, ["Bring the glass out", "through the cover.", "Cheers."], False)
 
 # notes
 s.text(20, 455, "Let go early and the pump stops where it is; the light swells ~10 % and goes dark (no resume until the ring is removed and re-inserted). Pulling the ring out stops the pump within 60 ms.", size=9.5, color="#444")

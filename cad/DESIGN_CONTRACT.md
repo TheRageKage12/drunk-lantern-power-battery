@@ -390,3 +390,26 @@ splitter's straight male plug (28.6 mm out, Ø12) with its cord in a U-turn reac
 the battery's end (`battery_connector_envelope`). The pack sits `PACK_Y` (7 mm) toward +Y, its +Y stop merging into
 the S1 pocket, so that envelope clears the drum wall by ~6 mm. The splitter's female end is the charge socket, loose inside, reached with the lantern
 lifted off; the deck's 11.3 mm jack hole stays empty. An exposed underside charge slot was tried and dropped the same day.
+
+## Revision C (classic proportions, 2026-10-23) - supersedes the stack, dishes, hand port, display window and base above
+The current numbers are in `params.py` and the module docstrings; this is the map of how the parts mate. Frame: Z up
+from the table, -Y the audience (lens) side, +Y Kevin's side (hand opening). Sphere centre `Z_SPHERE_CENTER` = 220.29.
+
+| Joint | Mating |
+|---|---|
+| drum `base` <- `foot` | foot spigot (r 87.3) in the drum's top band, which is 2 mm thicker inward over it (`DRUM_TOP_THICKEN`, bore 87.6); 3 M3x8 at z 75 (`BASE_JOINT_ANGLES` 90/210/330) into M3 inserts in the spigot, heads under green `screw_cap` discs |
+| `foot` -> sphere | riser (r 63.3-65.7) up through the sphere's bottom collar (`OPENING_ID` 132) to `BAY_FLOOR_Z`; 3 thumbscrews `THUMB_INSET` = 8 mm above the flat (`JOINT_ANGLES` 10/90/170) from inside the riser into 6-32 inserts in the collar |
+| sphere halves | split on y = 0; the rear half's internal flange, 4 M3x10 into the front half's insert bosses |
+| sphere -> `top_cap` | plug (r 63.3-65.7, `PLUG_L` 13 mm) in the top collar; 3 thumbscrews 8 mm below the top flat from inside the plug into 6-32 inserts in the collar |
+| `top_cap` <- `cap_floor` | plate on the ledge at `Z_CAP_FLOOR0`; 3 thumbscrews at r 85 (60/180/300) into 6-32 inserts in corbel bosses |
+| `top_cap` <- lid | `halo_ring` lugs in the rim's 3 L-grooves, push and twist `LID_TWIST` = 20 deg clockwise past a detent; `emblem_lid` glued on, lined up by two 1.75 mm filament pins (`LID_PIN_ANGLES`) |
+| sphere -> bells | plain collars (`COLLAR_T` 3.7, `COLLAR_OUT` 7.6) round the lens (r 57) and hand (r 70) openings; each bell's bore = collar + `FIT`; 2 thumbscrews per bell parallel to its axis at 45/135 deg (`BELL_LOCK_ANGLES`), from inside the sphere through a pad and the shell into 6-32 inserts in the bell's 8.5 mm throat (`BELL_THROAT_T`); a flat pocket (`BELL_SPOT_R`) sunk in the shell and a matching boss on the bell square the joint (`bell_screw_s`) |
+| rear bell <- cover | one-piece frosted disc (r 85.5, `CURTAIN_SLITS`) clamped against the lip by the full `curtain_clamp` ring (r 78-86.7, 4.5 thick), 4 countersunk M3x8 into 2.5 x 3.2 mm pilots in the 4 mm lip |
+| lock wall <- `led_panel` | collars on the panel's back over the wall's 4 posts (free ends at y = -61), glued; strips on its front |
+| sphere -> pivots | 2 M3x12 per pivot from inside the shell (`PIVOT_CLAMP` 6 mm under the head, `PIVOT_CB` counterbore for a green cap) into M3 inserts in the pivot |
+| pivots -> handle | printed 12 mm axles on the end pieces turn in the pivots (`HANDLE_AXLE`); stop tab in an arc groove; laps at 45/90/135 deg, 3 M3x8 + nut each, heads and nuts under green caps, epoxy; section 14 x 13.5 mm |
+| drum <- cartridge | 3 lugs inside the drum's bottom (30/150/270), L-slots and click bumps in `base_tray`'s collar, 20 deg twist |
+
+Print orientations: sphere halves dome up (split face on the bed); bells mouth down; `top_cap` plug down; `foot`
+spigot down; drum upright; `halo_ring` skin down; `led_panel` LED face down; `curtain_clamp` and `cap_floor` flat;
+handle pieces flat with the lap's cut side up; pivots outer face down.

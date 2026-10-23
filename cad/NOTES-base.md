@@ -1,3 +1,5 @@
+> **Superseded.** Revision C (2026-10-23): an 80 mm drum and a one-piece cartridge with the pump and a 32 oz drink bag; the battery and board moved to the top cap (`parts/base.py`, `parts/top.py`; `DESIGN_CONTRACT.md`, revision C). The notes below are history.
+
 > **Superseded in part.** Written for revision 2 (60 mm bottle, other power bank, rear door). Since revision 9 the base is a drum plus a removable cartridge (see `DESIGN_CONTRACT.md`, revision 9); the numbers below are history.
 
 # NOTES-base: base drum, rear door, hardware deck

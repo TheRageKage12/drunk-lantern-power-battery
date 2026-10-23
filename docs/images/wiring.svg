@@ -219,8 +219,8 @@
 <text x="1960" y="883" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">3 S</text>
 <path d="M1970,890 L1970,1180" fill="none" stroke="#222222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="1970" cy="1180" r="4" fill="#222222"/>
-<text x="1950" y="310" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">~75 cm</text>
-<text x="1950" y="330" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">7 parallel pieces</text>
+<text x="1950" y="310" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">~158 cm</text>
+<text x="1950" y="330" font-size="14" text-anchor="end" font-weight="normal" fill="#222222">10 parallel pieces</text>
 <path d="M1390,650 L1530,650" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M1390,830 L1840,830" fill="none" stroke="#2a9d2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="1570" cy="168" r="4" fill="#f77f00"/>
