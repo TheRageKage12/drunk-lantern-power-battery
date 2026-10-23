@@ -96,10 +96,13 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
   10 ft listing was kept because the size is exact and it's cheap; the build uses well under 3 ft.
 - **Reservoir: food-safe jar,** at most 73 mm across including the lid, at most 108 mm tall (since 2026-10-23: Kevin's 8 oz Ball jelly jar, 73 x 100-105 mm, on a 147 mm drum). It sits on the
   cartridge deck. Bought locally (Micro Homebrew, Kenmore).
-- **Jar vent: a one-way aquarium check valve** in a second 6 mm hole in the lid, arrow pointing into the jar.
-  - It replaced a 2.5 mm open hole after Kevin raised the leak risk.
+- **Jar vent: a Masontops Pickle Pipe silicone lid** (since 2026-10-23; from Kevin's fermentation kit), cut down to
+  replace the jar's metal flat lid under its band, valve nipple pointing into the jar, the tube through a 5 mm
+  punched hole.
+  - It lets air in (and still works under the drink, bubbling) and seals when the jar tips; Kevin's tip test passed.
+  - Before that: an aquarium check valve (AQUANEAT B086JRH4WS) in a second lid hole, which replaced a 2.5 mm open
+    hole after Kevin raised the leak risk.
   - The pickup tube can't leak because the pump's rollers pinch it shut.
-  - Listing: AQUANEAT 10-pack (B086JRH4WS), only 1 is used. A pet store's aquarium aisle also has them.
 - **Nozzle (rev 9c):**
   - The guide bends the tube **135°**, so the tip points 45° down and sits 6.7 mm above the rim, hidden behind the
     lock wall over the back third of the glass.
@@ -296,7 +299,6 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 
 - Amazon delivery dates were read from the listings on 2026-10-13 using a San Francisco default address.
 - Part quantities Kevin asked about:
-  - check valves: 1 used of 10
   - plugs: one of each pair
   - spring: 1
 
@@ -540,3 +542,9 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   Scratch builds at 145 and 175 mm both passed every check; 147 leaves 2-3 mm over the jar. The vent valve's ~40 mm
   of headroom is unchanged. Lock cable now ~45 cm, the nozzle ~15 cm above the pump, one tube run ~95 cm. Kevin's
   shot glass (48 x 60 mm) fits the well.
+- **2026-10-23, silicone vent lid instead of the check valve.** Kevin has a Masontops fermentation kit
+  (B01H7GI7V8). One Pickle Pipe lid, trimmed to the jar's flat-lid size and turned valve-down under the jar's band,
+  is the vent: air in, nothing out when tipped (Kevin's tip test passed), food-grade, no glue or drilled metal, and
+  nothing above the lid but the tube. A submerged valve still vents by bubbling, so the jar can be filled full.
+  The check valve is dropped from the guide and the Sheet (-$4.79; total about $201). Guide section 7 step 1,
+  cleaning and troubleshooting rewritten for it.

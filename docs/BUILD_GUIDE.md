@@ -88,7 +88,7 @@ it and bring it out.
 
 ![fluid path and layout](images/fluid-path.png)
 
-The drink touches only the jar, the platinum-silicone tube and the glass. No printed part is in the liquid path.
+The drink touches only the jar, its silicone lid, the platinum-silicone tube and the glass. No printed part is in the liquid path.
 
 ---
 
@@ -111,7 +111,7 @@ quantities, prices and who has what.
 | 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
 | 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 9–12.6 V in, set to 5.0 V out for the XIAO, gate driver and Hall sensor. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
-| 6 | Vent valve | [AQUANEAT aquarium check valves, 10-pack (B086JRH4WS)](https://www.amazon.com/dp/B086JRH4WS) | $4.79 | One goes in the jar lid: lets air in as the pump draws the drink out, but nothing out if the jar tips. Fits 3/16" airline. |
+| 6 | Jar lid and vent | One Masontops Pickle Pipe silicone airlock lid, from the [Masontops fermentation kit (B01H7GI7V8)](https://www.amazon.com/dp/B01H7GI7V8) Kevin already has | - | Cut down into a new flat lid for the jar, valve pointing **into** the jar: it lets air in as the pump draws the drink out, but nothing out if the jar tips (section 7, step 1). Food-grade silicone; the drink tube pushes through it and seals. |
 | 7 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
 | 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm; output falls from 12.6 to 9 V as it drains. Its one DC5521 port is both input and output, and its own switch must be ON to charge. You also use its supplied charger (12.6 V, 0.5 A, ~6 h) and its 1-female-to-2-male splitter, which replaces a charge jack (section 4, step 2). The cartridge tray is built for this case. |
 | 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.97 | Third-party (Pecafeitas) listing of the 0.1 A hinge-lever version. Omron's datasheet gives its minimum load as 1 mA at 5 V (the plain D2F needs 100 mA), which the section 4 interface supplies. Omron provenance is not verified: check the marking, the peg spacing against `switch_bracket`, and that it clicks reliably 50 times. |
@@ -136,7 +136,7 @@ quantities, prices and who has what.
 | 18 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1.50 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 19 | Straps and zip ties | Hardware store: VELCRO One-Wrap roll, 3/4" x 12 ft, model 90340 (Kevin has it), plus ~10 small zip ties (2.5 mm wide) | ~$9 | Cut the roll into 4 straps: two for the pump, one for the jar, one for the battery. The battery strap's lower run sits in a 2 mm recess under the tray, so it must be no thicker than 2 mm (One-Wrap measures about 1 mm). The zip ties hold the LM2596 and tidy the cables. |
 | 20 | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
-| 21 | Food-safe jar | Kevin has one: a Ball 8 oz quilted jelly jar (Fred Meyer and Target sell 12-packs) | ~$5 | **No bigger than 73 mm across and 108 mm tall, lid included**; Kevin's measures 73 x 100-105 mm. Holds ~200 mL usable, 5-6 pours. The lid must be drillable. |
+| 21 | Food-safe jar | Kevin has one: a Ball 8 oz quilted jelly jar (Fred Meyer and Target sell 12-packs) | ~$5 | **No bigger than 73 mm across and 108 mm tall, lid included**; Kevin's measures 73 x 100-105 mm. Holds ~200 mL usable, 5-6 pours. Its metal flat lid is swapped for a silicone one (item 6); the screw band stays. |
 | 22 | Shot glass, 1.5 oz | Kevin has one (48 mm across, 60 mm tall); otherwise Bargreen Ellingson or any kitchen store | ~$4 | **Up to 52 mm across the top and 62 mm tall** (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps. |
 | 23 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
 
@@ -145,11 +145,11 @@ quantities, prices and who has what.
 > board, and the charger plugs into the female end with the lantern lifted off (section 4 step 2, section 12). The
 > deck's 11.3 mm hole stays empty, so a jack can be added later.
 
-**Total: about $206 before tax** (2026-10-21, from the Sheet):
+**Total: about $201 before tax** (2026-10-23, from the Sheet):
 
 | Store | Total |
 |---|---:|
-| Amazon (items 1-10) | $127.99 |
+| Amazon (items 1-10) | $123.20 |
 | Vetco (items 11-16) | $43.69 |
 | Tacoma Screw (item 17) | ~$12 |
 | Hardware store (straps, zip ties) | ~$9 |
@@ -175,12 +175,11 @@ The total assumes you already have:
 
 | Store | Address, hours | Buy here |
 |---|---|---|
-| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch and the two JST plugs. Not stocked: XIAO, magnets, check valves. |
+| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch and the two JST plugs. Not stocked: XIAO, magnets. |
 | [Tacoma Screw Products, Ballard](https://www.tacomascrew.com/LocationFinder) | 3930 Leary Way NW, Seattle 98107, (206) 632-7565. Mon-Fri 7-5, Sat 9-1 | M3 screws and nuts by the piece, springs. Georgetown branch: 1121 S Bailey St, Mon-Fri 7-5. |
 | [McLendon Hardware](https://www.mclendons.com/locations) | White Center: 10210 16th Ave SW, Seattle 98146. Renton: 440 Rainier Ave S | Spring drawers, metric screws, glue. |
 | Ace Hardware (Magnolia, Maple Leaf, West Seattle Junction), Stoneway Hardware | Seattle neighbourhoods | The lock spring (Hillman spring drawer), fasteners by the piece. |
 | Target, Fred Meyer, Office Depot/OfficeMax | Several in Seattle | The curtain sheet: a clear-frosted polypropylene folder or divider (school aisle). Home Depot has no good match. |
-| Petco, PetSmart, aquarium shops | Several in Seattle | A single aquarium check valve, if you skip the Amazon 10-pack. |
 | [Bargreen Ellingson](https://www.bargreen.com/locations/seattle) | SoDo showroom, Mon-Fri 10-3 | 1.5 oz shot glasses. |
 | [Micro Homebrew](https://www.microhomebrew.com/) | Kenmore, (425) 892-8425 | Small food-safe bottles and jars. They do not stock the 1/8" pump tubing. |
 
@@ -596,15 +595,28 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
 
 ## 7. The fluid path
 
-1. **Jar lid.** Drill a 6 mm hole near the edge and push the tube through it (it seals itself) until it reaches
-   5 mm above the jar's bottom. **Vent:** the check valve's barbs are made for 3/16" airline, wider than the pump
-   tube, so the valve gets its own hole on the opposite side. Measure the barb (about 5 mm), drill the hole to
-   that size, push the valve's lower barb through the lid from above until its ridge seats, with the arrow
-   pointing **down into the jar**, and seal round it with a dab of super glue. Air gets in as the
-   pump draws the drink out (without it the jar goes under vacuum and the pours shrink), but if the jar tips,
-   nothing comes out. Blow through it to check: air goes in, not out. The valve stands about 25 mm above the
-   lid. Put it on the side of the lid nearest the drum wall: over the middle and the outer side there are
-   35-75 mm of room, but toward the lantern's centre the glass well hangs to about 27 mm above the lid.
+1. **Jar lid and vent.** The jar needs a vent: as the pump draws the drink out, air has to get in, or the jar goes
+   under vacuum and the pours shrink. If the jar tips, though, nothing may get out. A one-way silicone valve does
+   both, so the jar's metal flat lid is replaced by one cut from a Masontops Pickle Pipe (item 6). The jar's screw
+   band holds it on.
+   - **Cut the disc.** Trace the jar's metal flat lid onto the Pickle Pipe, centred on its valve, and cut it out
+     with scissors, on the line or just inside it (1-2 mm either way is fine). Keep the edge smooth: the seal is
+     the ring where the band presses the silicone onto the glass rim.
+   - **Turn it over.** The valve nipple must point **down into the jar**. That way the pump's suction opens it
+     and lets air in, and drink pressing on it from inside (a tipped jar) squeezes it shut.
+   - **Tube hole.** Punch a hole about 5 mm across (smaller than the 6.4 mm tube) at least 10 mm in from the edge,
+     with a leather punch or a hot nail. Push the tube through until it reaches 5 mm above the jar's bottom; the
+     silicone grips and seals it.
+   - **Close it.** Screw the band on firmly by hand, not cranked: overtightening squeezes the silicone out from
+     under it.
+   - **Test.** With the jar empty, suck gently on the tube: air comes in through the valve. Then fill it with
+     water, close it and hold it upside down over a sink: no drips. If the edge drips, re-centre the disc or cut a
+     fresh one from another of the kit's lids.
+
+   Fill the jar right up, leaving a little air under the lid. The valve still works under the drink: air bubbles
+   in through it (a faint gurgle on the first pours of a full jar). Nothing sticks up above the lid but the tube,
+   and over the middle of the lid there are 75 mm of room. If the trimmed disc is too floppy to seal, put the
+   metal flat lid on top as a backing ring, with a hole cut over the valve and a notch for the tube.
 2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
    continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
 3. **Route** (steps 3 to 5 describe the path; you thread it in section 9, steps 3 to 5, once those parts are
@@ -856,7 +868,7 @@ Same night, before the sugar dries:
    glass fits under the nozzle, so keep each run short: `cal 20000` would pour ~55 mL and overflow it.
 3. Unscrew the jar lid and hold the pickup tube out of the water. Run `cal 8000` twice more to push the
    line empty.
-4. Rinse the jar, the lid and its vent valve. Open the pump head and lift the tube off the rollers. Let
+4. Rinse the jar and the silicone lid, flexing the valve's slit under warm water so no sugar dries in it. Open the pump head and lift the tube off the rollers. Let
    everything air-dry with the tube ends open.
 
 **Never leave liqueur in the tube overnight:** the sugar gums up the bore and the rollers.
@@ -876,7 +888,7 @@ months. Replace the pump tube when it looks cloudy or flattened.
 | Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, section 6 step 6) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
 | Pump hums, no flow | Tube not seated under the rollers, head cap open, the service loop kinked when the lantern went back on, or the wrong (thin-walled) tube. |
-| Pours shrink after a few in a row, jar dents in | The vent valve is in backwards (arrow must point into the jar) or blocked. |
+| Pours shrink after a few in a row | The lid's valve isn't letting air in: it must point down into the jar, and dried sugar can glue its slit shut (rinse and flex it). |
 | Pump doesn't run at all | Switch on? Check the rail gives 9–12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
 | LEDs stay dark or stay on | Q2 wiring, U1 supply/input/output wiring, or U1's output-enable pins not grounded. |
