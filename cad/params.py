@@ -32,6 +32,15 @@ THUMB_COLLAR_L = 2.6
 THUMB_PILOT = 2.8           # pilot hole it threads into (PETG; 6-32 tap drill is 2.7)
 THUMB_CLEAR = 3.9           # clearance hole through the part it clamps
 THUMB_GRIP = 3.0            # clamped thickness under the collar: leaves ~3 mm of thread biting the boss
+# 2026-10-23 (Kevin): every thumbscrew turns from INSIDE the lantern, so the outside shows no screws. The head sits
+# in the cap's neck, the foot's neck or a bell's opening; its collar sinks into a counterbore in a THUMB_PAD_T pad,
+# leaving THUMB_WEB of plastic clamped, and the thread bites THUMB_THREAD_L - THUMB_WEB - FIT = 4.2 mm into the part
+# outside it (3 mm before), which is thickened to take a blind pilot.
+THUMB_PAD_T = 4.5           # pad on the inner part (plug, riser, bell collar) under each thumbscrew
+THUMB_WEB = 2.0             # plastic left under the collar's counterbore: what the thumbscrew clamps
+THUMB_CB_D = THUMB_COLLAR_D + 0.8
+THUMB_HEAD_L = 8.7          # knurled head length
+THUMB_INSET = 7.0           # sphere <-> top cap / foot thumbscrews this far inside the sphere's flats
 MAGNET_D = 6.0              # 6 x 2 mm neodymium disc (owner has 45)
 MAGNET_T = 2.0
 MAGNET_POCKET_D = MAGNET_D + 0.3   # press fit pocket
@@ -119,7 +128,6 @@ CAP_H = 80.0                # top cap cylinder, 190 mm across like the drum
 CARTRIDGE_FLOOR_T = 3.0     # one-piece cartridge floor (replaces tray + deck)
 JOINT_SPIGOT_H = 8.0        # spigot height: foot -> drum
 JOINT_SCREWS = 3            # radial M3 screws per joint, 120 deg apart, first at +Y (rear)
-JOINT_SCREW_ABOVE_FLAT = 3.0  # sphere <-> neck screws this far from the sphere flats
 
 SPHERE_D = 224.0            # rev C: 180 -> 224, the largest half that fits the bed split front/back
 SPHERE_FLAT_D = 136.8       # flats keep their size, so the neck joints are the old dish joints

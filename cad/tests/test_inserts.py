@@ -24,23 +24,23 @@ def pol(r, a): a = math.radians(a); return r * math.cos(a), r * math.sin(a)
 
 for a in S.FLANGE_SCREW_ANGLES:
     x, z = pol(S.FLANGE_SCREW_R, a); add('sphere_front', (x, -P.FIT, z), (0, -1, 0))
-for sx in (-1, 1):
+solids['handle_pivot_right'], solids['handle_pivot_left'] = H.pivot(1), H.pivot(-1)
+for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # from the face against the sphere (curved entry)
     for y, z in S.PIVOT_SCREWS:
-        x = math.sqrt(S.R_OUT ** 2 - y * y - z * z) - S.PIVOT_ENTRY
-        add('sphere_front' if y < 0 else 'sphere_rear', (sx * x, y, z), (-sx, 0, 0))
-for a in BL.CLAMP_SCREW_ANGLES: add('curtain_clamp', (*pol(BL.CLAMP_SCREW_R, a), 0), (0, 0, 1))
+        x = math.sqrt(S.R_OUT ** 2 - y * y - z * z) + S.PIVOT_ENTRY
+        add(n, (sx * x, y, z), (sx, 0, 0))
 for a in F.JOINT_ANGLES:
     x, y = pol(F.face_r(F.SPIGOT_R), a); dx, dy = pol(-1, a); add('foot', (x, y, F.Z_DRUM_SCREWS), (dx, dy, 0))
-pilots = []   # thumbscrew pilot holes (self-tapping, no insert)
-for a in F.SPHERE_ANGLES:
-    pilots.append(('foot', (*pol(F.face_r(F.RISER_R), a), F.Z_SPHERE_SCREWS), (*pol(-1, a), 0)))
-for sign, n in ((-1, 'sphere_front'), (1, 'sphere_rear')):   # bell thumbscrews, into the collars from below
-    for a in S.BELL_LOCK_ANGLES:
-        x, z = pol(S.collar_dims(sign)[1], a); dx, dz = pol(-1, a)
-        pilots.append((n, (x, sign * S.lock_s(sign), z), (dx, 0, dz)))
-for a in T.JOINT_ANGLES:
-    pilots.append(('top_cap', (*pol(T.face_r(T.PLUG_R), a), T.Z_SPHERE_SCREWS), (*pol(-1, a), 0)))
-for a in T.CAP_FLOOR_SCREW_ANGLES: add('top_cap', (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR0), (0, 0, -1))
+pilots = []   # thumbscrew pilot holes (self-tapping, no insert); all blind, the heads inside the lantern
+for z, angles in ((S.Z_LOWER_SCREWS, S.JOINT_ANGLES), (S.Z_UPPER_SCREWS, S.TOP_JOINT_ANGLES)):   # out into the collars
+    for a in angles:
+        pilots.append(('sphere_rear', (*pol(S.OPENING_ID / 2, a), z), (*pol(1, a), 0)))
+for sign, n in ((-1, 'bell_front'), (1, 'bell_rear')):   # bell thumbscrews, out into the throats (bell frame)
+    for a in S.BELL_LOCK_ANGLES[sign]:
+        ab = S.bell_frame_angle(sign, a)
+        pilots.append((n, (*pol(BL.bell_bore(sign), ab), S.lock_s(sign)), (*pol(1, ab), 0)))
+for a in T.CAP_FLOOR_SCREW_ANGLES:
+    pilots.append(('top_cap', (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR0), (0, 0, -1)))
 for mx, my in T.board_layout.MOUNTS: add('cap_floor', (*T.board_point(mx, my), T.BOARD_STANDOFF), (0, 0, -1))
 add('bay_floor', (*S.GUIDE_SCREW, P.FLOOR), (0, 0, -1))
 add('socket_housing', (*K.switch_screw_xy(), K.HOUSING_BOT), (0, 0, 1))
@@ -60,7 +60,7 @@ for i, (n, p, d) in enumerate(rows):
     blocked = volume(bore.intersect(solid)); missing = volume(wall.cut(solid)); opened = volume(end.cut(solid))
     print(i + 1, n, 'blocked', round(blocked, 4), 'missing 1mm wall', round(missing, 4), 'missing end', round(opened, 4), flush=True)
     if max(blocked, missing, opened) > .02: fail.append((n, p, blocked, missing, opened))
-assert len(rows) == 23, len(rows)
+assert len(rows) == 17, len(rows)
 assert not fail, fail
 # Thumbscrew pilots: open for the thread's length, 1.5 mm of plastic round them and 1 mm behind the tip.
 for n, p, d in pilots:
@@ -71,7 +71,14 @@ for n, p, d in pilots:
     v = (volume(bore.intersect(solid)), volume(wall.cut(solid)), volume(end.cut(solid)))
     print('pilot', n, [round(x, 4) for x in v])
     assert max(v) < .02, (n, p, v)
-assert len(pilots) == 10
+assert len(pilots) == 13
+# Curtain clamp pilots in the rear bell's 4 mm lip: open for the screw's bite, 0.6 mm of skin left on the mouth face.
+for a in BL.CLAMP_SCREW_ANGLES:
+    p, d = (BL.CLAMP_SCREW_R * math.cos(math.radians(a)), -BL.CLAMP_SCREW_R * math.sin(math.radians(a)), BL.R_LIP_S), (0, 0, 1)
+    v = (volume(cylinder(p, d, BL.CLAMP_PILOT / 2 - .001, 0, BL.CLAMP_PILOT_DEPTH - .001).intersect(solids['bell_rear'])),
+         volume(cylinder(p, d, BL.CLAMP_PILOT / 2 - .01, BL.CLAMP_PILOT_DEPTH + .1, BL.R_LIP_T - .1).cut(solids['bell_rear'])))
+    print('clamp pilot', [round(x, 4) for x in v])
+    assert max(v) < .02, (a, v)
 # Regression controls: detect the old 2.7 mm bore and a shallow 2 mm floor.
 p, d = (0, 0, 0), (0, 0, 1)
 old_bore = cylinder(p, d, 4, 0, 8).cut(cylinder(p, d, 1.35, -.1, 6.5))
@@ -82,40 +89,63 @@ assert volume(cylinder(p, d, 3, .15, 6.45, 2.001).cut(thin_floor)) > 1
 # ---------------------------------------------------------------- screw shanks at the assembled positions
 mods = (B, S, F, T, BL, H)
 placed = {}
-for m in mods:
+envelopes = {}
+from parts import electronics as E
+for m in mods + (E,):
     built, pl = m.build(), m.placements()
     for n, wp in built.items():
-        if not n.endswith('_envelope'):
-            placed[n] = place(wp, pl.get(n))
+        (envelopes if n.endswith('_envelope') else placed)[n] = place(wp, pl.get(n))
 ZC = P.Z_SPHERE_CENTER
+
+
+def clear_of_all(solid, label, skip=()):
+    """A screw head (or knob) must not hit any part or envelope."""
+    for n_, wp in list(placed.items()) + list(envelopes.items()):
+        if n_ in skip or n_ in ('fist_envelope', 'hand_path_envelope', 'glass_path_envelope'):
+            continue
+        assert inter_volume(solid, wp) < .01, (label, 'hits', n_)
+
+
+def knob(p, d, r_floor):
+    """Thumbscrew collar (in its counterbore) and knurled head, from the counterbore floor along d."""
+    c = cylinder(p, d, P.THUMB_COLLAR_D / 2, .05, P.THUMB_COLLAR_L)
+    return c.union(cylinder(p, d, P.THUMB_HEAD_D / 2, P.THUMB_COLLAR_L + .05, P.THUMB_COLLAR_L + P.THUMB_HEAD_L))
 shanks = []   # (label, start point, direction, length, parts it passes through)
 for sign, n, half in ((-1, 'bell_front', 'sphere_front'), (1, 'bell_rear', 'sphere_rear')):   # bell thumbscrews
-    for a in S.BELL_LOCK_ANGLES:
-        x, z = pol(BL.lock_seat_r(sign), a); dx, dz = pol(-1, a)
-        shanks.append(('bell thumbscrew', (x, sign * S.lock_s(sign), ZC + z), (dx, 0, dz), P.THUMB_THREAD_L, (n, half)))
-        r_seat = BL.lock_seat_r(sign)
-        knob = cylinder((*[v for v in (pol(r_seat + .05, a)[0],)], sign * S.lock_s(sign), ZC + pol(r_seat + .05, a)[1]), (-dx, 0, -dz), P.THUMB_COLLAR_D / 2, 0, P.THUMB_COLLAR_L)
-        p_h = pol(r_seat + P.THUMB_COLLAR_L + .05, a)
-        knob = knob.union(cylinder((p_h[0], sign * S.lock_s(sign), ZC + p_h[1]), (-dx, 0, -dz), P.THUMB_HEAD_D / 2, 0, 8.7))
-        for n_ in (n, half, 'foot'):
-            assert inter_volume(knob, placed[n_]) < .01, ('bell thumbscrew head hits', n_)
-for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x12 from the pivot's deep counterbore
+    for a in S.BELL_LOCK_ANGLES[sign]:
+        r_floor = S.collar_dims(sign)[1] - P.THUMB_WEB        # counterbore floor: the collar bears here
+        x, z = pol(r_floor, a); dx, dz = pol(1, a)
+        p = (x, sign * S.lock_s(sign), ZC + z)
+        shanks.append(('bell thumbscrew', p, (dx, 0, dz), P.THUMB_THREAD_L, (n, half)))
+        clear_of_all(knob(p, (-dx, 0, -dz), r_floor), 'bell thumbscrew head')
+for sx, n in ((1, 'handle_pivot_right'), (-1, 'handle_pivot_left')):   # M3x12 from inside the sphere
     for y, z in S.PIVOT_SCREWS:
-        shanks.append(('pivot', (sx * H.pivot_seat_x(y, z), y, ZC + z), (-sx, 0, 0), H.PIVOT_SCREW_L, (n, 'sphere_front' if y < 0 else 'sphere_rear')))
+        half = 'sphere_front' if y < 0 else 'sphere_rear'
+        p = (sx * S.pivot_seat_x(y, z), y, ZC + z)
+        shanks.append(('pivot', p, (sx, 0, 0), H.PIVOT_SCREW_L, (n, half)))
+        clear_of_all(cylinder(p, (-sx, 0, 0), P.M3_HEAD_D / 2 - .3, .05, 3.0), 'pivot screw head')
 for a in B.BASE_JOINT_ANGLES:   # M3x8 through the drum's band into the foot
     shanks.append(('drum-foot', (*pol(B.R_MAX - B.BASE_JOINT_CBORE_DEPTH, a), B.BASE_JOINT_Z), (*pol(-1, a), 0), 8, ('base', 'foot')))
-for a, z, part in [(a, S.Z_LOWER_SCREWS, 'foot') for a in S.JOINT_ANGLES] + [(a, S.Z_UPPER_SCREWS, 'top_cap') for a in S.TOP_JOINT_ANGLES]:
-    # thumbscrews: collar on the spot-faced seat, thread through the collar into the pilot; the head clears the well
-    shanks.append(('thumbscrew ' + part, (*pol(S.THUMB_SEAT_R, a), ZC + z), (*pol(-1, a), 0), P.THUMB_THREAD_L, ('sphere_front', 'sphere_rear', part)))
-    collar = cylinder((*pol(S.THUMB_SEAT_R + .05, a), ZC + z), (*pol(1, a), 0), P.THUMB_COLLAR_D / 2, 0, P.THUMB_COLLAR_L)
-    head = cylinder((*pol(S.THUMB_SEAT_R + P.THUMB_COLLAR_L + .05, a), ZC + z), (*pol(1, a), 0), P.THUMB_HEAD_D / 2, 0, 8.7)
-    for n_ in ('sphere_front', 'sphere_rear', 'foot', 'top_cap', 'bell_front', 'bell_rear'):
-        assert inter_volume(collar.union(head), placed[n_]) < .01, ('thumbscrew head/collar hits', n_, part, a)
-for a in T.CAP_FLOOR_SCREW_ANGLES:
-    shanks.append(('cap floor', (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR), (0, 0, -1), 8, ('cap_floor', 'top_cap')))
-for a in BL.CLAMP_SCREW_ANGLES:   # countersunk M3x8 from the rear bell's mouth face into the clamp
+for a, z, part, r_out in [(a, S.Z_LOWER_SCREWS, 'foot', F.RISER_R) for a in S.JOINT_ANGLES] + \
+                         [(a, S.Z_UPPER_SCREWS, 'top_cap', T.PLUG_R) for a in S.TOP_JOINT_ANGLES]:
+    # thumbscrews from inside the neck: collar on the counterbore floor, thread out through the web into the collar
+    r_floor = r_out - P.THUMB_WEB
+    p = (*pol(r_floor, a), ZC + z)
+    shanks.append(('thumbscrew ' + part, p, (*pol(1, a), 0), P.THUMB_THREAD_L, ('sphere_front', 'sphere_rear', part)))
+    clear_of_all(knob(p, (*pol(-1, a), 0), r_floor), 'thumbscrew head ' + part)
+for a in T.CAP_FLOOR_SCREW_ANGLES:   # thumbscrews down through the cap floor; heads on top among the electronics
+    p = (*pol(T.CAP_FLOOR_SCREW_R, a), T.Z_CAP_FLOOR)
+    shanks.append(('cap floor', p, (0, 0, -1), P.THUMB_THREAD_L, ('cap_floor', 'top_cap')))
+    clear_of_all(knob(p, (0, 0, 1), 0), 'cap floor thumbscrew head')
+for a in BL.CLAMP_SCREW_ANGLES:   # M3x8 from the clamp's back (inside the bell) into the lip's pilots
     x, z = pol(BL.CLAMP_SCREW_R, a)
-    shanks.append(('curtain clamp', (x, BL.R_MOUTH, ZC + z), (0, -1, 0), 8, ('bell_rear', 'curtain_clamp')))
+    p = (x, BL.R_LIP_S - BL.CURTAIN_T - BL.CLAMP_T + BL.CLAMP_CB, ZC + z)
+    shanks.append(('curtain clamp', p, (0, 1, 0), 8, ('curtain_clamp',)))
+    clear_of_all(cylinder(p, (0, -1, 0), P.M3_HEAD_D / 2 - .3, .05, 3.0), 'clamp screw head')
+for a in B.BASE_JOINT_ANGLES:   # the green caps fit over the heads, flush with the band
+    p = (*pol(B.R_MAX - B.DRUM_CAP_T, a), B.BASE_JOINT_Z)
+    cap = cylinder(p, (*pol(1, a), 0), B.DRUM_CAP_D / 2, 0, B.DRUM_CAP_T)
+    assert inter_volume(cap, placed['base']) < .01, ('drum cap', a)
 for phi in H.JOINTS:   # M3x10 through each lap
     for x, z in H.screw_points(phi):
         shanks.append(('handle lap', (x, -P.HANDLE_SECTION_T / 2 + H.LAP_CB, ZC + z), (0, 1, 0), 8, [n for n in placed if n.startswith('handle_')]))

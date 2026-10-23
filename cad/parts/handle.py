@@ -1,8 +1,9 @@
 """
 handle.py - rev C (2026-10-23): the loop handle on ring pivots at the sphere's sides (as on the classic battery).
 
-    handle_pivot_left / _right  ring pivot boss over the sphere's seam: 2 M3 into inserts in the two halves, a bore for
-                                the axle, and an arc groove in its face that stops the handle level on both sides
+    handle_pivot_left / _right  ring pivot boss over the sphere's seam: 2 M3 from inside the two halves into inserts in
+                                it (its face shows no screws), a bore for the axle, and an arc groove in its face that
+                                stops the handle level on both sides
     handle_end_left / _right    hub + spoke out along X + a 30 mm corner + the first 45 deg of the big arc
     handle_arc_1, _2            the rest of the big arc, 45 deg each
 
@@ -48,7 +49,7 @@ STOP_HALF = 90.0 + math.degrees(math.atan(TAB_W / 2 / TAB_R)) + 1.0   # the groo
 RING_GROOVES = (20.0,)                               # decorative ring on the pivot face (the mount screws sit inside it)
 NUT_AF, NUT_POCKET_DEPTH = 5.6, 2.6
 LAP_CB = 2.0                                         # lap screw heads sink 2 mm: M3x8 through the 10 mm lap into the nut
-PIVOT_SCREW_L, PIVOT_SCREW_BITE = 12.0, 6.0          # M3x12 into the sphere's inserts: counterbored deep enough for it
+PIVOT_SCREW_L = 12.0                                 # M3 x 12 from inside the sphere into inserts in the pivot
 # laps
 LAP_L = 40.0
 LAP_SCREWS = 3
@@ -174,11 +175,6 @@ def pieces():
     return out
 
 
-def pivot_seat_x(y, z):
-    """|x| of the counterbore floor for a pivot screw at (y, z): an M3x12 then bites PIVOT_SCREW_BITE into the insert."""
-    return math.sqrt(S.R_OUT ** 2 - y * y - z * z) + PIVOT_SCREW_L - PIVOT_SCREW_BITE
-
-
 def pivot(sign):
     """Ring pivot boss on the sphere's side at x = sign * R (sphere frame), its inner face following the sphere."""
     x0, x1 = sorted((sign * (S.R_OUT - 8.0), sign * PIVOT_X1))
@@ -189,10 +185,10 @@ def pivot(sign):
     face = sign * PIVOT_X1
     for r in RING_GROOVES:                           # concentric rings on the face
         b = b.cut(cq.Workplane('YZ').workplane(offset=face - sign * 0.8).circle(r + 0.6).circle(r - 0.6).extrude(sign * 2))
-    for y, z in S.PIVOT_SCREWS:                      # into the sphere's inserts, heads counterbored
-        b = b.cut(cq.Workplane('YZ').workplane(offset=x0 - 1).center(y, z).circle(P.M3_CLEAR / 2).extrude(x1 - x0 + 2))
-        b = b.cut(cq.Workplane('YZ').workplane(offset=face + sign * 0.01).center(y, z)
-                  .circle(P.M3_HEAD_D / 2 + 0.3).extrude(-sign * (PIVOT_X1 - pivot_seat_x(y, z))))
+    for y, z in S.PIVOT_SCREWS:                      # insert bores from the face against the sphere
+        x_surf = math.sqrt(S.R_OUT ** 2 - y * y - z * z)
+        b = b.cut(cq.Workplane('YZ').workplane(offset=sign * (x_surf - 0.5)).center(y, z)
+                  .circle(P.M3_INSERT_HOLE / 2).extrude(sign * (P.M3_INSERT_DEPTH + 0.5 + S.PIVOT_ENTRY)))
     # arc groove for the hub's stop tab: from level on one side, over the top, to level on the other
     n = 24
     pt = lambda r, t: (r * math.cos(math.radians(90 + t)), r * math.sin(math.radians(90 + t)))

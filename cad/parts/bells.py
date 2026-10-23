@@ -4,11 +4,13 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
     bell_front     on the lens opening (-Y). LED collar band behind the lens, the lens on a ledge in front of it.
     bell_rear      on the hand opening (+Y). LED rim band in the throat, the frosted strip curtain held at the mouth.
     diffuser       the front lens: a full round 118 mm white disc (the rev-9 diffuser had 98 mm flats: reprint)
-    curtain_clamp  arc that clamps the curtain's top edge to the inside of the rear bell's mouth lip
+    curtain_clamp  arc that clamps the curtain's top edge to the inside of the rear bell's mouth lip (3 M3 x 8 from
+                   behind it, inside the bell, into pilots in the lip: the mouth face shows no screws)
 
 Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
-Its throat slides over the collar round the opening (sphere.bell_collar) and two thumbscrews from below hold it
-(2026-10-23): no tools needed. Unplug its LED strip's lead before pulling it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
+Its throat slides over the collar round the opening (sphere.bell_collar) and two thumbscrews hold it (2026-10-23): no
+tools needed. They turn from inside the opening and bite outward into blind pilots in the throat, which is 8.5 mm thick
+for them, so the bell's outside shows no screws. Unplug its LED strip's lead before pulling it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
 
 Bell frame: the bell axis is +Z, the sphere centre at the origin, s (= z) the distance out from the centre.
 """
@@ -29,7 +31,7 @@ def _s_surface(r):
 F_EDGE = _s_surface(S.LENS_R)                # 96.4: sphere surface at the opening edge
 F_MOUTH = F_EDGE + P.FRONT_BELL_L            # 160.4
 F_OUT = P.FRONT_BELL_MOUTH_R                 # 84
-F_THROAT_OUT = 66.0                          # throat band: 3 mm of wall outside the L-slots
+F_THROAT_OUT = 69.5                          # throat band: 8.5 mm wall, deep enough for the thumbscrews' blind pilots
 F_LED_R, F_LED_S = 61.0, (106.0, 116.0)      # LED collar band: 37.5 cm of 10 mm COB strip, facing the axis
 F_LEDGE_S = 117.5                            # the lens rests on this face (toward the mouth)
 LENS_R = P.DIFFUSER_D / 2                    # 59
@@ -71,7 +73,7 @@ def front_profile():
 R_EDGE = _s_surface(S.HAND_R)                # 91.2
 R_MOUTH = R_EDGE + P.REAR_BELL_L             # 151.2
 R_OUT = P.REAR_BELL_MOUTH_R                  # 90
-R_THROAT_OUT = 79.5                          # throat band: 3 mm of wall outside the L-slots
+R_THROAT_OUT = 82.5                          # throat band: 8.5 mm wall, deep enough for the thumbscrews' blind pilots
 R_LED_R, R_LED_S = 74.0, (104.0, 114.0)      # LED rim band: 25-30 cm of strip on the 46 cm circumference
 R_LIP_R = 78.0                               # the mouth lip: the curtain sits against its inner face
 R_LIP_T = 4.0
@@ -82,7 +84,9 @@ R_WALL = 2.8
 CURTAIN_R = 85.5                             # frosted disc radius (cut into vertical strips below its top arc)
 CURTAIN_T = 0.5
 CLAMP_R = (R_LIP_R, R_OUT - R_WALL - 0.5)    # 78 .. 85.5
-CLAMP_T = 8.0                                # inserts in the clamp; countersunk M3 from the mouth face through the lip
+CLAMP_T = 8.0
+CLAMP_CB = 3.5                               # head counterbore in the clamp's back: an M3 x 8 then bites 3 mm into the lip
+CLAMP_PILOT, CLAMP_PILOT_DEPTH = 2.5, 3.2    # self-tapping pilot in the 4 mm lip: 0.8 mm (4 layers) left on the mouth face
 CLAMP_SCREW_R = sum(CLAMP_R) / 2             # 81.75
 CLAMP_SCREW_ANGLES = (90.0 - 55.0, 90.0, 90.0 + 55.0)   # around the bell axis, from +X (90 = top)
 
@@ -115,24 +119,21 @@ def _revolve(pts):
     return cq.Workplane('XZ').polyline(pts).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
 
 
+def bell_bore(sign):
+    return S.collar_dims(sign)[1] + P.FIT
+
+
 def _bell(pts, sign):
-    """The revolved bell, cut by the sphere, with the two thumbscrew holes and their flat seats."""
+    """The revolved bell, cut by the sphere, with the two thumbscrews' blind pilots (from the bore outward)."""
     b = _revolve(pts).cut(cq.Workplane('XY').sphere(R))
-    bore = S.collar_dims(sign)[1] + P.FIT
+    bore = bell_bore(sign)
     sl = S.lock_s(sign)
-    out = (F_THROAT_OUT if sign < 0 else R_THROAT_OUT) + 1
-    for a in S.BELL_LOCK_ANGLES:
+    for a in S.BELL_LOCK_ANGLES[sign]:
         ab = S.bell_frame_angle(sign, a)
-        hole = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.THUMB_CLEAR / 2).extrude(out - bore + 1)
-        cb = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.THUMB_COLLAR_D / 2 + 0.4) \
-            .extrude(out - lock_seat_r(sign))                # seat for the thumbscrew's collar
-        b = b.cut(hole.union(cb).rotate((0, 0, 0), (0, 0, 1), ab))
+        pilot = cq.Workplane(cq.Plane(origin=(bore - 0.5, 0, sl), normal=(1, 0, 0))).circle(P.THUMB_PILOT / 2) \
+            .extrude(S.THUMB_PILOT_DEPTH + 0.5)
+        b = b.cut(pilot.rotate((0, 0, 0), (0, 0, 1), ab))
     return b
-
-
-def lock_seat_r(sign):
-    """Radius of the flat seat for the lock thumbscrew's collar: THUMB_GRIP of throat left above the bore."""
-    return S.collar_dims(sign)[1] + P.FIT + P.THUMB_GRIP
 
 
 def bell_front():
@@ -141,11 +142,9 @@ def bell_front():
 
 def bell_rear():
     b = _bell(rear_profile(), +1)
-    for a in CLAMP_SCREW_ANGLES:             # countersunk clamp screws through the lip (top = -Y in this frame)
+    for a in CLAMP_SCREW_ANGLES:             # blind pilots in the lip for the clamp screws (top = -Y in this frame)
         x, y = CLAMP_SCREW_R * math.cos(math.radians(a)), -CLAMP_SCREW_R * math.sin(math.radians(a))
-        b = b.cut(cq.Workplane('XY').workplane(offset=R_LIP_S - 1).center(x, y).circle(P.M3_CLEAR / 2).extrude(R_LIP_T + 2))
-        b = b.cut(cq.Workplane('XY').add(cq.Solid.makeCone(P.M3_CLEAR / 2, P.M3_HEAD_D / 2 + 0.3, 1.8,
-                                                            pnt=cq.Vector(x, y, R_MOUTH - 1.8))))
+        b = b.cut(cq.Workplane('XY').workplane(offset=R_LIP_S - 0.5).center(x, y).circle(CLAMP_PILOT / 2).extrude(CLAMP_PILOT_DEPTH + 0.5))
     return b
 
 
@@ -156,8 +155,9 @@ def diffuser():
 
 def curtain_clamp():
     """Arc over the top of the curtain (+-CURTAIN_HALF_ANGLE): it presses the curtain's top edge against the rear bell's
-    lip; 3 countersunk M3 from the mouth face into inserts in it. Printed flat; frame: the bell axis at the origin,
-    the arc centred on +Y (= up once placed), z = 0 the face against the curtain."""
+    lip; 3 M3 x 8 from its back (inside the bell), heads counterbored, through the curtain into pilots in the lip.
+    Printed flat, curtain face down; frame: the bell axis at the origin, the arc centred on +Y (= up once placed), z = 0 the
+    face against the curtain."""
     r0, r1 = CLAMP_R
     a = P.CURTAIN_HALF_ANGLE
     ring = cq.Workplane('XY').circle(r1).circle(r0).extrude(CLAMP_T)
@@ -166,7 +166,8 @@ def curtain_clamp():
     c = ring.intersect(cq.Workplane('XY').polyline(pts).close().extrude(CLAMP_T))
     for t in CLAMP_SCREW_ANGLES:
         x, y = CLAMP_SCREW_R * math.cos(math.radians(t)), CLAMP_SCREW_R * math.sin(math.radians(t))
-        c = c.cut(cq.Workplane('XY').workplane(offset=-0.5).center(x, y).circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5))
+        c = c.cut(cq.Workplane('XY').workplane(offset=-0.5).center(x, y).circle(P.M3_CLEAR / 2).extrude(CLAMP_T + 1))
+        c = c.cut(cq.Workplane('XY').workplane(offset=CLAMP_T - CLAMP_CB).center(x, y).circle(P.M3_HEAD_D / 2 + 0.2).extrude(CLAMP_CB + 0.5))
     return c
 
 

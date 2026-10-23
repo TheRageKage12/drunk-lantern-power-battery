@@ -5,7 +5,9 @@ top.py - rev C (2026-10-23): the mirrored top (replaces dish_upper and top_diffu
                     cap, 80 mm tall, with a thickened rim carrying 3 L-grooves for the lid. Printed plug down.
     cap_floor       separate plate on a ledge at the bottom of the cap (a cap floor printed in place would be a 185 mm
                     bridge). Carries the battery (LED face down over a slot: look up the neck to read it), the board on
-                    standoffs, the buck module, the power switch S1 in a box (lever up) and the charge socket. 3 M3.
+                    standoffs, the buck module, the power switch S1 in a box (lever up) and the charge socket. 3
+                    thumbscrews (2026-10-23): lid off, 3 thumbscrews, lift it out (unplug the inline plugs if the leads
+                    are short), and the 3 thumbscrews holding the top cap to the sphere are down the neck.
     halo_ring       WHITE. A cup: the tube drops into the cap rim and carries the 3 bayonet lugs (quarter-turn twist-lock
                     with a click), the flange shows as a glowing band around the rim, and its 1.2 mm top is the emblem's
                     diffuser. Printed top down.
@@ -33,7 +35,8 @@ R_NECK = S.FLAT_D / 2                                # 68.4
 PLUG_R = S.OPENING_ID / 2 - P.FIT                    # 65.7: into the sphere's top collar
 PLUG_RI = PLUG_R - P.WALL                            # 63.3
 Z_FLAT = P.Z_SPHERE_TOP                              # 309.0
-Z_PLUG0 = Z_FLAT - S.OPENING_DEPTH                   # 300.0
+PLUG_L = 13.0                                        # 2026-10-23: 4 mm below the collar, to take the thumbscrews 7 mm down
+Z_PLUG0 = Z_FLAT - PLUG_L                            # 296.0
 Z_NECK1 = Z_FLAT + P.NECK_H                          # 334.0
 Z_CAP0, Z_TOP = P.Z_CAP0, P.Z_CAP_TOP                # 360.6, 440.6
 FLARE_WALL_R = P.WALL / math.cos(math.radians(P.FLARE_ANGLE))
@@ -46,9 +49,11 @@ CAP_FLOOR_R = R_CAP_IN - P.FIT                       # 92.3
 CAP_FLOOR_SCREW_R = 85.0                             # far enough in that each insert stays inside the flare wall
 CAP_FLOOR_SCREW_ANGLES = (60.0, 180.0, 300.0)        # clear of the battery, board, buck, S1 and the charge socket
 RIM_RI, RIM_H = 89.0, 14.0                           # thickened rim for the lid's L-grooves
-Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_UPPER_SCREWS   # 306.0
-JOINT_ANGLES = S.TOP_JOINT_ANGLES                  # thumbscrews from the sphere: clear of the wall extension's tabs
+Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_UPPER_SCREWS   # 302.0
+JOINT_ANGLES = S.TOP_JOINT_ANGLES                  # thumbscrews out into the sphere: clear of the wall extension's tabs
 THUMB_PILOT_DEPTH = 6.5
+PAD_W = 14.0
+CAP_FLOOR_PILOT_DEPTH = 7.0                          # thumbscrew pilots in the cap floor's bosses
 BOSS_W, BOSS_DEPTH = 10.0, P.M3_INSERT_DEPTH + 1.5
 
 # lid bayonet: lugs on the halo ring's tube, L-grooves in the cap rim; push down, twist LID_TWIST clockwise (from above)
@@ -105,32 +110,39 @@ def face_r(r):
     return math.sqrt(r * r - (BOSS_W / 2) ** 2)
 
 
-def _boss(r_face, z0, z1, angle, inward=True, corbel=0.0):
-    """Insert boss block against a wall at r_face, BOSS_W wide, z0..z1, growing inward; corbel = 45 deg wedge depth."""
-    r_face = face_r(r_face)
-    r0 = r_face - BOSS_DEPTH if inward else r_face
+def thumb_pad_r():
+    """Inner face of a thumbscrew pad: THUMB_PAD_T in from the plug's outside (where its head sits)."""
+    return PLUG_R - P.THUMB_PAD_T
+
+
+def _boss(r_face, z0, z1, angle, inward=True, corbel=0.0, w=BOSS_W, depth=BOSS_DEPTH):
+    """Boss block against a wall at r_face, w wide, z0..z1, growing inward; corbel = 45 deg wedge depth."""
+    r_face = math.sqrt(r_face ** 2 - (w / 2) ** 2)
+    r0 = r_face - depth if inward else r_face
     pts = [(r0, z0), (r_face, z0 - corbel), (r_face, z1), (r0, z1)]
-    return cq.Workplane('XZ').polyline(pts).close().extrude(BOSS_W / 2, both=True).rotate((0, 0, 0), (0, 0, 1), angle)
+    return cq.Workplane('XZ').polyline(pts).close().extrude(w / 2, both=True).rotate((0, 0, 0), (0, 0, 1), angle)
 
 
 def build_top_cap():
     c = cq.Workplane('XZ').polyline(profile()).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
     outer = cq.Workplane('XZ').polyline([(0, Z_FLAT), (R_NECK - 0.5, Z_FLAT), (R_NECK - 0.5, Z_NECK1), (R_CAP - 0.5, Z_CAP0 + 0.5),
                                           (R_CAP - 0.5, Z_TOP), (0, Z_TOP)]).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
-    for a in JOINT_ANGLES:                                   # plug bosses for the sphere's 3 radial screws
-        c = c.union(_boss(PLUG_R, Z_PLUG0, Z_FLAT + BEARING_T, a))
+    rp = thumb_pad_r()
+    for a in JOINT_ANGLES:                                   # pads under the 3 thumbscrews (heads inside the plug)
+        c = c.union(_boss(PLUG_R, Z_PLUG0, Z_FLAT + BEARING_T, a, w=PAD_W, depth=math.sqrt(PLUG_R ** 2 - (PAD_W / 2) ** 2) - rp))
     for a in CAP_FLOOR_SCREW_ANGLES:                         # cap floor bosses under the ledge (45 deg corbels)
         r0 = CAP_FLOOR_SCREW_R - 3.3
         pts = [(r0, Z_CAP_FLOOR0 - 8.0), (R_CAP_IN + 0.5, Z_CAP_FLOOR0 - 8.0 - (R_CAP_IN + 0.5 - r0)),
                (R_CAP_IN + 0.5, Z_CAP_FLOOR0), (r0, Z_CAP_FLOOR0)]
         c = c.union(cq.Workplane('XZ').polyline(pts).close().extrude(BOSS_W / 2, both=True)
                     .rotate((0, 0, 0), (0, 0, 1), a).intersect(outer))
-    for a in JOINT_ANGLES:
-        c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R + 0.5, PLUG_R - face_r(PLUG_R) + THUMB_PILOT_DEPTH + 0.5, P.THUMB_PILOT))
-    for a in CAP_FLOOR_SCREW_ANGLES:
+    for a in JOINT_ANGLES:                                   # clearance through, the collar's counterbore from inside
+        c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R + 0.5, PLUG_R - rp + 1.0, P.THUMB_CLEAR))
+        c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R - P.THUMB_WEB, PLUG_R - P.THUMB_WEB - rp + 0.5, P.THUMB_CB_D))
+    for a in CAP_FLOOR_SCREW_ANGLES:                         # cap floor thumbscrew pilots
         x, y = _ang_point(CAP_FLOOR_SCREW_R, a)
-        c = c.cut(cq.Workplane('XY').workplane(offset=Z_CAP_FLOOR0 - P.M3_INSERT_DEPTH).center(x, y)
-                  .circle(P.M3_INSERT_HOLE / 2).extrude(P.M3_INSERT_DEPTH + 0.5))
+        c = c.cut(cq.Workplane('XY').workplane(offset=Z_CAP_FLOOR0 - CAP_FLOOR_PILOT_DEPTH).center(x, y)
+                  .circle(P.THUMB_PILOT / 2).extrude(CAP_FLOOR_PILOT_DEPTH + 0.5))
     # lid L-grooves: an entry slot down from the rim, then a leg turning clockwise seen from above (negative angle)
     half = math.degrees(LUG_W / 2 / GROOVE_R) + 1.0
     for a in LID_LUG_ANGLES:
@@ -152,7 +164,7 @@ WEXT_T = S.WALL_T
 WEXT_Y = (S.WALL_FRONT_Y + S.WALL_BACK_Y) / 2        # -26.4: in line with the lock wall
 WEXT_HW = 57.0                                       # half width: the plug ring's bore is at x 57.5 here
 WEXT_Z0 = S.WALL_Z0 + S.WALL_H                       # 48.5: the printed wall's top edge (sphere frame)
-WEXT_Z1 = Z_PLUG0 - P.Z_SPHERE_CENTER - 0.5          # 79.2: 0.5 under the plug
+WEXT_Z1 = Z_PLUG0 - P.Z_SPHERE_CENTER - 0.5          # 75.2: 0.5 under the plug
 WEXT_TAB_X, WEXT_TAB_H = (53.0, 59.5), 4.0         # tabs up into notches in the plug ring (x 57.5 .. 60.1 here)
 WEXT_LEG = 8.0                                       # legs down over the wall's top edge
 
@@ -260,7 +272,7 @@ def build_cap_floor():
     cuts.append(cq.Workplane('XY').workplane(offset=-CAP_FLOOR_T - 1).center(wx, wy).slot2D(WIRE_HOLE[0], WIRE_HOLE[1]).extrude(CAP_FLOOR_T + 2))
     for a in CAP_FLOOR_SCREW_ANGLES:
         x, y = _ang_point(CAP_FLOOR_SCREW_R, a)
-        cuts.append(cq.Workplane('XY').workplane(offset=-CAP_FLOOR_T - 1).center(x, y).circle(P.M3_CLEAR / 2).extrude(CAP_FLOOR_T + 2))
+        cuts.append(cq.Workplane('XY').workplane(offset=-CAP_FLOOR_T - 1).center(x, y).circle(P.THUMB_CLEAR / 2).extrude(CAP_FLOOR_T + 2))
     for w_ in adds:
         plate = plate.union(w_)
     for c_ in cuts:
