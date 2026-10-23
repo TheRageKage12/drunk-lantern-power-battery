@@ -1,6 +1,6 @@
 # Green Lantern power battery that pours a shot: build guide
 
-A 3D-printed Green Lantern power battery, about 47 cm tall and 19 cm across at the base, with a hidden pump, a
+A 3D-printed Green Lantern power battery, about 50 cm tall and 19 cm across at the base, with a hidden pump, a
 hidden nozzle and a twist-to-pour lock.
 
 The sphere has two openings:
@@ -107,7 +107,7 @@ quantities, prices and who has what.
 | # | Item | Buy | Price | Notes |
 |---|---|---|---|---|
 | 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28.00 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
-| 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $13.99 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. One run is ~90 cm; the rest covers replacements (the tube is the part that wears). |
+| 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $13.99 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. One run is ~95 cm; the rest covers replacements (the tube is the part that wears). |
 | 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
 | 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 9–12.6 V in, set to 5.0 V out for the XIAO, gate driver and Hall sensor. 43 x 21 mm. |
 | 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
@@ -136,8 +136,8 @@ quantities, prices and who has what.
 | 18 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1.50 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
 | 19 | Straps and zip ties | Hardware store: VELCRO One-Wrap roll, 3/4" x 12 ft, model 90340 (Kevin has it), plus ~10 small zip ties (2.5 mm wide) | ~$9 | Cut the roll into 4 straps: two for the pump, one for the jar, one for the battery. The battery strap's lower run sits in a 2 mm recess under the tray, so it must be no thicker than 2 mm (One-Wrap measures about 1 mm). The zip ties hold the LM2596 and tidy the cables. |
 | 20 | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
-| 21 | Food-safe jar | Micro Homebrew (Kenmore) or any kitchen store | ~$5 | **No bigger than 73 mm across (lid included) and 76 mm tall**; measure it in the store with the lid on. The lid must be drillable. |
-| 22 | Shot glass, 1.5 oz | Bargreen Ellingson or any kitchen store | ~$4 | **Up to 52 mm across the top and 62 mm tall** (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps. |
+| 21 | Food-safe jar | Kevin has one: a Ball 8 oz quilted jelly jar (Fred Meyer and Target sell 12-packs) | ~$5 | **No bigger than 73 mm across and 108 mm tall, lid included**; Kevin's measures 73 x 100-105 mm. Holds ~200 mL usable, 5-6 pours. The lid must be drillable. |
+| 22 | Shot glass, 1.5 oz | Kevin has one (48 mm across, 60 mm tall); otherwise Bargreen Ellingson or any kitchen store | ~$4 | **Up to 52 mm across the top and 62 mm tall** (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps. |
 | 23 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
 
 > **No charge jack.** There is nothing to buy for charging. The battery's supplied splitter is "1 female to 2
@@ -196,7 +196,7 @@ All files are in `cad/output/` (STL for slicing, STEP for editing).
   only if you use a bought ring instead of `key_ring`. `assembly.stl` and the `*_envelope.stl` files are check
   volumes, not parts.
 - **Bed size:** everything fits your 230 x 230 x 240 mm Ender 3. The widest part is the rear sphere half at
-  221 mm (because of the handle bosses); the tallest is the base at 115 mm. Centre the big parts.
+  221 mm (because of the handle bosses); the tallest is the base at 147 mm. Centre the big parts.
 - **Adhesion:** a skirt is enough, except for the two sphere halves and `dish_lower`, whose first layer is only a
   2.4 mm ring: give those a 6 mm brim.
 
@@ -276,7 +276,7 @@ Install the brass inserts before assembly.
 
 | Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
 |---|---|---|---|---|---|
-| `base` (drum) | 190 x 190 x 115 | top band down | no | green | 232 |
+| `base` (drum) | 190 x 190 x 147 | top band down | no | green | 280 |
 | `base_tray` (cartridge floor, with the switch pocket and LED slot) | 179 x 179 x 44 | flat | no | green | 91 |
 | `base_deck` | 179 x 179 x 47 | flat | under the four electronics mounting pads; remove fully before fitting board | any | 111 |
 | `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 1 |
@@ -419,7 +419,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    - How it works: closed contacts pull D2 low; open contacts leave D2 at 3.3 V while the switch side rises to 5 V.
      R7 puts about 1.5 mA through the closed contacts (the D2F-01L needs at least 1 mA) and R6 adds about 0.6 mA.
      The firmware's internal pull-ups can stay on alongside R5 and R6.
-   - **Lock cable:** 4 wires, **+5V_REG, HALL, SW, GND**, about 40 cm, with the JST PH plug about 10 cm from the
+   - **Lock cable:** 4 wires, **+5V_REG, HALL, SW, GND**, about 45 cm, with the JST PH plug about 10 cm from the
      board. R5–R7 and D3 stay on the board.
    - **Do not solder the Hall sensor to the cable yet:** its leads must first pass through the sensor post's slot
      (section 6). Clip it on temporarily for the bench checks. Solder the switch wires before mounting the switch.
@@ -590,7 +590,7 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
 8. **Mount** it on the face of `lock_wall` (section 8): the two ears go down, one M3x10 through each ear and
    the wall, nut on the back. The lock cable passes through the wall: the sensor's three joints through the
    rectangular window behind the lock, the switch wires through the small window under it, where the plate's
-   rim notch lands. Leave the cable long enough to reach the base (about 40 cm).
+   rim notch lands. Leave the cable long enough to reach the base (about 45 cm).
 
 ---
 
@@ -603,7 +603,8 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
    pointing **down into the jar**, and seal round it with a dab of super glue. Air gets in as the
    pump draws the drink out (without it the jar goes under vacuum and the pours shrink), but if the jar tips,
    nothing comes out. Blow through it to check: air goes in, not out. The valve stands about 25 mm above the
-   lid; the lower dish leaves about 40 mm.
+   lid. Put it on the side of the lid nearest the drum wall: over the middle and the outer side there are
+   35-75 mm of room, but toward the lantern's centre the glass well hangs to about 27 mm above the lid.
 2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
    continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
 3. **Route** (steps 3 to 5 describe the path; you thread it in section 9, steps 3 to 5, once those parts are
@@ -763,7 +764,7 @@ speed 60         too much? lower the speed (too little? raise it) and run cal 11
 save             when it pours 30-37 mL (1 to 1.25 oz)
 ```
 
-Then repeat with the real drink: liqueur is thicker than water and the nozzle is about 12 cm above the pump, so
+Then repeat with the real drink: liqueur is thicker than water and the nozzle is about 15 cm above the pump, so
 expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be carried without spilling.
 
 ---
@@ -903,7 +904,7 @@ months. Replace the pump tube when it looks cloudy or flattened.
 **Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in
 10-15 s. Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A green COB LED
 strip is enough for a glow that just gets brighter, glows without visible dots, and it runs from the same 12 V as the pump. The reservoir
-is a squat jar because it shares the deck with the pump under the lower dish. The glass sits about 5 cm down in
+is a narrow jar (73 mm at most) because it shares the deck with the pump under the lower dish. The glass sits about 5 cm down in
 a slot because the sphere is only 10 cm tall inside and your fist and the lock need the space above it; that is
 also why it slides toward you before it lifts out. The early research notes are in `docs/research/`; they are partly superseded, and the
 current numbers are the ones in this guide and in `cad/params.py`.

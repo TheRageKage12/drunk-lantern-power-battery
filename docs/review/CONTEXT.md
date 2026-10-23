@@ -16,7 +16,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
 
 - **What it is:** a Halloween party prop. It's a 3D-printed Green Lantern power battery (lantern) that secretly
   pours a shot while Kevin recites the oath with his ring in the lock.
-- **Size:** about 47 cm tall, 19 cm across at the base.
+- **Size:** about 50 cm tall, 19 cm across at the base (47 cm before the 2026-10-23 taller drum).
 - **Based on:** Hedo3D's "Green Lantern luminous" (CC BY-NC 4.0, in `original-model/`), scaled up and hollowed
   for the hardware.
 - **Team:** Kevin (owner, wears the ring), Sky and Duncan.
@@ -94,7 +94,7 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
     118 mm long). **Measure it when it arrives.** There is about 6 mm of clearance.
 - **Tube: 1/8" ID x 1/4" OD platinum silicone, Auber 10 ft (B0DKB1NKB4).** Kevin asked if 3 ft would do. The
   10 ft listing was kept because the size is exact and it's cheap; the build uses well under 3 ft.
-- **Reservoir: squat food-safe jar,** at most 73 mm across including the lid, at most 76 mm tall. It sits on the
+- **Reservoir: food-safe jar,** at most 73 mm across including the lid, at most 108 mm tall (since 2026-10-23: Kevin's 8 oz Ball jelly jar, 73 x 100-105 mm, on a 147 mm drum). It sits on the
   cartridge deck. Bought locally (Micro Homebrew, Kenmore).
 - **Jar vent: a one-way aquarium check valve** in a second 6 mm hole in the lid, arrow pointing into the jar.
   - It replaced a 2.5 mm open hole after Kevin raised the leak risk.
@@ -305,7 +305,7 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 | Item | Risk | What the guide says |
 |---|---|---|
 | Pump outline | Measured 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall); ~6 mm clearance | Nothing to do: slide it so the motor rests in its cradle |
-| Jar | Bought locally | Must be ≤ 73 mm across with the lid, ≤ 76 mm tall |
+| Jar | Kevin's 8 oz Ball jar, 73 x 100-105 mm (at the width limit) | ≤ 73 mm across with the lid, ≤ 108 mm tall |
 | Shot glass | Bought locally | ≤ 52 mm across the top, ≤ 62 mm tall |
 | COB current | ~0.6 A estimated | Measure with the multimeter |
 | LED dimming on a draining pack | Accepted | Charge at ~half; buck-boost is an upgrade |
@@ -533,3 +533,10 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   raises the pump axis and motor saddle 0.5 mm. The envelope keeps ~6 mm to the drum and lower dish. "Measure the
   pump" removed from the guide, CAD notes and viewer (the assembly video never said it). The head box length
   (`PUMP_HEAD_L_EST`, 40 mm) stays an allowance; the pump slides along the saddles to seat the motor.
+- **2026-10-23, taller drum for an 8 oz jar.** Kevin wanted more drink per fill than a 4 oz jar (~3 pours). The
+  jar can't get wider (73 mm is the limit beside the pump), so the drum grew instead: `BASE_H` 115 -> 147 and
+  `BOTTLE_H` 76 -> 108 for his 8 oz Ball quilted jelly jar (73 mm across, 100-105 mm tall with the lid; ~200 mL
+  usable, 5-6 pours). Only `base` changes shape; everything above it moves up 32 mm and the lantern is ~50 cm tall.
+  Scratch builds at 145 and 175 mm both passed every check; 147 leaves 2-3 mm over the jar. The vent valve's ~40 mm
+  of headroom is unchanged. Lock cable now ~45 cm, the nozzle ~15 cm above the pump, one tube run ~95 cm. Kevin's
+  shot glass (48 x 60 mm) fits the well.

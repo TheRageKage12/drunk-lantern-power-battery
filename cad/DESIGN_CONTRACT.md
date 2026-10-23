@@ -97,7 +97,7 @@ Parts: **socket_housing** (faceplate + housing in one, printed faceplate DOWN on
   print a ready-made key ring.
 
 ## Print orientations and bed
-All parts fit a 230 x 230 x 240 bed (the owner's Ender 3, `PRINT_BED` in build.py; widest: the rear sphere half at 221 mm, tallest: the base at 115 mm).
+All parts fit a 230 x 230 x 240 bed (the owner's Ender 3, `PRINT_BED` in build.py; widest: the rear sphere half at 221 mm, tallest: the base at 147 mm).
 No part needs supports except the sphere halves (print open side down... i.e. the split plane on the bed,
 the dome up; the window/hatch overhangs are < 60 deg because the arch tops are rounded). Document any
 exception in build.py output.
