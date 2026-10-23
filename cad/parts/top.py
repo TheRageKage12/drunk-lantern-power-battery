@@ -47,7 +47,8 @@ CAP_FLOOR_SCREW_R = 85.0                             # far enough in that each i
 CAP_FLOOR_SCREW_ANGLES = (60.0, 180.0, 300.0)        # clear of the battery, board, buck, S1 and the charge socket
 RIM_RI, RIM_H = 89.0, 14.0                           # thickened rim for the lid's L-grooves
 Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_UPPER_SCREWS   # 306.0
-JOINT_ANGLES = S.TOP_JOINT_ANGLES                  # 30, 150, 270: clear of the wall extension's tabs
+JOINT_ANGLES = S.TOP_JOINT_ANGLES                  # thumbscrews from the sphere: clear of the wall extension's tabs
+THUMB_PILOT_DEPTH = 6.5
 BOSS_W, BOSS_DEPTH = 10.0, P.M3_INSERT_DEPTH + 1.5
 
 # lid bayonet: lugs on the halo ring's tube, L-grooves in the cap rim; push down, twist LID_TWIST clockwise (from above)
@@ -125,7 +126,7 @@ def build_top_cap():
         c = c.union(cq.Workplane('XZ').polyline(pts).close().extrude(BOSS_W / 2, both=True)
                     .rotate((0, 0, 0), (0, 0, 1), a).intersect(outer))
     for a in JOINT_ANGLES:
-        c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R + 0.5, PLUG_R - face_r(PLUG_R) + P.M3_INSERT_DEPTH + 0.5, P.M3_INSERT_HOLE))
+        c = c.cut(C.radial_hole(Z_SPHERE_SCREWS, a, PLUG_R + 0.5, PLUG_R - face_r(PLUG_R) + THUMB_PILOT_DEPTH + 0.5, P.THUMB_PILOT))
     for a in CAP_FLOOR_SCREW_ANGLES:
         x, y = _ang_point(CAP_FLOOR_SCREW_R, a)
         c = c.cut(cq.Workplane('XY').workplane(offset=Z_CAP_FLOOR0 - P.M3_INSERT_DEPTH).center(x, y)

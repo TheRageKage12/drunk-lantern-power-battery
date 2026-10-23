@@ -35,8 +35,10 @@ BEARING_T = 2.5                                      # ring joining the neck to 
 
 Z_DRUM_SCREWS = P.BASE_H - 5.0                       # 75: MATING base.BASE_JOINT_Z
 Z_SPHERE_SCREWS = P.Z_SPHERE_CENTER + S.Z_LOWER_SCREWS   # 134.6
-JOINT_ANGLES = C.joint_angles()                      # 90, 210, 330
+JOINT_ANGLES = C.joint_angles()                      # 90, 210, 330: drum screws
+SPHERE_ANGLES = S.JOINT_ANGLES                       # thumbscrews from the sphere
 BOSS_W, BOSS_DEPTH = 10.0, P.M3_INSERT_DEPTH + 1.5   # radial insert bosses (8 deep)
+THUMB_PILOT_DEPTH = 6.5                              # the thumbscrew's thread and tip; 1.5 mm of boss left behind it
 
 
 def _inner_cone(z):
@@ -78,10 +80,12 @@ def build_foot():
     f = cq.Workplane('XZ').polyline(profile()).close().revolve(360.0, (0, 0, 0), (0, 1, 0))
     for a in JOINT_ANGLES:
         f = f.union(_boss(SPIGOT_R, Z_SPIGOT0, Z_RIM + 4.0, a))
+    for a in SPHERE_ANGLES:
         f = f.union(_boss(RISER_R, Z_FLAT - BEARING_T, Z_SPHERE_SCREWS + 6.0, a, corbel_r=NECK_RI + 0.3))
     for a in JOINT_ANGLES:
         f = f.cut(C.radial_hole(Z_DRUM_SCREWS, a, SPIGOT_R + 0.5, SPIGOT_R - face_r(SPIGOT_R) + P.M3_INSERT_DEPTH + 0.5, P.M3_INSERT_HOLE))
-        f = f.cut(C.radial_hole(Z_SPHERE_SCREWS, a, RISER_R + 0.5, RISER_R - face_r(RISER_R) + P.M3_INSERT_DEPTH + 0.5, P.M3_INSERT_HOLE))
+    for a in SPHERE_ANGLES:                          # thumbscrew pilot holes
+        f = f.cut(C.radial_hole(Z_SPHERE_SCREWS, a, RISER_R + 0.5, RISER_R - face_r(RISER_R) + THUMB_PILOT_DEPTH + 0.5, P.THUMB_PILOT))
     # notch in the riser's top for the guide boss glued under the bay floor
     gz = Z_RISER1 + S.GUIDE_INSERT_BOSS_BOTTOM - P.FIT
     f = f.cut(cq.Workplane('XY').workplane(offset=gz).center(*S.GUIDE_SCREW)

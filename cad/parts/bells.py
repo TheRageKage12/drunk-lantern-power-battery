@@ -7,10 +7,8 @@ bells.py - rev C (2026-10-23): the two lens bells on the sphere's window sides, 
     curtain_clamp  arc that clamps the curtain's top edge to the inside of the rear bell's mouth lip
 
 Each bell is a revolved profile about its own axis, cut by the sphere's outer surface so its throat sits on the shell.
-It twists on (2026-10-23): its throat slides over the bayonet collar round the opening (sphere.bell_collar), the 3 lugs
-run down entry slots, a BELL_TWIST turn clockwise (seen from outside, like a jar lid) takes them along the L-slots past a click bump,
-and one M3 from below through the throat into the collar's insert locks it. Unplug its LED strip's lead before twisting
-it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
+Its throat slides over the collar round the opening (sphere.bell_collar) and two thumbscrews from below hold it
+(2026-10-23): no tools needed. Unplug its LED strip's lead before pulling it off. Printed mouth down: the inner cone is under 35 deg from vertical; the inward steps are 45 deg or under 3 mm.
 
 Bell frame: the bell axis is +Z, the sphere centre at the origin, s (= z) the distance out from the centre.
 """
@@ -118,27 +116,23 @@ def _revolve(pts):
 
 
 def _bell(pts, sign):
-    """The revolved bell, cut by the sphere, with its 3 L-slots, click bumps and the lock screw's hole."""
+    """The revolved bell, cut by the sphere, with the two thumbscrew holes and their flat seats."""
     b = _revolve(pts).cut(cq.Workplane('XY').sphere(R))
-    r, ro, s_end, (l0, l1) = S.collar_dims(sign)
-    bore = ro + P.FIT
-    groove = ro + S.LUG_D + P.FIT
-    s0, s1 = l0 - S.LUG_D - 1.0, l1 + 0.5                 # the leg clears the lug and its 45 deg underside
-    hs = math.degrees((S.LUG_W / 2 + 1.0) / bore)
-    for a in S.BELL_LUG_ANGLES:
-        lock = S.bell_frame_angle(sign, a)
-        entry = S.bell_frame_angle(sign, S.entry_angle(sign, a))
-        lo, hi = sorted((lock, entry))
-        b = b.cut(S.sector(bore - 0.5, groove, entry - hs, entry + hs, S.CUT - 10, s1))   # entry slot from the throat face
-        b = b.cut(S.sector(bore - 0.5, groove, lo - hs, hi + hs, s0, s1))                  # the leg
-        bump = lock + (6.0 + math.degrees(S.LUG_W / 2 / bore)) * (1 if entry > lock else -1)
-        b = b.union(S.sector(groove - 0.5, groove + 0.1, bump - 0.8, bump + 0.8, s0, s1))   # 0.5 mm click bump
-    ab = S.bell_frame_angle(sign, S.BELL_LOCK_ANGLE)
+    bore = S.collar_dims(sign)[1] + P.FIT
     sl = S.lock_s(sign)
     out = (F_THROAT_OUT if sign < 0 else R_THROAT_OUT) + 1
-    hole = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.M3_CLEAR / 2).extrude(out - bore + 1)
-    cb = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.M3_HEAD_D / 2 + 0.3).extrude(1 + 1.5)
-    return b.cut(hole.union(cb).rotate((0, 0, 0), (0, 0, 1), ab))
+    for a in S.BELL_LOCK_ANGLES:
+        ab = S.bell_frame_angle(sign, a)
+        hole = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.THUMB_CLEAR / 2).extrude(out - bore + 1)
+        cb = cq.Workplane(cq.Plane(origin=(out, 0, sl), normal=(-1, 0, 0))).circle(P.THUMB_COLLAR_D / 2 + 0.4) \
+            .extrude(out - lock_seat_r(sign))                # seat for the thumbscrew's collar
+        b = b.cut(hole.union(cb).rotate((0, 0, 0), (0, 0, 1), ab))
+    return b
+
+
+def lock_seat_r(sign):
+    """Radius of the flat seat for the lock thumbscrew's collar: THUMB_GRIP of throat left above the bore."""
+    return S.collar_dims(sign)[1] + P.FIT + P.THUMB_GRIP
 
 
 def bell_front():

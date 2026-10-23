@@ -24,8 +24,10 @@ OPENING_DEPTH = 9.0                         # collar depth from each flat
 COLLAR_R_OUT = OPENING_ID / 2 + 4.5         # 70.5: the collar ring inside each flat (the shell alone gives 1.2 mm)
 Z_LOWER_SCREWS = -CUT + P.JOINT_SCREW_ABOVE_FLAT   # -85.7, matches foot.Z_SPHERE_SCREWS
 Z_UPPER_SCREWS = CUT - P.JOINT_SCREW_ABOVE_FLAT    # +85.7, matches top.Z_SPHERE_SCREWS
-JOINT_ANGLES = C.joint_angles()             # 90, 210, 330 (first at +Y): bottom flat, into the foot's riser
-TOP_JOINT_ANGLES = (30.0, 150.0, 270.0)     # top flat, into the top cap's plug: clear of the wall extension's tabs
+# Thumbscrews (2026-10-23) at both flats, toward the back and sides, away from the front lens (and clear of the wall
+# extension's tabs at the top): the top cap and the base come off with them, leaving the sphere.
+JOINT_ANGLES = (10.0, 90.0, 170.0)          # bottom flat, into the foot's riser
+TOP_JOINT_ANGLES = JOINT_ANGLES             # top flat, into the top cap's plug
 BAY_FLOOR_Z = -52.5                         # rev C: held at the rev-9 height (36 mm above the flat) on the foot's riser
 
 # flange (joining ring inside the rear half, flush with the split face; the front half's bosses meet it there)
@@ -39,16 +41,14 @@ FLANGE_SCREW_ANGLES = (30.0, 150.0, 210.0, 330.0)   # in the XZ plane from +X; |
 FLANGE_SCREW_R = FLANGE_R_IN + FLANGE_W / 2 # 83.3
 BOSS_L = 9.0                                # insert boss length along -Y on the front half
 
-# rev C openings and the bell bayonets (2026-10-23): a collar stands out round each opening with 3 lugs; the bell
-# slides over it, turns BELL_TWIST and clicks; one M3 from below through the bell's throat into the collar locks it.
+# rev C openings and the bell mounts (2026-10-23): a plain collar stands out round each opening; the bell slides over it
+# and two thumbscrews from below, through the bell's throat into bosses in the collar, hold it. No tools needed.
 # Bell frame: the bell's axis is +Z (s = distance out from the sphere centre); sign -1 front (-Y), +1 rear (+Y).
 LENS_R, HAND_R = P.LENS_OPENING_R, P.HAND_OPENING_R    # 57, 70
-COLLAR_T, LUG_D, LUG_H, LUG_W = 3.7, 2.0, 5.0, 10.0    # collar wall; lugs radial, along the axis, tangential
+COLLAR_T = 3.7                              # collar wall
 COLLAR_OUT = 7.6                            # collar end, this far out from the sphere surface at the opening edge
-BELL_LUG_ANGLES = (90.0, 210.0, 330.0)      # locked lug angles in the XZ plane from +X (270, the bottom, has the lock)
-BELL_TWIST = 30.0                           # each bell goes on this far anticlockwise of locked and turns clockwise to lock
-                                            # (both as seen from outside, like a jar lid)
-BELL_LOCK_ANGLE = 270.0
+BELL_LOCK_ANGLES = (225.0, 315.0)           # thumbscrews in the XZ plane from +X: under the bell, either side
+THUMB_PILOT_DEPTH = 6.5
 PAD_R = 4.5
 PIVOT_ENTRY = 0.6                           # the curved surface over a 4 mm bore: full wall starts this far in
 # ring pivots for the handle: each pivot boss (parts/handle.py) sits over the seam and screws into both halves
@@ -108,6 +108,8 @@ def shell():
     # a collar ring inside each flat: the neck plugs locate in it and its radial screws bite in it
     for z0 in (-CUT, CUT - OPENING_DEPTH):
         s = s.union(cyl(COLLAR_R_OUT, z0, z0 + OPENING_DEPTH).intersect(cq.Workplane('XY').sphere(R_OUT - 0.5)))
+    for blk in thumb_bosses():
+        s = s.union(blk.intersect(cq.Workplane('XY').sphere(R_OUT - 0.05)))
     s = s.intersect(big_box(-130, 130, -130, 130, -CUT, CUT))
     # open both flats to the mating ID over the collar depth
     s = s.cut(cyl(OPENING_ID / 2, -CUT - 1, -CUT + OPENING_DEPTH))
@@ -126,11 +128,6 @@ def bell_frame_angle(sign, a):
     return a if sign < 0 else -a
 
 
-def entry_angle(sign, a):
-    """Assembly XZ angle where the lug at locked angle a enters its bell's L-slot (clockwise to lock, from outside)."""
-    return a + sign * BELL_TWIST
-
-
 def to_sphere(wp, sign):
     """Bell frame -> sphere frame."""
     return wp.rotate((0, 0, 0), (1, 0, 0), 90 if sign < 0 else -90)
@@ -145,7 +142,7 @@ def sector(r0, r1, a0, a1, z0, z1):
 
 
 def collar_dims(sign):
-    """(opening r, collar outer r, collar end s, lug s range) for the front (-1) or rear (+1) opening."""
+    """(opening r, collar outer r, collar end s, -) for the front (-1) or rear (+1) opening."""
     r = LENS_R if sign < 0 else HAND_R
     s_end = math.sqrt(R_OUT ** 2 - r * r) + COLLAR_OUT
     return r, r + COLLAR_T, s_end, (s_end - 6.0, s_end - 1.0)
@@ -156,27 +153,21 @@ def lock_s(sign):
 
 
 def bell_collar(sign):
-    """Bayonet collar round an opening, in the bell frame: 3 lugs (45 deg undersides, printed dome up) and a boss inside
-    it at the bottom for the lock screw's insert (45 deg underside too)."""
-    r, ro, s_end, (l0, l1) = collar_dims(sign)
+    """Locating collar round an opening, in the bell frame, with a boss inside it under each thumbscrew (45 deg
+    undersides: the halves print dome up). Returns (collar, pilot holes)."""
+    r, ro, s_end, _ = collar_dims(sign)
     c = cq.Workplane('XY').circle(ro).circle(r).extrude(s_end)
     c = c.cut(cq.Workplane('XY').sphere(R_IN + 0.5))               # stops inside the shell
-    half = math.degrees(LUG_W / 2 / ro)
-    for a in BELL_LUG_ANGLES:
-        ab = bell_frame_angle(sign, a)
-        lug = sector(ro - 0.5, ro + LUG_D, ab - half, ab + half, l0, l1)
-        prof = [(ro - 0.5, l0 - LUG_D - 0.5), (ro + LUG_D, l0), (ro + LUG_D, l0 + 0.01), (ro - 0.5, l0 + 0.01)]
-        ch = cq.Workplane('XZ').polyline(prof).close().extrude(LUG_W / 2, both=True).rotate((0, 0, 0), (0, 0, 1), ab)
-        c = c.union(lug).union(ch)
-    ab = bell_frame_angle(sign, BELL_LOCK_ANGLE)
     sl = lock_s(sign)
-    r0 = ro - (P.M3_INSERT_DEPTH + 1.5)
-    prof = [(r0, sl - 4.0), (ro - 0.5, sl - 4.0 - (ro - 0.5 - r0)), (ro - 0.5, s_end), (r0, s_end)]
-    boss = cq.Workplane('XZ').polyline(prof).close().extrude(5.0, both=True).rotate((0, 0, 0), (0, 0, 1), ab)
-    boss = boss.cut(cq.Workplane('XY').sphere(R_IN - 0.01).cut(cq.Workplane('XY').circle(ro).extrude(200)))
-    c = c.union(boss)
-    hole = cq.Workplane(cq.Plane(origin=(ro + 0.5, 0, sl), normal=(-1, 0, 0))).circle(P.M3_INSERT_HOLE / 2) \
-        .extrude(P.M3_INSERT_DEPTH + 0.5).rotate((0, 0, 0), (0, 0, 1), ab)
+    r0 = ro - (THUMB_PILOT_DEPTH + 1.5)
+    hole = None
+    for a in BELL_LOCK_ANGLES:
+        ab = bell_frame_angle(sign, a)
+        prof = [(r0, sl - 4.0), (ro - 0.5, sl - 4.0 - (ro - 0.5 - r0)), (ro - 0.5, s_end), (r0, s_end)]
+        c = c.union(cq.Workplane('XZ').polyline(prof).close().extrude(5.0, both=True).rotate((0, 0, 0), (0, 0, 1), ab))
+        h = cq.Workplane(cq.Plane(origin=(ro + 0.5, 0, sl), normal=(-1, 0, 0))).circle(P.THUMB_PILOT / 2) \
+            .extrude(THUMB_PILOT_DEPTH + 0.5).rotate((0, 0, 0), (0, 0, 1), ab)
+        hole = h if hole is None else hole.union(h)
     return c.intersect(cq.Workplane('XY').sphere(R_OUT + 40)), hole
 
 
@@ -196,16 +187,31 @@ def pivot_bosses(half):
     return adds, cuts
 
 
+THUMB_SEAT_R = OPENING_ID / 2 + P.THUMB_GRIP    # 69: flat seat for a thumbscrew's collar, 3 mm outside the bore
+
+
 def radial_screw_cutters(z, angles):
-    """Horizontal M3 holes through the collar wall at height z (the shell is at r = sqrt(R_OUT^2 - z^2) there,
-    not R_OUT), with a 2 mm counterbore measured from the surface on the hole axis."""
-    r_surf = math.sqrt(R_OUT ** 2 - z ** 2)        # 70.9 at z = +/-55.5
-    r_start = r_surf + 1.0
+    """Thumbscrew holes through the collar at height z: a flat seat spot-faced into the curved shell at THUMB_SEAT_R
+    (the knurled head then stands clear of the surface for fingers), and a clearance hole into the plug's boss."""
+    r_surf = math.sqrt(R_OUT ** 2 - z ** 2)        # 72.1 at z = +/-85.7
     cuts = []
     for a in angles:
-        cuts.append(C.radial_hole(z, a, r_start, r_start - (OPENING_ID / 2 - 1.0), P.M3_CLEAR))   # through the collar
-        cuts.append(C.radial_hole(z, a, r_start, 1.0 + 2.0, P.M3_HEAD_D + 0.2))                  # 2 mm counterbore
+        cuts.append(C.radial_hole(z, a, r_surf + 2.0, r_surf + 2.0 - (OPENING_ID / 2 - 1.0), P.THUMB_CLEAR))
+        cuts.append(C.radial_hole(z, a, r_surf + 2.0, r_surf + 2.0 - THUMB_SEAT_R, P.THUMB_COLLAR_D + 0.8))
+        cuts.append(C.radial_hole(z, a, R_OUT, R_OUT - THUMB_SEAT_R - P.THUMB_COLLAR_L, P.THUMB_HEAD_D + 2.0))   # head well
     return cuts
+
+
+def thumb_bosses():
+    """Solid blocks behind each thumbscrew, from the bore out to the shell, so the head's well cannot open into the
+    sphere (the collar ring alone meets the shell only near the flat)."""
+    out = []
+    for zs, angles in ((-1, JOINT_ANGLES), (1, TOP_JOINT_ANGLES)):
+        z0, z1 = sorted((zs * CUT, zs * (CUT - 16.0)))
+        for a in angles:
+            half = math.degrees(9.0 / OPENING_ID * 2)
+            out.append(sector(OPENING_ID / 2, R_OUT, a - half, a + half, z0, z1))
+    return out
 
 
 def flange_solid():
@@ -238,7 +244,7 @@ def build_halves():
     front = s.intersect(big_box(-130, 130, -130, 0, -130, 130))
     rear = s.intersect(big_box(-130, 130, 0, 130, -130, 130))
 
-    # ---- front: lens opening and its bayonet collar, flange bosses, pivot bosses
+    # ---- front: lens opening and its bell collar, flange bosses, pivot bosses
     adds, fcuts = front_bosses()
     a, c = pivot_bosses('front')
     adds += a
@@ -251,7 +257,7 @@ def build_halves():
     for c in fcuts:
         front = front.cut(c)
 
-    # ---- rear: flange, hand opening (the fist goes in here) and its bayonet collar, pivot bosses
+    # ---- rear: flange, hand opening (the fist goes in here) and its bell collar, pivot bosses
     rear = rear.union(flange_solid())
     adds, rcuts = pivot_bosses('rear')
     for a in adds:
