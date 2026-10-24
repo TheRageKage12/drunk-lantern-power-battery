@@ -10,7 +10,7 @@ assembled.
 | **Pour** | 30-37 mL (1-1.25 oz) into a 1.5 oz shot glass in about 11 s, about 20 pours per fill. |
 | **Power** | 12 V rechargeable pack inside the top cap; charges in place in about 6 h. |
 | **Source** | CAD `cad/` (CadQuery, all dimensions in `cad/params.py`), firmware `firmware/`, this document. |
-| **Shopping** | The [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) is the single source for parts, prices and purchase status. |
+| **Shopping** | The [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit) is the single source for parts, prices and purchase status. Its **3D printing** tab tracks every printed part. |
 | **Visuals** | [3D assembly viewer](https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html) · [step-by-step assembly video](videos/assembly-guide.mp4) · [exploded assembly video](videos/separate-and-assemble.mp4) · [service video](videos/service-access.mp4) |
 
 ## Contents
@@ -846,6 +846,11 @@ parts in white: `cap_floor`, `base_tray`, `bag_cover`, `bay_floor`, `guide_boss`
    (Validated.)
 
 ### PR-5. Print the parts
+
+**Track every print in the [Sheet's "3D printing" tab](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).** It has one row per part in the order below, with
+its settings, estimated grams and the build step it unblocks. Set each row's Status as it moves (To print, Printing,
+Printed, Inspected, Inserts in, Done, or Reprint) and fill in who is printing it, so the other tracks can see what's
+ready.
 
 Print in this order so the parts that unblock other tracks come first:
 

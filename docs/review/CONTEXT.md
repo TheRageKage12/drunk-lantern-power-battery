@@ -654,3 +654,7 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   decision history (that stays here). Build steps keep the viewer's 0-16 numbering. Also settled: the handle swings
   either way and rests down (no detent); reach and shot glass validated; epoxy on hand; drum-to-foot stays M3;
   `thumb_test` and filament still open; ring sizes later. Pen-spring check added (guide SH-3).
+- **2026-10-24, 3D printing tracker.** Kevin asked for a print tracker: the shared Sheet has a new "3D printing" tab
+  (one row per printed part in the guide's print order, with a Status dropdown, Printed/Left counts, settings,
+  grams if solid from the STL volumes (~2.86 kg: ~2.10 green, ~0.19 white, ~0.58 any colour), inserts, the build step
+  each part unblocks, and who is printing it). The guide's PR-5 and `CLAUDE.md` point to it.
