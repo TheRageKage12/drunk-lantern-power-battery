@@ -20,7 +20,9 @@ Duncan. CadQuery CAD in `cad/`, XIAO RP2040 firmware in `firmware/`, the build g
   the team works also updates `docs/review/CONTEXT.md` (the decision and why, dated). Add a line to its
   "Change log" section.
 - **The shopping list is the shared Google Sheet** linked from the README; there is no copy in the repo. Edit it
-  in place (it has Status, Have, Still to get, Who has it and Category columns). Don't recreate it.
+  in place (it has Status, Have, Still to get, Who has it and Category columns). Don't recreate it. Its
+  **3D printing** tab tracks every printed part (status, who is printing it, settings, grams); keep it in step with
+  the guide's part list when parts are added, removed or renamed.
 - **Checks before pushing CAD or firmware changes:**
   `cd cad && python3 build.py && python3 tests/test_socket.py` (0 problems, SOCKET MECHANISM OK),
   `cd firmware/test && make test` (all pass), and the arduino-cli compile in the README. Regenerate any image
