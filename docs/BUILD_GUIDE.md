@@ -65,7 +65,7 @@ it toward you, lift it and bring it out.
 13. [Service: opening it up](#13-service-opening-it-up)
 14. [Cleaning and storage](#14-cleaning-and-storage)
 15. [Troubleshooting](#15-troubleshooting)
-16. [What this budget build leaves out](#16-what-this-budget-build-leaves-out-and-how-to-add-it-back)
+16. [What this budget build leaves out](#16-what-this-budget-build-leaves-out-and-how-to-add-it-back) (see also [FUTURE.md](FUTURE.md))
 
 ---
 
@@ -1097,6 +1097,12 @@ checking on the finished prop, so treat 11.5 V as a rough guide, not a precise f
 6. Lay it back in the bay, spout at the well, press the tube into the clip, and put the cover on.
 7. Plug the pump plug in, coil the tube's slack, lower the lantern back on and twist it clockwise until it clicks.
 
+**Or fill it in place** (Kevin's preferred way: the bay shapes the bag, so it holds the most). Do steps 1-3, but
+leave the bag lying in the bay with its spout at the well. Unscrew the cap; the tube turns with it, so keep hold of
+the cap while it's off so it can't spin, and screwing it back on undoes the twist. Fill through a small funnel until
+the bag fills the bay up to the cover's height, screw the cap back on, squeeze out any air, then do steps 6-7. (A
+tube coupling so the cap can turn freely, and a removable fill bin, are on the [future list](FUTURE.md).)
+
 ---
 
 ## 13. Service: opening it up
@@ -1170,12 +1176,8 @@ months. Replace the pump tube when it looks cloudy or flattened.
 
 ## 16. What this budget build leaves out, and how to add it back
 
-| Upgrade | Cost | How |
-|---|---|---|
-| Glowing ring around the lock (24-pixel NeoPixel ring + translucent halo) | ~$17 | Set `LED_RING = True` in `cad/parts/socket.py`; the ring needs addressable-LED code, which is in the git history before the budget change. |
-| Fuse | ~$3 | An inline 2 A slow-blow fuse between the pack and S1. The pack's protection board already cuts out on a short. |
-| Steady LED brightness on a draining battery | ~$6 | A small buck-boost converter set to 12.0 V between the +12 V rail and the LED strip's + (the pump keeps its firmware compensation). Without it the strip dims as the pack drains: ~70 % of its current at half charge (~11.3 V), a third to a half at 10 V. Charging at half keeps it bright enough. |
-| PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
+Upgrades and future ideas (the NeoPixel lock ring, a fuse, steady LED brightness, a PRIME button, more plugs, steel
+axles, a removable fill bin and others) are collected in [`docs/FUTURE.md`](FUTURE.md), with costs and how to add them.
 
 **Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in 10-15 s.
 Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A green COB LED strip is enough
