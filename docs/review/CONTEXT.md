@@ -111,12 +111,17 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i and C). The repo
     or two ~3 mm V-notches in its tip so the film can't seal over it; squeeze the air out. No vent: the bag collapses.
   - The jar, the Masontops vent lid and the check valve are gone (rev 9 history in the change log).
   - Rejected: a slot to feed the excess bag through the cover (the drink can't pull film through, and it would pool
-    on the cover); a home-made heat-sealed bag; a rigid box. The refill procedure is still to be pinned down (§6).
+    on the cover); a home-made heat-sealed bag; a rigid box.
+  - **Refilling (Kevin, 2026-10-24):** the guide's procedure is fine; he'd rather fill the bag **in place in the bay**
+    so it takes the most drink (guide section 12 has both). Keep hold of the cap while it's off: the tube turns with
+    it, and screwing it back undoes the twist. A tube coupling, a removable fill bin and a tighter bag seal are in
+    `docs/FUTURE.md`.
   - The pickup tube can't leak because the pump's rollers pinch it shut.
 - **Nozzle (rev 9c, unchanged in rev C):**
   - The guide bends the tube **135°**, so the tip points 45° down and sits 6.7 mm above the rim, hidden behind the
-    lock wall over the back third of the glass (the bend runs sideways behind the wall; Kevin asked on 2026-10-23
-    whether the internals should turn 90° so it comes "straight on" from behind the glass; not decided, see §6).
+    lock wall over the back third of the glass. The bend runs sideways behind the wall; Kevin asked on 2026-10-23
+    whether the internals should turn 90° so it comes "straight on", then decided (2026-10-24) to **leave it where it
+    is**, since the LED panel now hides it completely.
   - It replaced a 90° bend that threw the stream onto the rim. The stream lands about 19 mm from the glass centre
     at any pump speed.
 - **Cleaning:** run warm water, then air, with `cal 8000`. Keep each run short: `cal 20000` would overflow the
@@ -389,9 +394,8 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   superseded choices. These are background, not the current spec. Either mark them as historical or leave them, but
   the guide must never point to them for a current number.
 - `cad/NOTES-base.md`, `NOTES-dishes.md` and `NOTES-handle.md` are marked superseded/historical. Same caution applies.
-- **Open in rev C (ask Kevin):** the spout "rotate the internals 90°" question (2026-10-23; the LED panel now hides
-  the spout from the audience); the refill procedure for the pouch under its cover (unscrew the bag from its cap with
-  the tube left in place, or fill in place); the handle's rest direction; drum-to-foot M3s vs inside thumbscrews;
+- **Future ideas** (upgrades, deferred and rejected-for-now options) are collected in `docs/FUTURE.md` (2026-10-24).
+- **Open in rev C (ask Kevin):** the handle's rest direction; drum-to-foot M3s vs inside thumbscrews;
   another green spool vs white hidden parts; the reach test; the 6-32 hole from `thumb_test.py`; `RING_ID`.
 - **Plugs (Kevin, 2026-10-23): no more for now.** The one JST SM 2-pin pair stays on the pump at the cartridge (it
   unplugs at every refill); the LED and pump leads at the cap floor and the two bells' LED leads are soldered with
@@ -639,3 +643,7 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   Guide, viewer, videos, renders, CAD README and design contract updated. Open items in §6.
 - **2026-10-23, no extra plugs.** Rev C would have needed 4 more JST SM 2-pin pairs (cap floor LED and pump leads,
   both bells). Kevin: leave it at the one pair for now (the pump at the cartridge); the rest are soldered with slack.
+- **2026-10-24, future list; spout and refill settled.** Kevin: leave the spout as it is (the LED panel hides it);
+  the refill guide is fine and he'd fill in place under the cover. New `docs/FUTURE.md` collects every future idea
+  (moved there from the guide's section 16, CONTEXT and PROGRESS), plus his new ones: a tube coupling or swivel so
+  the bag's cap can turn, a removable fill bin, and a tighter bag seal.

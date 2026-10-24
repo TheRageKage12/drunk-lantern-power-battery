@@ -427,3 +427,11 @@ Kevin's redesign, built and refined in one day (decisions and reasons in `CONTEX
 M3 vs thumbscrews, filament (2.8 kg if solid; slice to check), reach test, `thumb_test` hole size, `RING_ID`, and
 epoxy for the handle laps. Plugs: Kevin kept the one 2-pin pair (pump at the cartridge); the cap floor's LED and
 pump leads and the bells' leads are soldered with slack. Re-run `make_videos.py` after any further change.
+
+## 2026-10-24 — future list
+
+`docs/FUTURE.md` now holds every future and improvement idea: the build guide's old upgrade table (NeoPixel lock
+ring, fuse, buck-boost for steady LEDs, PRIME button), ideas from CONTEXT and PROGRESS (a separately dimmable channel,
+the steeper lock return ramp, steel handle axles, more plugs, drum thumbscrews, a clear lens, lining the sphere),
+CAD gaps (bell lead channels, tube coil space) and Kevin's new ones (tube coupling or swivel, removable fill bin,
+tighter bag seal, a fill hole in the cover). Spout stays as is; the guide adds filling the bag in place.

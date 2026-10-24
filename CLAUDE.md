@@ -26,4 +26,6 @@ Duncan. CadQuery CAD in `cad/`, XIAO RP2040 firmware in `firmware/`, the build g
   `cd firmware/test && make test` (all pass), and the arduino-cli compile in the README. Regenerate any image
   whose source changed (`cad/render_views.py`, `cad/render_stl.py output ../docs/images/stl`, `cad/export_viewer.py`, `cad/render_ring_colour.py`, `docs/images/src/gen_*.py`).
 - **Links:** exact product pages only (Amazon `/dp/<ASIN>`), never search pages; check delivery before Oct 31.
+- **Future ideas** (upgrades, things deferred or rejected for now) go in `docs/FUTURE.md`, not scattered through the
+  guide or CONTEXT; move an idea out of it when it's adopted.
 - No model identifiers in commits, code or docs.

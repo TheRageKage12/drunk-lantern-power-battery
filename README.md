@@ -37,6 +37,7 @@ Every part as exported from `cad/output/` (iso view, print orientation), includi
 | Path | What it is |
 |---|---|
 | `docs/BUILD_GUIDE.md` | The build guide. |
+| `docs/FUTURE.md` | Future scope and improvement ideas (not part of the current build). |
 | `docs/images/` | Wiring, fluid path, state machine, socket mechanism diagrams and CAD renders; `stl/` has a preview of every printed part. |
 | `docs/review/` | The design-review handoff: `CONTEXT.md` (every decision and why), `PROGRESS.md` (what the review checked and changed, and the open questions), the prompt and the conversation transcript. |
 | `docs/research/` | Early research notes (historical: several choices were later superseded, see `docs/review/CONTEXT.md`), the project brief, and the original ChatGPT transcript. |
