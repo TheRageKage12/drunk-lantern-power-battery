@@ -38,7 +38,7 @@ python3 render_ring_colour.py  # docs/images/ring-white-outline.png: key_ring wi
 Assembly order and the print table are in `docs/BUILD_GUIDE.md`.
 
 ## Hardware envelopes to verify against the real parts
-- Kamoer KPHM200: measured by Kevin on 2026-10-23: head 2.5 x 2.5 in (63.5 mm square), silver motor can 40 mm
+- Kamoer KPHM200: measured: head 2.5 x 2.5 in (63.5 mm square), silver motor can 40 mm
   across and ~50 mm long, 114 mm overall from the motor tabs. Modelled as a 64 x 64 x 40 mm head box plus a 40 mm
   can (`PUMP_*` in `params.py`), on the cartridge at `PUMP_X` = 37 mm, its head in a U-saddle and one strap round the
   motor. The head box's length (`PUMP_HEAD_L_EST` in `parts/base.py`) is a 40 mm allowance.
@@ -51,7 +51,7 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md`.
 - Shot glass: 40 mm base, 52 mm top, 62 mm tall envelope in the 54 mm wide `glass_well` slot.
 - Hand: a 106 x 76 mm fist (owner's is under 4 x 3 in), 85 mm long, ring face on the lock, through the 140 mm
   hand opening and the rear bell.
-- Kevin's knurled thumbscrews (6-32 PC-case thread, 6.5 mm thread, 7 x 2.6 mm collar, 11 x 8.7 mm head) and the
+- The knurled thumbscrews (6-32 PC-case thread, 6.5 mm thread, 7 x 2.6 mm collar, 11 x 8.7 mm head) and the
   initeq #6-32 long heat-set inserts (`THUMB_*`, `THUMB_INSERT_*`): print `thumb_test.py` to pick the insert hole.
 - Hall sensor (`HALL_SENSOR`): the A3144 lies face up in a 4.4 x 3.4 mm pocket on a post on `socket_base`, inside
   a blind hole in the rotor, ~3 mm from the magnet.

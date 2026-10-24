@@ -4,7 +4,7 @@
 [Printable PDF](board-assembly.pdf) · [Solder schedule](WIRE_SCHEDULE.md)
 
 The layout uses the planned Vetco VUPN2924 70 × 50 mm board. Follow the
-[build guide](../../BUILD_GUIDE.md#4-electronics-build-it-on-the-bench-first) for the circuit,
+[build guide](../../BUILD_GUIDE.md#6-electrical-track) for the circuit,
 off-board wiring, power sequencing and commissioning. This page covers the board layout itself.
 
 ## Reading the drawing

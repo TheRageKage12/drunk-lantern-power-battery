@@ -195,8 +195,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i and C). The repo
   epoxy each, section 14 x 13.5 mm (thickened from 10 so heads and nuts sink under caps), pieces and pivots at 100 %
   infill. **Printed 12 mm axles by default** (Kevin, 17:47); the steel-pin option stays in the CAD (`HANDLE_AXLE`).
   Rejected: steel dowel pins (Everbilt ~$4.28 each "expensive as hell", Amazon packs not Prime), a steel rod through the
-  handle (needs a vise), an inner/outer lap split to hide the screws (about 4x weaker in bending). Rest direction
-  (behind or in front) not chosen; either works.
+  handle (needs a vise), an inner/outer lap split to hide the screws (about 4x weaker in bending). **Rest direction
+  (2026-10-24, Kevin): it swings either way and rests down on either side for now; no detent.**
 
 ### Base (rev C, 2026-10-23)
 - **`foot`** replaces the lower dish: a spigot into the drum, the 45° flare, the neck, and a riser through the
@@ -379,11 +379,11 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 | Pump outline | Measured 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall) | Head 0.5 mm off the cartridge rim at `PUMP_X` 37: check the real head |
 | Drink bag | 32 oz pouch in a 0.65 L bay; fills to ~22 oz | Lay it flat, spout at the well, tube clipped |
 | 6-32 insert hole | 4.8 mm designed in | Print `thumb_test.py` first |
-| Reach to the lock | ~16-17 cm in from the rear bell's mouth | Try it (box test) before printing the bell |
-| Shot glass | Bought locally | ≤ 52 mm across the top, ≤ 62 mm tall |
+| Reach to the lock | ~16-17 cm in from the rear bell's mouth | **Validated 2026-10-24** (Kevin's box test with a 14 cm hole); fallback is trimming the hand bell |
+| Shot glass | Bought locally; **validated 2026-10-24** | ≤ 52 mm across the top, ≤ 62 mm tall |
 | COB current | ~1.25 A estimated for ~158 cm (~2.0 A peak with the pump) | Measure with the multimeter |
 | LED dimming on a draining pack | Accepted | Charge at ~half; buck-boost is an upgrade |
-| Pen spring fallback | ~1/3 stiffness | Test the lock's snap-back (guide section 6, step 4) |
+| Pen spring fallback | ~1/3 stiffness; stiffness cancels out of the greased return, only fit matters (OD ≤ 5 mm, cut to 10 mm, solid length < 4.5 mm) | Guide SH-3 check, then BU-1 step 4 snap-back test |
 | Sphere halves | 224 mm, dome up; short flat overhang under each bell thumbscrew pad | Print notes in the guide |
 | Fist envelope | Estimated | A mock-up print is suggested |
 | Filament | ~2.8 kg if solid (~2.6 kg green; STL volumes), less at real infill; Kevin has ~1.8 kg green | Slice everything and read the total; then buy a green spool or print hidden parts (cap floor, cartridge, bag cover, bay floor parts) in white: not decided |
@@ -395,13 +395,13 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   the guide must never point to them for a current number.
 - `cad/NOTES-base.md`, `NOTES-dishes.md` and `NOTES-handle.md` are marked superseded/historical. Same caution applies.
 - **Future ideas** (upgrades, deferred and rejected-for-now options) are collected in `docs/FUTURE.md` (2026-10-24).
-- **Open in rev C (ask Kevin):** the handle's rest direction; drum-to-foot M3s vs inside thumbscrews;
-  another green spool vs white hidden parts; the reach test; the 6-32 hole from `thumb_test.py`; `RING_ID`.
+- **Open in rev C (2026-10-24):** the 6-32 hole from `thumb_test.py` (TBD); filament (another green spool vs white
+  hidden parts, to discuss after slicing); `RING_ID` (several rings, possibly different sizes; sizes later). Settled:
+  handle rests either way; drum-to-foot stays M3 under caps (thumbscrews are in FUTURE); reach and shot glass
+  validated; epoxy on hand.
 - **Plugs (Kevin, 2026-10-23): no more for now.** The one JST SM 2-pin pair stays on the pump at the cartridge (it
   unplugs at every refill); the LED and pump leads at the cap floor and the two bells' LED leads are soldered with
   slack instead (those only come apart for repairs). Revisit later: each extra plug is a Vetco pair, ~$1.75.
-- **Possible purchase to approve:** a little two-part epoxy for the three handle laps, if no one has some. Super glue
-  would be the fallback (weaker on PETG).
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
 - `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
@@ -647,3 +647,10 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   the refill guide is fine and he'd fill in place under the cover. New `docs/FUTURE.md` collects every future idea
   (moved there from the guide's section 16, CONTEXT and PROGRESS), plus his new ones: a tube coupling or swivel so
   the bag's cap can turn, a removable fill bin, and a tighter bag seal.
+- **2026-10-24, build guide rewritten as a design proposal.** Kevin asked for `docs/BUILD_GUIDE.md` to read like a
+  senior engineer's proposal to leadership and the build team: executive summary, requirements with verification,
+  system design, then six tracks (Shopping SH, Electrical EL, Software SW, Fluids FL, Printing PR, Build BU), each a
+  numbered procedure with tests built in and "Blocked by" lines between tracks; current state only, no names, no
+  decision history (that stays here). Build steps keep the viewer's 0-16 numbering. Also settled: the handle swings
+  either way and rests down (no detent); reach and shot glass validated; epoxy on hand; drum-to-foot stays M3;
+  `thumb_test` and filament still open; ring sizes later. Pen-spring check added (guide SH-3).
