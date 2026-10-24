@@ -1,48 +1,51 @@
-"""Regression checks for cartridge retention, rear wiring and moving-shell clearance."""
+"""Regression checks for the cap layout (rev C): battery retention, rear wiring, the strap route and the cap wall."""
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import params as P
-from parts import base as B, electronics as E
+from parts import top as T, electronics as E
 from assembly import place
 from checks import inter_volume
 
-parts = B.build()
-placed = {n: place(s, B.placements().get(n)) for n, s in parts.items()}
+parts = T.build()
+placed = {n: place(s, T.placements().get(n)) for n, s in parts.items()}
 electronic = E.build()
 
-assert B.DECK_Z0 == 44 and B.DECK_TOP == 47, 'Battery thickness must not move the deck loads'
-assert B.DECK_GAP == 16   # deck at z=44 over the pack on its 1 mm bed
-for n in ('base_tray', 'base_deck', 'base'):
-    assert inter_volume(placed['powerbank_envelope'], placed[n]) < .5, n
-assert inter_volume(electronic['board_wiring_envelope'], placed['base_deck']) < .5
-assert inter_volume(electronic['board_components_envelope'], electronic['charge_plug_envelope']) < .5
-# The old jack location clashes with the populated board. Compound checks must
-# report this whichever operand is first (not silently return zero).
-old_plug = electronic['charge_plug_envelope'].translate((-8-P.JACK_XY[0], 80-P.JACK_XY[1], 0))
-forward = inter_volume(old_plug, electronic['board_components_envelope'])
-reverse = inter_volume(electronic['board_components_envelope'], old_plug)
-assert forward > .5 and abs(forward-reverse) < .01
+assert T.BOARD_STANDOFF == E.M.REAR_GAP, 'The standoffs are the board\'s rear wiring gap'
+for n in ('cap_floor', 'top_cap'):
+    assert inter_volume(electronic['powerbank_envelope'], placed[n]) < .5, n
+    assert inter_volume(electronic['battery_connector_envelope'], placed[n]) < .5, n
+assert inter_volume(electronic['board_wiring_envelope'], placed['cap_floor']) < .5
+# The battery's LED row must be readable from below: inside the neck bore and on the hand side of the lock wall.
+import math
+x0, x1 = P.PACK_LED_X
+y_led = -P.POWERBANK_L / 2 + P.PACK_LED_IN
+for x in (x0, x1):
+    pt = T.pack_to_cap(T._box(0.01, 0.01, 0.01, x, y_led)).val().Center()
+    assert math.hypot(pt.x, pt.y) < T.NECK_RI - 5, 'LED row outside the neck bore'
+    assert pt.y > T.WEXT_Y + T.WEXT_T, 'LED row hidden behind the lock wall'
 
-# A <=2 mm strap must pass both floor slots, under the floor and over the pack
-# without intersecting the side rails or the six pillars.
-xslot = B.BANK_HALF_W+B.BANK_END_STOP_GAP+B.BANK_END_STOP_T+1+B.STRAP_SLOT_W/2
-y0, y1 = P.BATTERY_STRAP_Y-10, P.BATTERY_STRAP_Y+10
-top = P.PACK_Z+P.POWERBANK_T
-strap = E.compound([
-    E.box(-xslot, xslot, y0, y1, 0, P.BATTERY_STRAP_T),
-    E.box(-xslot, xslot, y0, y1, top, top+P.BATTERY_STRAP_T),
-    *[E.box(s*xslot-.5, s*xslot+.5, y0, y1, 0, top+1) for s in (-1, 1)],
-])
-assert inter_volume(strap, placed['base_tray']) < .5, 'Strap blocked by tray/pillars'
-assert inter_volume(strap, placed['base_deck']) < .5
+# A <=2 mm strap must pass both plate slots, under the plate and over the pack
+# without hitting the rails, the board or anything else on the plate.
+xslot = T.HW + T.STOP_GAP + T.STOP_T + 1 + T.STRAP_SLOT_W / 2
+y0, y1 = P.BATTERY_STRAP_Y - 10, P.BATTERY_STRAP_Y + 10
+top = P.PACK_BED_T + P.POWERBANK_T
+strap = E.pack(E.compound([
+    E.box(-xslot, xslot, y0, y1, -T.CAP_FLOOR_T, -T.CAP_FLOOR_T + P.BATTERY_STRAP_T),
+    E.box(-xslot, xslot, y0, y1, top, top + P.BATTERY_STRAP_T),
+    *[E.box(s * xslot - .5, s * xslot + .5, y0, y1, -T.CAP_FLOOR_T, top + 1) for s in (-1, 1)],
+]))
+assert inter_volume(strap, placed['cap_floor']) < .5, 'Strap blocked by the plate or rails'
+for n, env in electronic.items():
+    if n != 'powerbank_envelope':
+        assert inter_volume(strap, env) < .5, f'Strap hits {n}'
 
-# Negative controls: the model must catch a component in the boss sweep and an
-# oversized capacitor hitting the wall, even if the PCB itself still fits.
-bad_edge_part = E.board_place(E.board_box(65, 15, 5, 10, 5, 10))
-assert inter_volume(bad_edge_part, placed['service_sweep_envelope']) > .5
-oversized_cap = E.board_place(E.board_box(25,-2,25,30,0,31))
-assert inter_volume(oversized_cap, placed['base']) > .5
+# Negative controls: the model must catch a component past the board's edge hitting the cap wall, and the battery
+# shifted 20 mm toward its plug, even if the PCB itself still fits.
+bad_edge_part = E.board_box(20, -40, 10, 10, 5, 10)
+assert inter_volume(bad_edge_part, placed['top_cap']) > .5
+shifted_plug = electronic['battery_connector_envelope'].translate((0, 20, 0))
+assert inter_volume(shifted_plug, placed['top_cap']) > .5
 
 # Former near-touching C3 and a moved socket must fail body spacing checks,
 # even though a fused component envelope would hide their overlap.
@@ -50,28 +53,28 @@ def rejects(action):
     try: action()
     except AssertionError: return
     raise AssertionError('Negative control was incorrectly accepted')
-bodies=E.M.bounds()
-u=bodies['U1']
-bodies['C3']=(u[0]+u[2]+.01,u[1],10,4,0,13)
-rejects(lambda:E.M.validate(bodies))
-bodies=E.M.bounds()
-bodies['R1']=(18-2,17-2,4,4,0,3)
-rejects(lambda:E.M.validate(bodies))
+bodies = E.M.bounds()
+u = bodies['U1']
+bodies['C3'] = (u[0] + u[2] + .01, u[1], 10, 4, 0, 13)
+rejects(lambda: E.M.validate(bodies))
+bodies = E.M.bounds()
+bodies['R1'] = (18 - 2, 17 - 2, 4, 4, 0, 3)
+rejects(lambda: E.M.validate(bodies))
 
 import routing, json, copy
-routes=json.loads((Path(__file__).resolve().parents[2]/'docs/review/protoboard/routing.json').read_text())
+routes = json.loads((Path(__file__).resolve().parents[2] / 'docs/review/protoboard/routing.json').read_text())
 routing.validate(routes)
-bad=copy.deepcopy(routes)
-next(w for w in bad if not w['bare'])['depth']=9.5
-rejects(lambda:routing.validate(bad))
-bad=copy.deepcopy(routes)
-next(w for w in bad if not w['bare'])['od']=1.2
-rejects(lambda:routing.validate(bad))
+bad = copy.deepcopy(routes)
+next(w for w in bad if not w['bare'])['depth'] = 9.5
+rejects(lambda: routing.validate(bad))
+bad = copy.deepcopy(routes)
+next(w for w in bad if not w['bare'])['od'] = 1.2
+rejects(lambda: routing.validate(bad))
 # Artificial same-layer crossing between unrelated wires, preserving endpoints.
-bad=copy.deepcopy(routes)
-a,b=[w for w in bad if w['id'] in ('W13','W41')]
-a['path']=[a['path'][0],b['path'][0],a['path'][-1]]
-a['depth']=b['depth']
-rejects(lambda:routing.validate(bad))
+bad = copy.deepcopy(routes)
+a, b = [w for w in bad if w['id'] in ('W13', 'W41')]
+a['path'] = [a['path'][0], b['path'][0], a['path'][-1]]
+a['depth'] = b['depth']
+rejects(lambda: routing.validate(bad))
 
-print('ELECTRONICS FIT OK: battery, fixed deck, rear wiring, strap route; oversized capacitor and boss collision detected')
+print('ELECTRONICS FIT OK: battery in the cap, LED row visible, rear wiring, strap route; wall and plug collisions detected')

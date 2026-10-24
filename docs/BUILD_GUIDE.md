@@ -1,65 +1,71 @@
 # Green Lantern power battery that pours a shot: build guide
 
-A 3D-printed Green Lantern power battery, about 50 cm tall and 19 cm across at the base, with a hidden pump, a
-hidden nozzle and a twist-to-pour lock.
+A 3D-printed Green Lantern power battery in the classic shape (rev C), with a hidden pump, a hidden spout and a
+twist-to-pour lock. It stands about 45 cm tall to the lid (49 cm with the handle up) and is 22.4 cm across the
+sphere. No screws show from outside.
 
-The sphere has two openings:
+From the bottom up:
 
-- the **hand opening** on your side, closed by a curtain of frosted plastic strips;
-- the frosted **display window** on the far side.
+- an 80 mm **drum** that holds the removable **cartridge** (the pump and the drink bag);
+- a flared **foot** and a short neck;
+- the 224 mm **sphere**, with a **lens bell** on the audience side and a **hand bell** on your side;
+- a short neck, a flare and the 190 mm **top cap**, which holds the battery and all the electronics;
+- the **emblem lid** with its glowing halo;
+- a loop **handle** on pivots at the sphere's sides.
 
-Throughout this guide, "your side" means the hand opening and "display side" means the window opposite it.
+Throughout this guide, "your side" means the hand bell (where you stand) and "display side" means the lens bell
+opposite it, facing the audience.
 
-**The show in one paragraph.** Push the empty shot glass in under the lock until it clicks. Punch in, ring face
-first, and the ring seats in the lock: the lantern glows faintly. Twist 45 degrees and hold it while you recite the
-oath. Behind the lock wall the pump pours about 1 oz into the glass while the light climbs from 15 % to 90 % over
-about 11 seconds. Turn back and the light swells to full, then goes dark. Grip the glass, slide it toward you, lift
-it and bring it out.
+**The show in one paragraph.** Push the empty shot glass in under the lock until it clicks. Punch in through the
+frosted cover, ring face first, and the ring seats in the lock: the lantern glows faintly. Twist 45 degrees and hold
+it while you recite the oath. Behind the lock wall the pump pours about 1 oz into the glass while the light climbs
+from 15 % to 90 % over about 11 seconds. Turn back and the light swells to full, then goes dark. Grip the glass, slide
+it toward you, lift it and bring it out.
 
 ![interaction timeline](images/interaction.png)
 
 **Status.** Designed, modelled and simulated; not yet built.
 
 - The firmware compiles and passes 20 simulated safety scenarios (`firmware/test`).
-- The CAD passes its fit checks, including the TalentCell mount and the electronics clearance envelopes. Those
-  checks use the reserved sizes in [CAD fit limits](../cad/README.md#electronics-fit-limits), so measure the real
-  capacitor, connectors, buck, switch and jar before printing. The battery and the pump are already measured.
-- Every bay is parametric (`cad/params.py`): a measured number is a one-line change and a re-run of
+- The CAD passes its fit checks (`cad/build.py`, `cad/tests/`). The electronics, the pump and the bag are checked
+  against reserved sizes in [CAD fit limits](../cad/README.md#electronics-fit-limits), so measure the real parts before
+  printing. The battery and the pump are already measured.
+- Every size is parametric (`cad/params.py`): a measured number is a one-line change and a re-run of
   `python3 build.py`.
 
 ## Viewer and videos
 
-- **3D assembly viewer:** [open it in the browser](https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html).
-  Each printed part has its own colour. The 14 steps follow the subassemblies and section 9, and an exploded view
-  shows how everything stacks. Click a part for its name and print notes.
-- **Videos:** [step-by-step assembly (4:30)](videos/assembly-guide.mp4) ·
-  [exploded assembly (0:12)](videos/separate-and-assemble.mp4) ·
-  [opening for service (0:12)](videos/service-access.mp4).
-  - The step-by-step video follows the build order and has chapter markers. Two orange-tube cutaways show the
-    pump-to-floor route and the nozzle threading.
+- **3D assembly viewer:** [open it in the browser](https://raw.githack.com/TheRageKage12/drunk-lantern-power-battery/main/docs/assembly-viewer/index.html)
+  (`docs/assembly-viewer/index.html`). Every part is colour-coded, the steps follow the build order in
+  [section 7](#7-assembly) (steps 0 to 16), and an exploded view shows how everything stacks. Click a part for its
+  name.
+- **Videos:** [step-by-step assembly](videos/assembly-guide.mp4) ·
+  [exploded assembly](videos/separate-and-assemble.mp4) ·
+  [opening for service](videos/service-access.mp4).
+  - The step-by-step video follows the same build order and step numbers as this guide.
   - The exploded video shows how the parts fit together; use the step-by-step video for the order.
-  - The pump outlet and the loose service loop are illustrative. Wiring, the curtain and the screws are described in
-    this guide but not animated.
-  - **Skip the "Install the charge jack" chapter.** The jack is no longer fitted: you charge through the splitter's
-    female end (section 12).
+  - The service video shows how to open the lid, lift the lantern off the cartridge and take the bells and the top
+    cap off ([section 13](#13-service-opening-it-up)).
+  - Wiring and most screws are described in this guide, not animated.
 
 ## Contents
 
 1. [How it works](#1-how-it-works)
-2. [Shopping list](#2-shopping-list)
+2. [What you need](#2-what-you-need)
 3. [Print the parts](#3-print-the-parts)
-4. [Electronics (build it on the bench first)](#4-electronics-build-it-on-the-bench-first)
-5. [Firmware](#5-firmware)
-6. [The lock](#6-the-lock)
-7. [The fluid path](#7-the-fluid-path)
-8. [The lock wall, the curtain and the top](#8-the-lock-wall-the-curtain-and-the-top)
-9. [Final assembly](#9-final-assembly)
+4. [Heat-set inserts](#4-heat-set-inserts)
+5. [Electronics (build it on the bench first)](#5-electronics-build-it-on-the-bench-first)
+6. [Firmware](#6-firmware)
+7. [Assembly](#7-assembly) (build steps 0 to 16)
+8. [The hand-side cover](#8-the-hand-side-cover)
+9. [The drink bag](#9-the-drink-bag)
 10. [Calibration](#10-calibration)
 11. [Test before the party](#11-test-before-the-party)
-12. [Performing it](#12-performing-it)
-13. [Cleaning and storage](#13-cleaning-and-storage)
-14. [Troubleshooting](#14-troubleshooting)
-15. [What this budget build leaves out](#15-what-this-budget-build-leaves-out-and-how-to-add-it-back)
+12. [Performing it](#12-performing-it) (on the day, charging, refilling)
+13. [Service: opening it up](#13-service-opening-it-up)
+14. [Cleaning and storage](#14-cleaning-and-storage)
+15. [Troubleshooting](#15-troubleshooting)
+16. [What this budget build leaves out](#16-what-this-budget-build-leaves-out-and-how-to-add-it-back)
 
 ---
 
@@ -79,111 +85,152 @@ it and bring it out.
 
 | Where | What is there |
 |---|---|
-| Top dish | A frosted disc in its floor. A ring of LED strip in the hole under it makes the top glow. |
-| Sphere, your side | The hand opening (120 x 96 mm), closed by a curtain of frosted plastic strips that your hand and the glass push through. |
-| Sphere, inside | The **lock wall**, 2.5 cm past the centre (toward the display window).<br>• **On its face, facing you:** the lock and a column of LEDs either side. The lock is a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-01L microswitch and the A3144 Hall sensor.<br>• **Under the lock:** the glass, in a slot.<br>• **Behind the wall, out of sight:** the nozzle, over the back third of the glass, and 4 rows of LEDs facing the display window. |
-| Sphere, display side | The white diffuser window. |
-| Lower dish | Hollow neck: the glass slot hangs into it; the tube and the cables pass through it. |
-| Base | A removable **cartridge** that slides up into the base drum, held by 3 thumbscrews underneath.<br>• **Floor:** the 12 V battery pack, lying flat, with the buck converter beside it.<br>• **Deck above it:** the jar, the Kamoer pump and the electronics board.<br>• **Nothing shows on the shell.** The power switch sits in a pocket under the cartridge floor (tip the lantern to flip it), and the battery's charge-level LEDs show through a thin slot in the floor.<br>• **To refill or charge:** undo the thumbscrews and lift the lantern off; the cartridge stays on the table, with the charge lead waiting inside. |
+| Lid | `halo_ring` (white) with the green `emblem_lid` glued on. Two 12.5 cm pieces of LED strip inside the top cap light the emblem and the halo's glowing band from below. Push down and twist 20 degrees to lock or unlock it; no tools. |
+| Top cap | The **cap floor**, a plate on a ledge inside the cap, carries the 12 V battery, the circuit board, the buck converter, the power switch S1 and the charge socket. Everything you do day to day (switch on, charge, USB) happens with the lid off. The battery lies LED face down over a slot: look up through the hand opening to read its charge dots. |
+| Sphere, your side | The 140 mm **hand opening** and the **hand bell**, closed by a one-piece frosted cover with 8 cuts from the centre: the flaps fold round your arm and spring back flat. A full ring of LED strip (~45 cm) inside the bell lights it. |
+| Sphere, inside | The **lock wall**, 2.5 cm past the centre toward the audience.<br>• **On its face, facing you:** the lock, with a 5 cm LED column either side. The lock is a rotor with the keyed ring pocket, 0 and 45 degree hard stops, a spring plunger that returns it, a cam, the D2F-01L microswitch and the A3144 Hall sensor.<br>• **Under the lock:** the glass, in a slot.<br>• **Behind the wall, out of sight:** the nozzle, over the back third of the glass.<br>• **In front of that:** the white **LED panel** with 4 rows of LED strip facing the lens. It hides the nozzle, the glass and the wires from the audience.<br>• **On top of the wall:** the white `wall_extension`, which braces it against the top cap and hides the wires running up. |
+| Sphere, display side | The **lens bell**: a frosted 118 mm white lens, with a 37.5 cm LED ring behind it. |
+| Foot | Hollow: the glass slot hangs into its neck; the tube and the pump's wires pass through it. |
+| Drum and cartridge | The drum is part of the lantern. The **cartridge** under it is one printed tray with the Kamoer pump and the **drink bag** (a 32 oz spouted pouch, filled to about 22 oz) under a cover. It twist-locks into the drum: to refill, twist the lantern a little anticlockwise and lift it off by the handle. Only the tube and the pump's two wires cross between the lantern and the cartridge. |
+
+![assembly](images/cad-assembly-iso.png)
+
+![front](images/cad-assembly-front.png) ![rear](images/cad-assembly-rear.png)
+
+![cutaway](images/cad-cutaway.png)
 
 ![fluid path and layout](images/fluid-path.png)
 
-The drink touches only the jar, its silicone lid, the platinum-silicone tube and the glass. No printed part is in the liquid path.
+The drink touches only the pouch, the platinum-silicone tube and the glass. No printed part is in the liquid path.
 
 ---
 
-## 2. Shopping list
+## 2. What you need
 
-The live list, with who has each item and what is left to buy, is the
+The shopping list, with prices, who has each item and what is still to get, is the
 [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).
-The tables below describe the same parts and why each one was chosen; the Sheet is the source of truth for
-quantities, prices and who has what.
+It is the only list: this section summarises what the build uses so you can check it against the Sheet.
 
-- **Prices.** Amazon prices were checked on 2026-10-15, Vetco's on 2026-10-13. Prices marked "~" are estimates.
-- **Item numbers** are only for this guide; the Sheet doesn't use them.
+### 2.1 Bought parts
 
-### 2.1 Order online
+**Online (Amazon):**
 
-| # | Item | Buy | Price | Notes |
-|---|---|---|---|---|
-| 1 | Pump | [Kamoer KPHM200, 12 V (B09HGVLHFV)](https://www.amazon.com/dp/B09HGVLHFV) | $28.00 | 200 mL/min or more at 12 V, 0.7 A. Run at ~70 % speed it pours about 1 oz in 11 s. |
-| 2 | Tubing | [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft (B0DKB1NKB4)](https://www.amazon.com/dp/B0DKB1NKB4) | $13.99 | The exact 3.2 x 6.4 mm size the Kamoer head needs. FDA 21 CFR 177.2600, NSF 51. Thinner 1/8" x 3/16" tube will not pump. One run is ~95 cm; the rest covers replacements (the tube is the part that wears). |
-| 3 | LED strip | [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m (B0CKYFLZFQ)](https://www.amazon.com/dp/B0CKYFLZFQ) | $14.99 | COB: 320 LEDs/m under one continuous coating, so it glows evenly with no dots. Cuts every 25 mm. You use 75 cm in 7 pieces. Its current isn't listed; COB strips like it draw roughly 0.8 A/m, so ~0.6 A for 75 cm. |
-| 4 | Buck converter | [LM2596 step-down module, 5-pack (B0DBVYP91F)](https://www.amazon.com/dp/B0DBVYP91F) | $7.99 | 9–12.6 V in, set to 5.0 V out for the XIAO, gate driver and Hall sensor. 43 x 21 mm. |
-| 5 | Magnets | [6 x 2 mm neodymium, 45-pack (B0CBRVF4PN)](https://www.amazon.com/dp/B0CBRVF4PN) | $6.29 | 1 in the ring key (the pack is the smallest sensible buy). |
-| 6 | Jar lid and vent | One Masontops Pickle Pipe silicone airlock lid, from the [Masontops fermentation kit (B01H7GI7V8)](https://www.amazon.com/dp/B01H7GI7V8) Kevin already has | - | Cut down into a new flat lid for the jar, valve pointing **into** the jar: it lets air in as the pump draws the drink out, but nothing out if the jar tips (section 7, step 1). Food-grade silicone; the drink tube pushes through it and seals. |
-| 7 | Microcontroller | [Seeed XIAO RP2040, pre-soldered (B0DRNTQ338)](https://www.amazon.com/dp/B0DRNTQ338) | $10.99 | |
-| 8 | 12 V battery pack | [TalentCell YB1203000 with charger (B00MHNQIR2)](https://www.amazon.com/dp/B00MHNQIR2) | $22.99 | 3000 mAh, 3 A maximum output, 105 x 65 x 25 mm; output falls from 12.6 to 9 V as it drains. Its one DC5521 port is both input and output, and its own switch must be ON to charge. You also use its supplied charger (12.6 V, 0.5 A, ~6 h) and its 1-female-to-2-male splitter, which replaces a charge jack (section 4, step 2). The cartridge tray is built for this case. |
-| 9 | D2F-01L lever microswitch, 4-pack (1 used) | [Amazon B0DBV9JX6L](https://www.amazon.com/dp/B0DBV9JX6L) | $7.97 | Third-party (Pecafeitas) listing of the 0.1 A hinge-lever version. Omron's datasheet gives its minimum load as 1 mA at 5 V (the plain D2F needs 100 mA), which the section 4 interface supplies. Omron provenance is not verified: check the marking, the peg spacing against `switch_bracket`, and that it clicks reliably 50 times. |
-| 10 | Heat-set inserts | [ruthex RX-M3x5.7 brass, 100-pack (B08BCRZZS3)](https://www.amazon.com/dp/B08BCRZZS3) | $9.99 | 32 used. 5.7 mm long, made for a 4.0 mm hole: the 32 receiving bores are 4.0 x 6.5 mm (section 3). Any plain M3 x 5.7 x 4.6 mm brass insert is the same part. |
+- Pump: [Kamoer KPHM200, 12 V](https://www.amazon.com/dp/B09HGVLHFV). Run at ~70 % speed it pours about 1 oz in 11 s.
+- Tube: [AUBER 1/8" ID x 1/4" OD platinum-cured silicone, 10 ft](https://www.amazon.com/dp/B0DKB1NKB4). The exact size
+  the Kamoer head needs; thinner 1/8" x 3/16" tube will not pump. One continuous piece runs from the bag through the
+  pump to the nozzle; the rest is spare (the tube is the part that wears).
+- Drink bag: [32 oz spouted pouch](https://www.amazon.com/dp/B09WR13XDT). **Still to buy.** It fills the bay to
+  about 22 oz under the cover; a 16 oz pouch would stop at 16 oz.
+- LED strip: [HAMRVL COB LED strip, green, 12 V, 8 mm, 5 m](https://www.amazon.com/dp/B0CKYFLZFQ). Cuts every 25 mm.
+  You use about 158 cm in 10 pieces (section 7, steps 2, 3, 9, 12 and 13).
+- Buck converter: [LM2596 step-down module, 5-pack](https://www.amazon.com/dp/B0DBVYP91F), set to 5.0 V.
+- Magnets: [6 x 2 mm neodymium, 45-pack](https://www.amazon.com/dp/B0CBRVF4PN). One goes in the ring.
+- Microcontroller: [Seeed XIAO RP2040, pre-soldered](https://www.amazon.com/dp/B0DRNTQ338).
+- Battery: [TalentCell YB1203000 with charger](https://www.amazon.com/dp/B00MHNQIR2). 3000 mAh, 3 A maximum,
+  105 x 65 x 25 mm; output falls from 12.6 to 9 V as it drains. Its one DC5521 port is both input and output, and its
+  own switch must be ON to charge. You also use its 12.6 V charger and its 1-female-to-2-male splitter (section 5,
+  step 2), which replaces a charge jack.
+- Microswitch: [D2F-01L lever microswitch, 4-pack](https://www.amazon.com/dp/B0DBV9JX6L). The 0.1 A hinge-lever
+  version (minimum load 1 mA at 5 V). Check the marking, the peg spacing against `switch_bracket`, and that it clicks
+  reliably 50 times.
+- M3 heat-set inserts: [ruthex RX-M3x5.7, 100-pack](https://www.amazon.com/dp/B08BCRZZS3). 17 used.
+- 6-32 heat-set inserts: [initeq #6-32 long, 20-pack](https://www.amazon.com/dp/B076QY9858). **Bought.** 13 used, one
+  under every thumbscrew.
 
-> **Hall sensor alternative (not recommended).** The lock is built for the A3144 from Vetco (item 11), on a post
-> that reaches up inside the rotor to about 3 mm from the magnet. An Adafruit DRV5032 board (#6051) also works: set
-> `HALL_SENSOR = 'DRV5032'` in `cad/params.py` and reprint `rotor` and `socket_base`. It sits under the plate, 7.7 mm
-> from the magnet instead of 3, and works on 3.3 V with either magnet pole. Adafruit ships slowly.
+**Vetco Electronics (Bellevue):**
 
-### 2.2 Pick up locally
+- Hall sensor: [A3144, VUPN6596](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63).
+- Gate buffer: [74AHCT125, DIP-14, VUPN524](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96).
+  Must be AHCT, not HC.
+- 2 MOSFETs: [IRLZ44NPBF, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151).
+  The page's URL and title are out of date; its detail table names the IRLZ44NPBF. Check the marking on the part.
+- Power switch S1: [30-10005 SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a)
+  (6.5 mm panel hole).
+- Inline plugs: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired)
+  for the lock cable, and [JST SM 2-pin pairs](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector)
+  for the pump. Rev C uses **one 4-pin pair** (the lock cable, at the cap floor) and **one 2-pin pair** (the pump, at
+  the cartridge, so the lantern lifts off). The LED and pump leads at the cap floor and the two bells' LED leads are
+  soldered straight through with slack instead (decided 2026-10-23; plugs there are an easy add later, about $1.75 a
+  pair).
+- Small parts: 2 x NTE585 and 1 x NTE586 (3 A/40 V) diodes; resistors 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ,
+  1 x 22 kΩ; 3 x 0.1 µF ceramic and 1 x 2200 µF/25 V capacitors; a DIP-14 socket; a breakaway header and a shunt for
+  JP1; the 5 x 7 cm protoboard, 22 AWG stranded wire and 1/8" heat-shrink.
 
-| # | Item | Where | Price | Notes |
-|---|---|---|---|---|
-| 11 | Hall sensor, A3144 | [Vetco, VUPN6596](https://vetco.net/products/vupn6596_hall-effect_sensor_-_allegro_a3144eua_d63) | $1.99 | Runs on 5 V, reacts to one magnet pole. It sits on a post inside the lock, ~3 mm from the magnet: about 90 mT there, 2.5 x its worst-case switch point. |
-| 12 | Cable plugs | Vetco: [JST PH 4-pin pair](https://vetco.net/products/jst-ph-2-0-4-pin-connector-male-female-pair-pre-wired) ($2.24) for the lock cable, [JST SM 2-pin pair](https://vetco.net/products/vupn1054_jst_sm_2_pin_m-f_pair_locking_connector) ($1.75) for the LED leads | $3.99 | So the lantern unplugs from the base cartridge. |
-| 13 | 74AHCT125 quad buffer, DIP-14 | [Vetco, VUPN524](https://vetco.net/products/vupn524_quad_level-shifter_-_74ahct125_-_3v_to_5v_d96) | $2.95 | Turns the XIAO's 3.3 V into a clean 5 V gate signal for both MOSFETs. Must be AHCT, not HC. |
-| 14 | 2 x IRLZ44NPBF N-MOSFET | [Vetco, VUPN1682](https://vetco.net/products/vupn1682_mosfet_mosft_for_micro_controllers_-_30v_-_60a_-_irlb8721pbf_d151) | $5.34 | Exact part: IRLZ44NPBF, TO-220. The page's URL and title are out of date, but its detail table names the IRLZ44NPBF. Check the IRLZ44N marking on the part. |
-| 15 | Small parts | Vetco | $24.47 | 2 x NTE585 and 1 x NTE586 (3 A/40 V) diodes; resistors 2 x 10 kΩ, 2 x 4.7 kΩ, 1 x 3.3 kΩ, 1 x 100 kΩ, 1 x 22 kΩ; 3 x 0.1 µF ceramic and 1 x 2200 µF/25 V capacitors; a DIP-14 socket; a breakaway header and a shunt for JP1; the 5 x 7 cm protoboard, 22 AWG stranded wire and 1/8" heat-shrink. |
-| 16 | Power switch | [Vetco 30-10005, SPST mini toggle with leads](https://vetco.net/products/30-10005_spst_miniature_toggle_switch_w-wire_leads_on-off_6a) | $4.95 | On-off, 1/4" bushing (6.5 mm panel hole), 6 A at 12 V. |
-| 17 | M3 screws and nuts | Tacoma Screw, by the piece ([or the Amazon M3 kit, B0HKFCTLK8](https://www.amazon.com/dp/B0HKFCTLK8), $8.99, which has no countersunk screws) | ~$12 | 4 x M3x6, 17 x M3x8, 8 x M3x8 flat-head (countersunk), 6 x M3x10, 11 x M3x12, 14 nuts. They go into the 32 heat-set inserts (item 10), except the 3 thumbscrews, the 5 lock screws and the 6 handle lap screws, which use the 14 nuts. |
-| 18 | Compression spring | Ace Hardware, Hillman spring drawer (bring calipers) | ~$1.50 | About 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (cut a longer one down). A retractable pen's spring also fits but is softer. |
-| 19 | Straps and zip ties | Hardware store: VELCRO One-Wrap roll, 3/4" x 12 ft, model 90340 (Kevin has it), plus ~10 small zip ties (2.5 mm wide) | ~$9 | Cut the roll into 4 straps: two for the pump, one for the jar, one for the battery. The battery strap's lower run sits in a 2 mm recess under the tray, so it must be no thicker than 2 mm (One-Wrap measures about 1 mm). The zip ties hold the LM2596 and tidy the cables. |
-| 20 | Curtain sheet | Target, Fred Meyer, Office Depot (school aisle): one clear-frosted polypropylene folder, binder divider or report cover | ~$3 | Polypropylene flexes thousands of times, lets the light through and hides the inside. One sheet makes the curtain (13 strips 12 x 97 mm). 0.3-0.5 mm; thinner parts more easily. Not PVC/vinyl, which cracks at the folds. |
-| 21 | Food-safe jar | Kevin has one: a Ball 8 oz quilted jelly jar (Fred Meyer and Target sell 12-packs) | ~$5 | **No bigger than 73 mm across and 108 mm tall, lid included**; Kevin's measures 73 x 100-105 mm. Holds ~200 mL usable, 5-6 pours. Its metal flat lid is swapped for a silicone one (item 6); the screw band stays. |
-| 22 | Shot glass, 1.5 oz | Kevin has one (48 mm across, 60 mm tall); otherwise Bargreen Ellingson or any kitchen store | ~$4 | **Up to 52 mm across the top and 62 mm tall** (Libbey 1.5 oz glasses fit). About 1.3 cm of it stands above the slot for your fingers; a heavy base helps. |
-| 23 | Super glue | the Gorilla Glue super glue you already have (any cyanoacrylate works) | - | For the magnets, the nuts, the Hall sensor and a few dots on the diffuser. |
+> **Hall sensor alternative (not recommended).** The lock is built for the A3144, on a post that reaches up inside the
+> rotor to about 3 mm from the magnet. An Adafruit DRV5032 board (#6051) also works: set `HALL_SENSOR = 'DRV5032'` in
+> `cad/params.py` and reprint `rotor` and `socket_base`. It sits under the plate, 7.7 mm from the magnet instead of 3,
+> and works on 3.3 V with either magnet pole. Adafruit ships slowly.
 
-> **No charge jack.** There is nothing to buy for charging. The battery's supplied splitter is "1 female to 2
-> male", with all three ends joined. One male plug stays in the battery, the other is cut off to make the lead to the
-> board, and the charger plugs into the female end with the lantern lifted off (section 4 step 2, section 12). The
-> deck's 11.3 mm hole stays empty, so a jack can be added later.
+**Local, or already owned:**
 
-**Total: about $201 before tax** (2026-10-23, from the Sheet):
+- Compression spring for the lock: about 0.4-0.5 mm wire, 5 mm outside diameter, ~10 mm long (Ace Hardware, Hillman
+  spring drawer; bring calipers). A retractable pen's spring also fits but is softer.
+- VELCRO One-Wrap, 3/4" (Kevin has it): **2 straps**, one for the battery on the cap floor and one round the pump's
+  motor. The battery strap runs in a 2 mm recess under the cap floor (One-Wrap is about 1 mm thick).
+- About 10 small zip ties (2.5 mm wide): the buck module, the charge socket and the cables.
+- Frosted polypropylene binder divider (Kevin has one), 0.3-0.5 mm: the one-piece hand-side cover. Not PVC or vinyl,
+  which crack at the folds.
+- Shot glass, 1.5 oz: up to 52 mm across the top and 62 mm tall (Kevin's is 48 x 60 mm). About 1.3 cm of it stands
+  above the slot for your fingers; a heavy base helps.
+- Super glue (Kevin's Gorilla Glue), and a little two-part epoxy for the three handle joints.
 
-| Store | Total |
-|---|---:|
-| Amazon (items 1-10) | $123.20 |
-| Vetco (items 11-16) | $43.69 |
-| Tacoma Screw (item 17) | ~$12 |
-| Hardware store (straps, zip ties) | ~$9 |
-| Ace and local (spring, curtain sheet, jar, shot glass) | ~$13.50 |
+> **No charge jack.** The battery's splitter is "1 female to 2 male", with all three ends joined. One male plug stays
+> in the battery, the other is cut off to make the lead to the board, and the charger plugs into the female end, which
+> is tied down on the cap floor. Charge with the lid off (section 12).
 
-The total assumes you already have:
+### 2.2 Hardware counts
 
-- **PETG filament.** About 1.2 kg of green at the settings in section 3 (two 1 kg spools: the second covers the
-  rest, the supports and one failed big part), ~30 g of white or natural for the diffusers, and under 1 g of white
-  for the ring's emblem outline (~$49 for two green spools and one white).
-- **Basic tools:**
-  - soldering iron and solder, multimeter, calipers, wire strippers, a heat gun or lighter;
-  - a drill with 3.2, 5 and 6 mm bits, flush cutters, pliers or a small wrench for the switch nut;
-  - a 2.5 mm hex key (a long or ball-end one, for the sphere's flange screws and the handle) and a 2 mm hex key for
-    the countersunk screws;
-  - a small flat screwdriver for the LM2596's trimmer, a hobby knife and a ruler;
-  - a USB-C data cable and a laptop with the Arduino IDE for the XIAO;
-  - a kitchen scale or measuring cup for calibration (1 g of water = 1 mL).
-- **Supplies:** a dab of silicone grease or petroleum jelly for the lock's ramp and plunger, double-sided tape for
-  the curtain, ~220 grit sandpaper.
+Everything below is already owned except where marked. Nothing shows from outside: every thumbscrew turns from inside
+the lantern, and the outside M3 heads and nuts sit under flush green caps.
+
+| Hardware | Used | Where |
+|---|---:|---|
+| Knurled thumbscrews (6-32, PC-case) | 13 of 23 | bells 4 (2 each), top cap to sphere 3, foot to sphere 3, cap floor 3 |
+| 6-32 heat-set inserts (initeq, bought) | 13 | one under each thumbscrew (section 4) |
+| M3 heat-set inserts (ruthex) | 17 | sphere flange 4, handle pivots 4, foot spigot 3, cap floor board standoffs 4, guide boss 1, socket housing 1 |
+| M3x6 socket | 4 | board on its standoffs |
+| M3x8 socket | 13 | drum to foot 3, handle laps 9, nozzle guide 1 |
+| M3x8 flat-head (countersunk) | 8 | lock base plate 3, switch bracket 1, curtain clamp ring 4 |
+| M3x10 socket | 6 | sphere halves 4, lock ears 2 |
+| M3x12 socket | 4 | handle pivots, from inside the sphere |
+| M3 nuts | 14 | lock 5 (base plate 3, ears 2), handle laps 9 |
+| Green screw caps (printed) | 25 | drum 3, handle laps 18 (9 heads, 9 nuts), pivot screw heads 4 |
+| LED strip | ~158 cm, 10 pieces | front bell ring 37.5 cm, rear bell ring ~45 cm, LED panel 4 x 10 cm, lock-face columns 2 x 5 cm, top cap 2 x 12.5 cm |
+
+**Filament.** The parts add up to about 2.8 kg of PETG if printed solid (about 2.6 kg of it green, the rest white:
+lens, LED panel, halo ring, lock wall, wall extension), plus under 1 g of white for the ring's emblem outline. At the
+settings in section 3 (walls plus partial infill; handle pieces and pivots solid) expect noticeably less: slice
+everything first and read the slicer's total before deciding whether you need another green spool (Kevin has about
+1.8 kg of green). If
+you are short of green, print the hidden parts in white: `cap_floor`, `base_tray` and `bag_cover` never show, and
+neither do `bay_floor`, `guide_boss`, `glass_well` and `nozzle_guide`. The tool prints can be any colour.
+
+**Tools:**
+
+- soldering iron and solder (with a heat-set insert tip if you have one), multimeter, calipers, wire strippers, a heat
+  gun or lighter;
+- a drill with a 3.2 mm bit (board holes) and a 6 mm bit (the pouch's cap), flush cutters, pliers or a small wrench
+  for the switch nut;
+- a 2.5 mm hex key, long or ball-end (sphere flange, pivots, handle, drum), and a 2 mm hex key for the countersunk
+  screws;
+- a small flat screwdriver for the LM2596's trimmer, a sharp hobby knife, a ruler, and a 3 mm hole punch or a nail you
+  can heat (for the cover);
+- a USB-C data cable and a laptop with the Arduino IDE for the XIAO;
+- a kitchen scale or measuring cup for calibration (1 g of water = 1 mL).
+
+**Supplies:** a dab of silicone grease or petroleum jelly for the lock's ramp and plunger, a few cm of 1.75 mm
+filament (pins that line up the lid), ~220 grit sandpaper.
 
 ### 2.3 Seattle-area stores (verified open on 2026-10-11; call before driving for specific stock)
 
 | Store | Address, hours | Buy here |
 |---|---|---|
-| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch and the two JST plugs. Not stocked: XIAO, magnets. |
+| [Vetco Electronics](https://vetco.net) | 12718 Northup Way STE 100, Bellevue 98005, (425) 641-7275. Mon-Fri 9-6, Sat 10-3:30 | The A3144, MOSFETs, diodes, resistors, capacitors, protoboard, IC socket, wire, heat-shrink, power switch and the JST plugs. Not stocked: XIAO, magnets. |
 | [Tacoma Screw Products, Ballard](https://www.tacomascrew.com/LocationFinder) | 3930 Leary Way NW, Seattle 98107, (206) 632-7565. Mon-Fri 7-5, Sat 9-1 | M3 screws and nuts by the piece, springs. Georgetown branch: 1121 S Bailey St, Mon-Fri 7-5. |
-| [McLendon Hardware](https://www.mclendons.com/locations) | White Center: 10210 16th Ave SW, Seattle 98146. Renton: 440 Rainier Ave S | Spring drawers, metric screws, glue. |
+| [McLendon Hardware](https://www.mclendons.com/locations) | White Center: 10210 16th Ave SW, Seattle 98146. Renton: 440 Rainier Ave S | Spring drawers, metric screws. |
 | Ace Hardware (Magnolia, Maple Leaf, West Seattle Junction), Stoneway Hardware | Seattle neighbourhoods | The lock spring (Hillman spring drawer), fasteners by the piece. |
-| Target, Fred Meyer, Office Depot/OfficeMax | Several in Seattle | The curtain sheet: a clear-frosted polypropylene folder or divider (school aisle). Home Depot has no good match. |
+| Target, Fred Meyer, Office Depot/OfficeMax | Several in Seattle | A spare frosted polypropylene folder or divider (school aisle). Home Depot has no good match. |
 | [Bargreen Ellingson](https://www.bargreen.com/locations/seattle) | SoDo showroom, Mon-Fri 10-3 | 1.5 oz shot glasses. |
-| [Micro Homebrew](https://www.microhomebrew.com/) | Kenmore, (425) 892-8425 | Small food-safe bottles and jars. They do not stock the 1/8" pump tubing. |
-
-Hardwick's in the U-District closed in 2020. Sound Homebrew Supply could not be confirmed open.
 
 ---
 
@@ -191,13 +238,16 @@ Hardwick's in the U-District closed in 2020. Sound Homebrew Supply could not be 
 
 All files are in `cad/output/` (STL for slicing, STEP for editing).
 
-- **What to print:** the 26 parts in the [part list](#part-list) below, plus `ring_sizer` first. Print `key_cap`
-  only if you use a bought ring instead of `key_ring`. `assembly.stl` and the `*_envelope.stl` files are check
-  volumes, not parts.
-- **Bed size:** everything fits your 230 x 230 x 240 mm Ender 3. The widest part is the rear sphere half at
-  221 mm (because of the handle bosses); the tallest is the base at 147 mm. Centre the big parts.
-- **Adhesion:** a skirt is enough, except for the two sphere halves and `dish_lower`, whose first layer is only a
-  2.4 mm ring: give those a 6 mm brim.
+- **What to print:** every part in the [part list](#part-list) below, 25 `screw_cap`s, and the four tool prints.
+  Print `key_cap` only if you use a bought ring instead of `key_ring`. `assembly.stl` and the `*_envelope.stl` files
+  are size allowances for bought parts, not parts.
+- **Bed size:** everything fits the 230 x 230 x 240 mm Ender 3. The widest parts are the handle end pieces (227 mm)
+  and the sphere halves (224 mm); the tallest is `top_cap` (145 mm). Centre the big parts.
+- **Adhesion:** a skirt is enough, except for the two sphere halves and the two bells, whose first layer is a thin
+  ring: give those a 6 mm brim.
+- **Print `thumb_test` first** (section 3, test prints): it confirms the 6-32 insert hole before the big parts.
+
+![all printed parts](images/stl/parts-iso.png)
 
 ### PETG settings (0.4 mm nozzle)
 
@@ -206,120 +256,100 @@ All files are in `cad/output/` (STL for slicing, STEP for editing).
 | Layer height | 0.2 mm |
 | Nozzle / bed | 235-245 °C / 75-85 °C |
 | Walls | 4 perimeters, 5 top and 5 bottom layers |
-| Infill | 25-30 % gyroid (100 % for the two diffusers) |
+| Infill | 25-30 % gyroid; **100 %** for the four handle pieces, the two pivots and the lens |
 | Outer wall speed | 40-60 mm/s |
 | Fan | off for the first 3 layers, then 30-50 % |
 | Bed surface | textured PEI, or glue stick on smooth PEI |
 | Elephant-foot compensation | 0.2 mm (Cura: Initial Layer Horizontal Expansion -0.2) |
 
-- **Why the elephant-foot setting matters:** the spigots, the locating rings and the drum's bore all mate on their
-  first layers with 0.3 mm of clearance a side, and a flared first layer on both parts eats that. If a ring still
-  binds, sand the smaller part's edge.
+- **Why the elephant-foot setting matters:** the foot's spigot, the top cap's plug and the cartridge's collar mate
+  with 0.3 mm of clearance a side, and a flared first layer eats that. If a fit still binds, sand the smaller part's
+  edge.
 - Turn "print thin walls" on for `socket_base` (the sensor post's walls).
 - Do not anneal.
 
-### Heat-set inserts
-
-Install the brass inserts before assembly.
-
-- All 32 receiving holes are **4 mm across × 6.5 mm deep**. The listed ruthex RX-M3x5.7 (5.7 mm long, 4.6 mm across,
-  made for a 4.0 mm hole) or any plain M3 x 5.7 x 4.6 mm brass insert fits; a 5 mm-wide "M3 x 4 x 5" insert does not.
-- Test one in a scrap print first, at the supplier's installation temperature.
-- Fit each flush with the entry face, let it cool, and check that a screw turns freely before mounting anything.
-- The 3.4 mm screw through-holes, countersinks and captured-nut pockets are separate features: no inserts there.
-- **The bay floor's insert needs its boss glued on first.** The 2 mm floor is too thin to hold an insert, so its bore
-  carries on into `guide_boss`, a small separate puck (printed apart so the floor prints flat without supports):
-  1. Put a thin ring of super glue round the boss's open (bore) face and press it onto the underside of the floor
-     (the side without the lip), over the insert hole near the tube hole.
-  2. Line the two bores up with a 4 mm drill bit pushed through both, and hold it until the glue sets. Pull the bit
-     out.
-  3. Stand the floor on the boss on the bench (prop the far edge level on a book) and set the insert from the top,
-     through the floor and into the boss. Pressing pushes the two parts together, and the insert locks them. In the
-     lantern the nozzle guide's screw pulls the boss up against the floor too.
-
-| Printed part | Inserts | Entry side |
-|---|---:|---|
-| `base_tray` | 3 | Tops of the deck-support pillars |
-| `base_deck` | 4 | Faces of the circuit-board mounting pads |
-| `dish_lower` | 6 | Outside faces of the two rings, three per ring |
-| `dish_upper` | 11 | Four top-diffuser holes, three outer radial holes, four underside curtain-clamp holes |
-| `sphere_front` | 4 | Split-face bosses |
-| `sphere_rear` | 2 | Inner walls of the two handle sockets; insert before fitting the legs |
-| `bay_floor` + `guide_boss` | 1 | Top face, under the nozzle-guide foot, through the floor into the glued-on boss (below) |
-| `socket_housing` | 1 | Open back, beside the switch cavity |
-
 ### Test prints (before any big part)
 
-1. **Size the ring.** Print `ring_sizer.stl` (ten labelled test bands, 18.5–23 mm, ~12 g, no supports).
+1. **6-32 insert hole.** Print `cad/output/thumb_test.stl` (~8 g): a block with holes of 4.6, 4.8 and 5.0 mm and a
+   2 mm plate like the one each thumbscrew clamps. Melt an initeq insert into each hole, top flush. Pick the hole where
+   it goes in straight, sits flush and doesn't spin when a thumbscrew is tightened through the plate. 4.8 mm is
+   designed in; if another size wins, set `THUMB_INSERT_HOLE` in `cad/params.py` and re-run `python3 build.py`.
+2. **Size the ring.** Print `ring_sizer.stl` (ten labelled test bands, 18.5–23 mm, ~12 g, no supports).
    - Pick the band that slides over the knuckle of your left middle finger with slight resistance.
    - Set `RING_ID` in `cad/params.py` to that size **plus 0.5 mm** (the ring's band is much wider than the test
      bands, so it fits tighter) and re-run `python3 build.py`.
    - Print `key_ring`. It should slide onto your finger past the knuckle; its raised emblem drops into the rotor's
      emblem-shaped pocket (bars level, either way up) and turns the rotor, with a little play. If the finger hole is
      wrong, change `RING_ID` again and reprint (about 9 g).
-2. **The lock:** `socket_housing`, `rotor`, `socket_base`, `plunger`. The rotor turns 45 degrees with slight drag
+3. **The lock:** `socket_housing`, `rotor`, `socket_base`, `plunger`. The rotor turns 45 degrees with slight drag
    and the plunger snaps it back. If it binds, raise `FIT` in `cad/params.py` by 0.05 and reprint the rotor.
-3. **The glass:** `glass_well` with your real shot glass. The glass slides the length of the slot, clicks over the
+4. **The glass:** `glass_well` with your real shot glass. The glass slides the length of the slot, clicks over the
    ridge at the far end, and comes back out. If it is wider than 52 mm at the top it won't fit; pick another glass.
-4. **The other sliding fits**, each as soon as both parts exist:
-   - `base_tray` up into `base` (sand the tray's edge, not the drum, if it binds);
-   - `dish_lower`'s spigot into the top of `base` (the tightest joint);
-   - `socket_housing` into the floor hole of `dish_upper`;
+5. **Reach check (do this before the sphere and bells).** The lock face is about 16-17 cm in from the hand bell's
+   mouth. Cut a 14 cm round hole in a box, tape paper strips over it, and set a target 16-17 cm in. Punch through to
+   it, twist, then bring a full shot glass back out. If it is awkward, say so before printing: shortening the hand
+   bell is the fallback.
+6. **The other sliding fits**, each as soon as both parts exist:
+   - the foot's spigot into the top of `base` (the tightest joint);
+   - `base_tray` up into `base` and twisted to its click (sand the tray's collar, not the drum, if it binds);
+   - `top_cap`'s plug into a sphere half's top collar;
+   - each bell over its collar on the sphere;
+   - `halo_ring` into the cap rim, twisted to its click;
    - `glass_well` into `bay_floor`'s slot;
-   - a handle leg into a boss of `sphere_rear`, before you print the arcs.
-5. **Hand check (optional).** The CAD clears a fist 106 x 76 mm (yours is under 4 x 3 in). To be sure before the
-   big prints, cut a 120 x 96 mm hole in a box and punch through it with a shot glass held under your fist. Both
-   must pass without scraping.
+   - a handle end piece's axle in a pivot.
 
 ### Part list
 
-| Part | Size (mm) | Orientation on the bed | Supports | Colour | ~g |
-|---|---|---|---|---|---|
-| `base` (drum) | 190 x 190 x 147 | top band down | no | green | 280 |
-| `base_tray` (cartridge floor, with the switch pocket and LED slot) | 179 x 179 x 44 | flat | no | green | 91 |
-| `base_deck` | 179 x 179 x 47 | flat | under the four electronics mounting pads; remove fully before fitting board | any | 111 |
-| `thumb_knob` (print 3) | 10 x 10 x 6 | flat | no | any | 1 |
-| `dish_lower` | 190 x 190 x 91 | mouth down | the 2.8 mm ring under the rim, 8 mm up: supports touching the build plate only | green | 184 |
-| `dish_upper` | 180 x 180 x 86 | floor down, mouth up | the 2.7 mm ring under the floor, 9 mm up: supports touching the build plate only | green | 220 |
-| `top_diffuser` | 100 x 100 x 3 | flat (countersunk) face down | no | white | 19 |
-| `sphere_front` (display side) | 180 x 117 x 80 | split face down, dome up | inside only, around the window (tree) | green | 72 |
-| `sphere_rear` (your side) | 221 x 117 x 76 | split face down, dome up | inside only, around the hand opening (tree) | green | 69 |
-| `diffuser` | 118 x 98 x 1 | flat, 100% infill | no | white | 13 |
-| `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white or any | 23 |
-| `curtain_clamp` | 115 x 38 x 3 | flat | no | green | 3 |
-| `bay_floor` | 131 x 131 x 4 | floor down, drip lip up, as exported | no | any | 21 |
-| `guide_boss` (glued under `bay_floor`) | 8 x 8 x 6 | bore up, as exported | no | any | <1 |
-| `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any | 38 |
-| `nozzle_guide` | 47 x 17 x 34 | foot down, as exported | a small tree support under the end of the bend | any | 3 |
-| `handle_leg_left` | 14 x 126 x 10 | flat | no | green | 17 |
-| `handle_leg_right` | 14 x 126 x 10 | flat | no | green | 17 |
-| `handle_arc_left` | 120 x 132 x 10 | flat | no | green | 25 |
-| `handle_arc_right` | 120 x 132 x 10 | flat | no | green | 25 |
-| `socket_housing` | 76 x 76 x 10 | ring face down | no | green | 32 |
-| `rotor` | 44 x 37 x 8 | bottom face down (skirt on the bed, key pocket up) | no | green | 7 |
-| `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any | 18 |
-| `switch_bracket` | 23 x 10 x 7 | flat, pegs up | no | any | 1 |
-| `plunger` | 5 x 5 x 4 | nose up | no | any | 1 |
-| `key_ring` | 27 x 27 x 34 | emblem down, as exported | under the head (around the emblem, touching the plate) and inside the finger hole | white for 3 layers, then green (below) | 8 |
-| `key_cap` (only for a bought ring) | 24 x 24 x 6 | glue face down, emblem up | no | green | 2 |
-| `ring_sizer` (test print, ten bands) | 196 x 61 x 8 | flat | no | any | 12 |
-| **Total** | | | | | **~1240 g** |
+Sizes are as printed (mm). "Any" means any colour: the part is hidden.
 
-**Supports.** None, except:
+| Part | Size | Orientation on the bed | Supports | Colour |
+|---|---|---|---|---|
+| `sphere_front` (display side, lens opening) | 224 x 177 x 104 | split face down, dome up | tree supports, inside only: the dome round the opening and the pads under the collar (check the slicer preview) | green |
+| `sphere_rear` (your side, hand opening) | 224 x 177 x 95 | split face down, dome up | as `sphere_front` | green |
+| `foot` | 190 x 190 x 96 | spigot down | no (45 degree flare) | green |
+| `base` (drum) | 190 x 190 x 80 | upright | no | green |
+| `top_cap` | 190 x 190 x 145 | plug down | no (45 degree flare and corbels) | green |
+| `bell_front` | 168 x 168 x 73 | mouth down | no (the lens ledge is a 2 mm overhang) | green |
+| `bell_rear` | 180 x 180 x 73 | mouth down | no | green |
+| `emblem_lid` | 182 x 182 x 2 | flat | no | green |
+| `emblem_centre` | 51 x 51 x 2 | flat | no | green |
+| `curtain_clamp` (full ring) | 173 x 173 x 4 | flat, cover face down | no | green |
+| `handle_end_left`, `handle_end_right` | 128 x 227 x 13 | flat, the lap's cut side up, **100 % infill** | no | green |
+| `handle_arc_1`, `handle_arc_2` | 205 x 95 x 13 | flat, the lap's cut side up, **100 % infill** | no | green |
+| `handle_pivot_left`, `handle_pivot_right` | 44 x 44 x 18 | outer face down, **100 % infill** | no | green |
+| `screw_cap` (**print 25**) | 6.5 x 6.5 x 1 | flat | no | green |
+| `diffuser` (front lens, full 118 mm disc) | 118 x 118 x 1 | flat, **100 % infill** | no | white |
+| `led_panel` | 172 x 122 x 7 | LED face down | no | white |
+| `halo_ring` | 190 x 190 x 14 | top (the 1.2 mm skin) down | no | white |
+| `lock_wall` | 120 x 102 x 36 | front face down, posts up | no | white |
+| `wall_extension` | 119 x 6 x 39 | standing on its legs | no (the channel between the legs is a short bridge) | white |
+| `bay_floor` | 131 x 131 x 4 | floor down, drip lip up, as exported | no | any |
+| `guide_boss` (glued under `bay_floor`) | 8 x 8 x 6 | bore up, as exported | no | any |
+| `glass_well` | 64 x 93 x 52 | floor down, flange up | no | any |
+| `nozzle_guide` | 47 x 17 x 34 | foot down, as exported | a small tree support under the end of the bend | any |
+| `cap_floor` | 185 x 185 x 25 | plate down | no (the switch box's roof is a short bridge) | any |
+| `base_tray` (the cartridge) | 179 x 179 x 66 | floor down | no | any |
+| `bag_cover` | 91 x 178 x 5 | top down, as exported | no | any |
+| `socket_housing` | 76 x 76 x 10 | ring face down | no | green |
+| `rotor` | 44 x 37 x 8 | bottom face down (skirt on the bed, key pocket up) | no | green |
+| `socket_base` | 95 x 79 x 7 | bottom face down, sensor post up | no | any |
+| `switch_bracket` | 23 x 10 x 6 | flat, pegs up | no | any |
+| `plunger` | 5 x 5 x 4 | nose up | no | any |
+| `key_ring` | 27 x 27 x 34 | emblem down, as exported | under the head (around the emblem, touching the plate) and inside the finger hole | white for 3 layers, then green (below) |
+| `key_cap` (only for a bought ring) | 24 x 24 x 6 | glue face down, emblem up | no | green |
 
-- **Inside the two sphere halves.** Print them split-face down; the last 15 mm of dome around the window and the
-  hand opening overhang more than 45 degrees, so enable tree supports on the inside only.
-- **Under the two dishes' bearing rings.** They start in mid-air 8-9 mm up; "touching build plate only" support is
-  a short ring that pulls off clean.
-- **Under the nozzle guide's bend.** It prints foot down, and the last 45 degrees of its bend hang past horizontal,
-  so give it a small tree support there.
-- **Under the key ring's head and inside its finger hole.**
+**Tool prints** (not part of the lantern, any colour, no supports):
 
-**Colours.** Print both diffusers (`diffuser`, `top_diffuser`) in white or natural PETG at 100 % infill; green works
-but is dimmer. A white `lock_wall` reflects more light out of the hand opening.
+| Tool | ~g | What it is for |
+|---|---:|---|
+| `thumb_test` | 8 | picks the 6-32 insert hole (print it first) |
+| `ring_sizer` | 12 | picks `RING_ID` for `key_ring` |
+| `emblem_jig` | 14 | centres `emblem_centre` in the lid while the glue sets (step 11) |
+| `curtain_stencil` | 14 | cutting stencil for the hand-side cover (section 8); the paper template does the same job |
 
-**Weights.** The grams column assumes the settings above: the parts are mostly wall, so count about 1.1 g per cm³
-(the diffusers are solid).
+The printed parts the rev 9 build had that rev C retired: `base_deck`, `thumb_knob`, `top_diffuser`, the two dishes,
+the handle legs and the old `curtain_clamp` strip. **Reprint `diffuser`:** the rev 9 one had flats; rev C needs the
+full round 118 mm disc.
 
 ### The ring's white outline
 
@@ -340,13 +370,51 @@ The magnet ends up behind green plastic. A plain green ring (no swap) works the 
 
 ![key_ring with a white emblem outline](images/ring-white-outline.png)
 
-![all printed parts](images/cad-parts-sheet.png)
-
-![assembly](images/cad-assembly-iso.png) ![cutaway](images/cad-cutaway.png)
+![all printed parts in place](images/cad-parts-sheet.png)
 
 ---
 
-## 4. Electronics (build it on the bench first)
+## 4. Heat-set inserts
+
+Install every brass insert before assembly, with the soldering iron at the supplier's temperature. Fit each one
+flush with its entry face and square to the hole, let it cool, and check that a screw turns freely before mounting
+anything. Try one in a scrap print first.
+
+- **M3 (17):** ruthex RX-M3x5.7 (5.7 mm long, 4.6 mm across, made for a 4.0 mm hole). Every M3 hole is
+  **4.0 mm across x 6.5 mm deep**. Any plain M3 x 5.7 x 4.6 mm brass insert fits; a 5 mm-wide "M3 x 4 x 5" one does not.
+- **6-32 (13):** initeq #6-32 long (6.35 mm long, tapered). Every 6-32 hole is **4.8 mm across x 7.0 mm deep**, or the
+  size `thumb_test` picked (section 3).
+- The 3.4 mm screw clearance holes, the countersinks, the hex nut pockets and the four small pilots in the hand bell's
+  mouth lip (for the curtain clamp's screws) are separate features: no inserts there.
+
+| Printed part | M3 | 6-32 | Where, and which way in |
+|---|---:|---:|---|
+| `sphere_front` | 4 | | the 4 bosses on the inside, at the split face (the sphere's flange screws) |
+| `sphere_rear` | | 6 | 3 round the top collar and 3 round the bottom collar, all on your side: push each in from inside the collar's bore, pointing outward |
+| `bell_front` | | 2 | the throat end (the end that meets the sphere), up into the thick throat wall at the top, pointing toward the mouth |
+| `bell_rear` | | 2 | as `bell_front` |
+| `top_cap` | | 3 | the tops of the 3 bosses inside the cap, just under the cap floor's ledge, from above |
+| `foot` | 3 | | the spigot's 3 bosses, from outside (the drum's screws) |
+| `handle_pivot_left`, `_right` | 2 each | | the face that goes against the sphere (it is curved: start square and press slowly) |
+| `cap_floor` | 4 | | the tops of the 4 board standoffs |
+| `bay_floor` + `guide_boss` | 1 | | top face, under the nozzle-guide foot, through the floor into the glued-on boss (below) |
+| `socket_housing` | 1 | | open back, beside the switch cavity |
+| **Total** | **17** | **13** | |
+
+**The bay floor's insert needs its boss glued on first.** The 2 mm floor is too thin to hold an insert, so its bore
+carries on into `guide_boss`, a small separate puck (printed apart so the floor prints flat without supports):
+
+1. Put a thin ring of super glue round the boss's open (bore) face and press it onto the underside of the floor
+   (the side without the lip), over the insert hole near the tube hole.
+2. Line the two bores up with a 4 mm drill bit pushed through both, and hold it until the glue sets. Pull the bit
+   out.
+3. Stand the floor on the boss on the bench (prop the far edge level on a book) and set the insert from the top,
+   through the floor and into the boss. Pressing pushes the two parts together, and the insert locks them. In the
+   lantern the nozzle guide's screw pulls the boss up against the floor too.
+
+---
+
+## 5. Electronics (build it on the bench first)
 
 ![wiring diagram](images/wiring.png)
 
@@ -358,11 +426,19 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
 - Check the actual hole-array position and C2 case size before you start.
 - Read [USB programming and calibration power](#usb-programming-and-calibration-power) before you plug in USB.
 
+**Where it all lives (rev C).** The board, the battery, the buck, S1 and the charge socket sit on `cap_floor` in the
+top cap ([picture](#the-cap-floor)). Only three leads leave the cap floor, through its wire hole: the **lock cable**
+(through its 4-pin plug just above the hole), the **LED lead** and the **pump lead** (both soldered straight through,
+with about 15 cm of slack coiled on the cap floor so the plate can be lifted out and set on the cap's rim still
+connected). They run down the top cap's neck, behind the wall extension and the lock wall. The pump lead carries on
+through the bay floor and the foot to the 2-pin plug on the cartridge, so the lantern can be lifted off.
+
 1. **Board, XIAO and U1.**
    - Orient the perfboard 70 mm across and 50 mm tall.
    - Drill four 3.2 mm holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side
      top-left corner (the [board layout](review/protoboard/README.md) is the reference). Check them against the
-     printed panel first, and keep each 9 x 9 mm mounting area clear.
+     cap floor's four standoffs first, and keep each 9 x 9 mm mounting area clear. Rear wires must fit in the 10 mm
+     under the board, outside those areas.
    - Fit the XIAO and a **DIP-14 socket** for U1; leave U1 out for the first USB flashing.
    - Fit a two-pin 2.54 mm header for JP1 and label it **REMOVE FOR USB**.
 2. **Battery lead, charge socket and S1.** The supplied TalentCell splitter is "1 female to 2 male", with all three
@@ -378,7 +454,7 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    - Plug the splitter into the pack, turn the pack's switch ON, and confirm 9–12.6 V and the polarity on the cut
      lead and at the female end. Unplug again before soldering.
    - Positive goes to S1. S1's other terminal is **VLOAD**, the switched battery rail. Negative goes to the common
-     ground.
+     ground. S1 sits in its own box on the cap floor, so leave its leads long enough to reach the board.
    - Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It smooths short dips; it cannot carry an
      overloaded or stalled motor.
 3. **Battery sense.** R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground. At a full 12.6 V pack,
@@ -406,8 +482,11 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    - Pump negative to Q1's drain, strip negative to Q2's drain; both loads' positives to VLOAD.
    - Run the pump and strip returns separately to the common power ground; don't route their current through the
      Hall/XIAO ground wiring.
-7. **Pump flyback diode.** D2 **NTE586, 3 A/40 V**, straight across the pump terminals: stripe (cathode) to VLOAD,
-   anode to Q1's drain. Do not use the 1 A NTE585 here.
+7. **Pump lead and flyback diode.** The pump lead is VLOAD and Q1's drain, soldered to the board and run down (with
+   slack at the cap floor) to the 2-pin plug on the cartridge. Solder D2 **NTE586, 3 A/40 V** straight across the pump's
+   own terminals, on the cartridge side: stripe (cathode) to the + terminal (VLOAD), anode to the − terminal (Q1's
+   drain). Do not use the 1 A NTE585 here. Twist the pump wires together and keep them away from the Hall and switch
+   wires.
 8. **Lock wires.**
    - **Hall sensor (A3144)**, printed face toward you, leads down: pin 1 to +5V_REG, pin 2 to ground, pin 3 straight
      to XIAO D1. R5 **4.7 kΩ from D1 to XIAO 3V3**, never to 5 V. Its open-collector output needs no series diode.
@@ -418,12 +497,14 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
    - How it works: closed contacts pull D2 low; open contacts leave D2 at 3.3 V while the switch side rises to 5 V.
      R7 puts about 1.5 mA through the closed contacts (the D2F-01L needs at least 1 mA) and R6 adds about 0.6 mA.
      The firmware's internal pull-ups can stay on alongside R5 and R6.
-   - **Lock cable:** 4 wires, **+5V_REG, HALL, SW, GND**, about 45 cm, with the JST PH plug about 10 cm from the
-     board. R5–R7 and D3 stay on the board.
+   - **Lock cable:** 4 wires, **+5V_REG, HALL, SW, GND**, with the JST PH plug just above the cap floor's wire hole.
+     The lantern side runs from the lock up behind the wall to the top cap's neck: measure it on the built lantern and
+     leave enough slack to lift the cap floor out. R5–R7 and D3 stay on the board.
    - **Do not solder the Hall sensor to the cable yet:** its leads must first pass through the sensor post's slot
-     (section 6). Clip it on temporarily for the bench checks. Solder the switch wires before mounting the switch.
-   - **LED lead:** VLOAD and Q2's drain, through the JST SM pair; leave the far end bare until section 8.
-   - Thread the lantern-side wires through the bay-floor hole before fitting the plug housings.
+     (step 1). Clip it on temporarily for the bench checks. Solder the switch wires before mounting the switch.
+   - **LED lead:** VLOAD (+) and Q2's drain (−), soldered to the board, with slack at the cap floor. Every LED piece
+     joins it (section 7, "The light harness").
+   - Thread each lead through the cap floor's wire hole before soldering it or fitting the lock cable's plug housing.
 9. **Commission it before assembly.** Flash it using the power procedure below.
    - **Without loads** (pump and strip disconnected), in USB calibration mode:
      - +5V_REG at U1 and at the Hall sensor reads 5.0 V;
@@ -436,15 +517,19 @@ Build the circuit on the 5 x 7 cm perfboard and test it before anything goes int
      - check full brightness, current and heating (`idle 255` for 100 % PWM, then `idle 0` and `save`);
      - measure current **in series**, with a suitably rated, fused meter; never put a meter in current mode
        across the battery;
-     - run short water pours with the LEDs on and measure the combined running current (the estimate is ~1.3 A,
-       not a measured figure; a normal meter may miss start-up peaks);
+     - run short water pours with the LEDs on and measure the combined running current. With about 158 cm of strip
+       the estimate is about 1.25 A of LEDs at full and about 2.0 A peak with the pump, inside the battery's 3 A, but
+       these are estimates (roughly 0.8 A per metre of strip), not measurements, and a normal meter may miss
+       start-up peaks;
      - watch for resets, protection trips and hot wiring or MOSFETs. Stop and investigate overheating, a stall
        or a trip; never stall the pump on purpose.
    - Every power-up must leave the pump off. The brief LED blink at boot is intentional.
+   - **Runtime:** the lights are only on during a pour (the idle glow is 0 by default), so a full charge covers
+     hundreds of pours. To lower the peak current, cap the brightness with `leds` (for example `leds 200`).
 
 ### USB programming and calibration power
 
-Normal operation is battery-only. Two rules always apply:
+Normal operation is battery-only. Everything here happens on the cap floor with the lid off. Two rules always apply:
 
 - **Never attach USB with JP1 fitted.** JP1 isolates only the XIAO's supply.
 - **Never move JP1 or insert or remove U1 with power connected.**
@@ -457,10 +542,9 @@ There are three power modes:
 | **USB calibration and testing** | `status`, `cal`, `vcal`, priming, cleaning | With all power off, remove JP1. Turn the pack and S1 ON, check +5V_REG, then connect USB: USB powers only the XIAO and the buck powers U1 and the Hall sensor. To attach the pump and LED leads, power down (USB out first, then S1 OFF), connect them, and repeat. Finish with `stop`, unplug USB, then S1 OFF. Refit JP1 only after USB is unplugged and the power is off. |
 | **Battery operation** | Normal use | USB unplugged, U1 in, JP1 fitted. Pack switch ON, then S1 ON. |
 
-- **S1 is the on/off switch.** The pack's own switch stays ON: it has no hole in the floor and is reached only with
-  the lantern lifted off (at the battery's end, under the deck's edge).
-- **Storage:** S1 OFF. For more than a few weeks, also turn the pack switch OFF the next time the lantern is lifted
-  off.
+- **S1 is the on/off switch.** Its lever sticks up through the roof of its box on the cap floor. The pack's own
+  switch stays ON; it is on the battery's end, also reached with the lid off.
+- **Storage:** S1 OFF. For more than a few weeks, also turn the pack switch OFF.
 - If the pack trips or +5V_REG fails during USB testing, unplug USB at once and find out why before retrying.
 
 An optional PRIME button goes between D6 and ground. Holding it runs the pump only when no ring is in.
@@ -468,12 +552,12 @@ It's not in the parts list; the serial `cal` command or a test pour does the sam
 
 ---
 
-## 5. Firmware
+## 6. Firmware
 
 Source: `firmware/green_lantern/green_lantern.ino`. Board: Seeed XIAO RP2040 on the "Raspberry Pi
-Pico/RP2040" Arduino core by Earle Philhower. No extra libraries.
+Pico/RP2040" Arduino core by Earle Philhower. No extra libraries. Rev C did not change the firmware.
 
-**First follow section 4's USB power procedure.**
+**First follow section 5's USB power procedure.**
 
 **Arduino IDE.** Boards Manager: install "Raspberry Pi Pico/RP2040" (Earle Philhower). Select "Seeed XIAO
 RP2040", open the sketch, upload. If no port appears, hold the XIAO's BOOT button while plugging it in.
@@ -525,18 +609,45 @@ pump run.
 
 ---
 
-## 6. The lock
+## 7. Assembly
+
+![exploded view](images/cad-exploded.png)
+
+The steps below are the build order the 3D viewer and the step-by-step video use. Directions: "your side" is the
+hand opening, "display side" the lens; "left" and "right" are as you see them standing at the hand opening, looking
+in, unless a step says otherwise.
+
+**Where every fastener is.** Nothing shows from outside:
+
+| Joint | Fasteners | Turned from |
+|---|---|---|
+| Each bell to the sphere | 2 thumbscrews, parallel to the bell's axis, 45 degrees either side of the top of the opening | inside the sphere; the heads hide behind the top edge of the opening |
+| Top cap to sphere | 3 thumbscrews | inside the top cap's neck (heads in the plug), with the lid and cap floor out |
+| Cap floor | 3 thumbscrews, down into the cap's bosses | above, with the lid off |
+| Foot to sphere | 3 thumbscrews | inside the foot's neck, reaching up through the open drum |
+| Drum to foot | 3 M3x8 through the drum's top band into the foot's spigot | outside, under green caps |
+| Handle pivots | 2 M3x12 each, into the pivot | inside the sphere, under green caps |
+| Handle laps | 3 M3x8 + nut per lap, 3 laps, plus epoxy | heads on the display-side face, nuts on your side, all under green caps |
+| Curtain clamp ring | 4 countersunk M3x8 into pilots in the hand bell's lip | inside the hand bell |
+| Sphere halves | 4 M3x10 through the rear half's internal flange into the front half's inserts | inside the sphere |
+
+### Step 0. Print and fit the inserts
+
+Print everything (section 3, `thumb_test` first) and melt in the 17 M3 and 13 6-32 inserts (section 4). Build and
+test the board on the bench (sections 5 and 6) before step 10.
+
+### Step 1. The lock
 
 ![socket mechanism](images/socket-mechanism.png)
 
 Parts: `socket_housing`, `rotor`, `socket_base`, `switch_bracket`, `plunger`, `key_ring`. Plus 3 x M3x8 flat-head and 3
-nuts for the base plate, 1 x M3x8 flat-head for the switch bracket, 2 x M3x10 and 2 nuts to mount it on the
-lock wall, the spring, the microswitch, the A3144 and one magnet.
+nuts for the base plate, 1 x M3x8 flat-head for the switch bracket, the spring, the microswitch, the A3144 and one
+magnet. The lock is unchanged from rev 9.
 
-The lock is screwed to the face of the lock wall with its ring pocket facing you, so you seat the ring by
-punching in. The rotor is a flat 36 mm disc. Under the housing's front lip its edge carries three features: a
-stop lug in a channel whose ends are the 0 and 45 degree stops, a cam that presses the switch lever 3 mm
-from about 30 degrees to the stop, and a ramp that pushes the spring plunger out so the rotor snaps back when you let go.
+The lock is screwed to the face of the lock wall with its ring pocket facing you, so you seat the ring by punching
+in. The rotor is a flat 36 mm disc. Under the housing's front lip its edge carries three features: a stop lug in a
+channel whose ends are the 0 and 45 degree stops, a cam that presses the switch lever 3 mm from about 30 degrees to
+the stop, and a ramp that pushes the spring plunger out so the rotor snaps back when you let go.
 
 1. **Nuts.** Drop M3 nuts into the three hex pockets on the underside of `socket_housing`. A dab of super glue
    holds each.
@@ -545,7 +656,7 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
      section 3) is the key. The rotor's pocket is the emblem's negative, so the bars turn the rotor when you twist.
      There is no tab.
    - **Find the magnet's switching face.** The A3144 reacts to one magnet pole only. With the sensor wired to the
-     board (section 4) and `status` running, hold each face of the magnet to the sensor's printed face. The face
+     board (section 5) and `status` running, hold each face of the magnet to the sensor's printed face. The face
      that gives `ring=present` goes **down**, toward the ring's face. Mark it.
    - **Glue the magnet in.** The pocket opens inside the band, so the magnet never shows. Put a drop of super glue
      in the pocket from inside the band, push the magnet to the bottom with a hex key, and let it set before you
@@ -557,217 +668,337 @@ from about 30 degrees to the stop, and a ramp that pushes the spring plunger out
    - **Bought ring instead:** print `key_cap` (a 24 mm disc carrying the same raised emblem). Glue the magnet into
      the pocket in its flat top, switching face toward the emblem, then glue that flat top onto a ring face at
      least 24 mm across, with the bars across the finger.
-3. **Hall sensor.** `socket_base` has a short round post in the middle with a small pocket on its tip. Bend
-   the A3144's three leads 90 degrees right at the body, toward its unprinted back, so that with the printed
-   face up they point straight down; feed them down the slot at the pocket's edge and out through the bottom
-   of the plate, and lay the sensor in the pocket **printed face up** (flush with the top). A dot of glue holds
-   it. Cut the three leads to different lengths under the plate, solder the cable to them and sleeve each joint:
-   staggered, the sleeves fit side by side in the wall's window. The rotor turns
-   around the post; the magnet ends up about 3 mm above the sensor. Fit C4 across pins 1 and 2 below the pocket,
-   insulate it and secure it so it cannot obstruct the rotor or the cable slot.
-4. **Rotor and plunger.** Turn `socket_housing` upside down. Smear a little silicone grease or petroleum jelly
-   on the rotor's rim (the ramp and the cam), the plunger's nose and the bore: dry PETG on PETG has about the
-   same friction (0.3-0.4) as the ramp's slope (0.26), so an unlubricated rotor can sit at 45 degrees instead
-   of returning; greased (about 0.1) it returns. Lay the spring in the open radial trough at the rim, closed end
-   outward, then the `plunger` between the spring and the bore, flat end on the spring, rounded nose toward
-   the bore. Hold it with a finger and lower the `rotor` into the bore, stop lug down into
-   its channel (it fits one way only). Twist to 45 degrees and let go: it should snap back every time. If it
-   only creeps back, add grease. It doesn't matter for the show either way: you turn the ring back yourself on
-   the last word, and the firmware only watches the switch. Too stiff to twist with a finger: use a softer
-   spring (0.4 mm wire).
-5. **Switch.** With its two wires already soldered on (section 4 step 8), press the microswitch onto the two
-   pegs of `switch_bracket`, lever toward the rotor, and lay the bracket in its recess in `socket_base`, its
-   round hole over the slot at the lever end. Lead the two wires out through the notch in the plate's rim at
-   the bottom (the plate has a matching notch; in the lantern it faces down).
-6. **Close and tune.** Screw `socket_base` onto the housing: 3 x M3x8 flat-head up from below into the nuts, and
-   a 4th flat-head up through the slot and the bracket into the housing, left loose. All four heads sit flush,
-   so the plate lies flat on the lock wall later. Twist slowly: the lever should start to move at about 30
-   degrees and click at about 40, before the stop at 45. To tune, loosen the 4th screw and push it along its
-   slot (it carries the bracket, 1 mm either way), then tighten. The switch must never be what stops the rotor.
-7. **Cycle it 50 times** and watch `status`: `switch=pressed` only near the end of the twist, `ring=present`
-   for the whole twist.
-8. **Mount** it on the face of `lock_wall` (section 8): the two ears go down, one M3x10 through each ear and
-   the wall, nut on the back. The lock cable passes through the wall: the sensor's three joints through the
-   rectangular window behind the lock, the switch wires through the small window under it, where the plate's
-   rim notch lands. Leave the cable long enough to reach the base (about 45 cm).
+3. **Hall sensor.** `socket_base` has a short round post in the middle with a small pocket on its tip. Bend the
+   A3144's three leads 90 degrees right at the body, toward its unprinted back, so that with the printed face up they
+   point straight down; feed them down the slot at the pocket's edge and out through the bottom of the plate, and lay
+   the sensor in the pocket **printed face up** (flush with the top). A dot of glue holds it. Cut the three leads to
+   different lengths under the plate, solder the cable to them and sleeve each joint: staggered, the sleeves fit side
+   by side in the wall's window. The rotor turns around the post; the magnet ends up about 3 mm above the sensor. Fit
+   C4 across pins 1 and 2 below the pocket, insulate it and secure it so it cannot obstruct the rotor or the cable
+   slot.
+4. **Rotor and plunger.** Turn `socket_housing` upside down. Smear a little silicone grease or petroleum jelly on the
+   rotor's rim (the ramp and the cam), the plunger's nose and the bore: dry PETG on PETG has about the same friction
+   (0.3-0.4) as the ramp's slope (0.26), so an unlubricated rotor can sit at 45 degrees instead of returning; greased
+   (about 0.1) it returns. Lay the spring in the open radial trough at the rim, closed end outward, then the
+   `plunger` between the spring and the bore, flat end on the spring, rounded nose toward the bore. Hold it with a
+   finger and lower the `rotor` into the bore, stop lug down into its channel (it fits one way only). Twist to 45
+   degrees and let go: it should snap back every time. If it only creeps back, add grease. It doesn't matter for the
+   show either way: you turn the ring back yourself on the last word, and the firmware only watches the switch. Too
+   stiff to twist with a finger: use a softer spring (0.4 mm wire).
+5. **Switch.** With its two wires already soldered on (section 5, step 8), press the microswitch onto the two pegs
+   of `switch_bracket`, lever toward the rotor, and lay the bracket in its recess in `socket_base`, its round hole
+   over the slot at the lever end. Lead the two wires out through the notch in the plate's rim at the bottom (the
+   plate has a matching notch; in the lantern it faces down).
+6. **Close and tune.** Screw `socket_base` onto the housing: 3 x M3x8 flat-head up from below into the nuts, and a
+   4th flat-head up through the slot and the bracket into the housing's insert, left loose. All four heads sit flush,
+   so the plate lies flat on the lock wall later. Twist slowly: the lever should start to move at about 30 degrees
+   and click at about 40, before the stop at 45. To tune, loosen the 4th screw and push it along its slot (it carries
+   the bracket, 1 mm either way), then tighten. The switch must never be what stops the rotor.
+7. **Cycle it 50 times** and watch `status`: `switch=pressed` only near the end of the twist, `ring=present` for the
+   whole twist.
+
+### Step 2. Lock wall
+
+Parts: `lock_wall` (white), the lock, 2 x M3x10 and 2 nuts, two 5 cm pieces of LED strip.
+
+**Cutting the strip.** Cut the COB strip only on its marked cut lines (every 25 mm). You need 10 pieces in all:
+four of 10 cm (step 3), two of 5 cm (here), one of 37.5 cm (step 12), one of about 45 cm (step 13) and two of 12.5 cm
+(step 9). Every piece is wired in parallel: all + pads together, all − pads together. The 22 AWG wire is fine; mark
+the + wires with a dot of paint or a bit of red heat-shrink. Direction doesn't matter on a single-colour strip.
+Solder a pair of leads to each piece before you stick it down.
+
+1. **LED columns.** Stick one 5 cm piece in each of the two vertical channels on the wall's face, beside the lock.
+   Pass their wires to the back through the small hole at the bottom of each channel.
+2. **Mount the lock** on the face of `lock_wall`: the two ears go down, one M3x10 through each ear and the wall, nut
+   on the back. The lock cable passes through the wall: the sensor's three joints through the rectangular window
+   behind the lock, the switch wires through the small window under it, where the plate's rim notch lands.
+3. The 4 LED channels on the back of the wall stay empty in rev C: the rows moved to the LED panel.
+
+### Step 3. LED panel
+
+Parts: `led_panel` (white), four 10 cm pieces of LED strip.
+
+1. Stick one 10 cm piece along each of the 4 shallow channels on the panel's front (the flat face; the collars are on
+   the back), LEDs facing out. Pass each piece's wires through the hole at the end of its row to the back.
+2. Slip the panel's 4 collars over the 4 posts on the back of the lock wall, LED face away from the wall (toward the
+   lens), with a dot of super glue in each collar.
+3. Join the 4 rows' leads and the 2 columns' leads behind the wall (see "The light harness" below).
+
+### Step 4. Bay floor, glass well, nozzle
+
+Parts: `bay_floor` with `guide_boss` glued under it (section 4), `glass_well`, `nozzle_guide`, 1 x M3x8, the tube, the
+lock wall assembly.
+
+1. **Glass well.** Drop `glass_well` into the floor's long slot, its ridge end toward the display side; it hangs from
+   its flange. The long slot points at your side; the two short slots for the wall's tabs sit either side in the far
+   half. The tube hole and the 7 mm cable hole are beyond the wall line: tube on the right, cables on the left.
+2. **Nozzle.** Cut the tube end square with a sharp blade. Push it up through the hole in `nozzle_guide`'s foot and
+   along the channel, pressing it in through the open side where it resists (the slit is a little narrower than the
+   tube), so 5 mm sticks out past the end, pointing down. Keep the rest of the tube on the reel side: it is cut to
+   length in step 15.
+3. Feed the tube's long end down through the tube hole in `bay_floor`, and screw the guide's foot into the bay-floor
+   insert (1 x M3x8), open side toward your side, the curve reaching toward the middle. The guide bends the tube up,
+   over and **45 degrees down**: the tube end sits about 7 mm above the glass rim, over the back third of the glass,
+   so the stream lands about 19 mm from the glass centre and the last drop falls straight in.
+4. **Lock wall.** Stand the wall's two tabs in the floor's two short slots, lock facing your side. Its back closes the
+   nozzle guide's open side; check the tube sits in the channel and its end still points down into the glass slot.
+
+### Step 5. Drum and foot
+
+Parts: `base` (drum), `foot`, 3 x M3x8, 3 green caps.
+
+Push the foot's spigot down into the top of the drum. Drive 3 x M3x8 from outside through the drum's thickened top
+band into the spigot's inserts, then press a green `screw_cap` into each counterbore over the heads (a dot of glue if
+one is loose). The drum and the foot stay together from now on.
+
+### Step 6. Sphere
+
+Parts: `sphere_front` and `sphere_rear`, 4 x M3x10, 3 thumbscrews, the bay floor assembly, the drum and foot.
+
+1. **Leads first.** Make the lantern side of the **pump lead** (2 wires, long enough to reach from the cap floor's
+   wire hole down to the cartridge, with slack). Feed it down through the bay floor's cable hole so its plug end will
+   hang out of the bottom of the foot. Keep the lock cable and the LED harness's ends free behind the wall: they go up.
+2. **Bay floor on the foot.** Set the bay floor assembly on top of the foot's riser. The boss under the floor drops
+   into a notch in the riser, so it sits one way only: lock facing your side. The tube and the pump lead go down the
+   middle of the foot and out of the open drum.
+3. **Close the sphere.** Bring `sphere_front` (lens opening) in from the display side and `sphere_rear` (hand
+   opening) in from your side, so their bottom collars close round the riser. The internal flange is inside the rear
+   half, flush with the split. Drive 4 x M3x10 through it into the front half's inserts from inside, reaching in
+   through the hand opening and the open top with a long or ball-end 2.5 mm key.
+4. **Foot to sphere.** Lay the lantern on its side on a towel, or lift it, and reach up through the open drum into the
+   foot's neck. Drive 3 thumbscrews from inside the neck out into the inserts in the sphere's bottom collar. The holes
+   line up only one way (they are all on your side). Finger-tight is enough.
+
+### Step 7. Pivots
+
+Parts: `handle_pivot_left`, `handle_pivot_right`, 4 x M3x12, 4 green caps.
+
+The `_right` parts go on the audience's right as seen from the display side, which is your **left** when you stand at
+the hand opening. On each side, hold the pivot against its seat on the sphere's side, over the seam, and drive 2 x
+M3x12 from inside the sphere, through the pads and the shell, into the pivot's inserts. Reach in through the hand
+opening and the open top. Press a green cap over each head (seen at an angle through the hand opening otherwise).
+
+### Step 8. Wall extension
+
+Stand `wall_extension` (white) on the lock wall's top edge, its legs over the wall. Nothing holds it yet: the top cap's
+plug catches its two tabs in step 9. Lead the lock cable and the LED harness up behind it (on the display side of the
+wall) so they come out at the top of the sphere.
+
+### Step 9. Top cap
+
+Parts: `top_cap`, 3 thumbscrews, two 12.5 cm pieces of LED strip.
+
+1. **Cap LEDs (before the cap goes on).** Stick the two 12.5 cm pieces on the inside wall of the cap, just under the
+   rim, one on the display side and one on your side, LEDs facing in. They light the emblem and the halo from below.
+   Run their leads down the cap wall to the neck; they join the LED harness on the lantern side of its plug.
+2. Thread the lock cable, the LED harness and the pump lead up through the top cap's neck as you lower it.
+3. Push the plug into the sphere's top collar, with the plug's notches over the wall extension's two tabs.
+4. Reach down through the open cap into the neck and drive 3 thumbscrews from inside the plug out into the inserts
+   in the sphere's top collar. The holes line up only one way.
+
+### Step 10. Cap floor
+
+Parts: `cap_floor`, the battery, the board, the buck, S1, the charge socket, 1 VELCRO strap, 4 x M3x6, zip ties,
+3 thumbscrews.
+
+#### The cap floor
+
+![the cap floor](images/cad-cap.png)
+
+Do this on the bench, then drop the finished plate in. S1's box and the charge socket sit on your side of the plate,
+the buck on the display side.
+
+1. **Strap first.** Thread a strap through both battery slots before fitting the pack. Its lower run sits in the
+   recess under the plate and must be no thicker than 2 mm.
+2. **Battery.** Push the splitter's male plug into the battery's port. Lay the TalentCell on its 1 mm bed between the
+   rails:
+   - **LED face down**, the five fuel-gauge dots over the slot in the plate;
+   - **port end toward your side**, against the low end stop;
+   - the plug's cord folded back in a U-turn over the plug.
+
+   Turn the battery's own switch ON (it stays ON), then tighten the strap.
+3. **Board.** Screw it to the 4 standoffs, component face up, USB end toward the display side (4 x M3x6). Clipped
+   leads and rear wiring must stay within the 10 mm gap under it.
+4. **Buck.** The LM2596 sits on its four 2 mm printed corner supports, zip-tied through the slots beside it. Check
+   that no solder joint on its underside rests on a support.
+5. **S1.** It hangs inside its box, lever up through the hole in the roof, nut tight on top. Its leads leave through
+   the opening in the box's side wall.
+6. **Charge socket.** Tie the splitter's female end loosely in its spot on your side of the plate, so you can lift it
+   out on its cord to charge.
+7. **Drop it in.** Lower the plate into the cap with S1 and the charge socket toward your side. Bring the lock cable,
+   the LED lead and the pump lead up through the plate's wire hole (display side) and plug each into its partner
+   from the board. Rest the plate on its ledge and drive 3 thumbscrews down into the cap's bosses.
+8. **Check the charge dots.** Look up through the hand opening (before the hand bell is on): the battery's LEDs
+   show through the slot.
+
+### Step 11. Lid
+
+Parts: `halo_ring` (white), `emblem_lid`, `emblem_centre`, `emblem_jig`, two short pieces of 1.75 mm filament.
+
+1. Push a short piece of 1.75 mm filament into each of the two pin holes in the halo ring's flange top. The pins only
+   fit the lid's matching holes one way, which centres it and turns it the right way round.
+2. Glue `emblem_lid` onto the halo ring's top, over the pins.
+3. Drop `emblem_jig` into the lid's round cut-out (its flange rests on the lid), put a little glue in the middle of
+   `emblem_centre`'s underside, drop it into the jig's bore and press it down. Lift the jig straight off after half
+   a minute.
+4. **Fit it.** Turn the lid until its 3 lugs drop into the cap rim's grooves, push down and twist clockwise (seen
+   from above) about 20 degrees until it clicks. Locked, the emblem's bars run left to right as seen from the front.
+   To open: twist anticlockwise and lift.
+
+### Step 12. Front bell (lens)
+
+Parts: `bell_front`, `diffuser`, the 37.5 cm LED piece, 2 thumbscrews.
+
+1. Stick the 37.5 cm piece round the inside of the bell's collar band, behind the lens ledge, LEDs facing the axis.
+2. Press `diffuser` into its pocket in the bell, onto the ledge. A few dots of glue hold it.
+3. Lead the ring's wires in through the lens opening and round the top of the LED panel to the back of the wall, and
+   solder them into the LED harness. Leave about 20 cm of slack so the bell can slide off and rest beside the
+   lantern still connected.
+4. Slide the bell straight onto the front collar. The bosses on its throat fill the flat spots on the
+   shell, so it only sits one way.
+5. **Thumbscrews:** reach in through the hand opening (the hand bell isn't on yet), past the end of the lock wall and
+   back behind it, to the top of the lens opening. Drive 2 thumbscrews from inside the sphere, parallel to the bell's
+   axis, into the inserts in its throat.
+
+### Step 13. Rear bell (hand side)
+
+Parts: `bell_rear`, the ~45 cm LED piece, the cover, `curtain_clamp`, 4 x M3x8 flat-head,
+2 thumbscrews.
+
+1. Stick the ~45 cm piece all the way round the band inside the bell's throat, LEDs facing the axis.
+2. Cut the cover and clamp it into the bell's mouth with the ring and 4 countersunk M3x8 ([section 8](#8-the-hand-side-cover)).
+3. Lead the ring's wires in through the hand opening, along the inside top of the shell, to the back of the wall, and
+   solder them into the LED harness, with about 20 cm of slack. Keep the run tight against the shell (a few dots of
+   glue) so it doesn't show; tuck the slack behind the wall.
+4. Slide the bell straight onto the hand-opening collar.
+5. **Thumbscrews:** reach in through the cover's flaps and up to the top of the hand opening. Drive 2 thumbscrews from
+   inside the sphere, parallel to the bell's axis, into the inserts in its throat. The heads hide behind the top
+   edge of the opening.
+
+### Step 14. Handle
+
+Parts: `handle_end_left`, `handle_end_right`, `handle_arc_1`, `handle_arc_2`, 9 x M3x8, 9 nuts, epoxy, 18 green caps.
+
+1. Push each end piece's printed axle into its pivot (`_right` into `handle_pivot_right`), the stop tab on its hub in
+   the pivot's arc groove. Nothing holds the axles in: the two spokes face each other, so the finished loop can't pull
+   off.
+2. `handle_arc_1` joins `handle_end_right`, `handle_arc_2` joins `handle_end_left`, and the two arcs join at the top.
+   Each joint is a 40 mm half-thickness lap.
+3. Dry-fit all three laps first. Then, one lap at a time: epoxy on both faces, 3 x M3x8 from the display-side face
+   (heads sink into their counterbores) with a nut in each hex pocket on your side, tightened.
+4. Press a green cap over every head and nut (18), flush with the faces.
+5. Support the handle level while the epoxy cures.
+
+The handle swings flat either way to lie around the middle for display; the stop tabs stop it just past level. The
+printed axles are fine for normal carrying but are the first thing to break if the lantern is yanked or swung by its
+handle.
+
+### Step 15. Cartridge
+
+![cartridge, bag cover lifted](images/cad-cartridge.png)
+
+Parts: `base_tray`, `bag_cover`, the pump, 1 VELCRO strap, the tube, the 32 oz pouch.
+
+1. **Pump.** Seat the pump in its saddles, head face (the tube ports) toward your side, head in the U-saddle and the
+   silver motor in its round saddle. Strap the motor down with one strap through the floor slots. There is no room for
+   a strap round the head: its saddle holds it.
+2. **Pump lead.** Solder the cartridge side of the pump's 2-pin plug to the pump's terminals, with D2 across them
+   (section 5, step 7).
+3. **Tube to the pump.** Open the Kamoer's head cap, lay the tube round the rollers and close the cap. Use one
+   continuous piece of tube from the nozzle through the pump to the bag: no joints, nothing to leak. Leave about 30 cm
+   of tube between the pump and the bay floor so you can lift the lantern off and set it down beside the cartridge;
+   coil it loosely (no tighter than a 5 cm circle, or it kinks) above the cartridge.
+4. **Bag.** Rig and fill the bag ([section 9](#9-the-drink-bag)), lay it flat in the bay with its spout in the back
+   corner by the splash wall, at the well, and press the tube (inside the bag, bag film and all) into the clip so its
+   tip lies in the well. The tube runs from the bag's spout over the splash wall through its notch to the pump's inlet.
+5. **Cover.** Lay `bag_cover` on the splash wall and the raised rim, lip down, so the whole bag, spout and all, is
+   under it.
+
+### Step 16. Lantern on the cartridge
+
+1. Plug the pump lead's two halves together (the plug sits by the pump's motor end).
+2. Lower the lantern over the cartridge, hand opening over the pump's head end. The 3 lugs inside the drum drop into
+   the L-slots in the cartridge's collar.
+3. Twist the lantern clockwise (seen from above) about 20 degrees until it clicks.
+
+### The light harness
+
+All 10 LED pieces are in parallel on the one light channel (Q2), on one soldered LED lead to the board:
+
+- **Behind the lock wall:** the 2 lock-face columns, the 4 panel rows and the two bells' leads join into one pair that
+  runs up behind the wall extension and the top cap's neck.
+- **In the top cap:** the two 12.5 cm pieces join that pair below the cap floor, then it goes up through the wire hole
+  to the board with its slack.
+- Join every + to +, every − to −, with sleeved solder joints. A star or a chain both work.
 
 ---
 
-## 7. The fluid path
+## 8. The hand-side cover
 
-1. **Jar lid and vent.** The jar needs a vent: as the pump draws the drink out, air has to get in, or the jar goes
-   under vacuum and the pours shrink. If the jar tips, though, nothing may get out. A one-way silicone valve does
-   both, so the jar's metal flat lid is replaced by one cut from a Masontops Pickle Pipe (item 6). The jar's screw
-   band holds it on.
-   - **Cut the disc.** Trace the jar's metal flat lid onto the Pickle Pipe, centred on its valve, and cut it out
-     with scissors, on the line or just inside it (1-2 mm either way is fine). Keep the edge smooth: the seal is
-     the ring where the band presses the silicone onto the glass rim.
-   - **Turn it over.** The valve nipple must point **down into the jar**. That way the pump's suction opens it
-     and lets air in, and drink pressing on it from inside (a tipped jar) squeezes it shut.
-   - **Tube hole.** Punch a hole about 5 mm across (smaller than the 6.4 mm tube) at least 10 mm in from the edge,
-     with a leather punch or a hot nail. Push the tube through until it reaches 5 mm above the jar's bottom; the
-     silicone grips and seals it.
-   - **Close it.** Screw the band on firmly by hand, not cranked: overtightening squeezes the silicone out from
-     under it.
-   - **Test.** With the jar empty, suck gently on the tube: air comes in through the valve. Then fill it with
-     water, close it and hold it upside down over a sink: no drips. If the edge drips, re-centre the disc or cut a
-     fresh one from another of the kit's lids.
+The hand bell is closed by one frosted polypropylene disc, 171 mm across, with 8 cuts 62 mm long from the centre,
+each ending in a punched 3 mm hole so it can't tear on. The uncut outer ring keeps it in one piece; the 8 flaps fold
+round your arm and the glass and spring back flat, so it looks like the front lens when your hand is out.
 
-   Fill the jar right up, leaving a little air under the lid. The valve still works under the drink: air bubbles
-   in through it (a faint gurgle on the first pours of a full jar). Nothing sticks up above the lid but the tube,
-   and over the middle of the lid there are 75 mm of room. If the trimmed disc is too floppy to seal, put the
-   metal flat lid on top as a backing ring, with a hole cut over the valve and a notch for the tube.
-2. **Pump head.** Open the Kamoer's head cap, lay the tube around the rollers, close the cap. Use one
-   continuous piece of tube from the jar to the nozzle: no joints, nothing to leak.
-3. **Route** (steps 3 to 5 describe the path; you thread it in section 9, steps 3 to 5, once those parts are
-   in place). The pump sits in its saddles on the deck, head toward your side so you can open the cap later,
-   held by two 20 mm straps through the deck's slots. The tube goes up through the lower dish neck and the tube hole in
-   `bay_floor` (behind the lock wall, on your right as you look in), then through `nozzle_guide`.
-4. **Nozzle.** The guide stands behind the wall and bends the tube up, over and **45 degrees down**. Its open
-   side faces the wall, which holds the tube in. Leave 5 mm of tube sticking out of its end, cut square with a
-   sharp blade. The tube end sits about 7 mm above the rim, over the back third of the glass, pointing down
-   into it: the stream lands about 19 mm from the glass centre at any pump speed, and the last drop falls
-   straight in. (A level tip would throw the stream sideways, onto the rim at the default speed.)
-5. **Service loop.** Leave about 30 cm of extra tube between the pump and the bay floor, coiled loosely (no
-   tighter than a 5 cm circle, or it kinks) in the space above the jar and pump. That slack lets you lift the
-   lantern off the cartridge and set it down beside it without disconnecting the tube.
-6. **Prime.** Follow section 4's USB calibration power sequence (JP1 removed); section 10 explains
-   access to the XIAO. With water in the jar and the glass in its slot, run `cal 6000` until water reaches
-   the nozzle. The tube stays full between pours. Unplug USB before switching S1 off.
+![cover cutting template](images/curtain_template.png)
+
+Use either guide; both come from the same CAD numbers:
+
+- the paper template [`docs/images/curtain_template.pdf`](images/curtain_template.pdf): print it at 100 % (actual
+  size, letter) and check the 50 mm bar with a ruler; or
+- the printed stencil `cad/output/curtain_stencil.stl` (an open 1.6 mm frame with knife slots).
+
+1. Tape the template or the stencil flat on the divider.
+2. **Punch the 8 small holes first** (3 mm hole punch, or a heated nail), at the ends of the cut lines.
+3. Cut the 8 lines with a sharp hobby knife, from the centre out to each hole. Don't cut past the holes.
+4. Punch the 4 clamp-screw holes (3.4 mm, near the edge; blue on the template).
+5. Cut round the outside circle.
+6. **Clamp it.** Stand the hand bell mouth down on the bench. From the throat side, lay the cover on the inside of the
+   mouth lip, then `curtain_clamp` on top of it, countersinks facing you, its 4 holes over the cover's holes and the
+   lip's pilots. Drive 4 countersunk M3x8 through the ring and the cover into the pilots. They cut their own thread
+   in the plastic: stop when snug. Use M3x8, not longer: only 0.8 mm of plastic is left on the mouth's face.
 
 ---
 
-## 8. The lock wall, the curtain and the top
+## 9. The drink bag
 
-![cutaway](images/cad-cutaway.png)
+The drink lives in a 32 oz spouted pouch lying flat in the cartridge's D-shaped bay, beside the pump, under the bag
+cover. The bay holds about 0.65 L under the cover, so fill it to about **22 oz** (roughly 20 shots). The floor falls
+2 degrees to a small well in the back corner by the splash wall, and a C-clip next to the well holds the tube's tip
+in it, so the last of the drink runs to the tube. No vent is needed: the bag collapses as the pump draws it.
 
-Cut the COB strip on its marked cut lines (every 25 mm) into 7 pieces: four of 10 cm, two of 5 cm and one of
-25 cm. Every piece is wired in parallel: all + pads together, all − pads together. The 22 AWG wire is fine; mark
-the + wires with a dot of paint or a bit of red heat-shrink (or buy a second colour). Direction doesn't matter
-on a single-colour strip.
+**Rig the bag (once):**
 
-1. **Back of the wall (display window).** One 10 cm piece in each of the 4 channels on the back of
-   `lock_wall`, LEDs facing out.
-2. **Face of the wall (hand opening).** One 5 cm piece in each of the two vertical channels beside the lock. Pass
-   their wires to the back through the small hole at the bottom of each channel.
-3. **Lock.** Screw the lock onto the wall (section 6, step 8). Solder the wall's + and − to the LED lead you
-   made in section 4 step 8 (its bare end), so it runs down with the lock cable.
-4. **Top.** Stick the 25 cm piece around the inside of the hole in the floor of `dish_upper`, LEDs facing
-   the centre: it goes once round (the hole is 25.1 cm around) and the hole wall is 8 mm tall, the same as the strip. Let their leads hang down from the display side
-   of the hole, so they fall behind the lock wall. Screw `top_diffuser` into the counterbore above them
-   (4 x M3x8 flat-head, from above).
-5. **Curtain.** From one frosted sheet, cut 13 strips 12 mm wide and 97 mm long. Lay them side by side, each
-   overlapping the next by 2 mm, along the curved `curtain_clamp`, and screw the clamp to the underside of
-   `dish_upper`'s plug (4 x M3x8 into the four inserts that bracket one of the plug's three radial screw holes;
-   that side faces the hand opening), the strips sandwiched between. A strip of double-sided tape or a few
-   dots of glue on the clamp hold the 13 strips while you screw it. They hang down behind the hand opening once the dish is on.
-6. **Display diffuser.** It sits on the ledge behind the window of `sphere_front`. A few dots of glue hold it.
+1. Drill a 6 mm hole in the pouch's cap and push the tube (1/4" OD) through it; it should be snug.
+2. Leave enough tube inside to reach from the spout to the clip and the well.
+3. Cut one or two small V-notches (about 3 mm) in the tube's tip, so the bag's film can't seal over the end.
 
----
+**Fill and fit it:**
 
-## 9. Final assembly
-
-Bottom to top. "Left" and "right" are as you see them standing at the hand opening, looking in.
-
-1. **Cartridge.** Work through these in order:
-   - **Tray.** Stand `base_tray` with the switch pocket (the raised box near the rim) toward you.
-   - **Buck.** The LM2596 goes in its pocket on the right, on its four 2 mm printed corner supports, zip-tied
-     through the slots beside it. Check that no solder joint on its underside rests on a support.
-   - **Power switch.** S1 goes up into the pocket's ceiling from below, nut tight.
-   - **Strap first.** Thread a 20 mm strap through both battery slots before fitting the pack. Its lower run sits in
-     the recess under the tray and must be no thicker than 2 mm.
-   - **Battery.** Push the splitter's male plug into the battery's port. Lay the TalentCell flat on its 1 mm printed bed, 7 mm toward
-     you from the middle:
-     - **LED face down**, the five fuel-gauge dots over the thin floor slot;
-     - **connector and switch end away from you**, against the low end stop;
-     - the plug's cord folded back in a U-turn over the plug. Plug and U-turn reach about 35 mm from the battery's
-       end, which leaves ~6 mm to the drum wall.
-
-     The [battery seat drawing](images/battery-seat.png) has the measurements. Turn the battery's own switch ON (it
-     stays ON), then tighten the strap: the deck is 16 mm above the case and does not hold it down.
-   - **Charge socket.** Tuck the splitter's female end beside the battery's end, where you can reach it with the
-     lantern lifted off, and tie it to a floor tie slot so it can't fall into the pump's way.
-   - **Leads.** Route and tie the battery lead along the tray edge to S1, clear of the retaining bosses. Bring the
-     pack's and S1's leads up through the open notch at the deck's edge. (The deck's other slot is a closed hole, so
-     a soldered lead can't be threaded through it later.)
-   - **Deck.** Drop `base_deck` in on top: 3 x M3x8 into the three pillars that have holes (it fits one way). The
-     deck's 11.3 mm hole, near its left edge, stays empty.
-   - **Check the LEDs.** Turn the cartridge over and check that the battery's LEDs show through the slot.
-   - **Jar.** Into its ring, with a strap through the finger slots.
-   - **Pump.** Fit the tube now, while the cartridge is open: open the head, lay the continuous tube around the
-     rollers and close the cap. Leave the outlet end free for threading to the nozzle later. Then seat the pump in
-     its saddles, sliding it along until the silver motor rests in its curved cradle, and secure it with two straps.
-   - **Board.** Remove all print support from the four board pads, then screw the board to the deck's vertical
-     panel (4 x M3x6 through the holes you drilled). Clipped leads and rear wiring must stay within the 10 mm gap
-     behind it (see the board guide's pad positions and wire layers). Keep the inline lock and LED plugs above the
-     empty module pocket on the left, clear of the battery supports.
-   - **Service check.** With the shell off you can reach JP1 and the pack switch. For pack service, undo the three
-     deck screws.
-2. **Drum.** Push an M3 nut into the slot in each of the 3 bosses inside the bottom of `base` (a dab of glue
-   holds each). Push an M3x12 screw head-first into each `thumb_knob` from below and glue it. Then `dish_lower`:
-   its spigot goes into the top of the drum, 3 x M3x8 from outside. The drum stays with the lantern from now on.
-3. **Bay floor.** From here until step 9 the open drum has the tube and the cables coming out of its bottom, so
-   stand the lantern on two blocks (a couple of books) to keep its rim off them.
-   - Lay `bay_floor` on the lower dish's locating ring. The long slot points at you; the two short slots for the
-     wall's tabs sit either side in the far half. The tube hole and the 7 mm cable hole are beyond the wall line:
-     tube on the right, cables on the left.
-   - The lock cable and LED lead already pass through the cable hole (section 4 step 8); their plugs go down
-     through the lower dish to the board.
-   - Take the free end of the tube coming from the pump on the cartridge, beside the shell. Leave about 30 cm extra
-     between the pump and the bay floor for the service loop, then feed the end up through the lower dish neck and
-     the tube hole in `bay_floor`. There is no connector at the floor.
-   - Drop `glass_well` into the long slot, its ridge end toward the display side; it hangs from its flange.
-4. **Nozzle.** Push the tube up through the hole in `nozzle_guide`'s foot and along the channel, pressing it
-   in through the open side where it resists (the slit is a little narrower than the tube), so 5 mm sticks out
-   past the end, pointing down. Screw the foot into the bay-floor insert (1 x M3x8), open side toward you,
-   the curve reaching toward the middle. The glued-on boss below the floor fits the matching relief in the lower dish.
-5. **Lock wall.** Stand the wall in its two slots, lock facing you. Its back closes the nozzle guide's open
-   side; check the tube sits in the channel and its end still points down into the glass slot. Take up the
-   slack in the lock cable and LED leads down through the cable hole.
-6. **Sphere.** Slide `sphere_front`, with the diffuser in it, in from the display side until it sits on the
-   lower dish and the wall's four posts touch the diffuser. Slide `sphere_rear` in from your side. The flange ring is inside
-   the rear half, flush with the split: drive the 4 x M3x10 through it into the front half's bosses from inside,
-   reaching in through the hand opening and the top opening with a ball-end or long 2.5 mm key (do this before
-   the upper dish goes on). Then 3 x M3x8 through the lower joint into the dish's ring (the holes sit 3 mm above
-   the sphere's flat; the heads stand a little proud on the curve, that is normal).
-7. **Top.** Stand `dish_upper` (with the top diffuser, the LED ring and the curtain on it) beside the sphere
-   and solder its ring's leads (~30 cm) to the wall's LED lead, sleeved. Then lower it onto the sphere so the
-   curtain goes down behind the hand opening, feeding the slack down behind the wall, and screw it on, 3 x M3x8.
-8. **Handle.** The part names are from the display side, so `handle_leg_left` goes on your right. Each leg
-   plugs into a boss on the rear half, counterbore facing outward; one M3x12 each goes in horizontally through
-   the round hole in the boss's outer wall, 6 mm into the leg's counterbore and on into the insert on the sphere
-   side, pointing at the lantern's axis (a long 2.5 mm hex key). The two arcs lap-joint to the legs and to
-   each other with 6 x M3x12 and nuts, left leg with left arc.
-9. **Join the lantern and the cartridge.** Plug the lock and LED plugs together, coil the tube's slack above
-   the jar, and lower the lantern over the cartridge. The three notches in the deck's edge and the three
-   bosses inside the drum only line up one way. Tip the lantern a little and turn the 3 thumbscrews up into the
-   bosses from underneath, finger-tight.
-
-- Keep the pump wires twisted and away from the Hall and switch wires.
-- **On and off:** tip the lantern and flip S1 in the pocket under the cartridge floor, on your side. It is out of
-  sight from every angle.
+1. Fill the pouch to about 22 oz, screw the cap (with the tube through it) on, and squeeze the air out.
+2. Lay it flat in the bay with the spout in the back corner by the splash wall, at the well.
+3. Press the tube, still inside the bag, down into the clip, bag film and all: the film wraps round the tube and the
+   notched tip lies in the well. Nothing on the floor touches the drink.
+4. Lead the tube from the spout over the splash wall, through the notch in its top, to the pump's inlet.
+5. Put `bag_cover` on. The bag shapes itself to the bay under it.
 
 ---
 
 ## 10. Calibration
 
-**Reaching the XIAO.** Its USB port is on the cartridge, under the lantern, so every `status`, `cal` and `vcal`
-here, in sections 11 and 13 and on the day means: switch off, undo the 3 thumbscrews, lift the lantern off and
-stand it beside the cartridge on two blocks (a couple of books), so the tube and the two cables run out under
-the drum's rim without being crushed. The glass stays in the lantern under the nozzle; the 30 cm service loop
-reaches.
+**Reaching the XIAO.** Twist the lid anticlockwise and lift it off. The board is on the cap floor, USB end toward the
+display side. The lantern stays on the cartridge, so the glass sits in its slot as usual.
 
-**Follow section 4's USB calibration power sequence: JP1 removed, U1 installed,
-regulated 5 V present before USB is connected.** Unplug USB before switching S1 off.
+**Follow section 5's USB calibration power sequence: JP1 removed, U1 installed, regulated 5 V present before USB is
+connected.** Unplug USB before switching S1 off.
 
-Water in the jar, the shot glass in its slot (only the shot glass fits under the nozzle; weigh what it pours on
-a kitchen scale, 1 g = 1 mL, or tip it into a measuring cup). Connect USB serial using section 4's power procedure.
+Water in the bag, the shot glass in its slot (only the shot glass fits under the nozzle; weigh what it pours on a
+kitchen scale, 1 g = 1 mL, or tip it into a measuring cup).
 
 First the battery reading: measure across the pack (or the rail) with the meter, type `vcal` and that number
 (for example `vcal 12.31`), then `status` should show the same. Type `save` to keep it.
 
-The pour time is the length of the show, so set it first and then adjust the pump speed until that time
-pours the amount you want.
+The pour time is the length of the show, so set it first and then adjust the pump speed until that time pours the
+amount you want.
 
 ```
 pour 11000       the build-up lasts 11 s (match it to how long you hold the twist)
@@ -776,8 +1007,8 @@ speed 60         too much? lower the speed (too little? raise it) and run cal 11
 save             when it pours 30-37 mL (1 to 1.25 oz)
 ```
 
-Then repeat with the real drink: liqueur is thicker than water and the nozzle is about 15 cm above the pump, so
-expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be carried without spilling.
+Then repeat with the real drink: liqueur is thicker than water and the nozzle is well above the pump, so expect a
+little less than with water. A 1.5 oz glass with 30-37 mL in it can be carried without spilling.
 
 ---
 
@@ -793,13 +1024,21 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 - [ ] Remove the ring and reinsert it, twist: one new pour.
 - [ ] Pull the ring out mid-pour: the pump stops at once.
 - [ ] 20 water pours in a row: every pour lands in the glass, no drips anywhere.
-- [ ] Carry and tilt the lantern with water in it, then leave it 30 minutes: dry inside.
+- [ ] Carry and tilt the lantern with water in the bag, then leave it 30 minutes: dry inside, nothing pooled in the
+      cartridge.
+- [ ] Run the bag nearly empty: the last pours still come (the tip stays in the well).
 - [ ] On the day: `status` reads about 11.5 V or more (roughly half charge or better). Below that, charge first.
-- [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring double-blinks before the glow.
-- [ ] Lantern lifted off, S1 OFF, pack switch ON, charger in the splitter's female end: the charger's LED shows charging; tip the lantern and the battery's LEDs show through the floor slot.
-- [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out through the curtain, without spilling.
-- [ ] Your fist goes through the curtain and into the lock, and back out, without catching.
-- [ ] With the lights on in a dim room, the curtain, the display window and the top all glow; you can't see the nozzle.
+- [ ] `status` shows the battery voltage. With a pack below 10.5 V (or a bench supply set to 10 V), inserting the ring
+      double-blinks before the glow.
+- [ ] Lid off, S1 OFF, pack switch ON, charger in the charge socket: the charger's LED shows charging. Look up through
+      the hand opening: the battery's LEDs show through the cap floor's slot.
+- [ ] Push the empty glass in until it clicks, pour water, then take it out: grip, slide 3 cm toward you, lift, out
+      through the cover, without spilling.
+- [ ] Your fist goes through the cover and into the lock, and back out, without catching; the flaps close flat again.
+- [ ] With the lights on in a dim room, the lens, the hand cover and the emblem all glow, the hand side a little dimmer
+      than the lens; you can't see the nozzle or the glass through the lens.
+- [ ] Measure the running current with all the strip lit and the pump running (section 5, step 9).
+- [ ] Lift the lantern off and put it back: the lugs drop in and click; the pump plug and the tube are not pulled.
 
 ---
 
@@ -808,68 +1047,92 @@ expect a little less than with water. A 1.5 oz glass with 30-37 mL in it can be 
 ### On the day
 
 1. Charge if `status` reads below about 11.5 V (section 11).
-2. Fill the jar with the real drink.
-3. With the lantern still standing beside the cartridge (section 10), prime with `cal 8000` into the shot glass
-   until the drink reaches the nozzle. The line is empty after cleaning; empty the glass as needed.
-4. Put the lantern on and do one full test pour into the glass: the first pour of the night should not be the one
-   in front of a guest.
+2. Fill the bag with the real drink (section 9).
+3. With the lid off, prime with `cal 8000` into the shot glass until the drink reaches the nozzle (section 5's USB
+   calibration sequence). The line is empty after cleaning; empty the glass as needed. Refit JP1 with the power off,
+   then the lid.
+4. Do one full test pour into the glass: the first pour of the night should not be the one in front of a guest.
 
 ### The performance
 
-Set the lantern on a table with the hand opening toward you. Reach through the curtain, lower the empty glass
-into the near end of its slot and push it all the way back until it clicks over the ridge: that is the pour
-position, under the lock.
+Set the lantern on a table with the hand opening toward you. Reach in through the cover, lower the empty glass into
+the near end of its slot and push it all the way back until it clicks over the ridge: that is the pour position,
+under the lock.
 
-1. Make a fist (ring on your left middle finger) and punch in through the curtain, ring face first, until the ring
+1. Make a fist (ring on your left middle finger) and punch in through the cover, ring face first, until the ring
    seats in the lock. The lantern glows faintly.
 2. Twist 45 degrees counterclockwise and hold it as you start the oath. The pump starts and the light begins to
    climb.
-3. Keep holding through the oath. After about 11 seconds the pour is done; the light sits at 90 % until you
-   turn back, so a longer oath is fine.
+3. Keep holding through the oath. After about 11 seconds the pour is done; the light sits at 90 % until you turn
+   back, so a longer oath is fine.
 4. On the last word, turn back. The light swells to full and goes dark.
-5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it,
-   slide it about 3 cm toward you, lift it straight up out of the slot and bring it out through the curtain.
+5. Draw your fist back a little and open your hand: the front of the glass is right under the lock. Grip it, slide
+   it about 3 cm toward you, lift it straight up out of the slot and bring it out through the cover.
 
 ### Charging
 
-Nothing needs unplugging.
+Nothing needs unplugging and the lantern stays on its cartridge.
 
-1. S1 OFF, USB unplugged.
-2. Undo the 3 thumbscrews and lift the lantern off; the cartridge stays on the table.
-3. Plug the supplied TalentCell 12.6 V charger into the splitter's female end, tucked beside the battery's end. The
-   battery's own switch must be ON to charge (it stays ON).
-4. The charger's LED is red while charging and green when done. A full charge takes about 6 h at 0.5 A.
+1. Twist the lid anticlockwise and lift it off. S1 OFF, USB unplugged.
+2. Lift the charge socket (the splitter's female end) out on its cord and plug the supplied TalentCell 12.6 V charger
+   into it. The battery's own switch must be ON to charge (it stays ON).
+3. The charger's LED is red while charging and green when done. A full charge takes about 6 h at 0.5 A.
+4. Tuck the socket back in its place and put the lid back on.
 
-**When to charge:** after every party, or whenever `status` reads below about 11.5 V (roughly half); the strip dims
-as the pack drains. The battery's own charge-level LEDs show through the slot in the floor whenever you tip the
-lantern. The double blink as you punch in (below 10.5 V) is a late warning. How voltage maps to runtime still needs
+**When to charge:** after every party, or whenever `status` reads below about 11.5 V (roughly half); the strip dims as
+the pack drains. The battery's own charge-level LEDs show through the slot in the cap floor: look up through the hand
+opening. The double blink as you punch in (below 10.5 V) is a late warning. How voltage maps to runtime still needs
 checking on the finished prop, so treat 11.5 V as a rough guide, not a precise fuel gauge.
 
-### Refilling (about 2 minutes)
+### Refilling (a few minutes)
 
-1. Switch off. Tip the lantern slightly and undo the 3 thumbscrews underneath.
-2. Lift the lantern off by its handle and set it down beside the cartridge. The tube and the cables have
-   enough slack; unplug the two cable plugs if you want the lantern completely free. The three knobs drop out
-   of their wells once undone: keep them with the cartridge.
-3. Undo the jar's strap and unscrew the lid; the pickup tube comes out with it.
-4. Fill the jar and put the lid back on.
-5. Lower the lantern back over the cartridge and do the thumbscrews up.
+1. Switch off (lid off, S1 OFF, lid back on).
+2. Twist the lantern a little anticlockwise (seen from above) and lift it off by its handle. The cartridge stays on
+   the table. The tube runs from the pump up into the lantern, so set the lantern down beside the cartridge; unplug
+   the pump plug if you want it free of the wires.
+3. Lift the bag cover by its finger hole. Pull the tube, bag film and all, up out of the clip.
+4. Lift the bag out by its spout. Hold the cap still and unscrew the bag from it, turning the bag, not the cap, so the
+   tube doesn't twist; slide the bag off the tube.
+5. Fill the bag to about 22 oz, slide it back over the tube, screw it onto the cap and squeeze the air out.
+6. Lay it back in the bay, spout at the well, press the tube into the clip, and put the cover on.
+7. Plug the pump plug in, coil the tube's slack, lower the lantern back on and twist it clockwise until it clicks.
 
 ---
 
-## 13. Cleaning and storage
+## 13. Service: opening it up
+
+The [opening for service video](videos/service-access.mp4) shows these.
+
+- **Charge, power switch, USB, JP1:** twist the lid anticlockwise and lift it off. S1, the charge socket, the
+  battery's switch and the board are on the cap floor.
+- **Refill:** section 12.
+- **A bell:** reach in from inside the sphere (for the hand bell, through the cover's flaps; for the lens bell, through
+  the hand opening, past the end of the lock wall and back behind it) and undo its 2 thumbscrews at the top of the
+  opening. Slide the bell straight off and rest it beside the lantern on its LED lead's slack (no plug; desolder
+  the lead if the bell must go away).
+- **The cap floor:** lid off, undo the 3 thumbscrews and lift the plate out, still connected, onto the cap's rim
+  (unplug the lock cable if you need more room).
+- **The top cap:** lid off, cap floor out, then reach down the neck and undo the 3 thumbscrews inside it, and lift
+  the cap off the sphere (the wall extension stays on the lock wall).
+- **The foot and drum from the sphere:** lift the lantern off the cartridge, lay it on its side or lift it, reach up
+  through the open drum into the foot's neck and undo the 3 thumbscrews. The drum and the foot stay screwed together.
+- **The pump head or tube:** lift the lantern off the cartridge; the pump head faces your side.
+
+---
+
+## 14. Cleaning and storage
 
 Same night, before the sugar dries:
 
-1. Switch off, lift the lantern off the cartridge and stand it beside it (section 10).
-   Connect USB serial using section 4's power procedure.
-   Empty the jar, half-fill it with warm water, and put the shot glass in its slot.
-2. `cal 8000` pours about 22 mL into the glass. Empty the glass and repeat 4 or 5 times. Only the shot
-   glass fits under the nozzle, so keep each run short: `cal 20000` would pour ~55 mL and overflow it.
-3. Unscrew the jar lid and hold the pickup tube out of the water. Run `cal 8000` twice more to push the
-   line empty.
-4. Rinse the jar and the silicone lid, flexing the valve's slit under warm water so no sugar dries in it. Open the pump head and lift the tube off the rollers. Let
-   everything air-dry with the tube ends open.
+1. Lid off; connect USB serial using section 5's power procedure.
+2. Empty the bag (section 12, refilling, steps 2 to 4), half-fill it with warm water and put it back with the tube in
+   the clip. Put the shot glass in its slot and the lantern back on.
+3. `cal 8000` pours about 22 mL into the glass. Empty the glass and repeat 4 or 5 times. Only the shot glass fits
+   under the nozzle, so keep each run short: `cal 20000` would pour ~55 mL and overflow it.
+4. Lift the lantern off, unscrew the bag from the cap so the tube's tip is in the air, put the lantern back and run
+   `cal 8000` twice more to push the line empty.
+5. Rinse the bag and its cap. Open the pump head and lift the tube off the rollers. Let everything air-dry with the
+   bag open and the tube ends open.
 
 **Never leave liqueur in the tube overnight:** the sugar gums up the bore and the rollers.
 
@@ -878,32 +1141,34 @@ months. Replace the pump tube when it looks cloudy or flattened.
 
 ---
 
-## 14. Troubleshooting
+## 15. Troubleshooting
 
 | Symptom | Check |
 |---|---|
-| Ring not detected | Are both cable plugs connected (easy to forget after a refill)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face toward the ring's face (section 6, step 2)? Is pin 1 on 5 V? |
-| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, section 6 step 4). The emblem's bars must be level (the rotor's rest position) to drop into the pocket. |
-| Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. Plugs connected? |
-| Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, section 6 step 6) or D2 is shorted to ground. |
+| Ring not detected | Are the plugs on the cap floor connected (easy to forget after taking the cap floor out)? `status` with the ring in. Is the A3144 printed face up on its post? Is the magnet's switching face toward the ring's face (step 1)? Is pin 1 on 5 V? |
+| Ring won't seat in the pocket | The rotor is not at rest: turn it back by hand (and grease it, step 1). The emblem's bars must be level (the rotor's rest position) to drop into the pocket. |
+| Nothing lights, no response | JP1 fitted with USB unplugged? Pack switch and S1 on? Pack flat: `status` over USB or the meter on the rail; charge it. LED lead's joints at the board and behind the wall intact? |
+| One bell stays dark | Its lead's joint at the harness broke (check it after taking the bell off). |
+| Pump won't stop | Switch S1 off. The firmware caps every run at 20 s; if it runs again on its own, the switch lever is stuck pressed (bracket slid too far toward the cam, step 1) or D2 is shorted to ground. |
 | No pour on the twist | `status` while twisting: the switch must read `pressed` before the hard stop. Slide the switch bracket toward the cam. |
-| Pump hums, no flow | Tube not seated under the rollers, head cap open, the service loop kinked when the lantern went back on, or the wrong (thin-walled) tube. |
-| Pours shrink after a few in a row | The lid's valve isn't letting air in: it must point down into the jar, and dried sugar can glue its slit shut (rinse and flex it). |
-| Pump doesn't run at all | Switch on? Check the rail gives 9–12.6 V (meter). Check Q1's pins (gate, drain, source) and the 10 k on D3. |
+| Pump doesn't run at all | Pump plug at the cartridge and at the cap floor connected (easy to forget after a refill)? Switch on? The rail gives 9–12.6 V (meter)? Check Q1's pins (gate, drain, source) and the 10 k on D3. |
+| Pump hums, no flow | Tube not seated under the rollers, head cap open, the tube's slack kinked when the lantern went back on, or the wrong (thin-walled) tube. |
+| Pours shrink, or stop before the bag is empty | The bag's film has sealed over the tube's tip: check the V-notches, and that the tip sits in the well and the tube is pressed into the clip. |
 | XIAO resets when the pump starts | 12 V sagging: C2 missing, or the pack nearly empty (charge it). |
 | LEDs stay dark or stay on | Q2 wiring, U1 supply/input/output wiring, or U1's output-enable pins not grounded. |
 | Double blink when the ring goes in | Low battery (below 10.5 V): charge it. If the pack is full, check the reading against your meter and run `vcal`. |
 | Pours shrink as the night goes on | The battery reading is off or not connected (`status` says `not sensed`): check the divider on D0, then `vcal`. |
 | Rotor sticks | Clean PETG strings out of the bore, sand lightly, or reprint the rotor with `FIT` + 0.05. |
-| Rotor doesn't return on its own | Grease the ramp, the plunger nose and the bore (section 6, step 4). A stiffer spring doesn't help: it is the ramp's slope against dry friction. Turning the ring back by hand works the same for the firmware. |
+| Rotor doesn't return on its own | Grease the ramp, the plunger nose and the bore (step 1). A stiffer spring doesn't help: it is the ramp's slope against dry friction. Turning the ring back by hand works the same for the firmware. |
 | Drips after the pour | Trim the tube end square; make sure 5 mm sticks out of the guide. |
 | Pour misses the glass | The glass was not pushed all the way back: it must click over the ridge. |
 | The glass catches on the way out | Slide it toward you the full 3 cm before lifting: lifting early hits the lock. |
-| Your hand catches on the curtain | Trim the strips 5 mm shorter, or use a thinner sheet (a 0.3 mm report cover). |
+| Your hand catches on the cover | Check the cuts reach the holes; use a thinner sheet (0.3 mm). |
+| The lid or the lantern won't click | Turn it back, lift it a little and find the entry where the lugs drop in, then twist again (clockwise, seen from above). |
 
 ---
 
-## 15. What this budget build leaves out, and how to add it back
+## 16. What this budget build leaves out, and how to add it back
 
 | Upgrade | Cost | How |
 |---|---|---|
@@ -911,12 +1176,11 @@ months. Replace the pump tube when it looks cloudy or flattened.
 | Fuse | ~$3 | An inline 2 A slow-blow fuse between the pack and S1. The pack's protection board already cuts out on a short. |
 | Steady LED brightness on a draining battery | ~$6 | A small buck-boost converter set to 12.0 V between the +12 V rail and the LED strip's + (the pump keeps its firmware compensation). Without it the strip dims as the pack drains: ~70 % of its current at half charge (~11.3 V), a third to a half at 10 V. Charging at half keeps it bright enough. |
 | PRIME button | ~$2 | 12 mm momentary button from D6 to ground. Already supported by the firmware. |
-| Pinch clamp for carrying a full jar | ~$6 | [Tubing pinch clamps (B0FCM98N2Q)](https://www.amazon.com/dp/B0FCM98N2Q). |
 
-**Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in
-10-15 s. Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A green COB LED
-strip is enough for a glow that just gets brighter, glows without visible dots, and it runs from the same 12 V as the pump. The reservoir
-is a narrow jar (73 mm at most) because it shares the deck with the pump under the lower dish. The glass sits about 5 cm down in
-a slot because the sphere is only 10 cm tall inside and your fist and the lock need the space above it; that is
-also why it slides toward you before it lifts out. The early research notes are in `docs/research/`; they are partly superseded, and the
-current numbers are the ones in this guide and in `cad/params.py`.
+**Why these choices.** The Kamoer pump states 200 mL/min as a minimum, so it reliably pours 1 to 1.25 oz in 10-15 s.
+Two Adafruit 5 V pumps state 100 mL/min each as a maximum and often miss that window. A green COB LED strip is enough
+for a glow that just gets brighter, glows without visible dots, and runs from the same 12 V as the pump. Rev C moved
+the battery and the board up into the top cap so almost the whole cartridge holds drink, in a collapsing bag that
+needs no vent. The glass sits in a slot under the lock because your fist and the lock need the space above it; that
+is also why it slides toward you before it lifts out. The design decisions and their reasons are in
+`docs/review/CONTEXT.md`; the current numbers are the ones in this guide and in `cad/params.py`.

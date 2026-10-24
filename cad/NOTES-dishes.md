@@ -1,3 +1,5 @@
+> **Historical.** Revision C (2026-10-23) has no dishes: the foot (`parts/foot.py`) and the top cap (`parts/top.py`) replace them. See `DESIGN_CONTRACT.md`, revision C.
+
 > **Superseded in part.** Written for revision 3 (180 mm lower dish mouth, the old base spigot). Since revision 9f the base bands and the lower dish mouth are `D_MAX` = 190 mm and the upper dish keeps 180 (`UPPER_DISH_MOUTH_D`); the current numbers are in `params.py` and `DESIGN_CONTRACT.md`.
 
 # NOTES - dishes module (`cad/parts/dishes.py`)

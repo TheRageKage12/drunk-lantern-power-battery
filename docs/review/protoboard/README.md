@@ -25,8 +25,9 @@ off-board wiring, power sequencing and commissioning. This page covers the board
 
 1. Confirm the physical board's 24 × 18 hole array and its edge offsets. The drawing assumes
    2.54 mm spacing, starting 5.79 mm from the left and 3.41 mm from the top. It is not a drill template.
-2. Mount the board landscape, component side toward the shell, bottom 2 mm above the deck.
-   Check the four screw centres against the printed panel before drilling 3.2 mm holes at
+2. Mount the board component side up on the cap floor's four 10 mm standoffs (rev C: the cap floor in the top
+   cap), rear wiring in the 10 mm under it. Check the four screw centres against the printed standoffs before
+   drilling 3.2 mm holes at
    (x,y) = (18,17), (55,15), (15,45), (58,45) mm from the component-side top-left. Keep each 9 × 9 mm area clear.
 3. Fit the small parts and DIP-14 socket before the XIAO and tall parts. U1's notch faces row 01;
    XIAO USB faces column A. Q1/Q2 printed faces face row 18, with G-D-S pins from columns P to R.
@@ -34,7 +35,7 @@ off-board wiring, power sequencing and commissioning. This page covers the board
 4. Lay C2 flat with insulated formed leads; reserve a case no larger than **25 mm long × 18 mm
    diameter**. Its actual dimensions remain unverified. Secure its body independently of its leads,
    leave the vent clear and revise the placement if it is too large.
-5. Solder the rear links with the board detached from its panel. Start with the five bare bus
+5. Solder the rear links with the board detached from its standoffs. Start with the five bare bus
    links, then work outward through the wire layers: **2.7, 4.6, 6.5, 8.4 mm** from the solder face
    to wire centre. The schedule gives each wire's layer. Use the planned 22 AWG wire; its listing
    gives 1.44 mm finished diameter and the routing check reserves **1.6 mm**. Trim leads and keep
@@ -47,10 +48,10 @@ off-board wiring, power sequencing and commissioning. This page covers the board
 
 ## Fit and checks before power
 
-The revised panel provides **10 mm behind the board**, outside four 9 × 9 mm screw areas.
-The outer wire layer reserves 9.2 mm including insulation, leaving 0.8 mm to the panel.
+The cap floor's standoffs provide **10 mm under the board**, outside four 9 × 9 mm screw areas.
+The outer wire layer reserves 9.2 mm including insulation, leaving 0.8 mm to the cap floor.
 Use M3 screw heads (and any washers) no larger than Ø6 mm; the component placement includes access for a straight
-hex key with the shell removed. Install the four M3-thread brass inserts in the panel’s Ø4 × 6.5 mm
+hex key with the lid off and the cap floor lifted out. Install the four M3-thread brass inserts in the standoffs' Ø4 × 6.5 mm
 bores before mounting the board. Use M3×6 screws; check engagement with any washers added and do not
 let a screw bottom out in the insert.
 
@@ -58,13 +59,12 @@ The component-side drawing and CAD use the **same individual body allowances**, 
 1 mm between them. The smallest gap is **1.10 mm (U1 to R3)**; C3 is now **3.47 mm from U1**.
 Q1/Q2 project at most 22 mm from the front. C2 projects at most 19 mm including retention beneath
 its Ø18 mm case and overhangs the board's top by 2 mm. The column-X edge must stay within the
-shown small-part allowances (3.2 mm resistors, 3.4 mm diode), so the shell's retaining boss can pass.
+shown small-part allowances (3.2 mm resistors, 3.4 mm diode).
 
 The checks cover body-to-body spacing, screw access, insulated wire corridors and their terminal
-rises, solder height, the rear stack, and the enclosure's shell-removal sweep. **They do not verify
+rises, solder height and the rear stack. **They do not verify
 supplier-unspecified dimensions, wire bend radii or the detailed fan-out at shared solder joints.** Dry-fit the populated board and formed wires
-before fastening it to the panel; do not compress wires to make it fit. Remove the print supports
-under the four pads. Final fit still depends on the delivered parts and soldering workmanship.
+before fastening it to the standoffs; do not compress wires to make it fit. Final fit still depends on the delivered parts and soldering workmanship.
 
 ## Dimensions used
 

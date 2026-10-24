@@ -1,3 +1,5 @@
+> **Superseded.** Revision C (2026-10-23) replaced this handle with a loop on ring pivots at the sphere's sides (`parts/handle.py`, docstring; `DESIGN_CONTRACT.md`, revision C). The notes below are history.
+
 # NOTES - handle module (`cad/parts/handle.py`)
 
 Parts (`HANDLE_PIECES` = 4): `handle_leg_left`, `handle_leg_right`, `handle_arc_left`, `handle_arc_right`.

@@ -1,6 +1,6 @@
 """
-Render assembly views from cad/output: iso / front / rear / top, a cutaway through x=0, an exploded view
-and a contact sheet of every printed part.  Output: docs/images/cad-*.png
+Render assembly views from cad/output: iso / front / rear / top, a cutaway through x=0, the cartridge, the cap's
+electronics, an exploded view and a contact sheet of every printed part.  Output: docs/images/cad-*.png
 
     python3 render_views.py
 """
@@ -25,9 +25,24 @@ DARK = (40, 110, 60)
 GREY = (150, 150, 150)
 ORANGE = (235, 150, 60)     # hardware envelopes
 WHITE = (235, 235, 235)     # diffuser / halo
-COLORS = {'diffuser': WHITE, 'halo': WHITE, 'top_diffuser': WHITE, 'base_tray': DARK,
-          'lock_wall': WHITE, 'socket_housing': GREY, 'rotor': GREY, 'socket_base': GREY, 'key_cap': GREY,
+COLORS = {'diffuser': WHITE, 'halo_ring': WHITE, 'wall_extension': WHITE, 'base_tray': DARK, 'cap_floor': DARK,
+          'lock_wall': WHITE, 'led_panel': WHITE, 'socket_housing': GREY, 'rotor': GREY, 'socket_base': GREY, 'key_cap': GREY,
           'switch_bracket': GREY, 'plunger': GREY, 'glass_well': DARK, 'bay_floor': DARK, 'guide_boss': DARK, 'nozzle_guide': DARK}
+
+
+TOOLS = {'thumb_test', 'emblem_jig', 'curtain_stencil', 'ring_sizer'}   # tool prints in cad/output, not lantern parts
+ALTERNATES = {'key_cap'}                                                 # same pocket as key_ring (the default)
+LED = (90, 255, 110)
+SKIN = (230, 190, 160)
+# exploded view: (dx, dy, dz) mm per part; anything not listed stays put
+EXPLODE = {'top_cap': (0, 0, 120), 'cap_floor': (0, 0, 175), 'halo_ring': (0, 0, 250), 'emblem_lid': (0, 0, 275),
+           'emblem_centre': (0, 0, 285), 'wall_extension': (0, 0, 55),
+           'sphere_front': (0, -45, 0), 'sphere_rear': (0, 45, 0), 'bell_front': (0, -120, 0), 'diffuser': (0, -175, 0),
+           'bell_rear': (0, 120, 0), 'curtain_clamp': (0, 170, 0), 'led_panel': (0, -18, 0),
+           'handle_end_left': (-40, 0, 170), 'handle_end_right': (40, 0, 170), 'handle_arc_1': (0, 0, 200),
+           'handle_arc_2': (0, 0, 200), 'handle_pivot_left': (-40, 0, 0), 'handle_pivot_right': (40, 0, 0),
+           'glass_well': (0, 0, -35), 'foot': (0, 0, -95), 'base': (0, 0, -165), 'screw_cap': (0, 25, -165),
+           'bag_cover': (0, 0, -215), 'base_tray': (0, 0, -260)}
 
 
 def placements():
@@ -46,6 +61,8 @@ def load_placed(pl):
         if not fn.endswith('.stl') or fn.startswith('assembly'):
             continue
         name = fn[:-4]
+        if name in TOOLS or name in ALTERNATES:
+            continue
         m = trimesh.load(os.path.join(OUT, fn), force='mesh')
         if name in pl:
             steps = pl[name] if isinstance(pl[name], list) else [pl[name]]
@@ -108,7 +125,7 @@ def main():
 
     render(solid, os.path.join(IMG, 'cad-assembly-iso.png'), az=35, el=22, title='assembly, iso (front-left)')
     render(solid, os.path.join(IMG, 'cad-assembly-front.png'), az=0, el=0, title='assembly, front (audience side)')
-    render(solid, os.path.join(IMG, 'cad-assembly-rear.png'), az=180, el=0, title='assembly, your side: hand opening with the lock inside (strip curtain not shown)')
+    render(solid, os.path.join(IMG, 'cad-assembly-rear.png'), az=180, el=0, title='assembly, your side: hand opening with the lock inside (cover not shown)')
     render(solid, os.path.join(IMG, 'cad-assembly-top.png'), az=0, el=89, title='assembly, top')
 
     # cutaway: keep x < 0 half of every printed part, show envelopes whole (they are inside)
@@ -121,33 +138,39 @@ def main():
         if s is not None and len(s.faces):
             cut.append((s, COLORS.get(n, GREEN)))
     for n, m in envelopes.items():
-        if n in ('fist_envelope', 'forearm_envelope'):
-            cut.append((m, (230, 190, 160)))        # the hand, skin tone
-        elif n not in ('switch_envelope', 'glass_path_envelope', 'service_sweep_envelope', 'charge_jack_envelope', 'charge_plug_envelope'):
+        if n == 'fist_envelope':
+            cut.append((m, SKIN))                   # the hand at the lock
+        elif n.endswith('led_envelope'):
+            cut.append((m, LED))
+        elif n not in ('hand_path_envelope', 'glass_path_envelope', 'lug_sweep_envelope', 'curtain_envelope'):
             cut.append((m, ORANGE))
-    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12, title='cutaway; orange = hardware / electronics fit allowances; tan = hand; service sweep hidden')
+    render(cut, os.path.join(IMG, 'cad-cutaway.png'), az=-90, el=12,
+           title='cutaway from the side; audience left, your side right; orange = bought parts (size allowances); green = LED strip; tan = hand')
 
-    cartridge_names = ('base_tray', 'base_deck', 'powerbank_envelope', 'bottle_envelope', 'pump_envelope',
-                       'perfboard_envelope', 'board_components_envelope', 'buck_envelope',
-                       'power_switch_envelope', 'battery_connector_envelope', 'pump_diode_envelope')
-    cartridge_colors = {'powerbank_envelope': ORANGE, 'pump_envelope': GREY,
-                        'bottle_envelope': (195, 210, 220), 'perfboard_envelope': (190, 145, 85),
-                        'board_components_envelope': (75, 110, 165), 'buck_envelope': (75, 110, 165)}
-    render([(meshes[n], cartridge_colors.get(n, COLORS.get(n, GREY))) for n in cartridge_names],
-           os.path.join(IMG, 'cad-cartridge.png'), az=145, el=35,
-           title='cartridge; hardware shown as fit allowances, not supplier models; outer shell removed')
+    cartridge = [(meshes['base_tray'], DARK), (meshes['pump_envelope'], GREY), (meshes['bag_envelope'], (205, 175, 95)),
+                 (meshes['pump_diode_envelope'], ORANGE), (meshes['pump_plug_envelope'], ORANGE)]
+    lid = meshes['bag_cover'].copy(); lid.apply_translation((0, 0, 45)); cartridge.append((lid, GREEN))
+    render(cartridge, os.path.join(IMG, 'cad-cartridge.png'), az=145, el=35,
+           title='cartridge, bag cover lifted: pump (grey), 32 oz drink bag (tan), pump plug; drum and lantern removed')
 
-    # exploded: lift each printed part by its order in Z
-    names = sorted(printed, key=lambda n: printed[n].bounds[0][2])
+    cap_names = ('cap_floor', 'powerbank_envelope', 'perfboard_envelope', 'board_components_envelope', 'buck_envelope',
+                 'power_switch_envelope', 'charge_socket_envelope', 'battery_connector_envelope', 'inline_connectors_envelope')
+    cap_colors = {'powerbank_envelope': (60, 70, 85), 'perfboard_envelope': (190, 145, 85),
+                  'board_components_envelope': (75, 110, 165), 'buck_envelope': (75, 110, 165)}
+    render([(meshes[n], cap_colors.get(n, COLORS.get(n, ORANGE))) for n in cap_names if n in meshes],
+           os.path.join(IMG, 'cad-cap.png'), az=25, el=50,
+           title='cap floor (inside the top cap, under the lid): battery, board, buck module, power switch, charge socket')
+
+    # exploded: each part moved along the way it comes off (top stack up, bottom down, bells out, handle up)
     expl = []
-    for i, n in enumerate(names):
-        m = printed[n].copy(); m.apply_translation((0, 0, 35 * i)); expl.append((m, COLORS.get(n, GREEN)))
-    render(expl, os.path.join(IMG, 'cad-exploded.png'), az=35, el=18, title='exploded (each part lifted 35 mm per step)')
+    for n, m in printed.items():
+        m = m.copy(); m.apply_translation(EXPLODE.get(n, (0, 0, 0))); expl.append((m, COLORS.get(n, GREEN)))
+    render(expl, os.path.join(IMG, 'cad-exploded.png'), az=35, el=18, title='exploded: each part moved the way it comes off')
 
     # per-part sheet (print orientation = raw STL)
     tiles = []
     for fn in sorted(os.listdir(OUT)):
-        if fn.endswith('.stl') and not fn.endswith('_envelope.stl') and not fn.startswith('assembly'):
+        if fn.endswith('.stl') and not fn.endswith('_envelope.stl') and not fn.startswith('assembly') and fn[:-4] not in TOOLS:
             m = trimesh.load(os.path.join(OUT, fn), force='mesh')
             tmp = os.path.join(OUT, '_tile.png')
             render([(m, GREEN)], tmp, size=300, az=35, el=25, title=f'{fn[:-4]}  {np.round(m.extents, 0).astype(int).tolist()} mm')

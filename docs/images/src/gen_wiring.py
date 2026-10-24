@@ -185,7 +185,7 @@ def stage(x, gate_y, title, q):
 
 stage(1530,650,'Kamoer KPHM200','Q1')
 stage(1840,830,'Green COB strip','Q2')
-s.lines(1950,310,['~75 cm','7 parallel pieces'],size=14,anchor='end',lh=20)
+s.lines(1950,310,['~158 cm','10 parallel pieces'],size=14,anchor='end',lh=20)
 wire([(1390,650),(1530,650)])
 wire([(1390,830),(1840,830)])
 horizontal_bridge(1660,830,GREEN)

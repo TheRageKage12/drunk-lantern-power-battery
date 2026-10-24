@@ -2,12 +2,12 @@
 
 Written on 2026-10-13 at the end of the design sessions and kept current since (see the Change log at the end),
 for anyone, person or Claude session, picking up this project. It condenses about
-100 messages between Kevin (the owner) and Claude, plus 9 CAD revisions. **Read this before changing anything.**
+100 messages between Kevin (the owner) and Claude, plus 9 CAD revisions and the rev C redesign (2026-10-23). **Read this before changing anything.**
 Each decision here was made on purpose, usually by Kevin. Don't reverse one unless you've found a concrete defect,
 and even then, ask Kevin first (see the review prompt).
 
 The original brief and ChatGPT plan are in `docs/research/BRIEF.md` and `docs/research/chatgpt-transcript.md`.
-Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository is
+Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i and C). The repository is
 `TheRageKage12/drunk-lantern-power-battery` (renamed from `temprepo` on 2026-10-14).
 
 ---
@@ -16,7 +16,11 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
 
 - **What it is:** a Halloween party prop. It's a 3D-printed Green Lantern power battery (lantern) that secretly
   pours a shot while Kevin recites the oath with his ring in the lock.
-- **Size:** about 50 cm tall, 19 cm across at the base (47 cm before the 2026-10-23 taller drum).
+- **Shape (rev C, 2026-10-23):** the classic battery: an 80 mm drum (190 mm across), a 45° flare and 25 mm neck, a
+  224 mm sphere with a lens bell in front and a hand bell behind, a mirrored neck and flare, a 190 x 80 mm top cap and
+  the emblem lid; a loop handle on ring pivots at the sphere's sides.
+- **Size:** about 45 cm tall to the lid, 49 cm with the handle up; 22.4 cm across the sphere, 32 cm front to back
+  across the bells, 48 cm across the handle loop (from the CAD assembly).
 - **Based on:** Hedo3D's "Green Lantern luminous" (CC BY-NC 4.0, in `original-model/`), scaled up and hollowed
   for the hardware.
 - **Team:** Kevin (owner, wears the ring), Sky and Duncan.
@@ -69,20 +73,22 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
 ## 3. How the show works (Kevin's own spec; don't change it)
 
 1. Push the empty shot glass in under the lock until it clicks.
-2. **Punch in horizontally**, fist first, ring face forward, through a strip curtain on Kevin's side of the sphere.
+2. **Punch in horizontally**, fist first, ring face forward, through the frosted cover in the hand bell on Kevin's side.
    The ring is on the **left hand**. The Hall sensor sees the ring's magnet, and the light fades up to ~15 %.
 3. **Twist 45° counterclockwise and hold.** Counterclockwise puts the hand in a better position to grab the
    glass. A cam clicks the microswitch, then:
    - the pump starts, about 1 oz in ~11 s (a bit under a full shot is fine)
    - the light climbs to ~90 % over the same time. This is the distraction while it pours.
 4. Turn back (a spring returns the rotor). The light swells to 100 % and goes dark.
-5. Grip the glass, slide it ~3 cm toward you, lift it out and bring it out through the curtain.
+5. Grip the glass, slide it ~3 cm toward you, lift it out and bring it out through the cover.
 
 - **Letting go early** stops the pump where it is. The light bumps ~10 %, then goes dark.
 - The pump runs only while the ring is in AND the twist is held, and only once per insertion.
 - The light should only **gradually increase in intensity**. No other light effects.
-- Kevin's fist is under 4" wide x 3" tall. The model uses a 106 x 76 mm envelope through a 120 x 96 mm opening.
-  Kevin said not to worry much about how far off-centre his fist is.
+- Kevin's fist is under 4" wide x 3" tall. The model uses a 106 x 76 mm envelope through the 140 mm hand opening.
+  Kevin said not to worry much about how far off-centre his fist is. Rev C puts the lock face about 16-17 cm in from
+  the rear bell's mouth (8 cm in rev 9): **not yet tried by hand** (a box test is suggested; shortening the rear bell is
+  the fallback).
 
 ## 4. Decision log (current state; the latest decision wins)
 
@@ -90,22 +96,27 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
 - **Pump: Kamoer KPHM200 12 V peristaltic (B09HGVLHFV), one pump.**
   - Rejected: two cheaper Adafruit 5 V pumps. They would barely make the 10-15 s window, need two tubes, and come
     from Adafruit.
-  - Kamoer publishes no drawing, so the CAD envelope is an estimate (64 x 63 x 40 head plus a 40 mm motor can,
-    118 mm long). **Measure it when it arrives.** There is about 6 mm of clearance.
+  - Measured by Kevin 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall). Rev C: it lies on the
+    cartridge floor at `PUMP_X` 37 (moved 7 mm right for a bigger bag bay), head in a U-saddle, one strap round the
+    motor; it is now the tallest thing in the base and sets the 80 mm drum.
 - **Tube: 1/8" ID x 1/4" OD platinum silicone, Auber 10 ft (B0DKB1NKB4).** Kevin asked if 3 ft would do. The
   10 ft listing was kept because the size is exact and it's cheap; the build uses well under 3 ft.
-- **Reservoir: food-safe jar,** at most 73 mm across including the lid, at most 108 mm tall (since 2026-10-23: Kevin's 8 oz Ball jelly jar, 73 x 100-105 mm, on a 147 mm drum). It sits on the
-  cartridge deck. Bought locally (Micro Homebrew, Kenmore).
-- **Jar vent: a Masontops Pickle Pipe silicone lid** (since 2026-10-23; from Kevin's fermentation kit), cut down to
-  replace the jar's metal flat lid under its band, valve nipple pointing into the jar, the tube through a 5 mm
-  punched hole.
-  - It lets air in (and still works under the drink, bubbling) and seals when the jar tips; Kevin's tip test passed.
-  - Before that: an aquarium check valve (AQUANEAT B086JRH4WS) in a second lid hole, which replaced a 2.5 mm open
-    hole after Kevin raised the leak risk.
+- **Reservoir (rev C, 2026-10-23): a 32 oz spouted pouch (amazon.com/dp/B09WR13XDT)** lying flat in the cartridge's
+  D-shaped bay beside the pump, under `bag_cover`. About 0.65 L of room, so it fills to roughly 22 oz. A 32 oz bag
+  keeps filling until the bay is full; the 16/15 oz flat pouches Kevin found are too wide to lie loose in the bay.
+  - The floor has 45° fillets and falls 2° to a well in the back corner (`WELL_XY`); a C-clip by the well, tilted 15°,
+    holds the tube's notched tip on the well's bottom **with the bag's film still round it**, so the last of the
+    drink drains to the tube.
+  - Rigging: a 6 mm hole in the pouch's cap, the 1/4" tube pushed through, long enough inside to reach the clip; one
+    or two ~3 mm V-notches in its tip so the film can't seal over it; squeeze the air out. No vent: the bag collapses.
+  - The jar, the Masontops vent lid and the check valve are gone (rev 9 history in the change log).
+  - Rejected: a slot to feed the excess bag through the cover (the drink can't pull film through, and it would pool
+    on the cover); a home-made heat-sealed bag; a rigid box. The refill procedure is still to be pinned down (§6).
   - The pickup tube can't leak because the pump's rollers pinch it shut.
-- **Nozzle (rev 9c):**
+- **Nozzle (rev 9c, unchanged in rev C):**
   - The guide bends the tube **135°**, so the tip points 45° down and sits 6.7 mm above the rim, hidden behind the
-    lock wall over the back third of the glass.
+    lock wall over the back third of the glass (the bend runs sideways behind the wall; Kevin asked on 2026-10-23
+    whether the internals should turn 90° so it comes "straight on" from behind the glass; not decided, see §6).
   - It replaced a 90° bend that threw the stream onto the rim. The stream lands about 19 mm from the glass centre
     at any pump speed.
 - **Cleaning:** run warm water, then air, with `cal 8000`. Keep each run short: `cal 20000` would overflow the
@@ -138,44 +149,90 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
     Open-collector OUT directly to D1, with 4.7 kΩ to XIAO 3V3. No series Hall diode or 5 V pull-up.
 - `socket_base` prints **bottom-down**, so the post isn't printed upside down.
 
-### Layout (rev 8, the lock-wall layout)
-- The sphere has two openings:
-  - the **hand opening** (120 x 96 mm) on Kevin's side, closed by a frosted polypropylene strip curtain
-  - the **display window** on the far side
-- The **lock wall** stands 2.5 cm past the sphere centre, toward the display window. It carries:
-  - on its face (toward Kevin): the lock, plus a column of LEDs on each side
-  - behind it (hidden): the nozzle and 4 rows of LEDs facing the window
-- The glass sits in a slot under the lock and hangs into the lower dish neck. A 1.5 mm ridge clicks it into place.
-  It slides out toward Kevin, then lifts.
-- **Light balance:** Kevin wanted the two sides roughly even, then decided to **keep it as is**. The display side
-  is brighter. If needed later, a separately dimmable channel needs only one MOSFET plus firmware, no reprint.
-- Curtain: one letter-size **polypropylene** binder divider or report cover, 0.3-0.5 mm, cut into 13 strips.
-  - Bought locally: Target, Fred Meyer, Office Depot.
-  - Not PVC or vinyl, which crack.
-  - The Amazon option (B0FM41G21X) arrives after Halloween. Home Depot has nothing suitable.
+### Layout (rev C, 2026-10-23; the lock wall itself is rev 8)
+- **How rev C came about:** Kevin wanted it to look like Hal Jordan's classic battery (14:29), picked "the emblem lid
+  and option C" (14:44: bigger sphere with bells, battery and electronics in a top cap, drink bag in the base, a short
+  flared foot), asked for a mirrored top (15:15) and approved the mock-up (15:20). The lower and upper dishes, the
+  display window, the hand port and the strip curtain are retired (`dishes.py` is out of the build).
+- **Sphere:** 224 mm (the largest half the 230 mm bed takes), split front/back, the flats kept at 136.8 mm. Round
+  openings: the lens opening (r 57) in front and the **hand opening, 140 mm** (r 70) behind, widened from 130 so a
+  hand holding a full glass has room (Kevin, 16:40).
+- **Bells** slide over plain collars round the openings: front 64 mm long (mouth r 84), rear 60 mm (mouth r 90);
+  throats 8.5 mm thick for the thumbscrews' inserts. Each bell's LED lead is soldered into the harness with ~20 cm of slack, so the bell slides off and rests beside the lantern (no plug, see below).
+- The internals keep their height relative to the sphere centre, so the **lock wall** (2.5 cm past the centre, toward
+  the audience), bay floor, guide boss, glass well, nozzle guide and the lock carry over unchanged; the foot's riser
+  now holds the bay floor. The glass sits in its slot under the lock and hangs into the foot's neck; a 1.5 mm ridge
+  clicks it in; it slides toward Kevin, then lifts.
+- **Front window (Kevin's "option D", 2026-10-23):** a plain white `led_panel` on the lock wall's four posts, in
+  front of the spout, the glass and the back of the wall, with the **4 LED rows on its front**, ~5 cm behind the
+  frosted front lens (`diffuser`, a full 118 mm disc: reprint the rev 9 one, which had flats). Why: rev C moved the lens
+  out into the bell, so without the panel the spout guide and the glass would show as shadows. The light passes one
+  frosted layer, not two. Rejected: a frosted panel with the LEDs behind it (dimmer), a clear lens (printed clear PETG
+  is cloudy; a bought acrylic disc would be needed). The wall's back channels stay unused; no reprint.
+- **Hand side (2026-10-23): one frosted polypropylene disc** (binder divider, 171 mm) with 8 cuts 62 mm from the
+  centre, each ending in a punched 3 mm hole, so it looks like the front window when the hand is out; the 8 flaps fold
+  round the arm and spring back flat. A full `curtain_clamp` ring presses its uncut edge flat against the rear bell's
+  lip (4 countersunk M3x8 from inside). Rejected: one slit down the middle (two floppy halves that won't close).
+  Cutting aids: `docs/images/curtain_template.pdf` (1:1) or the printed `cad/curtain_stencil.py` (open frame, ~14 g).
+  Material as before: polypropylene, not PVC or vinyl (Target, Fred Meyer, Office Depot).
+- **Light balance:** the audience side slightly brighter than the hand side (Kevin, 15:03: "the hand opening should be
+  slightly dimmer"); still true with the full rear ring because of the panel's 40 cm.
+- **Top cap:** one revolved part (plug into the sphere's top collar, neck, 45° flare, 190 mm cap with a thick rim
+  carrying the lid's L-grooves); `wall_extension` (white) stands on the lock wall and catches in notches in the plug:
+  it braces the wall and hides the wires running up.
+- **Lid:** `halo_ring` (white cup: 3 bayonet lugs, a 4 mm flange that glows round the rim, its 1.2 mm top is the
+  emblem's diffuser) with the green `emblem_lid` glued on and `emblem_centre` as the island; twist 20° clockwise past a
+  click (no locking screw: it is opened often and carries no weight; Kevin agreed since nothing could hide a
+  thumbscrew there). Two short pieces of 1.75 mm filament line the lid up; `cad/emblem_jig.py` centres the island.
+  `top_diffuser` is retired.
+- **Handle:** a loop on ring pivots at the sphere's sides (like the replica's wire handle), 235 mm arc radius, swings
+  flat either way to lie round the middle. Joints at 45/90/135° (away from the corners): 40 mm laps, 3 M3x8 + nut and
+  epoxy each, section 14 x 13.5 mm (thickened from 10 so heads and nuts sink under caps), pieces and pivots at 100 %
+  infill. **Printed 12 mm axles by default** (Kevin, 17:47); the steel-pin option stays in the CAD (`HANDLE_AXLE`).
+  Rejected: steel dowel pins (Everbilt ~$4.28 each "expensive as hell", Amazon packs not Prime), a steel rod through the
+  handle (needs a vise), an inner/outer lap split to hide the screws (about 4x weaker in bending). Rest direction
+  (behind or in front) not chosen; either works.
 
-### Base (rev 9, cartridge; rev 9f, 190 mm)
-- Kevin's requirement for refills in the field: undo hidden thumbscrews, lift the lantern off, unplug the cable and
-  the tube, fill the jar, then reverse. **Everything electrical and fluid stays on the cartridge.**
-- The cartridge holds:
-  - the battery flat on the tray floor
-  - a deck above it with the jar ring, the pump saddles and the electronics board
-  - the buck converter beside the pack
-- Three printed knurled knobs grip M3 screws into nuts trapped in the drum. The cable to the sphere has plugs:
-  - JST PH 4-pin for the lock
-  - JST SM 2-pin for the LEDs
-- Thread the cables through the 7 mm bay-floor hole **before** fitting the plug housings.
-- **Wider base: the base and lower dish are 190 mm (`D_MAX`), widened from 180 mm.**
-  - Kevin asked for this ("expand by 5-10 mm") to fix tight clearances after the 40 mm-thick battery raised the
-    deck. Those clearances were 0.5 mm at the jar and 1 mm at the pump.
-  - The upper dish stays 180 mm (`UPPER_DISH_MOUTH_D`) with its own cone. At 190 mm, the handle arcs touched it
-    from the side, and raising the handle didn't help.
-  - `DECK_GAP = 2` keeps the pack held down.
+### Base (rev C, 2026-10-23)
+- **`foot`** replaces the lower dish: a spigot into the drum, the 45° flare, the neck, and a riser through the
+  sphere's bottom collar to the bay floor.
+- **Drum (`base`) 80 mm:** with the battery and board gone, the pump is the tallest thing down there. The drum is
+  fixed to the foot (3 M3x8 under green caps; its top band is 2 mm thicker inward there so 3.3 mm of plastic sits under
+  each head, Kevin 20:29). It stays M3 under Kevin's thumbscrew rule because it never comes apart in normal use (the
+  offer to switch it to inside thumbscrews was not answered).
+- **One-piece cartridge (`base_tray`):** a 3 mm floor, the pump saddle, a splash wall between pump and bag (66 mm,
+  with a tube notch), the draining bag bay and clip, and the bayonet collar. `base_deck` and `thumb_knob` are retired.
+  It twist-locks to the drum (3 lugs, 20°, click bumps): **to refill, twist the lantern a little anticlockwise and
+  lift it off by the handle**; the cartridge stays on the table (Kevin kept the twist-lock, 17:28; thumbscrews from
+  underneath would mean tipping the lantern at every refill).
+- **`bag_cover`:** a D-shaped lid on the splash wall and the raised rim (Kevin 19:00: "a cover over the drink pocket…
+  so the bag pushes against that"), a 22 mm finger hole; the bag, spout and cap all stay under it.
+- Only the pump's 2 wires (through one plug) and the tube cross between the lantern and the cartridge.
+
+### Fasteners (rev C, 2026-10-23)
+- **Kevin's rule (17:17):** "things that might disconnect regularly should use the thumbscrews as long as they're
+  strong enough and the printing makes sense. Other things should use the M3 and other screws we already have." He
+  has 23 knurled PC-case thumbscrews (6-32, 6.5 mm thread, 7 mm collar, 11 x 8.7 mm head).
+- **Nothing shows when it sits on the table** (Kevin, 20:47). Every thumbscrew turns from inside:
+  - bells: 2 each, parallel to the hand, heads inside the sphere behind the top edge of the opening (45° either side
+    of the top); renders showed them through the hand opening at the sides or underneath, so they moved;
+  - top cap: 3 inside its neck (lid and cap floor out to reach); cap floor: 3 under the lid; foot: 3 inside its neck
+    (lantern off the cartridge, reach up the drum).
+- **6-32 brass heat-set inserts under every thumbscrew** so nothing wears (Kevin, 20:43): initeq #6-32 long
+  (amazon.com/dp/B076QY9858, 20-pack, bought). 4.8 x 7 mm holes (`THUMB_INSERT_*`); print `cad/thumb_test.py` to
+  confirm. Each thumbscrew grips ~4.2 mm. Rejected fallback: 6-32 nuts in pockets.
+- Other outside screws sit under flush green `screw_cap` discs (print 25: drum 3, handle 18, pivots 4); pivot M3s
+  come from inside the sphere; the curtain clamp's from inside the bell.
+- **Counts:** thumbscrews 13 of 23; 6-32 inserts 13 of 20; M3 inserts 17 (flange 4, pivots 4, foot spigot 3, board
+  standoffs 4, guide boss 1, socket housing 1); M3x6 4, M3x8 socket 13, M3x8 flat 8, M3x10 6, M3x12 4, nuts 14 — all
+  from what Kevin already owns. New purchases: only the pouch and the inserts.
+- Rejected: twist-on (bayonet) bells, built and then dropped once the thumbscrews held them (Kevin 17:20: "do we still
+  need the twist on part?"); a multi-turn thread (winds up the LED wires).
 
 ### Threaded mounts — 2026-10-14
 
-- The owner selected brass heat-set inserts and requested 4 mm holes at least 6 mm deep. All 32
-  receiving bores are now Ø4 × 6.5 mm, for M3 internal threads; this supersedes the self-tapping plan.
+- The owner selected brass heat-set inserts and requested 4 mm holes at least 6 mm deep. All M3 receiving bores
+  are Ø4 × 6.5 mm (17 in rev C; 32 in rev 9), for M3 internal threads; this supersedes the self-tapping plan.
 - Added backing at the handle mounts and a nozzle insert boss beneath the bay floor, with a matching
   lower-dish relief. The bay floor now prints inverted with support inside its drip lip.
 - Moved the twist-switch mounting screw 1.5 mm away from the cavity, with its bracket and base slot,
@@ -206,8 +263,8 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
   - Verified 2026-10-15 against TalentCell's 12 V manual: the YB1203000 has ONE DC5521 port, labelled
     "Input/Output", a power button and an LED; "push the switch to position I to make the charging circuit
     breakover"; it "can output while charging"; input 12.6 V 3 A max, charger 12.6 V 0.5 A, ~6 h, 190 g. So J1
-    wired across the pack lead ahead of S1 is the right place, and the pack's switch has to be reachable: it is,
-    from the -Y side with the lantern lifted off (the tray has no rim wall there, only a 3 mm lip). A 2019
+    wired across the pack lead ahead of S1 is the right place, and the pack's switch has to be reachable (rev C: on
+    the cap floor, under the lid). A 2019
     independent test (SotaBeams) measured 2.4 Ah (80 % of rated) and 11 V at 3 A on one unit; at our ~1.3 A peak
     and ~5 mAh per pour that is still hundreds of pours.
   - J1's third (switched) contact is unused; the charger's LED (red charging, green done) is the charge indicator.
@@ -215,11 +272,14 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
     end stops and pillars match the wider footprint; deck holes follow. Keep the deck underside at
     z=44 mm independently of pack thickness. A required 20 mm strap retains the pack; its <=2 mm
     lower run is recessed under the tray (2 mm since 2026-10-23, the pack on a 1 mm bed). Verify the supplied plug and bend fit the 25 mm end allowance.
-- The charge jack (2.1 mm panel jack, 11.3 mm deck hole; **not fitted since 2026-10-20**; since 2026-10-21 the splitter's female end inside the cartridge is the charge socket, see the change log) and an SPST mini toggle (1/4" bushing, 6.5 mm hole): since
-  2026-10-14 (rev 9h) nothing shows on the shell. The switch is in a pocket under the cartridge floor, lever
-  down (tip the lantern to flip it); the jack hole is on the deck, socket up, reached with the lantern lifted off.
-  Kevin chose this over a port panel in the drum's bottom band (visible from his side) and over both
-  underneath (which needs a cable groove at the rim). The switch stops the ~15 mA idle drain while stored.
+- **Rev C (2026-10-23): every electronic part lives on `cap_floor` in the top cap** (Kevin 15:03: "Do all the
+  electronics live inside the sphere, so we don't have to deal with… pulling out wires?"): the battery (LED face down
+  over a slot, so its charge dots show looking up through the hand opening), the board on four 10 mm standoffs, the
+  buck, S1 in a box with its lever up (6.5 mm hole), and the charge socket (the splitter's female end, tied down).
+  Lid off to switch on, charge, plug in USB or pull JP1; no lifting the lantern off for these. The lock, LED and pump
+  leads come up behind the lock wall and the wall extension through the cap floor's wire hole: the lock cable through
+  its 4-pin plug, the LED and pump leads soldered with ~15 cm of slack so the floor lifts out still connected. Nothing shows on the shell. The switch stops the ~15 mA idle drain while stored. About
+  230 g sits up top (accepted). The rev 9h switch pocket under the cartridge and the deck jack hole are gone.
 - An LM2596 makes regulated 5.0 V directly for U1 and Hall. Only the XIAO supply branch passes through
   an NTE585 Schottky and removable JP1. Remove JP1 before USB; follow the guide’s service sequence.
   JP1 is a reviewable addition for supply isolation during calibration (Vetco header + shunt, $2.24).
@@ -234,8 +294,13 @@ Revision history is in `cad/DESIGN_CONTRACT.md` (revisions 2-9i). The repository
 - 8 AA cells were also raised; the KBT pack was chosen instead.
 
 ### Lighting
-- **12 V green COB strip, 8 mm (HAMRVL B0CKYFLZFQ).** Cut on its 25 mm marks into 7 pieces (~75 cm total), all in
-  parallel, about 0.6 A (estimated; measure it).
+- **12 V green COB strip, 8 mm (HAMRVL B0CKYFLZFQ, 5 m reel).** Rev C: cut on its 25 mm marks into 10 pieces,
+  ~158 cm, all in parallel on the one light channel: front bell ring 37.5 cm (behind the lens), rear bell ring ~45 cm
+  (a full ring since 2026-10-23, was 25-30 cm), `led_panel` 4 x 10 cm, lock-face columns 2 x 5 cm, and ~25 cm in the
+  top cap for the emblem (two 12.5 cm pieces on the cap wall under the rim; Kevin 14:56 "keep 25 cm").
+- Current: ~0.8 A/m estimated, so ~1.25 A at full and ~2.0 A peak with the pump, inside the pack's 3 A (measure it).
+  Runtime is not a concern: the light is only on during a pour (idle 0 by default; `leds` caps the maximum, default 255), so hundreds of pours per
+  charge (Kevin, 21:46).
 - Plain strip on one MOSFET channel. Dropped in the budget cut: the NeoPixel ring around the lock and addressable
   LEDs. `LED_RING = False`; this is an upgrade only.
 
@@ -306,21 +371,33 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 
 | Item | Risk | What the guide says |
 |---|---|---|
-| Pump outline | Measured 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall); ~6 mm clearance | Nothing to do: slide it so the motor rests in its cradle |
-| Jar | Kevin's 8 oz Ball jar, 73 x 100-105 mm (at the width limit) | ≤ 73 mm across with the lid, ≤ 108 mm tall |
+| Pump outline | Measured 2026-10-23 (head 63.5 mm square, motor 40 x ~50 mm, 114 mm overall) | Head 0.5 mm off the cartridge rim at `PUMP_X` 37: check the real head |
+| Drink bag | 32 oz pouch in a 0.65 L bay; fills to ~22 oz | Lay it flat, spout at the well, tube clipped |
+| 6-32 insert hole | 4.8 mm designed in | Print `thumb_test.py` first |
+| Reach to the lock | ~16-17 cm in from the rear bell's mouth | Try it (box test) before printing the bell |
 | Shot glass | Bought locally | ≤ 52 mm across the top, ≤ 62 mm tall |
-| COB current | ~0.6 A estimated | Measure with the multimeter |
+| COB current | ~1.25 A estimated for ~158 cm (~2.0 A peak with the pump) | Measure with the multimeter |
 | LED dimming on a draining pack | Accepted | Charge at ~half; buck-boost is an upgrade |
 | Pen spring fallback | ~1/3 stiffness | Test the lock's snap-back (guide section 6, step 4) |
-| Sphere halves | Need interior supports | Print notes in the guide |
+| Sphere halves | 224 mm, dome up; short flat overhang under each bell thumbscrew pad | Print notes in the guide |
 | Fist envelope | Estimated | A mock-up print is suggested |
+| Filament | ~2.8 kg if solid (~2.6 kg green; STL volumes), less at real infill; Kevin has ~1.8 kg green | Slice everything and read the total; then buy a green spool or print hidden parts (cap floor, cartridge, bag cover, bay floor parts) in white: not decided |
 
 ## 6. Known loose ends a reviewer should look at
 
 - `docs/research/*.md` was written early (rev 2-5 era) and still describes the power bank, Adafruit parts and other
   superseded choices. These are background, not the current spec. Either mark them as historical or leave them, but
   the guide must never point to them for a current number.
-- `cad/NOTES-base.md` is marked superseded. Same caution applies.
+- `cad/NOTES-base.md`, `NOTES-dishes.md` and `NOTES-handle.md` are marked superseded/historical. Same caution applies.
+- **Open in rev C (ask Kevin):** the spout "rotate the internals 90°" question (2026-10-23; the LED panel now hides
+  the spout from the audience); the refill procedure for the pouch under its cover (unscrew the bag from its cap with
+  the tube left in place, or fill in place); the handle's rest direction; drum-to-foot M3s vs inside thumbscrews;
+  another green spool vs white hidden parts; the reach test; the 6-32 hole from `thumb_test.py`; `RING_ID`.
+- **Plugs (Kevin, 2026-10-23): no more for now.** The one JST SM 2-pin pair stays on the pump at the cartridge (it
+  unplugs at every refill); the LED and pump leads at the cap floor and the two bells' LED leads are soldered with
+  slack instead (those only come apart for repairs). Revisit later: each extra plug is a Vetco pair, ~$1.75.
+- **Possible purchase to approve:** a little two-part epoxy for the three handle laps, if no one has some. Super glue
+  would be the fallback (weaker on PETG).
 - Firmware wiring comments now match the electrical revision: Hall OUT directly to D1 with an external
   3.3 V pull-up. Internal pull-ups remain enabled; no firmware behavior change.
 - `key_ring` is generated since 2026-10-19 (sized by `RING_ID`); `key_cap` remains for a bought ring.
@@ -330,8 +407,10 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   - `cad/render_views.py` is a painter's-algorithm renderer. It now subdivides large faces, because large faces
     used to make the back panel look wrong.
   - Don't read rendering artefacts as CAD defects. Check against `checks.py` and the STL itself.
-- Totals and counts appear in several places: guide section 2, the Sheet, guide section 3's part table (~1.24 kg
-  of filament) and the diagrams. **They drift.** Check them against each other.
+- Totals and counts appear in several places: the guide, the Sheet, the guide's part table (~2.8 kg if solid
+  in rev C) and the diagrams. **They drift.** Check them against each other. `docs/images/fluid-path.*` is redrawn for
+  rev C; `battery-seat.*` still shows the rev 9 cartridge seat (the cap floor's seat follows the same `PACK_*` numbers)
+  and is kept as history until redrawn.
 
 ## 7. Tooling notes for a fresh container
 
@@ -548,3 +627,15 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   nothing above the lid but the tube. A submerged valve still vents by bubbling, so the jar can be filled full.
   The check valve is dropped from the guide and the Sheet (-$4.79; total about $201). Guide section 7 step 1,
   cleaning and troubleshooting rewritten for it.
+- **2026-10-23, rev C: the classic battery shape** (branch `claude/classic-battery`). Kevin chose concept C with the
+  emblem lid (14:44) and approved the mock-up (15:20): 224 mm sphere with a lens bell and a 140 mm hand bell, foot,
+  80 mm drum, one-piece cartridge with a 32 oz pouch (B09WR13XDT) under a cover on a draining floor, every electronic
+  part on a cap floor in the mirrored top cap, emblem lid with a white halo, loop handle on ring pivots with printed
+  axles. Then, the same day: every fastener hidden (thumbscrews from inside into 6-32 inserts B076QY9858, other heads
+  under 25 green caps), bell thumbscrews parallel to the hand over the openings, the drum band and handle thickened,
+  Kevin's white LED panel in front of the spout and glass, a full rear LED ring, a 25 cm emblem ring in the cap
+  (~158 cm of strip), and a one-piece slit hand-side cover with a full clamp ring, template and stencil. Retired:
+  dishes, display window, strip curtain, jar and vent lid, cartridge battery and deck, thumb knobs, top diffuser.
+  Guide, viewer, videos, renders, CAD README and design contract updated. Open items in §6.
+- **2026-10-23, no extra plugs.** Rev C would have needed 4 more JST SM 2-pin pairs (cap floor LED and pump leads,
+  both bells). Kevin: leave it at the one pair for now (the pump at the cartridge); the rest are soldered with slack.

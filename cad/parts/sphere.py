@@ -1,25 +1,37 @@
 """
-sphere.py - the lantern body: two sphere halves, hatch door, diffuser, bay floor, glass tray, LED carrier,
-nozzle clip, plus the glass envelope.
+sphere.py - the lantern body: two sphere halves, bay floor, guide boss, glass well, nozzle guide, lock wall, plus the
+glass, glass path and hand envelopes.
+
+Rev C (2026-10-23): a 224 mm sphere with the same 136.8 mm flats. A round lens opening in the front half takes the
+front bell, a round hand opening in the rear half takes the rear bell (parts/bells.py). Everything inside (bay floor,
+glass well, nozzle, lock wall, lock) keeps its height relative to the sphere centre, so the printed parts carry over;
+the foot's riser (parts/foot.py) now holds the bay floor up.
 
 Local frame ("sphere frame"): origin at the sphere centre (assembly Z = Z_SPHERE_CENTER), Z up,
-front (audience, window) = -Y, rear (owner, hatch) = +Y. Halves split on the XZ plane (y = 0).
+front (audience, lens) = -Y, rear (owner, hand opening) = +Y. Halves split on the XZ plane (y = 0).
 """
 import math
 import cadquery as cq
 import params as P
 import common as C
 
-R_OUT = P.SPHERE_D / 2                      # 90
-R_IN = R_OUT - P.WALL                       # 87.6
-CUT = P.SPHERE_CUT                          # 58.5: flats at +/- CUT
+R_OUT = P.SPHERE_D / 2                      # 112
+R_IN = R_OUT - P.WALL                       # 109.6
+CUT = P.SPHERE_CUT                          # 88.7: flats at +/- CUT
 FLAT_D = C.sphere_flat_d(P.SPHERE_D, CUT)   # 136.8
-OPENING_ID = FLAT_D - 2 * P.WALL            # 132.0: MATING with the dish locating rings (OD 131.4)
-OPENING_DEPTH = 9.0                         # collar depth from each flat (dishes.LOCATING_RING_H_UPPER)
-Z_LOWER_SCREWS = -CUT + P.JOINT_SCREW_ABOVE_FLAT   # -55.5 (assembly 195), matches dishes.Z_SPHERE_LOWER_SCREWS
-Z_UPPER_SCREWS = CUT - P.JOINT_SCREW_ABOVE_FLAT    # +55.5 (assembly 306)
-JOINT_ANGLES = C.joint_angles()             # 90, 210, 330 (first at +Y)
-BAY_FLOOR_Z = -CUT + 6.0                    # -52.5: bay_floor rests on the lower dish ring top (assembly 198)
+OPENING_ID = FLAT_D - 2 * P.WALL            # 132.0: MATING with the neck locating rings (OD 131.4)
+OPENING_DEPTH = 9.0                         # collar depth from each flat
+COLLAR_R_OUT = OPENING_ID / 2 + 4.5         # 70.5: the collar ring inside each flat (the shell alone gives 1.2 mm)
+Z_LOWER_SCREWS = -CUT + P.THUMB_INSET            # -80.7, matches foot.Z_SPHERE_SCREWS
+Z_UPPER_SCREWS = CUT - P.THUMB_INSET             # +80.7, matches top.Z_SPHERE_SCREWS
+# Thumbscrews (2026-10-23) at both flats, toward the back and sides, away from the front lens (and clear of the wall
+# extension's tabs at the top): the top cap and the base come off with them, leaving the sphere. They turn from inside
+# the neck (heads in the top cap's plug / the foot's riser) and bite outward into blind pilots in the collar, so the
+# sphere's outside is smooth; THUMB_INSET deep, where the shell is thick enough to cover a 7 mm pilot.
+JOINT_ANGLES = (10.0, 90.0, 170.0)          # bottom flat, from the foot's riser
+TOP_JOINT_ANGLES = JOINT_ANGLES             # top flat, from the top cap's plug
+THUMB_BOSS_W = 14.0                         # solid sector behind each pilot (9 mm before)
+BAY_FLOOR_Z = -52.5                         # rev C: held at the rev-9 height (36 mm above the flat) on the foot's riser
 
 # flange (joining ring inside the rear half, flush with the split face; the front half's bosses meet it there)
 # rev 9g: it used to span the split with its OD 0.3 inside the rear half's bore, so it never fused with the shell
@@ -32,26 +44,39 @@ FLANGE_SCREW_ANGLES = (30.0, 150.0, 210.0, 330.0)   # in the XZ plane from +X; |
 FLANGE_SCREW_R = FLANGE_R_IN + FLANGE_W / 2 # 83.3
 BOSS_L = 9.0                                # insert boss length along -Y on the front half
 
-# window (front) and diffuser
-WIN_W, WIN_H = P.WINDOW_W, P.WINDOW_H       # 90 x 87: rectangle + semicircle top, centred so it clears the collars
-WIN_R = WIN_W / 2                           # 45
-WIN_Z0 = -(WIN_H - WIN_R)                   # -42 bottom edge; top of the arch at +45
-DIFF_Y = -60.0                              # diffuser plane (chord radius 63.8 there)
-DIFF_D, DIFF_T = P.DIFFUSER_D, P.DIFFUSER_T # 118 x 1.0
-LEDGE_T, LEDGE_W = 2.0, 6.0                 # ring the diffuser rests against (far side)
-
-# hand port (rear): open rounded rectangle the fist punches through
-HATCH_W, HATCH_H, HATCH_R = P.HATCH_W, P.HATCH_H, 14.0    # 120 x 96
-HATCH_Z0 = -48.0                            # bottom edge (collar top is at -49.5)
-HATCH_ZC = HATCH_Z0 + HATCH_H / 2           # 0
+# rev C openings and the bell mounts (2026-10-23): a plain collar stands out round each opening; the bell slides over it
+# and two thumbscrews hold it. No tools needed. They run parallel to the bell's axis (the way the hand goes in), from
+# INSIDE the sphere: the head sits on a pad on the shell's inside, behind the opening's edge, so nothing shows looking
+# in; the thread goes out through the shell into a 6-32 insert in the bell's thickened throat. Under the throat a flat
+# pocket is sunk into the shell round each screw and a matching boss on the bell fills it, so the insert starts square.
+# Bell frame: the bell's axis is +Z (s = distance out from the sphere centre); sign -1 front (-Y), +1 rear (+Y).
+LENS_R, HAND_R = P.LENS_OPENING_R, P.HAND_OPENING_R    # 57, 70
+COLLAR_T = 3.7                              # collar wall
+COLLAR_OUT = 7.6                            # collar end, this far out from the sphere surface at the opening edge
+# thumbscrews in the XZ plane from +X, all four over the top: looking in from anywhere above the table, the rear ones
+# hide behind the opening's top edge and the front ones behind the lock wall and its extension (at the sides or
+# underneath, renders showed them through the hand opening). Rear: reach in and up. Front: reach in past the end of
+# the lock wall and back in behind it.
+BELL_LOCK_ANGLES = {-1: (45.0, 135.0), 1: (45.0, 135.0)}
+BELL_THROAT_T = 8.5                         # the bell's throat wall: the inserts sit in its middle
+BELL_SPOT_R = 4.0                           # flat spot under each screw: stays inside the throat's footprint
+BELL_PAD_R = 5.5                            # flat face under the thumbscrew's collar; a 45 deg skirt up to the shell
+PAD_R = 4.5
+PIVOT_ENTRY = 0.6                           # the curved surface over a 4 mm bore: full wall starts this far in
+# ring pivots for the handle: each pivot boss (parts/handle.py) sits over the seam. 2026-10-23: the 2 M3 x 12 come from
+# INSIDE the sphere (heads on pads inside the shell) into inserts in the pivot, so the pivot's face shows no screws.
+PIVOT_SCREWS = ((-12.0, -10.0), (12.0, -10.0))   # (y, z) of the two M3 on each side, axis along X
+PIVOT_CLAMP = 6.0                           # shell + pad under each head: an M3 x 12 then bites 6 mm into the pivot
+PIVOT_CB = 3.0 + P.SCREW_CAP_T + 0.1        # each head sinks in the pad under a green screw cap (seen at an angle
+PIVOT_PAD_R = 5.5                           # through the hand opening otherwise)
 
 # bay floor and lock wall (rev 8)
 BAY_FLOOR_OD = 131.0
 WALL_T = P.LOCK_WALL_T
 WALL_FRONT_Y = P.LOCK_FACE_Y - P.SOCKET_MODULE_DEPTH      # -25.2: the socket base plate sits here
 WALL_BACK_Y = WALL_FRONT_Y - WALL_T                        # -27.6: LED rows for the display window, tube behind
-WALL_W, WALL_H = 120.0, 99.0                               # from the bay floor top to 1 mm under the upper plug
-WALL_Z0 = -CUT + 6.0 + P.FLOOR                             # -50.5: bay floor top (wall-local z = 0)
+WALL_W, WALL_H = 120.0, 99.0                               # from the bay floor top (rev 9: to 1 mm under the old upper dish plug)
+WALL_Z0 = BAY_FLOOR_Z + P.FLOOR                            # -50.5: bay floor top (wall-local z = 0)
 NOTCH_HW = 33.0                                            # notch over the glass slot (flange at +-32)
 NOTCH_TOP = P.GLASS_TOP_Z_LOCAL + 3.0 - WALL_Z0            # 16.5: lower edge of the wall over the glass
 TAB_X0, TAB_X1 = 42.0, 50.0                                # tabs into the bay floor slots
@@ -62,7 +87,8 @@ FRONT_COL_X, FRONT_COL_Z = 54.0, (29.5, 79.5)              # one 5 cm column eit
 HALL_WIN_W, HALL_WIN_H = 34.0, 18.0                        # window behind the Hall board for the cables
 SWITCH_WIRE_NOTCH_R = 29.5                                 # = socket.WIRE_NOTCH_R: the plate's wire notch, at socket +Y
 SWITCH_WIRE_WIN = (9.0, 7.0)                               # window in the wall under that notch (notch is 6 x 3)
-WALL_POSTS = ((-40.0, 55.0), (40.0, 55.0), (-47.0, 25.0), (47.0, 25.0))   # spacer posts to the diffuser
+WALL_POSTS = ((-40.0, 55.0), (40.0, 55.0), (-47.0, 25.0), (47.0, 25.0))   # spacer posts (rev 9: to the diffuser at y -60); rev C: free ends
+DIFF_Y, DIFF_T = -60.0, 1.0                 # rev 9 diffuser plane: the printed wall's posts still end here
 GLASS_OUT_Y = P.GLASS_POUR_Y + P.GLASS_SLIDE                # +17: glass centre where it is lifted out
 WELL_YC = (P.GLASS_POUR_Y + GLASS_OUT_Y) / 2               # slot centre
 WELL_L = P.GLASS_SLIDE + P.WELL_ID                         # 78: inner slot length
@@ -81,16 +107,6 @@ GUIDE_INSERT_BOSS_BOTTOM = P.FLOOR - P.M3_INSERT_DEPTH - 1.5  # 1.5 mm closed en
 WIRE_SLOT_XY = (35.0, -32.0)                               # cables down, behind the wall
 WIRE_HOLE_D = 7.0
 
-# handle bosses (match parts.handle): pocket 14.6 x 10.6 x 12 deep, open up, mouth at the equator
-LEG_X = P.SPHERE_D / 2 + P.HANDLE_INNER_GAP + P.HANDLE_SECTION_T / 2   # 105
-HANDLE_PLANE_Y = P.WALL + P.HANDLE_SECTION_T / 2                        # 7.4
-BOSS_POCKET_W = P.HANDLE_SECTION_W + 2 * P.FIT    # 14.6 (X)
-BOSS_POCKET_T = P.HANDLE_SECTION_T + 2 * P.FIT    # 10.6 (Y)
-BOSS_POCKET_DEPTH = 12.0
-BOSS_SCREW_Z = -BOSS_POCKET_DEPTH / 2       # -6 (assembly 244.5)
-
-# nozzle clip
-
 Z_ASM = P.Z_SPHERE_CENTER
 
 
@@ -104,42 +120,142 @@ def big_box(x0, x1, y0, y1, z0, z1):
 
 def shell():
     s = cq.Workplane('XY').sphere(R_OUT).cut(cq.Workplane('XY').sphere(R_IN))
-    s = s.intersect(big_box(-100, 100, -100, 100, -CUT, CUT))
+    # a collar ring inside each flat: the neck plugs locate in it and its radial screws bite in it
+    for z0 in (-CUT, CUT - OPENING_DEPTH):
+        s = s.union(cyl(COLLAR_R_OUT, z0, z0 + OPENING_DEPTH).intersect(cq.Workplane('XY').sphere(R_OUT - 0.5)))
+    for blk in thumb_bosses():
+        s = s.union(blk.intersect(cq.Workplane('XY').sphere(R_OUT - 0.05)))
+    s = s.intersect(big_box(-130, 130, -130, 130, -CUT, CUT))
     # open both flats to the mating ID over the collar depth
     s = s.cut(cyl(OPENING_ID / 2, -CUT - 1, -CUT + OPENING_DEPTH))
     s = s.cut(cyl(OPENING_ID / 2, CUT - OPENING_DEPTH, CUT + 1))
     return s
 
 
-def arch_cutter(w, h_rect, r, y0, y1, zc_bottom):
-    """Arch (rectangle w x h_rect with a semicircle r on top), extruded along Y from y0 to y1, bottom at zc_bottom."""
-    prof = (cq.Workplane('XZ').workplane(offset=-y1)   # XZ workplane normal is -Y; offset so the extrusion spans y0..y1
-            .moveTo(-w / 2, zc_bottom).lineTo(w / 2, zc_bottom).lineTo(w / 2, zc_bottom + h_rect)
-            .threePointArc((0, zc_bottom + h_rect + r), (-w / 2, zc_bottom + h_rect)).close())
-    return prof.extrude(y1 - y0)
+def y_cyl(r, y0, y1, x=0.0, z=0.0):
+    """Cylinder along Y from y0 to y1 (either order) centred on (x, z)."""
+    lo, hi = min(y0, y1), max(y0, y1)
+    return cq.Workplane('XZ').workplane(offset=-hi).center(x, z).circle(r).extrude(hi - lo)
 
 
-def rounded_rect_cutter_y(w, h, r, y0, y1, zc):
-    prof = cq.Workplane('XZ').workplane(offset=-y1).center(0, zc).sketch().rect(w, h).vertices().fillet(r).finalize()
-    return prof.extrude(y1 - y0)
+def bell_frame_angle(sign, a):
+    """Assembly XZ angle -> bell-frame angle (the rear bell's frame is upside down: its +Y is the assembly's -Z)."""
+    return a if sign < 0 else -a
+
+
+def to_sphere(wp, sign):
+    """Bell frame -> sphere frame."""
+    return wp.rotate((0, 0, 0), (1, 0, 0), 90 if sign < 0 else -90)
+
+
+def sector(r0, r1, a0, a1, z0, z1):
+    """Annular sector r0..r1 between angles a0 < a1 (deg) about Z, z0..z1."""
+    n = max(4, int((a1 - a0) / 3) + 1)
+    pt = lambda r, a: (r * math.cos(math.radians(a)), r * math.sin(math.radians(a)))
+    pts = [pt(r1, a0 + (a1 - a0) * i / n) for i in range(n + 1)] + [pt(r0, a1 - (a1 - a0) * i / n) for i in range(n + 1)]
+    return cq.Workplane('XY').workplane(offset=z0).polyline(pts).close().extrude(z1 - z0)
+
+
+def collar_dims(sign):
+    """(opening r, collar outer r, collar end s, -) for the front (-1) or rear (+1) opening."""
+    r = LENS_R if sign < 0 else HAND_R
+    s_end = math.sqrt(R_OUT ** 2 - r * r) + COLLAR_OUT
+    return r, r + COLLAR_T, s_end, (s_end - 6.0, s_end - 1.0)
+
+
+def bell_screw_r(sign):
+    """Distance of a bell thumbscrew from the bell's axis: the middle of the throat's wall."""
+    return collar_dims(sign)[1] + P.FIT + BELL_THROAT_T / 2      # front 65.25, rear 78.25
+
+
+def bell_screw_s(sign):
+    """The flat joint face under a bell thumbscrew, set so the knurled head hangs wholly inside the shell with room for
+    fingers (the shell slopes in toward the centre further out, so its far edge sets it); the flat spot is sunk through
+    the shell to here and the pad behind it supplies the plastic."""
+    r_edge = bell_screw_r(sign) + P.THUMB_HEAD_D / 2 + 0.5
+    return math.sqrt(R_IN ** 2 - r_edge ** 2) - 0.1 + P.THUMB_COLLAR_L + P.THUMB_WEB   # front 87.8, rear 74.6
+
+
+def bell_seat_s(sign):
+    """Where the thumbscrew's collar bears: THUMB_WEB inside the joint face."""
+    return bell_screw_s(sign) - P.THUMB_WEB
+
+
+def bell_collar(sign):
+    """Plain locating collar round an opening, in the bell frame."""
+    r, ro, s_end, _ = collar_dims(sign)
+    c = cq.Workplane('XY').circle(ro).circle(r).extrude(s_end)
+    c = c.cut(cq.Workplane('XY').sphere(R_IN + 0.5))               # stops inside the shell
+    return c.intersect(cq.Workplane('XY').sphere(R_OUT + 40))
+
+
+def bell_mounts(sign):
+    """The two thumbscrew mounts for a bell, in the bell frame: (pads to add inside the shell, cuts: the collar's
+    counterbore, the clearance hole and the flat spot outside)."""
+    rs, sf = bell_screw_r(sign), bell_screw_s(sign)
+    sp = sf - P.THUMB_PAD_T                                      # pad face (head side)
+    pads, cuts = [], []
+    for a in BELL_LOCK_ANGLES[sign]:
+        rot = lambda w: w.rotate((0, 0, 0), (0, 0, 1), bell_frame_angle(sign, a))
+        pad = cq.Workplane('XY').workplane(offset=sp).center(rs, 0).circle(BELL_PAD_R).extrude(sf - sp + 3)
+        pad = pad.union(cq.Workplane('XY').add(cq.Solid.makeCone(BELL_PAD_R, BELL_PAD_R + 16, 16, pnt=cq.Vector(rs, 0, sp))))
+        pads.append(rot(pad.intersect(cq.Workplane('XY').sphere(R_OUT - 0.05))))
+        c = cq.Workplane('XY').workplane(offset=sp - 1).center(rs, 0).circle(P.THUMB_CB_D / 2).extrude(bell_seat_s(sign) - sp + 1)
+        c = c.union(cq.Workplane('XY').workplane(offset=sp - 1).center(rs, 0).circle(P.THUMB_CLEAR / 2).extrude(sf - sp + 2))
+        c = c.union(cq.Workplane('XY').workplane(offset=sf).center(rs, 0).circle(BELL_SPOT_R).extrude(15))
+        cuts.append(rot(c))
+    return pads, cuts
+
+
+def pivot_seat_x(y, z):
+    """|x| of the flat seat inside the shell for a pivot screw's head at (y, z)."""
+    return math.sqrt(R_OUT ** 2 - y * y - z * z) - PIVOT_CLAMP
+
+
+def pivot_bosses(half):
+    """Pads (axis along X) inside the shell for the handle's pivot screws, on the given half ('front' y < 0, 'rear'
+    y > 0): a flat seat for the head PIVOT_CLAMP in from the outer surface and a clearance hole out through the shell."""
+    adds, cuts = [], []
+    for sx in (-1, 1):
+        for y, z in PIVOT_SCREWS:
+            if (y < 0) != (half == 'front'):
+                continue
+            x0 = sx * pivot_seat_x(y, z)
+            xf = x0 - sx * PIVOT_CB                  # the pad's inner face: the cap sits flush with it
+            boss = cq.Workplane('YZ').workplane(offset=xf).center(y, z).circle(PIVOT_PAD_R).extrude(sx * (PIVOT_CLAMP + PIVOT_CB + 2))
+            boss = boss.union(cq.Workplane('XY').add(cq.Solid.makeCone(PIVOT_PAD_R, PIVOT_PAD_R + 12, 12, pnt=cq.Vector(xf, y, z),
+                                                                        dir=cq.Vector(sx, 0, 0))))   # 45 deg skirt to the shell
+            y0, y1 = (-130, -P.FIT) if half == 'front' else (0, 130)     # the skirt stops at the seam
+            adds.append(boss.intersect(cq.Workplane('XY').sphere(R_OUT - 0.2)).intersect(big_box(-130, 130, y0, y1, -130, 130)))
+            cuts.append(cq.Workplane('YZ').workplane(offset=x0 - sx * 1.0).center(y, z)
+                        .circle(P.M3_CLEAR / 2).extrude(sx * (PIVOT_CLAMP + 3)))
+            cuts.append(cq.Workplane('YZ').workplane(offset=xf - sx * 0.5).center(y, z)
+                        .circle(P.SCREW_CAP_CB_D / 2).extrude(sx * (PIVOT_CB + 0.5)))
+    return adds, cuts
 
 
 def radial_screw_cutters(z, angles):
-    """Horizontal M3 holes through the collar wall at height z (the shell is at r = sqrt(R_OUT^2 - z^2) there,
-    not R_OUT), with a 2 mm counterbore measured from the surface on the hole axis."""
-    r_surf = math.sqrt(R_OUT ** 2 - z ** 2)        # 70.9 at z = +/-55.5
-    r_start = r_surf + 1.0
-    cuts = []
-    for a in angles:
-        cuts.append(C.radial_hole(z, a, r_start, r_start - (OPENING_ID / 2 - 1.0), P.M3_CLEAR))   # through the collar
-        cuts.append(C.radial_hole(z, a, r_start, 1.0 + 2.0, P.M3_HEAD_D + 0.2))                  # 2 mm counterbore
-    return cuts
+    """6-32 insert bores at height z, from the collar's bore outward (the thumbscrews come from inside the neck)."""
+    r0 = OPENING_ID / 2
+    return [C.radial_hole(z, a, r0 + P.THUMB_INSERT_DEPTH, P.THUMB_INSERT_DEPTH + 1.0, P.THUMB_INSERT_HOLE) for a in angles]
+
+
+def thumb_bosses():
+    """Solid blocks behind each thumbscrew, from the bore out to the shell, so its pilot has plastic all round (the
+    collar ring alone meets the shell only near the flat)."""
+    out = []
+    for zs, angles in ((-1, JOINT_ANGLES), (1, TOP_JOINT_ANGLES)):
+        z0, z1 = sorted((zs * CUT, zs * (CUT - 16.0)))
+        for a in angles:
+            half = math.degrees(THUMB_BOSS_W / OPENING_ID)
+            out.append(sector(OPENING_ID / 2, R_OUT, a - half, a + half, z0, z1))
+    return out
 
 
 def flange_solid():
     f = (cq.Workplane('XZ').workplane(offset=-2 * FLANGE_T)   # spans y in [0, 2 * FLANGE_T]: inside the rear half
          .circle(FLANGE_R_OUT).circle(FLANGE_R_IN).extrude(2 * FLANGE_T))
-    f = f.intersect(big_box(-100, 100, -10, 10, -CUT + OPENING_DEPTH + 0.5, CUT - OPENING_DEPTH - 0.5))
+    f = f.intersect(big_box(-130, 130, -10, 10, -CUT + OPENING_DEPTH + 0.5, CUT - OPENING_DEPTH - 0.5))
     # keep the flange clear of the hatch opening on the rear half (hatch is at +Y so the flange ring at y~0 is fine)
     for a in FLANGE_SCREW_ANGLES:
         x, z = FLANGE_SCREW_R * math.cos(math.radians(a)), FLANGE_SCREW_R * math.sin(math.radians(a))
@@ -158,68 +274,38 @@ def front_bosses():
     return adds, cuts
 
 
-def handle_boss(sign):
-    """Rectangular socket for a handle leg at x = sign*LEG_X, open at the top (equator), on the rear half."""
-    x0 = sign * (R_OUT - 2.0)
-    x1 = sign * (LEG_X + BOSS_POCKET_W / 2 + 2.4)
-    y0, y1 = 0.0, HANDLE_PLANE_Y + BOSS_POCKET_T / 2 + 2.4
-    blk = big_box(min(x0, x1), max(x0, x1), y0, y1, -BOSS_POCKET_DEPTH - 4.0, 0.0)
-    pocket = big_box(sign * LEG_X - BOSS_POCKET_W / 2, sign * LEG_X + BOSS_POCKET_W / 2,
-                     HANDLE_PLANE_Y - BOSS_POCKET_T / 2, HANDLE_PLANE_Y + BOSS_POCKET_T / 2, -BOSS_POCKET_DEPTH, 1.0)
-    # insert in the pocket's inner (sphere-side) wall, axis along X, from the pocket face inward
-    ins_x = sign * (LEG_X - BOSS_POCKET_W / 2)
-    # Continue the receiving boss through the curved inner shell so the insert
-    # has a closed end and full surrounding wall, rather than breaking into the sphere.
-    blk = blk.union(cq.Workplane('YZ').workplane(offset=ins_x)
-                    .center(HANDLE_PLANE_Y, BOSS_SCREW_Z).circle(4.5)
-                    .extrude(-sign * (P.M3_INSERT_DEPTH + 1.5)))
-    insert = (cq.Workplane('YZ').workplane(offset=ins_x).center(HANDLE_PLANE_Y, BOSS_SCREW_Z)
-              .circle(P.M3_INSERT_HOLE / 2).extrude(-sign * P.M3_INSERT_DEPTH))
-    # access hole through the pocket's outer wall, so the leg screw's head can be reached with a hex key
-    out_x = sign * (LEG_X + BOSS_POCKET_W / 2 - 0.5)
-    access = (cq.Workplane('YZ').workplane(offset=out_x).center(HANDLE_PLANE_Y, BOSS_SCREW_Z)
-              .circle((P.M3_HEAD_D + 0.6) / 2).extrude(sign * 6.0))
-    return blk, [pocket, insert, access]
-
-
-
 def build_halves():
     s = shell()
-    cuts = radial_screw_cutters(Z_LOWER_SCREWS, JOINT_ANGLES) + radial_screw_cutters(Z_UPPER_SCREWS, JOINT_ANGLES)
+    cuts = radial_screw_cutters(Z_LOWER_SCREWS, JOINT_ANGLES) + radial_screw_cutters(Z_UPPER_SCREWS, TOP_JOINT_ANGLES)
     for c in cuts:
         s = s.cut(c)
-    front = s.intersect(big_box(-100, 100, -100, 0, -100, 100))
-    rear = s.intersect(big_box(-100, 100, 0, 100, -100, 100))
+    front = s.intersect(big_box(-130, 130, -130, 0, -130, 130))
+    rear = s.intersect(big_box(-130, 130, 0, 130, -130, 130))
 
-    # ---- front: window, diffuser ledge, flange bosses, carrier-independent
-    front = front.cut(arch_cutter(WIN_W, WIN_H - WIN_R, WIN_R, -100, -60, WIN_Z0))
-    ledge = (cq.Workplane('XZ').workplane(offset=-(DIFF_Y - DIFF_T - LEDGE_T)).circle(DIFF_D / 2 + 2).circle(DIFF_D / 2 - LEDGE_W).extrude(LEDGE_T))
-    ledge = ledge.intersect(cq.Workplane('XY').sphere(R_IN + 0.5))
-    ledge = ledge.intersect(big_box(-100, 100, -100, 100, -CUT + OPENING_DEPTH + 0.5, CUT - OPENING_DEPTH - 0.5))   # stay off the dish plugs
-    front = front.union(ledge)
-    adds, bcuts = front_bosses()
-    for a in adds:
+    # ---- front: lens opening and its bell collar, flange bosses, pivot bosses
+    adds, fcuts = front_bosses()
+    a, c = pivot_bosses('front')
+    adds += a
+    fcuts += c
+    pads, mcuts = bell_mounts(-1)
+    for a in adds + [to_sphere(p, -1) for p in pads]:
         front = front.union(a)
-    for c in bcuts:
+    front = front.cut(y_cyl(LENS_R, -40, -130))
+    front = front.union(to_sphere(bell_collar(-1), -1))
+    for c in [to_sphere(c, -1) for c in mcuts] + fcuts:
         front = front.cut(c)
 
-    # ---- rear: flange, hand port (open: the fist goes in here), handle bosses
+    # ---- rear: flange, hand opening (the fist goes in here) and its bell collar, pivot bosses
     rear = rear.union(flange_solid())
-    rear = rear.cut(rounded_rect_cutter_y(HATCH_W, HATCH_H, HATCH_R, 40, 100, HATCH_ZC))
-    for sx in (-1, 1):
-        blk, bc = handle_boss(sx)
-        rear = rear.union(blk)
-        for c in bc:
-            rear = rear.cut(c)
+    adds, rcuts = pivot_bosses('rear')
+    pads, mcuts = bell_mounts(+1)
+    for a in adds + [to_sphere(p, +1) for p in pads]:
+        rear = rear.union(a)
+    rear = rear.cut(y_cyl(HAND_R, 40, 130))
+    rear = rear.union(to_sphere(bell_collar(+1), +1))
+    for c in [to_sphere(c, +1) for c in mcuts] + rcuts:
+        rear = rear.cut(c)
     return front, rear
-
-
-
-def diffuser():
-    # flats top and bottom keep it off the dish plugs (the window spans z -42..+45)
-    h = 2 * (CUT - OPENING_DEPTH - 0.5)
-    return cq.Workplane('XY').circle(DIFF_D / 2).extrude(DIFF_T).intersect(
-        cq.Workplane('XY').rect(DIFF_D + 2, h).extrude(DIFF_T))
 
 
 def bay_floor():
@@ -244,7 +330,7 @@ def bay_floor():
 
 def guide_boss():
     """Insert boss glued under the bay floor (bay-floor frame). The 2 mm floor alone cannot retain a 6 mm insert, so
-    the bore continues into this boss, which hangs into a matching relief in the lower dish. A separate part so the
+    the bore continues into this boss, which hangs into a matching notch in the foot's riser. A separate part so the
     bay floor prints flat, lip up, without supports."""
     b = cyl(GUIDE_INSERT_BOSS_R, GUIDE_INSERT_BOSS_BOTTOM, 0, *GUIDE_SCREW)
     return b.cut(cyl(P.M3_INSERT_HOLE / 2, P.FLOOR - P.M3_INSERT_DEPTH, 0.5, *GUIDE_SCREW))
@@ -257,7 +343,7 @@ def slot(w, l, z0, z1, yc=None):
 
 
 def glass_well():
-    """Slot the glass slides in. Hangs from its flange on the bay floor into the lower dish.
+    """Slot the glass slides in. Hangs from its flange on the bay floor, down into the foot's neck.
     Built and printed floor down: z = 0 is the outside bottom, the flange is at the top with a 45 deg skirt."""
     top = (BAY_FLOOR_Z + P.FLOOR + WELL_FLANGE_T) - (GLASS_BASE_Z - P.FLOOR)   # outside bottom -> flange top
     ow, ol = P.WELL_ID + 2 * P.WELL_WALL, WELL_L + 2 * P.WELL_WALL
@@ -276,14 +362,55 @@ def glass_well():
     return w.union(ridge.intersect(slot(P.WELL_ID + 0.2, WELL_L + 0.2, 0, top)))
 
 
+# LED panel (2026-10-23, Kevin): a plain white panel on the wall's four posts, in front of everything on the display side
+# (nozzle, glass, the wall's back), with the 4 LED rows on ITS front facing the lens ~5 cm away. It hides the hardware
+# and the light passes one frosted layer (the lens), not two. The wall's back-face channels are no longer used.
+PANEL_BACK_Y = DIFF_Y - DIFF_T              # -61.0: the posts' free ends
+PANEL_T = 2.4
+PANEL_R, PANEL_Z = 86.0, (WALL_Z0 + 2.5, 74.0)   # round, cut flat over the drip lip and under the top cap's plug
+PANEL_ROWS_Z, PANEL_ROW_L = (-36.0, -12.0, 12.0, 36.0), BACK_ROW_L   # 4 x 10 cm of strip, as on the wall's back before
+PANEL_CH_D = 0.6                            # shallow guide channels for the strips
+PANEL_WIRE_X, PANEL_WIRE_D = 56.0, 4.0      # a lead hole at the end of each row, to the back
+COLLAR_IN, COLLAR_WALL, COLLAR_H = 6.0 + 2 * P.FIT, 1.2, 5.0   # sockets on the back that slip over the posts (+ glue)
+
+
+def led_panel():
+    """Sphere frame. The front face (y = PANEL_BACK_Y - PANEL_T) carries the strips; collars on the back fit the posts."""
+    y0, y1 = PANEL_BACK_Y - PANEL_T, PANEL_BACK_Y
+    p = y_cyl(PANEL_R, y0, y1).intersect(big_box(-130, 130, y0 - 1, y1 + 1, *PANEL_Z))
+    for z in PANEL_ROWS_Z:
+        p = p.cut(big_box(-PANEL_ROW_L / 2, PANEL_ROW_L / 2, y0 - 1, y0 + PANEL_CH_D, z - STRIP_CH_W / 2, z + STRIP_CH_W / 2))
+        p = p.cut(y_cyl(PANEL_WIRE_D / 2, y0 - 1, y1 + 1, PANEL_WIRE_X, z))
+    for (x, zw) in WALL_POSTS:
+        z = WALL_Z0 + zw
+        o, i = COLLAR_IN / 2 + COLLAR_WALL, COLLAR_IN / 2
+        p = p.union(big_box(x - o, x + o, y1 - 0.01, y1 + COLLAR_H, z - o, z + o).cut(big_box(x - i, x + i, y1 - 1, y1 + COLLAR_H + 1, z - i, z + i)))
+    return p
+
+
+def panel_leds():
+    """The 4 strips on the panel's front (2 mm COB strip), for renders and checks."""
+    y0 = PANEL_BACK_Y - PANEL_T + PANEL_CH_D
+    out = None
+    for z in PANEL_ROWS_Z:
+        b = big_box(-PANEL_ROW_L / 2 + 0.5, PANEL_ROW_L / 2 - 0.5, y0 - 2.0, y0 - 0.05, z - 4.0, z + 4.0)
+        out = b if out is None else out.union(b)
+    return out
+
+
+HAND_PATH_Y1 = 160.0                        # rev C: the hand and the glass travel out past the rear bell's mouth (151)
+
+
 def glass_path():
-    """Everything the glass passes through on the way out: the slide back at rim height, then the lift."""
+    """Everything the glass passes through on the way out: the slide back at rim height, the lift, then (rev C) out
+    through the hand opening and the rear bell, carried upright with its base just over the drip lip."""
     r = P.GLASS_D_TOP / 2 + 1.5
     z0 = BAY_FLOOR_Z + P.FLOOR + WELL_FLANGE_T                # flange top
     rim = P.GLASS_TOP_Z_LOCAL + P.WELL_RIDGE_H + 1.0          # rim while the base rides over the ridge, + 1 mm
     slide = slot(2 * r, P.GLASS_SLIDE + 2 * r, z0, rim)
     lift = cq.Workplane('XY').workplane(offset=z0).center(0, GLASS_OUT_Y).circle(r).extrude(P.GLASS_H + 3.0)
-    return slide.union(lift)
+    out = big_box(-r, r, GLASS_OUT_Y, HAND_PATH_Y1, z0 + 2.0, z0 + 2.0 + P.GLASS_H + 1.0)
+    return slide.union(lift).union(out)
 
 
 def nozzle_guide():
@@ -311,8 +438,8 @@ def nozzle_guide():
 
 
 def lock_wall():
-    """The wall just inside the hand port: the lock on its front face, the nozzle hidden behind it, LED strips on
-    both faces. Wall-local frame: x as the sphere, y = 0 the back face (display side), y = WALL_T the front face
+    """The wall just inside the hand port: the lock on its front face, the nozzle hidden behind it, LED strips on its
+    front face (the back-face rows moved to led_panel on 2026-10-23; their channels stay, unused). Wall-local frame: x as the sphere, y = 0 the back face (display side), y = WALL_T the front face
     (your side), z = 0 the bay floor top."""
     T = WALL_T
     w = big_box(-WALL_W / 2, WALL_W / 2, 0, T, 0, WALL_H)
@@ -347,25 +474,6 @@ def lock_wall():
     return w
 
 
-def curtain_clamp():
-    """Arc bar that clamps the strip curtain to the underside of the upper dish plug, just inside the hand port.
-    Printed flat. Frame: the sphere axis at the origin, the arc centred on +Y."""
-    r0, r1 = P.CURTAIN_R - 4.0, P.CURTAIN_R + 3.0
-    a = P.CURTAIN_HALF_ANGLE
-    ring = cq.Workplane('XY').circle(r1).circle(r0).extrude(CLAMP_T)
-    sector = (cq.Workplane('XY').polyline([(0, 0)] + [(1.5 * r1 * math.cos(math.radians(90 + t)), 1.5 * r1 * math.sin(math.radians(90 + t)))
-                                                  for t in (-a, -a / 2, 0, a / 2, a)]).close().extrude(CLAMP_T))
-    c = ring.intersect(sector)
-    for t in P.CURTAIN_SCREW_ANGLES:
-        x, y = P.CURTAIN_R * math.cos(math.radians(t)), P.CURTAIN_R * math.sin(math.radians(t))
-        c = c.cut(cyl(P.M3_CLEAR / 2, -1, CLAMP_T + 1, x, y))
-    return c
-
-
-CLAMP_T = 3.0
-UPPER_PLUG_H = max(6.0, P.SOCKET_PLATE_T + P.M3_INSERT_DEPTH + 1.5 - P.FLOOR)   # = dishes.LOCATING_RING_H_UPPER
-
-
 def _guide_origin():
     return (GROMMET_XY[0], GROMMET_XY[1], BAY_FLOOR_Z + P.FLOOR)   # tube exit on the bay floor top
 
@@ -375,18 +483,18 @@ def build():
     out = {
         'sphere_front': front.rotate((0, 0, 0), (1, 0, 0), -90),   # dome up, split face on the bed
         'sphere_rear': rear.rotate((0, 0, 0), (1, 0, 0), 90),
-        'diffuser': diffuser(),
         'bay_floor': bay_floor(),                       # floor on the bed, drip lip up, no supports
         'guide_boss': guide_boss().translate((-GUIDE_SCREW[0], -GUIDE_SCREW[1], -GUIDE_INSERT_BOSS_BOTTOM)),   # glue face up
         'glass_well': glass_well(),
         'lock_wall': lock_wall().rotate((0, 0, 0), (1, 0, 0), -90),     # lie flat: back face (rows, posts) up
-        'curtain_clamp': curtain_clamp(),
         'nozzle_guide': nozzle_guide(),
+        'led_panel': led_panel().rotate((0, 0, 0), (1, 0, 0), 90).translate((0, 0, PANEL_T - PANEL_BACK_Y)),   # front face down
+        'panel_led_envelope': panel_leds(),
         'glass_envelope': cq.Workplane('XY').add(cq.Solid.makeCone(P.GLASS_D_BASE / 2 + 1.0, P.GLASS_D_TOP / 2, P.GLASS_H)),
         'glass_path_envelope': glass_path(),
-        # the hand: a fist (ring face on the socket) and the forearm through the port
+        # the hand: a fist (ring face on the socket), and the fist's path in through the rear bell (rev C)
         'fist_envelope': cq.Workplane('XZ').ellipse(P.FIST_W / 2, P.FIST_H / 2).extrude(-P.FIST_LEN),
-        'forearm_envelope': cq.Workplane('XZ').circle(P.FOREARM_R).extrude(-60.0),
+        'hand_path_envelope': cq.Workplane('XZ').ellipse(P.FIST_W / 2, P.FIST_H / 2).extrude(-(HAND_PATH_Y1 - P.LOCK_FACE_Y - P.FIST_LEN)),
     }
     for k in ('sphere_front', 'sphere_rear', 'lock_wall'):
         bb = out[k].val().BoundingBox()
@@ -411,15 +519,15 @@ def placements():
     return {
         'sphere_front': unflat('sphere_front', 90, (0, 0, Z)),
         'sphere_rear': unflat('sphere_rear', -90, (0, 0, Z)),
-        'diffuser': ((1, 0, 0), 90, (0, DIFF_Y - DIFF_T, Z)),
         'bay_floor': ((0, 0, 1), 0, (0, 0, Z + BAY_FLOOR_Z)),
         'guide_boss': ((0, 0, 1), 0, (GUIDE_SCREW[0], GUIDE_SCREW[1], Z + BAY_FLOOR_Z + GUIDE_INSERT_BOSS_BOTTOM)),
         'glass_well': ((0, 0, 1), 0, (0, 0, Z + GLASS_BASE_Z - P.FLOOR)),   # printed the way it hangs
         'lock_wall': unflat('lock_wall', 90, (0, WALL_BACK_Y, Z + WALL_Z0)),
-        'curtain_clamp': ((0, 0, 1), 0, (0, 0, P.Z_SPHERE_TOP - UPPER_PLUG_H - CLAMP_T)),   # under the upper dish plug
         'nozzle_guide': ((0, 0, 1), 0, (gx, gy, Z + gz)),
+        'led_panel': [((0, 0, 1), 0, (0, 0, PANEL_BACK_Y - PANEL_T)), ((1, 0, 0), -90, (0, 0, Z))],
+        'panel_led_envelope': ((0, 0, 1), 0, (0, 0, Z)),
         'glass_envelope': ((0, 0, 1), 0, (0, P.GLASS_POUR_Y, Z + GLASS_BASE_Z)),
         'glass_path_envelope': ((0, 0, 1), 0, (0, 0, Z)),
         'fist_envelope': ((0, 0, 1), 0, (0, face_y, hand_z)),
-        'forearm_envelope': ((0, 0, 1), 0, (0, face_y + P.FIST_LEN - 10.0, hand_z)),
+        'hand_path_envelope': ((0, 0, 1), 0, (0, face_y + P.FIST_LEN, hand_z)),
     }
