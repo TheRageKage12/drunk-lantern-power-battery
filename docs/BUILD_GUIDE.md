@@ -825,6 +825,13 @@ PETG, 0.4 mm nozzle:
 - The foot's spigot, the top cap's plug and the cartridge's collar mate with 0.3 mm clearance a side; a flared first
   layer eats that, hence the elephant-foot setting.
 - Turn "print thin walls" on for `socket_base` (the sensor post).
+- **Seam.** Every layer starts and ends at one point, leaving a thin vertical line. Set the seam to **aligned** (or
+  paint it) on the side that won't be seen. On the bells that is the underside: directly opposite the midpoint of
+  the two thumbscrew insert holes in the throat (they sit 45 degrees either side of the top). On `sphere_rear`, the
+  top cap, foot and drum, put it on your side (the hand side, opposite the lens); on `sphere_front`, at the bottom.
+  A "scarf seam" (Orca, PrusaSlicer) hides it further.
+- Use the STLs from `cad/output/` as they are: they are meshed finely enough that round parts print round. Older
+  copies showed flat facets on the bells.
 - Do not anneal.
 
 **Filament:** about 2.8 kg of PETG if printed solid (about 2.6 kg green; the rest white), less at these settings.

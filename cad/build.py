@@ -37,7 +37,12 @@ def export(name, wp):
     os.makedirs(OUT, exist_ok=True)
     stl = os.path.join(OUT, f'{name}.stl')
     step = os.path.join(OUT, f'{name}.step')
-    cq.exporters.export(wp, stl, tolerance=0.05, angularTolerance=0.15)
+    # Printed parts get a fine mesh: at 0.15 rad a 150 mm bell came out as ~55 flat facets you could see in glossy
+    # PETG. Envelopes are only check volumes, so they keep the coarse mesh.
+    if name.endswith('_envelope'):
+        cq.exporters.export(wp, stl, tolerance=0.05, angularTolerance=0.15)
+    else:
+        cq.exporters.export(wp, stl, tolerance=0.02, angularTolerance=0.05)
     try:
         cq.exporters.export(wp, step)
     except Exception as e:  # STEP export is best-effort

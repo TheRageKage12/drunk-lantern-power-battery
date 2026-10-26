@@ -658,3 +658,9 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   (one row per printed part in the guide's print order, with a Status dropdown, Printed/Left counts, settings,
   grams if solid from the STL volumes (~2.86 kg: ~2.10 green, ~0.19 white, ~0.58 any colour), inserts, the build step
   each part unblocks, and who is printing it). The guide's PR-5 and `CLAUDE.md` point to it.
+- **2026-10-26, smooth STLs.** The first printed `bell_front` showed flat vertical facets: `build.py` exported every
+  STL at 0.15 rad angular tolerance, ~55 segments round a 150 mm bell (~8.5 mm flats, visible in glossy PETG). Printed
+  parts now export at 0.02 mm / 0.05 rad (~250 segments on the bells, ~1.8 mm flats, 0.003 mm deep); envelopes stay
+  coarse. STLs grow from ~17 MB to ~36 MB. The print also showed a wandering seam line: the guide's PR-3 now says to
+  align the seam on the hidden side (bells: underneath, opposite the midpoint of the two insert holes). Reprint
+  `bell_front` from the new STL if the facets bother you.
