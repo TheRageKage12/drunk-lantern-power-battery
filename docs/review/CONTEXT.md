@@ -664,3 +664,8 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   coarse. STLs grow from ~17 MB to ~36 MB. The print also showed a wandering seam line: the guide's PR-3 now says to
   align the seam on the hidden side (bells: underneath, opposite the midpoint of the two insert holes). Reprint
   `bell_front` from the new STL if the facets bother you.
+- **2026-10-26, old-STL prints stay; reprint at the end.** Old and new STLs fit each other (same geometry; the old
+  mesh only cuts inside curves: the worst mixed joint, a new `halo_ring` in an old `top_cap` rim, keeps >= 0.18 of its
+  0.3 mm a side). Kevin: defer reprints to the end to finish in time. Marked Reprint in the Sheet: `bell_front`,
+  `foot`, `base`, `top_cap`; parts not yet printed are noted "new STL only". Guide PR-6 gains sanding steps as the
+  alternative to a reprint.
