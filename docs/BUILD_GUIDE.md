@@ -825,6 +825,14 @@ PETG, 0.4 mm nozzle:
 - The foot's spigot, the top cap's plug and the cartridge's collar mate with 0.3 mm clearance a side; a flared first
   layer eats that, hence the elephant-foot setting.
 - Turn "print thin walls" on for `socket_base` (the sensor post).
+- **Seam.** Every layer starts and ends at one point, leaving a thin vertical line. Set the seam to **aligned** (or
+  paint it) on the side that won't be seen. On the bells that is the underside: directly opposite the midpoint of
+  the two thumbscrew insert holes in the throat (they sit 45 degrees either side of the top). On `sphere_rear`, the
+  top cap, foot and drum, put it on your side (the hand side, opposite the lens); on `sphere_front`, at the bottom.
+  A "scarf seam" (Orca, PrusaSlicer) hides it further.
+- Use the STLs from `cad/output/` as they are: they are meshed finely enough that round parts print round. Parts
+  printed from older copies show flat vertical facets on round surfaces (0.15-0.34 mm deep). They still fit new
+  parts; reprint them when time allows or sand them (PR-6).
 - Do not anneal.
 
 **Filament:** about 2.8 kg of PETG if printed solid (about 2.6 kg green; the rest white), less at these settings.
@@ -921,6 +929,20 @@ sliding fit as soon as both parts exist; sand the smaller part if it binds:
 - [ ] `halo_ring` into the cap rim, twisted to its click;
 - [ ] `glass_well` into `bay_floor`'s slot;
 - [ ] each handle end piece's axle in its pivot.
+
+**Smoothing a faceted part by sanding.** Facets are under 0.35 mm deep and the walls are about 1.8 mm, so sanding
+them out is safe:
+
+1. Sand only the ridges between the flats, with a sanding block or a flat foam pad so it bridges the low spots and
+   cuts the high ones. Work round the part until the ridge lines disappear.
+2. Go 150 → 220 → 400 grit, wet from 220 on so the PETG doesn't gum up.
+3. Sanded PETG turns matte and slightly cloudy, so sand a whole visible surface, not patches. Matte also hides any
+   remaining facets (they show through reflections). For a sheen, finish at 600-800 grit and add a satin clear coat,
+   or pass a heat gun quickly from a distance (practise on a scrap first: PETG goes from glossy to warped fast).
+4. **Never sand a mating surface:** the foot's spigot, the inside of the drum, the top cap's plug and rim grooves,
+   the bells' throats, the cartridge collar. They are hidden anyway, and they carry the fits.
+
+On the bells only the visible outer cone needs it.
 
 ### PR-7. Install the heat-set inserts
 
