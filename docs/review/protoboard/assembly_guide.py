@@ -23,6 +23,23 @@ def assembly_order(routes):
     groups=R.validate(routes)['assembly_groups'];byid={w['id']:w for w in routes}
     return [byid[n] for group in groups for n in group]
 
+def wire_actions(w):
+    """Prepare from an uncut spool, fitting before trimming the second end."""
+    tails=w['tails'];a=tails[0]
+    for t in tails:t['strip_mm']=math.ceil(R.length(t['path'])+2.1)
+    actions=[f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Measure the cable run below to calculate how much {w['colour']} wire to cut.",
+             f"Strip about {a['strip_mm']} mm of plastic off one end; twist the copper strands together. Insert through {a['anchor']} from the component side."]
+    if len(tails)==2:
+        b=tails[1]
+        actions.append(f"Curve the wire as shown. Mark where it enters {b['anchor']}; cut {b['strip_mm']} mm beyond the mark. Strip back to the mark, twist the strands and insert.")
+    else:
+        actions.append('Shape the wire along the shown route, out past the board edge. Keep its other end insulated for the later connection.')
+    entries=' and '.join(t['anchor'] for t in tails)
+    links='; '.join(t['anchor']+' → '+t['node'] for t in tails)
+    nodes=' and '.join(t['node'] for t in tails)
+    actions.append(f'Underneath, solder {entries}. Bend the bare ends: {links}. Solder {nodes}, clip excess copper.')
+    return actions
+
 def component_identity(ref):
     """Plain names and illustration labels, using the actual terminal assignments."""
     part=next((p for p in L.PARTS if p['ref']==ref),{})
@@ -82,16 +99,11 @@ def make_data(routes):
         joints=[]
         for name in group:
             w=byid[name];w.update(exit3d=R.cable_exit(w),surface='front',colour=NET_COLOUR[w['net']],length=route_length(w),segments=R.pieces(w),label=L.DESIGN['cables'].get(name,L.NETS[w['net']][1]),earlier_crossings=[],group=group)
+            w['assembly_actions']=wire_actions(w)
             for t in w['tails']:pins['WIRE.'+t['id']]=dict(pad=t['anchor'],net=w['net'])
             for t in w['tails']:
                 joints.extend([dict(pad=t['anchor'],owner=name),dict(pad=t['node'],owner=name)])
-        if len(group)==1:
-            tails=byid[group[0]]['tails']
-            entries=' and '.join(t['anchor'] for t in tails)
-            connections='; '.join(t['anchor']+' to '+t['node'] for t in tails)
-            text='Pass the stripped '+('ends' if len(tails)==2 else 'end')+' through '+entries+' from the component side. On the back, solder '+entries+', then bend the bare '+('ends' if len(tails)==2 else 'end')+' along the shown paths: '+connections+'. Solder at '+(' and '.join(t['node'] for t in tails))+', then trim the excess.'
-        else:
-            text='Fit both loops together before soldering either wire. For each wire below, pass its stripped ends through the entry holes. On the back, solder those holes, bend each bare end to its paired connection, and solder there. Trim the excess.'
+        text='Fit both loops together before soldering either wire. Select each wire below for its instructions.' if len(group)==2 else ''
         idx=add('wire','Install '+' + '.join(group),text,wires=group,phase='Insulated wires',joints=joints)
         for name in group:byid[name].update(prepare=idx,joints=[idx],check=idx)
     add('check','Check the board wiring','Check every listed wire for continuity and inspect neighbouring joints for bridges before adding the underside parts.',phase='Inspect')
@@ -103,7 +115,10 @@ def make_data(routes):
         w=dict(id=pg['id'],a=pad,b=ref,anchor_a=pad,anchor_b=ref,net=L.PINS[ref]['net'],bare=False,od=1.8,colour=colour,surface='rear',depth=max(p[2] for p in pg['path']),path3d=path,path=[p[:2] for p in path],exit3d=[],segments=[(path,1.8)],anchors=[pad],label=ref,length=dict(formed=round(R.length(path),1),tails=1.2,trim=6.8,cut=cut),earlier_crossings=[],group=[pg['id']],joints=[])
         polarity='positive' if colour=='red' else 'striped negative'
         idx=add('wire','Connect C2 · '+colour+' lead (2200 µF / 25 V)','Form the wire to the template. Insert into '+pad+' from the back, flush with the front, and solder on the back. Slide on heat-shrink, solder the other end to C2’s '+polarity+' leg, then cover that joint and shrink.',wires=[w['id']],ref='C2',points=[path[-1]],joints=[dict(pad=pad,owner=w['id'])],phase='Large capacitor')
-        w.update(prepare=idx,joints=[idx],check=idx);aux.append(w)
+        w.update(prepare=idx,joints=[idx],check=idx,assembly_actions=[
+            f'Cut {cut} mm of {colour} wire.',
+            'Remove enough plastic coating from each end to make its solder connection. Gently twist the exposed copper strands together.',
+            steps[idx]['text']]);aux.append(w)
     add('check','Strap the battery and C2 in place','Cut 350 mm of ONE-WRAP and thread the floor slots. Fit the battery LED-side down and C2 along its top. Strap across C2’s middle, leaving both ends clear and at least 50 mm overlap. Pull-test: C2 must not slide.',phase='Large capacitor')
     parts.append(dict(ref='C2',name='C2',identity=component_identity('C2'),fit=capfit,solder=[],bounds=M.bounds()['C2'],pins=['F02','F04'],side='external'))
     for j in L.DESIGN['harness']:
