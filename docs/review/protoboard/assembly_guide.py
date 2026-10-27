@@ -24,21 +24,37 @@ def assembly_order(routes):
     return [byid[n] for group in groups for n in group]
 
 def wire_actions(w):
-    """Prepare from an uncut spool, fitting before trimming the second end."""
+    """Prepare both ends before insertion; keep trimming stock on bare ends."""
     tails=w['tails'];a=tails[0]
     for t in tails:t['strip_mm']=math.ceil(R.length(t['path'])+2.1)
-    actions=[f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Measure the cable run below to calculate how much {w['colour']} wire to cut.",
-             f"Strip about {a['strip_mm']} mm of plastic off one end; twist the copper strands together. Insert through {a['anchor']} from the component side."]
+    if len(tails)==2:
+        # Keep the covered span at the planned length, rounded up by <1 mm.
+        # The existing 6 mm trimming allowance becomes accessible bare stock.
+        span=math.ceil(R.length(w['path3d']))
+        spare=w['length']['cut']-span-sum(t['strip_mm'] for t in tails)
+        assert spare>=0
+        a['prepare_strip_mm']=a['strip_mm']+spare//2
+        tails[1]['prepare_strip_mm']=tails[1]['strip_mm']+spare-spare//2
+        w['covered_mm']=span
+    else:
+        a['prepare_strip_mm']=a['strip_mm']+3
+    cut=f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Measure the cable run below to calculate how much {w['colour']} wire to cut."
     if len(tails)==2:
         b=tails[1]
-        actions.append(f"Curve the wire as shown. Mark where it enters {b['anchor']}; cut {b['strip_mm']} mm beyond the mark. Strip back to the mark, twist the strands and insert.")
+        strip=(f"Remove about {a['prepare_strip_mm']} mm of plastic from each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Remove {a['prepare_strip_mm']} mm of plastic from end A and {b['prepare_strip_mm']} mm from end B.")
+        prepare=cut+' '+strip+' Twist the loose copper strands together.'
+        fit=f"Bend the covered middle into a loop, with both bare ends pointing down. From the component side, insert A through {a['anchor']} and B through {b['anchor']}."
+        shape=f"Keep the loop about {round(w['depth']+w['od']/2)} mm above the board, matching the Fit wire view. Leave the bare ends straight underneath."
     else:
-        actions.append('Shape the wire along the shown route, out past the board edge. Keep its other end insulated for the later connection.')
+        prepare=cut+f" Remove about {a['prepare_strip_mm']} mm of plastic from the board end and twist the copper strands together. Leave the far end insulated."
+        fit=f"With the components facing you, put the bare end through {a['anchor']}. Keep the plastic above the board."
+        shape='Follow the Fit wire drawing to take the insulated cable out past the board edge. Leave its bare board end straight underneath for now.'
     entries=' and '.join(t['anchor'] for t in tails)
-    links='; '.join(t['anchor']+' → '+t['node'] for t in tails)
+    links='; '.join('from '+t['anchor']+' to the existing '+t['node']+' joint' for t in tails)
     nodes=' and '.join(t['node'] for t in tails)
-    actions.append(f'Underneath, solder {entries}. Bend the bare ends: {links}. Solder {nodes}, clip excess copper.')
-    return actions
+    return [prepare,fit,shape,
+            ('Once both wires are fitted, select' if len(w['group'])==2 else 'Select')+f' Solder ends and turn the board over. Solder {entries} to hold the wire.',
+            f'Bend the bare copper {links}. Clip off copper extending beyond those joints, then solder {nodes}.']
 
 def component_identity(ref):
     """Plain names and illustration labels, using the actual terminal assignments."""

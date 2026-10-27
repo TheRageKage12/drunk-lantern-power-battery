@@ -43,6 +43,17 @@ def test_all_solder_points_once_per_wire(data):
   assert w['length']['cut']>=w['length']['formed']
  assert len(data['routes'])==37
 
+def test_prepared_wire_reaches_both_joints_without_stripping_the_loop(data):
+ for w in data['routes']:
+  if not w.get('tails'):continue
+  for t in w['tails']:
+   assert t['prepare_strip_mm']>=R.length(t['path'])+2.1
+  if len(w['tails'])==2:
+   covered=w['length']['cut']-sum(t['prepare_strip_mm'] for t in w['tails'])
+   route=R.length(w['path3d'])
+   assert route<=covered<route+1
+   assert covered==w['covered_mm']
+
 def test_weaving_pairs_fitted_before_any_joint(data):
  routes={w['id']:w for w in data['routes']}
  for group in data['report']['assembly_groups']:
