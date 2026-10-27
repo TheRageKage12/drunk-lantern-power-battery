@@ -38,7 +38,7 @@ def test_component_and_mount_collisions_rejected():
 
 def test_all_solder_points_once_per_wire(data):
  for w in data['routes']:
-  solder=[s['pad'] for s in data['steps'] if s.get('wire')==w['id'] and s['kind']=='solder']
+  solder=[j['pad'] for s in data['steps'] for j in s.get('joints',[]) if j['owner']==w['id']]
   assert solder==w['anchors']
   assert w['length']['cut']>=w['length']['formed']
  assert len(data['routes'])==37
@@ -46,8 +46,39 @@ def test_all_solder_points_once_per_wire(data):
 def test_weaving_pairs_fitted_before_any_joint(data):
  routes={w['id']:w for w in data['routes']}
  for group in data['report']['assembly_groups']:
-  assert max(routes[n]['prepare'] for n in group)<min(min(routes[n]['joints']) for n in group)
+  indices={routes[n]['prepare'] for n in group}
+  assert len(indices)==1
+  step=data['steps'][indices.pop()]
+  assert step['wires']==group
+  assert {j['owner'] for j in step['joints']}==set(group)
+  assert all(routes[n]['joints']==[step['index']] for n in group)
+  if len(group)==2:assert step['text'].startswith('Fit both loops together before soldering either wire.')
  assert len(data['report']['preformed_pairs'])==4
+
+def test_components_are_complete_tasks_and_no_joints_lost(data):
+ assert data['steps'][0]['ref']=='R1'
+ for p in data['parts']:
+  if p['side']=='external':continue
+  step=data['steps'][p['fit']]
+  assert step['ref']==p['ref'] and step['kind']=='component'
+  assert step['pads']==p['pins'] and p['solder']==[step['index']]
+  assert [j['pad'] for s in data['steps'] for j in s.get('joints',[]) if j['owner']==p['ref']]==p['pins']
+ assert sum(len(s.get('joints',[])) for s in data['steps'])==182
+ assert len(data['steps'])<65
+
+def test_capacitor_wires_include_both_connections(data):
+ for w in data['routes']:
+  if w['surface']!='rear':continue
+  s=data['steps'][w['prepare']]
+  assert s['pads']==w['anchors'] and s['points']==[w['path3d'][-1]]
+  assert 'heat-shrink' in s['text']
+
+def test_earlier_joints_preserved_for_reheating(data):
+ owners={}
+ for s in data['steps']:
+  expected={owner for pad in s['pads'] for owner in owners.get(pad,[])}
+  assert set(s['previous'])==expected
+  for j in s.get('joints',[]):owners.setdefault(j['pad'],[]).append(j['owner'])
 
 def test_underside_parts_after_wires(data):
  last=max(max(w['joints']) for w in data['routes'] if w['surface']=='front')

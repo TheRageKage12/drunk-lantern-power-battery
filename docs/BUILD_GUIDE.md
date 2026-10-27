@@ -387,7 +387,7 @@ with its flyback diode and plug, all verified on the bench before anything goes 
 [wire-by-wire solder schedule](review/protoboard/WIRE_SCHEDULE.md) (the rear view is mirrored; pad names stay the
 same). Read [SW-6, USB power modes](#sw-6-connect-the-laptop-safely-usb-power-modes) before any USB connection.
 
-For physical soldering order, use the [one-joint-at-a-time board guide](review/protoboard/assembly.html).
+For physical soldering order, use the [step-by-step board assembly guide](review/protoboard/assembly.html).
 It fits front components, then insulated wires over that face, followed by the small rear parts and C2 pigtails.
 Each stranded-wire end has its own hole, with a short stripped tail to the indicated rear joint.
 It includes cut estimates and bend templates; four crossing pairs must be fitted together before soldering. EL-4 through EL-9 below describe the

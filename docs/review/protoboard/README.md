@@ -12,7 +12,7 @@ The components have moved; the printed enclosure and its four mounting holes hav
 4. Add R3, R4, C1, then C3 on the back, using their own component leads. Then add C2's two sleeved pigtails.
 5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
-The guide highlights one solder point at a time, retains completed work, and supplies cut lengths and 1:1 bend templates.
+Each step completes one component, one wire, or a pair of wires that must be fitted together. All joints for that task are highlighted; completed work stays visible. Cut lengths and 1:1 bend templates are available when needed.
 Use **Fit** to show the whole board; changing steps keeps your chosen view. A pad is the copper ring around a hole.
 Hole names are assigned from the component face; the rear view is mirrored.
 
@@ -58,7 +58,7 @@ That stock is trimmed off; it is not a slack loop left on the board. The rounded
 for forming. Outgoing leads include the rounded turn outside the board; add the measured external run and service slack.
 Keep the pump/LED service slack outside the board footprint.
 
-Strip only the lengths shown for that wire (typically 6–12 mm at a board end). Gently twist the strands, insert them
+Strip enough to reach the indicated joint on the back, keeping the rest insulated. Gently twist the strands, insert them
 **untinned**, and keep the insulation against the front face. Solder the wire's own hole first; form its short end along the
 highlighted rear path, then solder the destination. Lightly tin the exposed end as part of this operation. No loose strands,
 no solder bridges, and no forcing pre-tinned wire into the nominal 1 mm holes. Do not bend at a ceramic capacitor's coating.
