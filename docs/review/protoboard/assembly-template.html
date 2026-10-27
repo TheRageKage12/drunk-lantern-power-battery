@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drunk Lantern · board assembly guide</title>
+<style>
+:root{color-scheme:light;--ink:#25313c;--muted:#5b6670;--line:#d6dcd9;--paper:#fafbf9;--accent:#17634d;--current:#a34b00}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,sans-serif}main{max-width:1320px;margin:auto;padding:28px 32px 64px}h1{font-size:30px;line-height:1.2;font-weight:650;margin:8px 0 12px}h2{font-size:21px;line-height:1.3;margin:0 0 12px}h3{font-size:17px;margin:18px 0 8px}p{margin:10px 0}a{color:var(--accent)}.eyebrow{font-size:13px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}.muted{color:var(--muted);font-size:14px}.intro{max-width:900px}.nav,.tools,.legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap}button,select,input{font:inherit;color:inherit;min-height:40px}button,select{border:1px solid #bcc8c1;background:white;border-radius:6px;padding:7px 12px}button{cursor:pointer}button:hover{background:#eef4ef}button:disabled{opacity:.45;cursor:default}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #dc7800;outline-offset:3px}input[type=number]{width:110px;padding:6px;border:1px solid #bcc8c1;border-radius:5px}select{max-width:100%}.nav{position:sticky;top:0;z-index:3;background:var(--paper);margin-top:22px;padding:15px 0;border-top:1px solid var(--line)}.jump{flex:1;min-width:210px}.jump select{width:100%}label{font-size:14px}progress{width:100%;height:7px;accent-color:var(--accent);display:block;margin:3px 0 22px}.work{scroll-margin-top:110px;display:grid;grid-template-columns:minmax(0,1fr) 345px;gap:28px;align-items:start}.drawing{min-width:0}.tools{justify-content:space-between;margin-bottom:10px}.tools button{font-size:14px}.viewport{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:8px}.viewport svg{display:block;max-width:none}.inspector{border-top:3px solid var(--accent);padding-top:16px}.inspector p{font-size:15px}.step-meta{font-size:13px;color:var(--accent);margin-bottom:8px}.focus{padding:10px 12px;border-left:3px solid #cc6a16;background:#fff2df;font-weight:600}.note{background:#f0f3ee;padding:10px 12px;border-radius:6px}.caution{border-left:3px solid #b65a16;padding:4px 12px;margin:14px 0}.measure{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0}.measure strong{display:block;font-size:24px;font-weight:600}.measure span{font-size:13px;color:var(--muted)}.legend{font-size:13px;margin:12px 0}.mark{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid #96641a;background:#ffe6aa;margin-right:5px}.mark.done{background:#cddbd4;border-color:#526c5c}.key{display:flex;align-items:center;gap:6px}.swatch{display:inline-block;width:23px;height:9px;border:1px solid #738177;border-radius:4px}.side{width:100%;height:auto;display:block;margin:8px 0}.labelbox{border-top:1px solid var(--line);padding-top:10px;margin-top:12px;font-size:14px;min-height:32px}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;font-weight:600}details p,details li{font-size:15px}details ul{padding-left:20px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px;text-align:left}th,td{border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}th{font-weight:600}td button{font-size:13px;white-space:nowrap;min-height:32px;padding:4px 8px}code{font-size:.94em;background:#edf0ec;padding:1px 4px;border-radius:3px}footer{margin-top:30px;border-top:1px solid var(--line);padding-top:16px}.support{margin-top:30px}.spools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.spools div{font-size:14px}.no-print{display:initial}[hidden]{display:none!important}.pad-hit{cursor:pointer}.pad-hit:hover circle{stroke:#b15a08;stroke-width:.3}.reading{max-width:950px}.small-list{padding-left:18px;font-size:14px}.bounds{font-size:13px;color:var(--muted)}#source{font-size:12px}
+@media(max-width:1000px){.work{grid-template-columns:minmax(0,1fr) 300px;gap:18px}main{padding:22px 20px}.spools{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){main{padding:20px 14px}.work{scroll-margin-top:155px;display:flex;flex-direction:column}.inspector{order:0;width:100%}.drawing{order:1;width:100%}h1{font-size:26px}.nav{gap:8px}.jump{flex-basis:100%;order:3}.spools{grid-template-columns:1fr}.inspector .step-text{max-width:65ch}.tools{gap:7px}.tools select{max-width:190px}}
+@media print{main{padding:0}.nav,.tools,.support,footer,.no-print{display:none!important}.work{display:block}.inspector{break-inside:avoid}.viewport{overflow:visible;border:0}.viewport svg{width:100%!important}.drawing{break-inside:avoid}body{background:white}}
+</style>
+</head>
+<body><main>
+<header>
+<div class="eyebrow">Drunk Lantern / Workbench</div>
+<h1>Assemble the prototype board</h1>
+<p class="intro">Fit the components first. Then add the rear wires, working from the board outward. Each soldering step highlights <strong>one joint</strong>; solid wires and silver joints show the work before it.</p>
+<p class="muted">70 × 50 mm board · your six colours of 22 AWG stranded wire · <a href="index.html">Full reference layout</a> · <a href="../../BUILD_GUIDE.md#6-electrical-track">Electrical build instructions</a></p>
+</header>
+<div class="nav">
+<button id="previous" aria-label="Previous assembly step">← Previous</button>
+<button class="primary" id="next" aria-label="Next assembly step">Next step →</button>
+<label class="jump">Jump to a step <select id="step" aria-label="Assembly step"></select></label>
+<span id="counter" class="muted"></span>
+</div>
+<progress id="progress" max="100" value="0" aria-label="Position in assembly sequence"></progress>
+<div class="work">
+<section class="drawing" aria-label="Board drawing">
+<div class="tools">
+<label>View <select id="view" aria-label="Board view"><option value="rear">Solder side</option><option value="front">Component side</option><option value="tilt">Tilted solder side</option></select></label>
+<div><button id="minus" aria-label="Zoom out">−</button> <button id="fit">Fit</button> <button id="plus" aria-label="Zoom in">+</button></div>
+</div>
+<p id="orientation" class="muted"></p>
+<div class="viewport" id="viewport"><svg id="board" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Board assembly at the selected step"></svg></div>
+<div class="legend"><span><i class="mark"></i>Current joint</span><span><i class="mark done"></i>Earlier joint</span><span>Dashed wire = fitting now</span></div>
+<div id="pad-detail" class="labelbox">Click a solder spot for its hole name and component lead. Hole names stay the same on both sides.</div>
+<p class="bounds">Wire paths reserve space above the board. Bends and shared-joint fan-out are schematic: dry-form each wire before cutting its second end. This is not a full-scale drilling or bending template.</p>
+</section>
+<section class="inspector" aria-label="Current assembly instruction" aria-live="polite" aria-atomic="true">
+<div id="phase" class="step-meta"></div><h2 id="title"></h2>
+<div id="joint-focus" class="focus" hidden></div>
+<svg id="joint-detail" viewBox="0 0 14 14" role="img" aria-label="Close-up of the current solder point" style="display:block;width:100%;height:150px;margin:12px 0;border:1px solid #d6dcd9;background:white" hidden></svg>
+<p id="instruction" class="step-text"></p>
+<div id="wire-info" hidden>
+<div class="measure"><div><strong id="cut"></strong><span id="cut-label"></span></div><div><strong id="height"></strong><span>Wire centre from rear face</span></div></div>
+<p id="colour-label"></p>
+<svg id="profile" class="side" viewBox="0 0 330 130" role="img" aria-label="Side profile showing wire rise and the ten millimetre rear gap"></svg>
+<p id="crossings" class="note"></p>
+<div id="cable" hidden><h3>Measure the external cable</h3><p class="muted">From the shown board exit to the remote terminal or splice, following the intended route.</p>
+<label>External run (mm) <input id="external-run" type="number" min="0" max="3000" step="1" placeholder="Measure"></label><br>
+<label>Service slack (mm) <input id="service-slack" type="number" min="0" max="1000" step="1"></label>
+<p id="cable-result" class="note"></p><p class="muted">Keep service slack above the cap floor, outside the 10 mm board gap. For H07–H10 the initial 150 mm follows EL-9; the final enclosure fit still determines the cut.</p></div>
+<details><summary>How this cut length is estimated</summary><p id="formula"></p><p>Use the allowance to handle and trim the second end. Do not store the entire excess behind the board. Rounded bends may shorten the actual run; a wire must reach without tension but must not bow into the next layer.</p></details>
+</div>
+<div id="shared" class="caution" hidden></div>
+<p class="muted">Your place is saved on this browser. The drawing assumes earlier steps are complete; jumping ahead previews that stage, it does not verify your build.</p>
+</section>
+</div>
+<div class="support">
+<details><summary>Assembly order and how to solder a shared point</summary>
+<div class="reading"><p>Do not wire the empty board first. Fit the low components, socket and header, then the XIAO, MOSFETs and large capacitor. Solder and trim each component lead before rear wires obstruct it. Leave U1 out of its socket and JP1 open.</p>
+<p>Next install the five bare bridges. Then work through the four wire heights: <strong>2.7, 4.6, 6.5 and 8.4 mm</strong> from the rear surface to the wire centre. Long cable tails are installed at their assigned height, not all at the end. Thread those that pass through the cap floor before attaching them, and park their free ends outside the work area.</p>
+<p>At a shared point, the wire end sits against the existing component lead or copper pad. Strip only about 2 mm, lightly tin the strands, and hold it with tweezers while reheating the joint. Let it cool before releasing it. The guide lists the wires already attached there: hold them still and recheck them after reflow. Never twist several insulated wires into a tall bundle at the joint.</p>
+<p>Use removable tape to hold the route during fitting. Do not tension wires, kink PVC, leave whiskers of copper, or press the board down onto a wire pile. Strain-relieve outgoing cables on the cap floor, away from the solder pads.</p></div>
+</details>
+<details><summary>Your six wire colours</summary><p>Colour is a useful clue, not a unique electrical connection. Label both ends with the wire ID, especially the white supply wires and blue/yellow switched returns. Follow hole names, not colour alone.</p><div id="spools" class="spools"></div></details>
+<details><summary>Cut list · all board wires and outgoing cables</summary>
+<p>Starting blanks include trimming allowance. Try the first few before batch cutting. Outgoing-cable totals appear only after you enter a measured external run.</p><p><button id="csv">Download cut list (CSV)</button> <button id="print">Print current step</button></p>
+<div class="table-wrap"><table><thead><tr><th>Wire</th><th>Connection</th><th>Colour</th><th>Starting cut</th><th>Centre height</th></tr></thead><tbody id="cut-list"></tbody></table></div>
+</details>
+<details><summary>Wire fit, assumptions and checks</summary><div class="reading">
+<p>The <a href="https://www.amazon.com/dp/B00B4ZQ3L0">owner’s Electronix Express kit</a> is stranded 22 AWG. Amazon describes 0.010″ PVC insulation; that is not the overall diameter. <a href="https://www.elexp.com/collections/hook-up-wire-stranded/products/27wk22str25wire-kit-22ga-str-6-25ft-spool">Electronix Express lists approximately 1.7 mm overall diameter</a>. Measure the actual wire before following this plan.</p>
+<p>The existing routes are checked here at Ø1.7 mm, including their vertical rises. They leave at least 0.2 mm between unrelated wire corridors and only about <strong>0.105 mm at the tightest unrelated solder joint</strong>. That is nominal clearance, not manufacturing tolerance. The old reference drawing used Ø1.6 mm and has slightly more clearance.</p>
+<p>The highest wire’s outside surface reaches 9.25 mm into the 10 mm gap. There is only 0.75 mm left: no additional slack loop belongs above that route. The nominal tool-access check assumes a fine Ø1.8 mm tip approaching an unrelated joint straight from the rear. Real tip taper, solder volume and shared-joint crowding still need inspection.</p>
+<p>The code checks endpoints, electrical continuity, screw clearances, wire crossings, terminal rises and the build order. It does <strong>not</strong> certify a PVC bend radius, actual wire sag, fan-out of several ends within a shared joint, or your soldering iron’s access. Stop if the route requires a sharp kink or squeezes another wire; inspect and revise it before soldering. Do not assume a numerical cut length proves a physical fit.</p>
+<p>With power disconnected, check each finished wire with a meter, then inspect nearby pads. Capacitors and semiconductor paths mean an arbitrary continuity beep is not by itself proof of a short. Continue with the build guide’s staged power checks only after the mechanical dry fit.</p>
+<p>Technique reference: <a href="https://learn.sparkfun.com/tutorials/working-with-wire/stranded-vs-solid-core-wire">SparkFun: stranded wire preparation</a>. Circuit pinout and component dimensions remain in the <a href="README.md">board reference</a>.</p>
+</div></details>
+</div>
+<footer><span id="source"></span> · <a href="README.md">Board documentation</a> · <a href="../../BUILD_GUIDE.md#el-10-commission-the-board-without-loads">Commissioning procedure</a></footer>
+</main>
+<script>
+'use strict';
+const DATA=/*__ASSEMBLY_DATA__*/;
+const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
+const storageKey='lantern-board-assembly-'+DATA.version;
+let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{}
+let cursor=Number.isInteger(saved.cursor)?Math.max(0,Math.min(DATA.steps.length-1,saved.cursor)):0;
+let measurements=saved.measurements||{},view='rear',zoom=1;
+const routes=Object.fromEntries(DATA.routes.map(w=>[w.id,w]));
+const pins=Object.fromEntries(Object.entries(DATA.pins).map(([ref,p])=>[p.pad,{ref,...p}]));
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify({cursor,measurements}))}catch{}}
+function mm(pad){return[5.79+(pad.charCodeAt(0)-65)*2.54,3.41+(Number(pad.slice(1))-1)*2.54]}
+function el(tag,attrs={},text=''){let n=document.createElementNS(NS,tag);for(let[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text)n.textContent=text;return n}
+function add(parent,tag,attrs,text){let n=el(tag,attrs,text);parent.append(n);return n}
+function project(x,y,z=0){return view==='front'?[x,y]:view==='tilt'?[70-x+y*.25,y*.73-z*.85]:[70-x,y]}
+function path(points){return points.map((p,i)=>(i?'L':'M')+project(...p).join(',')).join(' ')}
+function physical(w){let d=w.depth,pts=w.path.map(p=>[...p,d]);if(!w.bare){pts.unshift([...w.path[0],.55]);if(w.b)pts.push([...w.path.at(-1),.55])}return pts}
+function drawWire(svg,w,pending){let pts=physical(w),colour=DATA.colours[w.colour],d=path(pts),group=add(svg,'g',{'data-wire':w.id,opacity:w.id===DATA.steps[cursor].wire?1:.7});
+ add(group,'path',{d,fill:'none',stroke:'#fff', 'stroke-width':w.od+.35,'stroke-linejoin':'round','stroke-linecap':'round'});
+ add(group,'path',{d,fill:'none',stroke:w.bare?'#bba17b':'#3c4545','stroke-width':w.od,'stroke-linejoin':'round','stroke-linecap':'round'});
+ add(group,'path',{d,fill:'none',stroke:w.bare?'#dfc8a4':colour,'stroke-width':Math.max(.3,w.od-.22),'stroke-linejoin':'round','stroke-linecap':'round',...(pending?{'stroke-dasharray':'1.4 .65'}:{})});
+ if(w.id===DATA.steps[cursor].wire){let p=pts[Math.floor(pts.length/2)],q=project(...p);add(group,'text',{x:q[0]+1,y:q[1]-1.4,'font-size':1.9,fill:'#172c22','paint-order':'stroke',stroke:'#fff','stroke-width':.65,'font-weight':700},w.id)}
+}
+function draw(){
+ const svg=$('board'),s=DATA.steps[cursor],width=$('viewport').clientWidth;
+ svg.replaceChildren();svg.setAttribute('viewBox',view==='tilt'?'-6 -18 100 72':'-6 -10 82 68');
+ svg.style.width=Math.max(width,width*zoom)+'px';
+ add(svg,'title',{},(view==='front'?'Component side':'Solder side')+': '+s.title);
+ add(svg,'desc',{},'Row 01 remains at the top. Amber circles mark the current solder point. Previously placed wires are solid.');
+ let corners=[[0,0],[70,0],[70,50],[0,50],[0,0]];
+ add(svg,'path',{d:path(corners),fill:'#faf3e5',stroke:'#b9aa8e','stroke-width':.18});
+ for(let[mx,my]of DATA.mounts){let box=[[mx-4.5,my-4.5],[mx+4.5,my-4.5],[mx+4.5,my+4.5],[mx-4.5,my+4.5],[mx-4.5,my-4.5]];add(svg,'path',{d:path(box),fill:'#e9ecec',stroke:'#9ba5a7','stroke-width':.15,'stroke-dasharray':'.6 .5'});let p=project(mx,my);add(svg,'circle',{cx:p[0],cy:p[1],r:1.6,fill:'white',stroke:'#a6adae','stroke-width':.15})}
+ for(let c=0;c<24;c++){let x=5.79+c*2.54;for(let r=0;r<18;r++){let y=3.41+r*2.54;if(DATA.mounts.some(([mx,my])=>Math.abs(x-mx)<4.5&&Math.abs(y-my)<4.5))continue;let p=project(x,y);add(svg,'circle',{cx:p[0],cy:p[1],r:.42,fill:'#fffaf0',stroke:'#c7b79b','stroke-width':.1})}
+ let p=project(x,-2.3);add(svg,'text',{x:p[0],y:p[1],'font-size':1.65,'text-anchor':'middle',fill:'#495158'},String.fromCharCode(65+c))}
+ for(let r=0;r<18;r++){let y=3.41+r*2.54;for(let x of [-2.3,72.3]){let p=project(x,y);add(svg,'text',{x:p[0],y:p[1]+.6,'font-size':1.7,'text-anchor':'middle',fill:'#495158'},String(r+1).padStart(2,'0'))}}
+ for(let part of DATA.parts){if(part.fit>cursor)continue;let[x,y,w,h]=part.bounds,installed=part.fit<cursor;
+  let g=add(svg,'g',{opacity:view==='front'?1:.22,'data-part':part.ref});let poly=[[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];
+  if(part.pins.length===2){let p0=mm(part.pins[0]),p1=mm(part.pins[1]);if(part.ref==='C2'){for(let p of[p0,p1])add(g,'path',{d:path([p,[25,p[1]]]),stroke:'#697870','stroke-width':.4})}else add(g,'path',{d:path([p0,p1]),stroke:'#697870','stroke-width':.4})}
+  add(g,'path',{d:path(poly),fill:part.ref==='C2'?'#edd59d':['MCU','U1'].includes(part.ref)?'#d6e1df':'#e5d4b4',stroke:installed?'#6e7971':'#ac580e','stroke-width':.2,...(!installed?{'stroke-dasharray':'.8 .5'}:{})});
+  let p=project(x+w/2,y+h/2);add(g,'text',{x:p[0],y:p[1]+.7,'text-anchor':'middle','font-size':2.1,fill:'#293934'},part.ref);
+  if(part.ref==='U1'){let a=project(x+w/2,y+1);add(g,'circle',{cx:a[0],cy:a[1],r:.7,fill:'#52665a'})}
+  if(part.ref==='MCU'){let a=project(.5,27),b=project(4.5,35.8);add(g,'path',{d:path([[.5,27],[4.5,27],[4.5,35.8],[.5,35.8],[.5,27]]),fill:'#9eada9',stroke:'#5b6e65','stroke-width':.2})}
+  if(['D1','D3'].includes(part.ref)){let pts=part.ref==='D1'?[[x+w-.6,y],[x+w-.6,y+h]]:[[x,y+h-.6],[x+w,y+h-.6]];add(g,'path',{d:path(pts),stroke:'#394b42','stroke-width':.6})}
+  if(['Q1','Q2'].includes(part.ref))add(g,'path',{d:path([[x,y+h],[x+w,y+h]]),stroke:'#394b42','stroke-width':.6});
+ }
+ if(view!=='front')for(let w of DATA.routes){if(w.prepare>cursor)continue;drawWire(svg,w,cursor<=w.joints.at(-1))}
+ const done=new Set(DATA.steps.slice(0,cursor).filter(x=>x.kind==='solder').map(x=>x.pad));
+ const visible=new Set(done);if(s.pad)visible.add(s.pad);if(s.ref){let part=DATA.parts.find(p=>p.ref===s.ref);if(part)part.pins.forEach(p=>visible.add(p))}if(s.wire){let w=routes[s.wire];visible.add(w.a);if(w.b)visible.add(w.b)}
+ for(let pad of visible){let p=project(...mm(pad)),current=pad===s.pad,g=add(svg,'g',{'data-pad':pad,class:'pad-hit',role:'button',tabindex:0,'aria-label':`${pad}: ${pins[pad].ref}, ${DATA.nets[pins[pad].net]?.label||'unused pin'}`});
+  if(current)add(g,'circle',{cx:p[0],cy:p[1],r:1.25,fill:'#ffdf94',stroke:'#a34b00','stroke-width':.3});
+  add(g,'circle',{cx:p[0],cy:p[1],r:.54,fill:done.has(pad)?'#bfcac4':'#fff',stroke:current?'#a34b00':'#536b5f','stroke-width':.18});
+  if(current){let pos=[p[0]+2,p[1]-2];add(svg,'text',{x:pos[0],y:pos[1],'font-size':2.2,fill:'#793800','font-weight':700,'paint-order':'stroke',stroke:'#fff','stroke-width':.75},pad)}
+  let act=()=>{$('pad-detail').textContent=`Hole ${pad} · ${pins[pad].ref} · ${DATA.nets[pins[pad].net]?.label||'unused; no wire'}. ${done.has(pad)?'An earlier step has soldered this point.':'Not yet soldered at this stage.'}`};g.addEventListener('click',act);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}})
+ }
+ $('orientation').textContent=view==='front'?'Component side · USB at left. Turn left ↔ right to solder; keep row 01 at the top.':view==='tilt'?'Tilted underside · wire rises are visible. Depth is measured from the rear surface.':'Solder side · mirrored left ↔ right, USB at right. Row 01 stays at the top.';
+ let inset=$('joint-detail');inset.toggleAttribute('hidden',!s.pad);if(s.pad){let p=project(...mm(s.pad));inset.replaceChildren(...[...svg.children].map(n=>n.cloneNode(true)));inset.setAttribute('viewBox',`${p[0]-7} ${p[1]-7} 14 14`);for(let n of inset.querySelectorAll('[tabindex]')){n.removeAttribute('tabindex');n.removeAttribute('role')}}
+}
+function profile(w){let svg=$('profile');svg.replaceChildren();let y=z=>105-z*8;add(svg,'rect',{x:24,y:y(0),width:278,height:5,fill:'#b6bdba'});add(svg,'path',{d:`M24 ${y(10)}H302`,stroke:'#7b8580','stroke-dasharray':'4 3'});add(svg,'text',{x:24,y:y(10)-8,'font-size':12,fill:'#526159'},'Cap floor · 10 mm limit');
+ let p=[[36,y(.55)],[65,y(w.depth)],[260,y(w.depth)],[288,y(w.b?.55:w.depth)]];
+ add(svg,'path',{d:p.map((v,i)=>(i?'L':'M')+v.join(',')).join(' '),fill:'none',stroke:'#445249','stroke-width':w.od*8,'stroke-linejoin':'round'});
+ add(svg,'path',{d:p.map((v,i)=>(i?'L':'M')+v.join(',')).join(' '),fill:'none',stroke:w.bare?'#d8bc8a':DATA.colours[w.colour],'stroke-width':Math.max(2,w.od*8-2),'stroke-linejoin':'round'});
+ add(svg,'text',{x:24,y:127,'font-size':12,fill:'#526159'},'Rear face · end rises shown schematically');
+}
+function measurement(w){let m=measurements[w.id]||{};return{run:m.run??'',slack:m.slack??(['H07','H08','H09','H10'].includes(w.id)?150:0)}}
+function cableTotal(w){let m=measurement(w);return m.run===''?null:Math.ceil(w.length.cut+Number(m.run)+Number(m.slack)+2+5)}
+function cableUpdate(){let w=routes[DATA.steps[cursor].wire];if(!w||w.b)return;let m=measurement(w);$('external-run').value=m.run;$('service-slack').value=m.slack;let total=cableTotal(w);$('cable-result').textContent=total===null?'Measure the external run to calculate a whole-cable cut length.':`Starting whole-cable cut: ${total} mm. Includes ${w.length.cut} mm locally, ${m.run} mm external route, ${m.slack} mm service slack, 2 mm far-end strip and 5 mm final trim.`}
+function render(){let s=DATA.steps[cursor],w=routes[s.wire];$('step').value=cursor;$('counter').textContent=`${cursor+1} / ${DATA.steps.length}`;$('progress').value=100*cursor/(DATA.steps.length-1);$('previous').disabled=cursor===0;$('next').disabled=cursor===DATA.steps.length-1;$('phase').textContent=s.phase;$('title').textContent=s.title;$('instruction').textContent=s.text;
+ $('joint-focus').hidden=!s.pad;if(s.pad)$('joint-focus').textContent=`Solder this point: ${s.pad} · ${pins[s.pad].ref}`;
+ $('wire-info').hidden=!w;$('shared').hidden=!(s.previous?.length);if(s.previous?.length)$('shared').textContent='Already attached here: '+s.previous.join(', ')+'. Hold these still while reheating; inspect and recheck continuity afterward.';
+ if(w){$('cut').textContent=w.length.cut+' mm';$('cut-label').textContent=w.b?'Starting blank; trim to fit':'Under-board portion only';$('height').textContent=w.depth+' mm';$('colour-label').replaceChildren();let sw=document.createElement('span');sw.className='swatch';sw.style.background=w.bare?'#c6a971':DATA.colours[w.colour];$('colour-label').append(sw,document.createTextNode(` ${w.bare?'Bare tinned conductor from':w.colour+' wire from'} ${w.bare?w.colour+' spool':w.id+' · '+DATA.nets[w.net].label}`));
+ $('crossings').textContent=w.earlier_crossings.length?'Cross ABOVE these earlier wires: '+w.earlier_crossings.join(', ')+'. Keep their existing heights; do not push them down.':'No crossing over an earlier route away from a shared joint. Keep the shown route and its end rises.';
+ $('formula').textContent=`${w.length.planar} mm along the drawn route + ${w.length.rises} mm of end rises + ${w.length.tails} mm for stripped terminations + ${w.length.trim} mm trim allowance, rounded up. ${w.bare?'The bridge is bare only between the two adjacent pads.':'The drawing uses angular corridors; form rounded bends within their available space.'}`;
+ $('cable').hidden=!!w.b;profile(w);cableUpdate()}
+ draw();persist();renderCuts();
+}
+function go(index){cursor=Math.max(0,Math.min(DATA.steps.length-1,Number(index)));view=DATA.steps[cursor].kind==='fit'?'front':'rear';$('view').value=view;$('pad-detail').textContent='Click a solder spot for its hole name and component lead. Hole names stay the same on both sides.';render();document.querySelector('.work').scrollIntoView({block:'start'})}
+function renderCuts(){let body=$('cut-list');body.replaceChildren();for(let w of DATA.routes){let tr=document.createElement('tr'),button=document.createElement('button');button.textContent=w.id;button.addEventListener('click',()=>{go(w.prepare);$('title').scrollIntoView({block:'center'})});let td=document.createElement('td');td.append(button);tr.append(td);for(let text of [w.a+' → '+(w.b||w.label),w.bare?'bare ('+w.colour+' spool)':w.colour,w.b?w.length.cut+' mm':(cableTotal(w)!==null?cableTotal(w)+' mm total':w.length.cut+' mm local + measured run'),w.depth+' mm']){let cell=document.createElement('td');cell.textContent=text;tr.append(cell)}body.append(tr)}}
+for(let s of DATA.steps){let o=document.createElement('option');o.value=s.index;o.textContent=`${s.index+1}. ${s.title}`;$('step').append(o)}
+$('previous').onclick=()=>go(cursor-1);$('next').onclick=()=>go(cursor+1);$('step').onchange=e=>go(e.target.value);$('view').onchange=e=>{view=e.target.value;draw()};$('plus').onclick=()=>{zoom=Math.min(3,zoom+.25);draw()};$('minus').onclick=()=>{zoom=Math.max(1,zoom-.25);draw()};$('fit').onclick=()=>{zoom=1;draw()};window.addEventListener('resize',draw);
+for(let id of ['external-run','service-slack'])$(id).addEventListener('input',()=>{let w=routes[DATA.steps[cursor].wire];if(!w||w.b)return;let run=$('external-run').value,slack=$('service-slack').value;if(!$(id).checkValidity())return;measurements[w.id]={run:run===''?'':Number(run),slack:slack===''?0:Number(slack)};persist();cableUpdate();renderCuts()});
+$('print').onclick=()=>window.print();$('csv').onclick=()=>{let rows=[['Wire','From','To','Colour','Starting cut mm','Local blank mm','Centre height mm','Note'],...DATA.routes.map(w=>[w.id,w.a,w.b||w.label,w.bare?'bare from '+w.colour:w.colour,w.b?w.length.cut:(cableTotal(w)??''),w.length.cut,w.depth,w.b?'Trim after dry fit':'Measure external run; total includes service slack only when entered'])];let csv=rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.href=url;a.download='lantern-board-wire-cuts.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+for(let[name,colour]of Object.entries(DATA.colours)){let div=document.createElement('div'),sw=document.createElement('span');sw.className='swatch';sw.style.background=colour;let label={red:'Switched battery +',black:'Ground only',white:'5 V supply paths (label each)',green:'3.3 V and Hall signal (label each)',yellow:'Sense / twist / LED return (label each)',blue:'PWM / gates / pump return (label each)'}[name],total=DATA.routes.filter(w=>w.b&&w.colour===name).reduce((n,w)=>n+w.length.cut,0);div.append(sw,document.createTextNode(` ${name}: ${label}. Board blanks: ${total} mm; cables extra.`));$('spools').append(div)}
+$('source').textContent=`Based on ${DATA.source} · build ${DATA.version}`;
+render();
+</script>
+</body></html>

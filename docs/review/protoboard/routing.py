@@ -100,13 +100,14 @@ def plan(order=ORDER):
 
 
 
-def validate(routes):
+def validate(routes, wire_od=None, clearance=CLEAR, joint_clearance=.15):
     """Independently check saved paths, wire crossings, terminal rises and mounts.
 
     Shared endpoint regions allow wire fan-out that is not modelled in detail.
     Paths describe routing corridors, not a supplier-specified bend radius. The
     drawing remains a soldering guide; form bends and inspect the assembled stack.
     """
+    wire_od=M.WIRE_OD if wire_od is None else wire_od
     assert len(routes)==len(L.WIRES)+len(L.HARNESS)
     by_id={w['id']:w for w in routes}
     assert len(by_id)==len(routes)
@@ -120,7 +121,7 @@ def validate(routes):
     for i,w in enumerate(routes):
         assert math.dist(w['path'][0],L.mm(w['a']))<1e-6
         if w['b']:assert math.dist(w['path'][-1],L.mm(w['b']))<1e-6
-        assert w['od']==(.8 if w['bare'] else M.WIRE_OD), (w['id'],'wire diameter')
+        assert w['od']==(.8 if w['bare'] else wire_od), (w['id'],'wire diameter')
         assert w['bare'] or w['depth']-w['od']/2>=M.JOINT_HEIGHT+.25, (w['id'],'solder height')
         assert w['depth']+w['od']/2<=REAR_GAP-.5, (w['id'],'rear gap')
         line=LineString(w['path']);tube=line.buffer(w['od']/2)
@@ -130,14 +131,14 @@ def validate(routes):
         if not w['bare']:
             for pin in L.PINS.values():
                 if pin['pad'] not in pads:
-                    assert line.distance(Point(L.mm(pin['pad'])))>=w['od']/2+M.JOINT_RADIUS+.15-1e-6,(w['id'],'unrelated joint',pin)
+                    assert line.distance(Point(L.mm(pin['pad'])))>=w['od']/2+M.JOINT_RADIUS+joint_clearance-1e-6,(w['id'],'unrelated joint',pin)
         for other in routes[:i]:
             otherpads={other['a']}|({other['b']} if other['b'] else set())
             shared=pads & otherpads
             joint=unary_union([Point(L.mm(p)).buffer(2.3) for p in shared])
             ol=LineString(other['path'])
-            separation=(w['od']+other['od'])/2+CLEAR
-            if abs(w['depth']-other['depth'])<separation:
+            separation=(w['od']+other['od'])/2+clearance
+            if abs(w['depth']-other['depth'])<separation-1e-6:
                 assert not line.intersects(ol.buffer(separation-1e-6).difference(joint)),(w['id'],other['id'],'crossing')
             for upper,lower,lp in ((w,other,ol),(other,w,line)):
                 if upper['bare'] or lower['depth']<=1.5:continue

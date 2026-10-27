@@ -387,6 +387,11 @@ with its flyback diode and plug, all verified on the bench before anything goes 
 [wire-by-wire solder schedule](review/protoboard/WIRE_SCHEDULE.md) (the rear view is mirrored; pad names stay the
 same). Read [SW-6, USB power modes](#sw-6-connect-the-laptop-safely-usb-power-modes) before any USB connection.
 
+For physical soldering order, use the [one-joint-at-a-time board guide](review/protoboard/assembly.html).
+It fits components first, then rear wires from the lowest layer outward, using the six-colour stranded-wire kit.
+It includes cut estimates, earlier-wire crossings and shared-joint checks. EL-4 through EL-9 below describe the
+circuits and off-board connections; the interactive guide supplies the board's assembly sequence.
+
 ### EL-1. Validate the circuit on paper
 
 Confirm these numbers before buying anything extra or building. They are the design margins.

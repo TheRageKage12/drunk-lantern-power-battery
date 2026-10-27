@@ -669,3 +669,15 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   0.3 mm a side). Kevin: defer reprints to the end to finish in time. Marked Reprint in the Sheet: `bell_front`,
   `foot`, `base`, `top_cap`; parts not yet printed are noted "new STL only". Guide PR-6 gains sanding steps as the
   alternative to a reprint.
+
+- **2026-10-26, guided board soldering.** Duncan has six colours of Electronix Express stranded 22 AWG wire
+  (B00B4ZQ3L0; supplier nominal OD 1.7 mm, not Amazon’s 0.010″ insulation entry). Added the standalone
+  `docs/review/protoboard/assembly.html`: components first, then bare bridges and rear routes in increasing
+  height; cable tails are interleaved so they are not trapped below later wires. Each solder operation is a
+  separate step (178); the guide shows prior work, crossings and shared-joint rework. Cut estimates include
+  end rises and trim allowance; external cable runs must be measured, with service slack outside the board gap.
+  Existing endpoints, paths, circuit and CAD dimensions are unchanged. A separate 1.7 mm nominal check passes
+  with 0.2 mm between wires, 0.105 mm at the tightest unrelated joint, and 9.25 mm maximum rear extent. This
+  reduces the old 1.6 mm model’s margins; actual bends, joint fan-out and tool access require dry fit. The guide
+  must not describe those calculations as a physically verified build. Tests reject invalid routes and check
+  every solder endpoint, assembly ordering and allowances. No Sheet changes.

@@ -1,11 +1,42 @@
 # Prototype-board assembly
 
-[Interactive viewer](index.html) · [Two-sided drawing](both-sides.png) ·
+[Step-by-step soldering guide](assembly.html) · [Full layout viewer](index.html) · [Two-sided drawing](both-sides.png) ·
 [Printable PDF](board-assembly.pdf) · [Solder schedule](WIRE_SCHEDULE.md)
 
 The layout uses the planned Vetco VUPN2924 70 × 50 mm board. Follow the
 [build guide](../../BUILD_GUIDE.md#6-electrical-track) for the circuit,
 off-board wiring, power sequencing and commissioning. This page covers the board layout itself.
+
+## Guided assembly with six wire colours
+
+Open [assembly.html](assembly.html) directly in a browser; it is self-contained and works offline.
+It walks through 178 individual soldering operations, with preparation and inspection steps between them.
+The current joint has an amber ring and a close-up. Earlier work stays visible. Choose the component,
+solder-side or tilted view; use Next/Previous or the step list. The browser saves your place and entered
+cable measurements. Jumping ahead previews a stage; it does not certify the earlier work.
+
+Fit and solder components first, low parts before tall parts; keep U1 out and JP1 open. Then fit the five
+bare bridges and work outward through the four rear wire layers. Outgoing cables are interleaved at their
+assigned depth so they are not trapped beneath later wires. Thread cap-floor cables first, as EL-9 requires.
+
+The guide uses the owner's [Electronix Express six-colour stranded 22 AWG kit](https://www.amazon.com/dp/B00B4ZQ3L0).
+The [supplier lists approximately 1.7 mm overall diameter](https://www.elexp.com/collections/hook-up-wire-stranded/products/27wk22str25wire-kit-22ga-str-6-25ft-spool);
+Amazon's 0.010″ PVC entry is not an overall diameter. The same paths pass a separate nominal check at 1.7 mm,
+with 0.2 mm wire-to-wire clearance, but only **0.105 mm at the tightest unrelated joint**. The highest wire reaches
+9.25 mm into the 10 mm gap. These are tight nominal margins: measure the wire, dry-form every route, and do not
+force it into the space. The original viewer/CAD corridor allowance below remains 1.6 mm. Neither check validates
+bend radii or multiple wire ends within a shared joint; a fine 1.8 mm soldering tip is the guide's access assumption.
+
+Board-wire cuts include the full routed path, rises from the solder joints, short stripped ends and 4–8 mm
+of trimming allowance. The bare bridges use a smaller handling allowance and finish at about 3.5 mm.
+Trim the second end after fitting; do not retain unused allowance as an extra loop. The tilted view and crossing
+list show which already-installed wires the new one passes above. For outgoing cables, enter the measured
+external run and service slack; the guide never assumes their remote endpoints. Pump/LED service slack starts
+at EL-9's 150 mm, kept outside the board gap. A CSV cut list is available in the page.
+
+Only six spool colours are used; labels identify connections that share a colour. Red is switched battery,
+black ground, white the 5 V paths, green 3.3 V/Hall, yellow sense/twist/LED return, and blue PWM/gates/pump return.
+Do not treat a blue/yellow load return as ground or join white supply paths across D1/JP1.
 
 ## Reading the drawing
 
@@ -105,8 +136,16 @@ SVG drawings with the `viewer.html` template. Run from this directory:
 ```sh
 python3 generate.py
 python3 generate.py --export
+python3 assembly.py
+python3 -m pytest test_assembly.py -q
 ```
 
 The first command rebuilds the standalone viewer and solder schedule with NumPy and Shapely installed. `--export` also rebuilds the combined PNG and four-page PDF; it requires `rsvg-convert`
 on PATH and the Python `pypdf` package. Intermediate SVGs and PDF pages are created in a temporary
 directory and removed automatically. No intermediate exports need to be committed.
+
+`assembly.py` combines the existing pin placement and saved `routing.json` with `assembly-template.html`.
+It writes the standalone `assembly.html`; it does not rewrite the reference paths or CAD dimensions.
+Its tests cover every lead/endpoint, layer and crossing order, shared-joint history, cut allowances, and rejection
+of deliberately invalid endpoints, crossings, wire diameter, height and screw intrusions. Pytest is needed only
+for the last command. Regenerate the guide whenever placement or saved routes change.
