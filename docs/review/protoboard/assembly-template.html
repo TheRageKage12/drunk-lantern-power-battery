@@ -95,7 +95,7 @@ function path(points){return points.map((p,i)=>(i?'L':'M')+project(...p).join(',
 function physical(w){return [...w.path3d,...(w.exit3d||[]).slice(1)]}
 function componentPicture(part){
  const box=$('component-card'),svg=$('component-picture');box.hidden=!part;if(!part)return;
- const info=part.identity,k=info.kind;svg.replaceChildren();svg.setAttribute('aria-label',info.name+'. '+info.note);
+ const info=part.identity,k=info.kind;svg.replaceChildren();svg.setAttribute('viewBox',k==='resistor'?'0 0 320 180':'0 0 320 140');svg.setAttribute('aria-label',info.name+'. '+info.note);
  add(svg,'title',{},info.name);add(svg,'desc',{},info.note);
  const line=(pts,colour='#78868c',width=3)=>add(svg,'path',{d:pts,fill:'none',stroke:colour,'stroke-width':width,'stroke-linecap':'round'});
  const rect=(x,y,w,h,fill,rx=3)=>add(svg,'rect',{x,y,width:w,height:h,rx,fill,stroke:'#59666b','stroke-width':1});
@@ -107,8 +107,13 @@ function componentPicture(part){
   label(61,127,info.ends[0].pad,15,'#a34b00');label(259,127,info.ends[1].pad,15,'#a34b00');
   label(160,20,'Find the band at one end');
  }else if(k==='resistor'){
-  line('M28 65H292');rect(107,48,106,34,'#ddc9a3',12);
-  label(160,24,'Resistor');label(160,115,'Either way round');
+  const colours={brown:'#78441d',black:'#202124',red:'#cf2634',orange:'#ed7916',yellow:'#f2cf18',violet:'#8042a2',gold:'#b78c31'};
+  for(let [row,variant] of info.band_variants.entries()){
+   let y=50+row*80;label(160,y-32,`${variant.tolerance}% · ${variant.bands[3]} end band`);
+   line(`M28 ${y}H292`);rect(107,y-17,106,34,'#e1cfac',12);
+   variant.bands.forEach((colour,i)=>add(svg,'rect',{x:[119,140,161,194][i],y:y-16,width:8,height:32,fill:colours[colour],'data-band':colour,'data-tolerance':variant.tolerance}));
+  }
+  label(160,173,info.bands.map(c=>c[0].toUpperCase()+c.slice(1)).join(' · '),13);
  }else if(k==='ceramic'){
   line('M142 65L134 110M178 65L186 110');add(svg,'ellipse',{cx:160,cy:56,rx:35,ry:32,fill:'#bf864a',stroke:'#795735','stroke-width':2});
   label(160,132,'Either way round');
@@ -133,7 +138,7 @@ function componentPicture(part){
  }else if(k==='jumper'){
   rect(129,47,62,25,'#30363b');rect(140,22,7,81,'#c7ad6b',0);rect(173,22,7,81,'#c7ad6b',0);rect(129,47,62,25,'#30363b');label(160,129,'Leave the removable cap off');
  }
- $('component-caption').textContent=k==='diode'?`${part.ref} = circuit label · NTE585 = part number. Shape guide, not to scale.`:`${part.ref} = circuit label. Shape guide; colour and markings may vary.`;
+ $('component-caption').textContent=k==='diode'?`${part.ref} = circuit label · NTE585 = part number. Shape guide, not to scale.`:k==='resistor'?`${part.ref} = circuit label. Either version fits; either way round.`:`${part.ref} = circuit label. Shape guide; colour and markings may vary.`;
 }
 function drawWire(svg,w,pending){let pts=physical(w),colour=DATA.colours[w.colour],active=(DATA.steps[cursor].wires||[]).includes(w.id),group=add(svg,'g',{'data-wire':w.id,opacity:active?1:.55});
  for(let [points,diameter] of w.segments){let d=path(points),bare=diameter===1;let visible=view==='tilt'||(view==='front'?!bare&&w.surface!=='rear':bare||w.surface==='rear');let layer=add(group,'g',{opacity:visible?1:.13});

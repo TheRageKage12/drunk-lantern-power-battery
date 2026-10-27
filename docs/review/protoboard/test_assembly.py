@@ -78,6 +78,18 @@ def test_component_identification_matches_board_assignments(data):
                         {'label':'Striped end','pad':L.PINS[ref+'.2']['pad']}]
  assert A.component_identity('U1')['kind']=='socket'
 
+def test_resistor_colours_decode_to_circuit_values(data):
+ digits=['black','brown','red','orange','yellow','green','blue','violet','grey','white']
+ values={p['ref']:float(p['value'][:-1])*1000 for p in L.PARTS if p['kind']=='resistor'}
+ for part in data['parts']:
+  if part['ref'] not in values:continue
+  variants=part['identity']['band_variants']
+  assert {v['tolerance'] for v in variants}=={2,5}
+  for variant in variants:
+   a,b,m,t=variant['bands']
+   assert (10*digits.index(a)+digits.index(b))*10**digits.index(m)==values[part['ref']]
+   assert {'gold':5,'red':2}[t]==variant['tolerance']
+
 def test_capacitor_wires_include_both_connections(data):
  for w in data['routes']:
   if w['surface']!='rear':continue

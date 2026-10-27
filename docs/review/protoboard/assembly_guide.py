@@ -8,6 +8,11 @@ import mechanical as M
 HERE=Path(__file__).resolve().parent
 COLOURS={'red':'#c42d32','black':'#292c32','white':'#fafafa','blue':'#2363bb','yellow':'#efd04a','green':'#2f8451'}
 NET_COLOUR=dict(VLOAD='red',GND='black',**{'5V_REG':'white','AFTER_D1':'white','XIAO_5V':'white','3V3':'green'},HALL='green',SW='yellow',TWIST='yellow',ADC='yellow',PWM_P='blue',GATE_P='blue',PWM_L='blue',GATE_L='blue',DRAIN_P='blue',DRAIN_L='yellow')
+# Planned NTE QW values: Vetco lists 5%; the NTE series sheet specifies 2%.
+# Show both tolerance bands, as requested, without changing the resistance.
+RESISTOR_BANDS={'100k':['brown','black','yellow'],'22k':['red','red','orange'],
+                '10k':['brown','black','orange'],'4.7k':['yellow','violet','red'],
+                '3.3k':['orange','orange','red']}
 
 def route_length(w):
     formed=R.length(w['path3d'])+R.length(R.cable_exit(w));tails=sum(R.length(t['path'])+2.1 for t in w['tails'])
@@ -36,7 +41,12 @@ def component_identity(ref):
           'mosfet':'Printed face toward '+('row 18.' if ref=='Q1' else 'column A.')}[kind]
     ends=[dict(pad=p['pad'],label=('Striped end' if key.endswith('.2') else 'Unstriped end') if kind=='diode' else key.split('.')[1])
           for key,p in L.PINS.items() if key.split('.')[0]==ref]
-    return dict(kind=kind,name=name,note=note,ends=ends)
+    identity=dict(kind=kind,name=name,note=note,ends=ends)
+    if kind=='resistor':
+        bands=RESISTOR_BANDS[part['value']]
+        identity.update(bands=bands,band_variants=[dict(tolerance=5,bands=bands+['gold']),dict(tolerance=2,bands=bands+['red'])],
+                        note=', '.join(bands)+', then gold (5%) or red (2%). Either way round.')
+    return identity
 
 def make_data(routes):
     report=R.validate(routes);byid={w['id']:w for w in routes};steps=[];visits=defaultdict(list);parts=[];pins=dict(L.PINS)

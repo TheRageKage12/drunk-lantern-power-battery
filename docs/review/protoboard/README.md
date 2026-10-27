@@ -54,6 +54,24 @@ at each end. Leave ≥50 mm of strap overlap and trim excess only after fitting.
 rolling, without crushing its sleeve. Pull-test with power disconnected before connecting the board; the leads must not
 hold the capacitor in place. No adhesive base or new mounting hardware is needed.
 
+## Resistor identification
+
+Each resistor illustration shows its four bands, in both gold-end (5%) and red-end (2%) versions.
+Either version meets the circuit's 5% acceptance limit; either physical orientation works.
+
+| Parts | Value | First three bands |
+|---|---|---|
+| R1 | 100 kΩ | Brown · black · yellow |
+| R2 | 22 kΩ | Red · red · orange |
+| R3, R4 | 10 kΩ | Brown · black · orange |
+| R5, R6 | 4.7 kΩ | Yellow · violet · red |
+| R7 | 3.3 kΩ | Orange · orange · red |
+
+The planned NTE QW parts have conflicting tolerance documentation: [Vetco's listing](https://vetco.net/products/nte-qw247_4-7k_ohm_1-4_watt_resistor)
+says 5%, while [NTE's series datasheet](https://static6.arrow.com/aropdfconversion/b7940565efd0f9772de4494dc62a7ce878d576bb/quarter.pdf)
+specifies 2% for these values. Both versions are shown. Band meanings follow the
+[Vishay colour chart](https://www.vishay.com/docs/49411/resistor_color_code_calculator.pdf).
+
 ## Wire preparation
 
 Cut one wire at a time. Cut lengths use the curved 3-D path, through-board ends, rear tails and **6 mm trimming stock**.
