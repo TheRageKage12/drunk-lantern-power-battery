@@ -28,7 +28,7 @@ Do not add washers. The checks include the nuts' conductive hex corners (5.5 mm 
 
 The XIAO now faces USB toward column X; U1's notch also faces column X. Q1's printed face faces row 18;
 Q2's printed face faces column A. D1's stripe goes to L05 and D3's stripe to S01. JP1 is R18/S18.
-C2 positive remains F02, negative F04, now via pigtails. Leave JP1 open for USB and follow the build guide's power procedure.
+C2 positive remains F02, negative F04, now via pigtails. Remove JP1’s jumper cap for USB and follow the build guide's power procedure.
 
 | Check | Modeled allowance / physical acceptance |
 |---|---|

@@ -138,7 +138,7 @@ function componentPicture(part){
  }else if(k==='jumper'){
   rect(129,47,62,25,'#30363b');rect(140,22,7,81,'#c7ad6b',0);rect(173,22,7,81,'#c7ad6b',0);rect(129,47,62,25,'#30363b');label(160,129,'Leave the removable cap off');
  }
- $('component-caption').textContent=k==='diode'?`${part.ref} = circuit label · NTE585 = part number. Shape guide, not to scale.`:k==='resistor'?`${part.ref} = circuit label. Either version fits; either way round.`:`${part.ref} = circuit label. Shape guide; colour and markings may vary.`;
+ $('component-caption').textContent=k==='diode'?`${part.ref} = circuit label · NTE585 = part number. Shape guide, not to scale.`:k==='resistor'?`${part.ref} = circuit label. Either version fits; either way round.`:k==='socket'?'This socket holds chip U1. Leave it empty until the final step.':`${part.ref} = circuit label. Shape guide; colour and markings may vary.`;
 }
 function drawWire(svg,w,pending){let pts=physical(w),colour=DATA.colours[w.colour],active=(DATA.steps[cursor].wires||[]).includes(w.id),group=add(svg,'g',{'data-wire':w.id,opacity:active?1:.55});
  for(let [points,diameter] of w.segments){let d=path(points),bare=diameter===1;let visible=view==='tilt'||(view==='front'?!bare&&w.surface!=='rear':bare||w.surface==='rear');let layer=add(group,'g',{opacity:visible?1:.13});

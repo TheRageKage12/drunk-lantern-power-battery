@@ -35,7 +35,7 @@ def component_identity(ref):
           'diode':'The band marks the end that must go into '+L.PINS.get(ref+'.2',{}).get('pad','')+'.',
           'ceramic':'Either way round. Colour and markings may vary.',
           'electrolytic':'The minus stripe marks the negative leg: connect black there.',
-          'jumper':'Leave the removable cap (shunt) off.',
+          'jumper':'Leave the removable jumper cap off.',
           'socket':'Fit the empty socket now; the chip goes in later.',
           'controller':'The USB connector faces column X.',
           'mosfet':'Printed face toward '+('row 18.' if ref=='Q1' else 'column A.')}[kind]
@@ -63,7 +63,7 @@ def make_data(routes):
       'Q2':'Fit with its printed face toward column A. Keep the top within 22 mm of the board. Solder all three legs and clip off the excess.',
       'D1':'Put the unstriped end into H04 and the striped end into L05, from the component side. Solder both ends on the back and clip off the excess.',
       'D3':'Put the unstriped end into N01 and the striped end into S01, from the component side. Solder both ends on the back and clip off the excess.',
-      'JP1':'Fit the header in R18/S18 and solder both pins. Leave the removable shunt off.',
+      'JP1':'Fit the header in R18/S18 and solder both pins. Leave the removable jumper cap off.',
       'C1':'Lay the disc flat on the back, following the lead template. Solder its legs onto C05 and C01; either way round. Keep it clear of the board and nearby joints.',
       'C3':'Lay the disc flat on the back, following the lead template. Solder its legs onto G10 and A13; either way round. Keep it clear of the board and nearby joints.',
       'R3':'Form the legs to the template and lay the resistor flat on the back. Solder onto F13 and G13, approaching from row 01. Clip excess only after fitting.',
@@ -73,10 +73,11 @@ def make_data(routes):
         if ref=='U1':pp.sort(key=lambda v:(v[0] not in ['U1.1','U1.8'],int(v[0].split('.')[1])))
         text=instructions.get(ref,'Bend the legs to fit the marked holes. Insert the resistor from the component side, solder both ends on the back, then clip off the excess.')
         identity=component_identity(ref)
-        fit=add('component','Install '+identity['name']+' · '+ref,text,ref=ref,phase=phase,joints=[dict(pad=p['pad'],owner=ref) for _,p in pp])
+        title='Install the socket for chip U1' if ref=='U1' else 'Install '+identity['name']+' · '+ref
+        fit=add('component',title,text,ref=ref,phase=phase,joints=[dict(pad=p['pad'],owner=ref) for _,p in pp])
         parts.append(dict(ref=ref,name=ref,identity=identity,fit=fit,solder=[fit],bounds=M.bounds()[ref],pins=[p['pad'] for _,p in pp],side='rear' if phase=='Underside parts' else 'front'))
     for ref in ['R1','R2','R5','R6','R7','D1','D3','U1','JP1','MCU','Q1','Q2']:component(ref,'Front components')
-    add('check','Inspect the first joints','Check orientation and solder bridges. Keep U1 out and JP1 open.',phase='Inspect')
+    add('check','Inspect the first joints','Check that every part faces the direction shown and that no solder accidentally joins neighbouring holes. Leave the installed 14-pin socket empty and the jumper cap off JP1’s two pins.',phase='Inspect')
     for group in report['assembly_groups']:
         joints=[]
         for name in group:
@@ -104,7 +105,7 @@ def make_data(routes):
         add('splice','Make '+j['id']+' · '+L.NETS[j['net']][1],'Join '+', '.join(j['members'])+'. Sleeve the entire joint and overlap each wire’s insulation. Keep it in the cable space beside the board.',phase='Power harness')
     add('check','Check the buck ground','With power disconnected, confirm buck IN− and OUT− have continuity. Only IN− needs the harness return; do not omit it.',phase='Power harness')
     add('check','Fit and inspect','Mount with two M3 nuts per hole and M3×10 screws. Front loops ≤35 mm; rear parts and wires ≤11 mm. Close the lid without pressing on anything.',phase='Final checks')
-    add('check','Commission without loads','Insert U1, notch toward column X. Set the buck to 5.0 V before connecting it. Continue with EL-10 in the build guide; follow SW-6 for USB.',phase='Final checks')
+    add('check','Commission without loads','Plug the 74AHCT125 chip (U1) into its socket, notch toward column X. Set the buck to 5.0 V before connecting it. Continue with EL-10 in the build guide; follow SW-6 for USB.',phase='Final checks')
     source=(HERE/'design.json').read_bytes()+(HERE/'assembly_guide.py').read_bytes()
     return dict(version=hashlib.sha256(source).hexdigest()[:12],diameter=1.8,gap=M.REAR_GAP,routes=[byid[n] for g in report['assembly_groups'] for n in g]+aux,steps=steps,parts=parts,pins=pins,mounts=L.MOUNTS,colours=COLOURS,nets={n:dict(label=v[1],colour=NET_COLOUR[n])for n,v in L.NETS.items()},rear_leads=L.DESIGN['leads'],rear_bodies=L.DESIGN['rear_bodies'],offboard_cap=L.DESIGN['offboard_cap'],pigtails=L.DESIGN['pigtails'],report=report,source='Existing board and printed parts · Existing M3 nuts and M3×10 screws · 27 October 2026')
 
