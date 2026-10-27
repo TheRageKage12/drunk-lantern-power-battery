@@ -27,7 +27,7 @@ def make_data(routes):
         steps.append(s);return s['index']
     add('check','Disconnect all power','Battery and USB disconnected. Leave U1 out and JP1 open.',phase='Prepare')
     add('check','Check the parts before soldering','Board: 70 × 50 mm. C2: ≤Ø18 × 25 mm. C1/C3: ≤Ø10 × 4 mm. Check the other size limits in Build details.',phase='Prepare')
-    add('check','Dry-fit the board and spacers','Use four 20 mm spacers and M3×25 screws on the existing posts. Check 30 mm below the board; then remove it for soldering.',phase='Prepare')
+    add('check','Dry-fit the M3 mounting','Use two M3 nuts under each hole and four M3×10 screws. Aim for 14.8 mm below the board. Remove it for soldering.',phase='Prepare')
     add('check','Hold the board by its edges','Keep both faces off the bench. Use your insulated stranded 22 AWG; twist stripped ends gently and insert them untinned.',phase='Prepare')
     values={p['ref']:p['value'] for p in L.PARTS}
     instructions={
@@ -37,10 +37,10 @@ def make_data(routes):
       'Q2':'Printed face toward column A. Height including leads ≤22 mm.',
       'D1':'Striped end in L05.', 'D3':'Striped end in S01.',
       'JP1':'Fit the header in R18/S18. Leave its shunt OFF.',
-      'C1':'Rear: attach its own leads to R2 at C05/C01. Body 6–19 mm below the solder face; no polarity.',
-      'C3':'Rear: its own leads join U1 pin 14 (G10) to pin 7 (A13). Body 7.5–20.5 mm below the solder face; no polarity.',
-      'R3':'Rear: stand upright under F13, with its return lead to G13. Keep the body 5 mm off the solder face. Approach its joint with the iron angled toward row 18.',
-      'R4':'Rear: stand upright under C13, with its return lead to D13. Keep the body 5 mm off the solder face. Approach its joint with the iron angled toward row 18.'}
+      'C1':'Rear: attach its own leads to R2 at C05/C01. Lay the disc flat, 6–10 mm below the solder face. Form its own leads to the template; no polarity.',
+      'C3':'Rear: its own leads join U1 pin 14 (G10) to pin 7 (A13). Lay the disc flat, 6–10 mm below the solder face. Form its own leads to the template; no polarity.',
+      'R3':'Rear: lay flat in the marked position, 5.5 mm off the solder face. Form its own leads to F13/G13; use the template.',
+      'R4':'Rear: lay flat in the marked position, 5.5 mm off the solder face. Keep at least 26 mm of uncut lead on the C13 side; use the template.'}
     def component(ref,phase):
         pp=[(key,p) for key,p in L.PINS.items() if key.split('.')[0]==ref]
         if ref=='U1':pp.sort(key=lambda v:(v[0] not in ['U1.1','U1.8'],int(v[0].split('.')[1])))
@@ -49,7 +49,10 @@ def make_data(routes):
         joints=[]
         for key,p in pp:
             detail='Solder this lead; trim to ≤1.5 mm. Joint height ≤2.5 mm.'
-            if phase=='Underside parts':detail='Solder the component’s own lead onto this existing joint; do not force a second lead through the hole.'
+            if phase=='Underside parts':
+                angle=L.DESIGN['tool_access'][key][0][1]
+                detail='Solder its own lead onto this joint; do not force it into the hole. Touch the side of the joint with a ≤2 mm tip.'
+                if ref in ['R3','R4']:detail+=' Approach from row 01; fit the capacitors later.'
             if p['net'].startswith('NC'):detail+=' Leave this pin unwired.'
             joints.append(add('solder','Solder '+key+' · '+p['pad'],detail,ref=ref,pad=p['pad'],phase=phase))
         parts.append(dict(ref=ref,name=ref,fit=fit,solder=joints,bounds=M.bounds()[ref],pins=[p['pad'] for _,p in pp],side='rear' if phase=='Underside parts' else 'front'))
@@ -72,7 +75,7 @@ def make_data(routes):
                 w['joints'].append(add('solder','Connect '+name+' · '+t['node'],'Bend this short end along the highlighted back-side path, then solder it to this joint. Keep it flat; trim any excess.',wire=name,pad=t['node'],phase='Insulated wires'))
             w['check']=w['joints'][-1]
     add('check','Check the board wiring','Check every listed wire for continuity and inspect neighbouring joints for bridges before adding the underside parts.',phase='Inspect')
-    for ref in ['C3','C1','R3','R4']:component(ref,'Underside parts')
+    for ref in L.DESIGN['rear_order']:component(ref,'Underside parts')
     capfit=add('fit','Prepare C2 · 2200 µF / 25 V','Positive to red; striped negative to black. Keep the case ≤Ø18 × 25 mm. Sleeve the two lead joints separately.',ref='C2',phase='Large capacitor')
     aux=[]
     for i,(ref,pad,colour) in enumerate([('C2.1','F02','red'),('C2.2','F04','black')]):
@@ -82,15 +85,16 @@ def make_data(routes):
         w['joints'].append(add('solder','Solder C2 '+colour+' lead · '+pad,'Insert from the back, flush with the front. Solder on the copper side; one wire through the hole.',pad=pad,wire=w['id'],phase='Large capacitor'))
         w['joints'].append(add('splice','Join C2 '+('positive' if colour=='red' else 'negative'),'Solder the '+colour+' pigtail to the '+('positive lead.' if colour=='red' else 'striped negative lead.')+' Slide its sleeve over the joint and shrink it.',wire=w['id'],point=path[-1],phase='Large capacitor'))
         w['check']=w['joints'][-1];aux.append(w)
-    add('check','Secure C2 independently','Tie C2 to its floor base beneath (36.5, 16), long axis toward row 18. Leave the vent clear; check the base holds before mounting the board.',phase='Large capacitor')
-    parts.append(dict(ref='C2',name='C2',fit=capfit,solder=[],bounds=M.bounds()['C2'],pins=['F02','F04'],side='rear'))
+    add('check','Fit the battery strap','Cut 350 mm from the existing ONE-WRAP roll. Thread the floor slots, fit the battery LED-side down, then place C2 under the loose strap.',phase='Large capacitor')
+    add('check','Secure C2 independently','Lay C2 on the battery under its existing strap, along the pack’s length. Centre the strap on the case; keep both ends clear. Pull-test before mounting the board.',phase='Large capacitor')
+    parts.append(dict(ref='C2',name='C2',fit=capfit,solder=[],bounds=M.bounds()['C2'],pins=['F02','F04'],side='external'))
     for j in L.DESIGN['harness']:
         add('splice','Make '+j['id']+' · '+L.NETS[j['net']][1],'Join '+', '.join(j['members'])+'. Sleeve the entire joint and overlap each wire’s insulation. Keep it in the cable space beside the board.',phase='Power harness')
     add('check','Check the buck ground','With power disconnected, confirm buck IN− and OUT− have continuity. Only IN− needs the harness return; do not omit it.',phase='Power harness')
-    add('check','Fit and inspect','Mount on the 20 mm spacers. Front loops ≤35 mm high; small rear parts ≤21 mm deep. C2 and its base fit under the board. Nothing may be compressed by the lid or screws.',phase='Final checks')
+    add('check','Fit and inspect','Mount with two M3 nuts per hole and M3×10 screws. Front loops ≤35 mm; rear parts and wires ≤11 mm. Close the lid without pressing on anything.',phase='Final checks')
     add('check','Commission without loads','Insert U1, notch toward column X. Set the buck to 5.0 V before connecting it. Continue with EL-10 in the build guide; follow SW-6 for USB.',phase='Final checks')
     source=(HERE/'design.json').read_bytes()+(HERE/'assembly_guide.py').read_bytes()
-    return dict(version=hashlib.sha256(source).hexdigest()[:12],diameter=1.8,gap=30,routes=[byid[n] for g in report['assembly_groups'] for n in g]+aux,steps=steps,parts=parts,pins=pins,mounts=L.MOUNTS,colours=COLOURS,nets={n:dict(label=v[1],colour=NET_COLOUR[n])for n,v in L.NETS.items()},rear_leads=L.DESIGN['leads'],pigtails=L.DESIGN['pigtails'],report=report,source='Existing board and printed parts · 20 mm removable spacers · 27 October 2026')
+    return dict(version=hashlib.sha256(source).hexdigest()[:12],diameter=1.8,gap=M.REAR_GAP,routes=[byid[n] for g in report['assembly_groups'] for n in g]+aux,steps=steps,parts=parts,pins=pins,mounts=L.MOUNTS,colours=COLOURS,nets={n:dict(label=v[1],colour=NET_COLOUR[n])for n,v in L.NETS.items()},rear_leads=L.DESIGN['leads'],rear_bodies=L.DESIGN['rear_bodies'],offboard_cap=L.DESIGN['offboard_cap'],pigtails=L.DESIGN['pigtails'],report=report,source='Existing board and printed parts · Existing M3 nuts and M3×10 screws · 27 October 2026')
 
 def main():
     routes=R.plan();data=make_data(routes)

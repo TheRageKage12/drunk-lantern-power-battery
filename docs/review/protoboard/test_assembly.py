@@ -70,9 +70,9 @@ def test_cut_stock_accounts_for_3d_and_rear_tails(routes):
   assert cut['cut']>=R.length(w['path3d'])+R.length(R.cable_exit(w))+sum(R.length(t['path'])+2.1 for t in w['tails'])+6-1e-6
 
 def test_hardware_and_harness_are_explicit(data):
- assert M.BOARD_SPACER==20 and M.REAR_GAP==30
+ assert M.BOARD_SPACER==4.8 and M.REAR_GAP==14.8
  assert sorted(len(j['members']) for j in L.DESIGN['harness'])==[3,5,6]
- assert 'M3×25' in ' '.join(s['text'] for s in data['steps'])
+ assert 'M3×10' in ' '.join(s['text'] for s in data['steps'])
 
 
 def test_rear_lead_and_iron_collisions_rejected():
@@ -81,6 +81,52 @@ def test_rear_lead_and_iron_collisions_rejected():
  d=copy.deepcopy(L.DESIGN);d['leads']['C1.1']=d['leads']['C3.1']
  with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)
  d=copy.deepcopy(L.DESIGN)
- # A normal approach hits R3's upright body; cached passing numbers cannot hide it.
- d['tool_access']['R3.1']=[[99,0,0]]
+ # A centred vertical approach runs into the target lead beyond the contact region.
+ d['tool_access']['R4.1']=[[99,0,0]]
+ with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)
+
+
+def test_metal_nuts_and_reduced_gap_rejected():
+ from redesign.rear import check_rear
+ from redesign.check import mm
+ d=copy.deepcopy(L.DESIGN);d['hardware']['rear_gap']=10
+ with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)
+ d=copy.deepcopy(L.DESIGN);d['hardware']['mounts'][0]=list(mm('H04'))
+ with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)
+
+
+def test_capacitor_wire_crossing_rejected():
+ from redesign.rear import check_rear
+ from redesign.check import mm
+ d=copy.deepcopy(L.DESIGN);d['pigtails'][1]['path']=d['pigtails'][0]['path']
+ with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)
+
+
+def test_front_routes_inside_stepped_enclosure_reserve():
+ from shapely.geometry import Polygon,Point
+ outline=Polygon(L.DESIGN['hardware']['front_outline'])
+ for wire in L.DESIGN['edges']:
+  for x,y,z in wire['path']:
+   assert outline.contains(Point(x,y)) and outline.boundary.distance(Point(x,y))>=.9
+ # The battery-strap corner is intentionally excluded, not silently reserved twice.
+ assert not outline.contains(Point(15,53))
+ assert outline.contains(Point(60,53))
+
+
+def test_rear_component_leads_and_floor_allowance(routes):
+ report=R.validate(routes)
+ assert report['maximum_rear_extent_mm']<=11
+ assert M.REAR_GAP-.5-11>=3.3-1e-6
+ for path in L.DESIGN['leads'].values():assert R.length(path)<=25
+ # Fixed mounting geometry and hardware are explicit in the guide data.
+ assert L.DESIGN['hardware']['nut_count']==8
+ assert L.DESIGN['hardware']['screw']=='M3x10'
+
+
+def test_rear_order_preserves_iron_access(data):
+ from redesign.rear import check_rear
+ from redesign.check import mm
+ sequence=[p['ref'] for p in data['parts'] if p['side']=='rear']
+ assert sequence==L.DESIGN['rear_order']
+ d=copy.deepcopy(L.DESIGN);d['rear_order']=['C3','C1','R3','R4']
  with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)

@@ -28,7 +28,7 @@
 <section class="board" id="rear"><h2>Solder side — wiring</h2><div class="viewport"><div class="canvas">{{REAR}}</div></div></section>
 </div></div>
 <p>Insulated loops are on the component side; short stripped ends connect on the back. Use the step guide for assembly order.</p>
-<p><b>Fit limits:</b> existing posts + 20 mm spacers. Front wiring ≤35 mm high; small rear parts ≤21 mm deep. Check capacitor sizes before soldering. <a href="README.md">Build details</a>.</p>
+<p><b>Fit limits:</b> existing posts + two M3 nuts per hole, with M3×10 screws. Front wiring ≤35 mm high; rear parts and wires ≤11 mm deep. Check capacitor sizes before soldering. <a href="README.md">Build details</a>.</p>
 <div class="cols">
 <section><h2>Cables and off-board connections</h2><div class="table-scroll"><table><thead><tr><th>Cable</th><th>Board hole</th><th>Other end</th><th>Connection</th></tr></thead><tbody>{{CABLES}}</tbody></table></div><p>J_LOAD joins S1 output, buck IN+, pump +, LED + and H01. J_GND joins battery −, buck IN−, lock ground and H02/H03/H04. J_5V joins buck OUT+, lock +5 V and H07. Insulate each splice.</p><p>D2 stays across the pump, stripe to +. C4 stays at the Hall sensor. See the <a href="WIRE_SCHEDULE.md">complete schedule</a>.</p><p>R1=100k; R2=22k; R3/R4=10k; R5/R6=4.7k; R7=3.3k. D1/D3=NTE585. C1/C3=0.1 µF. C2=2200 µF/25 V. U1=74AHCT125 DIP14. Q1/Q2=IRLZ44NPBF.</p></section>
 <section id="wire-table"><h2>Wire list — one wire per row</h2><p>Press <b>Show</b> to see that wire and its solder points on the solder-side drawing.</p><div class="table-scroll"><table><thead><tr><th>Show wire</th><th>From → to hole</th><th>Connection</th><th>Type</th></tr></thead><tbody>{{WIRES}}</tbody></table></div></section>

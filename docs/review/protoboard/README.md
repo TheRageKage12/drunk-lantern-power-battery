@@ -9,8 +9,8 @@ The components have moved; the printed enclosure and its four mounting holes hav
 2. Fit the insulated loops over that face. Each wire end goes through its **own empty hole**.
    On the back, its short stripped end bends to the indicated component joint. There are no bare buses or separate lead offcuts.
 3. Fit the four indicated wire pairs together before soldering either wire. The guide handles this order.
-4. Add C1/C3 and R3/R4 on the back, using their own component leads. Then add C2's two sleeved pigtails.
-5. Secure C2 on the cap floor, insulate the three power-harness splices, and fit the board on its spacers.
+4. Add R3, R4, C1, then C3 on the back, using their own component leads. Then add C2's two sleeved pigtails.
+5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
 The guide highlights one solder point at a time, retains completed work, and supplies cut lengths and 1:1 bend templates.
 Use **Fit** to show the whole board; changing steps keeps your chosen view. A pad is the copper ring around a hole.
@@ -18,9 +18,10 @@ Hole names are assigned from the component face; the rear view is mirrored.
 
 ## Mounting and fit
 
-Use four **20 mm unthreaded nylon spacers**, bore ≥3.2 mm and OD ≤6 mm, with **M3×25 screws** (heads ≤Ø6 mm).
-The existing 10 mm posts give 30 mm under the solder face. Nominal screw engagement is 25 − 20 − 1.2 = **3.8 mm**;
-check the screws clamp the board without bottoming out. Do not add washers that reduce that engagement.
+Use **eight existing M3 nuts and four M3×10 screws**: two nuts beneath each board hole, on the unchanged 10 mm printed posts.
+The nominal lift is 4.8 mm, giving **14.8 mm below the solder face** and **4.0 mm thread engagement** (10 − 4.8 − 1.2).
+Dry-fit before wiring. Keep the nuts aligned, seat all four corners evenly, and check that the board clamps without bottoming the screws.
+Do not add washers. The checks include the nuts' conductive hex corners (5.5 mm across flats, plus placement allowance).
 
 The XIAO now faces USB toward column X; U1's notch also faces column X. Q1's printed face faces row 18;
 Q2's printed face faces column A. D1's stripe goes to L05 and D3's stripe to S01. JP1 is R18/S18.
@@ -35,19 +36,20 @@ C2 positive remains F02, negative F04, now via pigtails. Leave JP1 open for USB 
 | Bare wire ends | The routed ends retain ≥0.52 mm from other Ø2 mm joints and ≥0.60 mm from unrelated ends. They are fixed at their hole and destination joint. Two ends have a small sideways bend shown in the drawing. |
 | Insulated wires | Nominal minimum skin separation 0.57 mm, including curve approximation allowance. Jackets may touch as loops flex; the design does **not** depend on an air gap between insulated wires. Keep jackets intact and bare joints separate. |
 | Components | Minimum body gap 1.09 mm. Front wires nominally clear bodies by ≥1.05 mm and exposed axial-component leads by ≥1.29 mm. |
-| Mounting screws | Wire paths leave a Ø10 mm access corridor. Spacers have a 0.25 mm radial allowance in the rear checks; use insulating nylon spacers. |
-| Small rear parts | Keep within 21 mm of the solder face, leaving at least 8.5 mm above the floor with 0.5 mm mounting variation. |
-| C2 support | Case ≤Ø18 × 25 mm, lying along the row direction. A ≤25.4 × 25.4 × 5 mm tie base sits on the existing floor, centred below board coordinate **(36.5,16)**. Its case, tie and base fit within the 30 mm space. Leave the vent clear. |
+| Mounting screws | Wire paths leave a clear Ø8.2 mm access corridor; use screw heads ≤Ø6 mm. Metal nut corners include 0.25 mm radial allowance; solder joints clear that enlarged envelope by ≥0.62 mm. Do not leave stray strands in the mounting areas. |
+| Small rear parts | Lay C1/C3 and R3/R4 flat. Rear parts, joints and wires must stay within **11 mm** of the solder face, leaving **≥3.3 mm** to the floor with 0.5 mm mounting variation. |
+| C2 support | Case ≤Ø18 × 25 mm, lying on the battery along its length. Centre it under the existing strap, at board coordinate **(14.5,90.5)**. Reserve 2 mm for the strap. Keep the vent and lead seal uncovered. |
 
 **Physical fit is still required.** The capacitors are not available to measure yet, and their listings omit case dimensions.
-Check all limits before soldering. Use a tip no wider than 2 mm; the rear resistors need an angled approach toward row 18. Dry-fit the raised board and retained capacitor; close the enclosure without pressing
-on wires. A failed fit means reforming the loops or revising the layout, not tightening screws to flatten it.
+Check all limits before soldering. Use a tip no wider than 2 mm. The rear-part checks include the completed wire-anchor joints,
+not just component terminals. Fit R3/R4 before C1, then C3, so later bodies do not block the iron. The guide supplies 1:1 lead templates; R4's longer lead needs at least **26 mm untrimmed**.
+Dry-fit the complete assembly and close the lid without pressing on wires. Do not tighten screws to flatten a failed fit.
 
-C2 must be retained independently of its leads. One option is a [Vetco 1-inch cable-tie base](https://vetco.net/products/sr-wm-abb_cable_tie_mount_-_1_x_1_adhesive_backed_qty_100)
-(25.4 mm square; **check delivered height ≤5 mm**). It is sold as 100 for $14.95, checked 27 October 2026; only one is needed.
-An existing base within the same size limit is suitable. Clean the floor and follow the adhesive's cure/application instructions;
-pull-test the mount before attaching the board. Position the tie around the case, away from its vent and lead seal.
-The fit calculation does not establish adhesive strength. No print changes or new supplier are required.
+Cut **350 mm from the existing 19 mm ONE-WRAP roll**. Thread the battery slots first, fit the battery LED-face down, and
+lay C2 on top along the pack's long direction. Centre the strap across its case; a 25 mm case leaves about 3 mm exposed
+at each end. Leave ≥50 mm of strap overlap and trim excess only after fitting. Tighten enough to prevent C2 sliding or
+rolling, without crushing its sleeve. Pull-test with power disconnected before connecting the board; the leads must not
+hold the capacitor in place. No adhesive base or new mounting hardware is needed.
 
 ## Wire preparation
 
@@ -61,6 +63,8 @@ Strip only the lengths shown for that wire (typically 6–12 mm at a board end).
 highlighted rear path, then solder the destination. Lightly tin the exposed end as part of this operation. No loose strands,
 no solder bridges, and no forcing pre-tinned wire into the nominal 1 mm holes. Do not bend at a ceramic capacitor's coating.
 
+C2’s insulated leads run beneath the board, around its column-X side, then across the battery. The free runs reserve
+Ø4 mm for the Ø1.8 mm wire; the first 35 mm follows the joint/forming template. Keep the completed underside within 11 mm.
 For C2, trim and sleeve each pigtail joint separately. Leave enough capacitor lead for a 3–4 mm overlap, without bending at
 the seal. Adjust the final insulated section to the delivered lead pitch, keeping the two sleeves separate. The body limit
 and drawing are envelopes, not a claim that the supplier guarantees a particular lead pitch.
@@ -94,7 +98,7 @@ and service loops must be fitted to the device.
 | XIAO | [Seeed](https://wiki.seeedstudio.com/XIAO-RP2040/), 21 × 17.8 mm and 15.24 mm header-row spacing. Reserve 21.5 × 18.3 × 12 mm including headers. |
 | U1/socket | [TI PDIP-14](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf), 2.54 mm pitch and 7.62 mm rows. [Vetco socket](https://vetco.net/products/14-pin-ic-socket-2-54mm-spacing-0-1) outer size is unpublished: require ≤20.5 × 11 × 10.5 mm assembled. |
 | Q1/Q2 | [Infineon TO-220](https://www.infineon.com/assets/row/public/documents/24/49/infineon-irlz44n-datasheet-en.pdf), section ≤10.54 × 4.69 mm. Reserve 10.8 × 4.9 mm and ≤22 mm mounted height. |
-| Resistors | Body limit 6.8 × Ø2.7 mm. R3/R4 stand on the rear, connected with their own leads; other resistors lie on the front. |
+| Resistors | Body limit 6.8 × Ø2.7 mm. R3/R4 lie flat on the rear, connected with their own leads; retain ≥26 mm on R4’s C13 end before forming. Other resistors lie on the front. |
 | D1/D3 | Body limit 5.5 × Ø2.9 mm. [Vishay DO-41 reference](https://www.vishay.com/docs/88525/1n5817.pdf) is smaller; this is not a dimensional guarantee for NTE585. |
 | C1/C3 | [Vetco disc](https://vetco.net/products/vupn6606_ceramic_capacitor_0-1_uf_-2080_50_volts_z5u): no mechanical drawing. Require ≤Ø10 × 4 mm and sufficient untrimmed leads to reach the indicated joints without bending at the coating. |
 | C2 | [Vetco 2200 µF / 25 V](https://vetco.net/products/2200uf25vdc_2200uf_25_volt_electrolytic_capacitor): no case drawing. Require ≤Ø18 × 25 mm; fit pigtails to its actual lead spacing. |
@@ -104,7 +108,7 @@ and service loops must be fitted to the device.
 
 `design.json` is the placement and route data. `mechanical.py` supplies shared size allowances; `routing.py` validates the
 wire paths. `redesign/check.py` checks exact polyline separation with a curve allowance, 4 mm bend construction, connectivity,
-separate wire holes the order of crossings, rear lead/spacer separation and access with a 2 mm iron tip widening to 5 mm over 12 mm. `cad/parts/electronics.py` checks the assembly reserve against the enclosure.
+separate wire holes, the order of crossings, rear lead/metal-nut separation and access with a 2 mm iron tip widening to 5 mm over 12 mm. `cad/parts/electronics.py` checks the assembly reserve against the enclosure.
 These are design checks, not measurements of an assembled board.
 
 ```sh
@@ -115,5 +119,6 @@ python3 -m pytest test_assembly.py -q
 
 Python dependencies: NumPy, SciPy, Shapely, NetworkX, pytest, pypdf; PNG/PDF export also uses `rsvg-convert`.
 Keep all power disconnected for continuity checks, then follow [EL-10 commissioning](../../BUILD_GUIDE.md#el-10-commission-the-board-without-loads).
-The spreadsheet has not been edited. Hardware follow-up: four 20 mm nylon spacers, four M3×25 screws, one tie base and a short
-length of suitable larger heat-shrink, replacing the previous 6 mm spacer/M3×12 proposal.
+The spreadsheet has not been edited. Allocate eight M3 nuts and four M3×10 screws from the existing hardware to the board;
+whole-device use becomes 22 nuts and ten M3×10 screws. No nylon spacers, M3×25 screws or adhesive tie base are required.
+The existing larger power-splice heat-shrink requirement remains.

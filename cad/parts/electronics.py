@@ -6,7 +6,7 @@ cad/README.md. Board positions follow docs/review/protoboard/{layout,generate}.p
 All solids here are already in the assembly frame; none are printable parts.
 
 Rev C (2026-10-23): the board, battery, buck module, power switch and charge socket live in the top cap, on the cap
-floor plate (parts/top.py). The board lies flat, component face up, on the existing 10 mm posts plus 20 mm removable spacers.
+floor plate (parts/top.py). The board lies flat, component face up, on the existing 10 mm posts plus two M3 nuts (4.8 mm) per post.
 """
 from pathlib import Path
 
@@ -61,22 +61,36 @@ def board_assembly():
     volumes follow the parts/lead paths so they do not fill the printed posts.
     """
     import numpy as np
-    items=[board_box(-10,-10,90,70,0,40),
-           board_box(0,0,70,50,-3.7,0),
-           board_box(4,-18,62,14,-23.2,10),
-           board_box(23.8,3.3,25.4,25.4,-31.2,-26.2),
-           board_box(31,-10,11,13.5,-19.2,-14.2)]  # C2 sleeves / delivered lead-pitch allowance
-    items += [board_box(*v) for n,v in M.bounds().items() if v[5]<0]
+    hardware = L.DESIGN['hardware']
+    outline = [T.board_point(x, y) for x, y in hardware['front_outline']]
+    front = cq.Workplane('XY').polyline(outline).close().extrude(hardware['front_reserve'])
+    items = [front.translate((0, 0, BOARD_FACE)),
+             board_box(0, 0, 70, 50, -3.7, 0),
+             board_box(4, -18, 62, 14, -12.2, 10)]
+    items += [board_box(*v) for n, v in M.bounds().items() if v[5] < 0 or n == 'C2']
+    # Reserve the whole lead face: the supplier does not publish C2's lead pitch.
+    items.append(board_box(27, 80.5, 10, 20, 10, 30))
     for path in L.DESIGN['leads'].values():
-        p=np.asarray(path);lo=p.min(axis=0)-.4;hi=p.max(axis=0)+.4
-        items.append(board_box(lo[0],lo[1],hi[0]-lo[0],hi[1]-lo[1],-1.2-hi[2],-1.2-lo[2]))
-    for wire in L.DESIGN['pigtails']:
-        p=np.asarray(wire['path'])
-        for i in range(0,len(p)-1,8):
-            c=p[i:i+9];lo=c.min(axis=0)-1.3;hi=c.max(axis=0)+1.3
-            items.append(board_box(lo[0],lo[1],hi[0]-lo[0],hi[1]-lo[1],-1.2-hi[2],-1.2-lo[2]))
-    items += [cq.Workplane('XY').workplane(offset=Z_FLOOR+T.BOARD_STANDOFF)
-        .center(*T.board_point(x,y)).circle(3).circle(1.6).extrude(M.BOARD_SPACER) for x,y in L.MOUNTS]
+        p = np.array(path)
+        for i in range(0, len(p)-1, 8):
+            c = p[i:i+9]
+            lo, hi = c.min(0)-.4, c.max(0)+.4
+            items.append(board_box(lo[0], lo[1], hi[0]-lo[0], hi[1]-lo[1], -1.2-hi[2], -1.2-lo[2]))
+    # The first 35 mm is located by the board joint/template. Free runs reserve
+    # Ø4 mm around Ø1.8 mm wire, allowing 1.1 mm of forming variation per side.
+    for w in L.DESIGN['pigtails']:
+        p = np.array(w['path'])
+        for i in range(0, len(p)-1, 4):
+            c = p[i:i+5]
+            travel = np.linalg.norm(np.diff(p[:i+5], axis=0), axis=1).sum()
+            radius = 2.0 if travel > 35 else 1.3
+            lo, hi = c.min(0)-radius, c.max(0)+radius
+            items.append(board_box(lo[0], lo[1], hi[0]-lo[0], hi[1]-lo[1], -1.2-hi[2], -1.2-lo[2]))
+    items += [cq.Workplane('XY').workplane(offset=Z_FLOOR+T.BOARD_STANDOFF).center(*T.board_point(x,y)).circle(L.DESIGN['hardware']['spacer_od_max']/2).circle(1.6).extrude(M.BOARD_SPACER) for x,y in L.MOUNTS]
+    xslot=T.HW+T.STOP_GAP+T.STOP_T+1+T.STRAP_SLOT_W/2
+    y0,y1=P.BATTERY_STRAP_Y-10,P.BATTERY_STRAP_Y+10;top=P.PACK_BED_T+P.POWERBANK_T
+    items += [pack(box(-xslot,xslot,y0,y1,-T.CAP_FLOOR_T,-T.CAP_FLOOR_T+2)),pack(box(-xslot,xslot,y0,y1,top,top+20))]
+    items += [pack(box(s*xslot-1,s*xslot+1,y0,y1,-T.CAP_FLOOR_T,top+1)) for s in (-1,1)]
     return compound(items)
 
 

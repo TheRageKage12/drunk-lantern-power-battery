@@ -24,7 +24,7 @@ def cable_exit(w):
     a=np.linspace(0,math.pi/2,33)
     p=[[x,-12+4*math.cos(t),8-4*math.sin(t)] for t in a]
     p += [[x,-12-4*math.sin(t),4*math.cos(t)] for t in a[1:]]
-    p.append([x,-16,-21.2])
+    p.append([x,-16,-10.2])
     return p
 
 def pieces(w):
@@ -47,5 +47,5 @@ def validate(routes=None):
         for k in ['a','b','anchor_a','anchor_b','net']:
             if k in e:assert e[k]==w[k],('route endpoint changed',w['id'],k)
     report=check(d)
-    report.update(routes=len(routes),maximum_rear_extent_mm=25,minimum_body_gap_mm=round(M.validate()[0][0],3))
+    report.update(routes=len(routes),minimum_body_gap_mm=round(M.validate()[0][0],3))
     return report

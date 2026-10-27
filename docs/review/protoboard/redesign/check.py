@@ -103,8 +103,16 @@ def check(d):
     for a,b in itertools.combinations(d['tails'],2):
         if a['node']==b['node']:continue
         assert LineString([p[:2] for p in a['path']]).distance(LineString([p[:2] for p in b['path']]))>=1.5-.001,('bare ends',a['id'],b['id'])
+    for pg in d['pigtails']:
+        p=np.asarray(pg['path']);formed=rounded(pg['controls'])
+        assert formed is not None and formed.shape==p.shape and np.allclose(formed,p,atol=.001),(pg['id'],'4 mm pigtail bends')
+        front=p.copy();front[:,2]=-1.2-front[:,2]
+        for e in routes:assert segments_gap(front,e['path'])-1.8>=.5,(pg['id'],e['id'],'pigtail/front wire')
+        for n,b in d['bodies'].items():
+            x,y,w,h,z0,z1=b;delta=np.maximum(np.maximum([x,y,z0]-front,front-[x+w,y+h,z1]),0)
+            assert np.linalg.norm(delta,axis=1).min()-.9>=.7,(pg['id'],n,'pigtail/front body')
     rear=check_rear(d,mm,segments_gap)
-    return dict(**rear,minimum_front_lead_gap_mm=round(front_lead_min,3),result='PASS — modeled geometry; physical fit still required',internal_links=26,outgoing_leads=9,dedicated_wire_holes=len(anchors),nets=len([n for n in nets if not n.startswith('NC')]),minimum_wire_skin_gap_mm=round(smallest[0],3),closest_wires=smallest[1:],minimum_wire_body_gap_mm=round(body_min,3),minimum_wire_to_driver_axis_mm=round(driver_min,3),maximum_front_extent_mm=32.9,front_reserved_height_mm=40,front_height_reserve_mm=7.1,rear_gap_mm=30,preformed_pairs=pairs,assembly_groups=assembly)
+    return dict(**rear,minimum_front_lead_gap_mm=round(front_lead_min,3),result='PASS — modeled geometry; physical fit still required',internal_links=26,outgoing_leads=9,dedicated_wire_holes=len(anchors),nets=len([n for n in nets if not n.startswith('NC')]),minimum_wire_skin_gap_mm=round(smallest[0],3),closest_wires=smallest[1:],minimum_wire_body_gap_mm=round(body_min,3),minimum_wire_to_driver_axis_mm=round(driver_min,3),maximum_front_extent_mm=32.9,front_reserved_height_mm=40,front_height_reserve_mm=7.1,rear_gap_mm=hardware["rear_gap"],preformed_pairs=pairs,assembly_groups=assembly)
 
 if __name__=='__main__':
     d=json.loads((HERE.parent/'design.json').read_text());report=check(d);(HERE/'check-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

@@ -308,13 +308,10 @@ the only shopping list; there is no copy in the repository. Edit it in place.
 | M3 heat-set inserts (ruthex) | 17 | sphere flange 4, handle pivots 4, foot spigot 3, board standoffs 4, guide boss 1, lock housing 1 |
 | M3x8 socket | 13 | drum to foot 3, handle laps 9, nozzle guide 1 |
 | M3x8 flat-head (countersunk) | 8 | lock base plate 3, switch bracket 1, cover clamp ring 4 |
-| M3x10 socket | 6 | sphere halves 4, lock ears 2 |
+| M3x10 socket | 10 | sphere halves 4, lock ears 2, board 4 |
 | M3x12 socket | 4 | handle pivots |
-| M3x25 socket | 4 | raised board; head diameter ≤6 mm |
-| Unthreaded nylon spacers | 4 | board: 20 mm long, bore ≥3.2 mm, outside diameter ≤6 mm |
-| Adhesive cable-tie base | 1 | C2: ≤25.4 × 25.4 × 5 mm, plus a tie; see board guide |
 | 6 mm 3:1 heat-shrink | short length | insulate the two larger power-harness splices |
-| M3 nuts | 14 | lock 5, handle laps 9 |
+| M3 nuts | 22 | lock 5, handle laps 9, board lift 8 (two per hole) |
 | Green screw caps (printed) | 25 | drum 3, handle laps 18, pivots 4 |
 
 **Tools:** soldering iron (with a heat-set insert tip if available), multimeter with a fused 10 A range, calipers,
@@ -432,8 +429,8 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
 
 1. Orient the perfboard 70 mm across and 50 mm tall.
 2. Drill four 3.2 mm holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left
-   corner. Dry-fit four 20 mm nylon spacers on the existing 10 mm posts, using M3x25 screws.
-   Spacer bore ≥3.2 mm, OD ≤6 mm; nominal thread engagement 3.8 mm. Check against the real posts, then remove
+   corner. Dry-fit two M3 nuts beneath each hole on the existing 10 mm posts, using four M3x10 screws.
+   The 4.8 mm nut stacks give 14.8 mm rear space and 4.0 mm nominal thread engagement. Check the real fit, then remove
    the board for soldering. Do not add washers or bottom out the screws. Printed holes and parts stay unchanged.
 3. Fit the XIAO (flashed in SW-5, or flash it later in USB-only mode) and a **DIP-14 socket** for U1. Leave U1 out
    until EL-7's power-off check. Both USB and socket notch face column X in the new layout.
@@ -444,8 +441,8 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
 1. Battery lead positive to S1; S1's other terminal is **VLOAD**, the switched rail. Negative to the common ground.
    S1 sits in its own box on the cap floor: leave its leads long enough to reach the board.
 2. Connect **C2 2200 µF/25 V** through the guide's red/black pigtails: positive to F02, negative to F04.
-   Sleeve each splice; retain the horizontal case on a tie base on the cap floor, independently of its leads.
-   Case ≤Ø18 × 25 mm; base ≤25.4 × 25.4 × 5 mm. It smooths short dips; it cannot carry a stalled motor.
+   Sleeve each splice; retain the horizontal case on top of the battery under its existing strap, independently of its leads.
+   Case ≤Ø18 × 25 mm; both ends must stay clear of the strap. It smooths short dips; it cannot carry a stalled motor.
 3. Make the guide's three insulated power splices beside row 01: J_LOAD (switched battery), J_GND (star ground),
    and J_5V (buck output). Keep the pump and LED source returns separate until J_GND. See the
    [harness connections](review/protoboard/README.md#harness-changes).
@@ -1165,7 +1162,7 @@ Parts: `top_cap`, 3 thumbscrews, the two 12.5 cm LED pieces.
 
 **Blocked by:** EL-12.
 
-Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, 1 VELCRO strap, 4 M3x25, four 20 mm nylon board spacers, one C2 tie base, zip ties,
+Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, a 350 mm length of the existing VELCRO roll, 4 M3x10, eight M3 nuts, zip ties,
 3 thumbscrews.
 
 ![the cap floor](images/cad-cap.png)
@@ -1173,17 +1170,17 @@ Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket,
 Assemble on the bench, then drop the plate in. S1's box and the charge socket are on your side, the buck on the display
 side.
 
-1. **Strap.** Thread the strap through both battery slots first; its lower run sits in the recess under the plate (≤ 2
+1. **Strap.** Cut 350 mm from the existing ONE-WRAP roll. Thread it through both battery slots first; its lower run sits in the recess under the plate (≤ 2
    mm).
 2. **Battery.** Splitter's male plug in the battery's port. Lay the pack on its bed between the rails: **LED face
    down** over the slot, **port end toward your side** against the low end stop, the plug's cord folded back in a
-   U-turn. Pack switch ON (it stays ON). Tighten the strap.
-3. **Board and C2.** Secure C2 to its floor-mounted base, centred beneath board coordinate (36.5, 16),
-   long axis toward row 18; keep the vent clear. Follow the base adhesive's cure instructions and check it holds.
-   Add a 20 mm nylon spacer to each existing post and mount the board component face up with M3x25 screws.
-   Use the unchanged mounting-hole pattern to orient it; the XIAO USB end now faces column X.
-   Nominal space below the copper face is 30 mm. Small rear parts must project ≤21 mm; front loops ≤35 mm.
-   Dry-fit C2, its sleeves and base, then close the enclosure without compressing anything.
+   U-turn. Pack switch ON (it stays ON). Leave the strap loose until C2 is positioned.
+3. **Board and C2.** Lay C2 on the battery along its length, centred beneath the strap. Tighten the strap with
+   ≥50 mm overlap; keep both capacitor ends clear. Pull-test: the case must not slide or roll, and the leads must carry no load.
+   Mount the board on two M3 nuts per hole with M3x10 screws. USB faces column X in the board drawing.
+   Nominal space below the copper face is 14.8 mm. Rear parts and wires must project ≤11 mm; front loops ≤35 mm.
+   Route C2's leads under the board, up beyond column X and onto the battery as shown in the board guide.
+   Close the enclosure without compressing anything. Printed parts and mounting holes remain unchanged.
 4. **Buck.** On its four 2 mm corner supports, zip-tied through the slots. No solder joint may rest on a support.
 5. **S1.** Hangs inside its box, lever up through the roof hole, nut tight on top.
 6. **Charge socket.** Tie the splitter's female end loosely in its spot, so it lifts out on its cord to charge.

@@ -33,12 +33,15 @@ top = P.PACK_BED_T + P.POWERBANK_T
 strap = E.pack(E.compound([
     E.box(-xslot, xslot, y0, y1, -T.CAP_FLOOR_T, -T.CAP_FLOOR_T + P.BATTERY_STRAP_T),
     E.box(-xslot, xslot, y0, y1, top, top + P.BATTERY_STRAP_T),
-    *[E.box(s * xslot - .5, s * xslot + .5, y0, y1, -T.CAP_FLOOR_T, top + 1) for s in (-1, 1)],
+    *[E.box(s * xslot - 1, s * xslot + 1, y0, y1, -T.CAP_FLOOR_T, top + 1) for s in (-1, 1)],
 ]))
 assert inter_volume(strap, placed['cap_floor']) < .5, 'Strap blocked by the plate or rails'
 for n, env in electronic.items():
-    if n != 'powerbank_envelope':
+    if n not in ('powerbank_envelope','board_assembly_envelope'):
         assert inter_volume(strap, env) < .5, f'Strap hits {n}'
+
+# The revised board reserve deliberately includes its own battery strap. The PCB itself must remain clear.
+assert inter_volume(strap,E.board_box(0,0,70,50,-1.2,0))<.5
 
 # Negative controls: the model must catch a component past the board's edge hitting the cap wall, and the battery
 # shifted 20 mm toward its plug, even if the PCB itself still fits.

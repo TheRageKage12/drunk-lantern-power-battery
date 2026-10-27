@@ -477,3 +477,12 @@ tighter bag seal, a fill hole in the cover). Spout stays as is; the guide adds f
   build with 594 component/shell-removal checks and zero problems; electronics and socket tests; 20 firmware
   scenarios; RP2040 compile (63,136 bytes). Browser step/view controls, joint close-ups, bend-template download
   and external-length calculation checked. Physical component/assembly fit remains unverified.
+
+
+### 2026-10-27 — existing M3 mounting supersedes the spacer proposal
+
+- Use eight existing M3 nuts and four M3×10 screws, not the proposed nylon spacers/M3×25 screws. Printed geometry and exports stay unchanged.
+- Flatten the small rear components; limit the completed underside to 11 mm within a nominal 14.8 mm gap.
+- Move C2 onto the battery under the existing ONE-WRAP strap; remove the adhesive tie-base requirement.
+- Recheck the complete strap route, capacitor pigtails, conductive nuts and all solder joints before regenerating the guide.
+- Capacitor sizes remain unmeasured acceptance limits; the checks establish modeled fit, not a physically tested assembly.

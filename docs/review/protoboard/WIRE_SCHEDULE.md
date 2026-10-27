@@ -10,14 +10,14 @@ Generated from `design.json`. Hole names are assigned from the component side. T
 | W15 | P07 → P09 → S03 → R03 | green | 78 mm |
 | W25 | M03 → M02 → S02 → S01 | yellow | 67 mm |
 | W16 | O07 → O09 → V08 → V09 | yellow | 100 mm |
-| W22 | H07 → G05 → I03 → I02 | white | 42 mm |
-| H03 | W03 → W01 | black | 92 mm + measured external run |
-| H08 | N02 → M02 | yellow | 98 mm + measured external run |
+| W22 | H07 → H04 → I03 → I02 | white | 43 mm |
+| H03 | W03 → W01 | black | 81 mm + measured external run |
+| H08 | N02 → M02 | yellow | 87 mm + measured external run |
 | W05 | A16 → A13 → B08 → C10 | black | 99 mm |
 | W10 | D08 → E10 → D15 → D13 | black | 68 mm |
-| H09 | R04 → R03 | green | 101 mm + measured external run |
+| H09 | R04 → R03 | green | 90 mm + measured external run |
 | W23 | H02 → I02 → I10 → G10 | white | 62 mm |
-| H05 | V03 → V01 | blue | 128 mm + measured external run |
+| H05 | V03 → V01 | blue | 117 mm + measured external run |
 | W13 | Q07 → Q09 → B05 → C05 | yellow | 104 mm |
 | W24 | B01 → A01 → G02 → F02 | red | 70 mm |
 | W19 | M07 → M09 → C15 → C13 | blue | 92 mm |
@@ -30,17 +30,17 @@ Generated from `design.json`. Hole names are assigned from the component side. T
 | W02 | G03 → F04 → D01 → C01 | black | 86 mm |
 | W03 | E01 → C01 → A07 → B10 | black | 102 mm |
 | W17 | W08 → V09 → M01 → N01 | yellow | 115 mm |
-| H02 | F03 → F04 | black | 123 mm + measured external run |
+| H02 | F03 → F04 | black | 112 mm + measured external run |
 | W08 | H08 → F10 → O18 → P15 | black | 113 mm |
-| H04 | J18 → H18 | black | 202 mm + measured external run |
-| H07 | G04 → G05 | white | 137 mm + measured external run |
-| H01 | E02 → F02 | red | 156 mm + measured external run |
+| H04 | J18 → H18 | black | 191 mm + measured external run |
+| H07 | G04 → H04 | white | 126 mm + measured external run |
+| H01 | E02 → F02 | red | 145 mm + measured external run |
 | W18 | N07 → N09 → F15 → F13 | blue | 133 mm |
 | W11 | N17 → O15 → S07 → R09 | green | 119 mm |
 | W20 | E15 → E13 → U03 → U01 | blue | 133 mm |
-| H06 | J17 → H17 | yellow | 189 mm + measured external run |
-| C2_1 | F02 → C2.1 | red | 55 mm |
-| C2_2 | F04 → C2.2 | black | 70 mm |
+| H06 | J17 → H17 | yellow | 178 mm + measured external run |
+| C2_1 | F02 → C2.1 | red | 235 mm |
+| C2_2 | F04 → C2.2 | black | 240 mm |
 
 ## Power harness
 
@@ -102,7 +102,7 @@ Buck IN− and OUT− must have continuity; only IN− gets a separate return wi
 | R6.2 | V09 | TWIST |
 | R7.1 | I02 | 5V_REG |
 | R7.2 | M02 | SW |
-| D1.1 | G05 | 5V_REG |
+| D1.1 | H04 | 5V_REG |
 | D1.2 | L05 | AFTER_D1 |
 | D3.1 | N01 | TWIST |
 | D3.2 | S01 | SW |

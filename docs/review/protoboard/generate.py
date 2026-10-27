@@ -9,10 +9,10 @@ OUT=Path(__file__).resolve().parent
 ESC=html.escape
 
 def validate():return R.validate()
-def svg(body,width=1330,height=1330):return f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}"><rect width="100%" height="100%" fill="white"/>{body}</svg>'
+def svg(body,width=1330,height=2200):return f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}"><rect width="100%" height="100%" fill="white"/>{body}</svg>'
 
 class Drawing:
- def __init__(self,data,rear=False):self.data=data;self.rear=rear;self.s=[];self.scale=15;self.ox=130;self.oy=400
+ def __init__(self,data,rear=False):self.data=data;self.rear=rear;self.s=[];self.scale=15;self.ox=180 if rear else 100;self.oy=400
  def pt(self,x,y):return self.ox+(70-x if self.rear else x)*self.scale,self.oy+y*self.scale
  def line(self,points,color,width=2,extra=''):
   d=' '.join(('M' if i==0 else 'L')+','.join(f'{v:.2f}'for v in self.pt(*p[:2])) for i,p in enumerate(points))
@@ -33,13 +33,13 @@ class Drawing:
   for x,y in L.MOUNTS:
    self.circle(x,y,5,'#f4f4ef','stroke="#93a096" stroke-dasharray="5 4"');self.circle(x,y,1.6,'white','stroke="#647367"')
   for part in self.data['parts']:
-   x,y,w,h,z0,z1=part['bounds'];n=part['ref'];same=part['side']==('rear'if self.rear else'front')
+   x,y,w,h,z0,z1=part['bounds'];n=part['ref'];same=part['side']=='external' or part['side']==('rear'if self.rear else'front')
    self.s.append(f'<g opacity="{.8 if same else .12}">');
    if part['side']=='front' and len(part['pins'])==2:self.line([L.mm(p) for p in part['pins']],'#6b7a70',4)
    self.rect(x,y,w,h,'#cddfd6' if n in ('MCU','U1') else '#ebd8ad');xx,yy=self.pt(x+w/2,y+h/2);self.text(xx,yy+6,n,22,'middle')
    if n=='C2':
     for i,pg in enumerate(self.data['pigtails']):
-     xx,yy,z=pg['path'][-1];self.line([[xx,yy],[xx,3.5]],'#6b7a70',4);tx,ty=self.pt(xx,5);self.text(tx,ty,'+' if i==0 else '−',20,'middle')
+     xx,yy,z=pg['path'][-1];self.line([[xx,yy],[27,yy]],'#6b7a70',4);tx,ty=self.pt(29,yy-2);self.text(tx,ty,'+' if i==0 else '−',20,'middle')
    if n=='U1':self.circle(x+w-1,y+h/2,.55,'#3f5a48')
    if n in ('D1','D3'):self.line([[x+w-.6,y],[x+w-.6,y+h]],'#394b42',7)
    if n in ('Q1','Q2'):self.line([[x,y+h],[x+w,y+h]] if n=='Q1' else [[x,y],[x,y+h]],'#394b42',7)
@@ -63,8 +63,9 @@ class Drawing:
    xx,yy=self.pt(L.mm(c+'01')[0],-2.3);self.text(xx,yy,c,19,'middle')
   for r in range(1,19):
    xx,yy=self.pt(-2.3,L.mm('A'+f'{r:02}')[1]);self.text(xx,yy+6,f'{r:02}',19,'middle')
-  self.text(45,1240,'70 × 50 mm board · existing mounting holes · 20 mm removable spacers',20)
-  self.text(45,1275,'C2 mounts on a tie base on the floor. Check actual part sizes before soldering.',18)
+  self.rect(5,80.5,19,20,'none','stroke-dasharray="5 4"')
+  self.text(45,2070,'C2 sits on the battery, under its existing strap. Both case ends stay clear.',18)
+  self.text(45,2120,'70 × 50 mm board · two M3 nuts per hole · M3×10 screws · unchanged printed parts',18)
   self.s.append('</g>');return ''.join(self.s)
 
 def reference_pages(data):
@@ -74,7 +75,7 @@ def reference_pages(data):
   for i,w in enumerate(data['routes'][start:start+30]):
    text=f"{w['id']} · {w['colour']} · {' → '.join(w['anchors']+([w['b']] if w['surface']=='rear' else []))} · start {w['length']['cut']} mm"+(' + measured external run' if not w['b'] else '')
    s.append(f'<text x="45" y="{115+i*36}" font-size="20">{ESC(text)}</text>')
-  s.append('<text x="45" y="1260" font-size="19">Trim after forming. Spare cut length is not an extra loop to leave on the board.</text></g>');pages.append(svg(''.join(s)))
+  s.append('<text x="45" y="1260" font-size="19">Trim after forming. Spare cut length is not an extra loop to leave on the board.</text></g>');pages.append(svg(''.join(s),height=1330))
  return pages
 
 def export(front,rear,data):
