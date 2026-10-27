@@ -85,8 +85,13 @@ def make_data(routes):
             for t in w['tails']:pins['WIRE.'+t['id']]=dict(pad=t['anchor'],net=w['net'])
             for t in w['tails']:
                 joints.extend([dict(pad=t['anchor'],owner=name),dict(pad=t['node'],owner=name)])
-        text=('Fit both loops together before soldering either wire. ' if len(group)==2 else 'Fit the loop shown over the component side. ')
-        text+='On the back, solder each wire in its own hole, then bend its stripped end along the shown path and solder it to the connected joint. Clip excess.'
+        if len(group)==1:
+            tails=byid[group[0]]['tails']
+            entries=' and '.join(t['anchor'] for t in tails)
+            connections='; '.join(t['anchor']+' to '+t['node'] for t in tails)
+            text='Pass the stripped '+('ends' if len(tails)==2 else 'end')+' through '+entries+' from the component side. On the back, solder '+entries+', then bend the bare '+('ends' if len(tails)==2 else 'end')+' along the shown paths: '+connections+'. Solder at '+(' and '.join(t['node'] for t in tails))+', then trim the excess.'
+        else:
+            text='Fit both loops together before soldering either wire. For each wire below, pass its stripped ends through the entry holes. On the back, solder those holes, bend each bare end to its paired connection, and solder there. Trim the excess.'
         idx=add('wire','Install '+' + '.join(group),text,wires=group,phase='Insulated wires',joints=joints)
         for name in group:byid[name].update(prepare=idx,joints=[idx],check=idx)
     add('check','Check the board wiring','Check every listed wire for continuity and inspect neighbouring joints for bridges before adding the underside parts.',phase='Inspect')
