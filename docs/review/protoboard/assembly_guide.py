@@ -81,17 +81,24 @@ def make_data(routes):
       'D1':'Put the unstriped end into H04 and the striped end into L05, from the component side. Solder both ends on the back and clip off the excess.',
       'D3':'Put the unstriped end into N01 and the striped end into S01, from the component side. Solder both ends on the back and clip off the excess.',
       'JP1':'Fit the header in R18/S18 and solder both pins. Leave the removable jumper cap off.',
-      'C1':'Lay the disc flat on the back, following the lead template. Solder its legs onto C05 and C01; either way round. Keep it clear of the board and nearby joints.',
-      'C3':'Lay the disc flat on the back, following the lead template. Solder its legs onto G10 and A13; either way round. Keep it clear of the board and nearby joints.',
-      'R3':'Form the legs to the template and lay the resistor flat on the back. Solder onto F13 and G13, approaching from row 01. Clip excess only after fitting.',
-      'R4':'Keep the long leg uncut until fitted. Form to the template, lay flat on the back and solder onto C13 and D13, approaching from row 01. Then clip any excess.'}
+    }
     def component(ref,phase):
         pp=[(key,p) for key,p in L.PINS.items() if key.split('.')[0]==ref]
         if ref=='U1':pp.sort(key=lambda v:(v[0] not in ['U1.1','U1.8'],int(v[0].split('.')[1])))
         text=instructions.get(ref,'Bend the legs to fit the marked holes. Insert the resistor from the component side, solder both ends on the back, then clip off the excess.')
         identity=component_identity(ref)
         title='Install the socket for chip U1' if ref=='U1' else 'Install '+identity['name']+' · '+ref
-        fit=add('component',title,text,ref=ref,phase=phase,joints=[dict(pad=p['pad'],owner=ref) for _,p in pp])
+        actions=[]
+        if ref in L.DESIGN['rear_bodies']:
+            holes=' and '.join(p['pad'] for _,p in pp)
+            title='Attach '+identity['name']+' · '+ref
+            actions=[
+                ('Turn the board over: exposed solder joints face you.' if ref==L.DESIGN['rear_order'][0] else 'Keep the exposed solder joints facing you.')+' Leave the existing connections in place.',
+                f'Bend the metal legs as drawn to reach the existing {holes} joints. Keep the body raised as shown in the side view.',
+                'Mark the legs where they meet the joints. Remove the part and trim at those marks before soldering, then refit.',
+                'Hold each leg tip against its joint. Heat until solder melts around the tip; hold still until it sets. Repeat for the other leg.']
+            text=' '.join(actions)
+        fit=add('component',title,text,ref=ref,phase=phase,actions=actions,joints=[dict(pad=p['pad'],owner=ref) for _,p in pp])
         parts.append(dict(ref=ref,name=ref,identity=identity,fit=fit,solder=[fit],bounds=M.bounds()[ref],pins=[p['pad'] for _,p in pp],side='rear' if phase=='Underside parts' else 'front'))
     for ref in ['R1','R2','R5','R6','R7','D1','D3','U1','JP1','MCU','Q1','Q2']:component(ref,'Front components')
     add('check','Inspect the first joints','Check that every part faces the direction shown and that no solder accidentally joins neighbouring holes. Leave the installed 14-pin socket empty and the jumper cap off JP1’s two pins.',phase='Inspect')

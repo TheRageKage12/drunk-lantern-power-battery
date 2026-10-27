@@ -9,7 +9,7 @@ The components have moved; the printed enclosure and its four mounting holes hav
 2. Fit the insulated loops over that face. Each wire end goes through its **own empty hole**.
    On the back, its short stripped end bends to the indicated component joint. There are no bare buses or separate lead offcuts.
 3. Fit the four indicated wire pairs together before soldering either wire. The guide handles this order.
-4. Add R3, R4, C1, then C3 on the back, using their own component leads. Then add C2's two sleeved pigtails.
+4. Turn the board so the exposed solder joints face you. Add R3, R4, C1, then C3 by soldering their own metal legs onto the existing joints, without inserting them into occupied holes. Bend and check the legs, then remove the part and trim before soldering. Then add C2's two sleeved pigtails.
 5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
 Each step completes one component, one wire, or a pair of wires that must be fitted together. All joints for that task are highlighted; completed work stays visible. Cut lengths and 1:1 bend templates are available when needed.
@@ -41,7 +41,7 @@ C2 positive remains F02, negative F04, now via pigtails. Remove JP1’s jumper c
 | Insulated wires | Nominal minimum skin separation 0.57 mm, including curve approximation allowance. Jackets may touch as loops flex; the design does **not** depend on an air gap between insulated wires. Keep jackets intact and bare joints separate. |
 | Components | Minimum body gap 1.09 mm. Front wires nominally clear bodies by ≥1.05 mm and exposed axial-component leads by ≥1.29 mm. |
 | Mounting screws | Wire paths leave a clear Ø8.2 mm access corridor; use screw heads ≤Ø6 mm. Metal nut corners include 0.25 mm radial allowance; solder joints clear that enlarged envelope by ≥0.62 mm. Do not leave stray strands in the mounting areas. |
-| Small rear parts | Lay C1/C3 and R3/R4 flat. Rear parts, joints and wires must stay within **11 mm** of the solder face, leaving **≥3.3 mm** to the floor with 0.5 mm mounting variation. |
+| Small rear parts | Keep the bodies parallel to, and raised above, the solder side: R3/R4 have 5.5 mm body clearance; C1/C3 have 6 mm. Their bent legs join existing solder joints. Rear parts, joints and wires must stay within **11 mm** of the solder face, leaving **≥3.3 mm** to the floor with 0.5 mm mounting variation. |
 | C2 support | Case ≤Ø18 × 25 mm, lying on the battery along its length. Centre it under the existing strap, at board coordinate **(14.5,90.5)**. Reserve 2 mm for the strap. Keep the vent and lead seal uncovered. |
 
 **Physical fit is still required.** The capacitors are not available to measure yet, and their listings omit case dimensions.
