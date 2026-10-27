@@ -306,11 +306,11 @@ the only shopping list; there is no copy in the repository. Edit it in place.
 | Knurled thumbscrews (6-32, PC-case) | 13 | bells 4 (2 each), top cap to sphere 3, foot to sphere 3, cap floor 3 |
 | 6-32 heat-set inserts (initeq) | 13 | one under each thumbscrew |
 | M3 heat-set inserts (ruthex) | 17 | sphere flange 4, handle pivots 4, foot spigot 3, board standoffs 4, guide boss 1, lock housing 1 |
-| M3x6 socket | 4 | board on its standoffs |
 | M3x8 socket | 13 | drum to foot 3, handle laps 9, nozzle guide 1 |
 | M3x8 flat-head (countersunk) | 8 | lock base plate 3, switch bracket 1, cover clamp ring 4 |
 | M3x10 socket | 6 | sphere halves 4, lock ears 2 |
-| M3x12 socket | 4 | handle pivots |
+| M3x12 socket | 8 | handle pivots 4, board 4 |
+| Unthreaded spacers | 4 | board: 6 mm long, bore ≥3.2 mm, outside diameter ≤6 mm |
 | M3 nuts | 14 | lock 5, handle laps 9 |
 | Green screw caps (printed) | 25 | drum 3, handle laps 18, pivots 4 |
 
@@ -388,7 +388,8 @@ with its flyback diode and plug, all verified on the bench before anything goes 
 same). Read [SW-6, USB power modes](#sw-6-connect-the-laptop-safely-usb-power-modes) before any USB connection.
 
 For physical soldering order, use the [one-joint-at-a-time board guide](review/protoboard/assembly.html).
-It fits components first, then rear wires from the lowest layer outward, using the six-colour stranded-wire kit.
+It fits components first, then supported bare tracks, outgoing cables and rounded jumpers in an order that keeps
+unfinished joints accessible, using the six-colour stranded-wire kit.
 It includes cut estimates, earlier-wire crossings and shared-joint checks. EL-4 through EL-9 below describe the
 circuits and off-board connections; the interactive guide supplies the board's assembly sequence.
 
@@ -428,8 +429,8 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
 
 1. Orient the perfboard 70 mm across and 50 mm tall.
 2. Drill four 3.2 mm holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left
-   corner. Keep each 9 x 9 mm mounting area clear; rear wires must fit in the 10 mm under the board, outside those
-   areas. *Soft block: check the holes against the printed `cap_floor`'s standoffs when it exists.*
+   corner. Add a 6 mm spacer on each existing 10 mm post, using M3x12 screws. Keep each 9 x 9 mm mounting
+   area clear; the rear wiring has 16 mm of space. *Soft block: check the holes against the printed `cap_floor`'s standoffs when it exists.*
 3. Fit the XIAO (flashed in SW-5, or flash it later in USB-only mode) and a **DIP-14 socket** for U1. Leave U1 out
    until EL-7's power-off check.
 4. Fit a 2-pin header for JP1 and label it **REMOVE FOR USB**.
@@ -1155,7 +1156,7 @@ Parts: `top_cap`, 3 thumbscrews, the two 12.5 cm LED pieces.
 
 **Blocked by:** EL-12.
 
-Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, 1 VELCRO strap, 4 M3x6, zip ties,
+Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, 1 VELCRO strap, 4 M3x12, four 6 mm board spacers, zip ties,
 3 thumbscrews.
 
 ![the cap floor](images/cad-cap.png)
@@ -1168,8 +1169,9 @@ side.
 2. **Battery.** Splitter's male plug in the battery's port. Lay the pack on its bed between the rails: **LED face
    down** over the slot, **port end toward your side** against the low end stop, the plug's cord folded back in a
    U-turn. Pack switch ON (it stays ON). Tighten the strap.
-3. **Board.** Screw it to the 4 standoffs, component face up, USB end toward the display side (4 M3x6). Rear wiring
-   stays within the 10 mm gap.
+3. **Board.** Put a 6 mm spacer on each of the four existing posts. Mount component face up, USB end toward the
+   display side, with four M3x12 screws. Spacers: bore ≥3.2 mm, outside diameter ≤6 mm. Measure at least 15.5 mm
+   under the board; finished wiring must extend no more than 13.5 mm, leaving at least 2 mm clear without compression.
 4. **Buck.** On its four 2 mm corner supports, zip-tied through the slots. No solder joint may rest on a support.
 5. **S1.** Hangs inside its box, lever up through the roof hole, nut tight on top.
 6. **Charge socket.** Tie the splitter's female end loosely in its spot, so it lifts out on its cord to charge.

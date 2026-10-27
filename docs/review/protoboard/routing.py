@@ -1,180 +1,237 @@
-"""Finite-diameter rear-wire routing, with three assembly heights within the existing 10 mm gap.
+"""Rear wiring with formed bends, solder envelopes and assembly tolerances.
 
-Every cable and board link has a reserved path, including its rise from the solder
-joint. Same-pad ends share a solder joint; other insulated wires cannot overlap.
-Uses shapely for geometric clearance checks; no CAD runtime required.
+The selected topology is in layout.py. Geometry is regenerated deterministically;
+no ideal vertical-to-horizontal corners or unmodelled shared-pad fan-out are used.
+All dimensions are mm, depth positive away from the solder face.
 """
-import heapq, math
-from collections import Counter
+import math
 import numpy as np
 from shapely.geometry import LineString, Point, box
 from shapely.ops import unary_union
-import shapely
 import layout as L
-
 import mechanical as M
+
 OD=M.WIRE_OD
-CLEAR=.5
-JOINT_CLEAR=.5
 BARE_OD=1.0
-LAYERS=(3.0,5.6,8.2) # centres measured back from the solder face
+BEND_RADIUS=4.0  # chosen forming target, NOT an unpublished manufacturer rating
+BARE_BEND_RADIUS=1.0
+WIRE_MOVEMENT=.4
+FLOOR_TOLERANCE=.5
+BOW_ALLOWANCE=.5
+CLEAR=.2
+JOINT_CLEAR=.4
+LAYERS=(6.0,9.0,12.0)
 REAR_GAP=M.REAR_GAP
-DEPTH_COST=0.1
-STEP=.635
 
 
-# A fixed routing priority makes regeneration deterministic. Long crowded links
-# need room before the remaining short links are placed.
-ORDER=['W35', 'H05', 'H01', 'W32', 'W46', 'H03', 'H08', 'W42', 'H13', 'H10', 'W09', 'W50', 'H12', 'W47', 'W45', 'W40', 'H04', 'W10', 'H02', 'H06', 'W25', 'W33', 'W23', 'W38', 'H11', 'W12', 'W24', 'W44', 'H07', 'H09', 'W49', 'W48', 'H14']
+def clean(points):
+    result=[]
+    for p in points:
+        p=[float(v) for v in p]
+        if not result or math.dist(p,result[-1])>1e-8:result.append(p)
+    return result
 
-def plan(order=ORDER):
+
+def arch(a,b,height,offset_a=(0,0),offset_b=(0,0)):
+    a=np.array(L.mm(a));b=np.array(L.mm(b));oa=np.array(offset_a);ob=np.array(offset_b)
+    va=a+oa;vb=b+ob;length=np.linalg.norm(vb-va);direction=(vb-va)/length
+    assert length>=2*BEND_RADIUS
+    r=BEND_RADIUS;t=np.linspace(0,math.pi/2,65)
+    def leg(pad,offset,u):
+        top=height-r
+        assert not np.any(offset) or top-.55>=4
+        z=np.linspace(.55,top,65);f=np.clip((z-.55)/4,0,1);f=3*f*f-2*f*f*f
+        rise=np.c_[pad+f[:,None]*offset,z]
+        turn=np.c_[pad+offset+(r-r*np.cos(t))[:,None]*u,top+r*np.sin(t)]
+        return np.vstack([rise,turn])
+    start=leg(a,oa,direction);end=leg(b,ob,-direction)[::-1]
+    centre=np.c_[va+np.linspace(r,length-r,max(2,math.ceil(length*5)))[:,None]*direction,
+                 np.full(max(2,math.ceil(length*5)),height)]
+    return clean(np.vstack([start,centre,end]))
+
+
+def flat(pads):
+    """Round bare-conductor corners inside their soldered anchor region."""
+    points=[np.array(L.mm(p)) for p in pads]; result=[[*points[0],.55]]
+    for a,b,c in zip(points,points[1:],points[2:]):
+        u=(b-a)/np.linalg.norm(b-a);v=(c-b)/np.linalg.norm(c-b)
+        if np.dot(u,v)>.99:continue
+        r=BARE_BEND_RADIUS;centre=b-u*r+v*r
+        for t in np.linspace(0,math.pi/2,17):
+            pt=centre-v*r*math.cos(t)+u*r*math.sin(t)
+            result.append([*pt,.55])
+    result.append([*points[-1],.55])
+    return clean(result)
+
+
+def cable(pad,index):
+    """Fan out below the board; turn upward beyond its edge, away from the floor."""
+    x,y=L.mm(pad);end_x=x
+    # First 2 mm are stripped, then PVC stays on. The small straight fan-out
+    # joins the outward tangent before the 4 mm bend at the board edge.
+    # Cubic horizontal fan-out has zero lateral slope at both ends.
+    pts=[[x,y-(1-math.cos(t)),math.sin(t)] for t in np.linspace(0,math.pi/2,33)]
+    pts.extend([[x,yy,1.0] for yy in np.linspace(y-1,-2,50)])
+    for t in np.linspace(0,math.pi/2,65):
+        pts.append([end_x,-2-4*math.sin(t),1-4*(1-math.cos(t))])
+    pts.extend([[end_x,-6,z] for z in np.linspace(-3,-7,21)])
+    return clean(pts)
+
+
+def plan():
     routes=[]
-    # Internal links and cables share the same finite-diameter rules.
-    jobs=[dict(w) for w in L.WIRES]
-    for i,(ref,pad,net,_) in enumerate(L.HARNESS):
-        jobs.append(dict(id=ref,a=pad,b=None,bare=False,net=net,exit=(L.mm(pad)[0],-5.48)))
-    jobs.sort(key=lambda w:(not w['bare'],order.index(w['id']) if w['id'] in order else 999,w['id'].startswith('H'),-math.dist(L.mm(w['a']), L.mm(w['b']) if w['b'] else w['exit'])))
-    # Board is extended only above the top for the guided cable fan-out.
-    xs=np.arange(-2,99)*STEP+L.ORIGIN[0]; ys=np.arange(-14,73)*STEP+L.ORIGIN[1]
-    points=shapely.points(np.tile(xs,len(ys)),np.repeat(ys,len(xs)))
-    domain=unary_union([box(0,0,70,50),box(25,-7,67,0)]).buffer(-OD/2-.1)
-    mounts=unary_union([box(x-4.5,y-4.5,x+4.5,y+4.5) for x,y in L.MOUNTS])
-    base_ok=shapely.contains(domain,points) & ~shapely.intersects(mounts.buffer(1.3),points)
-    def grid(p):return int(round((p[0]-xs[0])/STEP)),int(round((p[1]-ys[0])/STEP))
-    def xy(p):return (float(xs[p[0]]),float(ys[p[1]]))
-    remaining=Counter(p for j in jobs for p in (j['a'],j['b']) if p)
-    for job in jobs:
-        start=L.mm(job['a']); end=L.mm(job['b']) if job['b'] else job['exit']
-        pads={job['a']}|({job['b']} if job['b'] else set())
-        if job['bare']:
-            routes.append(dict(job,path=[start,end],depth=.55,od=BARE_OD))
-            remaining.subtract(pads)
-            continue
-        candidates=[]
-        for depth in LAYERS:
-            obstacles=[]; impossible=False
-            for pin in L.PINS.values():
-                pad=pin['pad']
-                if pad in pads:continue
-                top=max([0]+[w['depth'] for w in routes if pad in (w['a'],w['b'])])
-                # Reserve a soldering approach at unfinished joints. A high
-                # overpass is allowed only if later routes can stay underneath;
-                # terminal-leg checks and final depth ordering enforce this.
-                if (remaining[pad] and depth < LAYERS[0]+OD+CLEAR) or depth <= top+1e-6:
-                    obstacles.append(Point(L.mm(pad)).buffer(OD/2+M.JOINT_RADIUS+JOINT_CLEAR))
-            for other in routes:
-                # Shared pad branches merge within a small joint region only.
-                shared=pads & ({other['a']}|({other['b']} if other['b'] else set()))
-                shared_zone=unary_union([Point(L.mm(p)).buffer(2.3) for p in shared])
-                line=LineString(other['path'])
-                separation=OD/2+other['od']/2+CLEAR
-                planar=math.sqrt(max(0,separation**2-(depth-other['depth'])**2))
-                if planar>1e-6:
-                    obstacles.append(line.buffer(planar).difference(shared_zone))
-                # Horizontal wire against another wire's vertical terminal leg.
-                leg_gap=math.sqrt(max(0,separation**2-max(0,depth-other['depth'])**2))
-                if not other['bare'] and leg_gap>1e-6:
-                    for pad in (other['a'],other['b']):
-                        if pad and pad not in shared:obstacles.append(Point(L.mm(pad)).buffer(leg_gap))
-                new_leg_gap=math.sqrt(max(0,separation**2-max(0,other['depth']-depth)**2))
-                if not other['bare'] and new_leg_gap>1e-6:
-                    for pt,pad in ((start,job['a']),(end,job['b'])):
-                        if pad and pad not in shared and line.distance(Point(pt))<new_leg_gap:
-                            impossible=True
-            if impossible:continue
-            blocked=unary_union(obstacles)
-            ok=(base_ok & ~shapely.intersects(blocked,points)).reshape(len(ys),len(xs))
-            a,b=grid(start),grid(end)
-            # Exact endpoint coordinates are on-grid except cable exits; the last segment is checked below.
-            if not ok[a[1],a[0]] or not ok[b[1],b[0]]:continue
-            first=(*a,-1); costs={first:0};prev={};q=[(0,0,first)];last=None
-            while q:
-                _,cost,state=heapq.heappop(q)
-                if cost!=costs.get(state):continue
-                x,y,d=state
-                if (x,y)==b:last=state;break
-                for nd,(dx,dy) in enumerate(((1,0),(-1,0),(0,1),(0,-1))):
-                    nx,ny=x+dx,y+dy
-                    if not(0<=nx<len(xs) and 0<=ny<len(ys) and ok[ny,nx]):continue
-                    nc=cost+1+(3 if d not in (-1,nd) else 0)
-                    ns=(nx,ny,nd)
-                    if nc<costs.get(ns,1e20):
-                        costs[ns]=nc;prev[ns]=state;heapq.heappush(q,(nc+abs(nx-b[0])+abs(ny-b[1]),nc,ns))
-            if last is None:continue
-            path=[]
-            while last!=first:path.append(last[:2]);last=prev[last]
-            path.append(a);path.reverse()
-            corners=[path[0]]
-            for i in range(1,len(path)-1):
-                if (path[i][0]-path[i-1][0],path[i][1]-path[i-1][1])!=(path[i+1][0]-path[i][0],path[i+1][1]-path[i][1]):corners.append(path[i])
-            corners.append(path[-1]);path=[xy(p) for p in corners];path[0]=start;path[-1]=end
-            line=LineString(path)
-            if line.intersects(blocked) or line.buffer(OD/2+.49).intersects(mounts):continue
-            candidates.append((line.length+depth*DEPTH_COST,depth,path))
-        if not candidates:
-            raise AssertionError(('No physical wire route',job['id'],job['a'],job['b']))
-        _,depth,path=min(candidates)
-        routes.append(dict(job,path=path,depth=depth,od=OD))
-        remaining.subtract(pads)
-    return sorted(routes,key=lambda w:w['id'])
-
-
-
-def validate(routes, wire_od=None, clearance=CLEAR, joint_clearance=JOINT_CLEAR):
-    """Independently check saved paths, wire crossings, terminal rises and mounts.
-
-    Shared endpoint regions allow wire fan-out that is not modelled in detail.
-    Paths describe routing corridors, not a supplier-specified bend radius. The
-    drawing remains a soldering guide; form bends and inspect the assembled stack.
-    """
-    wire_od=M.WIRE_OD if wire_od is None else wire_od
-    assert len(routes)==len(L.WIRES)+len(L.HARNESS)
-    by_id={w['id']:w for w in routes}
-    assert len(by_id)==len(routes)
     for w in L.WIRES:
-        r=by_id[w['id']]
-        assert (r['a'],r['b'],r['bare'])==(w['a'],w['b'],w['bare'])
-    for ref,pad,net,_ in L.HARNESS:
-        assert by_id[ref]['a']==pad and by_id[ref]['b'] is None
+        r=dict(w);r['od']=BARE_OD if w['bare'] else OD
+        r['depth']=.55 if w['bare'] else w['depth']
+        r['path3d']=flat(w['pads']) if w['bare'] else arch(w['a'],w['b'],w['depth'],w.get('offset_a',(0,0)),w.get('offset_b',(0,0)))
+        r['path']=[[p[0],p[1]] for p in r['path3d']]
+        routes.append(r)
+    order=sorted(L.HARNESS,key=lambda h:L.mm(h[1])[0])
+    for i,(ref,pad,net,label) in enumerate(order):
+        pts=cable(pad,i)
+        routes.append(dict(id=ref,a=pad,b=None,bare=False,net=net,depth=1.0,od=OD,
+                           anchors=[pad],path3d=pts,path=[p[:2] for p in pts],exit=pts[-1][:2]))
+    return sorted(routes,key=lambda r:r['id'])
+
+
+def length(points):return sum(math.dist(a,b) for a,b in zip(points,points[1:]))
+
+
+def segments(points):
+    p=np.asarray(points);a=p[:-1];b=p[1:];keep=np.linalg.norm(b-a,axis=1)>1e-8
+    return a[keep],b[keep]
+
+
+def segment_distance(points,other):
+    """Exact minimum between the polyline segments, not just sampled vertices."""
+    a,aa=segments(points);b,bb=segments(other)
+    if not len(a) or not len(b):return math.inf
+    u=(aa-a)[:,None,:];v=(bb-b)[None,:,:];w=a[:,None,:]-b[None,:,:]
+    A=np.sum(u*u,axis=2);B=np.sum(u*v,axis=2);C=np.sum(v*v,axis=2)
+    D=np.sum(u*w,axis=2);E=np.sum(v*w,axis=2);den=A*C-B*B
+    s=np.divide(B*E-C*D,den,out=np.zeros_like(den),where=abs(den)>1e-14)
+    t=np.divide(A*E-B*D,den,out=np.zeros_like(den),where=abs(den)>1e-14)
+    interior=(abs(den)>1e-14)&(s>=0)&(s<=1)&(t>=0)&(t<=1)
+    dist=np.where(interior,np.sum((w+s[:,:,None]*u-t[:,:,None]*v)**2,axis=2),np.inf)
+    # Four constrained boundary cases also cover parallel segments.
+    for ss in (0,1):
+        tt=np.clip((E+ss*B)/C,0,1)
+        dist=np.minimum(dist,np.sum((w+ss*u-tt[:,:,None]*v)**2,axis=2))
+    for tt in (0,1):
+        ss=np.clip((tt*B-D)/A,0,1)
+        dist=np.minimum(dist,np.sum((w+ss[:,:,None]*u-tt*v)**2,axis=2))
+    return float(np.sqrt(dist.min()))
+
+
+def outside_joints(points,pads):
+    # Densify before trimming so the exemption never extends beyond the actual
+    # 2 mm diameter, 2.5 mm tall solder envelope. Return separate line fragments.
+    dense=[]
+    for a,b in zip(points,points[1:]):
+        dense.extend(np.linspace(a,b,max(2,math.ceil(math.dist(a,b)/.05)),endpoint=False))
+    dense.append(points[-1]);groups=[];group=[]
+    for p in dense:
+        inside=any(math.dist(p[:2],L.mm(q))<=M.JOINT_RADIUS and p[2]<=M.JOINT_HEIGHT for q in pads)
+        if inside:
+            if len(group)>1:groups.append(group)
+            group=[]
+        else:group.append(p)
+    if len(group)>1:groups.append(group)
+    return groups
+
+
+def pieces(route):
+    """Split at insulation boundaries; 2 mm stripped ends are real geometry."""
+    if route['bare']:return [(route['path3d'],BARE_OD)]
+    pts=route['path3d'];total=length(pts)
+    cuts=[2.0]+([total-2.0] if route['b'] else [])
+    result=[];section=[pts[0]];travel=0;which=0
+    for a,b in zip(pts,pts[1:]):
+        span=math.dist(a,b)
+        while which<len(cuts) and travel<cuts[which]<=travel+span:
+            t=(cuts[which]-travel)/span
+            point=[x+(y-x)*t for x,y in zip(a,b)];section.append(point)
+            result.append((clean(section),BARE_OD if which==0 else OD))
+            section=[point];which+=1
+        section.append(b);travel+=span
+    result.append((clean(section),BARE_OD if route['b'] else OD))
+    return result
+
+def minimum_radius(points):
+    p=np.asarray(clean(points));a=p[1:-1]-p[:-2];b=p[2:]-p[1:-1]
+    cross=np.linalg.norm(np.cross(a,b),axis=1)
+    length_product=np.linalg.norm(a,axis=1)*np.linalg.norm(b,axis=1)*np.linalg.norm(a+b,axis=1)
+    radii=np.divide(length_product,2*cross,out=np.full_like(cross,np.inf),where=cross>1e-10)
+    return float(radii.min()) if len(radii) else math.inf
+
+def validate(routes,wire_od=None,clearance=CLEAR,joint_clearance=JOINT_CLEAR):
+    expected={r['id']:r for r in plan()}
+    assert len(routes)==len(expected) and len({r['id'] for r in routes})==len(expected)
+    assert wire_od in (None,OD)
+    occupied={p['pad']:p['net'] for p in L.PINS.values()}
+    anchors={p for r in routes for p in r['anchors']}|{p['pad'] for k,p in L.PINS.items() if not k.startswith('BUS.')}
     mounts=unary_union([box(x-4.5,y-4.5,x+4.5,y+4.5) for x,y in L.MOUNTS])
-    room=unary_union([box(0,0,70,50),box(25,-7,67,0)])
-    for i,w in enumerate(routes):
-        assert math.dist(w['path'][0],L.mm(w['a']))<1e-6
-        if w['b']:assert math.dist(w['path'][-1],L.mm(w['b']))<1e-6
-        assert w['od']==(BARE_OD if w['bare'] else wire_od), (w['id'],'wire diameter')
-        assert w['bare'] or w['depth']-w['od']/2>=M.JOINT_HEIGHT+.25, (w['id'],'solder height')
-        assert w['depth']+w['od']/2<=REAR_GAP-.5, (w['id'],'rear gap')
-        line=LineString(w['path']);tube=line.buffer(w['od']/2)
-        assert room.covers(tube),(w['id'],'outside reserved volume')
-        assert tube.distance(mounts)>=.49,(w['id'],'mount pad')
-        pads={w['a']}|({w['b']} if w['b'] else set())
-        for pin in L.PINS.values():
-            pad=pin['pad']
-            if pad in pads:continue
-            gap=line.distance(Point(L.mm(pad)))-w['od']/2-M.JOINT_RADIUS
-            if gap < joint_clearance-1e-6:
-                top=max([0]+[r['depth'] for r in routes if pad in (r['a'],r['b'])])
-                assert not w['bare'] and w['depth']>top+1e-6 and w['depth']-w['od']/2>=M.JOINT_HEIGHT+clearance-1e-6, (w['id'],'unfinished or too-close joint',pad)
-        for other in routes[:i]:
-            otherpads={other['a']}|({other['b']} if other['b'] else set())
-            shared=pads & otherpads
-            joint=unary_union([Point(L.mm(p)).buffer(2.3) for p in shared])
-            ol=LineString(other['path'])
-            separation=(w['od']+other['od'])/2+clearance
-            planar=math.sqrt(max(0,separation**2-(w['depth']-other['depth'])**2))
-            if planar>1e-6:
-                assert not line.intersects(ol.buffer(planar-1e-6).difference(joint)),(w['id'],other['id'],'crossing')
-            for upper,lower,lp in ((w,other,ol),(other,w,line)):
-                if upper['bare'] or lower['depth']<=1.5:continue
-                leg_gap=math.sqrt(max(0,separation**2-max(0,lower['depth']-upper['depth'])**2))
-                if leg_gap>1e-6:
-                    for pad in (upper['a'],upper['b']):
-                        if pad and pad not in shared:
-                            assert lp.distance(Point(L.mm(pad)))>=leg_gap-1e-6,(w['id'],other['id'],'terminal rise')
-    return {'routes':len(routes),'maximum_rear_extent_mm':max(w['depth']+w['od']/2 for w in routes)}
+    wire_min=math.inf;bare_min=math.inf;mount_min=math.inf
+    for i,r in enumerate(routes):
+        e=expected[r['id']]
+        assert (r['a'],r['b'],r['bare'],r['net'])==(e['a'],e['b'],e['bare'],e['net']),r['id']
+        assert r['depth']==e['depth'] and r['od']==e['od'],(r['id'],'height or diameter')
+        assert r['path3d']==e['path3d'] and r['path']==e['path'],(r['id'],'unreviewed path')
+        assert r['anchors']==e['anchors']
+        for points,diameter in pieces(r):
+            if diameter==OD:assert minimum_radius(points[1:-1])>=4-.01,(r['id'],'tight insulated bend')
+        pts=np.array(r['path3d']);radius=r['od']/2
+        if not r['bare'] and r['b']:
+            fixed={p['pad'] for k,p in L.PINS.items() if not k.startswith('BUS.')}
+            assert not (set(r['anchors']) & fixed),(r['id'],'insulated jumper requires its own holes')
+        assert max(pts[:,2])+radius+BOW_ALLOWANCE<=M.REAR_GAP-FLOOR_TOLERANCE-2.0,(r['id'],'floor margin')
+        if r['b']:
+            tube=LineString(r['path']).buffer(radius)
+            assert box(0,0,70,50).covers(tube),(r['id'],'board edge')
+            gap=tube.distance(mounts);mount_min=min(mount_min,gap)
+            assert gap>=.49,(r['id'],'mount keepout',gap)
+        for mx,my in L.MOUNTS:
+            # Printed 9 mm square posts end 6 mm below the board; above them
+            # the removable spacer is only 6 mm in diameter.
+            xy=np.maximum(np.abs(pts[:,:2]-[mx,my])-4.75,0)
+            dz=np.maximum(np.maximum(M.BOARD_SPACER-pts[:,2],pts[:,2]-M.REAR_GAP),0)
+            post=np.sqrt(np.sum(xy*xy,axis=1)+dz*dz)-radius-WIRE_MOVEMENT
+            radial=np.maximum(0,np.linalg.norm(pts[:,:2]-[mx,my],axis=1)-3.25)
+            vertical=np.maximum(np.maximum(-pts[:,2],pts[:,2]-M.BOARD_SPACER),0)
+            spacer=np.hypot(radial,vertical)-radius-WIRE_MOVEMENT
+            assert post.min()>=.19,(r['id'],'printed post tolerance',float(post.min()))
+            assert spacer.min()>=.19,(r['id'],'spacer tolerance',float(spacer.min()))
+        # Every unrelated solder joint is a cylinder, not a 2-D obstacle whose
+        # height gets lost. Same-net joins may meet ONLY at declared anchors.
+        for pad in anchors-set(r['anchors']):
+            if occupied[pad]==r['net'] and r['bare'] and pad in r.get('pads',[]):continue
+            for points,diameter in pieces(r):
+                p=np.asarray(points)
+                dxy=np.linalg.norm(p[:,:2]-L.mm(pad),axis=1)
+                d=np.hypot(np.maximum(0,dxy-M.JOINT_RADIUS),np.maximum(0,p[:,2]-M.JOINT_HEIGHT))
+                assert d.min()>=diameter/2+joint_clearance-.015,(r['id'],'joint',pad,float(d.min()-diameter/2))
+        for q in routes[:i]:
+            shared=set(r['anchors'])&set(q['anchors'])
+            for rpoints,rd in pieces(r):
+                for qpoints,qd in pieces(q):
+                    rp=outside_joints(rpoints,shared) if shared else [rpoints]
+                    qp=outside_joints(qpoints,shared) if shared else [qpoints]
+                    dist=min((segment_distance(a,b) for a in rp for b in qp),default=math.inf)
+                    gap=dist-(rd+qd)/2
+                    target=1.0 if rd==OD and qd==OD else .7 if rd!=qd else .4
+                    if r['id'].startswith('H') and q['id'].startswith('H'):target=.7
+                    if shared:target=.1
+                    assert gap>=target-.015,(r['id'],q['id'],'wire clearance',round(gap,3),target)
+                    if rd==OD and qd==OD and not shared and not(r['id'].startswith('H') and q['id'].startswith('H')):wire_min=min(wire_min,gap)
+                    elif not shared:bare_min=min(bare_min,gap)
+    return dict(routes=len(routes),maximum_rear_extent_mm=max(r['depth']+r['od']/2 for r in routes),
+                wire_bow_allowance_mm=BOW_ALLOWANCE,floor_tolerance_mm=FLOOR_TOLERANCE,
+                remaining_floor_clearance_mm=round(M.REAR_GAP-max(r['depth']+r['od']/2 for r in routes)-BOW_ALLOWANCE-FLOOR_TOLERANCE,2),
+                minimum_insulated_gap_mm=round(wire_min,3),minimum_bare_gap_mm=round(bare_min,3),
+                minimum_mount_gap_mm=round(mount_min,3),minimum_insulated_bend_radius_mm=BEND_RADIUS,
+                solder_height_mm=M.JOINT_HEIGHT)
 
 
 if __name__=='__main__':
     import json
-    routes=plan()
-    print(json.dumps(validate(routes),indent=2))
+    print(json.dumps(validate(plan()),indent=2))

@@ -81,13 +81,15 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md`.
 Everything electrical except the pump and the LED strips sits on `cap_floor`, inside the top cap under the lid.
 `build.py` checks the envelopes against printed parts and other hardware, with a 0.5 mm³ overlap limit for
 electronics. Boolean errors and failed checks return a nonzero exit status. Individual component bodies also require
-at least 1 mm separation and clear the Ø6 mm screw-head/access areas. The saved 72 rear-wire/cable corridors are
-checked at 1.8 mm insulated diameter, with a 9.1 mm rear stack inside the existing 10 mm gap. See the [board guide](../docs/review/protoboard/README.md#dimensions-used) for
+at least 1 mm separation and clear the Ø6 mm screw-head/access areas. The 113 rear-wire/cable routes are
+checked with rounded bends, 1.8 mm insulated diameter and 2.5 mm solder joints. Four removable 6 mm spacers
+raise the board on its unchanged 10 mm printed posts. The 12.9 mm wire stack leaves 2.1 mm to the floor
+after 0.5 mm wire bow and 0.5 mm mounting variation. See the [board guide](../docs/review/protoboard/README.md#dimensions-used) for
 dimensional sources and limits. These are clearance allowances, not detailed supplier CAD or measured parts:
 
 | Item | Model / assembly limit |
 |---|---|
-| Perfboard | 70 x 50 x 1.2 mm, component face up on four 10 mm standoffs (`BOARD_STANDOFF`) with M3 inserts; rear wires fit in the 10 mm under it, outside the four screw areas. |
+| Perfboard | 70 x 50 x 1.2 mm, component face up on four existing 10 mm standoffs (`BOARD_STANDOFF`) plus four removable 6 mm spacers (bore ≥3.2 mm, OD ≤6 mm), with M3x12 screws; 16 mm rear wiring gap. Printed parts are unchanged. |
 | XIAO and U1 | 12 mm projection including XIAO headers; 10.5 mm for U1 and socket. The USB cable reaches it with the lid off. |
 | Buck | 43 x 21 x 14 mm above four 2 mm printed corner supports, two cable ties; 10 mm lead allowance beyond each end. Check the delivered module. |
 | Lock plug and lead slack | 22 x 20 x 16 mm over the cap floor's wire hole (`CAP_WIRE_HOLE_XY`): the lock cable's 4-pin plug and the coiled slack of the soldered LED and pump leads. |

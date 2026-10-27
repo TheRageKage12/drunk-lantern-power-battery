@@ -6,7 +6,7 @@ cad/README.md. Board positions follow docs/review/protoboard/{layout,generate}.p
 All solids here are already in the assembly frame; none are printable parts.
 
 Rev C (2026-10-23): the board, battery, buck module, power switch and charge socket live in the top cap, on the cap
-floor plate (parts/top.py). The board lies flat, component face up, on 10 mm standoffs (the rear wiring gap).
+floor plate (parts/top.py). The board lies flat, component face up, on the existing 10 mm posts plus 6 mm removable spacers.
 """
 from pathlib import Path
 
@@ -20,7 +20,7 @@ import layout as L
 import mechanical as M
 
 Z_FLOOR = T.Z_CAP_FLOOR                              # the cap floor plate's top, assembly z
-BOARD_BACK = Z_FLOOR + T.BOARD_STANDOFF
+BOARD_BACK = Z_FLOOR + T.BOARD_STANDOFF + M.BOARD_SPACER
 BOARD_FACE = BOARD_BACK + P.PERFBOARD_T
 
 
@@ -54,6 +54,20 @@ def pack(wp):
     return cap(T.pack_to_cap(wp))
 
 
+def cable_exit():
+    """Reserved rounded cable turn outside the board; .5 mm positioning allowance."""
+    from shapely.geometry import LineString, box as sbox
+    import routing
+    r=next(r for r in routing.plan() if r['id']=='H01')
+    profile=LineString([(p[1],p[2]) for p in r['path3d'] if p[1]<=0]).buffer(M.WIRE_OD/2+.5)
+    profile=profile.intersection(sbox(-10,-10,0,5))
+    xs=[L.mm(p)[0] for _,p,_,_ in L.HARNESS]
+    lo=min(xs)-M.WIRE_OD/2-.5;hi=max(xs)+M.WIRE_OD/2+.5
+    pts=[(P.PERFBOARD_H/2-y,BOARD_BACK-depth) for y,depth in list(profile.exterior.coords)[:-1]]
+    return (cq.Workplane('YZ').workplane(offset=lo-P.PERFBOARD_W/2).polyline(pts).close().extrude(hi-lo)
+            .rotate((0,0,0),(0,0,1),P.BOARD_CAP_ROT).translate((*P.BOARD_CAP_XY,0)))
+
+
 def build():
     pcb = board_box(0, 0, P.PERFBOARD_W, P.PERFBOARD_H, -P.PERFBOARD_T, 0)
     # Space for wires under the board; the standoffs are intentionally excluded.
@@ -72,7 +86,9 @@ def build():
         'board_components_envelope': compound(components),
         'board_wiring_envelope': rear,
         # Local cable exit past the board's top edge, under the component face.
-        'board_cable_exit_envelope': board_box(25, -7, 42, 7, -P.PERFBOARD_T-9.2, -P.PERFBOARD_T-.2),
+        'board_cable_exit_envelope': cable_exit(),
+        'board_spacers_envelope': compound([cq.Workplane('XY').workplane(offset=Z_FLOOR+T.BOARD_STANDOFF)
+            .center(*T.board_point(x,y)).circle(3).circle(1.6).extrude(M.BOARD_SPACER) for x,y in L.MOUNTS]),
         'powerbank_envelope': pack(box(-P.POWERBANK_W/2, P.POWERBANK_W/2, -P.POWERBANK_L/2, P.POWERBANK_L/2,
                                        P.PACK_BED_T, P.PACK_BED_T+P.POWERBANK_T)),
         # The splitter's straight male plug in the pack's port, its cord folded back in a U-turn that reaches

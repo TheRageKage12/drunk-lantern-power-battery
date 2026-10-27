@@ -449,3 +449,13 @@ tighter bag seal, a fill hole in the cover). Spout stays as is; the guide adds f
 - Checks: 12 route/connectivity/order tests; full CAD build with 777 electronics checks and zero problems;
   socket and existing enclosure electronics-fit tests. Temporary exports kept the print files untouched.
   Actual wire bends and shared solder joints still need a dry fit before fastening the board.
+
+## 2026-10-27 — board wiring with realistic bends (PR #31)
+
+- Supersedes the 10 mm-gap proposal: add four removable 6 mm spacers and M3×12 screws; no printed changes.
+- 4 mm curved bends, separate jumper holes, supported bare tracks, 2.5 mm joint envelopes; 2.1 mm floor
+  clearance after bow and mounting allowances. Guide: 464 steps / 320 solder operations, curved cuts and 1:1 templates.
+- 11 guide tests, all 16 nets, full CAD (840 checks / zero problems), electronics/socket checks, 20 firmware
+  scenarios and RP2040 compile pass. Prints, renders and videos untouched. Browser controls and template download checked.
+- Remaining: obtain spacer hardware, retain cable row, measure delivered parts and dry-fit without compressing wiring.
+  Build instructions list the hardware; the shared spreadsheet has not been edited.

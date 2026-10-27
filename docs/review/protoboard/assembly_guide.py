@@ -30,29 +30,47 @@ BY_PAD = {p['pad']: (ref, p['net']) for ref, p in L.PINS.items()}
 
 
 def route_length(w):
-    """Conservative blank: orthogonal corridor + rises + termination + trim.
+    """Actual curved centreline plus through-board tails and trimming stock."""
+    formed=R.length(w['path3d'])
+    tails=0 if w['bare'] else M.BOARD_THICKNESS if not w['b'] else 2*(M.BOARD_THICKNESS+.55)
+    trim=4 if w['bare'] else 6
+    return dict(planar=round(formed,1),rises=0,tails=round(tails,1),trim=trim,
+                formed=round(formed,1),cut=math.ceil(formed+tails+trim))
 
-    The model reserves the wire's height; it does not invent a second slack hump
-    above that height. Round corners during dry fit and trim unused allowance.
-    """
-    planar = sum(math.dist(a, b) for a, b in zip(w['path'], w['path'][1:]))
-    ends = 2 if w['b'] else 1
-    rise = 0 if w['bare'] else ends * (w['depth'] - .55)
-    tails = .8 if w['bare'] else 2 * ends
-    trim = 3 if w['bare'] else max(4, min(8, planar * .05))
-    return dict(planar=round(planar, 1), rises=round(rise, 1), tails=tails,
-                trim=round(trim, 1), cut=math.ceil(planar + rise + tails + trim))
+
+def assembly_order(routes):
+    """Finish obstructed joints first, and put crossing lower wires in first."""
+    pending={w['id']:w for w in routes}; before={id:set() for id in pending}
+    lines={w['id']:LineString(w['path']) for w in routes}
+    for a in routes:
+        for b in routes:
+            if a is b:continue
+            shared=set(a['anchors']) & set(b['anchors'])
+            if any(lines[a['id']].distance(Point(L.mm(p))) < a['od']/2+1.4-1e-6
+                   for p in set(b['anchors'])-shared):before[a['id']].add(b['id'])
+            if a['bare'] and not b['bare']:before[b['id']].add(a['id'])
+            if not a['b'] and b['b'] and not b['bare']:before[b['id']].add(a['id'])
+            if (not a['bare'] and not b['bare'] and a['b'] and b['b']
+                and a['depth']<b['depth'] and lines[a['id']].intersects(lines[b['id']])):
+                before[b['id']].add(a['id'])
+    ordered=[]
+    while pending:
+        ready=[w for id,w in pending.items() if not(before[id] & pending.keys())]
+        assert ready, ('Impossible soldering order', sorted(pending))
+        w=min(ready,key=lambda w:(w['depth'],w['id']))
+        ordered.append(pending.pop(w['id']))
+    return ordered
 
 
 def validate_routes(routes):
     result = R.validate(routes)
     # A finished joint may be covered by a later wire. Every joint that still
     # needs soldering must retain a straight approach for a 2 mm tip + 0.4 mm.
-    ordered=sorted(routes,key=lambda w:(w['depth'],w['id']))
+    ordered=assembly_order(routes)
     for i,w in enumerate(ordered):
         line=LineString(w['path'])
-        future={p for later in ordered[i+1:] for p in (later['a'],later['b']) if p}
-        for pad in future - {w['a'],w['b']}:
+        future={p for later in ordered[i+1:] for p in later['anchors']}
+        for pad in future - set(w['anchors']):
             assert line.distance(Point(L.mm(pad))) >= w['od']/2 + 1.4 - 1e-6, (w['id'],pad,'tip access')
     return result
 
@@ -60,7 +78,7 @@ def validate_routes(routes):
 def make_data(routes):
     G.validate()
     report = validate_routes(routes)
-    routes = sorted(routes, key=lambda w: (w['depth'], w['id']))
+    routes = assembly_order(routes)
     harness = {r: label for r, pad, net, label in L.HARNESS}
     steps = []
     visits = defaultdict(list)
@@ -77,10 +95,10 @@ def make_data(routes):
         'Battery, USB and buck disconnected. Leave U1 out and JP1 open.', phase='Prepare')
     add('check', 'Check the board and mounts',
         '70 × 50 mm, isolated pads. Match the four screw holes to the cap floor; drill Ø3.2 mm before soldering.', phase='Prepare')
-    add('check', 'Keep the existing mounts',
-        'The printed posts provide 10 mm below the board. Solder with the board removed; dry-fit before fastening.', phase='Prepare')
+    add('check', 'Add four 6 mm spacers',
+        'Use Ø3.2 mm holes, ≤6 mm outside diameter, and M3×12 screws. Existing 10 mm posts stay; wiring space becomes 16 mm.', phase='Prepare')
     add('check', 'Prepare your wire',
-        'Use your six colours of stranded 22 AWG, up to Ø1.8 mm over insulation. Tin 2 mm at each end.', phase='Prepare')
+        'Use your six colours of stranded 22 AWG, up to Ø1.8 mm over insulation. Bare tracks are lightly tinned. Leave through-hole wire ends untinned until fitted.', phase='Prepare')
 
     parts = {p['ref']: p for p in L.PARTS}
     order = ['R1','R2','R3','R4','R5','R6','R7','D1','D3','U1','JP1','C1','C3','MCU','Q1','Q2','C2']
@@ -105,7 +123,7 @@ def make_data(routes):
         for key, pin in pins:
             nc = pin['net'].startswith('NC')
             joint_steps.append(add('solder', f"Solder {key} · {pin['pad']}",
-                'Solder, cool, then trim to ≤1.5 mm above the board.' +
+                'Solder, cool, then trim the lead to ≤1.5 mm. Keep the finished joint below 2.5 mm.' +
                 (' No wire connects here.' if nc else ''),
                 ref=ref, pad=pin['pad'], phase='Components'))
         component_data.append(dict(ref=ref, name=name, fit=fit, solder=joint_steps,
@@ -116,11 +134,14 @@ def make_data(routes):
     add('check', 'Thread the outgoing cables',
         'Thread pump, LED and lock leads through the cap floor. Lift the board free and park the long ends out of the way.', phase='Prepare cables')
 
+    add('check', 'Keep the cable row flat',
+        'Retain the outgoing wires side by side. Their bends turn upward beyond the board edge; service loops stay outside the board gap.', phase='Prepare cables')
     last_depth = None
     for w in routes:
         w['net'] = BY_PAD[w['a']][1]
         w['colour'] = NET_COLOUR[w['net']]
         w['length'] = route_length(w)
+        w['segments'] = R.pieces(w)
         w['label'] = harness.get(w['id'], L.NETS[w['net']][1])
         w['earlier_crossings'] = []
         for old in routes:
@@ -132,29 +153,36 @@ def make_data(routes):
                 intersections = intersections.difference(Point(L.mm(pad)).buffer(2.3))
             if not intersections.is_empty:
                 w['earlier_crossings'].append(old['id'])
-        phase = 'Bare links' if w['bare'] else 'Wiring · '+{3.0:'lower',5.6:'middle',8.2:'upper'}[w['depth']]
+        phase = 'Bare tracks' if w['bare'] else 'Cable row' if not w['b'] else 'Arches · '+{6.0:'lower',9.0:'middle',12.0:'upper'}[w['depth']]
         if w['depth'] != last_depth:
             add('check', 'Start '+phase.lower(),
-                ('Strip and tin each short link. Keep it close to the board; no stray strands.' if w['bare'] else
-                 f"Keep the top of each wire about {w['depth']+w['od']/2:g} mm off the board. Tape in place; leave earlier wires undisturbed."), phase=phase)
+                ('Strip, form and lightly tin. Solder each marked anchor; no loose strands.' if w['bare'] else
+                 f"Keep the top of each wire about {w['depth']+w['od']/2:g} mm off the board. Form before soldering; leave earlier wires undisturbed."), phase=phase)
             last_depth = w['depth']
         dest = w['b'] or w['label']
-        prep = (f"Strip and tin the link. Finish at about {w['length']['planar']+.8:.1f} mm; no stray strands." if w['bare'] else
-                'Form the shown path with relaxed bends. Leave the second end long; trim it after fitting.' if w['b'] else
-                'Measure the external run below, then form the shown board route. Keep service slack outside the board gap.')
+        prep = ('Form the shown track; tin lightly. Anchor every marked hole, including the bends.' if w['bare'] else
+                'Form both rounded bends before fitting. Strip 4 mm; insert each end 1.2 mm into its empty hole, flush with the front.' if w['b'] else
+                'Measure the external run below. Strip 4 mm at the board end; insert 1.2 mm, flush with the front. Keep the cable row flat.')
+        if w.get('offset_a') or w.get('offset_b'):
+            bends=[]
+            for end in ('a','b'):
+                offset=w.get('offset_'+end)
+                if offset:
+                    direction=('column X' if offset[0]>0 else 'column A') if offset[0] else ('row 18' if offset[1]>0 else 'row 01')
+                    bends.append(w[end]+' toward '+direction)
+            prep+=' Lean '+', '.join(bends)+' by 0.6 mm; match both template views.'
         w['prepare'] = add('wire', f"Prepare {w['id']} · {w['a']} → {dest}", prep, wire=w['id'], phase=phase)
         w['joints'] = []
-        for end, pad in enumerate([w['a']] + ([w['b']] if w['b'] else [])):
-            detail = ('Solder beside the existing lead; do not force another wire through the hole.' if not end else
-                      'Trim to fit, tin 2 mm, then solder. Leave the wire relaxed.')
-            if w['bare']:detail = 'Solder this end. Keep the bare bridge over these two pads only.'
-            if end or not w['b']:detail += ' Check continuity and neighbouring pads.'
-            w['joints'].append(add('solder', f"Solder {w['id']} {'second' if end else 'first'} end · {pad}", detail,
+        for end, pad in enumerate(w['anchors']):
+            detail = ('Solder this anchor. Keep strands together and the track flat.' if w['bare'] else
+                      'Solder the single wire in this hole. Keep the formed bend relaxed; joint ≤2.5 mm high.')
+            if end==len(w['anchors'])-1:detail+=' Check continuity and neighbouring pads.'
+            w['joints'].append(add('solder', f"Solder {w['id']} · {pad}", detail,
                                     wire=w['id'], pad=pad, phase=phase))
         w['check'] = w['joints'][-1]
 
     add('check','Check the finished board',
-        'Check all connections and unintended shorts. Dry-fit on the existing 10 mm posts without squeezing wires; then insert U1, notch toward row 01.', phase='Final checks')
+        'Check all connections and unintended shorts. Fit the 6 mm spacers. Check at least 2 mm remains below the wiring without squeezing it; then insert U1, notch toward row 01.', phase='Final checks')
     add('check','Set the buck to 5.0 V before connecting it',
         'Continue with EL-6–EL-12 in the build guide. D2 goes at the pump; C4 at the Hall sensor. Follow SW-6 for USB.', phase='Final checks')
 
@@ -164,7 +192,7 @@ def make_data(routes):
                 gap=M.REAR_GAP, routes=routes, steps=steps, parts=component_data,
                 pins=L.PINS, mounts=L.MOUNTS, colours=COLOURS,
                 nets={n:dict(label=v[1],colour=NET_COLOUR[n]) for n,v in L.NETS.items()},
-                report=report, source='Existing 10 mm mounts · 27 October 2026')
+                report=report, source='Existing 10 mm posts + 6 mm removable spacers · 27 October 2026')
 
 
 def main():

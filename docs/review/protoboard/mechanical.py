@@ -8,10 +8,12 @@ import math
 import layout as L
 MIN_BODY_GAP = 1.0
 BOARD_THICKNESS = 1.2
-REAR_GAP = 10.0
+PRINTED_POST_HEIGHT = 10.0
+BOARD_SPACER = 6.0
+REAR_GAP = PRINTED_POST_HEIGHT + BOARD_SPACER
 WIRE_OD = 1.8  # owner's nominal 1.7 mm stranded PVC wire, plus diameter allowance
-JOINT_HEIGHT = 1.5
-JOINT_RADIUS = 0.95
+JOINT_HEIGHT = 2.5
+JOINT_RADIUS = 1.0
 MOUNT_TOOL_RADIUS = 3.0  # straight 2.5 mm hex key, screw head <=6 mm diameter
 
 def bounds(cap_length=25, cap_diameter=18, mosfet_height=22):

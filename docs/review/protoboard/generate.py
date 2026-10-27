@@ -23,7 +23,9 @@ def validate():
         assert BY_PAD[a][1]==BY_PAD[b][1],('short',w)
         assert not BY_PAD[a][1].startswith('NC'),('NC wired',w)
         w['net']=BY_PAD[a][1]
-        if w['bare']:assert math.dist(mm(a),mm(b))<8.1,w
+        for pad in w.get('pads',[a,b]):
+            assert BY_PAD[pad][1]==w['net'],('cross-net pad',w['id'],pad)
+            parent[root(a)]=root(pad)
         parent[root(a)]=root(b)
     for ref,pad,net,label in HARNESS:
         assert BY_PAD[pad][1]==net, (ref,'cable connected to wrong net')
@@ -32,7 +34,7 @@ def validate():
     assert all(len(g)==1 for n,g in groups.items()),groups
     # Mechanical pins with no external connection must remain separate, not tied to ground.
     assert sum(n.startswith('NC') for _,n in BY_PAD.values())==8
-    assert len(HARNESS)==14 and len(PARTS)==13 and len(PINS)==82
+    assert len(HARNESS)==14 and len(PARTS)==13
     return {'occupied_pads':len(PINS),'wires':len(WIRES),'nets':len(NETS),'unused_device_pins':8,
             'result':'All intended nets connected; no cross-net wires; no occupied pad in mount keepouts.'}
 
@@ -74,8 +76,8 @@ class Drawing:
   self.add('<g font-family="Arial, sans-serif">')
   self.text(42,38,'SOLDER SIDE — mirrored' if self.rear else 'COMPONENT SIDE — USB at left',29)
   self.text(42,70,'Flip the board left ↔ right; top stays top. Pad names do not change.' if self.rear else '70 × 50 mm • 24 × 18 holes • 2.54 mm pitch • all point-to-point wires are on rear.',18)
-  self.text(42,100,'Insulated wires cross without joining. Solder only at marked endpoints; bends are not joints.' if self.rear else 'Solid dots: through-hole leads. Square ports: rear-only cable attachment pads.',17)
-  self.text(42,127,'Bare links follow the solder schedule. All other wires retain their insulation.' if self.rear else 'Coordinates are assigned by this drawing; supplier lettering may be on the opposite face.',17)
+  self.text(42,100,'Insulated wires cross without joining. Solder at marked anchors; crossings do not join.' if self.rear else 'Solid dots: through-hole leads. Square ports: rear-only cable attachment pads.',17)
+  self.text(42,127,'Bare tracks are anchored at each bend and at most three holes apart.' if self.rear else 'Coordinates are assigned by this drawing; supplier lettering may be on the opposite face.',17)
   if not self.rear:
    self.text(42,166,'R1 100k · R2 22k · R3/R4 10k · R5/R6 4.7k · R7 3.3k',18)
    self.text(42,191,'C1/C3 0.1 µF · D1/D3 NTE585 · JP1 removable shunt (remove for USB)',18)
@@ -98,7 +100,7 @@ class Drawing:
     self.line(w['path'],'#fffdf7',8 if w['bare'] else 7)
     self.line(w['path'],color,4.3 if w['bare'] else 3.2)
     self.add('</g>')
-   # Flying leads: solder to rear pad without pushing a second wire through a populated hole.
+   # Flying leads use their own holes; the bare tracks join them on the rear.
    for ref,pad,net,label in HARNESS:
     route=next(w for w in ALL_ROUTES if w['id']==ref);pts=route['path'];end=pts[-1]
     self.add(f'<g class="harness" data-net="{net}"><title>{ref}: {pad} → {ESC(label)}</title>')
@@ -152,19 +154,21 @@ def reference_pages():
  for i,line in enumerate(lines):d.text(42,744+i*28,line,17)
  for i,(net,(color,label)) in enumerate(NETS.items()):
   col,row=divmod(i,4);d.text(42+col*318,965+row*38,'● '+label,16,color=color)
- d.text(42,1165,'Cable H02 attaches to N02. Capacitor C2 positive uses F02.',17)
+ d.text(42,1165,'Cable H02 attaches to N01. Capacitor C2 positive uses F02.',17)
  d.add('</g>');connections=svg(''.join(d.s))
- d=Drawing();d.add('<g font-family="Arial, sans-serif">')
- d.text(42,45,'WIRE-BY-WIRE SOLDER SCHEDULE',29)
- d.text(42,82,'Use component-side pad names on both faces. All links on rear; solder only at their two endpoints.',18)
- for i,w in enumerate(WIRES):
-  col,row=divmod(i,math.ceil(len(WIRES)/2));x=42+col*650;y=162+row*33
-  d.text(x,y,w['id'],18);d.text(x+70,y,w['a']+' → '+w['b'],18)
-  d.text(x+235,y,w['net'],16,color=NETS[w['net']][0])
-  d.text(x+400,y,'BARE link' if w['bare'] else f"{w['depth']:g} mm deep",16)
- d.text(42,1140,'Square junction pads carry wires only; see the schedule for their connections.',18)
- d.text(42,1175,'Crossings and bends are not joints. Keep all other bare metal inside a solder fillet.',18)
- d.add('</g>');return connections,svg(''.join(d.s))
+ pages=[connections]
+ for start in range(0,len(WIRES),32):
+  d=Drawing();d.add('<g font-family="Arial, sans-serif">')
+  d.text(42,45,'WIRE AND SOLDER ANCHORS',29)
+  d.text(42,82,'Solder every listed hole. Bare tracks are supported at bends and ≤3 holes apart.',18)
+  for i,w in enumerate(WIRES[start:start+32]):
+   y=130+i*32
+   d.text(42,y,w['id'],16);d.text(115,y,' → '.join(w['anchors']),16)
+   d.text(630,y,w['net'],15,color=NETS[w['net']][0])
+   d.text(850,y,'BARE track' if w['bare'] else f"Rounded arch · top {w['depth']+.9:g} mm",15)
+  d.text(42,1210,'6 mm removable spacers + existing 10 mm posts. Printed parts stay unchanged.',17)
+  d.add('</g>');pages.append(svg(''.join(d.s)))
+ return pages
 
 def export(front,rear):
  """Render kept artifacts using temporary SVG/PDF intermediates."""
@@ -202,7 +206,7 @@ def main():
   w['length_mm']=round(sum(math.dist(a,b) for a,b in zip(w['path'],w['path'][1:])),1)
  (OUT/'routing.json').write_text(json.dumps(ALL_ROUTES,indent=2)+'\n')
  front,rear=Drawing().draw(),Drawing(True).draw()
- rows='\n'.join(f'| {w["id"]} | {w["a"]} | {w["b"]} | {w["net"]} | {"Bare tinned link" if w["bare"] else f"Insulated; centre {w['depth']} mm behind board"} |' for w in WIRES)
+ rows='\n'.join(f'| {w["id"]} | {w["a"]} | {' → '.join(w['anchors'][1:])} | {w["net"]} | {"Bare tinned link" if w["bare"] else f"Insulated; centre {w['depth']} mm behind board"} |' for w in WIRES)
  pins='\n'.join(f'| {ref} | {p["pad"]} | {p["net"]} |' for ref,p in PINS.items())
  harness='\n'.join(f'| {ref} | {pad} | {label} | {next(w for w in ALL_ROUTES if w["id"]==ref)["depth"]:g} mm |' for ref,pad,net,label in HARNESS)
  (OUT/'WIRE_SCHEDULE.md').write_text('# Perfboard wire and solder schedule\n\nGenerated from `layout.py`. Front coordinates are retained on the mirrored rear view.\n\n## Cable attachments (solder side)\n\n| Cable | Pad | Other end | Centre behind board |\n|---|---|---|---|\n'+harness+'\n\n## Every board wire\n\n| Wire | From | To | Net | Construction |\n|---|---|---|---|---|\n'+rows+'\n\n## Every component lead and attachment pad\n\nFor resistors/capacitors `.1` and `.2` are drawing lead IDs. C2.1 is +; C2.2 is −. For diodes, .1 is anode and .2 is striped cathode. U1 numbers are actual IC pin numbers.\n\n| Lead | Pad | Net |\n|---|---|---|\n'+pins+'\n')

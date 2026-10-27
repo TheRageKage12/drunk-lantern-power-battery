@@ -695,3 +695,27 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   0.8 mm vertical clearance at crossings. Actual bends, shared-joint fan-out and delivered
   dimensions still require dry fit. Generator renamed assembly_guide.py so CAD imports its own assembly.py.
   No shopping-list changes or reprints required.
+
+### 2026-10-27 — realistic wire bends and removable board spacers (PR #31)
+
+Supersedes the 9.1 mm stack / 10 mm gap routing above. Duncan requested realistic hand-soldered clearances,
+confirmed the printed enclosure cannot change, and said small spacers or hardware can be obtained.
+
+- Keep every printed part, export, mounting hole and component position unchanged. Add four 6 mm unthreaded
+  spacers (bore ≥3.2 mm, OD ≤6 mm) and four M3×12 screws on the existing 10 mm posts. Board gap is 16 mm;
+  screw engagement remains 4.8 mm. Only the non-printing electronics envelopes move.
+- Use the existing six-colour stranded 22 AWG kit, reserving Ø1.8 mm. The new routes use 79 supported bare
+  tracks, 20 insulated jumpers with their own holes, and 14 outgoing cables in a retained parallel row.
+  Bare tracks have anchors at bends and at most 7.62 mm apart. Circuit nets and independent pump/LED returns stay.
+- Model actual 4 mm-radius insulated bends, 2.5 mm-high solder joints and stripped ends. The 12.9 mm nominal
+  stack leaves 2.1 mm to the floor after 0.5 mm extra bow and 0.5 mm mounting/board variation. Free insulated
+  jumpers have ≥1.185 mm surface separation, allowing 0.4 mm movement each; the retained cable row has 0.74 mm.
+  Posts expand 0.25 mm per side in the checks. Four risers across three jumpers lean 0.6 mm away from nearby mounting posts.
+- The concise guide has 464 steps / 320 individual solder operations, real curved cut lengths, an access-checked
+  order, and downloadable 1:1 plan/elevation templates. More short bare tracks replace crowded wire/lead joints.
+- Checks passed: all 16 nets, 11 guide tests including physical negative controls; full CAD build with 840
+  enclosure/electronics checks and zero problems; electronics and socket tests; 20 firmware scenarios and
+  RP2040 compile (63,136 bytes). CAD exports went to /tmp; no print, image or video files were regenerated.
+- Physical acceptance remains required: measure ≥15.5 mm space and ≤13.5 mm finished wiring height, with
+  ≥2 mm free below it and clearance beside every post. Do not compress wires with the mounting screws.
+  Retain the flat cable row and strain-relieve external runs. Spreadsheet hardware edits are not made here.

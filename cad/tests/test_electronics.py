@@ -11,7 +11,7 @@ parts = T.build()
 placed = {n: place(s, T.placements().get(n)) for n, s in parts.items()}
 electronic = E.build()
 
-assert T.BOARD_STANDOFF == E.M.REAR_GAP, 'The standoffs are the board\'s rear wiring gap'
+assert T.BOARD_STANDOFF + E.M.BOARD_SPACER == E.M.REAR_GAP, 'The standoffs are the board\'s rear wiring gap'
 for n in ('cap_floor', 'top_cap'):
     assert inter_volume(electronic['powerbank_envelope'], placed[n]) < .5, n
     assert inter_volume(electronic['battery_connector_envelope'], placed[n]) < .5, n
