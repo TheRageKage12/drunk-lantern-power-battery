@@ -13,8 +13,11 @@ The components have moved; the printed enclosure and its four mounting holes hav
 5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
 Each step completes one component, one wire, or a pair of wires that must be fitted together. All joints for that task are highlighted; completed work stays visible. Cut lengths and 1:1 bend templates are available when needed.
-Use **Fit** to show the whole board; changing steps keeps your chosen view. A pad is the copper ring around a hole.
-Hole names are assigned from the component face; the rear view is mirrored.
+The socket and controller steps open a close-up with staggered hole labels and leader lines. Use **Fit** to show the whole board, or **Part close-up** to return. Changing steps keeps your chosen side of the board. A pad is the copper ring around a hole.
+Each component step includes a shape illustration and its orientation. Names such as D1 are circuit labels; NTE585 is a part number.
+**H04 means column H, row 4** in this guide. The blue guides locate the selected hole; click another marked hole to move them.
+These labels may not be printed on the physical board. A01 is the upper-left grid hole on the component face; flip left-to-right
+for soldering, keeping row 01 at the top. The rear view is mirrored, but every hole keeps its name.
 
 ## Mounting and fit
 

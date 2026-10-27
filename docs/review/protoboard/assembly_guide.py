@@ -18,6 +18,26 @@ def assembly_order(routes):
     groups=R.validate(routes)['assembly_groups'];byid={w['id']:w for w in routes}
     return [byid[n] for group in groups for n in group]
 
+def component_identity(ref):
+    """Plain names and illustration labels, using the actual terminal assignments."""
+    part=next((p for p in L.PARTS if p['ref']==ref),{})
+    value=part.get('value','').replace('k',' kΩ').replace('uF',' µF')
+    kind=part.get('kind',{'U1':'socket','MCU':'controller','Q1':'mosfet','Q2':'mosfet'}.get(ref))
+    name={'resistor':value+' resistor','diode':'NTE585 diode','ceramic':value+' ceramic capacitor',
+          'electrolytic':'2200 µF / 25 V capacitor','jumper':'two-pin header','socket':'14-pin socket',
+          'controller':'XIAO RP2040 controller','mosfet':'IRLZ44N MOSFET'}[kind]
+    note={'resistor':'Either way round. Match the resistance on the parts bag.',
+          'diode':'The band marks the end that must go into '+L.PINS.get(ref+'.2',{}).get('pad','')+'.',
+          'ceramic':'Either way round. Colour and markings may vary.',
+          'electrolytic':'The minus stripe marks the negative leg: connect black there.',
+          'jumper':'Leave the removable cap (shunt) off.',
+          'socket':'Fit the empty socket now; the chip goes in later.',
+          'controller':'The USB connector faces column X.',
+          'mosfet':'Printed face toward '+('row 18.' if ref=='Q1' else 'column A.')}[kind]
+    ends=[dict(pad=p['pad'],label=('Striped end' if key.endswith('.2') else 'Unstriped end') if kind=='diode' else key.split('.')[1])
+          for key,p in L.PINS.items() if key.split('.')[0]==ref]
+    return dict(kind=kind,name=name,note=note,ends=ends)
+
 def make_data(routes):
     report=R.validate(routes);byid={w['id']:w for w in routes};steps=[];visits=defaultdict(list);parts=[];pins=dict(L.PINS)
     def add(kind,title,text,**kw):
@@ -26,14 +46,13 @@ def make_data(routes):
         s['previous']=list(dict.fromkeys(owner for pad in s['pads'] for owner in visits[pad]))
         for j in s.get('joints',[]):visits[j['pad']].append(j['owner'])
         steps.append(s);return s['index']
-    values={p['ref']:p['value'] for p in L.PARTS}
     instructions={
       'U1':'Fit the empty socket with its notch toward column X. Solder two opposite corners, then the remaining pins. Leave the chip out.',
       'MCU':'Fit the XIAO with USB toward column X, using its existing headers. Solder both rows of pins.',
       'Q1':'Fit with its printed face toward row 18. Keep the top within 22 mm of the board. Solder all three legs and clip off the excess.',
       'Q2':'Fit with its printed face toward column A. Keep the top within 22 mm of the board. Solder all three legs and clip off the excess.',
-      'D1':'Fit the diode with its striped end in L05. Solder both ends on the back and clip off the excess.',
-      'D3':'Fit the diode with its striped end in S01. Solder both ends on the back and clip off the excess.',
+      'D1':'Put the unstriped end into H04 and the striped end into L05, from the component side. Solder both ends on the back and clip off the excess.',
+      'D3':'Put the unstriped end into N01 and the striped end into S01, from the component side. Solder both ends on the back and clip off the excess.',
       'JP1':'Fit the header in R18/S18 and solder both pins. Leave the removable shunt off.',
       'C1':'Lay the disc flat on the back, following the lead template. Solder its legs onto C05 and C01; either way round. Keep it clear of the board and nearby joints.',
       'C3':'Lay the disc flat on the back, following the lead template. Solder its legs onto G10 and A13; either way round. Keep it clear of the board and nearby joints.',
@@ -43,8 +62,9 @@ def make_data(routes):
         pp=[(key,p) for key,p in L.PINS.items() if key.split('.')[0]==ref]
         if ref=='U1':pp.sort(key=lambda v:(v[0] not in ['U1.1','U1.8'],int(v[0].split('.')[1])))
         text=instructions.get(ref,'Bend the legs to fit the marked holes. Insert the resistor from the component side, solder both ends on the back, then clip off the excess.')
-        fit=add('component','Install '+ref+' · '+values.get(ref,{'MCU':'XIAO RP2040','U1':'DIP-14 socket','Q1':'pump MOSFET','Q2':'LED MOSFET'}.get(ref,'')),text,ref=ref,phase=phase,joints=[dict(pad=p['pad'],owner=ref) for _,p in pp])
-        parts.append(dict(ref=ref,name=ref,fit=fit,solder=[fit],bounds=M.bounds()[ref],pins=[p['pad'] for _,p in pp],side='rear' if phase=='Underside parts' else 'front'))
+        identity=component_identity(ref)
+        fit=add('component','Install '+identity['name']+' · '+ref,text,ref=ref,phase=phase,joints=[dict(pad=p['pad'],owner=ref) for _,p in pp])
+        parts.append(dict(ref=ref,name=ref,identity=identity,fit=fit,solder=[fit],bounds=M.bounds()[ref],pins=[p['pad'] for _,p in pp],side='rear' if phase=='Underside parts' else 'front'))
     for ref in ['R1','R2','R5','R6','R7','D1','D3','U1','JP1','MCU','Q1','Q2']:component(ref,'Front components')
     add('check','Inspect the first joints','Check orientation and solder bridges. Keep U1 out and JP1 open.',phase='Inspect')
     for group in report['assembly_groups']:
@@ -69,7 +89,7 @@ def make_data(routes):
         idx=add('wire','Connect C2 · '+colour+' lead (2200 µF / 25 V)','Form the wire to the template. Insert into '+pad+' from the back, flush with the front, and solder on the back. Slide on heat-shrink, solder the other end to C2’s '+polarity+' leg, then cover that joint and shrink.',wires=[w['id']],ref='C2',points=[path[-1]],joints=[dict(pad=pad,owner=w['id'])],phase='Large capacitor')
         w.update(prepare=idx,joints=[idx],check=idx);aux.append(w)
     add('check','Strap the battery and C2 in place','Cut 350 mm of ONE-WRAP and thread the floor slots. Fit the battery LED-side down and C2 along its top. Strap across C2’s middle, leaving both ends clear and at least 50 mm overlap. Pull-test: C2 must not slide.',phase='Large capacitor')
-    parts.append(dict(ref='C2',name='C2',fit=capfit,solder=[],bounds=M.bounds()['C2'],pins=['F02','F04'],side='external'))
+    parts.append(dict(ref='C2',name='C2',identity=component_identity('C2'),fit=capfit,solder=[],bounds=M.bounds()['C2'],pins=['F02','F04'],side='external'))
     for j in L.DESIGN['harness']:
         add('splice','Make '+j['id']+' · '+L.NETS[j['net']][1],'Join '+', '.join(j['members'])+'. Sleeve the entire joint and overlap each wire’s insulation. Keep it in the cable space beside the board.',phase='Power harness')
     add('check','Check the buck ground','With power disconnected, confirm buck IN− and OUT− have continuity. Only IN− needs the harness return; do not omit it.',phase='Power harness')

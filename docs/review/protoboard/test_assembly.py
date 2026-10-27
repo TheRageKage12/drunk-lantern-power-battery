@@ -66,6 +66,18 @@ def test_components_are_complete_tasks_and_no_joints_lost(data):
  assert sum(len(s.get('joints',[])) for s in data['steps'])==182
  assert len(data['steps'])<65
 
+def test_component_identification_matches_board_assignments(data):
+ for part in data['parts']:
+  info=part['identity']
+  assert info['kind'] and info['name'] and info['note']
+  assert {e['pad'] for e in info['ends']}==set(part['pins'])
+ for ref in ['D1','D3']:
+  info=next(p for p in data['parts'] if p['ref']==ref)['identity']
+  assert info['name']=='NTE585 diode'
+  assert info['ends']==[{'label':'Unstriped end','pad':L.PINS[ref+'.1']['pad']},
+                        {'label':'Striped end','pad':L.PINS[ref+'.2']['pad']}]
+ assert A.component_identity('U1')['kind']=='socket'
+
 def test_capacitor_wires_include_both_connections(data):
  for w in data['routes']:
   if w['surface']!='rear':continue
