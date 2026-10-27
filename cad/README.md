@@ -81,8 +81,8 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md`.
 Everything electrical except the pump and the LED strips sits on `cap_floor`, inside the top cap under the lid.
 `build.py` checks the envelopes against printed parts and other hardware, with a 0.5 mm³ overlap limit for
 electronics. Boolean errors and failed checks return a nonzero exit status. Individual component bodies also require
-at least 1 mm separation and clear the Ø6 mm screw-head/access areas. The saved 66 rear-wire/cable corridors are
-checked at 1.6 mm insulated diameter. See the [board guide](../docs/review/protoboard/README.md#dimensions-used) for
+at least 1 mm separation and clear the Ø6 mm screw-head/access areas. The saved 72 rear-wire/cable corridors are
+checked at 1.8 mm insulated diameter, with a 9.1 mm rear stack inside the existing 10 mm gap. See the [board guide](../docs/review/protoboard/README.md#dimensions-used) for
 dimensional sources and limits. These are clearance allowances, not detailed supplier CAD or measured parts:
 
 | Item | Model / assembly limit |

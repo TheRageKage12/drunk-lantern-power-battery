@@ -10,29 +10,34 @@ off-board wiring, power sequencing and commissioning. This page covers the board
 ## Guided assembly with six wire colours
 
 Open [assembly.html](assembly.html) directly in a browser; it is self-contained and works offline.
-It walks through 178 individual soldering operations, with preparation and inspection steps between them.
-The current joint has an amber ring and a close-up. Earlier work stays visible. Choose the component,
-solder-side or tilted view; use Next/Previous or the step list. The browser saves your place and entered
-cable measurements. Jumping ahead previews a stage; it does not certify the earlier work.
+It highlights one solder point at a time, keeps earlier work visible and saves your place.
+Use Next/Previous or the step list; front, mirrored rear and tilted views are available.
+There are 190 solder operations, plus short fitting and inspection steps.
 
-Fit and solder components first, low parts before tall parts; keep U1 out and JP1 open. Then fit the five
-bare bridges and work outward through the four rear wire layers. Outgoing cables are interleaved at their
-assigned depth so they are not trapped beneath later wires. Thread cap-floor cables first, as EL-9 requires.
+Fit components first, then the short tinned links, then insulated wires in the shown order.
+Work with the board off its posts. Outgoing cables join the sequence at their assigned height;
+thread the cap-floor cables before soldering, as EL-9 requires.
 
-The guide uses the owner's [Electronix Express six-colour stranded 22 AWG kit](https://www.amazon.com/dp/B00B4ZQ3L0).
-The [supplier lists approximately 1.7 mm overall diameter](https://www.elexp.com/collections/hook-up-wire-stranded/products/27wk22str25wire-kit-22ga-str-6-25ft-spool);
-Amazon's 0.010″ PVC entry is not an overall diameter. The same paths pass a separate nominal check at 1.7 mm,
-with 0.2 mm wire-to-wire clearance, but only **0.105 mm at the tightest unrelated joint**. The highest wire reaches
-9.25 mm into the 10 mm gap. These are tight nominal margins: measure the wire, dry-form every route, and do not
-force it into the space. The original viewer/CAD corridor allowance below remains 1.6 mm. Neither check validates
-bend radii or multiple wire ends within a shared joint; a fine 1.8 mm soldering tip is the guide's access assumption.
+The guide uses the owner's [Electronix Express stranded 22 AWG kit](https://www.amazon.com/dp/B00B4ZQ3L0).
+The [supplier lists approximately 1.7 mm outside diameter](https://www.elexp.com/collections/hook-up-wire-stranded/products/27wk22str25wire-kit-22ga-str-6-25ft-spool);
+the routing reserves **1.8 mm**. **The printed CAD, 10 mm posts, mounting holes and component positions are unchanged.**
+The wire stack reaches **9.1 mm**, leaving **0.9 mm** to the floor.
 
-Board-wire cuts include the full routed path, rises from the solder joints, short stripped ends and 4–8 mm
-of trimming allowance. The bare bridges use a smaller handling allowance and finish at about 3.5 mm.
-Trim the second end after fitting; do not retain unused allowance as an extra loop. The tilted view and crossing
-list show which already-installed wires the new one passes above. For outgoing cables, enter the measured
-external run and service slack; the guide never assumes their remote endpoints. Pump/LED service slack starts
-at EL-9's 150 mm, kept outside the board gap. A CSV cut list is available in the page.
+Short tinned links replace bulky insulated loops and distribute ground and power through spare pads.
+Several outgoing cables attach directly to their circuit points, eliminating intermediate wires and joints.
+There are **33 insulated runs instead of 61**, including the 14 outgoing cables, and 39 short bare links.
+Each component lead carries at most two insulated wire ends. The circuit and independent pump/LED source
+returns are unchanged; the quiet ground bus joins the input return beside C2.
+
+The geometric check allows **at least 0.5 mm between unrelated wire corridors**. Every joint still needing
+solder retains an approach for a **2 mm tip with 0.4 mm lateral clearance**. Higher wires may cover finished
+lower joints. The three insulated-wire layers have **0.8 mm vertical clearance at crossings**;
+follow each route and its crossing instructions.
+
+Cut estimates include the route, end rises, short tinned ends and 4–8 mm trimming allowance.
+Trim the second end after fitting; do not leave the extra as a loop. For outgoing cables, enter the measured
+external run and service slack. Pump/LED slack starts at EL-9's 150 mm and stays outside the board gap.
+The page includes a CSV cut list.
 
 Only six spool colours are used; labels identify connections that share a colour. Red is switched battery,
 black ground, white the 5 V paths, green 3.3 V/Hall, yellow sense/twist/LED return, and blue PWM/gates/pump return.
@@ -46,7 +51,7 @@ Do not treat a blue/yellow load return as ground or join white supply paths acro
   mark means an unused device pin, soldered mechanically with no wire. Small squares mark cable
   attachments or wire junctions. Large dashed squares reserve space around mounting screws.
 - Each solid coloured path is one rear wire, soldered only at its endpoints. Bends and crossings
-  are not joints. Insulate all wires except the short bare links W01/W02/W05–W07.
+  are not joints. Only the links marked BARE in the schedule are stripped; keep all other wires insulated.
 - Dashed coloured lines are cables leaving the board. Cable IDs are distinct from hole names:
   cable H02 attaches to hole N02; hole F02 is C2 positive. Use the solder schedule for every endpoint.
 - In the viewer, connection buttons highlight groups of connected points (nets); **Show W…**
@@ -66,21 +71,20 @@ Do not treat a blue/yellow load return as ground or join white supply paths acro
 4. Lay C2 flat with insulated formed leads; reserve a case no larger than **25 mm long × 18 mm
    diameter**. Its actual dimensions remain unverified. Secure its body independently of its leads,
    leave the vent clear and revise the placement if it is too large.
-5. Solder the rear links with the board detached from its standoffs. Start with the five bare bus
-   links, then work outward through the wire layers: **2.7, 4.6, 6.5, 8.4 mm** from the solder face
-   to wire centre. The schedule gives each wire's layer. Use the planned 22 AWG wire; its listing
-   gives 1.44 mm finished diameter and the routing check reserves **1.6 mm**. Trim leads and keep
+5. Solder the rear links with the board detached from its standoffs. Start with the 39 short tinned
+   links, then work outward through the assigned heights: **3.0, 5.6, 8.2 mm** from the solder face
+   to wire centre. The schedule gives each wire's layer. Use the owner’s stranded 22 AWG wire; the routing check reserves **1.8 mm** over insulation. Trim leads and keep
    solder joints within **1.5 mm** of the back face. Lay wire ends against the joint rather than
    forcing several wires through one hole. A shared endpoint is one solder joint; crossings elsewhere
    must remain insulated. Form smooth bends; drawn corners are routing guides, not cut lengths.
-6. Q02 and I16 are wire junctions with no additional component. Attach and strain-relieve cables
+6. Square junction pads carry wires only; their connections are listed in the schedule. Strain-relieve cables
    H01–H14, checking connector positions end-to-end rather than relying on wire colours.
    D2 stays at the pump and C4 at the Hall sensor; neither belongs on this board.
 
 ## Fit and checks before power
 
 The cap floor's standoffs provide **10 mm under the board**, outside four 9 × 9 mm screw areas.
-The outer wire layer reserves 9.2 mm including insulation, leaving 0.8 mm to the cap floor.
+The outer wire layer reserves 9.1 mm including insulation, leaving 0.9 mm to the cap floor.
 Use M3 screw heads (and any washers) no larger than Ø6 mm; the component placement includes access for a straight
 hex key with the lid off and the cap floor lifted out. Install the four M3-thread brass inserts in the standoffs' Ø4 × 6.5 mm
 bores before mounting the board. Use M3×6 screws; check engagement with any washers added and do not
@@ -112,10 +116,9 @@ Check those items before soldering; a part over its limit needs a different part
 | C1/C3 | [Vetco disc capacitor](https://vetco.net/products/vupn6606_ceramic_capacitor_0-1_uf_-2080_50_volts_z5u) has no mechanical drawing. **Limit Ø10 × 4 mm thick, 13 mm mounted height**; form leads to the shown 2.54/5.08 mm spans without bending at the coating. |
 | C2 | [Vetco 2200 µF / 25 V](https://vetco.net/products/2200uf25vdc_2200uf_25_volt_electrolytic_capacitor) omits case size. **Limit Ø18 × 25 mm**, laid flat; leads have 6.5 mm between pad and case for insulated forming. Secure the body without covering its vent. |
 | JP1 | Header + shunt **limit 5.5 × 2.5 × 8 mm**. |
-| Rear wire | [Vetco 22 AWG PH-78-22210](https://vetco.net/products/hookup_wire_stranded_22_ga): 1.44 mm finished diameter. Check assumes 1.6 mm; separate unrelated wire corridors by at least 0.25 mm. Solder-joint allowance is Ø1.9 × 1.5 mm. |
+| Rear wire | Owner’s Electronix Express stranded 22 AWG: nominal Ø1.7 mm; reserve Ø1.8 mm, ≥0.5 mm between unrelated wire corridors. Solder-joint allowance Ø1.9 × 1.5 mm. |
 
-The circuit values and shopping-list items are unchanged. The larger body drawings replace earlier
-undersized placeholders; parts, mounting holes and wiring have moved to make room for them.
+The circuit values and shopping-list items are unchanged. Component placement and mounting holes match the existing printed enclosure; only rear wiring changes in this revision.
 
 With all power disconnected and U1 removed, use the schedule to check continuity for each wire,
 inspect for solder bridges and confirm component orientation. Then follow the build guide's
@@ -136,7 +139,7 @@ SVG drawings with the `viewer.html` template. Run from this directory:
 ```sh
 python3 generate.py
 python3 generate.py --export
-python3 assembly.py
+python3 assembly_guide.py
 python3 -m pytest test_assembly.py -q
 ```
 
@@ -144,7 +147,7 @@ The first command rebuilds the standalone viewer and solder schedule with NumPy 
 on PATH and the Python `pypdf` package. Intermediate SVGs and PDF pages are created in a temporary
 directory and removed automatically. No intermediate exports need to be committed.
 
-`assembly.py` combines the existing pin placement and saved `routing.json` with `assembly-template.html`.
+`assembly_guide.py` combines the existing pin placement and saved `routing.json` with `assembly-template.html`.
 It writes the standalone `assembly.html`; it does not rewrite the reference paths or CAD dimensions.
 Its tests cover every lead/endpoint, layer and crossing order, shared-joint history, cut allowances, and rejection
 of deliberately invalid endpoints, crossings, wire diameter, height and screw intrusions. Pytest is needed only

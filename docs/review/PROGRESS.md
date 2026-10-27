@@ -435,3 +435,17 @@ ring, fuse, buck-boost for steady LEDs, PRIME button), ideas from CONTEXT and PR
 the steeper lock return ramp, steel handle axles, more plugs, drum thumbscrews, a clear lens, lining the sphere),
 CAD gaps (bell lead channels, tube coil space) and Kevin's new ones (tube coupling or swivel, removable fill bin,
 tighter bag seal, a fill hole in the cover). Spout stays as is; the guide adds filling the bag in place.
+
+## 2026-10-27 — fixed enclosure and concise board guide (PR #31)
+
+- Printed CAD is frozen because parts are printing. The unpushed taller-post proposal was removed, including
+  its exports, renders and video changes. Existing 10 mm posts, holes and component placement stay unchanged.
+- 33 insulated runs replace 61, using short tinned buses and direct cable attachments. 58 board links plus
+  14 outgoing cables; all 16 nets connected and independent pump/LED ground returns retained.
+- Routing reserves Ø1.8 mm for the nominal Ø1.7 mm kit, >=0.5 mm between unrelated wire corridors and a
+  2 mm soldering-tip approach plus 0.4 mm clearance at every unfinished joint. Stack 9.1 mm; floor gap 0.9 mm.
+- Concise guide: 291 steps / 190 solder operations. Completed work stays visible; each step gives one action,
+  with cut length, wire colour and crossing information when needed. Detailed assumptions stay in the README.
+- Checks: 12 route/connectivity/order tests; full CAD build with 777 electronics checks and zero problems;
+  socket and existing enclosure electronics-fit tests. Temporary exports kept the print files untouched.
+  Actual wire bends and shared solder joints still need a dry fit before fastening the board.

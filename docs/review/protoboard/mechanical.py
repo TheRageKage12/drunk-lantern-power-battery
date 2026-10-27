@@ -9,7 +9,7 @@ import layout as L
 MIN_BODY_GAP = 1.0
 BOARD_THICKNESS = 1.2
 REAR_GAP = 10.0
-WIRE_OD = 1.6  # 1.44 mm listed finished OD, plus a modelling allowance
+WIRE_OD = 1.8  # owner's nominal 1.7 mm stranded PVC wire, plus diameter allowance
 JOINT_HEIGHT = 1.5
 JOINT_RADIUS = 0.95
 MOUNT_TOOL_RADIUS = 3.0  # straight 2.5 mm hex key, screw head <=6 mm diameter

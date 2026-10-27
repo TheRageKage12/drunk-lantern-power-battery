@@ -681,3 +681,17 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   reduces the old 1.6 mm model’s margins; actual bends, joint fan-out and tool access require dry fit. The guide
   must not describe those calculations as a physically verified build. Tests reject invalid routes and check
   every solder endpoint, assembly ordering and allowances. No Sheet changes.
+
+- **2026-10-27, fixed printed enclosure and simpler board wiring.** Duncan confirmed the CAD parts are
+  already printing. The unpushed 17 mm post proposal is withdrawn: printed geometry, exports, renders and
+  videos remain identical to the existing revision. Keep the 10 mm posts, board holes and component positions.
+  Rerouted with a 1.8 mm allowance for the nominal 1.7 mm stranded wire. Short tinned buses and direct cable
+  attachments reduce insulated runs from 61 to 33; 39 bare links bring the total to 58 board links and 14
+  cables. Pump/LED source returns stay independent. The quiet ground bus joins the input return beside C2.
+  All nets retain their schematic connectivity. Maximum rear extent is 9.1 mm, leaving 0.9 mm to the floor;
+  unrelated wire corridors keep >=0.5 mm separation. Every unfinished joint keeps a 2 mm-tip approach with
+  0.4 mm lateral clearance; upper wires may cover completed lower joints. The concise guide covers all 190
+  solder operations, with per-wire cuts, crossing order and shared-joint history. Three wire layers at 3.0/5.6/8.2 mm centre height leave
+  0.8 mm vertical clearance at crossings. Actual bends, shared-joint fan-out and delivered
+  dimensions still require dry fit. Generator renamed assembly_guide.py so CAD imports its own assembly.py.
+  No shopping-list changes or reprints required.
