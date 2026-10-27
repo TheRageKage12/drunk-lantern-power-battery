@@ -15,7 +15,7 @@ assert T.BOARD_STANDOFF + E.M.BOARD_SPACER == E.M.REAR_GAP, 'The standoffs are t
 for n in ('cap_floor', 'top_cap'):
     assert inter_volume(electronic['powerbank_envelope'], placed[n]) < .5, n
     assert inter_volume(electronic['battery_connector_envelope'], placed[n]) < .5, n
-assert inter_volume(electronic['board_wiring_envelope'], placed['cap_floor']) < .5
+assert inter_volume(electronic['board_assembly_envelope'], placed['cap_floor']) < .5
 # The battery's LED row must be readable from below: inside the neck bore and on the hand side of the lock wall.
 import math
 x0, x1 = P.PACK_LED_X
@@ -72,7 +72,7 @@ next(w for w in bad if not w['bare'])['od'] = 1.2
 rejects(lambda: routing.validate(bad))
 # Artificial same-layer crossing between unrelated wires, preserving endpoints.
 bad = copy.deepcopy(routes)
-a, b = [w for w in bad if w['id'] in ('W13', 'W41')]
+a, b = [w for w in bad if w['id'] in ('W13', 'W24')]
 a['path'] = [a['path'][0], b['path'][0], a['path'][-1]]
 a['depth'] = b['depth']
 rejects(lambda: routing.validate(bad))

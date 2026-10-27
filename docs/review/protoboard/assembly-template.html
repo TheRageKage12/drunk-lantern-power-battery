@@ -16,8 +16,8 @@
 <header>
 <div class="eyebrow">Drunk Lantern / Workbench</div>
 <h1>Assemble the prototype board</h1>
-<p class="intro">Components first, then wires. Follow the amber solder point.</p>
-<p class="muted">22 AWG · six colours · <strong>10 mm posts + 6 mm spacers</strong> · <a href="README.md">Build details</a></p>
+<p class="intro">Follow one highlighted solder point at a time.</p>
+<p class="muted">22 AWG · six colours · <strong>10 mm posts + 20 mm spacers</strong> · <a href="README.md">Build details</a></p>
 </header>
 <div class="nav">
 <button id="previous" aria-label="Previous assembly step">← Previous</button>
@@ -29,7 +29,7 @@
 <div class="work">
 <section class="drawing" aria-label="Board drawing">
 <div class="tools">
-<label>View <select id="view" aria-label="Board view"><option value="rear">Solder side</option><option value="front">Component side</option><option value="tilt">Tilted solder side</option></select></label>
+<label>View <select id="view" aria-label="Board view"><option value="rear">Solder side</option><option value="front">Component side</option><option value="tilt">Tilted view</option></select></label>
 <div><button id="minus" aria-label="Zoom out">−</button> <button id="fit">Fit</button> <button id="plus" aria-label="Zoom in">+</button></div>
 </div>
 <p id="orientation" class="muted"></p>
@@ -44,11 +44,11 @@
 <svg id="joint-detail" viewBox="0 0 14 14" role="img" aria-label="Close-up of the current solder point" style="display:block;width:100%;height:150px;margin:12px 0;border:1px solid #d6dcd9;background:white" hidden></svg>
 <p id="instruction" class="step-text"></p>
 <div id="wire-info" hidden>
-<div class="measure"><div><strong id="cut"></strong><span id="cut-label"></span></div><div><strong id="height"></strong><span>Top of wire above board</span></div></div>
+<div class="measure"><div><strong id="cut"></strong><span id="cut-label"></span></div><div><strong id="height"></strong><span>Wire height on its own side</span></div></div>
 <p id="colour-label"></p><button id="wire-template" class="no-print">Download bend template</button>
-<svg id="profile" class="side" viewBox="0 0 330 130" role="img" aria-label="Side profile showing wire height in the 16 mm rear gap"></svg>
+<svg id="profile" class="side" viewBox="0 0 330 130" role="img" aria-label="Side profile of the formed wire"></svg>
 <p id="crossings" class="note"></p>
-<div id="cable" hidden><h3>Measure the external cable</h3><p class="muted">Measure from the board exit to its destination.</p>
+<div id="cable" hidden><h3>Measure the external cable</h3><p class="muted">Measure from the cable’s lower exit to its destination.</p>
 <label>External run (mm) <input id="external-run" type="number" min="0" max="3000" step="1" placeholder="Measure"></label><br>
 <label>Service slack (mm) <input id="service-slack" type="number" min="0" max="1000" step="1"></label>
 <p id="cable-result" class="note"></p><p class="muted">Keep cable slack outside the board gap.</p></div>
@@ -72,30 +72,30 @@ const DATA=/*__ASSEMBLY_DATA__*/;
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const storageKey='lantern-board-assembly-'+DATA.version;
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{}
-let cursor=Number.isInteger(saved.cursor)?Math.max(0,Math.min(DATA.steps.length-1,saved.cursor)):0;
+let cursor=location.hash==='#complete'?DATA.steps.length-1:Number.isInteger(saved.cursor)?Math.max(0,Math.min(DATA.steps.length-1,saved.cursor)):0;
 let measurements=saved.measurements||{},view='rear',zoom=1;
 const routes=Object.fromEntries(DATA.routes.map(w=>[w.id,w]));
-const pins=Object.fromEntries(Object.entries(DATA.pins).map(([ref,p])=>[p.pad,{ref,...p}]));
+const pins={};for(let[ref,p]of Object.entries(DATA.pins)){if(pins[p.pad])pins[p.pad].ref+=' / '+ref;else pins[p.pad]={ref,...p}}
 function persist(){try{localStorage.setItem(storageKey,JSON.stringify({cursor,measurements}))}catch{}}
 function mm(pad){return[5.79+(pad.charCodeAt(0)-65)*2.54,3.41+(Number(pad.slice(1))-1)*2.54]}
 function el(tag,attrs={},text=''){let n=document.createElementNS(NS,tag);for(let[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text)n.textContent=text;return n}
 function add(parent,tag,attrs,text){let n=el(tag,attrs,text);parent.append(n);return n}
-function project(x,y,z=0){return view==='front'?[x,y]:view==='tilt'?[70-x+y*.25,y*.73-z*.85]:[70-x,y]}
+function project(x,y,z=0){return view==='front'?[x,y]:view==='tilt'?[x+y*.25,y*.73-z*.85]:[70-x,y]}
 function path(points){return points.map((p,i)=>(i?'L':'M')+project(...p).join(',')).join(' ')}
-function physical(w){return w.path3d}
+function physical(w){return [...w.path3d,...(w.exit3d||[]).slice(1)]}
 function drawWire(svg,w,pending){let pts=physical(w),colour=DATA.colours[w.colour],group=add(svg,'g',{'data-wire':w.id,opacity:w.id===DATA.steps[cursor].wire?1:.55});
- for(let [points,diameter] of w.segments){let d=path(points),bare=diameter===1;
-  add(group,'path',{d,fill:'none',stroke:'#fff','stroke-width':diameter+.3,'stroke-linejoin':'round','stroke-linecap':'round'});
-  add(group,'path',{d,fill:'none',stroke:bare?'#aa906d':'#3c4545','stroke-width':diameter,'stroke-linejoin':'round','stroke-linecap':'round'});
-  add(group,'path',{d,fill:'none',stroke:bare?'#dfc8a4':colour,'stroke-width':Math.max(.3,diameter-.22),'stroke-linejoin':'round','stroke-linecap':'round',...(pending?{'stroke-dasharray':'1.4 .65'}:{})});
+ for(let [points,diameter] of w.segments){let d=path(points),bare=diameter===1;let visible=view==='tilt'||(view==='front'?!bare&&w.surface!=='rear':bare||w.surface==='rear');let layer=add(group,'g',{opacity:visible?1:.13});
+  add(layer,'path',{d,fill:'none',stroke:'#fff','stroke-width':diameter+.3,'stroke-linejoin':'round','stroke-linecap':'round'});
+  add(layer,'path',{d,fill:'none',stroke:bare?'#aa906d':'#3c4545','stroke-width':diameter,'stroke-linejoin':'round','stroke-linecap':'round'});
+  add(layer,'path',{d,fill:'none',stroke:bare?'#dfc8a4':colour,'stroke-width':Math.max(.3,diameter-.22),'stroke-linejoin':'round','stroke-linecap':'round',...(pending?{'stroke-dasharray':'1.4 .65'}:{})});
  }
  if(w.id===DATA.steps[cursor].wire){let p=pts[Math.floor(pts.length/2)],q=project(...p);add(group,'text',{x:q[0]+1,y:q[1]-1.4,'font-size':1.9,fill:'#172c22','paint-order':'stroke',stroke:'#fff','stroke-width':.65,'font-weight':700},w.id)}
 }
 
 function draw(){
  const svg=$('board'),s=DATA.steps[cursor],width=$('viewport').clientWidth;
- svg.replaceChildren();svg.setAttribute('viewBox',view==='tilt'?'-6 -24 100 78':'-6 -10 82 68');
- const aspect=view==='tilt'?100/78:82/68,fitWidth=Math.min(width,Math.max(320,window.innerHeight-245)*aspect);
+ svg.replaceChildren();svg.setAttribute('viewBox',view==='tilt'?'-10 -38 106 116':'-10 -21 90 80');
+ const aspect=view==='tilt'?106/116:90/80,fitWidth=Math.min(width,Math.max(360,window.innerHeight-220)*aspect);
  svg.style.width=fitWidth*zoom+'px';
  add(svg,'title',{},(view==='front'?'Component side':'Solder side')+': '+s.title);
  add(svg,'desc',{},'Row 01 remains at the top. Amber circles mark the current solder point. Previously placed wires are solid.');
@@ -105,17 +105,22 @@ function draw(){
  for(let c=0;c<24;c++){let x=5.79+c*2.54;for(let r=0;r<18;r++){let y=3.41+r*2.54;if(DATA.mounts.some(([mx,my])=>Math.abs(x-mx)<4.5&&Math.abs(y-my)<4.5))continue;let p=project(x,y);add(svg,'circle',{cx:p[0],cy:p[1],r:.42,fill:'#fffaf0',stroke:'#c7b79b','stroke-width':.1})}
  let p=project(x,-2.3);add(svg,'text',{x:p[0],y:p[1],'font-size':1.65,'text-anchor':'middle',fill:'#495158'},String.fromCharCode(65+c))}
  for(let r=0;r<18;r++){let y=3.41+r*2.54;for(let x of [-2.3,72.3]){let p=project(x,y);add(svg,'text',{x:p[0],y:p[1]+.6,'font-size':1.7,'text-anchor':'middle',fill:'#495158'},String(r+1).padStart(2,'0'))}}
- for(let part of DATA.parts){if(part.fit>cursor)continue;let[x,y,w,h]=part.bounds,installed=part.fit<cursor;
-  let g=add(svg,'g',{opacity:view==='front'?1:.22,'data-part':part.ref});let poly=[[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];
-  if(part.pins.length===2){let p0=mm(part.pins[0]),p1=mm(part.pins[1]);if(part.ref==='C2'){for(let p of[p0,p1])add(g,'path',{d:path([p,[25,p[1]]]),stroke:'#697870','stroke-width':.4})}else add(g,'path',{d:path([p0,p1]),stroke:'#697870','stroke-width':.4})}
+ for(let part of DATA.parts){if(part.fit>cursor)continue;let[x,y,w,h,z0,z1]=part.bounds,installed=part.fit<cursor,z=part.side==='front'?z1:z0;
+  let visible=part.side===(view==='front'?'front':'rear');let g=add(svg,'g',{opacity:visible||view==='tilt'?1:.16,'data-part':part.ref});let poly=[[x,y,z],[x+w,y,z],[x+w,y+h,z],[x,y+h,z],[x,y,z]];if(view==='tilt'){let base=part.side==='front'?0:-1.2;for(let[a,b]of[[[x,y],[x+w,y]],[[x+w,y],[x+w,y+h]],[[x+w,y+h],[x,y+h]],[[x,y+h],[x,y]]])add(g,'path',{d:path([[...a,base],[...b,base],[...b,z],[...a,z],[...a,base]]),fill:'#c6d0c8',stroke:'#8b978e','stroke-width':.12,opacity:.5})}
+  if(part.ref==='C2'){
+   for(let [i,pg] of DATA.pigtails.entries()){let [xx,yy,dd]=pg.path.at(-1),zz=-1.2-dd;add(g,'path',{d:path([[xx,yy,zz],[xx,3.5,zz]]),stroke:'#697870','stroke-width':.6});let label=project(xx,5,zz);add(g,'text',{x:label[0],y:label[1],'font-size':2.4,'text-anchor':'middle'},i===0?'+':'−')}
+  }
+  if(part.side==='rear' && part.ref!=='C2'){
+   for(let [ref,pts]of Object.entries(DATA.rear_leads))if(ref.startsWith(part.ref+'.'))add(g,'path',{d:path(pts.map(([x,y,z])=>[x,y,-1.2-z])),fill:'none',stroke:'#697870','stroke-width':.5});
+  }else if(part.pins.length===2 && part.ref!=='C2')add(g,'path',{d:path(part.pins.map(mm)),fill:'none',stroke:'#697870','stroke-width':.4});
   add(g,'path',{d:path(poly),fill:part.ref==='C2'?'#edd59d':['MCU','U1'].includes(part.ref)?'#d6e1df':'#e5d4b4',stroke:installed?'#6e7971':'#ac580e','stroke-width':.2,...(!installed?{'stroke-dasharray':'.8 .5'}:{})});
-  let p=project(x+w/2,y+h/2);add(g,'text',{x:p[0],y:p[1]+.7,'text-anchor':'middle','font-size':2.1,fill:'#293934'},part.ref);
-  if(part.ref==='U1'){let a=project(x+w/2,y+1);add(g,'circle',{cx:a[0],cy:a[1],r:.7,fill:'#52665a'})}
-  if(part.ref==='MCU'){let a=project(.5,27),b=project(4.5,35.8);add(g,'path',{d:path([[.5,27],[4.5,27],[4.5,35.8],[.5,35.8],[.5,27]]),fill:'#9eada9',stroke:'#5b6e65','stroke-width':.2})}
-  if(['D1','D3'].includes(part.ref)){let pts=part.ref==='D1'?[[x+w-.6,y],[x+w-.6,y+h]]:[[x,y+h-.6],[x+w,y+h-.6]];add(g,'path',{d:path(pts),stroke:'#394b42','stroke-width':.6})}
-  if(['Q1','Q2'].includes(part.ref))add(g,'path',{d:path([[x,y+h],[x+w,y+h]]),stroke:'#394b42','stroke-width':.6});
+  let p=project(x+w/2,y+h/2,z);add(g,'text',{x:p[0],y:p[1]+.7,'text-anchor':'middle','font-size':2.1,fill:'#293934'},part.ref);
+  if(part.ref==='U1'){let a=project(x+w-1,y+h/2,z);add(g,'circle',{cx:a[0],cy:a[1],r:.7,fill:'#52665a'})}
+  if(part.ref==='MCU')add(g,'path',{d:path([[x+w-2,y+5],[x+w+2,y+5],[x+w+2,y+h-5],[x+w-2,y+h-5],[x+w-2,y+5]]),fill:'#9eada9',stroke:'#5b6e65','stroke-width':.2});
+  if(['D1','D3'].includes(part.ref))add(g,'path',{d:path([[x+w-.6,y],[x+w-.6,y+h]]),stroke:'#394b42','stroke-width':.6});
+  if(['Q1','Q2'].includes(part.ref))add(g,'path',{d:path(part.ref==='Q1'?[[x,y+h],[x+w,y+h]]:[[x,y],[x,y+h]]),stroke:'#394b42','stroke-width':.6});
  }
- if(view!=='front')for(let w of DATA.routes){if(w.prepare>cursor)continue;drawWire(svg,w,cursor<=w.joints.at(-1))}
+ for(let w of DATA.routes){if(w.prepare>cursor)continue;drawWire(svg,w,cursor<=w.joints.at(-1))}
  const done=new Set(DATA.steps.slice(0,cursor).filter(x=>x.kind==='solder').map(x=>x.pad));
  const visible=new Set(done);if(s.pad)visible.add(s.pad);if(s.ref){let part=DATA.parts.find(p=>p.ref===s.ref);if(part)part.pins.forEach(p=>visible.add(p))}if(s.wire){let w=routes[s.wire];w.anchors.forEach(p=>visible.add(p))}
  for(let pad of visible){let p=project(...mm(pad)),current=pad===s.pad,g=add(svg,'g',{'data-pad':pad,class:'pad-hit',role:'button',tabindex:0,'aria-label':`${pad}: ${pins[pad].ref}, ${DATA.nets[pins[pad].net]?.label||'unused pin'}`});
@@ -124,22 +129,22 @@ function draw(){
   if(current){let pos=[p[0]+2,p[1]-2];add(svg,'text',{x:pos[0],y:pos[1],'font-size':2.2,fill:'#793800','font-weight':700,'paint-order':'stroke',stroke:'#fff','stroke-width':.75},pad)}
   let act=()=>{$('pad-detail').textContent=`Hole ${pad} · ${pins[pad].ref} · ${DATA.nets[pins[pad].net]?.label||'unused; no wire'}. ${done.has(pad)?'An earlier step has soldered this point.':'Not yet soldered at this stage.'}`};g.addEventListener('click',act);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}})
  }
- $('orientation').textContent=view==='front'?'Component side · USB left · row 01 at top':view==='tilt'?'Tilted solder side · wires rise away from the board':'Solder side · USB right · row 01 at top';
- let inset=$('joint-detail');inset.toggleAttribute('hidden',!s.pad);if(s.pad){let p=project(...mm(s.pad));inset.replaceChildren(...[...svg.children].map(n=>n.cloneNode(true)));inset.setAttribute('viewBox',`${p[0]-7} ${p[1]-7} 14 14`);for(let n of inset.querySelectorAll('[tabindex]')){n.removeAttribute('tabindex');n.removeAttribute('role')}}
+ if(s.point){let p=project(...s.point);add(svg,'circle',{cx:p[0],cy:p[1],r:1.25,fill:'#ffdf94',stroke:'#a34b00','stroke-width':.3})}
+ $('orientation').textContent=view==='front'?'Component side · USB right · row 01 at top':view==='tilt'?'Tilted view · loops above, short ends below':'Solder side · USB left · row 01 at top';
+ let inset=$('joint-detail');inset.toggleAttribute('hidden',!s.pad&&!s.point);if(s.pad||s.point){let p=s.point?project(...s.point):project(...mm(s.pad));inset.replaceChildren(...[...svg.children].map(n=>n.cloneNode(true)));inset.setAttribute('viewBox',`${p[0]-7} ${p[1]-7} 14 14`);for(let n of inset.querySelectorAll('[tabindex]')){n.removeAttribute('tabindex');n.removeAttribute('role')}}
 }
 function sidePoints(w){let pts=physical(w),a=pts[0],b=pts.at(-1),dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);return pts.map(p=>[((p[0]-a[0])*dx+(p[1]-a[1])*dy)/len,p[2]])}
-function profile(w){let svg=$('profile');svg.replaceChildren();let pts=sidePoints(w),low=Math.min(0,...pts.map(p=>p[1]))-1,span=pts.at(-1)[0],scale=Math.min(270/Math.max(span,1),85/(DATA.gap-low)),y=z=>115-(z-low)*scale;
- add(svg,'rect',{x:24,y:y(0),width:278,height:3,fill:'#b6bdba'});
- add(svg,'path',{d:`M24 ${y(DATA.gap)}H302`,stroke:'#7b8580','stroke-dasharray':'4 3'});
- add(svg,'text',{x:24,y:y(DATA.gap)-8,'font-size':12,fill:'#526159'},`Cap floor · ${DATA.gap} mm`);
- let d=pts.map((p,i)=>(i?'L':'M')+(30+p[0]*scale)+','+y(p[1])).join(' ');
+function profile(w){let svg=$('profile');svg.replaceChildren();let pts=sidePoints(w),minX=Math.min(...pts.map(p=>p[0])),maxX=Math.max(...pts.map(p=>p[0])),low=Math.min(-2,...pts.map(p=>p[1]))-2,high=Math.max(2,...pts.map(p=>p[1]))+3,scale=Math.min(270/Math.max(maxX-minX,1),90/(high-low)),y=z=>112-(z-low)*scale;
+ add(svg,'rect',{x:24,y:y(0),width:278,height:Math.max(2,1.2*scale),fill:'#b6bdba'});
+ let d=pts.map((p,i)=>(i?'L':'M')+(30+(p[0]-minX)*scale)+','+y(p[1])).join(' ');
  add(svg,'path',{d,fill:'none',stroke:'#58665e','stroke-width':w.od*scale+1,'stroke-linejoin':'round'});
  add(svg,'path',{d,fill:'none',stroke:DATA.colours[w.colour],'stroke-width':w.od*scale,'stroke-linejoin':'round'});
- add(svg,'text',{x:24,y:128,'font-size':12,fill:'#526159'},w.b?'4 mm bend radius · actual profile':'Cable turns upward outside the board');
+ add(svg,'text',{x:24,y:12,'font-size':12,fill:'#526159'},w.surface==='rear'?'Capacitor lead below the board':'Loop above the board');
+ add(svg,'text',{x:24,y:128,'font-size':12,fill:'#526159'},w.b?'4 mm bend radius · actual profile':'Cable turns down outside the board');
 }
 function wireTemplate(){let w=routes[DATA.steps[cursor].wire];if(!w)return;
- let views=[{label:'Solder-side plan · A = '+w.a+' · B = '+(w.b||'cable exit'),points:w.path.map(([x,y])=>[70-x,y])}];
- if(!w.bare)views.push({label:'Side elevation · A to B · depth away from board',points:sidePoints(w).map(([x,z])=>[x,-z])});
+ let views=[{label:'Component-side plan · A = '+w.anchor_a+' · B = '+(w.anchor_b||'cable exit'),points:physical(w).map(([x,y])=>[x,y])}];
+ if(!w.bare)views.push({label:'Side elevation · above/below the component face',points:sidePoints(w).map(([x,z])=>[x,-z])});
  let y=17,width=110;
  for(let v of views){v.minX=Math.min(...v.points.map(p=>p[0]));v.minY=Math.min(...v.points.map(p=>p[1]));v.y=y;y+=Math.max(...v.points.map(p=>p[1]))-v.minY+17;}
  let height=y+12,svg=el('svg',{xmlns:NS,width:width+'mm',height:height+'mm',viewBox:`0 0 ${width} ${height}`});
@@ -157,22 +162,22 @@ function wireTemplate(){let w=routes[DATA.steps[cursor].wire];if(!w)return;
  add(svg,'text',{x:20,y:height-6,'font-size':2.6},'10 mm scale check');
  let url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'})),a=document.createElement('a');a.href=url;a.download=w.id+'-forming-template.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function measurement(w){let m=measurements[w.id]||{};return{run:m.run??'',slack:m.slack??(['H07','H08','H09','H10'].includes(w.id)?150:0)}}
+function measurement(w){let m=measurements[w.id]||{};return{run:m.run??'',slack:m.slack??(['H05','H06','H08','H09'].includes(w.id)?150:0)}}
 function cableTotal(w){let m=measurement(w);return m.run===''?null:Math.ceil(w.length.cut+Number(m.run)+Number(m.slack)+2+5)}
 function cableUpdate(){let w=routes[DATA.steps[cursor].wire];if(!w||w.b)return;let m=measurement(w);$('external-run').value=m.run;$('service-slack').value=m.slack;let total=cableTotal(w);$('cable-result').textContent=total===null?'Enter the external run.':`Cut ${total} mm total (includes slack and trim).`}
 
 function render(){let s=DATA.steps[cursor],w=routes[s.wire];$('step').value=cursor;$('counter').textContent=`${cursor+1} / ${DATA.steps.length}`;$('progress').value=100*cursor/(DATA.steps.length-1);$('previous').disabled=cursor===0;$('next').disabled=cursor===DATA.steps.length-1;$('phase').textContent=s.phase;$('title').textContent=s.title;$('instruction').textContent=s.text;
  $('joint-focus').hidden=!s.pad;if(s.pad)$('joint-focus').textContent=`Solder this point: ${s.pad} · ${pins[s.pad].ref}`;
  $('wire-info').hidden=!w;$('shared').hidden=!(s.previous?.length);if(s.previous?.length)$('shared').textContent='Already attached here: '+s.previous.join(', ')+'. Hold still while reheating.';
- if(w){$('cut').textContent=w.length.cut+' mm';$('cut-label').textContent=w.b?'Cut; trim second end':'Under-board portion only';$('height').textContent=(w.depth+w.od/2).toFixed(1)+' mm';$('colour-label').replaceChildren();let sw=document.createElement('span');sw.className='swatch';sw.style.background=w.bare?'#c6a971':DATA.colours[w.colour];$('colour-label').append(sw,document.createTextNode(` ${w.bare?'Bare tinned conductor from':w.colour+' ·'} ${w.bare?w.colour+' spool':w.id+' · '+DATA.nets[w.net].label}`));
+ if(w){$('cut').textContent=w.length.cut+' mm';$('cut-label').textContent=w.b?'Cut; trim second end':'Board portion only';$('height').textContent=(w.depth+w.od/2).toFixed(1)+' mm';$('colour-label').replaceChildren();let sw=document.createElement('span');sw.className='swatch';sw.style.background=w.bare?'#c6a971':DATA.colours[w.colour];$('colour-label').append(sw,document.createTextNode(` ${w.bare?'Bare tinned conductor from':w.colour+' ·'} ${w.bare?w.colour+' spool':w.id+' · '+DATA.nets[w.net].label}`));
  $('crossings').hidden=!w.earlier_crossings.length;
- $('crossings').textContent='Pass above: '+w.earlier_crossings.join(', ');
+ $('crossings').textContent='Earlier crossing wires: '+w.earlier_crossings.join(', ');
  $('profile').toggleAttribute('hidden',s.kind!=='wire'||w.bare);$('wire-template').hidden=s.kind!=='wire';$('wire-template').textContent=w.bare?'Download track template':'Download bend template';
  $('cable').hidden=!!w.b;profile(w);cableUpdate()}
  draw();persist();renderCuts();
 }
-function go(index){cursor=Math.max(0,Math.min(DATA.steps.length-1,Number(index)));view=DATA.steps[cursor].kind==='fit'?'front':'rear';$('view').value=view;$('pad-detail').textContent='Click a solder point to identify it.';render();document.querySelector('.work').scrollIntoView({block:'start'})}
-function renderCuts(){let body=$('cut-list');body.replaceChildren();for(let w of DATA.routes){let tr=document.createElement('tr'),button=document.createElement('button');button.textContent=w.id;button.addEventListener('click',()=>{go(w.prepare);$('title').scrollIntoView({block:'center'})});let td=document.createElement('td');td.append(button);tr.append(td);for(let text of [w.a+' → '+(w.b||w.label),w.bare?'bare ('+w.colour+' spool)':w.colour,w.b?w.length.cut+' mm':(cableTotal(w)!==null?cableTotal(w)+' mm total':w.length.cut+' mm local + measured run'),w.depth+' mm']){let cell=document.createElement('td');cell.textContent=text;tr.append(cell)}body.append(tr)}}
+function go(index){cursor=Math.max(0,Math.min(DATA.steps.length-1,Number(index)));$('pad-detail').textContent='Click a solder point to identify it.';render();document.querySelector('.work').scrollIntoView({block:'start'})}
+function renderCuts(){let body=$('cut-list');body.replaceChildren();for(let w of DATA.routes){let tr=document.createElement('tr'),button=document.createElement('button');button.textContent=w.id;button.addEventListener('click',()=>{go(w.prepare);$('title').scrollIntoView({block:'center'})});let td=document.createElement('td');td.append(button);tr.append(td);for(let text of [w.a+' → '+(w.b||w.label),w.bare?'bare ('+w.colour+' spool)':w.colour,w.b?w.length.cut+' mm':(cableTotal(w)!==null?cableTotal(w)+' mm total':w.length.cut+' mm local + measured run'),w.depth.toFixed(1)+' mm']){let cell=document.createElement('td');cell.textContent=text;tr.append(cell)}body.append(tr)}}
 for(let s of DATA.steps){let o=document.createElement('option');o.value=s.index;o.textContent=`${s.index+1}. ${s.title}`;$('step').append(o)}
 $('previous').onclick=()=>go(cursor-1);$('next').onclick=()=>go(cursor+1);$('step').onchange=e=>go(e.target.value);$('view').onchange=e=>{view=e.target.value;draw()};$('plus').onclick=()=>{zoom=Math.min(3,zoom+.25);draw()};$('minus').onclick=()=>{zoom=Math.max(1,zoom-.25);draw()};$('fit').onclick=()=>{zoom=1;draw()};window.addEventListener('resize',draw);
 for(let id of ['external-run','service-slack'])$(id).addEventListener('input',()=>{let w=routes[DATA.steps[cursor].wire];if(!w||w.b)return;let run=$('external-run').value,slack=$('service-slack').value;if(!$(id).checkValidity())return;measurements[w.id]={run:run===''?'':Number(run),slack:slack===''?0:Number(slack)};persist();cableUpdate();renderCuts()});

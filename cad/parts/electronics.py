@@ -6,7 +6,7 @@ cad/README.md. Board positions follow docs/review/protoboard/{layout,generate}.p
 All solids here are already in the assembly frame; none are printable parts.
 
 Rev C (2026-10-23): the board, battery, buck module, power switch and charge socket live in the top cap, on the cap
-floor plate (parts/top.py). The board lies flat, component face up, on the existing 10 mm posts plus 6 mm removable spacers.
+floor plate (parts/top.py). The board lies flat, component face up, on the existing 10 mm posts plus 20 mm removable spacers.
 """
 from pathlib import Path
 
@@ -54,41 +54,38 @@ def pack(wp):
     return cap(T.pack_to_cap(wp))
 
 
-def cable_exit():
-    """Reserved rounded cable turn outside the board; .5 mm positioning allowance."""
-    from shapely.geometry import LineString, box as sbox
-    import routing
-    r=next(r for r in routing.plan() if r['id']=='H01')
-    profile=LineString([(p[1],p[2]) for p in r['path3d'] if p[1]<=0]).buffer(M.WIRE_OD/2+.5)
-    profile=profile.intersection(sbox(-10,-10,0,5))
-    xs=[L.mm(p)[0] for _,p,_,_ in L.HARNESS]
-    lo=min(xs)-M.WIRE_OD/2-.5;hi=max(xs)+M.WIRE_OD/2+.5
-    pts=[(P.PERFBOARD_H/2-y,BOARD_BACK-depth) for y,depth in list(profile.exterior.coords)[:-1]]
-    return (cq.Workplane('YZ').workplane(offset=lo-P.PERFBOARD_W/2).polyline(pts).close().extrude(hi-lo)
-            .rotate((0,0,0),(0,0,1),P.BOARD_CAP_ROT).translate((*P.BOARD_CAP_XY,0)))
+def board_assembly():
+    """Reserved assembly volume; internal spacing is checked by routing/mechanical.
+
+    The broad front reserve includes 7.1 mm above the nominal wire loops. Rear
+    volumes follow the parts/lead paths so they do not fill the printed posts.
+    """
+    import numpy as np
+    items=[board_box(-10,-10,90,70,0,40),
+           board_box(0,0,70,50,-3.7,0),
+           board_box(4,-18,62,14,-23.2,10),
+           board_box(23.8,3.3,25.4,25.4,-31.2,-26.2),
+           board_box(31,-10,11,13.5,-19.2,-14.2)]  # C2 sleeves / delivered lead-pitch allowance
+    items += [board_box(*v) for n,v in M.bounds().items() if v[5]<0]
+    for path in L.DESIGN['leads'].values():
+        p=np.asarray(path);lo=p.min(axis=0)-.4;hi=p.max(axis=0)+.4
+        items.append(board_box(lo[0],lo[1],hi[0]-lo[0],hi[1]-lo[1],-1.2-hi[2],-1.2-lo[2]))
+    for wire in L.DESIGN['pigtails']:
+        p=np.asarray(wire['path'])
+        for i in range(0,len(p)-1,8):
+            c=p[i:i+9];lo=c.min(axis=0)-1.3;hi=c.max(axis=0)+1.3
+            items.append(board_box(lo[0],lo[1],hi[0]-lo[0],hi[1]-lo[1],-1.2-hi[2],-1.2-lo[2]))
+    items += [cq.Workplane('XY').workplane(offset=Z_FLOOR+T.BOARD_STANDOFF)
+        .center(*T.board_point(x,y)).circle(3).circle(1.6).extrude(M.BOARD_SPACER) for x,y in L.MOUNTS]
+    return compound(items)
 
 
 def build():
-    pcb = board_box(0, 0, P.PERFBOARD_W, P.PERFBOARD_H, -P.PERFBOARD_T, 0)
-    # Space for wires under the board; the standoffs are intentionally excluded.
-    rear = board_box(0, 0, P.PERFBOARD_W, P.PERFBOARD_H, -P.PERFBOARD_T-M.REAR_GAP+0.2, -P.PERFBOARD_T-0.2)
-    for x, y in L.MOUNTS:
-        px, py = T.board_point(x, y)
-        pcb = pcb.cut(cq.Workplane('XY').workplane(offset=BOARD_BACK-1).center(px, py).circle(1.6).extrude(P.PERFBOARD_T+2))
-        rear = rear.cut(board_box(x-4.6, y-4.6, 9.2, 9.2, -P.PERFBOARD_T-M.REAR_GAP-1, 1))
-    bodies = M.bounds()
-    M.validate(bodies)
-    components = [board_box(*bounds) for bounds in bodies.values()]
+    M.validate()
     t_mid = P.PACK_BED_T + P.POWERBANK_T / 2
     end = -P.POWERBANK_L / 2
     out = {
-        'perfboard_envelope': pcb,
-        'board_components_envelope': compound(components),
-        'board_wiring_envelope': rear,
-        # Local cable exit past the board's top edge, under the component face.
-        'board_cable_exit_envelope': cable_exit(),
-        'board_spacers_envelope': compound([cq.Workplane('XY').workplane(offset=Z_FLOOR+T.BOARD_STANDOFF)
-            .center(*T.board_point(x,y)).circle(3).circle(1.6).extrude(M.BOARD_SPACER) for x,y in L.MOUNTS]),
+        'board_assembly_envelope': board_assembly(),
         'powerbank_envelope': pack(box(-P.POWERBANK_W/2, P.POWERBANK_W/2, -P.POWERBANK_L/2, P.POWERBANK_L/2,
                                        P.PACK_BED_T, P.PACK_BED_T+P.POWERBANK_T)),
         # The splitter's straight male plug in the pack's port, its cord folded back in a U-turn that reaches

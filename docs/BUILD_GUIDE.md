@@ -309,8 +309,11 @@ the only shopping list; there is no copy in the repository. Edit it in place.
 | M3x8 socket | 13 | drum to foot 3, handle laps 9, nozzle guide 1 |
 | M3x8 flat-head (countersunk) | 8 | lock base plate 3, switch bracket 1, cover clamp ring 4 |
 | M3x10 socket | 6 | sphere halves 4, lock ears 2 |
-| M3x12 socket | 8 | handle pivots 4, board 4 |
-| Unthreaded spacers | 4 | board: 6 mm long, bore ≥3.2 mm, outside diameter ≤6 mm |
+| M3x12 socket | 4 | handle pivots |
+| M3x25 socket | 4 | raised board; head diameter ≤6 mm |
+| Unthreaded nylon spacers | 4 | board: 20 mm long, bore ≥3.2 mm, outside diameter ≤6 mm |
+| Adhesive cable-tie base | 1 | C2: ≤25.4 × 25.4 × 5 mm, plus a tie; see board guide |
+| 6 mm 3:1 heat-shrink | short length | insulate the two larger power-harness splices |
 | M3 nuts | 14 | lock 5, handle laps 9 |
 | Green screw caps (printed) | 25 | drum 3, handle laps 18, pivots 4 |
 
@@ -388,9 +391,9 @@ with its flyback diode and plug, all verified on the bench before anything goes 
 same). Read [SW-6, USB power modes](#sw-6-connect-the-laptop-safely-usb-power-modes) before any USB connection.
 
 For physical soldering order, use the [one-joint-at-a-time board guide](review/protoboard/assembly.html).
-It fits components first, then supported bare tracks, outgoing cables and rounded jumpers in an order that keeps
-unfinished joints accessible, using the six-colour stranded-wire kit.
-It includes cut estimates, earlier-wire crossings and shared-joint checks. EL-4 through EL-9 below describe the
+It fits front components, then insulated wires over that face, followed by the small rear parts and C2 pigtails.
+Each stranded-wire end has its own hole, with a short stripped tail to the indicated rear joint.
+It includes cut estimates and bend templates; four crossing pairs must be fitted together before soldering. EL-4 through EL-9 below describe the
 circuits and off-board connections; the interactive guide supplies the board's assembly sequence.
 
 ### EL-1. Validate the circuit on paper
@@ -429,18 +432,23 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
 
 1. Orient the perfboard 70 mm across and 50 mm tall.
 2. Drill four 3.2 mm holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left
-   corner. Add a 6 mm spacer on each existing 10 mm post, using M3x12 screws. Keep each 9 x 9 mm mounting
-   area clear; the rear wiring has 16 mm of space. *Soft block: check the holes against the printed `cap_floor`'s standoffs when it exists.*
+   corner. Dry-fit four 20 mm nylon spacers on the existing 10 mm posts, using M3x25 screws.
+   Spacer bore ≥3.2 mm, OD ≤6 mm; nominal thread engagement 3.8 mm. Check against the real posts, then remove
+   the board for soldering. Do not add washers or bottom out the screws. Printed holes and parts stay unchanged.
 3. Fit the XIAO (flashed in SW-5, or flash it later in USB-only mode) and a **DIP-14 socket** for U1. Leave U1 out
-   until EL-7's power-off check.
+   until EL-7's power-off check. Both USB and socket notch face column X in the new layout.
 4. Fit a 2-pin header for JP1 and label it **REMOVE FOR USB**.
 
 ### EL-4. Power input, S1 and C2
 
 1. Battery lead positive to S1; S1's other terminal is **VLOAD**, the switched rail. Negative to the common ground.
    S1 sits in its own box on the cap floor: leave its leads long enough to reach the board.
-2. Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It smooths short dips; it cannot carry a
-   stalled motor.
+2. Connect **C2 2200 µF/25 V** through the guide's red/black pigtails: positive to F02, negative to F04.
+   Sleeve each splice; retain the horizontal case on a tie base on the cap floor, independently of its leads.
+   Case ≤Ø18 × 25 mm; base ≤25.4 × 25.4 × 5 mm. It smooths short dips; it cannot carry a stalled motor.
+3. Make the guide's three insulated power splices beside row 01: J_LOAD (switched battery), J_GND (star ground),
+   and J_5V (buck output). Keep the pump and LED source returns separate until J_GND. See the
+   [harness connections](review/protoboard/README.md#harness-changes).
 
 ### EL-5. Battery sense
 
@@ -451,7 +459,8 @@ R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground. Keep th
 
 1. Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
 2. Pack and S1 on. Meter on DC volts across OUT+/OUT−; turn the trimmer until it reads **5.0 V**. Switch off.
-3. OUT+ is **+5V_REG**: U1 and the Hall sensor connect straight to it.
+3. OUT+ is **+5V_REG**: U1 and the Hall sensor connect straight to it through J_5V. With power disconnected,
+   confirm IN− and OUT− have continuity before omitting a redundant OUT− return wire; IN− still joins J_GND.
 4. The XIAO's 5V pin is fed through **D1 NTE585** (stripe toward the XIAO), then **JP1** in series. Grounds stay
    connected with JP1 removed.
 
@@ -1156,7 +1165,7 @@ Parts: `top_cap`, 3 thumbscrews, the two 12.5 cm LED pieces.
 
 **Blocked by:** EL-12.
 
-Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, 1 VELCRO strap, 4 M3x12, four 6 mm board spacers, zip ties,
+Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, 1 VELCRO strap, 4 M3x25, four 20 mm nylon board spacers, one C2 tie base, zip ties,
 3 thumbscrews.
 
 ![the cap floor](images/cad-cap.png)
@@ -1169,9 +1178,12 @@ side.
 2. **Battery.** Splitter's male plug in the battery's port. Lay the pack on its bed between the rails: **LED face
    down** over the slot, **port end toward your side** against the low end stop, the plug's cord folded back in a
    U-turn. Pack switch ON (it stays ON). Tighten the strap.
-3. **Board.** Put a 6 mm spacer on each of the four existing posts. Mount component face up, USB end toward the
-   display side, with four M3x12 screws. Spacers: bore ≥3.2 mm, outside diameter ≤6 mm. Measure at least 15.5 mm
-   under the board; finished wiring must extend no more than 13.5 mm, leaving at least 2 mm clear without compression.
+3. **Board and C2.** Secure C2 to its floor-mounted base, centred beneath board coordinate (36.5, 16),
+   long axis toward row 18; keep the vent clear. Follow the base adhesive's cure instructions and check it holds.
+   Add a 20 mm nylon spacer to each existing post and mount the board component face up with M3x25 screws.
+   Use the unchanged mounting-hole pattern to orient it; the XIAO USB end now faces column X.
+   Nominal space below the copper face is 30 mm. Small rear parts must project ≤21 mm; front loops ≤35 mm.
+   Dry-fit C2, its sleeves and base, then close the enclosure without compressing anything.
 4. **Buck.** On its four 2 mm corner supports, zip-tied through the slots. No solder joint may rest on a support.
 5. **S1.** Hangs inside its box, lever up through the roof hole, nut tight on top.
 6. **Charge socket.** Tie the splitter's female end loosely in its spot, so it lifts out on its cord to charge.

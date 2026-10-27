@@ -12,14 +12,14 @@
 <p>Both sides of the board, with all wiring and solder points. Choose a connection to highlight it.</p>
 <p><a href="assembly.html">Build the board one solder point at a time</a> — assembly order, six wire colours and cut-length estimates.</p>
 <details class="intro"><summary>How to read this diagram</summary>
-<p><b>Dashed squares and circles:</b> mounting screw clearances and holes to drill. Keep parts and wires outside each square.</p>
+<p><b>Dashed outlines and circles:</b> mounting screw clearances and holes to drill. Keep parts and wires outside each marked clearance.</p>
 <p><b>Pad:</b> the copper soldering spot around a board hole. <b>A09</b> means column A, row 09. <b>Net:</b> points joined electrically by wires, such as all ground connections.</p>
-<p>Click a coloured soldering spot to read its connection. Use <b>Show W…</b> in the <a href="#wire-table">wire list</a> to highlight one wire and its two soldering holes. Use <b>+</b> to enlarge both drawings and <b>Fit</b> to reset.</p>
+<p>Click a coloured soldering spot to read its connection. Use <b>Show W…</b> in the <a href="#wire-table">wire list</a> to highlight one wire and its solder points. Use <b>+</b> to enlarge both drawings and <b>Fit</b> to reset.</p>
 </details>
 <div class="toolbar">
 <div class="filters">{{BUTTONS}}</div>
 <div><button id="out" aria-label="Zoom out">−</button><output id="scale">Fit</output><button id="in" aria-label="Zoom in">+</button><button id="fit">Fit</button></div>
-<p id="selection" role="status">Showing all 52 board wires.</p>
+<p id="selection" role="status">Showing all 37 wire routes.</p>
 <p id="detail" aria-live="polite" hidden></p>
 </div>
 <div class="drawing-scroll"><div class="boards">
@@ -27,11 +27,11 @@
 <section class="board" id="front"><h2>Component side</h2><div class="viewport"><div class="canvas">{{FRONT}}</div></div></section>
 <section class="board" id="rear"><h2>Solder side — wiring</h2><div class="viewport"><div class="canvas">{{REAR}}</div></div></section>
 </div></div>
-<p><b>Rear wiring:</b> crossings stay insulated. Solder only at the marked endpoints. W01/W02/W05–W07 are bare copper links between adjacent holes. Dashed coloured lines are cables leaving the board. Pins marked NC have no wire attached. Small solid squares mark cable attachments or wire junctions.</p>
-<p><b>Build limits:</b> verify the actual board's hole positions and C2 dimensions first. Keep rear wires below the 10 mm gap and outside the screw areas. Disconnect all power while soldering. Remove JP1 for USB. See the <a href="README.md">assembly instructions</a> for checks.</p>
+<p>Insulated loops are on the component side; short stripped ends connect on the back. Use the step guide for assembly order.</p>
+<p><b>Fit limits:</b> existing posts + 20 mm spacers. Front wiring ≤35 mm high; small rear parts ≤21 mm deep. Check capacitor sizes before soldering. <a href="README.md">Build details</a>.</p>
 <div class="cols">
-<section><h2>Cables and off-board connections</h2><div class="table-scroll"><table><thead><tr><th>Cable</th><th>Board hole</th><th>Other end</th><th>Centre behind board</th></tr></thead><tbody>{{CABLES}}</tbody></table></div><p>D2 NTE586 is across the pump, stripe to pump +. C4 0.1 µF is across A3144 pins 1–2 at the sensor. The microswitch NC contact is unused. Battery + goes to the S1 input and battery − to H02 (no charge jack: charge at the splitter's female end). The board receives the switched S1 output at N01.</p><p>R1=100k; R2=22k; R3/R4=10k; R5/R6=4.7k; R7=3.3k. D1/D3=NTE585. C1/C3=0.1 µF. C2=2200 µF/25 V. U1=74AHCT125 DIP14. Q1/Q2=IRLZ44NPBF.</p></section>
-<section id="wire-table"><h2>Wire list — one wire per row</h2><p>Press <b>Show</b> to see that wire and its two soldering holes on the solder-side drawing.</p><div class="table-scroll"><table><thead><tr><th>Show wire</th><th>From → to hole</th><th>Connection</th><th>Type</th></tr></thead><tbody>{{WIRES}}</tbody></table></div></section>
+<section><h2>Cables and off-board connections</h2><div class="table-scroll"><table><thead><tr><th>Cable</th><th>Board hole</th><th>Other end</th><th>Connection</th></tr></thead><tbody>{{CABLES}}</tbody></table></div><p>J_LOAD joins S1 output, buck IN+, pump +, LED + and H01. J_GND joins battery −, buck IN−, lock ground and H02/H03/H04. J_5V joins buck OUT+, lock +5 V and H07. Insulate each splice.</p><p>D2 stays across the pump, stripe to +. C4 stays at the Hall sensor. See the <a href="WIRE_SCHEDULE.md">complete schedule</a>.</p><p>R1=100k; R2=22k; R3/R4=10k; R5/R6=4.7k; R7=3.3k. D1/D3=NTE585. C1/C3=0.1 µF. C2=2200 µF/25 V. U1=74AHCT125 DIP14. Q1/Q2=IRLZ44NPBF.</p></section>
+<section id="wire-table"><h2>Wire list — one wire per row</h2><p>Press <b>Show</b> to see that wire and its solder points on the solder-side drawing.</p><div class="table-scroll"><table><thead><tr><th>Show wire</th><th>From → to hole</th><th>Connection</th><th>Type</th></tr></thead><tbody>{{WIRES}}</tbody></table></div></section>
 </div>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -44,14 +44,14 @@ function select(net,id=''){
  const row=id?$('tr[data-id="'+id+'"]'):null;
  $$('.wire,.pad,.harness').forEach(e=>{
   let yes=!net||e.dataset.net===net;
-  if(row)yes=e.classList.contains('wire')?e.dataset.id===id:e.classList.contains('pad')&&[row.dataset.a,row.dataset.b].includes(e.dataset.pad);
+  if(row)yes=e.classList.contains('wire')?e.dataset.id===id:e.classList.contains('pad')&&row.dataset.pads.split(' ').includes(e.dataset.pad);
   e.classList.toggle('dim',!yes);
  });
  $$('button[data-net]').forEach(e=>{const active=!id&&e.dataset.net===net;e.classList.toggle('active',active);e.setAttribute('aria-pressed',active)});
  $$('tr[data-id]').forEach(e=>e.classList.toggle('active',e===row));
  const name=$$('button[data-net]').find(e=>e.dataset.net===net)?.textContent||net;
- const count=$$('.wire:not(.dim)').length;
- $('#selection').textContent=row?'Showing '+id+': solder one wire between holes '+row.dataset.a+' and '+row.dataset.b+' ('+name+').':net?'Showing '+name+': '+count+' board wire'+(count===1?'':'s')+'. Other connections are faded.':'Showing all 52 board wires.';
+ const count=new Set($$('.wire:not(.dim)').map(e=>e.dataset.id)).size;
+ $('#selection').textContent=row?'Showing '+id+': '+row.dataset.a+' and '+row.dataset.b+' ('+name+').':net?'Showing '+name+': '+count+' board wire'+(count===1?'':'s')+'. Other connections are faded.':'Showing all 37 wire routes.';
 }
 
 $$('button[data-net]').forEach(e=>e.onclick=()=>{select(e.dataset.net)});

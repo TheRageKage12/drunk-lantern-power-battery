@@ -459,3 +459,21 @@ tighter bag seal, a fill hole in the cover). Spout stays as is; the guide adds f
   scenarios and RP2040 compile pass. Prints, renders and videos untouched. Browser controls and template download checked.
 - Remaining: obtain spacer hardware, retain cable row, measure delivered parts and dry-fit without compressing wiring.
   Build instructions list the hardware; the shared spreadsheet has not been edited.
+
+## 2026-10-27 — component rearrangement for insulated stranded wire (PR #31)
+
+- Replaces the rejected bare-track design. Existing board and printed enclosure retained; component placement
+  changes, long wires move to the front, and each wire end gets a separate hole with a short rear tail.
+- 26 board links + nine outgoing leads + two C2 pigtails. Four crossing pairs fit together. The guide has
+  256 steps / 182 board solder operations, bend templates, cut estimates and individual-joint close-ups.
+- Four 20 mm nylon spacers / M3×25 screws provide 30 mm rear space. C2 is independently tied to a base on the
+  unchanged floor. Three off-board power splices preserve independent pump/LED source returns.
+- Front loops nominally 32.9 mm; acceptance ≤35 mm within a checked 40 mm reserve. Small rear parts ≤21 mm.
+  Capacitor dimensions remain unmeasured acceptance limits; dry-fit actual parts and hand-formed wiring.
+- Spreadsheet unchanged; hardware/listing/price follow-up is in the PR description. Print files and existing
+  renders/videos are unchanged. See the new CONTEXT entry and board README for the superseding design.
+
+- Completed checks: 12 guide tests, all 16 nets and unchanged assignments for 60 component terminals; full CAD
+  build with 594 component/shell-removal checks and zero problems; electronics and socket tests; 20 firmware
+  scenarios; RP2040 compile (63,136 bytes). Browser step/view controls, joint close-ups, bend-template download
+  and external-length calculation checked. Physical component/assembly fit remains unverified.
