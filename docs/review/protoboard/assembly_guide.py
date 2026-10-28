@@ -52,7 +52,7 @@ def wire_actions(w):
     links='; '.join(t['anchor']+' → pin '+t['node'] for t in tails)
     rings='copper ring' if len(tails)==1 else 'copper rings'
     return [prepare,fit,
-            ('After fitting both wires, turn' if len(w['group'])==2 else 'Turn')+f' the board over; set View to Solder side. Solder the wire to the {rings} around {entries}.',
+            ('After fitting both wires, turn' if len(w['group'])==2 else 'Turn')+f' the board over. Solder the wire to the {rings} around {entries}.',
             f'Bend the bare ends to touch the existing pins: {links}.',
             'Trim the ends just past those pins.',
             'Solder each wire end onto its pin’s existing joint.']
