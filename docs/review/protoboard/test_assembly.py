@@ -57,14 +57,25 @@ def test_prepared_wire_reaches_both_joints_without_stripping_the_loop(data):
 def test_weaving_pairs_fitted_before_any_joint(data):
  routes={w['id']:w for w in data['routes']}
  for group in data['report']['assembly_groups']:
-  indices={routes[n]['prepare'] for n in group}
-  assert len(indices)==1
-  step=data['steps'][indices.pop()]
-  assert step['wires']==group
-  assert {j['owner'] for j in step['joints']}==set(group)
-  assert all(routes[n]['joints']==[step['index']] for n in group)
-  if len(group)==2:assert step['text'].startswith('Fit both loops together before soldering either wire.')
+  fitting=[routes[n]['prepare'] for n in group]
+  soldering=[routes[n]['joints'][0] for n in group]
+  assert max(fitting)<min(soldering)
+  assert len(set(fitting+soldering))==2*len(group)
+  for name in group:
+   w=routes[name];fit=data['steps'][w['prepare']];solder=data['steps'][w['joints'][0]]
+   assert fit['wire_stage']=='fit' and fit['wires']==[name] and not fit['joints']
+   assert solder['wire_stage']=='solder' and solder['wires']==[name]
+   assert {j['owner'] for j in solder['joints']}=={name}
+   if len(group)==2:assert fit['text'].startswith('Fit both loops together before soldering either wire.')
  assert len(data['report']['preformed_pairs'])==4
+
+def test_every_wire_action_is_a_numbered_navigable_step(data):
+ assert [s['index'] for s in data['steps']]==list(range(len(data['steps'])))
+ for w in data['routes']:
+  if not w.get('tails'):continue
+  appearances=[s for s in data['steps'] if w['id'] in s.get('wires',[])]
+  assert [s['wire_stage'] for s in appearances]==['fit','solder']
+  assert all(w['id'] in s['title'] for s in appearances)
 
 def test_components_are_complete_tasks_and_no_joints_lost(data):
  assert data['steps'][0]['ref']=='R1'
@@ -75,7 +86,7 @@ def test_components_are_complete_tasks_and_no_joints_lost(data):
   assert step['pads']==p['pins'] and p['solder']==[step['index']]
   assert [j['pad'] for s in data['steps'] for j in s.get('joints',[]) if j['owner']==p['ref']]==p['pins']
  assert sum(len(s.get('joints',[])) for s in data['steps'])==182
- assert len(data['steps'])<65
+ assert len(data['steps'])<100
 
 def test_component_identification_matches_board_assignments(data):
  for part in data['parts']:
