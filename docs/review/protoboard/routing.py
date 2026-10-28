@@ -24,7 +24,12 @@ def cable_exit(w):
     a=np.linspace(0,math.pi/2,33)
     p=[[x,-12+4*math.cos(t),8-4*math.sin(t)] for t in a]
     p += [[x,-12-4*math.sin(t),4*math.cos(t)] for t in a[1:]]
-    p.append([x,-16,-10.2])
+    if w['id']=='H06':
+        # Turn inward above the cap-floor thumbscrew at (-85, 0); a straight
+        # drop here passes too close to its 11 mm head. Printed parts stay fixed.
+        p += [[x,-16+4*(1-math.cos(t)),-4*math.sin(t)] for t in a[1:]]
+    else:
+        p.append([x,-16,-10.2])
     return p
 
 def pieces(w):

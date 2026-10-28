@@ -73,9 +73,9 @@ def reference_pages(data):
  for start in range(0,len(data['routes']),30):
   s=['<g font-family="Arial,sans-serif">'];s.append('<text x="45" y="55" font-size="28">WIRE CUTS AND SOLDER POINTS</text>')
   for i,w in enumerate(data['routes'][start:start+30]):
-   text=f"{w['id']} · {w['colour']} · {' → '.join(w['anchors']+([w['b']] if w['surface']=='rear' else []))} · start {w['length']['cut']} mm"+(' + measured external run' if not w['b'] else '')
+   text=f"{w['id']} · {w['colour']} · {' → '.join(w['anchors']+([w['b']] if w['surface']=='rear' else []))} · start {w['length']['cut']} mm"
    s.append(f'<text x="45" y="{115+i*36}" font-size="20">{ESC(text)}</text>')
-  s.append('<text x="45" y="1260" font-size="19">Trim after forming. Spare cut length is not an extra loop to leave on the board.</text></g>');pages.append(svg(''.join(s),height=1330))
+  s.append('<text x="45" y="1260" font-size="19">Trim after forming. Outgoing-wire slack stays beside the cap opening, never on the board.</text></g>');pages.append(svg(''.join(s),height=1330))
  return pages
 
 def export(front,rear,data):
@@ -93,13 +93,14 @@ def main():
  parser=argparse.ArgumentParser();parser.add_argument('--export',action='store_true');args=parser.parse_args()
  data=A.make_data(R.plan());front=Drawing(data).draw();rear=Drawing(data,True).draw()
  buttons='<button data-net="">All wiring</button>'+''.join(f'<button data-net="{n}" style="border-color:{c}">{ESC(label)}</button>'for n,(c,label)in L.NETS.items())
- rows=''.join(f'<tr data-id="{w["id"]}" data-net="{w["net"]}" data-a="{w["a"]}" data-b="{w["b"] or w["label"]}" data-pads="{" ".join(w["anchors"])}"><td><button class="trace">Show {w["id"]}</button></td><td>{ESC(" → ".join(w["anchors"]+([w["b"]] if w["surface"]=="rear" else [])))}</td><td>{ESC(L.NETS[w["net"]][1])}</td><td>{w["colour"]} · {w["length"]["cut"]} mm'+(' + measured run' if not w['b'] else '')+'</td></tr>'for w in data['routes'])
+ rows=''.join(f'<tr data-id="{w["id"]}" data-net="{w["net"]}" data-a="{w["a"]}" data-b="{w["b"] or w["label"]}" data-pads="{" ".join(w["anchors"])}"><td><button class="trace">Show {w["id"]}</button></td><td>{ESC(" → ".join(w["anchors"]+([w["b"]] if w["surface"]=="rear" else [])))}</td><td>{ESC(L.NETS[w["net"]][1])}</td><td>{w["colour"]} · {w["length"]["cut"]} mm'+'</td></tr>'for w in data['routes'])
  cables=''.join(f'<tr><td>{n}</td><td>{p}</td><td>{ESC(label)}</td><td>{net}</td></tr>'for n,p,net,label in L.HARNESS)
  page=(OUT/'viewer.html').read_text()
  for k,v in dict(BUTTONS=buttons,FRONT=svg(front),REAR=svg(rear),WIRES=rows,CABLES=cables).items():page=page.replace('{{'+k+'}}',v)
  (OUT/'index.html').write_text(page)
  schedule='# Board solder schedule\n\nGenerated from `design.json`. Hole names are assigned from the component side. The rear view is mirrored.\n\n| Wire | Solder points in order | Colour | Starting cut |\n|---|---|---|---|\n'
- for w in data['routes']:schedule+=f"| {w['id']} | {' → '.join(w['anchors']+([w['b']] if w['surface']=='rear' else []))} | {w['colour']} | {w['length']['cut']} mm"+(' + measured external run' if not w['b'] else '')+' |\n'
+ for w in data['routes']:schedule+=f"| {w['id']} | {' → '.join(w['anchors']+([w['b']] if w['surface']=='rear' else []))} | {w['colour']} | {w['length']['cut']} mm"+' |\n'
+ schedule+='\nOutgoing cuts include their cap-floor route and slack. See [destinations and enclosure wiring](OFFBOARD_WIRING.md) before connecting the free ends.\n'
  schedule+='\n## Power harness\n\n'
  for j in L.DESIGN['harness']:schedule+='- **'+j['id']+':** '+', '.join(j['members'])+'.\n'
  schedule+='\nBuck IN− and OUT− must have continuity; only IN− gets a separate return wire. Pump and LED source returns join logic ground only at J_GND. D2 stays at the pump; C4 at the Hall sensor.\n\n## Component leads\n\n| Lead | Hole or existing joint | Connection |\n|---|---|---|\n'

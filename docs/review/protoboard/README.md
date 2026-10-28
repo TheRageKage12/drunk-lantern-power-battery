@@ -1,6 +1,6 @@
 # Prototype-board assembly
 
-[Step-by-step guide](assembly.html) · [Full layout](index.html) · [Two-sided drawing](both-sides.png) · [PDF](board-assembly.pdf) · [Solder schedule](WIRE_SCHEDULE.md)
+[Step-by-step guide](assembly.html) · [Full layout](index.html) · [Two-sided drawing](both-sides.png) · [PDF](board-assembly.pdf) · [Solder schedule](WIRE_SCHEDULE.md) · [Outgoing-wire destinations and cuts](OFFBOARD_WIRING.md)
 
 Use the existing **70 × 50 mm isolated-pad board** and the six colours of insulated stranded 22 AWG.
 The components have moved; the printed enclosure and its four mounting holes have not.
@@ -13,7 +13,7 @@ The components have moved; the printed enclosure and its four mounting holes hav
 5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
 Each step completes one component, one wire, or a pair that must be fitted together. Previous and Next always move one listed step; there are 58 steps and no hidden substeps.
-Wire steps start from the spool: cut the stated colour and length, strip both ends, insert both into the named holes, then solder. “Strip” means remove the plastic coating to expose the copper. Wire steps keep the full instruction list beside the same Component side / Solder side / Tilted view selector used throughout the guide. They start on the component side. Help beside the view selector explains the drawings; numbered instructions describe physical work only. Changing the view changes only the drawing. One side sketch shows the finished connection: the insulated loop above the board and stripped ends joined to existing pins underneath. This explains the connection method, not the exact geometry; the main board drawing supplies actual positions. Full-size wire drawings remain available in the cut list, with a direct button for the capacitor leads. The component-side drawing marks entry holes only; the solder-side drawing uses circles for entry holes and squares for existing pins. Unrelated joints are subdued; the instructions distinguish soldering to an entry hole’s copper ring from attaching to a pin’s existing joint. Extra cutting allowance stays on the bare ends and is clipped before soldering them to the existing component joints. The covered span is the planned route length rounded up by less than 1 mm; shape and check the loop before soldering. Outgoing cables keep their far end insulated until the later connection.
+Board-to-board wire steps start from the spool: cut the stated colour and length, strip both ends, insert both into the named holes, then solder. Outgoing leads use only one board end. “Strip” means remove the plastic coating to expose the copper. Wire steps keep the full instruction list beside the same Component side / Solder side / Tilted view selector used throughout the guide. They start on the component side. Help beside the view selector explains the drawings; numbered instructions describe physical work only. Changing the view changes only the drawing. One side sketch shows the finished connection: the insulated loop above the board and stripped ends joined to existing pins underneath. This explains the connection method, not the exact geometry; the main board drawing supplies actual positions. Full-size wire drawings remain available in the cut list, with a direct button for the capacitor leads. The component-side drawing marks entry holes only; the solder-side drawing uses circles for entry holes and squares for existing pins. Unrelated joints are subdued; the instructions distinguish soldering to an entry hole’s copper ring from attaching to a pin’s existing joint. Extra cutting allowance stays on the bare ends and is clipped before soldering them to the existing component joints. The covered span is the planned route length rounded up by less than 1 mm; shape and check the loop before soldering. Outgoing-wire steps use descriptive names, fixed cuts and a cap-floor destination map. Their H IDs are wire labels, not hole names. Only the board end is soldered in those steps; label the insulated free end for later connection.
 The socket and controller steps open a close-up with staggered hole labels and leader lines. Use **Fit** to show the whole board, or **Part close-up** to return. Each step starts on the side used for its first action. A pad is the copper ring around a hole.
 Each component step includes a shape illustration and its orientation. Names such as D1 are circuit labels; NTE585 is a part number.
 **H04 means column H, row 4** in this guide. Clicking a hole adds blue guides to locate it; click another marked hole to move them.
@@ -77,8 +77,7 @@ specifies 2% for these values. Both versions are shown. Band meanings follow the
 
 Cut one wire at a time. Cut lengths use the curved 3-D path, through-board ends, rear tails and **6 mm trimming stock**.
 That stock is trimmed off; it is not a slack loop left on the board. The rounded routes themselves provide the rise and room
-for forming. Outgoing leads include the rounded turn outside the board; add the measured external run and service slack.
-Keep the pump/LED service slack outside the board footprint.
+for forming. Outgoing cuts include the rounded board exit, CAD-based cap-floor route, connection allowance and slack. The [enclosure cut plan](OFFBOARD_WIRING.md) distinguishes these board leads from the separate pump, LED and lock runs. Keep the 150 mm pump/LED service loops beside the cap-floor opening, outside the board footprint. No cable calculator or external-route measurement is required.
 
 Strip enough to reach the indicated joint on the back, keeping the rest insulated. Gently twist the strands, insert them
 **untinned**, and keep the insulation against the front face. Solder the wire's own hole first; form its short end along the
@@ -109,8 +108,7 @@ Make these splices on the bench, with sleeves already on the wires. Divide the f
 lightly pre-tin, overlap their stripped ends and solder. Cover all bare conductor and overlap the jackets with heat-shrink;
 allow a finished splice diameter ≤5.5 mm. The existing 1/8-inch sleeve may not pass over these bundles: obtain **6 mm 3:1
 heat-shrink** for the two larger splices. Retain the joins beside the board's top edge (row 01), below the cable turns, rather
-than adding a lump beneath the board. The cable reserve is checked against the fixed enclosure; final external lead lengths
-and service loops must be fitted to the device.
+than adding a lump beneath the board. The [fixed cut plan](OFFBOARD_WIRING.md) supplies the external lead lengths and designated slack. Trim only the fitting stock after positioning the wires. The route check includes the cap-floor screw heads; H06 turns inward above its nearest head.
 
 ## Component size evidence
 

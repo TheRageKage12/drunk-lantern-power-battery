@@ -5,6 +5,7 @@ from collections import defaultdict
 import layout as L
 import routing as R
 import mechanical as M
+import offboard as O
 HERE=Path(__file__).resolve().parent
 COLOURS={'red':'#c42d32','black':'#292c32','white':'#fafafa','blue':'#2363bb','yellow':'#efd04a','green':'#2f8451'}
 NET_COLOUR=dict(VLOAD='red',GND='black',**{'5V_REG':'white','AFTER_D1':'white','XIAO_5V':'white','3V3':'green'},HALL='green',SW='yellow',TWIST='yellow',ADC='yellow',PWM_P='blue',GATE_P='blue',PWM_L='blue',GATE_L='blue',DRAIN_P='blue',DRAIN_L='yellow')
@@ -38,7 +39,7 @@ def wire_actions(w):
         w['covered_mm']=span
     else:
         a['prepare_strip_mm']=a['strip_mm']+3
-    cut=f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Use the cable calculator below to find the cut length for this {w['colour']} wire."
+    cut=f"Cut {w['length']['cut']} mm of {w['colour']} wire."
     if len(tails)==2:
         b=tails[1]
         strip=(f"Strip {a['prepare_strip_mm']} mm at each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Strip {a['prepare_strip_mm']} mm from one end (A), {b['prepare_strip_mm']} mm from the other (B).")
@@ -51,11 +52,18 @@ def wire_actions(w):
     entries=' and '.join(t['anchor'] for t in tails)
     links='; '.join(t['anchor']+' → pin '+t['node'] for t in tails)
     rings='copper ring' if len(tails)==1 else 'copper rings'
-    return [prepare,fit,
+    actions=[prepare,fit,
             ('After fitting both wires, turn' if len(w['group'])==2 else 'Turn')+f' the board over. Solder the wire to the {rings} around {entries}.',
             f'Bend the bare ends to touch the existing pins: {links}.',
             'Trim the ends just past those pins.',
             'Solder each wire end onto its pin’s existing joint.']
+    if len(tails)==1:
+        actions[3]=f"Bend the bare end underneath to touch the existing pin at {a['node']}."
+        actions[4]='Trim the bare end just past that pin.'
+        actions[5]='Solder the wire onto the pin’s existing joint.'
+    if not w['b']:
+        actions.append(f"Label the free end ‘{w['outbound']['tag']}’ and leave it insulated and unconnected for now.")
+    return actions
 
 def component_identity(ref):
     """Plain names and illustration labels, using the actual terminal assignments."""
@@ -123,12 +131,20 @@ def make_data(routes):
         joints=[]
         for name in group:
             w=byid[name];w.update(exit3d=R.cable_exit(w),surface='front',colour=NET_COLOUR[w['net']],length=route_length(w),segments=R.pieces(w),label=L.DESIGN['cables'].get(name,L.NETS[w['net']][1]),earlier_crossings=[],group=group)
+            if not w['b']:
+                w['outbound']=O.plan(w,w['length']['cut'])
+                w['length']['cut']=w['outbound']['cut_mm']
             w['assembly_actions']=wire_actions(w)
             for t in w['tails']:pins['WIRE.'+t['id']]=dict(pad=t['anchor'],net=w['net'])
             for t in w['tails']:
                 joints.extend([dict(pad=t['anchor'],owner=name),dict(pad=t['node'],owner=name)])
         text='Fit both loops together before soldering either wire.' if len(group)==2 else ''
-        idx=add('wire','Install '+' + '.join(group),text,wires=group,phase='Insulated wires',joints=joints)
+        title='Install '+' + '.join(group)
+        if len(group)==1 and not byid[group[0]]['b']:
+            out=byid[group[0]]['outbound']
+            title='Attach '+(out['title'] if out['title'].startswith(('LED','Hall','5')) else out['title'][0].lower()+out['title'][1:])+' · wire '+group[0]
+            text='To '+out['destination'].lower()+'. Attach only the board end in this step.'
+        idx=add('wire',title,text,wires=group,phase='Insulated wires',joints=joints)
         for name in group:byid[name].update(prepare=idx,joints=[idx],check=idx)
     add('check','Check the board wiring','Check every listed wire for continuity and inspect neighbouring joints for bridges before adding the underside parts.',phase='Inspect')
     for ref in L.DESIGN['rear_order']:component(ref,'Underside parts')
@@ -150,11 +166,12 @@ def make_data(routes):
     add('check','Check the buck ground','With power disconnected, confirm buck IN− and OUT− have continuity. Only IN− needs the harness return; do not omit it.',phase='Power harness')
     add('check','Fit and inspect','Mount with two M3 nuts per hole and M3×10 screws. Front loops ≤35 mm; rear parts and wires ≤11 mm. Close the lid without pressing on anything.',phase='Final checks')
     add('check','Commission without loads','Plug the 74AHCT125 chip (U1) into its socket, notch toward column X. Set the buck to 5.0 V before connecting it. Continue with EL-10 in the build guide; follow SW-6 for USB.',phase='Final checks')
-    source=(HERE/'design.json').read_bytes()+(HERE/'assembly_guide.py').read_bytes()
-    return dict(version=hashlib.sha256(source).hexdigest()[:12],diameter=1.8,gap=M.REAR_GAP,routes=[byid[n] for g in report['assembly_groups'] for n in g]+aux,steps=steps,parts=parts,pins=pins,mounts=L.MOUNTS,colours=COLOURS,nets={n:dict(label=v[1],colour=NET_COLOUR[n])for n,v in L.NETS.items()},rear_leads=L.DESIGN['leads'],rear_bodies=L.DESIGN['rear_bodies'],offboard_cap=L.DESIGN['offboard_cap'],pigtails=L.DESIGN['pigtails'],report=report,source='Existing board and printed parts · Existing M3 nuts and M3×10 screws · 27 October 2026')
+    source=b''.join(p.read_bytes() for p in [HERE/'design.json',HERE/'assembly_guide.py',HERE/'offboard.py',HERE/'routing.py',O.CAD/'params.py',O.CAD/'parts/top.py'])
+    return dict(enclosure=O.installation(),version=hashlib.sha256(source).hexdigest()[:12],diameter=1.8,gap=M.REAR_GAP,routes=[byid[n] for g in report['assembly_groups'] for n in g]+aux,steps=steps,parts=parts,pins=pins,mounts=L.MOUNTS,colours=COLOURS,nets={n:dict(label=v[1],colour=NET_COLOUR[n])for n,v in L.NETS.items()},rear_leads=L.DESIGN['leads'],rear_bodies=L.DESIGN['rear_bodies'],offboard_cap=L.DESIGN['offboard_cap'],pigtails=L.DESIGN['pigtails'],report=report,source='Existing board and printed parts · Existing M3 nuts and M3×10 screws · 27 October 2026')
 
 def main():
     routes=R.plan();data=make_data(routes)
+    O.write_notes(data['routes'],HERE/'OFFBOARD_WIRING.md')
     (HERE/'routing.json').write_text(json.dumps(routes,separators=(',',':'))+'\n')
     (HERE/'assembly.html').write_text((HERE/'assembly-template.html').read_text().replace('/*__ASSEMBLY_DATA__*/',json.dumps(data,separators=(',',':')).replace('</','<\\/')))
     print(json.dumps(dict(steps=len(data['steps']),solder_operations=sum(len(s.get('joints',[])) for s in data['steps']),**data['report']),indent=2))

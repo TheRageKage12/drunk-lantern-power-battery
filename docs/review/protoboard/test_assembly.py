@@ -196,3 +196,50 @@ def test_rear_order_preserves_iron_access(data):
  assert sequence==L.DESIGN['rear_order']
  d=copy.deepcopy(L.DESIGN);d['rear_order']=['C3','C1','R3','R4']
  with pytest.raises(AssertionError):check_rear(d,mm,segments_gap)
+
+
+def test_outgoing_cut_lengths_include_enclosure_route_and_service_slack(data):
+ import offboard as O
+ plans={w['id']:w['outbound'] for w in data['routes'] if not w['b']}
+ assert O.validate(plans)
+ # The original local-only cut is insufficient for the physical destination.
+ bad=copy.deepcopy(plans);bad['H05']['cut_mm']=bad['H05']['local_mm']
+ with pytest.raises(AssertionError):O.validate(bad)
+ bad=copy.deepcopy(plans);bad['H06']['slack_mm']=20
+ with pytest.raises(AssertionError):O.validate(bad)
+ for w in data['routes']:
+  if not w['b']:
+   assert w['length']['cut']==plans[w['id']]['cut_mm']
+   assert f"Cut {w['length']['cut']} mm" in w['assembly_actions'][0]
+
+
+def test_existing_connector_and_floor_openings_are_retained(data):
+ import offboard as O
+ plans={w['id']:w['outbound'] for w in data['routes'] if not w['b']}
+ assert all(plans[n]['target']=='LOCK_PLUG' for n in ('H08','H09'))
+ e=data['enclosure'];pump=next(r for r in e['lower_runs'] if r['name']=='Pump trunk')
+ assert pump['path'][-1]==e['pump_plug']
+ assert any(p[:2]==list(O.S.WIRE_SLOT_XY) and abs(p[2]-(O.P.Z_SPHERE_CENTER+O.S.BAY_FLOOR_Z))<.001 for p in pump['path'])
+ # The lock cable crosses the floor vertically inside the slot, not diagonally through its edge.
+ top,bottom=e['switch_path'][1:3]
+ assert top[:2]==bottom[:2]==list(O.P.CAP_WIRE_HOLE_XY)
+ assert top[2]>O.FLOOR and bottom[2]<=O.FLOOR-O.T.CAP_FLOOR_T
+
+
+def test_led_exit_clears_floor_thumbscrew():
+ import offboard as O
+ w=next(w for w in R.plan() if w['id']=='H06')
+ def head_gap(path):
+  gaps=[]
+  for p in path:
+   x,y,z=O.board_to_cap(p)
+   radial=max(0,math.hypot(x+O.T.CAP_FLOOR_SCREW_R,y)-O.P.THUMB_HEAD_D/2)
+   vertical=max(0,z-O.P.THUMB_HEAD_L-O.P.THUMB_COLLAR_L)
+   gaps.append(math.hypot(radial,vertical))
+  return min(gaps)
+ import math
+ assert head_gap(R.cable_exit(w))>1.4
+ # Former vertical drop to the bottom of the cable lane must fail the same clearance.
+ x=R.cable_exit(w)[0][0]
+ old=[[x,-16,-10.2]]
+ assert head_gap(old)<.9

@@ -390,7 +390,7 @@ same). Read [SW-6, USB power modes](#sw-6-connect-the-laptop-safely-usb-power-mo
 For physical soldering order, use the [step-by-step board assembly guide](review/protoboard/assembly.html).
 It fits front components, then insulated wires over that face, followed by the small rear parts and C2 pigtails.
 Each stranded-wire end has its own hole, with a short stripped tail to the indicated rear joint.
-It includes cut estimates and bend templates; four crossing pairs must be fitted together before soldering. EL-4 through EL-9 below describe the
+It includes fixed cut lengths, outgoing-wire destination maps and bend templates; four crossing pairs must be fitted together before soldering. EL-4 through EL-9 below describe the
 circuits and off-board connections; the interactive guide supplies the board's assembly sequence.
 
 ### EL-1. Validate the circuit on paper
@@ -482,16 +482,15 @@ IRLZ44N, label facing you, leads down: pin 1 gate, pin 2 drain (also the tab), p
 ### EL-9. Leads off the cap floor and lock wiring
 
 **Blocked by:** PR: `cap_floor` printed. Thread each lead through the cap floor's wire hole **before** soldering it or
-fitting the lock cable's plug housing. Only three leads leave the cap floor:
+fitting the lock cable's plug housing. Use the [fixed enclosure cut list](review/protoboard/OFFBOARD_WIRING.md): board leads and the separate lower runs are listed separately, so do not add the two cuts together. Only three leads leave the cap floor:
 
 | Lead | Wires | At the cap floor | Far end |
 |---|---|---|---|
 | Lock cable | +5V_REG, HALL, SW, GND | JST PH 4-pin plug just above the wire hole | Hall sensor and microswitch at the lock |
-| LED lead | VLOAD (+), Q2 drain (−) | Soldered to the board, ~15 cm slack coiled on the plate | The LED harness (BU steps 3, 9, 12, 13) |
-| Pump lead | VLOAD (+), Q1 drain (−) | Soldered to the board, ~15 cm slack | Joined in BU-10 to the lantern-side run (EL-11), which ends in the JST SM 2-pin plug at the cartridge |
+| LED lead | VLOAD (+), Q2 drain (−) | Yellow H06 and its red partner join beside the opening; 150 mm slack in each cap-side lead | The LED harness (BU steps 3, 9, 12, 13) |
+| Pump lead | VLOAD (+), Q1 drain (−) | Blue H05 and its red partner join beside the opening; 150 mm slack in each cap-side lead | Joined in BU-10 to the lantern-side run (EL-11), which ends in the JST SM 2-pin plug at the cartridge |
 
-The slack lets the cap floor lift out and rest on the cap's rim still connected. Mark every + wire with paint or red
-heat-shrink.
+The slack lets the cap floor lift out and rest on the cap's rim still connected. Keep the loops beside the wire opening, never below the board. H08/H09 end at the cap-side lock connector; they are not the full lock cable. Match prewired connector pins with a continuity test rather than trusting their colours. Mark every + wire with paint or red heat-shrink.
 
 1. **Hall sensor (A3144),** printed face toward you, leads down: pin 1 to +5V_REG, pin 2 to ground, pin 3 to XIAO D1.
    On the board, R5 **4.7 kΩ from D1 to XIAO 3V3** (never to 5 V). Fit **C4 0.1 µF across sensor pins 1 and 2, at the
@@ -501,8 +500,7 @@ heat-shrink.
    switch is mounted).
 3. On the board: R7 **3.3 kΩ** from +5V_REG to SW; R6 **4.7 kΩ** from XIAO 3V3 to D2; **D3 NTE585, anode to D2,
    stripe to SW**. Closed contacts pull D2 low; open, D2 sits at 3.3 V while the switch side rises to 5 V.
-4. **Lock cable length:** the lantern side runs from the lock up behind the wall to the top cap's neck. Leave it long
-   now; trim it in BU-10 with slack to lift the cap floor out.
+4. **Lock cable:** cut 300 mm each of white, black, yellow and green for the separate lantern-side run. Pass it through the cap-floor opening, down the neck and behind the wall extension. This includes 60 mm of slack; retain that slack when trimming the ends to the existing connector pigtails and sensor/switch joints. The cap-side H08/H09 cuts are separate.
 
 ### EL-10. Commission the board without loads
 
@@ -523,9 +521,7 @@ disconnected.
 **Blocked by:** EL-10. Do this together with FL-2.
 
 1. Solder the cartridge half of the JST SM 2-pin plug to the pump's terminals. Solder the lantern half to a 2-wire
-   lantern-side run long enough to reach from the cap floor's wire hole down to the cartridge with slack (it is laid
-   in at BU-6 and joined to the board's pump lead at BU-10). For the bench test, join it to the board's pump lead
-   temporarily.
+   lantern-side run made from **525 mm each of red and blue** (separate from H05 and its red cap-side partner). Follow the [planned route](review/protoboard/OFFBOARD_WIRING.md) behind the wall and through the bay-floor cable hole. Retain 75 mm near the plug for access. Lay it in at BU-6 and join it to the cap leads at BU-10. For the bench test, join it temporarily.
 2. Solder **D2 NTE586** straight across the pump's own terminals: stripe (cathode) to + (VLOAD), anode to − (Q1 drain).
    Never use the 1 A NTE585 here.
 3. Twist the pump wires together and keep them away from the Hall and switch wires.
@@ -1185,8 +1181,7 @@ side.
 5. **S1.** Hangs inside its box, lever up through the roof hole, nut tight on top.
 6. **Charge socket.** Tie the splitter's female end loosely in its spot, so it lifts out on its cord to charge.
 7. **Drop it in.** Lower the plate in, S1 and charge socket toward your side. Bring the lock cable, LED lead and pump
-   lead up through the wire hole and connect: lock cable plug, and solder the LED harness and pump lead to their board
-   leads with sleeved joints. Coil ~15 cm of slack. Rest the plate on its ledge and drive 3 thumbscrews down into the
+   lead up through the wire hole and connect: lock cable plug, and solder the LED harness and pump lead to their labelled cap-side leads with sleeved joints. Keep the planned 150 mm of slack in each pump/LED cap-side lead beside the opening. Rest the plate on its ledge and drive 3 thumbscrews down into the
    cap's bosses.
 8. **Check:** looking up through the hand opening (before the hand bell goes on), the battery's LEDs show through the
    slot.
@@ -1274,7 +1269,7 @@ Parts: `base_tray` with the pump, `bag_cover`, the tube and bag.
 
 ### The light harness
 
-All 10 LED pieces are in parallel on one channel (Q2), on the one LED lead to the board:
+All 10 LED pieces are in parallel on one channel (Q2). Cut **225 mm each of red and yellow** for the separate trunk from the cap-floor opening to the common LED wiring behind the upper lock wall. This is separate from H06 and its red cap-side partner. Retain 30 mm of slack at the lower join; trim the remaining fitting stock. The individual strip branches below are unchanged:
 
 - **Behind the lock wall:** the 2 columns, 4 panel rows and both bells' leads join into one pair that runs up behind
   the wall extension and the top cap's neck.

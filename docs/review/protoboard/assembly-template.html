@@ -40,6 +40,11 @@
 <div class="viewport" id="viewport"><svg id="board" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Board assembly at the selected step"></svg></div>
 <div id="board-legend" class="legend"></div>
 <div id="pad-detail" class="labelbox">Click a solder point to identify it.</div>
+<figure id="destination-card" class="part-card" hidden>
+<h3 id="destination-title">Where the free end goes later</h3>
+<svg id="destination-map" viewBox="0 0 400 230" role="img"></svg>
+<figcaption id="destination-caption"></figcaption>
+</figure>
 
 </section>
 <section class="inspector" aria-label="Current assembly instruction" aria-live="polite" aria-atomic="true">
@@ -63,10 +68,7 @@
 </figure>
 <div id="wire-actions" hidden></div>
 <button id="capacitor-wire-template" hidden>Print full-size wire shape</button>
-<div id="cable" hidden><h3>Measure the external cable</h3><p class="muted">Measure from the cable’s lower exit to its destination.</p>
-<label>External run (mm) <input id="external-run" type="number" min="0" max="3000" step="1" placeholder="Measure"></label><br>
-<label>Service slack (mm) <input id="service-slack" type="number" min="0" max="1000" step="1"></label>
-<p id="cable-result" class="note"></p><p class="muted">Keep cable slack outside the board gap.</p></div>
+
 </div>
 <div id="shared" class="caution" hidden></div>
 
@@ -75,6 +77,11 @@
 <div class="support">
 <details><summary>How to find a hole on the board</summary><p><strong>H04 means column H, row 4.</strong> Letters run across the drawing; numbers run down it. These are this guide’s labels, not necessarily markings on your board. On the component side, A01 is the upper-left grid hole. Flip left-to-right to solder: A01 moves to the upper right, but its name stays the same. Match the mounting holes to the drawing and keep row 01 at the top.</p></details>
 <details><summary>Wire soldering technique</summary><p>Strip just enough to reach the joint shown on the back. Gently twist the strands and insert them without pre-tinning; keep the insulation against the front face. Solder the wire to the copper ring around its entry hole. Bend the bare end against the destination pin and trim it just beyond the pin. Reheat the pin’s existing solder to attach the wire. Keep stray strands away from neighbouring joints.</p></details>
+<details><summary>Later enclosure wiring · fixed cut list</summary>
+<p>Separate pieces for connecting the board to the rest of the lantern. Cut each listed colour; do not add these lengths to the board leads above. Retain connector pigtails and trim the new wire to meet them.</p>
+<div class="table-wrap"><table><thead><tr><th>Piece</th><th>Colours</th><th>Cut each</th><th>Connects to</th></tr></thead><tbody id="enclosure-cuts"></tbody></table></div>
+<p><a href="OFFBOARD_WIRING.md">Routing, service slack and cut-length calculations</a></p>
+</details>
 <details><summary>Wire colours</summary><div id="spools" class="spools"></div></details>
 <details><summary>Cut list · all board wires and outgoing cables</summary>
 <p>Cut wires as you reach their step. Fit the indicated pairs together; trim excess after fitting.</p><p><button id="csv">Download cut list (CSV)</button> <button id="print">Print current step</button></p>
@@ -90,13 +97,13 @@ const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const storageKey='lantern-board-assembly-'+DATA.version;
 let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{}
 let cursor=location.hash==='#complete'?DATA.steps.length-1:Number.isInteger(saved.cursor)?Math.max(0,Math.min(DATA.steps.length-1,saved.cursor)):0;
-let measurements=saved.measurements||{},view='front',zoom=1,selectedWire=null,selectedPad=null,closeup=true;
+let view='front',zoom=1,selectedWire=null,selectedPad=null,closeup=true;
 const routes=Object.fromEntries(DATA.routes.map(w=>[w.id,w]));
 function initialView(){return DATA.rear_bodies[DATA.steps[cursor].ref]||currentWire()?.surface==='rear'?'rear':'front'}
 function wireStep(){return !!currentWire()?.tails?.length}
 function currentWire(){return routes[selectedWire||(DATA.steps[cursor].wires||[])[0]]}
 const pins={};for(let[ref,p]of Object.entries(DATA.pins)){if(pins[p.pad])pins[p.pad].ref+=' / '+ref;else pins[p.pad]={ref,...p}}
-function persist(){try{localStorage.setItem(storageKey,JSON.stringify({cursor,measurements}))}catch{}}
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify({cursor}))}catch{}}
 function mm(pad){return[5.79+(pad.charCodeAt(0)-65)*2.54,3.41+(Number(pad.slice(1))-1)*2.54]}
 function el(tag,attrs={},text=''){let n=document.createElementNS(NS,tag);for(let[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text)n.textContent=text;return n}
 function add(parent,tag,attrs,text){let n=el(tag,attrs,text);parent.append(n);return n}
@@ -278,7 +285,7 @@ function wireConnection(w){
  label(160,95,'Board');
  const loop=w.tails.length===2?'M110 100V54Q110 30 134 30H186Q210 30 210 54V100':'M110 100V54Q110 30 134 30H285';
  line(loop,'#59666b',9);line(loop,DATA.colours[w.colour],6);
- label(177,17,w.tails.length===2?'Insulated wire':'To external connection');
+ label(177,17,w.tails.length===2?'Insulated wire':'To '+w.outbound.tag);
  for(const [i,t]of w.tails.entries()){
   const entry=i===0?110:210,node=i===0?40:280;
   line(`M${node} 70V139`,'#697870',3);
@@ -299,7 +306,7 @@ function wireTemplate(w=currentWire()){if(!w)return;
  for(let v of views){v.minX=Math.min(...v.points.map(p=>p[0]));v.minY=Math.min(...v.points.map(p=>p[1]));v.y=y;y+=Math.max(...v.points.map(p=>p[1]))-v.minY+17;}
  let height=y+12,svg=el('svg',{xmlns:NS,width:width+'mm',height:height+'mm',viewBox:`0 0 ${width} ${height}`});
  add(svg,'rect',{width:'100%',height:'100%',fill:'white'});
- add(svg,'text',{x:5,y:5,'font-size':3},`${w.id} · ${w.colour} · cut ${w.length.cut} mm${w.b?'':' + measured external run'}`);
+ add(svg,'text',{x:5,y:5,'font-size':3},`${w.id} · ${w.colour} · cut ${w.length.cut} mm${w.b?'':' total cut; drawing shows board portion'}`);
  add(svg,'text',{x:5,y:10,'font-size':2.6},'Print at 100%. Match the centreline; trim after forming.');
  for(let v of views){add(svg,'text',{x:5,y:v.y,'font-size':2.5},v.label);
  let pts=v.points.map(p=>[p[0]-v.minX+10,p[1]-v.minY+v.y+6]);
@@ -321,36 +328,75 @@ function componentTemplate(){let ref=DATA.steps[cursor].ref,b=DATA.rear_bodies[r
  for(let [n,p]of leads){let q=p.map(project);add(svg,'path',{d:q.map((p,i)=>(i?'L':'M')+p.join(',')).join(' '),fill:'none',stroke:n.endsWith('.1')?'#205f9f':'#663d78','stroke-width':.5});let joint=p.reduce((a,b)=>a[2]<b[2]?a:b),a=project(joint);add(svg,'text',{x:a[0],y:a[1]-1,'font-size':2.1},DATA.pins[n].pad);}}
  add(svg,'path',{d:`M7 ${height-7}h10m-10 -1v2m10 -2v2`,stroke:'#222','stroke-width':.2});add(svg,'text',{x:20,y:height-6,'font-size':2.6},'10 mm scale check');let url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'})),a=document.createElement('a');a.href=url;a.download=ref+'-lead-template.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function measurement(w){let m=measurements[w.id]||{};return{run:m.run??'',slack:m.slack??(['H05','H06','H08','H09'].includes(w.id)?150:0)}}
-function cableTotal(w){let m=measurement(w);return m.run===''?null:Math.ceil(w.length.cut+Number(m.run)+Number(m.slack)+2+5)}
+function destinationMap(w){
+ const card=$('destination-card'),svg=$('destination-map');card.hidden=!w?.outbound;svg.replaceChildren();if(card.hidden)return;
+ const e=DATA.enclosure,o=w.outbound,c=DATA.colours[w.colour];
+ const map=p=>[108+p[0],113-p[1]],line=(points,colour,width=1)=>add(svg,'path',{d:points.map((p,i)=>(i?'L':'M')+p.join(',')).join(' '),fill:'none',stroke:colour,'stroke-width':width,'stroke-linejoin':'round','stroke-linecap':'round'});
+ const text=(x,y,value,size=10)=>add(svg,'text',{x,y,'text-anchor':'middle','font-size':size,fill:'#25313c'},value);
+ const rect=(b,fill)=>{const [x,y]=map([b[0],b[1]+b[3]]);add(svg,'rect',{x,y,width:b[2],height:b[3],rx:2,fill,stroke:'#b3bcb5','stroke-width':.6})};
+ text(108,12,'Top cap · lid removed',12);
+ add(svg,'circle',{cx:108,cy:113,r:e.radius,fill:'#f4f2ea',stroke:'#9eaaa1'});
+ rect(e.battery,'#e5e9e5');text(136,113,'Battery');rect(e.buck,'#d7e1dd');text(108,183,'Buck',8);
+ const board=e.board.map(map);add(svg,'polygon',{points:board.map(p=>p.join(',')).join(' '),fill:'#e8d7b6',stroke:'#a69474'});text(70,111,'Board');text(70,80,'USB',7);
+ for(const pt of Object.values(e.joins)){const [x,y]=map(pt);add(svg,'circle',{cx:x,cy:y,r:2.8,fill:'#c9d1cc'})}
+ const port=map(e.port);add(svg,'rect',{x:port[0]-8,y:port[1]-5,width:16,height:10,rx:5,fill:'#fff',stroke:'#9ca89f'});
+ const plug=map(e.lock_plug);add(svg,'rect',{x:plug[0]-6,y:plug[1]-4,width:12,height:8,rx:1,fill:'#c8d4cf',stroke:'#74887e','stroke-width':.6});
+ // board_point for the fixed 90 degree orientation; positions themselves come from CAD.
+ const corner=e.board[0],u=[(e.board[1][0]-corner[0])/70,(e.board[1][1]-corner[1])/70],v=[(e.board[3][0]-corner[0])/50,(e.board[3][1]-corner[1])/50];
+ const onBoard=physical(w).map(p=>map([corner[0]+u[0]*p[0]+v[0]*p[1],corner[1]+u[1]*p[0]+v[1]*p[1]]));
+ const points=[...onBoard,...o.path.slice(1).map(map)];line(points,'#46514b',3.2);line(points,c,2);
+ const end=points.at(-1);add(svg,'circle',{cx:end[0],cy:end[1],r:4.3,fill:'#fff',stroke:'#17634d','stroke-width':1.5});
+ if(o.slack_mm===150){const coil=map(e.service_coil);add(svg,'ellipse',{cx:coil[0],cy:coil[1],rx:12,ry:12,fill:'none',stroke:'#46514b','stroke-width':2.5});add(svg,'ellipse',{cx:coil[0],cy:coil[1],rx:12,ry:12,fill:'none',stroke:c,'stroke-width':1.4})}
+ const targetLabel={J_LOAD:'Battery + join',J_GND:'Ground join',J_5V:'5 V join',LOCK_PLUG:'4-pin plug',PUMP_JOIN:'Join at opening',LED_JOIN:'Join at opening'}[o.target];
+ line([end,[15,197],[58,197]],'#17634d',.8);text(62,210,targetLabel,10);
+ text(108,227,'Green circle: connect this end later',9);
+ // Whole-lantern locator uses the same world X/Z coordinates as the CAD. It is not a new view mode.
+ const world=p=>[321+p[0]*.38,216-p[2]*.44];
+ const capTop=world([0,0,e.cap_top_z])[1],capFloor=world([0,0,e.floor_z])[1];
+ add(svg,'rect',{x:285,y:capTop,width:72,height:capFloor-capTop,rx:4,fill:'#e8eee8',stroke:'#a2afa5'});
+ add(svg,'ellipse',{cx:321,cy:119,rx:43,ry:40,fill:'#f4f5f1',stroke:'#a2afa5'});
+ add(svg,'rect',{x:286,y:181,width:70,height:35,rx:3,fill:'#e8eee8',stroke:'#a2afa5'});
+ line([[300,capFloor],[300,80]],'#a2afa5');line([[342,capFloor],[342,80]],'#a2afa5');line([[300,157],[300,181]],'#a2afa5');line([[342,157],[342,181]],'#a2afa5');
+ text(321,12,'Lantern · display side',12);
+ let lower=null,name='Top cap';
+ if(w.id==='H05'){lower=e.lower_runs.find(r=>r.name==='Pump trunk').path;name='Pump plug'}
+ if(w.id==='H06'){lower=e.lower_runs.find(r=>r.name==='LED trunk').path;name='LED wiring'}
+ if(w.id==='H08'){lower=e.switch_path;name='Twist switch'}
+ if(w.id==='H09'){lower=e.hall_path;name='Hall sensor'}
+ if(lower){const p=lower.map(world);line(p,'#46514b',2.8);line(p,c,1.6);const end=p.at(-1);add(svg,'circle',{cx:end[0],cy:end[1],r:3,fill:'#17634d'});text(352,Math.min(211,end[1]+15),name,10)}
+ else{const pt=world([o.path.at(-1)[0],0,e.floor_z+6]);add(svg,'circle',{cx:pt[0],cy:pt[1],r:3,fill:'#17634d'});text(321,capFloor+14,name)}
+ $('destination-caption').textContent=o.connection+' '+o.slack_note;
+ svg.setAttribute('aria-label',`${o.title}. Cap-floor map: ${o.route} Destination: ${o.destination}. ${o.connection}`);
+}
+
 function renderWireActions(w){
  const list=$('wire-actions');list.replaceChildren();list.hidden=!w?.assembly_actions;if(!w?.assembly_actions)return;
- const actions=[...w.assembly_actions];if(!w.b){const total=cableTotal(w);if(total!==null)actions[0]=`Cut ${total} mm of ${w.colour} wire (includes the external run and slack).`+actions[0].slice(actions[0].indexOf('.')+1)}
+ const actions=w.assembly_actions;
  const ol=document.createElement('ol');ol.className='wire-actions';
  for(const text of actions){const li=document.createElement('li');li.textContent=text;ol.append(li)}
  list.append(ol);
 }
-function cableUpdate(){let w=currentWire();if(!w||w.b)return;let m=measurement(w);$('external-run').value=m.run;$('service-slack').value=m.slack;let total=cableTotal(w);$('cable-result').textContent=total===null?'Enter the external run before cutting.':`Cut ${total} mm total (includes slack and trim).`}
 
 function render(){let s=DATA.steps[cursor],w=currentWire();$('step').value=cursor;$('counter').textContent=`${cursor+1} / ${DATA.steps.length}`;$('progress').value=100*cursor/(DATA.steps.length-1);$('previous').disabled=cursor===0;$('next').disabled=cursor===DATA.steps.length-1;$('phase').textContent=s.phase;$('title').textContent=s.title;$('instruction').textContent=s.text;
- componentPicture(DATA.parts.find(p=>p.ref===s.ref));rearPicture(s);wireConnection(w);renderWireActions(w);$('instruction').hidden=!!s.actions?.length||!s.text||!!w?.assembly_actions&&s.wires.length===1;
+ componentPicture(DATA.parts.find(p=>p.ref===s.ref));rearPicture(s);wireConnection(w);renderWireActions(w);$('instruction').hidden=!!s.actions?.length||!s.text||!!w?.assembly_actions&&s.wires.length===1&&!w.outbound;
  $('joint-focus').hidden=!s.pads.length||!!w?.assembly_actions;if(s.pads.length)$('joint-focus').textContent=s.actions?.length?'Attach to existing solder; do not insert legs into the holes.':s.points?.length?'Solder the marked board and capacitor connections.':w?.tails?.length?`${s.wires.length===1?'One wire':'Each wire'}: solder twice at each board end.`:s.kind==='component'&&s.pads.length===2?`Solder both ends: ${s.pads.join(' and ')}.`:`Solder all ${s.pads.length} highlighted points.`;
  $('component-template').hidden=!DATA.rear_bodies[s.ref];
  $('wire-info').hidden=!w;$('capacitor-wire-template').hidden=!w||!!w.tails?.length;$('shared').hidden=!s.previous.length||!!s.actions?.length||!!w?.tails?.length;if(s.previous.length)$('shared').textContent='Keep existing pins and wires still while the solder cools.';
  $('wire-choice').replaceChildren();$('wire-choice').hidden=(s.wires||[]).length<2;
  for(let id of s.wires||[]){let route=routes[id],button=document.createElement('button');button.textContent=`${id} · ${route.colour} · ${route.length.cut} mm`;button.setAttribute('aria-pressed',String(w.id===id));if(w.id===id)button.className='primary';button.onclick=()=>{selectedWire=id;render()};$('wire-choice').append(button)}
- if(w){$('cable').hidden=!!w.b;cableUpdate()}
+ destinationMap(w);
  draw();persist();renderCuts();
 }
 function go(index,wire=null){cursor=Math.max(0,Math.min(DATA.steps.length-1,Number(index)));selectedWire=wire;selectedPad=null;view=initialView();closeup=true;zoom=1;$('component-shape').open=false;$('pad-detail').textContent='Click a solder point to identify it.';render();document.querySelector('.work').scrollIntoView({block:'start'})}
-function renderCuts(){let body=$('cut-list');body.replaceChildren();for(let w of DATA.routes){let tr=document.createElement('tr'),button=document.createElement('button');button.textContent=w.id;button.addEventListener('click',()=>{go(w.prepare,w.id);$('title').scrollIntoView({block:'center'})});let td=document.createElement('td');td.append(button);tr.append(td);for(let text of [w.a+' → '+(w.b||w.label),w.bare?'bare ('+w.colour+' spool)':w.colour,w.b?w.length.cut+' mm':(cableTotal(w)!==null?cableTotal(w)+' mm total':w.length.cut+' mm local + measured run'),w.depth.toFixed(1)+' mm']){let cell=document.createElement('td');cell.textContent=text;tr.append(cell)}let templateCell=document.createElement('td'),templateButton=document.createElement('button');templateButton.textContent='Print full-size';templateButton.setAttribute('aria-label','Print full-size wire shape for '+w.id);templateButton.onclick=()=>wireTemplate(w);templateCell.append(templateButton);tr.append(templateCell);body.append(tr)}}
+function renderCuts(){let body=$('cut-list');body.replaceChildren();for(let w of DATA.routes){let tr=document.createElement('tr'),button=document.createElement('button');button.textContent=w.outbound?'Wire '+w.id:w.id;button.addEventListener('click',()=>{go(w.prepare,w.id);$('title').scrollIntoView({block:'center'})});let td=document.createElement('td');td.append(button);tr.append(td);for(let text of [w.outbound?w.outbound.title+' → '+w.outbound.destination:w.a+' → '+(w.b||w.label),w.bare?'bare ('+w.colour+' spool)':w.colour,w.length.cut+' mm',w.depth.toFixed(1)+' mm']){let cell=document.createElement('td');cell.textContent=text;tr.append(cell)}let templateCell=document.createElement('td'),templateButton=document.createElement('button');templateButton.textContent='Print full-size';templateButton.setAttribute('aria-label','Print full-size wire shape for '+w.id);templateButton.onclick=()=>wireTemplate(w);templateCell.append(templateButton);tr.append(templateCell);body.append(tr)}}
 for(let s of DATA.steps){let o=document.createElement('option');o.value=s.index;o.textContent=`${s.index+1}. ${s.title}`;$('step').append(o)}
 $('component-template').onclick=componentTemplate;
 $('capacitor-wire-template').onclick=()=>wireTemplate();
 $('previous').onclick=()=>go(cursor-1);$('next').onclick=()=>go(cursor+1);$('step').onchange=e=>go(e.target.value);$('view').onchange=e=>{view=e.target.value;draw()};$('plus').onclick=()=>{zoom=Math.min(3,zoom+.25);draw()};$('minus').onclick=()=>{zoom=Math.max(1,zoom-.25);draw()};$('fit').onclick=()=>{zoom=1;closeup=false;draw()};$('part-view').onclick=()=>{zoom=1;closeup=true;draw()};window.addEventListener('resize',draw);
-for(let id of ['external-run','service-slack'])$(id).addEventListener('input',()=>{let w=currentWire();if(!w||w.b)return;let run=$('external-run').value,slack=$('service-slack').value;if(!$(id).checkValidity())return;measurements[w.id]={run:run===''?'':Number(run),slack:slack===''?0:Number(slack)};persist();cableUpdate();renderWireActions(w);renderCuts()});
-$('print').onclick=()=>window.print();$('csv').onclick=()=>{let rows=[['Wire','From','To','Colour','Starting cut mm','Local blank mm','Centre height mm','Note'],...DATA.routes.map(w=>[w.id,w.a,w.b||w.label,w.bare?'bare from '+w.colour:w.colour,w.b?w.length.cut:(cableTotal(w)??''),w.length.cut,w.depth,w.b?'Trim after dry fit':'Measure external run; total includes service slack only when entered'])];let csv=rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.href=url;a.download='lantern-board-wire-cuts.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
-for(let[name,colour]of Object.entries(DATA.colours)){let div=document.createElement('div'),sw=document.createElement('span');sw.className='swatch';sw.style.background=colour;let label={red:'Switched battery +',black:'Ground only',white:'5 V supply paths (label each)',green:'3.3 V and Hall signal (label each)',yellow:'Sense / twist / LED return (label each)',blue:'PWM / gates / pump return (label each)'}[name],total=DATA.routes.filter(w=>w.b&&w.colour===name).reduce((n,w)=>n+w.length.cut,0);div.append(sw,document.createTextNode(` ${name}: ${label}. Board blanks: ${total} mm; cables extra.`));$('spools').append(div)}
+
+$('print').onclick=()=>window.print();$('csv').onclick=()=>{let rows=[['Wire','From','To','Colour','Starting cut mm','Local blank mm','Centre height mm','Note'],...DATA.routes.map(w=>[w.id,w.a,w.b||w.label,w.bare?'bare from '+w.colour:w.colour,w.length.cut,w.length.cut,w.depth,w.outbound?'Includes route, slack and trimming; connect free end later':'Trim after dry fit'])];let csv=rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.href=url;a.download='lantern-board-wire-cuts.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+for(let[name,colour]of Object.entries(DATA.colours)){let div=document.createElement('div'),sw=document.createElement('span');sw.className='swatch';sw.style.background=colour;let label={red:'Switched battery +',black:'Ground only',white:'5 V supply paths (label each)',green:'3.3 V and Hall signal (label each)',yellow:'Sense / twist / LED return (label each)',blue:'PWM / gates / pump return (label each)'}[name],total=DATA.routes.filter(w=>w.b&&w.colour===name).reduce((n,w)=>n+w.length.cut,0);div.append(sw,document.createTextNode(` ${name}: ${label}. Board links: ${total} mm; outgoing leads listed below.`));$('spools').append(div)}
+for(const r of [...DATA.enclosure.cap_jumpers,...DATA.enclosure.lower_runs]){const tr=document.createElement('tr');for(const value of [r.name,r.colours.join(', '),r.cut_mm+' mm',r.destination]){const td=document.createElement('td');td.textContent=value;tr.append(td)}$('enclosure-cuts').append(tr)}
 $('source').textContent=`Based on ${DATA.source} · build ${DATA.version}`;
 view=initialView();render();
 </script>
