@@ -44,16 +44,16 @@ def wire_actions(w):
         strip=(f"Remove about {a['prepare_strip_mm']} mm of plastic from each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Remove {a['prepare_strip_mm']} mm of plastic from end A and {b['prepare_strip_mm']} mm from end B.")
         prepare=cut+' '+strip+' Twist the loose copper strands together.'
         fit=f"Bend the covered middle into a loop, with both bare ends pointing down. From the component side, insert A through {a['anchor']} and B through {b['anchor']}."
-        shape=f"Keep the loop about {round(w['depth']+w['od']/2)} mm above the board, matching the Fit wire view. Leave the bare ends straight underneath."
+        shape=f"Keep the loop about {round(w['depth']+w['od']/2)} mm above the board, following the board drawing. Leave the bare ends straight underneath."
     else:
         prepare=cut+f" Remove about {a['prepare_strip_mm']} mm of plastic from the board end and twist the copper strands together. Leave the far end insulated."
         fit=f"With the components facing you, put the bare end through {a['anchor']}. Keep the plastic above the board."
-        shape='Follow the Fit wire drawing to take the insulated cable out past the board edge. Leave its bare board end straight underneath for now.'
+        shape='Follow the board drawing to take the insulated cable out past the board edge. Leave its bare board end straight underneath for now.'
     entries=' and '.join(t['anchor'] for t in tails)
     links='; '.join('from '+t['anchor']+' to the existing '+t['node']+' joint' for t in tails)
     nodes=' and '.join(t['node'] for t in tails)
     return [prepare,fit,shape,
-            ('Once both wires are fitted, select' if len(w['group'])==2 else 'Select')+f' Solder ends and turn the board over. Solder {entries} to hold the wire.',
+            ('Once both wires are fitted, turn' if len(w['group'])==2 else 'Turn')+f' the board over. Solder {entries} to hold the wire.',
             f'Bend the bare copper {links}. Clip off copper extending beyond those joints, then solder {nodes}.']
 
 def component_identity(ref):
