@@ -433,7 +433,7 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
    The 4.8 mm nut stacks give 14.8 mm rear space and 4.0 mm nominal thread engagement. Check the real fit, then remove
    the board for soldering. Do not add washers or bottom out the screws. Printed holes and parts stay unchanged.
 3. Fit the XIAO (flashed in SW-5, or flash it later in USB-only mode) and a **DIP-14 socket** for U1. Leave U1 out
-   until EL-7's power-off check. Both USB and socket notch face column X in the new layout.
+   until the assembly guide’s first-power step. Both USB and socket notch face column X in the new layout.
 4. Fit a 2-pin header for JP1 and label it **REMOVE FOR USB**.
 
 ### EL-4. Power input, S1 and C2
@@ -443,7 +443,7 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
 2. Connect **C2 2200 µF/25 V** through the guide's red/black pigtails: positive to F02, negative to F04.
    Sleeve each splice; retain the horizontal case on top of the battery under its existing strap, independently of its leads.
    Case ≤Ø18 × 25 mm; both ends must stay clear of the strap. It smooths short dips; it cannot carry a stalled motor.
-3. Make the guide's three insulated power splices beside row 01: J_LOAD (switched battery), J_GND (star ground),
+3. Set and test the buck output in EL-6 **before** joining its output to anything. Then make the guide's three insulated power splices beside row 01: J_LOAD (switched battery), J_GND (star ground),
    and J_5V (buck output). Keep the pump and LED source returns separate until J_GND. See the
    [harness connections](review/protoboard/README.md#harness-changes).
 
@@ -468,7 +468,7 @@ R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground. Keep th
 3. XIAO D3 to pin 2 (pump); D4 to pin 5 (light). R3 and R4, **10 kΩ**, from those two inputs to ground.
 4. **Test, all power off:** check the socket notch against the
    [DIP-14 pinout](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf), and continuity of pins 1, 4, 7, 10, 13 to
-   ground. Then insert U1.
+   ground. Leave the chip out until the assembly guide’s first-power step.
 
 ### EL-8. MOSFETs Q1 (pump) and Q2 (light)
 
@@ -490,6 +490,15 @@ fitting the lock cable's plug housing. Use the [fixed enclosure cut list](review
 | LED lead | VLOAD (+), Q2 drain (−) | Yellow H06 and its red partner join beside the opening; 150 mm slack in each cap-side lead | The LED harness (BU steps 3, 9, 12, 13) |
 | Pump lead | VLOAD (+), Q1 drain (−) | Blue H05 and its red partner join beside the opening; 150 mm slack in each cap-side lead | Joined in BU-10 to the lantern-side run (EL-11), which ends in the JST SM 2-pin plug at the cartridge |
 
+Before joining the outgoing leads, unplug battery and USB and remove the jumper cap. Strip each free end for its final connection. Meter on Ω: check each pair below; it must be within 2 Ω of touching the probe tips together, even while gently moving the cable. Check before sleeving the join or inserting the connector.
+
+| Board joint | Other probe |
+|---|---|
+| V01 | Exposed end of blue H05 (pump negative) |
+| H17 | Exposed end of yellow H06 (LED negative) |
+| S01 | Exposed end of yellow H08 (switch signal) |
+| R03 | Exposed end of green H09 (Hall signal) |
+
 The slack lets the cap floor lift out and rest on the cap's rim still connected. Keep the loops beside the wire opening, never below the board. H08/H09 end at the cap-side lock connector; they are not the full lock cable. Match prewired connector pins with a continuity test rather than trusting their colours. Mark every + wire with paint or red heat-shrink.
 
 1. **Hall sensor (A3144),** printed face toward you, leads down: pin 1 to +5V_REG, pin 2 to ground, pin 3 to XIAO D1.
@@ -504,17 +513,24 @@ The slack lets the cap floor lift out and rest on the cap's rim still connected.
 
 ### EL-10. Commission the board without loads
 
-**Blocked by:** SW-5 (firmware on the XIAO). Use SW-6's **USB calibration and testing** mode. Pump and strip
-disconnected.
+**Prerequisites:** finish the assembly guide’s component, wire, short-circuit and battery-only voltage checks. Upload the firmware in SW-5. Pump and LED strips stay disconnected throughout these tests.
 
-| Check | Pass |
-|---|---|
-| +5V_REG at U1 pin 14 and at the Hall sensor | 5.0 V |
-| GPIO D1 and D2 | ~3.3 V open, < 0.8 V active |
-| `status` with a magnet at the sensor and the switch pressed | Follows the magnet and switch every time, including with the cable moved |
-| Battery reading after `vcal <meter reading>` | Within 0.2 V of the meter |
-| Both MOSFET gates at idle | Low |
-| Power-up | Pump output off; a brief LED blink at boot is intentional |
+1. With battery and USB unplugged, connect the completed lock cable. Remove the jumper cap from JP1; leave the 74AHCT125 chip installed. Check the Hall sensor’s printed face/lead numbering against EL-9 before applying power.
+2. Meter: black lead in **COM**, red in **V/Ω**, set to **DC volts** (20 V range on a manual meter). Clip black to **F04 (ground)** while power is off. Keep the board accessible on an insulating surface. Touch only one joint with the red probe; switch off before repositioning the board or clip.
+3. Turn on the battery and S1. Red on **G10** must read **4.9–5.1 V**. If it does not, switch off and repair before connecting USB.
+4. Connect USB, open the serial monitor at **115200 baud**, and send `idle 0`. Take the following readings with black still on F04. If a result fails, disconnect USB first, then switch off and unplug the battery before repair.
+
+| Test / red probe | Do this | Expected result |
+|---|---|---|
+| Hall supply, sensor pin 1 | Leave the lock cable attached. | 4.9–5.1 V. |
+| Hall signal, **P09** (D1) | Move the magnet away, then bring its sensing pole to the sensor. | Away: 3.0–3.4 V; detected: below 0.8 V. If it never changes, try the other magnetic pole and check sensor orientation/wiring. |
+| Twist signal, **O09** (D2) | Release, then press the microswitch. | Released: 3.0–3.4 V; pressed: below 0.8 V. |
+| Sensor reporting | Send `status` after each change. Repeat five times while gently moving the cable. | `ring=present/absent` follows the magnet; `switch=pressed/released` follows the switch, with no missed or flickering changes. |
+| Pump gate, **U01** | Remove magnet, release switch. Send `cal 10000`; wait 1 s. Then send `stop`. | Running: above 0.5 V; stopped: below 0.2 V. The signal is pulsed, so a DC meter reads an average of a few volts rather than a fixed 5 V. This test does not prove the motor can run under load. |
+| LED gate, **H16** | With no magnet and switch released, send `idle 255`, then `idle 0`. | `idle 255`: 4.7–5.1 V; `idle 0`: below 0.2 V. Do not save the temporary 255 setting. |
+| Battery measurement, **F02** | Read DC volts from F02 to F04. Send `vcal` followed by that number, e.g. `vcal 12.31`, then `status`. | Reported battery voltage within 0.2 V of the meter. Send `save` only after restoring `idle 0`. |
+
+Finish with `idle 0` and `stop`. Unplug USB first, then switch off and unplug the battery. Refit JP1’s jumper cap only with all power disconnected. Connect and test the pump and LEDs separately in the following build steps; passing these no-load checks does not establish motor/LED current capacity.
 
 ### EL-11. Connect and test the pump
 

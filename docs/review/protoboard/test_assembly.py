@@ -138,7 +138,7 @@ def test_cut_stock_accounts_for_3d_and_rear_tails(routes):
 def test_hardware_and_harness_are_explicit(data):
  assert M.BOARD_SPACER==4.8 and M.REAR_GAP==14.8
  assert sorted(len(j['members']) for j in L.DESIGN['harness'])==[3,5,6]
- assert 'M3×10' in ' '.join(s['text'] for s in data['steps'])
+ assert 'M3×10' in ' '.join(s['text']+' '+' '.join(s.get('actions',[])) for s in data['steps'])
 
 
 def test_rear_lead_and_iron_collisions_rejected():
@@ -243,3 +243,30 @@ def test_led_exit_clears_floor_thumbscrew():
  x=R.cable_exit(w)[0][0]
  old=[[x,-16,-10.2]]
  assert head_gap(old)<.9
+
+
+def test_meter_checks_use_present_points_and_correct_nets(data):
+ import verification as V
+ known={p['pad'] for p in data['pins'].values()}
+ for step in data['steps']:
+  for c in step.get('checks',[]):
+   assert c['black'] and c['red'] and c['mode'] and c['expected']
+   assert set(c['pads'])<=known
+   present={j['pad'] for s in data['steps'][:step['index']+1] for j in s.get('joints',[])}
+   assert set(c['pads'])<=present, (step['title'],c)
+   if c['expected']==V.DIRECT and len(c['pads'])==2:
+    nets={p['net'] for p in data['pins'].values() if p['pad'] in c['pads']}
+    assert len(nets)==1, c
+ # Ground returns cannot be tested together until the harness joins them.
+ shorts=next(s for s in data['steps'] if s['title']=='Check for shorts before power')
+ ground=next(s for s in data['steps'] if s['title'].startswith('Make J_GND'))
+ assert shorts['index']>ground['index']
+
+def test_verification_covers_every_wire_and_power_sequence(data):
+ for w in data['routes']:
+  assert any(c['name'].startswith(w['id']+' ') for c in data['steps'][w['prepare']]['checks'])
+ titles=[s['title'] for s in data['steps']]
+ assert titles.index('Set the buck output before joining the harness')<next(i for i,t in enumerate(titles) if t.startswith('Make J_'))
+ assert titles.index('Check for shorts before power')<titles.index('Power the board without loads')<titles.index('Test the sensors before connecting loads')
+ assert 'jumper cap' in data['steps'][-1]['actions'][0]
+ assert all(c['mode']=='DC V' for c in data['steps'][-1]['checks'])

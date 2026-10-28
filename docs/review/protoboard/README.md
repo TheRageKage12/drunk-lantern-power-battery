@@ -12,13 +12,24 @@ The components have moved; the printed enclosure and its four mounting holes hav
 4. Turn the board so the exposed solder joints face you. Add R3, R4, C1, then C3 by soldering their own metal legs onto the existing joints, without inserting them into occupied holes. Bend and check the legs, then remove the part and trim before soldering. Then add C2's two sleeved pigtails.
 5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
-Each step completes one component, one wire, or a pair that must be fitted together. Previous and Next always move one listed step; there are 58 steps and no hidden substeps.
+Each step completes one component, one wire, or a pair that must be fitted together. Previous and Next always move one listed step; there are 60 steps and no hidden substeps.
 Board-to-board wire steps start from the spool: cut the stated colour and length, strip both ends, insert both into the named holes, then solder. Outgoing leads use only one board end. “Strip” means remove the plastic coating to expose the copper. Wire steps keep the full instruction list beside the same Component side / Solder side / Tilted view selector used throughout the guide. They start on the component side. Help beside the view selector explains the drawings; numbered instructions describe physical work only. Changing the view changes only the drawing. One side sketch shows the finished connection: the insulated loop above the board and stripped ends joined to existing pins underneath. This explains the connection method, not the exact geometry; the main board drawing supplies actual positions. Full-size wire drawings remain available in the cut list, with a direct button for the capacitor leads. The component-side drawing marks entry holes only; the solder-side drawing uses circles for entry holes and squares for existing pins. Unrelated joints are subdued; the instructions distinguish soldering to an entry hole’s copper ring from attaching to a pin’s existing joint. Extra cutting allowance stays on the bare ends and is clipped before soldering them to the existing component joints. The covered span is the planned route length rounded up by less than 1 mm; shape and check the loop before soldering. Outgoing-wire steps use descriptive names, fixed cuts and a cap-floor destination map. Their H IDs are wire labels, not hole names. Only the board end is soldered in those steps; label the insulated free end for later connection.
 The socket and controller steps open a close-up with staggered hole labels and leader lines. Use **Fit** to show the whole board, or **Part close-up** to return. Each step starts on the side used for its first action. A pad is the copper ring around a hole.
 Each component step includes a shape illustration and its orientation. Names such as D1 are circuit labels; NTE585 is a part number.
 **H04 means column H, row 4** in this guide. Clicking a hole adds blue guides to locate it; click another marked hole to move them.
 These labels may not be printed on the physical board. A01 is the upper-left grid hole on the component face; flip left-to-right
 for soldering, keeping row 01 at the top. The rear view is mirrored, but every hole keeps its name.
+
+
+## Verification while assembling
+
+The guide includes a meter check in every wire step, before more wiring covers the joint. Checkpoints test the initial resistor values and diode direction, socket connections, power-rail shorts, mounting, and operating voltages. Probe-pair buttons only highlight the named holes; all instructions stay visible. A parallel path can hide a bad joint, so also inspect and gently move each new wire. A near-zero resistance means a connection; a brief capacitor-charging beep alone is not a short.
+
+Set the buck to 5.00 V with its output disconnected **before** making the power harness. First power the board with pump, LEDs and lock cable disconnected; test the sensors and gate commands separately afterward. [EL-10](../../BUILD_GUIDE.md#el-10-commission-the-board-without-loads) gives the exact USB power sequence, readings and commands. Never move the jumper cap or driver chip while powered.
+
+Resistance ranges are practical assembly checks, allowing the listed resistor tolerances and ordinary meter error. In-circuit semiconductor readings vary: a resistance short screen does not prove that a circuit works. Capacitor values are checked from their markings before fitting, not inferred from an in-circuit resistance reading.
+
+Reference limits: [Nexperia 74AHCT125](https://www.nexperia.com/products/analog-logic-ics/logic/buffers-inverters-transceivers/buffers/series/74AHC125-74AHCT125.html), [Seeed XIAO RP2040](https://wiki.seeedstudio.com/XIAO-RP2040/), and the [NTE585 manufacturer datasheet](https://www.be-electronics.com/v/vspfiles/datasheet/nte/nte585.pdf). The guide’s tighter voltage targets are troubleshooting acceptance ranges, not maximum component ratings.
 
 ## Mounting and fit
 
