@@ -41,22 +41,21 @@ def wire_actions(w):
     cut=f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Use the cable calculator below to find the cut length for this {w['colour']} wire."
     if len(tails)==2:
         b=tails[1]
-        strip=(f"Strip {a['prepare_strip_mm']} mm at each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Strip {a['prepare_strip_mm']} mm at A; {b['prepare_strip_mm']} mm at B.")
+        strip=(f"Strip {a['prepare_strip_mm']} mm at each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Strip {a['prepare_strip_mm']} mm from one end (A), {b['prepare_strip_mm']} mm from the other (B).")
         prepare=cut+' '+strip
-        fit=f"Bend a loop about {round(w['depth']+w['od']/2)} mm high. With components facing you, insert A into {a['anchor']} and B into {b['anchor']}."
+        ends=(f"the ends through {a['anchor']} and {b['anchor']}" if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"A through {a['anchor']} and B through {b['anchor']}")
+        fit=f"From the component side, insert {ends}, leaving a loop about {round(w['depth']+w['od']/2)} mm above the board."
     else:
         prepare=cut+f" Strip {a['prepare_strip_mm']} mm at the board end only."
         fit=f"With components facing you, insert the bare end into {a['anchor']}. Route the insulated cable past the board edge as drawn."
     entries=' and '.join(t['anchor'] for t in tails)
-    links='; '.join(t['anchor']+' against the existing pin at '+t['node'] for t in tails)
-    nodes=' and '.join(t['node'] for t in tails)
+    links='; '.join(t['anchor']+' → pin '+t['node'] for t in tails)
     rings='copper ring' if len(tails)==1 else 'copper rings'
-    attachment='the wire end to that pin' if len(tails)==1 else 'the wire ends to those pins'
     return [prepare,fit,
             ('After fitting both wires, turn' if len(w['group'])==2 else 'Turn')+f' the board over. Solder the wire to the {rings} around {entries}.',
-            f'Bend the bare end from {links}.',
-            'Trim each bare end just beyond its pin, leaving it touching the pin.',
-            f'Reheat the existing solder at {nodes} to join {attachment}.']
+            f'Bend the bare ends to touch the existing pins: {links}.',
+            'Trim the ends just past those pins.',
+            'Solder each wire end onto its pin’s existing joint.']
 
 def component_identity(ref):
     """Plain names and illustration labels, using the actual terminal assignments."""
