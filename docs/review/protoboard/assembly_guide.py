@@ -120,22 +120,16 @@ def make_data(routes):
     for ref in ['R1','R2','R5','R6','R7','D1','D3','U1','JP1','MCU','Q1','Q2']:component(ref,'Front components')
     add('check','Inspect the first joints','Check that every part faces the direction shown and that no solder accidentally joins neighbouring holes. Leave the installed 14-pin socket empty and the jumper cap off JP1’s two pins.',phase='Inspect')
     for group in report['assembly_groups']:
+        joints=[]
         for name in group:
             w=byid[name];w.update(exit3d=R.cable_exit(w),surface='front',colour=NET_COLOUR[w['net']],length=route_length(w),segments=R.pieces(w),label=L.DESIGN['cables'].get(name,L.NETS[w['net']][1]),earlier_crossings=[],group=group)
             w['assembly_actions']=wire_actions(w)
             for t in w['tails']:pins['WIRE.'+t['id']]=dict(pad=t['anchor'],net=w['net'])
-        # Put every fitting operation in the public sequence before any soldering
-        # in its group: interleaved pairs must be fitted together.
-        for name in group:
-            w=byid[name]
-            text='Fit both loops together before soldering either wire.' if len(group)==2 else ''
-            idx=add('wire','Fit '+w['colour']+' wire · '+name,text,wires=[name],wire_stage='fit',phase='Insulated wires',joints=[])
-            w['prepare']=idx
-        for position,name in enumerate(group):
-            w=byid[name]
-            joints=[dict(pad=pad,owner=name) for t in w['tails'] for pad in [t['anchor'],t['node']]]
-            idx=add('wire','Solder '+w['colour']+' wire · '+name,'',wires=[name],wire_stage='solder',keep_solder_side=position>0,phase='Insulated wires',joints=joints)
-            w.update(joints=[idx],check=idx)
+            for t in w['tails']:
+                joints.extend([dict(pad=t['anchor'],owner=name),dict(pad=t['node'],owner=name)])
+        text='Fit both loops together before soldering either wire.' if len(group)==2 else ''
+        idx=add('wire','Install '+' + '.join(group),text,wires=group,phase='Insulated wires',joints=joints)
+        for name in group:byid[name].update(prepare=idx,joints=[idx],check=idx)
     add('check','Check the board wiring','Check every listed wire for continuity and inspect neighbouring joints for bridges before adding the underside parts.',phase='Inspect')
     for ref in L.DESIGN['rear_order']:component(ref,'Underside parts')
     capfit=len(steps)
