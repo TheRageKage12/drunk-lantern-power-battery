@@ -127,7 +127,7 @@ def make_data(routes):
             for t in w['tails']:pins['WIRE.'+t['id']]=dict(pad=t['anchor'],net=w['net'])
             for t in w['tails']:
                 joints.extend([dict(pad=t['anchor'],owner=name),dict(pad=t['node'],owner=name)])
-        text='Fit both loops together before soldering either wire. Select each wire below for its instructions.' if len(group)==2 else ''
+        text='Fit both loops together before soldering either wire.' if len(group)==2 else ''
         idx=add('wire','Install '+' + '.join(group),text,wires=group,phase='Insulated wires',joints=joints)
         for name in group:byid[name].update(prepare=idx,joints=[idx],check=idx)
     add('check','Check the board wiring','Check every listed wire for continuity and inspect neighbouring joints for bridges before adding the underside parts.',phase='Inspect')
