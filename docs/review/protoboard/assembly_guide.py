@@ -38,23 +38,25 @@ def wire_actions(w):
         w['covered_mm']=span
     else:
         a['prepare_strip_mm']=a['strip_mm']+3
-    cut=f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Measure the cable run below to calculate how much {w['colour']} wire to cut."
+    cut=f"Cut {w['length']['cut']} mm of {w['colour']} wire." if w['b'] else f"Use the cable calculator below to find the cut length for this {w['colour']} wire."
     if len(tails)==2:
         b=tails[1]
-        strip=(f"Remove about {a['prepare_strip_mm']} mm of plastic from each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Remove {a['prepare_strip_mm']} mm of plastic from end A and {b['prepare_strip_mm']} mm from end B.")
-        prepare=cut+' '+strip+' Twist the loose copper strands together.'
-        fit=f"Bend the covered middle into a loop, with both bare ends pointing down. From the component side, insert A through {a['anchor']} and B through {b['anchor']}."
-        shape=f"Keep the loop about {round(w['depth']+w['od']/2)} mm above the board, following the board drawing. Leave the bare ends straight underneath."
+        strip=(f"Strip {a['prepare_strip_mm']} mm at each end." if a['prepare_strip_mm']==b['prepare_strip_mm'] else f"Strip {a['prepare_strip_mm']} mm at A; {b['prepare_strip_mm']} mm at B.")
+        prepare=cut+' '+strip
+        fit=f"Bend a loop about {round(w['depth']+w['od']/2)} mm high. With components facing you, insert A into {a['anchor']} and B into {b['anchor']}."
     else:
-        prepare=cut+f" Remove about {a['prepare_strip_mm']} mm of plastic from the board end and twist the copper strands together. Leave the far end insulated."
-        fit=f"With the components facing you, put the bare end through {a['anchor']}. Keep the plastic above the board."
-        shape='Follow the board drawing to take the insulated cable out past the board edge. Leave its bare board end straight underneath for now.'
+        prepare=cut+f" Strip {a['prepare_strip_mm']} mm at the board end only."
+        fit=f"With components facing you, insert the bare end into {a['anchor']}. Route the insulated cable past the board edge as drawn."
     entries=' and '.join(t['anchor'] for t in tails)
-    links='; '.join('from '+t['anchor']+' to the existing '+t['node']+' joint' for t in tails)
+    links='; '.join(t['anchor']+' against the existing pin at '+t['node'] for t in tails)
     nodes=' and '.join(t['node'] for t in tails)
-    return [prepare,fit,shape,
-            ('Once both wires are fitted, turn' if len(w['group'])==2 else 'Turn')+f' the board over. Solder {entries} to hold the wire.',
-            f'Bend the bare copper {links}. Clip off copper extending beyond those joints, then solder {nodes}.']
+    rings='copper ring' if len(tails)==1 else 'copper rings'
+    attachment='the wire end to that pin' if len(tails)==1 else 'the wire ends to those pins'
+    return [prepare,fit,
+            ('After fitting both wires, turn' if len(w['group'])==2 else 'Turn')+f' the board over. Solder the wire to the {rings} around {entries}.',
+            f'Bend the bare end from {links}.',
+            'Trim each bare end just beyond its pin, leaving it touching the pin.',
+            f'Reheat the existing solder at {nodes} to join {attachment}.']
 
 def component_identity(ref):
     """Plain names and illustration labels, using the actual terminal assignments."""

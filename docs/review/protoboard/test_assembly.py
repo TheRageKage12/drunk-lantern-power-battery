@@ -47,7 +47,7 @@ def test_prepared_wire_reaches_both_joints_without_stripping_the_loop(data):
  for w in data['routes']:
   if not w.get('tails'):continue
   for t in w['tails']:
-   assert t['prepare_strip_mm']>=R.length(t['path'])+2.1
+   assert t['prepare_strip_mm']>=R.length(t['path'])+2.3
   if len(w['tails'])==2:
    covered=w['length']['cut']-sum(t['prepare_strip_mm'] for t in w['tails'])
    route=R.length(w['path3d'])
