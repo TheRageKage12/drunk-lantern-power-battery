@@ -1,112 +1,155 @@
 # Prototype-board assembly
 
-[Interactive viewer](index.html) · [Two-sided drawing](both-sides.png) ·
-[Printable PDF](board-assembly.pdf) · [Solder schedule](WIRE_SCHEDULE.md)
+[Step-by-step guide](assembly.html) · [Full layout](index.html) · [Two-sided drawing](both-sides.png) · [PDF](board-assembly.pdf) · [Solder schedule](WIRE_SCHEDULE.md) · [Outgoing-wire destinations and cuts](OFFBOARD_WIRING.md)
 
-The layout uses the planned Vetco VUPN2924 70 × 50 mm board. Follow the
-[build guide](../../BUILD_GUIDE.md#6-electrical-track) for the circuit,
-off-board wiring, power sequencing and commissioning. This page covers the board layout itself.
+Use the existing **70 × 50 mm isolated-pad board** and the six colours of insulated stranded 22 AWG.
+The components have moved; the printed enclosure and its four mounting holes have not.
 
-## Reading the drawing
+1. Solder the front components with the board held by its edges.
+2. Fit the insulated loops over that face. Each wire end goes through its **own empty hole**.
+   On the back, its short stripped end bends to the indicated component joint. There are no bare buses or separate lead offcuts.
+3. Fit the four indicated wire pairs together before soldering either wire. The guide handles this order.
+4. Turn the board so the exposed solder joints face you. Add R3, R4, C1, then C3 by soldering their own metal legs onto the existing joints, without inserting them into occupied holes. Bend and check the legs, then remove the part and trim before soldering. Then add C2's two sleeved pigtails.
+5. Secure C2 on the battery under its strap, insulate the power-harness splices, and mount the board on two M3 nuts per hole.
 
-- Hole names A–X / 01–18 are assigned from the component side. The solder-side view is mirrored;
-  keep the same physical edge at the top when turning the board over. Supplier lettering may differ.
-- A pad is the copper soldering spot around a hole. Coloured dots mark occupied pads; a diagonal
-  mark means an unused device pin, soldered mechanically with no wire. Small squares mark cable
-  attachments or wire junctions. Large dashed squares reserve space around mounting screws.
-- Each solid coloured path is one rear wire, soldered only at its endpoints. Bends and crossings
-  are not joints. Insulate all wires except the short bare links W01/W02/W05–W07.
-- Dashed coloured lines are cables leaving the board. Cable IDs are distinct from hole names:
-  cable H02 attaches to hole N02; hole F02 is C2 positive. Use the solder schedule for every endpoint.
-- In the viewer, connection buttons highlight groups of connected points (nets); **Show W…**
-  highlights one wire. Click a coloured spot for its connection. **+ / −** zoom; **Fit** resets.
+Each step completes one component, one wire, or a pair that must be fitted together. Previous and Next always move one listed step; there are 60 steps and no hidden substeps.
+Board-to-board wire steps start from the spool: cut the stated colour and length, strip both ends, insert both into the named holes, then solder. Outgoing leads use only one board end. “Strip” means remove the plastic coating to expose the copper. Wire steps keep the full instruction list beside the same Component side / Solder side / Tilted view selector used throughout the guide. They start on the component side. Help beside the view selector explains the drawings; numbered instructions describe physical work only. Changing the view changes only the drawing. One side sketch shows the finished connection: the insulated loop above the board and stripped ends joined to existing pins underneath. This explains the connection method, not the exact geometry; the main board drawing supplies actual positions. Full-size wire drawings remain available in the cut list, with a direct button for the capacitor leads. The component-side drawing marks entry holes only; the solder-side drawing uses circles for entry holes and squares for existing pins. Unrelated joints are subdued; the instructions distinguish soldering to an entry hole’s copper ring from attaching to a pin’s existing joint. Extra cutting allowance stays on the bare ends and is clipped before soldering them to the existing component joints. The covered span is the planned route length rounded up by less than 1 mm; shape and check the loop before soldering. Outgoing-wire steps use descriptive names, fixed cuts and a cap-floor destination map. Their H IDs are wire labels, not hole names. Only the board end is soldered in those steps; label the insulated free end for later connection.
+The socket and controller steps open a close-up with staggered hole labels and leader lines. Use **Fit** to show the whole board, or **Part close-up** to return. Each step starts on the side used for its first action. A pad is the copper ring around a hole.
+Each component step includes a shape illustration and its orientation. Names such as D1 are circuit labels; NTE585 is a part number.
+**H04 means column H, row 4** in this guide. Clicking a hole adds blue guides to locate it; click another marked hole to move them.
+These labels may not be printed on the physical board. A01 is the upper-left grid hole on the component face; flip left-to-right
+for soldering, keeping row 01 at the top. The rear view is mirrored, but every hole keeps its name.
 
-## Placement and soldering
 
-1. Confirm the physical board's 24 × 18 hole array and its edge offsets. The drawing assumes
-   2.54 mm spacing, starting 5.79 mm from the left and 3.41 mm from the top. It is not a drill template.
-2. Mount the board component side up on the cap floor's four 10 mm standoffs (rev C: the cap floor in the top
-   cap), rear wiring in the 10 mm under it. Check the four screw centres against the printed standoffs before
-   drilling 3.2 mm holes at
-   (x,y) = (18,17), (55,15), (15,45), (58,45) mm from the component-side top-left. Keep each 9 × 9 mm area clear.
-3. Fit the small parts and DIP-14 socket before the XIAO and tall parts. U1's notch faces row 01;
-   XIAO USB faces column A. Q1/Q2 printed faces face row 18, with G-D-S pins from columns P to R.
-   Keep their metal drain tabs separate. Follow the drawing's diode stripes and C2 polarity.
-4. Lay C2 flat with insulated formed leads; reserve a case no larger than **25 mm long × 18 mm
-   diameter**. Its actual dimensions remain unverified. Secure its body independently of its leads,
-   leave the vent clear and revise the placement if it is too large.
-5. Solder the rear links with the board detached from its standoffs. Start with the five bare bus
-   links, then work outward through the wire layers: **2.7, 4.6, 6.5, 8.4 mm** from the solder face
-   to wire centre. The schedule gives each wire's layer. Use the planned 22 AWG wire; its listing
-   gives 1.44 mm finished diameter and the routing check reserves **1.6 mm**. Trim leads and keep
-   solder joints within **1.5 mm** of the back face. Lay wire ends against the joint rather than
-   forcing several wires through one hole. A shared endpoint is one solder joint; crossings elsewhere
-   must remain insulated. Form smooth bends; drawn corners are routing guides, not cut lengths.
-6. Q02 and I16 are wire junctions with no additional component. Attach and strain-relieve cables
-   H01–H14, checking connector positions end-to-end rather than relying on wire colours.
-   D2 stays at the pump and C4 at the Hall sensor; neither belongs on this board.
+## Verification while assembling
 
-## Fit and checks before power
+The guide includes a meter check in every wire step, before more wiring covers the joint. Checkpoints test the initial resistor values and diode direction, socket connections, power-rail shorts, mounting, and operating voltages. Probe-pair buttons only highlight the named holes; all instructions stay visible. A parallel path can hide a bad joint, so also inspect and gently move each new wire. A near-zero resistance means a connection; a brief capacitor-charging beep alone is not a short.
 
-The cap floor's standoffs provide **10 mm under the board**, outside four 9 × 9 mm screw areas.
-The outer wire layer reserves 9.2 mm including insulation, leaving 0.8 mm to the cap floor.
-Use M3 screw heads (and any washers) no larger than Ø6 mm; the component placement includes access for a straight
-hex key with the lid off and the cap floor lifted out. Install the four M3-thread brass inserts in the standoffs' Ø4 × 6.5 mm
-bores before mounting the board. Use M3×6 screws; check engagement with any washers added and do not
-let a screw bottom out in the insert.
+Set the buck to 5.00 V with its output disconnected **before** making the power harness. First power the board with pump, LEDs and lock cable disconnected; test the sensors and gate commands separately afterward. [EL-10](../../BUILD_GUIDE.md#el-10-commission-the-board-without-loads) gives the exact USB power sequence, readings and commands. Never move the jumper cap or driver chip while powered.
 
-The component-side drawing and CAD use the **same individual body allowances**, with at least
-1 mm between them. The smallest gap is **1.10 mm (U1 to R3)**; C3 is now **3.47 mm from U1**.
-Q1/Q2 project at most 22 mm from the front. C2 projects at most 19 mm including retention beneath
-its Ø18 mm case and overhangs the board's top by 2 mm. The column-X edge must stay within the
-shown small-part allowances (3.2 mm resistors, 3.4 mm diode).
+Resistance ranges are practical assembly checks, allowing the listed resistor tolerances and ordinary meter error. In-circuit semiconductor readings vary: a resistance short screen does not prove that a circuit works. Capacitor values are checked from their markings before fitting, not inferred from an in-circuit resistance reading.
 
-The checks cover body-to-body spacing, screw access, insulated wire corridors and their terminal
-rises, solder height and the rear stack. **They do not verify
-supplier-unspecified dimensions, wire bend radii or the detailed fan-out at shared solder joints.** Dry-fit the populated board and formed wires
-before fastening it to the standoffs; do not compress wires to make it fit. Final fit still depends on the delivered parts and soldering workmanship.
+Reference limits: [Nexperia 74AHCT125](https://www.nexperia.com/products/analog-logic-ics/logic/buffers-inverters-transceivers/buffers/series/74AHC125-74AHCT125.html), [Seeed XIAO RP2040](https://wiki.seeedstudio.com/XIAO-RP2040/), and the [NTE585 manufacturer datasheet](https://www.be-electronics.com/v/vspfiles/datasheet/nte/nte585.pdf). The guide’s tighter voltage targets are troubleshooting acceptance ranges, not maximum component ratings.
 
-## Dimensions used
+## Mounting and fit
 
-“Limit” means a required purchasing/assembly size, not a measurement supplied by the vendor.
-Check those items before soldering; a part over its limit needs a different part or a revised layout.
+Use **eight existing M3 nuts and four M3×10 screws**: two nuts beneath each board hole, on the unchanged 10 mm printed posts.
+The nominal lift is 4.8 mm, giving **14.8 mm below the solder face** and **4.0 mm thread engagement** (10 − 4.8 − 1.2).
+Dry-fit before wiring. Keep the nuts aligned, seat all four corners evenly, and check that the board clamps without bottoming the screws.
+Do not add washers. The checks include the nuts' conductive hex corners (5.5 mm across flats, plus placement allowance).
 
-| Part | Evidence and drawing allowance |
+The XIAO now faces USB toward column X; U1's notch also faces column X. Q1's printed face faces row 18;
+Q2's printed face faces column A. D1's stripe goes to L05 and D3's stripe to S01. JP1 is R18/S18.
+C2 positive remains F02, negative F04, now via pigtails. Remove JP1’s jumper cap for USB and follow the build guide's power procedure.
+
+| Check | Modeled allowance / physical acceptance |
 |---|---|
-| XIAO RP2040 | [Seeed board/footprint](https://wiki.seeedstudio.com/XIAO-RP2040/): 21 × 17.8 mm, 15.24 mm header-row pitch. Allow 21.5 × 18.3 mm; **12 mm assembled height is a limit**, including headers and pins trimmed on the rear. |
-| U1 + socket | [TI PDIP-14](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf): 2.54 mm lead pitch, 7.62 mm rows. [Vetco socket](https://vetco.net/products/14-pin-ic-socket-2-54mm-spacing-0-1) does not specify its outer body: **limit 11 × 20.5 × 10.5 mm** including the IC. |
-| Q1/Q2 | [Infineon IRLZ44N TO-220 drawing](https://www.infineon.com/assets/row/public/documents/24/49/infineon-irlz44n-datasheet-en.pdf): maximum 10.54 × 4.69 mm section, 15.24 mm body/tab height. Allow 10.8 × 4.9 mm and trim/form leads to keep total projection ≤22 mm. |
-| R1–R7 | Axial body **limit 6.8 × Ø2.7 mm**, projection 3.2 mm. All spans leave at least 1 mm of straight lead at each end before bending. |
-| D1/D3 | Body **limit 5.5 × Ø2.9 mm**, projection 3.4 mm. This exceeds [Vishay DO-41](https://www.vishay.com/docs/88525/1n5817.pdf) maxima (5.2 × Ø2.7 mm), but that is a package reference, not a dimensional guarantee for the listed NTE585. |
-| C1/C3 | [Vetco disc capacitor](https://vetco.net/products/vupn6606_ceramic_capacitor_0-1_uf_-2080_50_volts_z5u) has no mechanical drawing. **Limit Ø10 × 4 mm thick, 13 mm mounted height**; form leads to the shown 2.54/5.08 mm spans without bending at the coating. |
-| C2 | [Vetco 2200 µF / 25 V](https://vetco.net/products/2200uf25vdc_2200uf_25_volt_electrolytic_capacitor) omits case size. **Limit Ø18 × 25 mm**, laid flat; leads have 6.5 mm between pad and case for insulated forming. Secure the body without covering its vent. |
-| JP1 | Header + shunt **limit 5.5 × 2.5 × 8 mm**. |
-| Rear wire | [Vetco 22 AWG PH-78-22210](https://vetco.net/products/hookup_wire_stranded_22_ga): 1.44 mm finished diameter. Check assumes 1.6 mm; separate unrelated wire corridors by at least 0.25 mm. Solder-joint allowance is Ø1.9 × 1.5 mm. |
+| Wire | Nominal Ø1.7 mm; reserve Ø1.8 mm for the owner's [Electronix Express kit](https://www.elexp.com/products/27wk22str25wire-kit-22ga-str-6-25ft-spool), [B00B4ZQ3L0](https://www.amazon.com/dp/B00B4ZQ3L0). |
+| Bends | 4 mm centreline radius in three dimensions. A roughly 6.5 mm round former produces that radius with this wire. This is a forming target, not a published minimum bend rating. |
+| Front loops | Nominal top 32.9 mm. Allow **2 mm extra bow**; finished loops must stay ≤35 mm above the front face. The enclosure check reserves 40 mm, leaving 5 mm beyond that acceptance limit. |
+| Rear soldering | Joint allowance Ø2 × 2.5 mm; trim component pins to ≤1.5 mm. Long wires stay on the other face, so they do not obstruct the iron. |
+| Bare wire ends | The routed ends retain ≥0.52 mm from other Ø2 mm joints and ≥0.60 mm from unrelated ends. They are fixed at their hole and destination joint. Two ends have a small sideways bend shown in the drawing. |
+| Insulated wires | Nominal minimum skin separation 0.57 mm, including curve approximation allowance. Jackets may touch as loops flex; the design does **not** depend on an air gap between insulated wires. Keep jackets intact and bare joints separate. |
+| Components | Minimum body gap 1.09 mm. Front wires nominally clear bodies by ≥1.05 mm and exposed axial-component leads by ≥1.29 mm. |
+| Mounting screws | Wire paths leave a clear Ø8.2 mm access corridor; use screw heads ≤Ø6 mm. Metal nut corners include 0.25 mm radial allowance; solder joints clear that enlarged envelope by ≥0.62 mm. Do not leave stray strands in the mounting areas. |
+| Small rear parts | Keep the bodies parallel to, and raised above, the solder side: R3/R4 have 5.5 mm body clearance; C1/C3 have 6 mm. Their bent legs join existing solder joints. Rear parts, joints and wires must stay within **11 mm** of the solder face, leaving **≥3.3 mm** to the floor with 0.5 mm mounting variation. |
+| C2 support | Case ≤Ø18 × 25 mm, lying on the battery along its length. Centre it under the existing strap, at board coordinate **(14.5,90.5)**. Reserve 2 mm for the strap. Keep the vent and lead seal uncovered. |
 
-The circuit values and shopping-list items are unchanged. The larger body drawings replace earlier
-undersized placeholders; parts, mounting holes and wiring have moved to make room for them.
+**Physical fit is still required.** The capacitors are not available to measure yet, and their listings omit case dimensions.
+Check all limits before soldering. Use a tip no wider than 2 mm. The rear-part checks include the completed wire-anchor joints,
+not just component terminals. Fit R3/R4 before C1, then C3, so later bodies do not block the iron. The guide supplies 1:1 lead templates; R4's longer lead needs at least **26 mm untrimmed**.
+Dry-fit the complete assembly and close the lid without pressing on wires. Do not tighten screws to flatten a failed fit.
 
-With all power disconnected and U1 removed, use the schedule to check continuity for each wire,
-inspect for solder bridges and confirm component orientation. Then follow the build guide's
-staged power-up procedure. Software checks cannot establish solder quality or thermal behaviour.
+Cut **350 mm from the existing 19 mm ONE-WRAP roll**. Thread the battery slots first, fit the battery LED-face down, and
+lay C2 on top along the pack's long direction. Centre the strap across its case; a 25 mm case leaves about 3 mm exposed
+at each end. Leave ≥50 mm of strap overlap and trim excess only after fitting. Tighten enough to prevent C2 sliding or
+rolling, without crushing its sleeve. Pull-test with power disconnected before connecting the board; the leads must not
+hold the capacitor in place. No adhesive base or new mounting hardware is needed.
 
-## Sources and regeneration
+## Resistor identification
 
-Pin placement was checked against [Seeed's standard XIAO RP2040 pinout](https://wiki.seeedstudio.com/XIAO-RP2040/)
-and [official footprint library](https://files.seeedstudio.com/wiki/XIAO-KiCad-Library/New_XIAO_Series_Footprints.zip)
-(15.24 mm header-row separation), [TI's 74AHCT125 datasheet](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf),
-and the [reviewed circuit](../../images/wiring.svg). Board specifications come from
-[Vetco's exact listing](https://vetco.net/products/phenolic-protoboard-1-97-x-2-76-inch).
+Each resistor illustration shows its four bands, in both gold-end (5%) and red-end (2%) versions.
+Either version meets the circuit's 5% acceptance limit; either physical orientation works.
 
-`layout.py` defines placement and wire endpoints; `mechanical.py` supplies shared body dimensions;
-`routing.py` checks wire corridors and writes their depths through the generator. `generate.py` combines the
-SVG drawings with the `viewer.html` template. Run from this directory:
+| Parts | Value | First three bands |
+|---|---|---|
+| R1 | 100 kΩ | Brown · black · yellow |
+| R2 | 22 kΩ | Red · red · orange |
+| R3, R4 | 10 kΩ | Brown · black · orange |
+| R5, R6 | 4.7 kΩ | Yellow · violet · red |
+| R7 | 3.3 kΩ | Orange · orange · red |
+
+The planned NTE QW parts have conflicting tolerance documentation: [Vetco's listing](https://vetco.net/products/nte-qw247_4-7k_ohm_1-4_watt_resistor)
+says 5%, while [NTE's series datasheet](https://static6.arrow.com/aropdfconversion/b7940565efd0f9772de4494dc62a7ce878d576bb/quarter.pdf)
+specifies 2% for these values. Both versions are shown. Band meanings follow the
+[Vishay colour chart](https://www.vishay.com/docs/49411/resistor_color_code_calculator.pdf).
+
+## Wire preparation
+
+Cut one wire at a time. Cut lengths use the curved 3-D path, through-board ends, rear tails and **6 mm trimming stock**.
+That stock is trimmed off; it is not a slack loop left on the board. The rounded routes themselves provide the rise and room
+for forming. Outgoing cuts include the rounded board exit, CAD-based cap-floor route, connection allowance and slack. The [enclosure cut plan](OFFBOARD_WIRING.md) distinguishes these board leads from the separate pump, LED and lock runs. Keep the 150 mm pump/LED service loops beside the cap-floor opening, outside the board footprint. No cable calculator or external-route measurement is required.
+
+Strip enough to reach the indicated joint on the back, keeping the rest insulated. Gently twist the strands, insert them
+**untinned**, and keep the insulation against the front face. Solder the wire's own hole first; form its short end along the
+highlighted rear path, then solder the destination. Lightly tin the exposed end as part of this operation. No loose strands,
+no solder bridges, and no forcing pre-tinned wire into the nominal 1 mm holes. Do not bend at a ceramic capacitor's coating.
+
+C2’s insulated leads run beneath the board, around its column-X side, then across the battery. The free runs reserve
+Ø4 mm for the Ø1.8 mm wire; the first 35 mm follows the joint/forming template. Keep the completed underside within 11 mm.
+For C2, trim and sleeve each pigtail joint separately. Leave enough capacitor lead for a 3–4 mm overlap, without bending at
+the seal. Adjust the final insulated section to the delivered lead pitch, keeping the two sleeves separate. The body limit
+and drawing are envelopes, not a claim that the supplier guarantees a particular lead pitch.
+
+## Harness changes
+
+Three insulated splices replace the crowded on-board power fan-out:
+
+| Splice | Connections |
+|---|---|
+| J_LOAD · switched battery | S1 output, H01, buck IN+, pump +, LED + |
+| J_GND · ground | Battery −, buck IN−, H02 logic return, H03 pump source, H04 LED source, lock ground |
+| J_5V · regulated 5 V | Buck OUT+, H07, lock +5 V |
+
+H05 goes to pump −, H06 to LED −, H08 to microswitch NO, and H09 to Hall OUT. Check continuity between the buck's IN− and
+OUT− before omitting a separate OUT− lead. Pump and LED source returns remain independent until J_GND; they do not flow
+through the logic-ground chain. D2 stays at the pump and C4 at the Hall sensor. Circuit values and GPIO connections are unchanged.
+
+Make these splices on the bench, with sleeves already on the wires. Divide the five/six wires into two opposing bundles,
+lightly pre-tin, overlap their stripped ends and solder. Cover all bare conductor and overlap the jackets with heat-shrink;
+allow a finished splice diameter ≤5.5 mm. The existing 1/8-inch sleeve may not pass over these bundles: obtain **6 mm 3:1
+heat-shrink** for the two larger splices. Retain the joins beside the board's top edge (row 01), below the cable turns, rather
+than adding a lump beneath the board. The [fixed cut plan](OFFBOARD_WIRING.md) supplies the external lead lengths and designated slack. Trim only the fitting stock after positioning the wires. The route check includes the cap-floor screw heads; H06 turns inward above its nearest head.
+
+## Component size evidence
+
+| Part | Source / assembly limit |
+|---|---|
+| Board | [Vetco VUPN2924](https://vetco.net/products/phenolic-protoboard-1-97-x-2-76-inch), 70 × 50 mm, 24 × 18 holes at 2.54 mm pitch. Confirm actual edge offsets before drilling. Existing mounting centres: (18,17), (55,15), (15,45), (58,45) mm. |
+| XIAO | [Seeed](https://wiki.seeedstudio.com/XIAO-RP2040/), 21 × 17.8 mm and 15.24 mm header-row spacing. Reserve 21.5 × 18.3 × 12 mm including headers. |
+| U1/socket | [TI PDIP-14](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf), 2.54 mm pitch and 7.62 mm rows. [Vetco socket](https://vetco.net/products/14-pin-ic-socket-2-54mm-spacing-0-1) outer size is unpublished: require ≤20.5 × 11 × 10.5 mm assembled. |
+| Q1/Q2 | [Infineon TO-220](https://www.infineon.com/assets/row/public/documents/24/49/infineon-irlz44n-datasheet-en.pdf), section ≤10.54 × 4.69 mm. Reserve 10.8 × 4.9 mm and ≤22 mm mounted height. |
+| Resistors | Body limit 6.8 × Ø2.7 mm. R3/R4 lie flat on the rear, connected with their own leads; retain ≥26 mm on R4’s C13 end before forming. Other resistors lie on the front. |
+| D1/D3 | Body limit 5.5 × Ø2.9 mm. [Vishay DO-41 reference](https://www.vishay.com/docs/88525/1n5817.pdf) is smaller; this is not a dimensional guarantee for NTE585. |
+| C1/C3 | [Vetco disc](https://vetco.net/products/vupn6606_ceramic_capacitor_0-1_uf_-2080_50_volts_z5u): no mechanical drawing. Require ≤Ø10 × 4 mm and sufficient untrimmed leads to reach the indicated joints without bending at the coating. |
+| C2 | [Vetco 2200 µF / 25 V](https://vetco.net/products/2200uf25vdc_2200uf_25_volt_electrolytic_capacitor): no case drawing. Require ≤Ø18 × 25 mm; fit pigtails to its actual lead spacing. |
+| JP1 | Header and shunt ≤5.5 × 2.5 × 8 mm. |
+
+## Checks and regeneration
+
+`design.json` is the placement and route data. `mechanical.py` supplies shared size allowances; `routing.py` validates the
+wire paths. `redesign/check.py` checks exact polyline separation with a curve allowance, 4 mm bend construction, connectivity,
+separate wire holes, the order of crossings, rear lead/metal-nut separation and access with a 2 mm iron tip widening to 5 mm over 12 mm. `cad/parts/electronics.py` checks the assembly reserve against the enclosure.
+These are design checks, not measurements of an assembled board.
 
 ```sh
-python3 generate.py
+python3 assembly_guide.py
 python3 generate.py --export
+python3 -m pytest test_assembly.py -q
 ```
 
-The first command rebuilds the standalone viewer and solder schedule with NumPy and Shapely installed. `--export` also rebuilds the combined PNG and four-page PDF; it requires `rsvg-convert`
-on PATH and the Python `pypdf` package. Intermediate SVGs and PDF pages are created in a temporary
-directory and removed automatically. No intermediate exports need to be committed.
+Python dependencies: NumPy, SciPy, Shapely, NetworkX, pytest, pypdf; PNG/PDF export also uses `rsvg-convert`.
+Keep all power disconnected for continuity checks, then follow [EL-10 commissioning](../../BUILD_GUIDE.md#el-10-commission-the-board-without-loads).
+The spreadsheet has not been edited. Allocate eight M3 nuts and four M3×10 screws from the existing hardware to the board;
+whole-device use becomes 22 nuts and ten M3×10 screws. No nylon spacers, M3×25 screws or adhesive tie base are required.
+The existing larger power-splice heat-shrink requirement remains.

@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drunk Lantern · board assembly guide</title>
+<style>
+:root{color-scheme:light;--ink:#25313c;--muted:#5b6670;--line:#d6dcd9;--paper:#fafbf9;--accent:#17634d;--current:#a34b00}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,sans-serif}main{max-width:1320px;margin:auto;padding:28px 32px 64px}h1{font-size:30px;line-height:1.2;font-weight:650;margin:8px 0 12px}h2{font-size:21px;line-height:1.3;margin:0 0 12px}h3{font-size:17px;margin:18px 0 8px}p{margin:10px 0}a{color:var(--accent)}.eyebrow{font-size:13px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}.muted{color:var(--muted);font-size:14px}.intro{max-width:900px}.nav,.tools,.legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap}button,select,input{font:inherit;color:inherit;min-height:40px}button,select{border:1px solid #bcc8c1;background:white;border-radius:6px;padding:7px 12px}button{cursor:pointer}button:hover{background:#eef4ef}button:disabled{opacity:.45;cursor:default}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #dc7800;outline-offset:3px}input[type=number]{width:110px;padding:6px;border:1px solid #bcc8c1;border-radius:5px}select{max-width:100%}.nav{position:sticky;top:0;z-index:3;background:var(--paper);margin-top:22px;padding:15px 0;border-top:1px solid var(--line)}.jump{flex:1;min-width:210px}.jump select{width:100%}label{font-size:14px}progress{width:100%;height:7px;accent-color:var(--accent);display:block;margin:3px 0 22px}.work{scroll-margin-top:110px;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:28px;align-items:start}.drawing{min-width:0;position:sticky;top:100px}.tools{justify-content:space-between;margin-bottom:10px}.tools button{font-size:14px}.viewport{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:8px}.viewport svg{display:block;max-width:none;margin:auto}.inspector{border-top:3px solid var(--accent);padding-top:16px}.inspector p{font-size:15px}.step-meta{font-size:13px;color:var(--accent);margin-bottom:8px}.focus{padding:10px 12px;border-left:3px solid #cc6a16;background:#fff2df;font-weight:600}.note{background:#f0f3ee;padding:10px 12px;border-radius:6px}.caution{border-left:3px solid #b65a16;padding:4px 12px;margin:14px 0}.measure{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0}.measure strong{display:block;font-size:24px;font-weight:600}.measure span{font-size:13px;color:var(--muted)}.legend{font-size:13px;margin:12px 0}.mark{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid #96641a;background:#ffe6aa;margin-right:5px}.mark.done{background:#cddbd4;border-color:#526c5c}.key{display:flex;align-items:center;gap:6px}.swatch{display:inline-block;width:23px;height:9px;border:1px solid #738177;border-radius:4px}.side{width:100%;height:auto;display:block;margin:8px 0}.labelbox{border-top:1px solid var(--line);padding-top:10px;margin-top:12px;font-size:14px;min-height:32px}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;font-weight:600}details p,details li{font-size:15px}details ul{padding-left:20px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px;text-align:left}th,td{border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}th{font-weight:600}td button{font-size:13px;white-space:nowrap;min-height:32px;padding:4px 8px}code{font-size:.94em;background:#edf0ec;padding:1px 4px;border-radius:3px}footer{margin-top:30px;border-top:1px solid var(--line);padding-top:16px}.support{margin-top:30px}.spools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.spools div{font-size:14px}.no-print{display:initial}[hidden]{display:none!important}.pad-hit{cursor:pointer}.pad-hit:hover circle{stroke:#b15a08;stroke-width:.3}.reading{max-width:950px}.small-list{padding-left:18px;font-size:14px}.bounds{font-size:13px;color:var(--muted)}#source{font-size:12px}
+@media(max-width:1000px){.work{grid-template-columns:minmax(0,1fr) 300px;gap:18px}main{padding:22px 20px}.spools{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){main{padding:20px 14px}.work{scroll-margin-top:155px;display:flex;flex-direction:column}.inspector{order:0;width:100%}.drawing{order:1;width:100%;position:static}h1{font-size:26px}.nav{gap:8px}.jump{flex-basis:100%;order:3}.spools{grid-template-columns:1fr}.inspector .step-text{max-width:65ch}.tools{gap:7px}.tools select{max-width:190px}}
+@media print{main{padding:0}.nav,.tools,.support,footer,.no-print{display:none!important}.work{display:block}.inspector{break-inside:avoid}.viewport{overflow:visible;border:0}.viewport svg{width:100%!important}.drawing{break-inside:avoid}body{background:white}}
+#rear-picture,#component-picture{max-width:320px;margin:auto}#component-identify:not(.folded){border:0;padding:0}#component-identify.folded{padding:8px 0 12px}.wire-actions{padding-left:24px;margin:8px 0 16px;font-size:15px}.wire-actions li{padding-left:3px;margin:0 0 12px}.part-card{margin:0 0 12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px}.part-card svg{width:100%;height:auto;display:block}.part-card figcaption{font-size:13px;color:var(--muted)}.hole-key{font-size:14px;margin:8px 0}.hole-key strong{color:#205f9f}
+#checks{border-top:2px solid var(--line);margin-top:18px;padding-top:12px}#checks h3{margin-top:0}#checks table{font-size:14px}#checks th,#checks td{padding:8px 6px}#checks .probe-pair{white-space:normal;text-align:left;width:100%;font-size:13px}#checks .probe-pair span{display:block}#checks tr.selected{background:#e7f2eb}#checks .test-name{font-size:13px;color:var(--muted);margin-bottom:4px}#checks td:first-child{width:48%}.meter-mode{font-weight:650}#check-stop{font-size:13px;border-left:3px solid #b65a16;padding-left:10px}
+</style>
+</head>
+<body><main>
+<header>
+<div class="eyebrow">Drunk Lantern / Workbench</div>
+<h1>Assemble the prototype board</h1>
+<p class="intro">Follow the numbered steps in order.</p>
+<p class="muted">22 AWG · six colours · <strong>Existing M3 mounting</strong> · <a href="README.md">Build details</a></p>
+<p class="muted"><strong>Before starting:</strong> disconnect battery and USB. Check <a href="README.md#mounting-and-fit">part sizes and the M3 dry-fit</a>. Hold the board by its edges.</p>
+</header>
+<div class="nav">
+<button id="previous" aria-label="Previous assembly step">← Previous</button>
+<button class="primary" id="next" aria-label="Next assembly step">Next step →</button>
+<label class="jump">Jump to a step <select id="step" aria-label="Assembly step"></select></label>
+<span id="counter" class="muted"></span>
+</div>
+<progress id="progress" max="100" value="0" aria-label="Position in assembly sequence"></progress>
+<div class="work">
+<section class="drawing" aria-label="Board drawing">
+<div class="tools">
+<label id="view-control">View <select id="view" aria-label="Board view"><option value="rear">Solder side</option><option value="front">Component side</option><option value="tilt">Tilted view</option></select></label>
+<div><button id="part-view" hidden>Part close-up</button> <button id="minus" aria-label="Zoom out">−</button> <button id="fit">Fit</button> <button id="plus" aria-label="Zoom in">+</button></div>
+</div>
+<p id="view-help" class="muted" hidden>Drawing: Component side = insert wire · Solder side = join ends</p>
+<p id="orientation" class="muted"></p>
+<p id="hole-key" class="hole-key"></p>
+<div class="viewport" id="viewport"><svg id="board" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Board assembly at the selected step"></svg></div>
+<div id="board-legend" class="legend"></div>
+<div id="pad-detail" class="labelbox">Click a solder point to identify it.</div>
+<figure id="destination-card" class="part-card" hidden>
+<h3 id="destination-title">Where the free end goes later</h3>
+<svg id="destination-map" viewBox="0 0 400 230" role="img"></svg>
+<figcaption id="destination-caption"></figcaption>
+</figure>
+
+</section>
+<section class="inspector" aria-label="Current assembly instruction" aria-live="polite" aria-atomic="true">
+<div id="phase" class="step-meta" hidden></div><h2 id="title"></h2>
+<details id="component-identify" open><summary id="component-identify-label" hidden>Identify this part</summary><figure id="component-card" class="part-card" hidden><svg id="component-picture" viewBox="0 0 320 140" role="img"></svg><figcaption id="component-caption"></figcaption></figure></details>
+<div id="joint-focus" class="focus" hidden></div>
+<svg id="joint-detail" viewBox="0 0 14 14" role="img" aria-label="Close-up of the current solder point" style="display:block;width:100%;height:150px;margin:12px 0;border:1px solid #d6dcd9;background:white" hidden></svg>
+<p id="instruction" class="step-text"></p>
+<figure id="rear-card" class="part-card" hidden><svg id="rear-picture" viewBox="0 0 320 225" role="img"></svg></figure>
+<ol id="component-actions" class="wire-actions" hidden></ol>
+<details id="component-shape" hidden><summary>Leg-bending drawing and soldering access</summary>
+<p>The download is a full-size drawing of the part and its metal legs, from three angles. Print at 100% and use it to check the bends before cutting.</p>
+<button id="component-template" class="no-print">Download full-size bending drawing</button>
+<p id="iron-access"></p>
+</details>
+<div id="wire-info" hidden>
+<div id="wire-choice" class="tools" aria-label="Wires to fit together" hidden></div>
+<figure id="wire-connection" class="part-card" hidden>
+<svg id="wire-connection-picture" viewBox="0 0 320 175" role="img"></svg>
+<figcaption>Finished connection · side sketch, not to scale.</figcaption>
+</figure>
+<div id="wire-actions" hidden></div>
+<button id="capacitor-wire-template" hidden>Print full-size wire shape</button>
+
+</div>
+<div id="shared" class="caution" hidden></div>
+<section id="checks" hidden aria-label="Verification checks">
+<h3>Check before continuing</h3>
+<p id="check-setup"></p>
+<p class="muted">Drawing controls: select a probe pair to highlight its board holes.</p>
+<table><thead><tr><th>Meter / probe locations</th><th>Expected result</th></tr></thead><tbody id="check-rows"></tbody></table>
+<p id="check-note"></p>
+<p id="check-stop">If a result does not match, stop. Check the probe locations and contact, then repair the connection with all power disconnected. Repeat the test before continuing.</p>
+</section>
+
+</section>
+</div>
+<div class="support">
+<details><summary>How to find a hole on the board</summary><p><strong>H04 means column H, row 4.</strong> Letters run across the drawing; numbers run down it. These are this guide’s labels, not necessarily markings on your board. On the component side, A01 is the upper-left grid hole. Flip left-to-right to solder: A01 moves to the upper right, but its name stays the same. Match the mounting holes to the drawing and keep row 01 at the top.</p></details>
+<details><summary>Wire soldering technique</summary><p>Strip just enough to reach the joint shown on the back. Gently twist the strands and insert them without pre-tinning; keep the insulation against the front face. Solder the wire to the copper ring around its entry hole. Bend the bare end against the destination pin and trim it just beyond the pin. Reheat the pin’s existing solder to attach the wire. Keep stray strands away from neighbouring joints.</p></details>
+<details><summary>Later enclosure wiring · fixed cut list</summary>
+<p>Separate pieces for connecting the board to the rest of the lantern. Cut each listed colour; do not add these lengths to the board leads above. Retain connector pigtails and trim the new wire to meet them.</p>
+<div class="table-wrap"><table><thead><tr><th>Piece</th><th>Colours</th><th>Cut each</th><th>Connects to</th></tr></thead><tbody id="enclosure-cuts"></tbody></table></div>
+<p><a href="OFFBOARD_WIRING.md">Routing, service slack and cut-length calculations</a></p>
+</details>
+<details><summary>Wire colours</summary><div id="spools" class="spools"></div></details>
+<details><summary>Cut list · all board wires and outgoing cables</summary>
+<p>Cut wires as you reach their step. Fit the indicated pairs together; trim excess after fitting.</p><p><button id="csv">Download cut list (CSV)</button> <button id="print">Print current step</button></p>
+<div class="table-wrap"><table><thead><tr><th>Wire</th><th>Connection</th><th>Colour</th><th>Starting cut</th><th>Centre height</th><th>Bend drawing</th></tr></thead><tbody id="cut-list"></tbody></table></div>
+</details>
+</div>
+<footer><span id="source"></span> · <a href="README.md">Board documentation</a> · <a href="../../BUILD_GUIDE.md#el-10-commission-the-board-without-loads">Commissioning procedure</a></footer>
+</main>
+<script>
+'use strict';
+const DATA=/*__ASSEMBLY_DATA__*/;
+const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
+const storageKey='lantern-board-assembly-'+DATA.version;
+let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{}
+let cursor=location.hash==='#complete'?DATA.steps.length-1:Number.isInteger(saved.cursor)?Math.max(0,Math.min(DATA.steps.length-1,saved.cursor)):0;
+let view='front',zoom=1,selectedWire=null,selectedPad=null,closeup=true,selectedCheck=0;
+const routes=Object.fromEntries(DATA.routes.map(w=>[w.id,w]));
+function initialView(){if(DATA.steps[cursor].checks?.length&&!currentWire())return 'rear';return DATA.rear_bodies[DATA.steps[cursor].ref]||currentWire()?.surface==='rear'?'rear':'front'}
+function wireStep(){return !!currentWire()?.tails?.length}
+function currentWire(){return routes[selectedWire||(DATA.steps[cursor].wires||[])[0]]}
+const pins={};for(let[ref,p]of Object.entries(DATA.pins)){if(pins[p.pad])pins[p.pad].ref+=' / '+ref;else pins[p.pad]={ref,...p}}
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify({cursor}))}catch{}}
+function mm(pad){return[5.79+(pad.charCodeAt(0)-65)*2.54,3.41+(Number(pad.slice(1))-1)*2.54]}
+function el(tag,attrs={},text=''){let n=document.createElementNS(NS,tag);for(let[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text)n.textContent=text;return n}
+function add(parent,tag,attrs,text){let n=el(tag,attrs,text);parent.append(n);return n}
+function project(x,y,z=0){return view==='front'?[x,y]:view==='tilt'?[x+y*.25,y*.73-z*.85]:[70-x,y]}
+function path(points){return points.map((p,i)=>(i?'L':'M')+project(...p).join(',')).join(' ')}
+function physical(w){return [...w.path3d,...(w.exit3d||[]).slice(1)]}
+function rearPicture(s){
+ const b=DATA.rear_bodies[s.ref],svg=$('rear-picture');$('rear-card').hidden=!b;$('component-shape').hidden=!b;
+ const actions=$('component-actions');actions.replaceChildren();actions.hidden=!s.actions?.length;
+ for(let text of s.actions||[]){let li=document.createElement('li');li.textContent=text;actions.append(li)}
+ if(!b)return;
+ const leads=Object.entries(DATA.rear_leads).filter(([ref])=>ref.startsWith(s.ref+'.'));
+ const y=z=>140-z*7;
+ svg.replaceChildren();svg.setAttribute('aria-label',`${s.ref} attachment sketch, not a bending template. The body is raised ${b.z0} mm above the solder side. Each leg ends in an existing solder joint, without entering the hole.`);
+ const label=(xx,yy,text,size=12)=>add(svg,'text',{x:xx,y:yy,'text-anchor':'middle','font-size':size,fill:'#25313c'},text);
+ label(160,16,'Attachment sketch · not to scale',14);
+ add(svg,'rect',{x:14,y:140,width:292,height:9,fill:'#eadbc2',stroke:'#b9aa8e'});
+ for(let [i,[ref]]of leads.entries()){
+  let xx=i===0?55:245,bx=i===0?104:216;
+  add(svg,'path',{d:`M${bx} ${y((b.z0+b.z1)/2)}H${xx}V135`,fill:'none',stroke:'#a34b00','stroke-width':3,'stroke-linejoin':'round'});
+  add(svg,'path',{d:`M${xx} 132V157`,stroke:'#697870','stroke-width':2});
+  add(svg,'ellipse',{cx:xx,cy:135,rx:5,ry:3.5,fill:'#ffdf94',stroke:'#a34b00','stroke-width':1});
+  label(xx,177,DATA.pins[ref].pad,13);
+ }
+ add(svg,'rect',{x:104,y:y(b.z1),width:112,height:(b.z1-b.z0)*7,rx:4,fill:'#e5d4b4',stroke:'#526159','stroke-width':1});
+ label(160,y(b.z1)-8,s.ref,13);
+ add(svg,'path',{d:`M278 ${y(b.z0)}h12m-6 0V140m-6 0h12`,stroke:'#526159','stroke-width':1,fill:'none'});
+ label(279,y(b.z0)-17,`${b.z0} mm gap`);
+ label(160,201,'New leg tips join existing solder.');
+ label(160,218,'Follow the close-up for the actual bends.',11);
+ $('iron-access').textContent=['R3','R4'].includes(s.ref)?'Bring the soldering iron toward these joints from the edge labelled row 01 (the top of the board drawing). This keeps it clear of the new resistor body.': 'Keep the soldering iron clear of the nearby parts and wires.';
+}
+function componentPicture(part){
+ const box=$('component-card'),svg=$('component-picture');box.hidden=!part;$('component-identify').hidden=!part;$('component-identify').open=!DATA.rear_bodies[part?.ref];$('component-identify').classList.toggle('folded',!!DATA.rear_bodies[part?.ref]);$('component-identify-label').hidden=!DATA.rear_bodies[part?.ref];if(!part)return;
+ const info=part.identity,k=info.kind;svg.replaceChildren();svg.setAttribute('viewBox',k==='resistor'?'0 0 320 180':'0 0 320 140');svg.setAttribute('aria-label',info.name+'. '+info.note);
+ add(svg,'title',{},info.name);add(svg,'desc',{},info.note);
+ const line=(pts,colour='#78868c',width=3)=>add(svg,'path',{d:pts,fill:'none',stroke:colour,'stroke-width':width,'stroke-linecap':'round'});
+ const rect=(x,y,w,h,fill,rx=3)=>add(svg,'rect',{x,y,width:w,height:h,rx,fill,stroke:'#59666b','stroke-width':1});
+ const label=(x,y,text,size=13,fill='#25313c')=>add(svg,'text',{x,y,'text-anchor':'middle','font-size':size,fill},text);
+ if(k==='diode'){
+  line('M30 56H290');rect(108,39,104,34,'#30363b',8);rect(193,40,9,32,'#dce3e6',0);
+  line('M46 56V88','#59666b',1);line('M274 56V88','#59666b',1);
+  label(61,106,'Unstriped end');label(259,106,'Striped end');
+  label(61,127,info.ends[0].pad,15,'#a34b00');label(259,127,info.ends[1].pad,15,'#a34b00');
+  label(160,20,'Find the band at one end');
+ }else if(k==='resistor'){
+  const colours={brown:'#78441d',black:'#202124',red:'#cf2634',orange:'#ed7916',yellow:'#f2cf18',violet:'#8042a2',gold:'#b78c31'};
+  for(let [row,variant] of info.band_variants.entries()){
+   let y=50+row*80;label(160,y-32,`${variant.tolerance}% · ${variant.bands[3]} end band`);
+   line(`M28 ${y}H292`);rect(107,y-17,106,34,'#e1cfac',12);
+   variant.bands.forEach((colour,i)=>add(svg,'rect',{x:[119,140,161,194][i],y:y-16,width:8,height:32,fill:colours[colour],'data-band':colour,'data-tolerance':variant.tolerance}));
+  }
+  label(160,173,info.bands.map(c=>c[0].toUpperCase()+c.slice(1)).join(' · '),13);
+ }else if(k==='ceramic'){
+  line('M142 65L134 110M178 65L186 110');add(svg,'ellipse',{cx:160,cy:56,rx:35,ry:32,fill:'#bf864a',stroke:'#795735','stroke-width':2});
+  label(160,132,'Either way round');
+ }else if(k==='electrolytic'){
+  line('M137 95V126M184 95V126');rect(119,18,82,82,'#364b61',5);rect(176,19,17,80,'#d9e1e4',0);
+  label(184,47,'−',20);label(184,75,'−',20);label(83,131,'Red +',13,'#b1262e');label(237,131,'Black −',13);
+  line('M108 126H137M184 126H211','#59666b',1);label(160,12,'Minus stripe');
+ }else if(k==='socket'){
+  for(let i=0;i<7;i++){rect(71+i*27,34,7,12,'#b8c1c5',1);rect(71+i*27,87,7,12,'#b8c1c5',1)}
+  rect(61,46,198,41,'#343a3d');
+  for(let i=0;i<7;i++){rect(72+i*27,52,6,5,'#13181b',1);rect(72+i*27,76,6,5,'#13181b',1)}
+  line('M259 57Q242 66 259 75','#dce3e6',3);label(160,18,'Empty socket — not the chip');label(211,124,'Notch → column X');
+ }else if(k==='controller'){
+  rect(116,24,85,84,'#267a6b',6);
+  for(let i=0;i<7;i++){rect(113,29+i*11,8,5,'#d7b868',1);rect(196,29+i*11,8,5,'#d7b868',1)}
+  rect(142,51,29,30,'#343a3d');rect(146,14,25,22,'#ccd3d6');rect(151,15,15,6,'#36434a',1);
+  label(160,132,'USB connector → column X');
+ }else if(k==='mosfet'){
+  rect(135,12,50,30,'#bfc9cf',2);add(svg,'circle',{cx:160,cy:25,r:6,fill:'white',stroke:'#59666b'});
+  rect(128,39,64,47,'#30363b');label(160,66,'IRLZ44N',10,'#fff');
+  line('M140 86V113M160 86V113M180 86V113');label(160,132,part.ref==='Q1'?'Printed face → row 18':'Printed face → column A');
+ }else if(k==='jumper'){
+  rect(129,47,62,25,'#30363b');rect(140,22,7,81,'#c7ad6b',0);rect(173,22,7,81,'#c7ad6b',0);rect(129,47,62,25,'#30363b');label(160,129,'Leave the removable cap off');
+ }
+ $('component-caption').textContent=k==='diode'?`${part.ref} = circuit label · NTE585 = part number. Shape guide, not to scale.`:k==='resistor'?`${part.ref} = circuit label. Either version fits; either way round.`:k==='socket'?'This socket holds chip U1. Leave it empty until the final step.':`${part.ref} = circuit label. Shape guide; colour and markings may vary.`;
+}
+function drawWire(svg,w){let pts=physical(w),colour=DATA.colours[w.colour],active=wireStep()?w.id===currentWire().id:(DATA.steps[cursor].wires||[]).includes(w.id),group=add(svg,'g',{'data-wire':w.id,opacity:active?1:wireStep()?.3:.55});
+ const segments=w.joints[0]>cursor?w.segments.filter(([,d])=>d!==1):w.segments;
+ for(let [points,diameter] of segments){let d=path(points),bare=diameter===1;let visible=view==='tilt'||(view==='front'?!bare&&w.surface!=='rear':bare||w.surface==='rear');if(wireStep()&&!visible)continue;let layer=add(group,'g',{opacity:visible?1:.13});
+  add(layer,'path',{d,fill:'none',stroke:'#fff','stroke-width':diameter+.3,'stroke-linejoin':'round','stroke-linecap':'round'});
+  add(layer,'path',{d,fill:'none',stroke:bare?'#aa906d':'#3c4545','stroke-width':diameter,'stroke-linejoin':'round','stroke-linecap':'round'});
+  add(layer,'path',{d,fill:'none',stroke:bare?'#dfc8a4':colour,'stroke-width':Math.max(.3,diameter-.22),'stroke-linejoin':'round','stroke-linecap':'round'});
+ }
+ if(active&&!w.tails?.length){let p=pts[Math.floor(pts.length/2)],q=project(...p);add(group,'text',{x:q[0]+1,y:q[1]-1.4,'font-size':1.9,fill:'#172c22','paint-order':'stroke',stroke:'#fff','stroke-width':.65,'font-weight':700},w.id)}
+}
+
+function padPosition(pad){return project(...mm(pad))}
+function draw(){
+ const svg=$('board'),s=DATA.steps[cursor],width=$('viewport').clientWidth;
+ $('view').value=view;
+ const activeTest=s.checks?.[selectedCheck];
+ const currentPads=activeTest&&selectedCheck!==null?activeTest.pads:wireStep()?(view==='front'||view==='tilt'?currentWire().tails.map(t=>t.anchor):currentWire().anchors):s.pads;
+ const focusPad=selectedPad||currentPads[0],focusCol=focusPad?.[0],focusRow=focusPad?Number(focusPad.slice(1)):null;
+ const expanded=cursor>=DATA.parts.find(p=>p.ref==='C2').fit;
+ const densePart=s.kind==='component'&&(s.pads.length>6||DATA.rear_bodies[s.ref])?DATA.parts.find(p=>p.ref===s.ref):null;
+ const focusWire=currentWire()?.tails?.length?currentWire():null;
+ const locatingTest=!!activeTest&&selectedCheck!==null;
+ $('part-view').hidden=!densePart;$('part-view').setAttribute('aria-pressed',String(!!densePart&&closeup));
+ let box=expanded?(view==='tilt'?[-15,-38,140,155]:[-25,-21,120,151]):(view==='tilt'?[-10,-38,106,116]:[-10,-21,90,80]);
+ if(densePart&&closeup&&!locatingTest){let[x,y,w,h,z0,z1]=densePart.bounds,pts=[...s.pads.map(p=>project(...mm(p))),...Object.entries(DATA.rear_leads).filter(([ref])=>ref.startsWith(s.ref+'.')).flatMap(([,p])=>p.map(([x,y,z])=>project(x,y,-1.2-z))),...[[x,y],[x+w,y],[x,y+h],[x+w,y+h]].flatMap(([a,b])=>[project(a,b,z0),project(a,b,z1)])];let xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);box=[Math.min(...xs)-8,Math.min(...ys)-10,Math.max(...xs)-Math.min(...xs)+16,Math.max(...ys)-Math.min(...ys)+20]}
+ if(locatingTest&&activeTest.pads.length&&closeup){const pts=activeTest.pads.map(p=>project(...mm(p))),xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);box=[Math.min(...xs)-13,Math.min(...ys)-13,Math.max(...xs)-Math.min(...xs)+26,Math.max(...ys)-Math.min(...ys)+26]}
+ if(focusWire&&closeup&&!locatingTest){let pts=[...s.wires.flatMap(id=>physical(routes[id]).map(p=>project(...p))),...currentPads.map(p=>project(...mm(p)))],xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);box=[Math.min(...xs)-12,Math.min(...ys)-12,Math.max(...xs)-Math.min(...xs)+24,Math.max(...ys)-Math.min(...ys)+24]}
+ svg.replaceChildren();svg.setAttribute('viewBox',box.join(' '));
+ const aspect=box[2]/box[3],fitWidth=Math.min(width,Math.max(300,window.innerHeight-300)*aspect);
+ svg.style.width=fitWidth*zoom+'px';
+ add(svg,'title',{},(view==='front'?'Component side':view==='rear'?'Solder side':'Tilted view')+': '+s.title);
+ add(svg,'desc',{},'Row 01 remains at the top. Orange marks identify this step’s connections; earlier work is subdued.');
+ if(expanded){let z=10;add(svg,'path',{d:path([[-20,58,z],[85,58,z],[85,123,z],[-20,123,z],[-20,58,z]]),fill:'#e6e9eb',stroke:'#849099','stroke-width':.2});let label=project(32,115,z);add(svg,'text',{x:label[0],y:label[1],'font-size':3,'text-anchor':'middle',fill:'#526159'},'Battery top');add(svg,'path',{d:path([[5,58,10],[24,58,10],[24,123,10],[5,123,10],[5,58,10]]),fill:'#9ba6a1',opacity:.2});}
+ let corners=[[0,0],[70,0],[70,50],[0,50],[0,0]];
+ add(svg,'path',{d:path(corners),fill:'#faf3e5',stroke:'#b9aa8e','stroke-width':.18});
+ if(focusPad&&(!wireStep()||selectedPad)){let [x,y]=mm(focusPad);add(svg,'path',{d:path([[x,-1],[x,y],[-1,y]]),fill:'none',stroke:'#205f9f','stroke-width':.28,'stroke-dasharray':'.7 .6','data-hole-guide':focusPad});}
+ for(let[mx,my]of DATA.mounts){let box=[[mx-4.5,my-4.5],[mx+4.5,my-4.5],[mx+4.5,my+4.5],[mx-4.5,my+4.5],[mx-4.5,my-4.5]];add(svg,'path',{d:path(box),fill:'#e9ecec',stroke:'#9ba5a7','stroke-width':.15,'stroke-dasharray':'.6 .5'});let p=project(mx,my);add(svg,'circle',{cx:p[0],cy:p[1],r:1.6,fill:'white',stroke:'#a6adae','stroke-width':.15})}
+ for(let c=0;c<24;c++){let x=5.79+c*2.54;for(let r=0;r<18;r++){let y=3.41+r*2.54;if(DATA.mounts.some(([mx,my])=>Math.abs(x-mx)<4.5&&Math.abs(y-my)<4.5))continue;let p=project(x,y);add(svg,'circle',{cx:p[0],cy:p[1],r:.42,fill:'#fffaf0',stroke:'#c7b79b','stroke-width':.1})}
+ let p=project(x,-2.3),selected=String.fromCharCode(65+c)===focusCol;add(svg,'text',{x:p[0],y:p[1],'font-size':selected?2.3:1.65,'font-weight':selected?700:400,'text-anchor':'middle',fill:selected?'#205f9f':'#495158'},String.fromCharCode(65+c))}
+ for(let r=0;r<18;r++){let y=3.41+r*2.54,selected=r+1===focusRow;for(let x of [-2.3,72.3]){let p=project(x,y);add(svg,'text',{x:p[0],y:p[1]+.6,'font-size':selected?2.3:1.7,'font-weight':selected?700:400,'text-anchor':'middle',fill:selected?'#205f9f':'#495158'},String(r+1).padStart(2,'0'))}}
+ for(let part of DATA.parts){if(part.fit>cursor)continue;let[x,y,w,h,z0,z1]=part.bounds,installed=part.fit<cursor,z=part.side==='rear'?z0:z1;
+  let visible=part.side==='external'||part.side===(view==='front'?'front':'rear');let g=add(svg,'g',{opacity:visible||view==='tilt'?1:wireStep()?0:.16,'data-part':part.ref});let poly=[[x,y,z],[x+w,y,z],[x+w,y+h,z],[x,y+h,z],[x,y,z]];if(view==='tilt'){let base=part.side==='rear'?z1:z0;for(let[a,b]of[[[x,y],[x+w,y]],[[x+w,y],[x+w,y+h]],[[x+w,y+h],[x,y+h]],[[x,y+h],[x,y]]])add(g,'path',{d:path([[...a,base],[...b,base],[...b,z],[...a,z],[...a,base]]),fill:'#c6d0c8',stroke:'#8b978e','stroke-width':.12,opacity:.5})}
+  if(part.ref==='C2'){
+   for(let [i,pg] of DATA.pigtails.entries()){let [xx,yy,dd]=pg.path.at(-1),zz=-1.2-dd;add(g,'path',{d:path([[xx,yy,zz],[27,yy,zz]]),stroke:'#697870','stroke-width':.6});let label=project(29,yy-2,zz);add(g,'text',{x:label[0],y:label[1],'font-size':2.4,'text-anchor':'middle'},i===0?'+':'−')}
+  }
+  if(part.side==='rear' && part.ref!=='C2'){
+   for(let [ref,pts]of Object.entries(DATA.rear_leads))if(ref.startsWith(part.ref+'.'))add(g,'path',{d:path(pts.map(([x,y,z])=>[x,y,-1.2-z])),fill:'none',stroke:part.ref===s.ref?'#a34b00':'#697870','stroke-width':part.ref===s.ref?.75:.5});
+  }else if(part.pins.length===2 && part.ref!=='C2')add(g,'path',{d:path(part.pins.map(mm)),fill:'none',stroke:'#697870','stroke-width':.4});
+  if(DATA.rear_bodies[part.ref])poly=DATA.rear_bodies[part.ref].xy.map(([x,y])=>[x,y,z]);
+  add(g,'path',{d:path(poly),fill:part.ref==='C2'?'#edd59d':['D1','D3'].includes(part.ref)?'#30363b':['MCU','U1'].includes(part.ref)?'#d6e1df':'#e5d4b4',stroke:installed?'#6e7971':'#ac580e','stroke-width':.2,...(!installed?{'stroke-dasharray':'.8 .5'}:{})});
+  if(part.ref==='C2')add(g,'path',{d:path([[5,y,z+.1],[24,y,z+.1],[24,y+h,z+.1],[5,y+h,z+.1],[5,y,z+.1]]),fill:'#657d76',opacity:.45,stroke:'#526b63','stroke-width':.2});
+  let p=project(x+w/2,y+h/2,z);add(g,'text',{x:p[0],y:p[1]+.7,'text-anchor':'middle','font-size':2.1,fill:['D1','D3'].includes(part.ref)?'#fff':'#293934'},part.ref);
+  if(part.ref==='U1'){let a=project(x+w-1,y+h/2,z);add(g,'circle',{cx:a[0],cy:a[1],r:.7,fill:'#52665a'})}
+  if(part.ref==='MCU')add(g,'path',{d:path([[x+w-2,y+5],[x+w+2,y+5],[x+w+2,y+h-5],[x+w-2,y+h-5],[x+w-2,y+5]]),fill:'#9eada9',stroke:'#5b6e65','stroke-width':.2});
+  if(['D1','D3'].includes(part.ref))add(g,'path',{d:path([[x+w-.6,y],[x+w-.6,y+h]]),stroke:'#dce3e6','stroke-width':.6});
+  if(['Q1','Q2'].includes(part.ref))add(g,'path',{d:path(part.ref==='Q1'?[[x,y+h],[x+w,y+h]]:[[x,y],[x,y+h]]),stroke:'#394b42','stroke-width':.6});
+ }
+ for(let w of DATA.routes){if(w.prepare>cursor)continue;drawWire(svg,w)}
+ const wireLabels={};
+ if(focusWire&&closeup&&!locatingTest){
+  const ordered=currentPads.map(pad=>({pad,p:padPosition(pad)})).sort((a,b)=>a.p[0]-b.p[0]);
+  for(const [side,items]of [[0,ordered.slice(0,Math.ceil(ordered.length/2))],[1,ordered.slice(Math.ceil(ordered.length/2))]]){
+   if(!items.length)continue;
+   items.sort((a,b)=>a.p[1]-b.p[1]);
+   const start=Math.max(box[1]+5,Math.min(items[0].p[1],box[1]+box[3]-5-(items.length-1)*5));
+   items.forEach((item,i)=>wireLabels[item.pad]={x:side?box[0]+box[2]-1:box[0]+1,y:start+i*5,side});
+  }
+ }
+ const done=new Set(DATA.steps.slice(0,cursor).flatMap(x=>x.pads));
+ const visible=new Set([...done,...currentPads]);
+ for(let pad of visible){let p=padPosition(pad),current=currentPads.includes(pad),g=add(svg,'g',{'data-pad':pad,'data-current':current,class:'pad-hit',role:'button',tabindex:0,'aria-label':`${pad}: ${pins[pad].ref}, ${DATA.nets[pins[pad].net]?.label||'unused pin'}`});
+  const existingPin=!locatingTest&&!!focusWire?.tails.some(t=>t.node===pad);
+  if(current){
+   if(existingPin)add(g,'rect',{x:p[0]-1,y:p[1]-1,width:2,height:2,rx:.15,fill:'#fff2db',stroke:'#a34b00','stroke-width':.22});
+   else add(g,'circle',{cx:p[0],cy:p[1],r:1,fill:'#fff2db',stroke:'#a34b00','stroke-width':.22});
+  }
+  add(g,'circle',{cx:p[0],cy:p[1],r:focusWire&&!current ? .35 : .42,fill:done.has(pad)?'#bfcac4':'#fff',stroke:current?'#a34b00':focusWire?'#aeb6b0':'#536b5f','stroke-width':.12});
+  if(current){let outside=wireLabels[pad],row=currentPads.filter(n=>n.slice(1)===pad.slice(1)).sort(),crowded=row.length>(DATA.rear_bodies[s.ref]?1:3),pos=[p[0]+2,p[1]-2];
+   if(locatingTest){pos=[p[0]-3,p[1]+(activeTest.pads.indexOf(pad)?-3:4)];add(svg,'path',{d:`M${p[0]} ${p[1]}L${pos[0]+.4} ${pos[1]-.5}`,fill:'none',stroke:'#4e6359','stroke-width':.16})}
+   else if(outside){pos=[outside.x,outside.y];crowded=false;add(svg,'path',{d:`M${p[0]} ${p[1]}L${outside.x+(outside.side?-8:8)} ${outside.y}`,fill:'none',stroke:'#a34b00','stroke-width':.16})}
+   else if(crowded){let rows=currentPads.map(n=>Number(n.slice(1))),below=Number(pad.slice(1))===Math.max(...rows)&&Math.max(...rows)>Math.min(...rows),direction=below?1:-1,offset=3.7+3.2*(row.indexOf(pad)%2);pos=[p[0],p[1]+direction*offset+.55];add(svg,'path',{d:`M${p[0]} ${p[1]+direction*.8}V${p[1]+direction*(offset-1)}`,fill:'none',stroke:'#a34b00','stroke-width':.16})}
+   add(svg,'text',{x:pos[0],y:pos[1],'text-anchor':locatingTest?'end':outside?(outside.side?'end':'start'):crowded?'middle':'start','font-size':locatingTest?1.65:outside?1.9:crowded?1.65:2.2,fill:'#793800','font-weight':700,'paint-order':'stroke',stroke:'#fff','stroke-width':.5,'data-hole-label':pad},locatingTest?`${activeTest.black===pad?'Black':'Red'}: ${pad}`:pad);
+
+  }
+  let act=()=>{selectedPad=pad;$('pad-detail').textContent=`Hole ${pad} · ${pins[pad].ref} · ${DATA.nets[pins[pad].net]?.label||'unused; no wire'}. ${current?(locatingTest?'Meter probe point; do not solder during this check.':focusWire?(s.wires.some(id=>routes[id].tails.some(t=>t.node===pad))?'Solder the bent wire onto the existing pin joint; do not insert it into this hole.':'Solder the inserted wire to the copper ring around this hole.'):'Solder in this step.'):done.has(pad)?'Already soldered.':'Not yet soldered.'}`;draw()};g.addEventListener('click',act);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}})
+ }
+ for(let point of s.points||[]){let p=project(...point);add(svg,'circle',{cx:p[0],cy:p[1],r:1.25,fill:'#ffdf94',stroke:'#a34b00','stroke-width':.3})}
+ const legend=$('board-legend');legend.replaceChildren();
+ const key=(text,square=false)=>{let item=document.createElement('span'),mark=document.createElement('i');mark.className='mark';if(square)mark.style.borderRadius='2px';item.append(mark,document.createTextNode(text));legend.append(item)};
+ if(focusWire&&!locatingTest){key('Wire-entry hole');if(view==='rear')key('Existing pin — attach here',true)}
+ else{key(locatingTest?'Meter probe point':'Solder in this step');let item=document.createElement('span');item.textContent='Grey dots: earlier joints';legend.append(item)}
+ $('view-help').hidden=!focusWire;
+ $('orientation').textContent=(densePart&&closeup?`${s.ref} close-up · `:'')+(view==='front'?'Component side · USB right · row 01 at top':view==='tilt'?'Tilted view · component side':'Solder side · USB left · row 01 at top');
+ $('hole-key').hidden=!!focusWire&&!selectedPad;$('hole-key').replaceChildren();if(focusPad){let strong=document.createElement('strong');strong.textContent=`${focusPad} = column ${focusCol}, row ${focusRow}.`;$('hole-key').append(strong,' Click another marked hole to locate it.')}else $('hole-key').textContent='Hole names stay the same when you flip the board.';
+ let inset=$('joint-detail');inset.toggleAttribute('hidden',!selectedPad);if(selectedPad){let p=padPosition(selectedPad);inset.replaceChildren(...[...svg.children].map(n=>n.cloneNode(true)));inset.setAttribute('viewBox',`${p[0]-7} ${p[1]-7} 14 14`);for(let n of inset.querySelectorAll('[tabindex]')){n.removeAttribute('tabindex');n.removeAttribute('role')}}
+}
+// Simplified connection sketch restored from the original explanatory wire diagram.
+// It explains how one wire passes through the board; the main drawing supplies actual positions.
+function wireConnection(w){
+ const box=$('wire-connection'),svg=$('wire-connection-picture');box.hidden=!w?.tails?.length;svg.replaceChildren();
+ if(box.hidden)return;
+ const line=(d,colour,width)=>add(svg,'path',{d,fill:'none',stroke:colour,'stroke-width':width,'stroke-linecap':'round','stroke-linejoin':'round'});
+ const label=(x,y,text,size=12)=>add(svg,'text',{x,y,'text-anchor':'middle','font-size':size,fill:'#25313c'},text);
+ add(svg,'rect',{x:14,y:100,width:292,height:10,fill:'#eadbc2',stroke:'#b9aa8e'});
+ label(160,95,'Board');
+ const loop=w.tails.length===2?'M110 100V54Q110 30 134 30H186Q210 30 210 54V100':'M110 100V54Q110 30 134 30H285';
+ line(loop,'#59666b',9);line(loop,DATA.colours[w.colour],6);
+ label(177,17,w.tails.length===2?'Insulated wire':'To '+w.outbound.tag);
+ for(const [i,t]of w.tails.entries()){
+  const entry=i===0?110:210,node=i===0?40:280;
+  line(`M${node} 70V139`,'#697870',3);
+  line(`M${entry} 100V126Q${entry} 135 ${entry+(i===0?-9:9)} 135H${node}`,'#a87332',3);
+  add(svg,'circle',{cx:entry,cy:135,r:4,fill:'#fff2db',stroke:'#a34b00','stroke-width':1.2});
+  add(svg,'rect',{x:node-4,y:131,width:8,height:8,rx:1,fill:'#fff2db',stroke:'#a34b00','stroke-width':1.2});
+  label(node,62,`${t.node} pin`);
+  const endName=w.tails.length===2&&w.tails[0].prepare_strip_mm!==w.tails[1].prepare_strip_mm?(i===0?'A: ':'B: '):'';
+  label(entry,158,`${endName}${t.anchor} hole`);
+ }
+ svg.setAttribute('aria-label',`${w.id}: finished connection, simplified side sketch, not to scale. Insulated wire loops above the board. `+w.tails.map(t=>`The stripped end passes through hole ${t.anchor} and bends underneath to the existing pin at ${t.node}. Solder at the entry hole and the existing pin joint.`).join(' '));
+}
+function sidePoints(w){let pts=physical(w),a=pts[0],b=pts.at(-1),dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);return pts.map(p=>[((p[0]-a[0])*dx+(p[1]-a[1])*dy)/len,p[2]])}
+function wireTemplate(w=currentWire()){if(!w)return;
+ let views=[{label:'Component-side plan · A = '+w.anchor_a+' · B = '+(w.anchor_b||'cable exit'),points:physical(w).map(([x,y])=>[x,y])}];
+ if(!w.bare)views.push({label:'Side elevation · above/below the component face',points:sidePoints(w).map(([x,z])=>[x,-z])});
+ let y=17,width=110;
+ for(let v of views){v.minX=Math.min(...v.points.map(p=>p[0]));v.minY=Math.min(...v.points.map(p=>p[1]));v.y=y;y+=Math.max(...v.points.map(p=>p[1]))-v.minY+17;}
+ let height=y+12,svg=el('svg',{xmlns:NS,width:width+'mm',height:height+'mm',viewBox:`0 0 ${width} ${height}`});
+ add(svg,'rect',{width:'100%',height:'100%',fill:'white'});
+ add(svg,'text',{x:5,y:5,'font-size':3},`${w.id} · ${w.colour} · cut ${w.length.cut} mm${w.b?'':' total cut; drawing shows board portion'}`);
+ add(svg,'text',{x:5,y:10,'font-size':2.6},'Print at 100%. Match the centreline; trim after forming.');
+ for(let v of views){add(svg,'text',{x:5,y:v.y,'font-size':2.5},v.label);
+ let pts=v.points.map(p=>[p[0]-v.minX+10,p[1]-v.minY+v.y+6]);
+ let d=pts.map((p,i)=>(i?'L':'M')+p.join(',')).join(' ');
+ add(svg,'path',{d,fill:'none',stroke:'#d1d5d2','stroke-width':w.od,'stroke-linejoin':'round'});
+ add(svg,'path',{d,fill:'none',stroke:'#222','stroke-width':.15});
+ for(let [pt,label] of [[pts[0],'A'],[pts.at(-1),'B']])add(svg,'text',{x:pt[0]-3,y:pt[1]+1,'font-size':2.5},label);
+ }
+ add(svg,'path',{d:`M7 ${height-7}h10m-10 -1v2m10 -2v2`,fill:'none',stroke:'#222','stroke-width':.2});
+ add(svg,'text',{x:20,y:height-6,'font-size':2.6},'10 mm scale check');
+ let url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'})),a=document.createElement('a');a.href=url;a.download=w.id+'-forming-template.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function componentTemplate(){let ref=DATA.steps[cursor].ref,b=DATA.rear_bodies[ref];if(!b)return;
+ let leads=Object.entries(DATA.rear_leads).filter(([n])=>n.startsWith(ref+'.')),views=[{name:'Plan · hole names from component side',axes:[0,1]},{name:'Across board / depth below copper',axes:[0,2]},{name:'Down board / depth below copper',axes:[1,2]}];
+ let y=17,width=110,bodyPoints=b.xy.flatMap(([x,y])=>[[x,y,b.z0],[x,y,b.z1]]);
+ for(let v of views){let pts=[...bodyPoints,...leads.flatMap(([,p])=>p)].map(p=>v.axes.map(i=>p[i]));v.min=[0,1].map(i=>Math.min(...pts.map(p=>p[i])));v.max=[0,1].map(i=>Math.max(...pts.map(p=>p[i])));v.y=y;y+=v.max[1]-v.min[1]+15;}
+ let height=y+12,svg=el('svg',{xmlns:NS,width:width+'mm',height:height+'mm',viewBox:`0 0 ${width} ${height}`});add(svg,'rect',{width:'100%',height:'100%',fill:'white'});add(svg,'text',{x:5,y:5,'font-size':3},ref+' · own component leads');add(svg,'text',{x:5,y:10,'font-size':2.6},'Print at 100%. Bend with pliers away from the case.');
+ for(let v of views){add(svg,'text',{x:5,y:v.y,'font-size':2.5},v.name);let project=p=>[p[v.axes[0]]-v.min[0]+10,p[v.axes[1]]-v.min[1]+v.y+5];let bb=bodyPoints.map(project),lo=[0,1].map(i=>Math.min(...bb.map(p=>p[i]))),hi=[0,1].map(i=>Math.max(...bb.map(p=>p[i])));add(svg,'rect',{x:lo[0],y:lo[1],width:hi[0]-lo[0],height:hi[1]-lo[1],fill:'#e5d4b4',stroke:'#666','stroke-width':.15});
+ for(let [n,p]of leads){let q=p.map(project);add(svg,'path',{d:q.map((p,i)=>(i?'L':'M')+p.join(',')).join(' '),fill:'none',stroke:n.endsWith('.1')?'#205f9f':'#663d78','stroke-width':.5});let joint=p.reduce((a,b)=>a[2]<b[2]?a:b),a=project(joint);add(svg,'text',{x:a[0],y:a[1]-1,'font-size':2.1},DATA.pins[n].pad);}}
+ add(svg,'path',{d:`M7 ${height-7}h10m-10 -1v2m10 -2v2`,stroke:'#222','stroke-width':.2});add(svg,'text',{x:20,y:height-6,'font-size':2.6},'10 mm scale check');let url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'})),a=document.createElement('a');a.href=url;a.download=ref+'-lead-template.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function destinationMap(w){
+ const card=$('destination-card'),svg=$('destination-map');card.hidden=!w?.outbound;svg.replaceChildren();if(card.hidden)return;
+ const e=DATA.enclosure,o=w.outbound,c=DATA.colours[w.colour];
+ const map=p=>[108+p[0],113-p[1]],line=(points,colour,width=1)=>add(svg,'path',{d:points.map((p,i)=>(i?'L':'M')+p.join(',')).join(' '),fill:'none',stroke:colour,'stroke-width':width,'stroke-linejoin':'round','stroke-linecap':'round'});
+ const text=(x,y,value,size=10)=>add(svg,'text',{x,y,'text-anchor':'middle','font-size':size,fill:'#25313c'},value);
+ const rect=(b,fill)=>{const [x,y]=map([b[0],b[1]+b[3]]);add(svg,'rect',{x,y,width:b[2],height:b[3],rx:2,fill,stroke:'#b3bcb5','stroke-width':.6})};
+ text(108,12,'Top cap · lid removed',12);
+ add(svg,'circle',{cx:108,cy:113,r:e.radius,fill:'#f4f2ea',stroke:'#9eaaa1'});
+ rect(e.battery,'#e5e9e5');text(136,113,'Battery');rect(e.buck,'#d7e1dd');text(108,183,'Buck',8);
+ const board=e.board.map(map);add(svg,'polygon',{points:board.map(p=>p.join(',')).join(' '),fill:'#e8d7b6',stroke:'#a69474'});text(70,111,'Board');text(70,80,'USB',7);
+ for(const pt of Object.values(e.joins)){const [x,y]=map(pt);add(svg,'circle',{cx:x,cy:y,r:2.8,fill:'#c9d1cc'})}
+ const port=map(e.port);add(svg,'rect',{x:port[0]-8,y:port[1]-5,width:16,height:10,rx:5,fill:'#fff',stroke:'#9ca89f'});
+ const plug=map(e.lock_plug);add(svg,'rect',{x:plug[0]-6,y:plug[1]-4,width:12,height:8,rx:1,fill:'#c8d4cf',stroke:'#74887e','stroke-width':.6});
+ // board_point for the fixed 90 degree orientation; positions themselves come from CAD.
+ const corner=e.board[0],u=[(e.board[1][0]-corner[0])/70,(e.board[1][1]-corner[1])/70],v=[(e.board[3][0]-corner[0])/50,(e.board[3][1]-corner[1])/50];
+ const onBoard=physical(w).map(p=>map([corner[0]+u[0]*p[0]+v[0]*p[1],corner[1]+u[1]*p[0]+v[1]*p[1]]));
+ const points=[...onBoard,...o.path.slice(1).map(map)];line(points,'#46514b',3.2);line(points,c,2);
+ const end=points.at(-1);add(svg,'circle',{cx:end[0],cy:end[1],r:4.3,fill:'#fff',stroke:'#17634d','stroke-width':1.5});
+ if(o.slack_mm===150){const coil=map(e.service_coil);add(svg,'ellipse',{cx:coil[0],cy:coil[1],rx:12,ry:12,fill:'none',stroke:'#46514b','stroke-width':2.5});add(svg,'ellipse',{cx:coil[0],cy:coil[1],rx:12,ry:12,fill:'none',stroke:c,'stroke-width':1.4})}
+ const targetLabel={J_LOAD:'Battery + join',J_GND:'Ground join',J_5V:'5 V join',LOCK_PLUG:'4-pin plug',PUMP_JOIN:'Join at opening',LED_JOIN:'Join at opening'}[o.target];
+ line([end,[15,197],[58,197]],'#17634d',.8);text(62,210,targetLabel,10);
+ text(108,227,'Green circle: connect this end later',9);
+ // Whole-lantern locator uses the same world X/Z coordinates as the CAD. It is not a new view mode.
+ const world=p=>[321+p[0]*.38,216-p[2]*.44];
+ const capTop=world([0,0,e.cap_top_z])[1],capFloor=world([0,0,e.floor_z])[1];
+ add(svg,'rect',{x:285,y:capTop,width:72,height:capFloor-capTop,rx:4,fill:'#e8eee8',stroke:'#a2afa5'});
+ add(svg,'ellipse',{cx:321,cy:119,rx:43,ry:40,fill:'#f4f5f1',stroke:'#a2afa5'});
+ add(svg,'rect',{x:286,y:181,width:70,height:35,rx:3,fill:'#e8eee8',stroke:'#a2afa5'});
+ line([[300,capFloor],[300,80]],'#a2afa5');line([[342,capFloor],[342,80]],'#a2afa5');line([[300,157],[300,181]],'#a2afa5');line([[342,157],[342,181]],'#a2afa5');
+ text(321,12,'Lantern · display side',12);
+ let lower=null,name='Top cap';
+ if(w.id==='H05'){lower=e.lower_runs.find(r=>r.name==='Pump trunk').path;name='Pump plug'}
+ if(w.id==='H06'){lower=e.lower_runs.find(r=>r.name==='LED trunk').path;name='LED wiring'}
+ if(w.id==='H08'){lower=e.switch_path;name='Twist switch'}
+ if(w.id==='H09'){lower=e.hall_path;name='Hall sensor'}
+ if(lower){const p=lower.map(world);line(p,'#46514b',2.8);line(p,c,1.6);const end=p.at(-1);add(svg,'circle',{cx:end[0],cy:end[1],r:3,fill:'#17634d'});text(352,Math.min(211,end[1]+15),name,10)}
+ else{const pt=world([o.path.at(-1)[0],0,e.floor_z+6]);add(svg,'circle',{cx:pt[0],cy:pt[1],r:3,fill:'#17634d'});text(321,capFloor+14,name)}
+ $('destination-caption').textContent=o.connection+' '+o.slack_note;
+ svg.setAttribute('aria-label',`${o.title}. Cap-floor map: ${o.route} Destination: ${o.destination}. ${o.connection}`);
+}
+
+function renderWireActions(w){
+ const list=$('wire-actions');list.replaceChildren();list.hidden=!w?.assembly_actions;if(!w?.assembly_actions)return;
+ const actions=w.assembly_actions;
+ const ol=document.createElement('ol');ol.className='wire-actions';
+ for(const text of actions){const li=document.createElement('li');li.textContent=text;ol.append(li)}
+ list.append(ol);
+}
+
+function renderChecks(s){
+ const section=$('checks');section.hidden=!s.checks?.length;
+ $('check-rows').replaceChildren();if(section.hidden)return;
+ $('check-setup').textContent=s.check_setup||'Power disconnected · meter on Ω.';
+ $('check-note').textContent=s.check_note||'';
+ s.checks.forEach((c,i)=>{const tr=document.createElement('tr');if(selectedCheck===i)tr.className='selected';
+ const td=document.createElement('td'),name=document.createElement('div');name.className='test-name';name.textContent=c.name+' · '+c.mode;td.append(name);
+ const b=document.createElement('button');b.className='probe-pair'+(selectedCheck===i?' primary':'');b.setAttribute('aria-pressed',String(selectedCheck===i));b.setAttribute('aria-label','Locate probes for '+c.name+': black '+c.black+', red '+c.red);
+ for(const value of ['Black: '+c.black,'Red: '+c.red]){const span=document.createElement('span');span.textContent=value;b.append(span)}
+ if(!c.pads.length){b.disabled=true;b.title='These terminals are on the separate component, outside the board drawing.'}
+ b.onclick=()=>{selectedCheck=selectedCheck===i?null:i;selectedPad=null;view='rear';closeup=true;render()};td.append(b);tr.append(td);
+ const result=document.createElement('td');result.textContent=c.expected;tr.append(result);$('check-rows').append(tr)});
+}
+
+function render(){let s=DATA.steps[cursor],w=currentWire();$('step').value=cursor;$('counter').textContent=`${cursor+1} / ${DATA.steps.length}`;$('progress').value=100*cursor/(DATA.steps.length-1);$('previous').disabled=cursor===0;$('next').disabled=cursor===DATA.steps.length-1;$('phase').textContent=s.phase;$('title').textContent=s.title;$('instruction').textContent=s.text;
+ componentPicture(DATA.parts.find(p=>p.ref===s.ref));rearPicture(s);wireConnection(w);renderWireActions(w);$('instruction').hidden=!!s.actions?.length&&s.kind==='component'||!s.text||!!w?.assembly_actions&&s.wires.length===1&&!w.outbound;
+ $('joint-focus').hidden=!!s.checks?.length&&s.kind!=='wire'||!s.pads.length||!!w?.assembly_actions;if(s.pads.length)$('joint-focus').textContent=s.actions?.length?'Attach to existing solder; do not insert legs into the holes.':s.points?.length?'Solder the marked board and capacitor connections.':w?.tails?.length?`${s.wires.length===1?'One wire':'Each wire'}: solder twice at each board end.`:s.kind==='component'&&s.pads.length===2?`Solder both ends: ${s.pads.join(' and ')}.`:`Solder all ${s.pads.length} highlighted points.`;
+ $('component-template').hidden=!DATA.rear_bodies[s.ref];
+ $('wire-info').hidden=!w;$('capacitor-wire-template').hidden=!w||!!w.tails?.length;$('shared').hidden=!s.previous.length||!!s.actions?.length||!!w?.tails?.length;if(s.previous.length)$('shared').textContent='Keep existing pins and wires still while the solder cools.';
+ $('wire-choice').replaceChildren();$('wire-choice').hidden=(s.wires||[]).length<2;
+ for(let id of s.wires||[]){let route=routes[id],button=document.createElement('button');button.textContent=`${id} · ${route.colour} · ${route.length.cut} mm`;button.setAttribute('aria-pressed',String(w.id===id));if(w.id===id)button.className='primary';button.onclick=()=>{selectedWire=id;render()};$('wire-choice').append(button)}
+ destinationMap(w);renderChecks(s);
+ draw();persist();renderCuts();
+}
+function go(index,wire=null){cursor=Math.max(0,Math.min(DATA.steps.length-1,Number(index)));selectedWire=wire;selectedPad=null;selectedCheck=DATA.steps[cursor].kind==='wire'?null:0;view=initialView();closeup=true;zoom=1;$('component-shape').open=false;$('pad-detail').textContent='Click a solder point to identify it.';render();document.querySelector('.work').scrollIntoView({block:'start'})}
+function renderCuts(){let body=$('cut-list');body.replaceChildren();for(let w of DATA.routes){let tr=document.createElement('tr'),button=document.createElement('button');button.textContent=w.outbound?'Wire '+w.id:w.id;button.addEventListener('click',()=>{go(w.prepare,w.id);$('title').scrollIntoView({block:'center'})});let td=document.createElement('td');td.append(button);tr.append(td);for(let text of [w.outbound?w.outbound.title+' → '+w.outbound.destination:w.a+' → '+(w.b||w.label),w.bare?'bare ('+w.colour+' spool)':w.colour,w.length.cut+' mm',w.depth.toFixed(1)+' mm']){let cell=document.createElement('td');cell.textContent=text;tr.append(cell)}let templateCell=document.createElement('td'),templateButton=document.createElement('button');templateButton.textContent='Print full-size';templateButton.setAttribute('aria-label','Print full-size wire shape for '+w.id);templateButton.onclick=()=>wireTemplate(w);templateCell.append(templateButton);tr.append(templateCell);body.append(tr)}}
+for(let s of DATA.steps){let o=document.createElement('option');o.value=s.index;o.textContent=`${s.index+1}. ${s.title}`;$('step').append(o)}
+$('component-template').onclick=componentTemplate;
+$('capacitor-wire-template').onclick=()=>wireTemplate();
+$('previous').onclick=()=>go(cursor-1);$('next').onclick=()=>go(cursor+1);$('step').onchange=e=>go(e.target.value);$('view').onchange=e=>{view=e.target.value;draw()};$('plus').onclick=()=>{zoom=Math.min(3,zoom+.25);draw()};$('minus').onclick=()=>{zoom=Math.max(1,zoom-.25);draw()};$('fit').onclick=()=>{zoom=1;closeup=false;draw()};$('part-view').onclick=()=>{zoom=1;closeup=true;draw()};window.addEventListener('resize',draw);
+
+$('print').onclick=()=>window.print();$('csv').onclick=()=>{let rows=[['Wire','From','To','Colour','Starting cut mm','Local blank mm','Centre height mm','Note'],...DATA.routes.map(w=>[w.id,w.a,w.b||w.label,w.bare?'bare from '+w.colour:w.colour,w.length.cut,w.length.cut,w.depth,w.outbound?'Includes route, slack and trimming; connect free end later':'Trim after dry fit'])];let csv=rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.href=url;a.download='lantern-board-wire-cuts.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+for(let[name,colour]of Object.entries(DATA.colours)){let div=document.createElement('div'),sw=document.createElement('span');sw.className='swatch';sw.style.background=colour;let label={red:'Switched battery +',black:'Ground only',white:'5 V supply paths (label each)',green:'3.3 V and Hall signal (label each)',yellow:'Sense / twist / LED return (label each)',blue:'PWM / gates / pump return (label each)'}[name],total=DATA.routes.filter(w=>w.b&&w.colour===name).reduce((n,w)=>n+w.length.cut,0);div.append(sw,document.createTextNode(` ${name}: ${label}. Board links: ${total} mm; outgoing leads listed below.`));$('spools').append(div)}
+for(const r of [...DATA.enclosure.cap_jumpers,...DATA.enclosure.lower_runs]){const tr=document.createElement('tr');for(const value of [r.name,r.colours.join(', '),r.cut_mm+' mm',r.destination]){const td=document.createElement('td');td.textContent=value;tr.append(td)}$('enclosure-cuts').append(tr)}
+$('source').textContent=`Based on ${DATA.source} · build ${DATA.version}`;
+selectedCheck=DATA.steps[cursor].kind==='wire'?null:0;view=initialView();render();
+</script>
+</body></html>

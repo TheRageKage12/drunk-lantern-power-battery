@@ -440,6 +440,8 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
 
 ## 8. Change log (newest last)
 
+Current board decision: [relocated components and insulated wiring, 27 October](#2026-10-27--relocated-components-and-insulated-stranded-wiring-pr-31); supersedes the earlier bare-track proposals below.
+
 - **2026-10-13, full review (PR #6).** Four CAD defects fixed: no screw holes for the sphere/dish joints, three
   screws that could not seat, the rear sphere half exporting as three loose bodies, and nowhere for the switch
   wires to leave the lock. Plus print-orientation and guide fixes. Screw list now 4 x M3x6, 17 x M3x8, 8 x M3x8
@@ -669,3 +671,87 @@ roll $9 plus zip ties, Ace and local ~$13.50); build guide section 2 has the sto
   0.3 mm a side). Kevin: defer reprints to the end to finish in time. Marked Reprint in the Sheet: `bell_front`,
   `foot`, `base`, `top_cap`; parts not yet printed are noted "new STL only". Guide PR-6 gains sanding steps as the
   alternative to a reprint.
+
+- **2026-10-26, guided board soldering.** Duncan has six colours of Electronix Express stranded 22 AWG wire
+  (B00B4ZQ3L0; supplier nominal OD 1.7 mm, not Amazon’s 0.010″ insulation entry). Added the standalone
+  `docs/review/protoboard/assembly.html`: components first, then bare bridges and rear routes in increasing
+  height; cable tails are interleaved so they are not trapped below later wires. Each solder operation is a
+  separate step (178); the guide shows prior work, crossings and shared-joint rework. Cut estimates include
+  end rises and trim allowance; external cable runs must be measured, with service slack outside the board gap.
+  Existing endpoints, paths, circuit and CAD dimensions are unchanged. A separate 1.7 mm nominal check passes
+  with 0.2 mm between wires, 0.105 mm at the tightest unrelated joint, and 9.25 mm maximum rear extent. This
+  reduces the old 1.6 mm model’s margins; actual bends, joint fan-out and tool access require dry fit. The guide
+  must not describe those calculations as a physically verified build. Tests reject invalid routes and check
+  every solder endpoint, assembly ordering and allowances. No Sheet changes.
+
+- **2026-10-27, fixed printed enclosure and simpler board wiring.** Duncan confirmed the CAD parts are
+  already printing. The unpushed 17 mm post proposal is withdrawn: printed geometry, exports, renders and
+  videos remain identical to the existing revision. Keep the 10 mm posts, board holes and component positions.
+  Rerouted with a 1.8 mm allowance for the nominal 1.7 mm stranded wire. Short tinned buses and direct cable
+  attachments reduce insulated runs from 61 to 33; 39 bare links bring the total to 58 board links and 14
+  cables. Pump/LED source returns stay independent. The quiet ground bus joins the input return beside C2.
+  All nets retain their schematic connectivity. Maximum rear extent is 9.1 mm, leaving 0.9 mm to the floor;
+  unrelated wire corridors keep >=0.5 mm separation. Every unfinished joint keeps a 2 mm-tip approach with
+  0.4 mm lateral clearance; upper wires may cover completed lower joints. The concise guide covers all 190
+  solder operations, with per-wire cuts, crossing order and shared-joint history. Three wire layers at 3.0/5.6/8.2 mm centre height leave
+  0.8 mm vertical clearance at crossings. Actual bends, shared-joint fan-out and delivered
+  dimensions still require dry fit. Generator renamed assembly_guide.py so CAD imports its own assembly.py.
+  No shopping-list changes or reprints required.
+
+### 2026-10-27 — realistic wire bends and removable board spacers (PR #31)
+
+Supersedes the 9.1 mm stack / 10 mm gap routing above. Duncan requested realistic hand-soldered clearances,
+confirmed the printed enclosure cannot change, and said small spacers or hardware can be obtained.
+
+- Keep every printed part, export, mounting hole and component position unchanged. Add four 6 mm unthreaded
+  spacers (bore ≥3.2 mm, OD ≤6 mm) and four M3×12 screws on the existing 10 mm posts. Board gap is 16 mm;
+  screw engagement remains 4.8 mm. Only the non-printing electronics envelopes move.
+- Use the existing six-colour stranded 22 AWG kit, reserving Ø1.8 mm. The new routes use 79 supported bare
+  tracks, 20 insulated jumpers with their own holes, and 14 outgoing cables in a retained parallel row.
+  Bare tracks have anchors at bends and at most 7.62 mm apart. Circuit nets and independent pump/LED returns stay.
+- Model actual 4 mm-radius insulated bends, 2.5 mm-high solder joints and stripped ends. The 12.9 mm nominal
+  stack leaves 2.1 mm to the floor after 0.5 mm extra bow and 0.5 mm mounting/board variation. Free insulated
+  jumpers have ≥1.185 mm surface separation, allowing 0.4 mm movement each; the retained cable row has 0.74 mm.
+  Posts expand 0.25 mm per side in the checks. Four risers across three jumpers lean 0.6 mm away from nearby mounting posts.
+- The concise guide has 464 steps / 320 individual solder operations, real curved cut lengths, an access-checked
+  order, and downloadable 1:1 plan/elevation templates. More short bare tracks replace crowded wire/lead joints.
+- Checks passed: all 16 nets, 11 guide tests including physical negative controls; full CAD build with 840
+  enclosure/electronics checks and zero problems; electronics and socket tests; 20 firmware scenarios and
+  RP2040 compile (63,136 bytes). CAD exports went to /tmp; no print, image or video files were regenerated.
+- Physical acceptance remains required: measure ≥15.5 mm space and ≤13.5 mm finished wiring height, with
+  ≥2 mm free below it and clearance beside every post. Do not compress wires with the mounting screws.
+  Retain the flat cable row and strain-relieve external runs. Spreadsheet hardware edits are not made here.
+
+### 2026-10-27 — relocated components and insulated stranded wiring (PR #31)
+
+Supersedes the bare-track / fixed-component / 6 mm spacer proposal above. Duncan rejected bare stranded tracks
+and separate rigid lead-offcut links, retained the existing isolated-pad board, and explicitly allowed component
+rearrangement. The printed enclosure remains frozen. Capacitors are not yet available to measure.
+
+- Move/rotate the XIAO, U1, MOSFETs and front passives to make room for 26 insulated front-side links and nine
+  outgoing leads. Every stranded end has its own hole (61 total); only its short stripped end runs along the
+  rear to a component joint. No long bare buses or separate offcuts. All 60 component-terminal net assignments
+  remain identical. Pump and LED source returns stay separate until the off-board ground splice.
+- Fit front components, front wires, then rear C1/C3 and R3/R4 using their own leads. Four crossing pairs must
+  be formed and fitted together before either is soldered. This keeps long loops away from the iron and reduces
+  the guide from 320 to 182 board solder operations (256 steps). Use a ≤2 mm tip; the rear resistors need an
+  angled approach toward row 18. Keep short bare ends flat and free of stray strands.
+- Use four 20 mm unthreaded nylon spacers (OD ≤6 mm, bore ≥3.2 mm) and M3×25 screws (heads ≤6 mm) on the
+  unchanged 10 mm posts: 30 mm rear space and nominal 3.8 mm thread engagement. No added washers.
+- C2 moves to a horizontal case retained independently on the existing cap floor. Require case ≤Ø18 × 25 mm,
+  a ≤25.4 × 25.4 × 5 mm adhesive tie base centred under board (36.5,16), and separately sleeved red/black
+  pigtails to F02/F04. Leave the vent clear; check adhesion after curing. Actual lead pitch determines the final
+  splice position within the reserved space. C1/C3 limits remain ≤Ø10 × 4 mm, with long enough leads.
+- Three sleeved harness splices replace crowded board power fan-outs: J_LOAD five ways, J_GND six ways,
+  J_5V three ways. Check buck IN−/OUT− continuity before omitting the redundant OUT− lead. Larger joins need
+  6 mm 3:1 heat-shrink; keep the finished sleeves ≤5.5 mm in diameter and outside the board footprint.
+- Model Ø1.8 mm wire and 4 mm centreline bends. Nominal front top 32.9 mm; allow 2 mm extra bow and require
+  finished loops ≤35 mm, inside a 40 mm enclosure reserve. Insulated jackets may touch when flexed; the design
+  does not depend on a minimum air gap between jackets. Short bare tails retain ≥0.52 mm from unrelated joints.
+  Small rear parts must remain ≤21 mm deep. Body gap ≥1.09 mm; screw paths retain Ø10 mm access corridors.
+- `design.json` is the shared placement/route source. Reproducible checks cover connectivity, crossings, bare
+  ends, component leads, spacer clearances, iron approach and the enclosure. The full drawing, PDF, solder
+  schedule and interactive guide are regenerated. Only non-printing CAD envelopes change; printed sources,
+  exports, existing renders and videos remain unchanged. A physical dry fit is still required when parts arrive.
+- Spreadsheet is untouched. After acceptance, update board hardware to the spacer/screw specifications above,
+  add one suitably sized tie base and larger heat-shrink, and refresh affected listing prices/quantities.

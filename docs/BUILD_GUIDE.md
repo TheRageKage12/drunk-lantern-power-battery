@@ -306,12 +306,12 @@ the only shopping list; there is no copy in the repository. Edit it in place.
 | Knurled thumbscrews (6-32, PC-case) | 13 | bells 4 (2 each), top cap to sphere 3, foot to sphere 3, cap floor 3 |
 | 6-32 heat-set inserts (initeq) | 13 | one under each thumbscrew |
 | M3 heat-set inserts (ruthex) | 17 | sphere flange 4, handle pivots 4, foot spigot 3, board standoffs 4, guide boss 1, lock housing 1 |
-| M3x6 socket | 4 | board on its standoffs |
 | M3x8 socket | 13 | drum to foot 3, handle laps 9, nozzle guide 1 |
 | M3x8 flat-head (countersunk) | 8 | lock base plate 3, switch bracket 1, cover clamp ring 4 |
-| M3x10 socket | 6 | sphere halves 4, lock ears 2 |
+| M3x10 socket | 10 | sphere halves 4, lock ears 2, board 4 |
 | M3x12 socket | 4 | handle pivots |
-| M3 nuts | 14 | lock 5, handle laps 9 |
+| 6 mm 3:1 heat-shrink | short length | insulate the two larger power-harness splices |
+| M3 nuts | 22 | lock 5, handle laps 9, board lift 8 (two per hole) |
 | Green screw caps (printed) | 25 | drum 3, handle laps 18, pivots 4 |
 
 **Tools:** soldering iron (with a heat-set insert tip if available), multimeter with a fused 10 A range, calipers,
@@ -387,6 +387,12 @@ with its flyback diode and plug, all verified on the bench before anything goes 
 [wire-by-wire solder schedule](review/protoboard/WIRE_SCHEDULE.md) (the rear view is mirrored; pad names stay the
 same). Read [SW-6, USB power modes](#sw-6-connect-the-laptop-safely-usb-power-modes) before any USB connection.
 
+For physical soldering order, use the [step-by-step board assembly guide](review/protoboard/assembly.html).
+It fits front components, then insulated wires over that face, followed by the small rear parts and C2 pigtails.
+Each stranded-wire end has its own hole, with a short stripped tail to the indicated rear joint.
+It includes fixed cut lengths, outgoing-wire destination maps and bend templates; four crossing pairs must be fitted together before soldering. EL-4 through EL-9 below describe the
+circuits and off-board connections; the interactive guide supplies the board's assembly sequence.
+
 ### EL-1. Validate the circuit on paper
 
 Confirm these numbers before buying anything extra or building. They are the design margins.
@@ -423,18 +429,23 @@ The TalentCell splitter is "1 female to 2 male" with all three ends joined. Do n
 
 1. Orient the perfboard 70 mm across and 50 mm tall.
 2. Drill four 3.2 mm holes at (x, y) = (18, 17), (55, 15), (15, 45) and (58, 45) mm from the component-side top-left
-   corner. Keep each 9 x 9 mm mounting area clear; rear wires must fit in the 10 mm under the board, outside those
-   areas. *Soft block: check the holes against the printed `cap_floor`'s standoffs when it exists.*
+   corner. Dry-fit two M3 nuts beneath each hole on the existing 10 mm posts, using four M3x10 screws.
+   The 4.8 mm nut stacks give 14.8 mm rear space and 4.0 mm nominal thread engagement. Check the real fit, then remove
+   the board for soldering. Do not add washers or bottom out the screws. Printed holes and parts stay unchanged.
 3. Fit the XIAO (flashed in SW-5, or flash it later in USB-only mode) and a **DIP-14 socket** for U1. Leave U1 out
-   until EL-7's power-off check.
+   until the assembly guide’s first-power step. Both USB and socket notch face column X in the new layout.
 4. Fit a 2-pin header for JP1 and label it **REMOVE FOR USB**.
 
 ### EL-4. Power input, S1 and C2
 
 1. Battery lead positive to S1; S1's other terminal is **VLOAD**, the switched rail. Negative to the common ground.
    S1 sits in its own box on the cap floor: leave its leads long enough to reach the board.
-2. Solder **C2 2200 µF/25 V** from VLOAD to ground, positive to VLOAD. It smooths short dips; it cannot carry a
-   stalled motor.
+2. Connect **C2 2200 µF/25 V** through the guide's red/black pigtails: positive to F02, negative to F04.
+   Sleeve each splice; retain the horizontal case on top of the battery under its existing strap, independently of its leads.
+   Case ≤Ø18 × 25 mm; both ends must stay clear of the strap. It smooths short dips; it cannot carry a stalled motor.
+3. Set and test the buck output in EL-6 **before** joining its output to anything. Then make the guide's three insulated power splices beside row 01: J_LOAD (switched battery), J_GND (star ground),
+   and J_5V (buck output). Keep the pump and LED source returns separate until J_GND. See the
+   [harness connections](review/protoboard/README.md#harness-changes).
 
 ### EL-5. Battery sense
 
@@ -445,7 +456,8 @@ R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground. Keep th
 
 1. Connect only LM2596 IN+ to VLOAD and IN− to ground; leave OUT unloaded.
 2. Pack and S1 on. Meter on DC volts across OUT+/OUT−; turn the trimmer until it reads **5.0 V**. Switch off.
-3. OUT+ is **+5V_REG**: U1 and the Hall sensor connect straight to it.
+3. OUT+ is **+5V_REG**: U1 and the Hall sensor connect straight to it through J_5V. With power disconnected,
+   confirm IN− and OUT− have continuity before omitting a redundant OUT− return wire; IN− still joins J_GND.
 4. The XIAO's 5V pin is fed through **D1 NTE585** (stripe toward the XIAO), then **JP1** in series. Grounds stay
    connected with JP1 removed.
 
@@ -456,7 +468,7 @@ R1 100 kΩ from VLOAD to D0; R2 22 kΩ and C1 0.1 µF from D0 to ground. Keep th
 3. XIAO D3 to pin 2 (pump); D4 to pin 5 (light). R3 and R4, **10 kΩ**, from those two inputs to ground.
 4. **Test, all power off:** check the socket notch against the
    [DIP-14 pinout](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf), and continuity of pins 1, 4, 7, 10, 13 to
-   ground. Then insert U1.
+   ground. Leave the chip out until the assembly guide’s first-power step.
 
 ### EL-8. MOSFETs Q1 (pump) and Q2 (light)
 
@@ -470,16 +482,24 @@ IRLZ44N, label facing you, leads down: pin 1 gate, pin 2 drain (also the tab), p
 ### EL-9. Leads off the cap floor and lock wiring
 
 **Blocked by:** PR: `cap_floor` printed. Thread each lead through the cap floor's wire hole **before** soldering it or
-fitting the lock cable's plug housing. Only three leads leave the cap floor:
+fitting the lock cable's plug housing. Use the [fixed enclosure cut list](review/protoboard/OFFBOARD_WIRING.md): board leads and the separate lower runs are listed separately, so do not add the two cuts together. Only three leads leave the cap floor:
 
 | Lead | Wires | At the cap floor | Far end |
 |---|---|---|---|
 | Lock cable | +5V_REG, HALL, SW, GND | JST PH 4-pin plug just above the wire hole | Hall sensor and microswitch at the lock |
-| LED lead | VLOAD (+), Q2 drain (−) | Soldered to the board, ~15 cm slack coiled on the plate | The LED harness (BU steps 3, 9, 12, 13) |
-| Pump lead | VLOAD (+), Q1 drain (−) | Soldered to the board, ~15 cm slack | Joined in BU-10 to the lantern-side run (EL-11), which ends in the JST SM 2-pin plug at the cartridge |
+| LED lead | VLOAD (+), Q2 drain (−) | Yellow H06 and its red partner join beside the opening; 150 mm slack in each cap-side lead | The LED harness (BU steps 3, 9, 12, 13) |
+| Pump lead | VLOAD (+), Q1 drain (−) | Blue H05 and its red partner join beside the opening; 150 mm slack in each cap-side lead | Joined in BU-10 to the lantern-side run (EL-11), which ends in the JST SM 2-pin plug at the cartridge |
 
-The slack lets the cap floor lift out and rest on the cap's rim still connected. Mark every + wire with paint or red
-heat-shrink.
+Before joining the outgoing leads, unplug battery and USB and remove the jumper cap. Strip each free end for its final connection. Meter on Ω: check each pair below; it must be within 2 Ω of touching the probe tips together, even while gently moving the cable. Check before sleeving the join or inserting the connector.
+
+| Board joint | Other probe |
+|---|---|
+| V01 | Exposed end of blue H05 (pump negative) |
+| H17 | Exposed end of yellow H06 (LED negative) |
+| S01 | Exposed end of yellow H08 (switch signal) |
+| R03 | Exposed end of green H09 (Hall signal) |
+
+The slack lets the cap floor lift out and rest on the cap's rim still connected. Keep the loops beside the wire opening, never below the board. H08/H09 end at the cap-side lock connector; they are not the full lock cable. Match prewired connector pins with a continuity test rather than trusting their colours. Mark every + wire with paint or red heat-shrink.
 
 1. **Hall sensor (A3144),** printed face toward you, leads down: pin 1 to +5V_REG, pin 2 to ground, pin 3 to XIAO D1.
    On the board, R5 **4.7 kΩ from D1 to XIAO 3V3** (never to 5 V). Fit **C4 0.1 µF across sensor pins 1 and 2, at the
@@ -489,31 +509,35 @@ heat-shrink.
    switch is mounted).
 3. On the board: R7 **3.3 kΩ** from +5V_REG to SW; R6 **4.7 kΩ** from XIAO 3V3 to D2; **D3 NTE585, anode to D2,
    stripe to SW**. Closed contacts pull D2 low; open, D2 sits at 3.3 V while the switch side rises to 5 V.
-4. **Lock cable length:** the lantern side runs from the lock up behind the wall to the top cap's neck. Leave it long
-   now; trim it in BU-10 with slack to lift the cap floor out.
+4. **Lock cable:** cut 300 mm each of white, black, yellow and green for the separate lantern-side run. Pass it through the cap-floor opening, down the neck and behind the wall extension. This includes 60 mm of slack; retain that slack when trimming the ends to the existing connector pigtails and sensor/switch joints. The cap-side H08/H09 cuts are separate.
 
 ### EL-10. Commission the board without loads
 
-**Blocked by:** SW-5 (firmware on the XIAO). Use SW-6's **USB calibration and testing** mode. Pump and strip
-disconnected.
+**Prerequisites:** finish the assembly guide’s component, wire, short-circuit and battery-only voltage checks. Upload the firmware in SW-5. Pump and LED strips stay disconnected throughout these tests.
 
-| Check | Pass |
-|---|---|
-| +5V_REG at U1 pin 14 and at the Hall sensor | 5.0 V |
-| GPIO D1 and D2 | ~3.3 V open, < 0.8 V active |
-| `status` with a magnet at the sensor and the switch pressed | Follows the magnet and switch every time, including with the cable moved |
-| Battery reading after `vcal <meter reading>` | Within 0.2 V of the meter |
-| Both MOSFET gates at idle | Low |
-| Power-up | Pump output off; a brief LED blink at boot is intentional |
+1. With battery and USB unplugged, connect the completed lock cable. Remove the jumper cap from JP1; leave the 74AHCT125 chip installed. Check the Hall sensor’s printed face/lead numbering against EL-9 before applying power.
+2. Meter: black lead in **COM**, red in **V/Ω**, set to **DC volts** (20 V range on a manual meter). Clip black to **F04 (ground)** while power is off. Keep the board accessible on an insulating surface. Touch only one joint with the red probe; switch off before repositioning the board or clip.
+3. Turn on the battery and S1. Red on **G10** must read **4.9–5.1 V**. If it does not, switch off and repair before connecting USB.
+4. Connect USB, open the serial monitor at **115200 baud**, and send `idle 0`. Take the following readings with black still on F04. If a result fails, disconnect USB first, then switch off and unplug the battery before repair.
+
+| Test / red probe | Do this | Expected result |
+|---|---|---|
+| Hall supply, sensor pin 1 | Leave the lock cable attached. | 4.9–5.1 V. |
+| Hall signal, **P09** (D1) | Move the magnet away, then bring its sensing pole to the sensor. | Away: 3.0–3.4 V; detected: below 0.8 V. If it never changes, try the other magnetic pole and check sensor orientation/wiring. |
+| Twist signal, **O09** (D2) | Release, then press the microswitch. | Released: 3.0–3.4 V; pressed: below 0.8 V. |
+| Sensor reporting | Send `status` after each change. Repeat five times while gently moving the cable. | `ring=present/absent` follows the magnet; `switch=pressed/released` follows the switch, with no missed or flickering changes. |
+| Pump gate, **U01** | Remove magnet, release switch. Send `cal 10000`; wait 1 s. Then send `stop`. | Running: above 0.5 V; stopped: below 0.2 V. The signal is pulsed, so a DC meter reads an average of a few volts rather than a fixed 5 V. This test does not prove the motor can run under load. |
+| LED gate, **H16** | With no magnet and switch released, send `idle 255`, then `idle 0`. | `idle 255`: 4.7–5.1 V; `idle 0`: below 0.2 V. Do not save the temporary 255 setting. |
+| Battery measurement, **F02** | Read DC volts from F02 to F04. Send `vcal` followed by that number, e.g. `vcal 12.31`, then `status`. | Reported battery voltage within 0.2 V of the meter. Send `save` only after restoring `idle 0`. |
+
+Finish with `idle 0` and `stop`. Unplug USB first, then switch off and unplug the battery. Refit JP1’s jumper cap only with all power disconnected. Connect and test the pump and LEDs separately in the following build steps; passing these no-load checks does not establish motor/LED current capacity.
 
 ### EL-11. Connect and test the pump
 
 **Blocked by:** EL-10. Do this together with FL-2.
 
 1. Solder the cartridge half of the JST SM 2-pin plug to the pump's terminals. Solder the lantern half to a 2-wire
-   lantern-side run long enough to reach from the cap floor's wire hole down to the cartridge with slack (it is laid
-   in at BU-6 and joined to the board's pump lead at BU-10). For the bench test, join it to the board's pump lead
-   temporarily.
+   lantern-side run made from **525 mm each of red and blue** (separate from H05 and its red cap-side partner). Follow the [planned route](review/protoboard/OFFBOARD_WIRING.md) behind the wall and through the bay-floor cable hole. Retain 75 mm near the plug for access. Lay it in at BU-6 and join it to the cap leads at BU-10. For the bench test, join it temporarily.
 2. Solder **D2 NTE586** straight across the pump's own terminals: stripe (cathode) to + (VLOAD), anode to − (Q1 drain).
    Never use the 1 A NTE585 here.
 3. Twist the pump wires together and keep them away from the Hall and switch wires.
@@ -1150,7 +1174,7 @@ Parts: `top_cap`, 3 thumbscrews, the two 12.5 cm LED pieces.
 
 **Blocked by:** EL-12.
 
-Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, 1 VELCRO strap, 4 M3x6, zip ties,
+Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket, a 350 mm length of the existing VELCRO roll, 4 M3x10, eight M3 nuts, zip ties,
 3 thumbscrews.
 
 ![the cap floor](images/cad-cap.png)
@@ -1158,19 +1182,22 @@ Parts: `cap_floor` with the board, the battery, the buck, S1, the charge socket,
 Assemble on the bench, then drop the plate in. S1's box and the charge socket are on your side, the buck on the display
 side.
 
-1. **Strap.** Thread the strap through both battery slots first; its lower run sits in the recess under the plate (≤ 2
+1. **Strap.** Cut 350 mm from the existing ONE-WRAP roll. Thread it through both battery slots first; its lower run sits in the recess under the plate (≤ 2
    mm).
 2. **Battery.** Splitter's male plug in the battery's port. Lay the pack on its bed between the rails: **LED face
    down** over the slot, **port end toward your side** against the low end stop, the plug's cord folded back in a
-   U-turn. Pack switch ON (it stays ON). Tighten the strap.
-3. **Board.** Screw it to the 4 standoffs, component face up, USB end toward the display side (4 M3x6). Rear wiring
-   stays within the 10 mm gap.
+   U-turn. Pack switch ON (it stays ON). Leave the strap loose until C2 is positioned.
+3. **Board and C2.** Lay C2 on the battery along its length, centred beneath the strap. Tighten the strap with
+   ≥50 mm overlap; keep both capacitor ends clear. Pull-test: the case must not slide or roll, and the leads must carry no load.
+   Mount the board on two M3 nuts per hole with M3x10 screws. USB faces column X in the board drawing.
+   Nominal space below the copper face is 14.8 mm. Rear parts and wires must project ≤11 mm; front loops ≤35 mm.
+   Route C2's leads under the board, up beyond column X and onto the battery as shown in the board guide.
+   Close the enclosure without compressing anything. Printed parts and mounting holes remain unchanged.
 4. **Buck.** On its four 2 mm corner supports, zip-tied through the slots. No solder joint may rest on a support.
 5. **S1.** Hangs inside its box, lever up through the roof hole, nut tight on top.
 6. **Charge socket.** Tie the splitter's female end loosely in its spot, so it lifts out on its cord to charge.
 7. **Drop it in.** Lower the plate in, S1 and charge socket toward your side. Bring the lock cable, LED lead and pump
-   lead up through the wire hole and connect: lock cable plug, and solder the LED harness and pump lead to their board
-   leads with sleeved joints. Coil ~15 cm of slack. Rest the plate on its ledge and drive 3 thumbscrews down into the
+   lead up through the wire hole and connect: lock cable plug, and solder the LED harness and pump lead to their labelled cap-side leads with sleeved joints. Keep the planned 150 mm of slack in each pump/LED cap-side lead beside the opening. Rest the plate on its ledge and drive 3 thumbscrews down into the
    cap's bosses.
 8. **Check:** looking up through the hand opening (before the hand bell goes on), the battery's LEDs show through the
    slot.
@@ -1258,7 +1285,7 @@ Parts: `base_tray` with the pump, `bag_cover`, the tube and bag.
 
 ### The light harness
 
-All 10 LED pieces are in parallel on one channel (Q2), on the one LED lead to the board:
+All 10 LED pieces are in parallel on one channel (Q2). Cut **225 mm each of red and yellow** for the separate trunk from the cap-floor opening to the common LED wiring behind the upper lock wall. This is separate from H06 and its red cap-side partner. Retain 30 mm of slack at the lower join; trim the remaining fitting stock. The individual strip branches below are unchanged:
 
 - **Behind the lock wall:** the 2 columns, 4 panel rows and both bells' leads join into one pair that runs up behind
   the wall extension and the top cap's neck.

@@ -80,14 +80,22 @@ Assembly order and the print table are in `docs/BUILD_GUIDE.md`.
 
 Everything electrical except the pump and the LED strips sits on `cap_floor`, inside the top cap under the lid.
 `build.py` checks the envelopes against printed parts and other hardware, with a 0.5 mm³ overlap limit for
-electronics. Boolean errors and failed checks return a nonzero exit status. Individual component bodies also require
-at least 1 mm separation and clear the Ø6 mm screw-head/access areas. The saved 66 rear-wire/cable corridors are
-checked at 1.6 mm insulated diameter. See the [board guide](../docs/review/protoboard/README.md#dimensions-used) for
-dimensional sources and limits. These are clearance allowances, not detailed supplier CAD or measured parts:
+electronics. Boolean errors and failed checks return a nonzero exit status. Individual component bodies require
+at least 1 mm separation. The relocated layout uses 26 insulated front links, nine outgoing leads and two C2 pigtails,
+with Ø1.8 mm wire, 4 mm bends and Ø2 × 2.5 mm solder-joint allowances. **Two existing M3 nuts per hole**
+raise the board 4.8 mm on its unchanged 10 mm printed posts, with M3×10 screws. Rear parts and wires must stay within
+11 mm of the solder face, leaving ≥3.3 mm to the floor with 0.5 mm mounting variation. Front loops must stay ≤35 mm
+within a checked 40 mm reserve. C2 lies on the battery under the existing strap. The combined `board_assembly_envelope`
+includes the complete strap route, capacitor, sleeved joints, cable bends and metal nut stacks. The front reserve is
+stepped beside the battery strap, with the wire routes checked against that boundary. Internal checks include all solder
+joints, bare leads, metal nuts and iron access.
+See the [board guide](../docs/review/protoboard/README.md#mounting-and-fit) for dimensions and physical acceptance.
+Printed geometry, exports, renders and videos are unchanged; old overview images are not the updated wiring layout.
+These are clearance allowances, not detailed supplier CAD or measured parts:
 
 | Item | Model / assembly limit |
 |---|---|
-| Perfboard | 70 x 50 x 1.2 mm, component face up on four 10 mm standoffs (`BOARD_STANDOFF`) with M3 inserts; rear wires fit in the 10 mm under it, outside the four screw areas. |
+| Perfboard | 70 x 50 x 1.2 mm, component face up on four existing 10 mm standoffs (`BOARD_STANDOFF`) plus two M3 nuts per hole (4.8 mm lift), with M3x10 screws; 14.8 mm rear space. Printed parts are unchanged. |
 | XIAO and U1 | 12 mm projection including XIAO headers; 10.5 mm for U1 and socket. The USB cable reaches it with the lid off. |
 | Buck | 43 x 21 x 14 mm above four 2 mm printed corner supports, two cable ties; 10 mm lead allowance beyond each end. Check the delivered module. |
 | Lock plug and lead slack | 22 x 20 x 16 mm over the cap floor's wire hole (`CAP_WIRE_HOLE_XY`): the lock cable's 4-pin plug and the coiled slack of the soldered LED and pump leads. |

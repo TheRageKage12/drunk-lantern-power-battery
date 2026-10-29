@@ -11,11 +11,11 @@ parts = T.build()
 placed = {n: place(s, T.placements().get(n)) for n, s in parts.items()}
 electronic = E.build()
 
-assert T.BOARD_STANDOFF == E.M.REAR_GAP, 'The standoffs are the board\'s rear wiring gap'
+assert T.BOARD_STANDOFF + E.M.BOARD_SPACER == E.M.REAR_GAP, 'The standoffs are the board\'s rear wiring gap'
 for n in ('cap_floor', 'top_cap'):
     assert inter_volume(electronic['powerbank_envelope'], placed[n]) < .5, n
     assert inter_volume(electronic['battery_connector_envelope'], placed[n]) < .5, n
-assert inter_volume(electronic['board_wiring_envelope'], placed['cap_floor']) < .5
+assert inter_volume(electronic['board_assembly_envelope'], placed['cap_floor']) < .5
 # The battery's LED row must be readable from below: inside the neck bore and on the hand side of the lock wall.
 import math
 x0, x1 = P.PACK_LED_X
@@ -33,12 +33,15 @@ top = P.PACK_BED_T + P.POWERBANK_T
 strap = E.pack(E.compound([
     E.box(-xslot, xslot, y0, y1, -T.CAP_FLOOR_T, -T.CAP_FLOOR_T + P.BATTERY_STRAP_T),
     E.box(-xslot, xslot, y0, y1, top, top + P.BATTERY_STRAP_T),
-    *[E.box(s * xslot - .5, s * xslot + .5, y0, y1, -T.CAP_FLOOR_T, top + 1) for s in (-1, 1)],
+    *[E.box(s * xslot - 1, s * xslot + 1, y0, y1, -T.CAP_FLOOR_T, top + 1) for s in (-1, 1)],
 ]))
 assert inter_volume(strap, placed['cap_floor']) < .5, 'Strap blocked by the plate or rails'
 for n, env in electronic.items():
-    if n != 'powerbank_envelope':
+    if n not in ('powerbank_envelope','board_assembly_envelope'):
         assert inter_volume(strap, env) < .5, f'Strap hits {n}'
+
+# The revised board reserve deliberately includes its own battery strap. The PCB itself must remain clear.
+assert inter_volume(strap,E.board_box(0,0,70,50,-1.2,0))<.5
 
 # Negative controls: the model must catch a component past the board's edge hitting the cap wall, and the battery
 # shifted 20 mm toward its plug, even if the PCB itself still fits.
@@ -72,7 +75,7 @@ next(w for w in bad if not w['bare'])['od'] = 1.2
 rejects(lambda: routing.validate(bad))
 # Artificial same-layer crossing between unrelated wires, preserving endpoints.
 bad = copy.deepcopy(routes)
-a, b = [w for w in bad if w['id'] in ('W13', 'W41')]
+a, b = [w for w in bad if w['id'] in ('W13', 'W24')]
 a['path'] = [a['path'][0], b['path'][0], a['path'][-1]]
 a['depth'] = b['depth']
 rejects(lambda: routing.validate(bad))

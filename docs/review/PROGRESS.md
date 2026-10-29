@@ -435,3 +435,54 @@ ring, fuse, buck-boost for steady LEDs, PRIME button), ideas from CONTEXT and PR
 the steeper lock return ramp, steel handle axles, more plugs, drum thumbscrews, a clear lens, lining the sphere),
 CAD gaps (bell lead channels, tube coil space) and Kevin's new ones (tube coupling or swivel, removable fill bin,
 tighter bag seal, a fill hole in the cover). Spout stays as is; the guide adds filling the bag in place.
+
+## 2026-10-27 — fixed enclosure and concise board guide (PR #31)
+
+- Printed CAD is frozen because parts are printing. The unpushed taller-post proposal was removed, including
+  its exports, renders and video changes. Existing 10 mm posts, holes and component placement stay unchanged.
+- 33 insulated runs replace 61, using short tinned buses and direct cable attachments. 58 board links plus
+  14 outgoing cables; all 16 nets connected and independent pump/LED ground returns retained.
+- Routing reserves Ø1.8 mm for the nominal Ø1.7 mm kit, >=0.5 mm between unrelated wire corridors and a
+  2 mm soldering-tip approach plus 0.4 mm clearance at every unfinished joint. Stack 9.1 mm; floor gap 0.9 mm.
+- Concise guide: 291 steps / 190 solder operations. Completed work stays visible; each step gives one action,
+  with cut length, wire colour and crossing information when needed. Detailed assumptions stay in the README.
+- Checks: 12 route/connectivity/order tests; full CAD build with 777 electronics checks and zero problems;
+  socket and existing enclosure electronics-fit tests. Temporary exports kept the print files untouched.
+  Actual wire bends and shared solder joints still need a dry fit before fastening the board.
+
+## 2026-10-27 — board wiring with realistic bends (PR #31)
+
+- Supersedes the 10 mm-gap proposal: add four removable 6 mm spacers and M3×12 screws; no printed changes.
+- 4 mm curved bends, separate jumper holes, supported bare tracks, 2.5 mm joint envelopes; 2.1 mm floor
+  clearance after bow and mounting allowances. Guide: 464 steps / 320 solder operations, curved cuts and 1:1 templates.
+- 11 guide tests, all 16 nets, full CAD (840 checks / zero problems), electronics/socket checks, 20 firmware
+  scenarios and RP2040 compile pass. Prints, renders and videos untouched. Browser controls and template download checked.
+- Remaining: obtain spacer hardware, retain cable row, measure delivered parts and dry-fit without compressing wiring.
+  Build instructions list the hardware; the shared spreadsheet has not been edited.
+
+## 2026-10-27 — component rearrangement for insulated stranded wire (PR #31)
+
+- Replaces the rejected bare-track design. Existing board and printed enclosure retained; component placement
+  changes, long wires move to the front, and each wire end gets a separate hole with a short rear tail.
+- 26 board links + nine outgoing leads + two C2 pigtails. Four crossing pairs fit together. The guide has
+  256 steps / 182 board solder operations, bend templates, cut estimates and individual-joint close-ups.
+- Four 20 mm nylon spacers / M3×25 screws provide 30 mm rear space. C2 is independently tied to a base on the
+  unchanged floor. Three off-board power splices preserve independent pump/LED source returns.
+- Front loops nominally 32.9 mm; acceptance ≤35 mm within a checked 40 mm reserve. Small rear parts ≤21 mm.
+  Capacitor dimensions remain unmeasured acceptance limits; dry-fit actual parts and hand-formed wiring.
+- Spreadsheet unchanged; hardware/listing/price follow-up is in the PR description. Print files and existing
+  renders/videos are unchanged. See the new CONTEXT entry and board README for the superseding design.
+
+- Completed checks: 12 guide tests, all 16 nets and unchanged assignments for 60 component terminals; full CAD
+  build with 594 component/shell-removal checks and zero problems; electronics and socket tests; 20 firmware
+  scenarios; RP2040 compile (63,136 bytes). Browser step/view controls, joint close-ups, bend-template download
+  and external-length calculation checked. Physical component/assembly fit remains unverified.
+
+
+### 2026-10-27 — existing M3 mounting supersedes the spacer proposal
+
+- Use eight existing M3 nuts and four M3×10 screws, not the proposed nylon spacers/M3×25 screws. Printed geometry and exports stay unchanged.
+- Flatten the small rear components; limit the completed underside to 11 mm within a nominal 14.8 mm gap.
+- Move C2 onto the battery under the existing ONE-WRAP strap; remove the adhesive tie-base requirement.
+- Recheck the complete strap route, capacitor pigtails, conductive nuts and all solder joints before regenerating the guide.
+- Capacitor sizes remain unmeasured acceptance limits; the checks establish modeled fit, not a physically tested assembly.

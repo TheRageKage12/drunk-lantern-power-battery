@@ -1,0 +1,140 @@
+{
+  "maximum_rear_extent_mm": 10,
+  "minimum_nut_to_joint_gap_mm": 0.625,
+  "minimum_rear_lead_gap_mm": 1.84,
+  "minimum_iron_clearance_mm": 0.49,
+  "minimum_front_lead_gap_mm": 1.29,
+  "result": "PASS \u2014 modeled geometry; physical fit still required",
+  "internal_links": 26,
+  "outgoing_leads": 9,
+  "dedicated_wire_holes": 61,
+  "nets": 16,
+  "minimum_wire_skin_gap_mm": 0.574,
+  "closest_wires": [
+    "W08",
+    "W23"
+  ],
+  "minimum_wire_body_gap_mm": 1.05,
+  "minimum_wire_to_driver_axis_mm": 4.1,
+  "maximum_front_extent_mm": 32.9,
+  "front_reserved_height_mm": 40,
+  "front_height_reserve_mm": 7.1,
+  "rear_gap_mm": 14.8,
+  "preformed_pairs": [
+    [
+      "W09",
+      "W26"
+    ],
+    [
+      "W02",
+      "W03"
+    ],
+    [
+      "W13",
+      "W24"
+    ],
+    [
+      "W15",
+      "W25"
+    ]
+  ],
+  "assembly_groups": [
+    [
+      "W01"
+    ],
+    [
+      "W04"
+    ],
+    [
+      "W07"
+    ],
+    [
+      "W15",
+      "W25"
+    ],
+    [
+      "W16"
+    ],
+    [
+      "W22"
+    ],
+    [
+      "H03"
+    ],
+    [
+      "H08"
+    ],
+    [
+      "W05"
+    ],
+    [
+      "W10"
+    ],
+    [
+      "H09"
+    ],
+    [
+      "W23"
+    ],
+    [
+      "H05"
+    ],
+    [
+      "W13",
+      "W24"
+    ],
+    [
+      "W19"
+    ],
+    [
+      "W12"
+    ],
+    [
+      "W14"
+    ],
+    [
+      "W06"
+    ],
+    [
+      "W09",
+      "W26"
+    ],
+    [
+      "W21"
+    ],
+    [
+      "W02",
+      "W03"
+    ],
+    [
+      "W17"
+    ],
+    [
+      "H02"
+    ],
+    [
+      "W08"
+    ],
+    [
+      "H04"
+    ],
+    [
+      "H07"
+    ],
+    [
+      "H01"
+    ],
+    [
+      "W18"
+    ],
+    [
+      "W11"
+    ],
+    [
+      "W20"
+    ],
+    [
+      "H06"
+    ]
+  ]
+}

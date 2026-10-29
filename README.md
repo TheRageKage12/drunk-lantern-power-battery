@@ -12,7 +12,7 @@ Start here: **[docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)** (parts list with link
 assembly, wiring, firmware, calibration, testing, cleaning). Shopping list (who has what, what's left to buy, links and prices): the
 [shared Google Sheet](https://docs.google.com/spreadsheets/d/17pCjma48U2CBcsrsc3ZVFVb3nuV0KqnQlag0SO8B_yU/edit).
 
-**Current build:** [circuit](docs/images/wiring.svg), [board assembly](docs/review/protoboard/README.md),
+**Current build:** [circuit](docs/images/wiring.svg), [board assembly](docs/review/protoboard/README.md), [step-by-step soldering](docs/review/protoboard/assembly.html),
 and [CAD fit limits](cad/README.md#electronics-fit-limits). The battery, board and switches live on the cap floor
 inside the top cap; the drink (a 32 oz spouted pouch) and the pump live in the cartridge under the drum. Verify the
 listed component and connector dimensions before printing. The shopping Sheet matches this build.

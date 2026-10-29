@@ -1,0 +1,184 @@
+{
+  "passed": true,
+  "sample_pitch_mm": 2,
+  "board_wire_envelope_radius_mm": 1.4,
+  "lower_bundle_radius_mm": 2.5,
+  "checks": [
+    {
+      "name": "H01",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        -28.999999999999996,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "H02",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        -21.999999999999996,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "H03",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        27.000000000000004,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "H04",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        -7.999999999999997,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "H05",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        20.000000000000004,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "H06",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 2.556,
+      "nearest": "floor screw 1",
+      "point": [
+        -77.82842712474618,
+        -0.9999999999999976,
+        379.7462046578173
+      ],
+      "passed": true
+    },
+    {
+      "name": "H07",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        -14.999999999999998,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "H08",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 2.985,
+      "nearest": "floor screw 1",
+      "point": [
+        -79.0,
+        6.000000000000003,
+        377.4746317825635
+      ],
+      "passed": true
+    },
+    {
+      "name": "H09",
+      "required_radius_mm": 1.4,
+      "minimum_distance_mm": 5.8,
+      "nearest": "cap floor",
+      "point": [
+        -79.0,
+        13.000000000000002,
+        372.37463178256354
+      ],
+      "passed": true
+    },
+    {
+      "name": "Pump trunk",
+      "required_radius_mm": 2.5,
+      "minimum_distance_mm": 3.5,
+      "nearest": "bay_floor",
+      "point": [
+        35.0,
+        -32.0,
+        169.78731589128176
+      ],
+      "passed": true
+    },
+    {
+      "name": "LED trunk",
+      "required_radius_mm": 2.5,
+      "minimum_distance_mm": 4.601,
+      "nearest": "cap floor",
+      "point": [
+        -46.34615384615385,
+        -54.26923076923077,
+        361.8592471671789
+      ],
+      "passed": true
+    },
+    {
+      "name": "Lock cable",
+      "required_radius_mm": 2.5,
+      "minimum_distance_mm": 4.232,
+      "nearest": "lock_wall",
+      "point": [
+        -1.5789473684210513,
+        -31.83157894736842,
+        198.4188948386502
+      ],
+      "passed": true
+    },
+    {
+      "name": "Hall branch",
+      "required_radius_mm": 2.5,
+      "minimum_distance_mm": 4.601,
+      "nearest": "cap floor",
+      "point": [
+        -46.34615384615385,
+        -54.26923076923077,
+        361.8592471671789
+      ],
+      "passed": true
+    },
+    {
+      "name": "Shared neck bundle",
+      "required_radius_mm": 3.5,
+      "minimum_distance_mm": 4.601,
+      "nearest": "cap floor",
+      "point": [
+        -46.34615384615385,
+        -54.26923076923077,
+        361.8592471671789
+      ],
+      "passed": true
+    },
+    {
+      "name": "Pump/LED service-loop space",
+      "required_clearance_mm": 1,
+      "minimum_distance_mm": 3.224,
+      "nearest": "top cap",
+      "passed": true
+    }
+  ],
+  "scope": "Existing cap, floor, wall extension, bay floor, lock wall, LED panel, glass well, battery, buck and cap-floor screw heads. Insulated bundles may touch each other. Includes a 28 \u00d7 28 \u00d7 18 mm service-loop reserve. Does not certify delivered connector sizes or hand soldering."
+}

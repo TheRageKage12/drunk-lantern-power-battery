@@ -111,7 +111,7 @@ def electronics_checks(all_parts, placements):
     validate_connectivity()
     from pathlib import Path
     gaps = E.M.validate(E.M.bounds())
-    assert T.BOARD_STANDOFF == E.M.REAR_GAP
+    assert T.BOARD_STANDOFF + E.M.BOARD_SPACER == E.M.REAR_GAP
     assert P.PERFBOARD_T == E.M.BOARD_THICKNESS
     route_path = Path(__file__).resolve().parents[1] / 'docs/review/protoboard/routing.json'
     report = routing.validate(json.loads(route_path.read_text()))
